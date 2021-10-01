@@ -12,7 +12,7 @@ const SearchPage: NextPage = () => {
 
   return (
     <PageLayout>
-      {searchState.query === '' && <SearchBox />}
+      <SearchBox />
       <Results />
     </PageLayout>
   )

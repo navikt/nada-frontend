@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { Button, SearchField, SearchFieldInput, TextField } from '@navikt/ds-react'
-import { Close, Search } from '@navikt/ds-icons'
-import React, { useContext } from 'react'
-import { SearchFieldButton, SearchFieldClearButton } from "@navikt/ds-react/esm/form/search-field";
-import { SearchState } from '../../pages/_app';
+import {Button, SearchField, SearchFieldInput, TextField} from '@navikt/ds-react'
+import React, {useContext} from 'react'
+import {SearchState} from '../../pages/_app';
+import {useRouter} from "next/router";
+import {Search} from "@navikt/ds-icons";
 
 const SearchDiv = styled.div`
   width: 80%;
@@ -22,32 +22,36 @@ export interface SearchBoxProps {
 export default function SearchBox() {
 
     const searchState = useContext(SearchState)
-
-    const [searchBox, setSearchBox] = React.useState(searchState.query)
+    const router = useRouter()
 
     return (
         <SearchDiv role="navigation">
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault()
-                }}
-            >
-                <div style={{ display: "flex", }}>
-                    <TextField label="" hideLabel
-                        onChange={(event) => {
-                            setSearchBox(event.target.value)
-                        }}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                searchState.setQuery(searchBox)
-                            }
-                        }}
-                    />
-                    <Button onClick={() => searchState.setQuery(searchBox)}>
-                        <Search /> Søk
-                    </Button>
-                </div>
-            </form>
+            <div style={{display: "flex",}}>
+                <TextField label="" hideLabel
+                           value={searchState.value}
+                           onChange={(e) => {
+                               searchState.setValue(e.target.value)
+                           }}
+                           onKeyDown={(event) => {
+                               if (event.key === 'Enter') {
+                                   searchState.setQuery(searchState.value)
+                                   router.push({
+                                       pathname: '/search',
+                                       query: {q: searchState.value}
+                                   })
+                               }
+                           }}
+                />
+                <Button onClick={() => {
+                    searchState.setQuery(searchState.value)
+                    router.push({
+                        pathname: '/search',
+                        query: {q: searchState.query}
+                    })
+                }}>
+                    <Search/> Søk
+                </Button>
+            </div>
         </SearchDiv>
     )
 }

@@ -6,6 +6,8 @@ import { createContext, useState } from 'react'
 type SearchStateType = {
   query: string
   setQuery: Function
+  value: string
+  setValue: Function
 }
 
 type UserState = {
@@ -13,16 +15,17 @@ type UserState = {
   setUser: Function
 }
 
-export const SearchState = createContext<SearchStateType>({ query: '', setQuery: () => { } })
+export const SearchState = createContext<SearchStateType>({ query: '', value: '', setValue: () => {}, setQuery: () => { } })
 export const UserState = createContext<UserState>({ user: '', setUser: () => { } })
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [searchState, setSeachState] = useState('')
+  const [searchValue, setSeachValue] = useState('')
+  const [searchQuery, setSeachQuery] = useState('')
   const [userState, setUserState] = useState('')
 
   return (
     <UserState.Provider value={{ user: userState, setUser: setUserState }}>
-      <SearchState.Provider value={{ query: searchState, setQuery: setSeachState }}>
+      <SearchState.Provider value={{ query: searchQuery, setQuery: setSeachQuery, value: searchValue, setValue: setSeachValue }}>
         <Component {...pageProps} />
       </SearchState.Provider>
     </UserState.Provider>

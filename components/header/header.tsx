@@ -5,6 +5,7 @@ import User from './user'
 import HeaderLogo from '../lib/icons/headerLogo'
 import SearchBox from '../search/search'
 import { SearchState } from '../../pages/_app'
+import {useRouter} from "next/router";
 
 const HeaderBar = styled.header`
   display: flex;
@@ -19,6 +20,9 @@ export interface UserData {
 export default function Header() {
   const [userData, setUserData] = useState({})
   const searchState = useContext(SearchState)
+
+  const router = useRouter()
+    console.log(router.pathname)
   return (
     <HeaderBar role="banner">
       <Link href="/">
@@ -26,7 +30,8 @@ export default function Header() {
           <HeaderLogo />
         </div>
       </Link>
-      { searchState.query !== '' && <SearchBox /> }
+
+      { router.pathname !== '/' && <SearchBox /> }
       <User user={userData} />
     </HeaderBar>
   )
