@@ -2,19 +2,18 @@ import type { NextPage } from 'next'
 import SearchBox from '../components/search/search'
 import Results from '../components/results/results'
 import PageLayout from '../components/pageLayout'
-import { useEffect, useState } from 'react'
-import useSWR from 'swr'
+import { useContext } from 'react'
+import { SearchState } from './_app'
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 const SearchPage: NextPage = () => {
-  const [query, setQuery] = useState('')
-  const { data, error } = useSWR(`api/search?q=${query}`, fetcher)
+
+  const searchState = useContext(SearchState)
 
   return (
     <PageLayout>
-      <SearchBox query={query} setQuery={setQuery} />
-      <Results data={data} error={error} />
+      {searchState.query === '' && <SearchBox />}
+      <Results />
     </PageLayout>
   )
 }
