@@ -19,13 +19,13 @@ export const SearchState = createContext<SearchStateType>({ query: '', value: ''
 export const UserState = createContext<UserState>({ user: '', setUser: () => { } })
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [searchValue, setSeachValue] = useState('')
-  const [searchQuery, setSeachQuery] = useState('')
+  const [searchValue, setSearchValue] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [userState, setUserState] = useState('')
 
   return (
     <UserState.Provider value={{ user: userState, setUser: setUserState }}>
-      <SearchState.Provider value={{ query: searchQuery, setQuery: setSeachQuery, value: searchValue, setValue: setSeachValue }}>
+      <SearchState.Provider value={{ query: searchQuery, setQuery: setSearchQuery, value: searchValue, setValue: setSearchValue }}>
         <Component {...pageProps} />
       </SearchState.Provider>
     </UserState.Provider>
