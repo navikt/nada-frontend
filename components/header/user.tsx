@@ -1,16 +1,15 @@
 import styled from 'styled-components'
 import {Button} from '@navikt/ds-react'
 import {Success} from '@navikt/ds-icons'
-import {UserData} from "./header";
-
+import {useContext} from "react";
+import {UserState} from "../../pages/_app";
 
 const UserBox = styled.div``
 
-interface userProps {
-    user: UserData
-}
+export default function User() {
 
-export default function User({user}: userProps) {
+    const user = useContext(UserState)
+
     return (
         <UserBox>
             {user ?
