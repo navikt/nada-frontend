@@ -1,28 +1,21 @@
 import SearchResult from './searchresult'
 import styled from 'styled-components'
-import { navGra60 } from '../../styles/constants'
-import { SearchBoxProps } from '../search/search'
 import { Loader, Panel } from '@navikt/ds-react'
-import { SearchResultEntry } from '../../lib/schema_types'
 import { SearchState } from '../../pages/_app'
 import { useContext } from 'react'
 
 import useSWR from 'swr'
 import fetcher from '../../lib/fetcher'
+import {SearchResultEntry} from "../../lib/schema_types";
 
 const ResultsBox = styled.div`
   flex-grow: 1;
   padding: 15px;
 `
 
-export interface ResultProps {
-  data: SearchResultEntry[]
-  error: string
-}
-
 export function Results() {
   const searchState = useContext(SearchState)
-  const { data, error } = useSWR(`api/search?q=${searchState.query}`, fetcher)
+  const { data, error } = useSWR<SearchResultEntry[], Error>(`api/search?q=${searchState.query}`, fetcher)
   
   if (error) {
     return <div>error</div>

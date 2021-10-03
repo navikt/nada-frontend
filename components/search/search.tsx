@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Button, SearchField, SearchFieldInput, TextField} from '@navikt/ds-react'
+import {Button, TextField} from '@navikt/ds-react'
 import React, {useContext} from 'react'
 import {SearchState} from '../../pages/_app';
 import {useRouter} from "next/router";
@@ -13,11 +13,6 @@ const SearchDiv = styled.div`
     width: 100%;
   };
 `
-
-export interface SearchBoxProps {
-    query: string
-    setQuery: React.Dispatch<React.SetStateAction<string>>
-}
 
 export default function SearchBox() {
 
