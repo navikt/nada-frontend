@@ -49,8 +49,12 @@ const response: SearchResultEntry[] = [
 ]
 
 export const handler = (req: NextApiRequest, res: NextApiResponse) => {
-  const query = req.query["q"]
-  let filteredResponse  = response.filter((r) => Object.values(r).join().toLowerCase().includes(query))
+  const query: string | string[] = req.query["q"]
+
+
+  let filteredResponse  = response.filter((r) =>
+      Object.values(r).join().toLowerCase().includes(
+          query instanceof Array ? query[0] : query))
 
   res.status(200).json(filteredResponse)
 }
