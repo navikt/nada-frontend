@@ -3,7 +3,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import User from './user'
 import HeaderLogo from '../lib/icons/headerLogo'
-import SearchBox from '../search/search'
+import SearchBox from '../search/searchBox'
 import { SearchState } from '../../pages/_app'
 import {useRouter} from "next/router";
 

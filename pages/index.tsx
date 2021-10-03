@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import SearchBox from '../components/search/search'
+import SearchBox from '../components/search/searchBox'
 import Results from '../components/results/results'
 import PageLayout from '../components/pageLayout'
 import { useContext } from 'react'
