@@ -3,16 +3,31 @@ import useSWR from 'swr'
 import DataProductSpinner from '../../components/lib/spinner'
 import PageLayout from '../../components/pageLayout'
 import {DatasetSchema, SearchResultEntry} from '../../lib/schema_types'
-import ReactMarkdown from 'react-markdown'
 import ErrorMessage from '../../components/lib/error'
 import fetcher from '../../lib/fetcher'
+import {Box, Tab, Tabs} from "@mui/material";
+import {useState} from "react";
+import Link from "next/link";
+import TabPanel from "../../components/lib/tabPanel";
+import ReactMarkdown from "react-markdown";
 
 interface DatasetDetailProps {
     data: DatasetSchema
     error: Error | undefined
 }
 
+
+
 const DatasetDetail = ({data, error}: DatasetDetailProps) => {
+
+    const [activeTab, setActiveTab] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setActiveTab(newValue);
+    };
+
+
+
     if (error) return <ErrorMessage error={error}/>
 
     if (!data) return <DataProductSpinner/>
@@ -21,19 +36,30 @@ const DatasetDetail = ({data, error}: DatasetDetailProps) => {
         <div>
             <h1>{data.name}</h1>
 
-            <div>
+
+        <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>
+            <Tabs
+                value={activeTab}
+                onChange={handleChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+            >
+                <Tab label="Beskrivelse" value={0}/>
+                <Tab label="Skjema" value={1} />
+                <Tab label="Lineage" />
+            </Tabs>
+        </Box>
+            <TabPanel index={0} value={activeTab} >
                 <ReactMarkdown>
                     {data.description || '*ingen beskrivelse*'}
                 </ReactMarkdown>
-            </div>
-            <h3>{data.pii}</h3>
-            <p>
-                {data.bigquery?.project_id +
-                '-' +
-                data.bigquery?.dataset +
-                '-' +
-                data.bigquery?.table}
-            </p>
+            </TabPanel>
+            <TabPanel index={1} value={activeTab} >
+                {data.name}
+            </TabPanel>
+
+
         </div>
     )
 }

@@ -4,9 +4,9 @@ import { DatasetSchema } from '../../../lib/schema_types'
 const response: DatasetSchema = {
   id: 'DS_1',
   dataproduct_id: 'DP_1',
-  name: 'DS 1',
-  description: `## Lorem ipsum
-  Dolor *sit* **amet**`,
+  name: 'Team Risk',
+  description: `## Team Risk – regelanalyse
+  Brukes som beslutningsgrunnlag i forbindelse med utvikling av en risk-komponent i ny sykepengeløsning`,
   pii: false,
   bigquery: {
     project_id: 'projectid',

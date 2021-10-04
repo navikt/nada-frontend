@@ -213,6 +213,7 @@ export interface components {
       keyword?: string[]
       datasets?: {
         id?: string
+        name?: string
         type?: components['schemas']['DatasetType']
       }[]
     }
