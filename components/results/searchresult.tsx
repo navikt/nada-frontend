@@ -1,14 +1,13 @@
 import styled from 'styled-components'
 import Link from 'next/link'
-import { navGra20, navGra40 } from '../../styles/constants'
+import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { components } from '../../lib/schema'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import DataPackageLogo from '../lib/icons/dataPackageLogo'
 import DataProductLogo from '../lib/icons/dataProductLogo'
 
-
 const SearchResultDiv = styled.div`
-  background-color: ${navGra20};
+  background-color: ${navGraBakgrunn};
   padding: 5px;
   margin-bottom: 5px;
   h1 {
@@ -17,7 +16,7 @@ const SearchResultDiv = styled.div`
   }
   cursor: pointer;
   :hover {
-    background-color: ${navGra40};
+    background-color: ${navBlaLighten80};
   }
 `
 
@@ -50,7 +49,9 @@ export const SearchResult = ({ searchResultEntry }: SearchResultProps) => {
               <h1>{searchResultEntry.name}</h1>
               <p>{searchResultEntry.excerpt}</p>
             </div>
-            <SearchResultLogo><DataProductLogo/></SearchResultLogo>
+            <SearchResultLogo>
+              <DataProductLogo />
+            </SearchResultLogo>
           </SearchResultContent>
         </Link>
       </SearchResultDiv>
@@ -64,7 +65,9 @@ export const SearchResult = ({ searchResultEntry }: SearchResultProps) => {
               <h1>{searchResultEntry.name}</h1>
               <p>{searchResultEntry.excerpt}</p>
             </div>
-            <SearchResultLogo><DataPackageLogo /></SearchResultLogo>
+            <SearchResultLogo>
+              <DataPackageLogo />
+            </SearchResultLogo>
           </SearchResultContent>
         </Link>
       </SearchResultDiv>
@@ -79,7 +82,9 @@ export const SearchResult = ({ searchResultEntry }: SearchResultProps) => {
             <h1>{searchResultEntry.name}</h1>
             <p>{searchResultEntry.excerpt}</p>
           </div>
-          <SearchResultLogo><BigQueryLogo /></SearchResultLogo>
+          <SearchResultLogo>
+            <BigQueryLogo />
+          </SearchResultLogo>
         </SearchResultContent>
       </Link>
     </SearchResultDiv>
