@@ -10,277 +10,282 @@ export interface paths {
   };
   "/dataproducts": {
     /** List all dataproducts */
-    get: {
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['Dataproduct'][]
-          }
-        }
-      }
-    }
+    get: operations["getDataproducts"];
     /** Create a new dataproduct */
-    post: {
-      responses: {
-        /** Created successfully */
-        201: {
-          content: {
-            'application/json': components['schemas']['Dataproduct']
-          }
-        }
-      }
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['NewDataproduct']
-        }
-      }
-    }
-  }
-  '/dataproducts/{dataproduct_id}': {
+    post: operations["createDataproduct"];
+  };
+  "/dataproducts/{id}": {
     /** List a dataproduct with datasets */
-    get: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-        }
-      }
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['Dataproduct'][]
-          }
-        }
-      }
-    }
+    get: operations["getDataproduct"];
     /** Update a dataproduct */
-    put: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-        }
-      }
-      responses: {
-        /** Updated OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['Dataproduct']
-          }
-        }
-      }
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['NewDataproduct']
-        }
-      }
-    }
+    put: operations["updateDataproduct"];
     /** Delete a dataproduct */
-    delete: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-        }
-      }
-      responses: {
-        /** Deleted OK */
-        204: never
-      }
-    }
-  }
-  '/dataproducts/{dataproduct_id}/datasets': {
-    /** List all datasets for a dataproduct */
-    get: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-        }
-      }
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['Dataset'][]
-          }
-        }
-      }
-    }
+    delete: operations["deleteDataproduct"];
+  };
+  "/datasets": {
     /** Create a new dataset */
-    post: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-        }
-      }
-      responses: {
-        /** Created successfully */
-        201: {
-          content: {
-            'application/json': components['schemas']['Dataset']
-          }
-        }
-      }
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['NewDataset']
-        }
-      }
-    }
-  }
-  '/dataproducts/{dataproduct_id}/datasets/{dataset_id}': {
+    post: operations["createDataset"];
+  };
+  "/datasets/{id}": {
     /** Get dataset */
-    get: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-          /** Dataset ID */
-          dataset_id: string
-        }
-      }
-      responses: {
-        /** OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['Dataset']
-          }
-        }
-      }
-    }
+    get: operations["getDataset"];
     /** Update a dataset */
-    put: {
-      parameters: {
-        path: {
-          /** Dataproduct ID */
-          dataproduct_id: string
-          /** Dataset ID */
-          dataset_id: string
-        }
-      }
-      responses: {
-        /** Updated OK */
-        200: {
-          content: {
-            'application/json': components['schemas']['Dataset']
-          }
-        }
-      }
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['NewDataset']
-        }
-      }
-    }
+    put: operations["updateDataset"];
     /** Delete a dataset */
-    delete: operations['deleteDataset']
-  }
-  '/search': {
-    get: {
-      parameters: {
-        query: {
-          q?: string
-        }
-      }
-      responses: {
-        /** Search result */
-        200: {
-          content: {
-            'application/json': components['schemas']['SearchResultEntry'][]
-          }
-        }
-      }
-    }
+    delete: operations["deleteDataset"];
+  };
+  "/search": {
+    /** Search in Datakatalog */
+    get: operations["search"];
     parameters: {
       query: {
-        q?: string
-      }
-    }
-  }
+        q?: string;
+      };
+    };
+  };
 }
 
 export interface components {
   schemas: {
     Dataproduct: {
-      id: string
-      name: string
-      description?: string
-      slug: string
-      repo?: string
-      last_modified: string
-      created: string
-      owner: components['schemas']['Owner']
-      keyword?: string[]
+      id: string;
+      name: string;
+      description?: string;
+      slug: string;
+      repo?: string;
+      last_modified: string;
+      created: string;
+      owner: components["schemas"]["Owner"];
+      keywords?: string[];
       datasets?: {
-        id?: string
-        type?: components['schemas']['DatasetType']
-      }[]
-    }
-    DatasetType: 'bigquery'
+        id?: string;
+        type?: components["schemas"]["DatasetType"];
+        name?: string;
+      }[];
+    };
+    DatasetType: "bigquery";
     Owner: {
-      team: string
-      teamkatalogen?: string
-    }
+      team: string;
+      teamkatalogen?: string;
+    };
+    BigQuery: {
+      project_id: string;
+      dataset: string;
+      table: string;
+    };
     NewDataproduct: {
-      name: string
-      description?: string
-      slug?: string
-      repo?: string
-      owner: components['schemas']['Owner']
-      keyword?: string[]
-    }
+      name: string;
+      description?: string;
+      slug?: string;
+      repo?: string;
+      owner: components["schemas"]["Owner"];
+      keywords?: string[];
+    };
+    UserInfo: {
+      name?: string;
+      email?: string;
+      teams?: string[];
+    };
     Dataset: {
-      id?: string
-      dataproduct_id?: string
-      name?: string
-      description?: string
-      pii?: boolean
-      bigquery?: {
-        project_id: string
-        dataset: string
-        table: string
-      }
-    }
+      id: string;
+      dataproduct_id: string;
+      name: string;
+      description?: string;
+      pii: boolean;
+      bigquery: components["schemas"]["BigQuery"];
+    };
     NewDataset: {
-      name: string
-      description?: string
-      pii: boolean
-      bigquery: {
-        project_id: string
-        dataset: string
-        table: string
-      }
-    }
+      name: string;
+      description?: string;
+      dataproduct_id: string;
+      pii: boolean;
+      bigquery: components["schemas"]["BigQuery"];
+    };
     SearchResultEntry: {
-      url?: string
-      type?: 'dataset' | 'dataproduct' | 'datapackage'
-      id?: string
-      name?: string
-      excerpt?: string
-    }
-  }
+      url?: string;
+      type?: "dataset" | "dataproduct" | "datapackage";
+      id?: string;
+      name?: string;
+      excerpt?: string;
+    };
+  };
 }
 
 export interface operations {
+  /** get user info */
+  getUserInfo: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserInfo"];
+        };
+      };
+    };
+  };
+  /** List all dataproducts */
+  getDataproducts: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Dataproduct"][];
+        };
+      };
+    };
+  };
+  /** Create a new dataproduct */
+  createDataproduct: {
+    responses: {
+      /** Created successfully */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Dataproduct"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewDataproduct"];
+      };
+    };
+  };
+  /** List a dataproduct with datasets */
+  getDataproduct: {
+    parameters: {
+      path: {
+        /** Dataproduct ID */
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Dataproduct"][];
+        };
+      };
+    };
+  };
+  /** Update a dataproduct */
+  updateDataproduct: {
+    parameters: {
+      path: {
+        /** Dataproduct ID */
+        id: string;
+      };
+    };
+    responses: {
+      /** Updated OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Dataproduct"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewDataproduct"];
+      };
+    };
+  };
+  /** Delete a dataproduct */
+  deleteDataproduct: {
+    parameters: {
+      path: {
+        /** Dataproduct ID */
+        id: string;
+      };
+    };
+    responses: {
+      /** Deleted OK */
+      204: never;
+    };
+  };
+  /** Create a new dataset */
+  createDataset: {
+    responses: {
+      /** Created successfully */
+      201: {
+        content: {
+          "application/json": components["schemas"]["Dataset"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewDataset"];
+      };
+    };
+  };
+  /** Get dataset */
+  getDataset: {
+    parameters: {
+      path: {
+        /** Dataset ID */
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Dataset"];
+        };
+      };
+    };
+  };
+  /** Update a dataset */
+  updateDataset: {
+    parameters: {
+      path: {
+        /** Dataset ID */
+        id: string;
+      };
+    };
+    responses: {
+      /** Updated OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Dataset"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NewDataset"];
+      };
+    };
+  };
   /** Delete a dataset */
   deleteDataset: {
     parameters: {
       path: {
-        /** Dataproduct ID */
-        dataproduct_id: string
         /** Dataset ID */
-        dataset_id: string
-      }
-    }
+        id: string;
+      };
+    };
     responses: {
       /** Deleted OK */
-      204: never
-    }
-  }
+      204: never;
+    };
+  };
+  /** Search in Datakatalog */
+  search: {
+    parameters: {
+      query: {
+        q?: string;
+      };
+    };
+    responses: {
+      /** Search result */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchResultEntry"][];
+        };
+      };
+    };
+  };
 }
 
 export interface external {}
