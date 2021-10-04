@@ -11,6 +11,8 @@ const UserBox = styled.div`
 
   & svg {
     margin-right: 0.25em;
+    color: #239f42;
+    font-size: 24px;
   }
 `
 
@@ -21,7 +23,7 @@ export default function User() {
     <UserBox>
       {user ? (
         <>
-          <Success style={{ color: '#239f42', fontSize: '24px' }} />
+          <Success />
           Bobby Brown
         </>
       ) : (
