@@ -4,7 +4,11 @@
  */
 
 export interface paths {
-  '/dataproducts': {
+  "/userinfo": {
+    /** get user info */
+    get: operations["getUserInfo"];
+  };
+  "/dataproducts": {
     /** List all dataproducts */
     get: {
       responses: {
@@ -213,7 +217,6 @@ export interface components {
       keyword?: string[]
       datasets?: {
         id?: string
-        name?: string
         type?: components['schemas']['DatasetType']
       }[]
     }
