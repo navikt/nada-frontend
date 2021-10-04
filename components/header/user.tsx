@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
 import { Success } from '@navikt/ds-icons'
 import { useContext } from 'react'
-import { UserState } from '../../pages/_app'
+import { AuthState } from '../../pages/_app'
 
 const UserBox = styled.div`
   whitespace: no-break;
@@ -17,17 +17,17 @@ const UserBox = styled.div`
 `
 
 export default function User() {
-  const user = useContext(UserState)
+  const authState = useContext(AuthState)
 
   return (
     <UserBox>
-      {user ? (
+      {authState.user ? (
         <>
           <Success />
-          Bobby Brown
+          {authState.user.name}
         </>
       ) : (
-        <Button key="logg-inn" variant="primary" size="small">
+        <Button key="logg-inn" variant="primary" size="small" onClick={() => window.location.replace('/api/login')}>
           Logg inn
         </Button>
       )}

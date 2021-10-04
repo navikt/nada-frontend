@@ -1,8 +1,10 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import '@navikt/ds-css'
-import { createContext, useState } from 'react'
-import {UserInfoSchema} from "../lib/schema_types";
+import {createContext, useEffect, useState} from 'react'
+import {SearchResultEntry, UserInfoSchema} from "../lib/schema_types";
+import useSWR from "swr";
+import fetcher from "../lib/fetcher";
 
 type SearchStateType = {
   query: string
@@ -12,24 +14,31 @@ type SearchStateType = {
 }
 
 type AuthStateType = {
-  user: UserInfoSchema
+  user?: UserInfoSchema
   setUser: Function
 }
 
 export const SearchState = createContext<SearchStateType>({ query: '', value: '', setValue: () => {}, setQuery: () => { } })
-export const UserState = createContext<AuthStateType>({ user: {}, setUser: () => { } })
+export const AuthState = createContext<AuthStateType>({ setUser: () => { } })
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [searchValue, setSearchValue] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
-  const [userState, setUserState] = useState({})
+  const [userState, setUserState] = useState<UserInfoSchema>()
+
+
+  const {data, error} = useSWR<UserInfoSchema, Error>(
+      '/api/userinfo',
+      fetcher
+  )
+  useEffect(() => setUserState(data), [data, error])
 
   return (
-    <UserState.Provider value={{ user: userState, setUser: setUserState }}>
+    <AuthState.Provider value={{ user: userState, setUser: setUserState }}>
       <SearchState.Provider value={{ query: searchQuery, setQuery: setSearchQuery, value: searchValue, setValue: setSearchValue }}>
         <Component {...pageProps} />
       </SearchState.Provider>
-    </UserState.Provider>
+    </AuthState.Provider>
   )
 }
 export default MyApp

@@ -10,7 +10,7 @@ const response: UserInfoSchema = {
 }
 
 export const handler = (req: NextApiRequest, res: NextApiResponse) => {
-    req.query["login"] === "false" ? res.status(200).json({}): res.status(200).json(response)
+    req.cookies["login"] !== "innlogget" ? res.status(200).json(null): res.status(200).json(response)
 }
 
 export default handler
