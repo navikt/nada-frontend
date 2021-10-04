@@ -36,3 +36,6 @@ yarn-error.log*
 
 # idea
 .idea
+
+# Schema from backend
+spec-v1.0.yaml
