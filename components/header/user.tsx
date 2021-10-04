@@ -1,18 +1,22 @@
 import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
-import { Success } from '@navikt/ds-icons'
+import { People, Success } from '@navikt/ds-icons'
 import { useContext } from 'react'
 import { AuthState } from '../../pages/_app'
+import { navGraBakgrunn } from '../../styles/constants'
 
 const UserBox = styled.div`
-  whitespace: no-break;
+  white-space: nowrap;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 
   & svg {
     margin-right: 0.25em;
     color: #239f42;
-    font-size: 24px;
+    font-size: 32px;
+    background-color: ${navGraBakgrunn};
+    border-radius: 50%;
+    padding: 2px;
   }
 `
 
@@ -23,11 +27,16 @@ export default function User() {
     <UserBox>
       {authState.user ? (
         <>
-          <Success />
+          <People />
           {authState.user.name}
         </>
       ) : (
-        <Button key="logg-inn" variant="primary" size="small" onClick={() => window.location.replace('/api/login')}>
+        <Button
+          key="logg-inn"
+          variant="primary"
+          size="small"
+          onClick={() => window.location.replace('/api/login')}
+        >
           Logg inn
         </Button>
       )}
