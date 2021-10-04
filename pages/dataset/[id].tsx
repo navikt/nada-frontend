@@ -68,7 +68,7 @@ const Dataset = () => {
     const router = useRouter()
     const {id} = router.query
 
-    const {data, error} = useSWR<SearchResultEntry, Error>(
+    const {data, error} = useSWR<DatasetSchema, Error>(
         id ? `/api/dataset/${id}` : null,
         fetcher
     )
