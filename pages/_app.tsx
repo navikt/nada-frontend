@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import '@navikt/ds-css'
 import { createContext, useState } from 'react'
+import {UserInfoSchema} from "../lib/schema_types";
 
 type SearchStateType = {
   query: string
@@ -10,18 +11,18 @@ type SearchStateType = {
   setValue: Function
 }
 
-type UserState = {
-  user: string
+type AuthStateType = {
+  user: UserInfoSchema
   setUser: Function
 }
 
 export const SearchState = createContext<SearchStateType>({ query: '', value: '', setValue: () => {}, setQuery: () => { } })
-export const UserState = createContext<UserState>({ user: '', setUser: () => { } })
+export const UserState = createContext<AuthStateType>({ user: {}, setUser: () => { } })
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [searchValue, setSearchValue] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
-  const [userState, setUserState] = useState('')
+  const [userState, setUserState] = useState({})
 
   return (
     <UserState.Provider value={{ user: userState, setUser: setUserState }}>

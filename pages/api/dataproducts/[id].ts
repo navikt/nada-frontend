@@ -14,7 +14,7 @@ const response: DataproductSchema = {
         team: 'Test team',
         teamkatalogen: 'Test team',
     },
-    keyword: ['lorem ipsum', 'sorryyy'],
+    keywords: ['lorem ipsum', 'sorryyy'],
     datasets: [
         {
             id: 'DS_1',
