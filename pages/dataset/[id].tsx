@@ -22,7 +22,7 @@ const DatasetDetail = ({data, error}: DatasetDetailProps) => {
 
     const [activeTab, setActiveTab] = useState(0);
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (event: any, newValue: number) => {
         setActiveTab(newValue);
     };
 

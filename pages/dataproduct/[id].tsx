@@ -63,9 +63,8 @@ const DataProductDetail = ({id}: DataProductDetailProps) => {
                 <h2>Dataset i dataproduktet:</h2>
                 {data.datasets?.map((d, i) => {
                     return (
-                        <div style={{display: 'block'}}>
-
-                            <Link key={'dataproduct_datasets_' + i} href={`/dataset/${d.id}`}>
+                        <div key={'dataproduct_datasets_' + i}  style={{display: 'block'}}>
+                            <Link href={`/dataset/${d.id}`}>
                                 {d.name}
                             </Link>
                         </div>
