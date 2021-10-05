@@ -3,7 +3,7 @@ import { components } from '../../lib/schema'
 
 type SearchResultEntry = components['schemas']['SearchResultEntry']
 
-const response: SearchResultEntry[] = [
+const mockSearchResult: SearchResultEntry[] = [
   {
     url: 'banan',
     type: 'dataproduct',
@@ -57,7 +57,7 @@ const response: SearchResultEntry[] = [
 export const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const query: string | string[] = req.query['q']
 
-  let filteredResponse = response.filter((r) =>
+  let filteredResponse = mockSearchResult.filter((r) =>
     Object.values(r)
       .join()
       .toLowerCase()

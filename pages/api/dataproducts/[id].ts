@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { DataproductSchema } from '../../../lib/schema_types'
 
-const response: DataproductSchema = {
+const mockDataproduct: DataproductSchema = {
   id: 'test',
   name: 'Team Risk',
   description:
@@ -31,7 +31,7 @@ const response: DataproductSchema = {
 }
 
 export const handler = (req: NextApiRequest, res: NextApiResponse) => {
-  res.status(200).json(response)
+  res.status(200).json(mockDataproduct)
 }
 
 export default handler
