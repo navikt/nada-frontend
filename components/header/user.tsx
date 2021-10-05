@@ -2,8 +2,8 @@ import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
 import { People, Success } from '@navikt/ds-icons'
 import { useContext } from 'react'
-import { AuthState } from '../../pages/_app'
 import { navGraBakgrunn } from '../../styles/constants'
+import { AuthState } from '../../lib/context'
 
 const UserBox = styled.div`
   white-space: nowrap;

@@ -1,31 +1,49 @@
 import SearchResult from './searchresult'
 import styled from 'styled-components'
 import { Loader, Panel } from '@navikt/ds-react'
-import { SearchState } from '../../pages/_app'
 import { useContext } from 'react'
 
 import useSWR from 'swr'
 import fetcher from '../../lib/fetcher'
-import {SearchResultEntry} from "../../lib/schema_types";
+import { SearchResultEntry } from '../../lib/schema_types'
+import { SearchState } from '../../lib/context'
 
 const ResultsBox = styled.div`
   flex-grow: 1;
-  padding: 15px;
+  padding: 15px 0;
+
+  & .navds-panel {
+    padding-bottom: 0;
+  }
+`
+
+const NoResultsYetBox = styled.div`
+  margin: 0 auto;
 `
 
 export function Results() {
   const searchState = useContext(SearchState)
-  const { data, error } = useSWR<SearchResultEntry[], Error>(`/search?q=${searchState.query}`, fetcher)
-  
+
+  const { data, error } = useSWR<SearchResultEntry[], Error>(
+    searchState.searchQuery.length
+      ? `/search?q=${searchState.searchQuery}`
+      : `/search?q=data`,
+    fetcher
+  )
+
   if (error) {
-    return <div>error</div>
+    return (
+      <NoResultsYetBox>
+        <h1>Error</h1>
+      </NoResultsYetBox>
+    )
   }
+
   if (!data) {
     return (
-      <div>
-        {' '}
+      <NoResultsYetBox>
         <Loader transparent />
-      </div>
+      </NoResultsYetBox>
     )
   }
 

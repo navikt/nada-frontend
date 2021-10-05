@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { Button, TextField } from '@navikt/ds-react'
-import React, { useContext } from 'react'
-import { SearchState } from '../../pages/_app'
+import React, { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Search } from '@navikt/ds-icons'
+import { SearchState } from '../../lib/context'
 
 const SearchDiv = styled.div`
   width: 70%;
@@ -19,8 +19,19 @@ const SearchDiv = styled.div`
   }
 `
 
+const redirectPath = (query: string) =>
+  query.length
+    ? {
+        pathname: '/search',
+        query: { q: query },
+      }
+    : {
+        pathname: '/dataproducts',
+      }
+
 export default function SearchBox() {
   const searchState = useContext(SearchState)
+  const [value, setValue] = useState<string>(searchState.searchQuery)
   const router = useRouter()
 
   return (
@@ -29,27 +40,19 @@ export default function SearchBox() {
         <TextField
           label=""
           hideLabel
-          value={searchState.value}
-          onChange={(e) => {
-            searchState.setValue(e.target.value)
-          }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              searchState.setQuery(searchState.value)
-              router.push({
-                pathname: '/search',
-                query: { q: searchState.value },
-              })
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              searchState.setSearchQuery(value)
+              router.push(redirectPath(value))
             }
           }}
         />
         <Button
           onClick={() => {
-            searchState.setQuery(searchState.value)
-            router.push({
-              pathname: '/search',
-              query: { q: searchState.query },
-            })
+            searchState.setSearchQuery(value)
+            router.push(redirectPath(value))
           }}
         >
           <Search /> Søk

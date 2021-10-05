@@ -8,29 +8,23 @@ import DataProductLogo from '../lib/icons/dataProductLogo'
 
 const SearchResultDiv = styled.div`
   background-color: ${navGraBakgrunn};
-  padding: 5px;
-  margin-bottom: 5px;
-  h1 {
-    font-size: 1.5em;
-    margin: 0;
-  }
+  display: flex;
+  padding: 8px;
+  margin-bottom: 15px;
+
   cursor: pointer;
   :hover {
     background-color: ${navBlaLighten80};
   }
 `
 
-const SearchResultLogo = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  flex: 1;
-  align-items: center;
-`
-
 const SearchResultContent = styled.div`
-  display: flex;
-  flex: 1;
-  padding: 8px;
+  flex-grow: 1;
+
+  h1 {
+    font-size: 1.5em;
+    margin: 0;
+  }
 `
 
 type SearchResultEntry = components['schemas']['SearchResultEntry']
@@ -39,56 +33,33 @@ export interface SearchResultProps {
   searchResultEntry: SearchResultEntry
 }
 
-export const SearchResult = ({ searchResultEntry }: SearchResultProps) => {
-  if (searchResultEntry.type === 'dataproduct') {
-    return (
-      <SearchResultDiv>
-        <Link href={`/dataproduct/${searchResultEntry.id}`}>
-          <SearchResultContent>
-            <div>
-              <h1>{searchResultEntry.name}</h1>
-              <p>{searchResultEntry.excerpt}</p>
-            </div>
-            <SearchResultLogo>
-              <DataProductLogo />
-            </SearchResultLogo>
-          </SearchResultContent>
-        </Link>
-      </SearchResultDiv>
-    )
-  } else if (searchResultEntry.type === 'datapackage') {
-    return (
-      <SearchResultDiv>
-        <Link href={`/datapackage/${searchResultEntry.id}`}>
-          <SearchResultContent>
-            <div>
-              <h1>{searchResultEntry.name}</h1>
-              <p>{searchResultEntry.excerpt}</p>
-            </div>
-            <SearchResultLogo>
-              <DataPackageLogo />
-            </SearchResultLogo>
-          </SearchResultContent>
-        </Link>
-      </SearchResultDiv>
-    )
+const SearchResultAbstract = ({ searchResultEntry }: SearchResultProps) => (
+  <SearchResultContent>
+    <h1>{searchResultEntry.name}</h1>
+    <p>{searchResultEntry.excerpt}</p>
+  </SearchResultContent>
+)
+
+const SearchResultIcon = ({ searchResultEntry }: SearchResultProps) => {
+  const iconMap = {
+    dataproduct: <DataProductLogo />,
+    dataset: <BigQueryLogo />,
+    datapackage: <DataPackageLogo />,
   }
 
-  return (
-    <SearchResultDiv>
-      <Link href={`/dataset/${searchResultEntry.id}`}>
-        <SearchResultContent>
-          <div>
-            <h1>{searchResultEntry.name}</h1>
-            <p>{searchResultEntry.excerpt}</p>
-          </div>
-          <SearchResultLogo>
-            <BigQueryLogo />
-          </SearchResultLogo>
-        </SearchResultContent>
-      </Link>
-    </SearchResultDiv>
-  )
+  if (searchResultEntry.type && searchResultEntry.type in iconMap)
+    return iconMap[searchResultEntry.type]
+
+  return <DataProductLogo />
 }
+
+export const SearchResult = ({ searchResultEntry }: SearchResultProps) => (
+  <Link href={`/dataproduct/${searchResultEntry.id}`}>
+    <SearchResultDiv>
+      <SearchResultAbstract searchResultEntry={searchResultEntry} />
+      <SearchResultIcon searchResultEntry={searchResultEntry} />
+    </SearchResultDiv>
+  </Link>
+)
 
 export default SearchResult

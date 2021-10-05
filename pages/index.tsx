@@ -3,11 +3,9 @@ import SearchBox from '../components/search/searchBox'
 import Results from '../components/results/results'
 import PageLayout from '../components/pageLayout'
 import { useContext } from 'react'
-import { SearchState } from './_app'
-
+import { SearchState } from '../lib/context'
 
 const SearchPage: NextPage = () => {
-
   const searchState = useContext(SearchState)
 
   return (
