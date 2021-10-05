@@ -1,25 +1,24 @@
 import styled from 'styled-components'
-import {Button} from '@navikt/ds-react'
 import React, {useContext} from 'react'
-import {navGraBakgrunn} from '../../styles/constants'
-import { People } from '@navikt/ds-icons'
 import {AuthState} from '../../lib/context'
 import {Menu, MenuItem} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { AddCircleFilled } from '@navikt/ds-icons'
 
-const UserBox = styled.div`
+const CreateBox = styled.div`
   white-space: nowrap;
   display: flex;
   align-items: center;
+  margin-left: auto;
+  margin-right: 10px;
 `
 
-export default function User() {
+export default function Create() {
     const authState = useContext(AuthState)
     const menuId = 'primary-search-account-menu';
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
-    const handleProfileMenuOpen = (event) => {
+    const handleAddMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -27,20 +26,18 @@ export default function User() {
         setAnchorEl(null);
     };
 
-    return (
-        <UserBox>
-            {authState.user ? (
-                <>
+    if (authState.user) return (
+        <CreateBox>
                 <IconButton
                     size="large"
                     edge="end"
-                    aria-label="brukermeny"
+                    aria-label="Add new item"
                     aria-controls={menuId}
                     aria-haspopup="true"
-                    onClick={handleProfileMenuOpen}
+                    onClick={handleAddMenuOpen}
                     color="inherit"
                 >
-                    <People />
+                    <AddCircleFilled />
                 </IconButton>
                     <Menu
                         anchorEl={anchorEl}
@@ -57,20 +54,11 @@ export default function User() {
                         open={isMenuOpen}
                         onClose={handleMenuClose}
                     >
-                        <MenuItem onClick={handleMenuClose}>Mine tilganger</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Logg ut</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>dataprodukt</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>datasett</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>datapakke</MenuItem>
                     </Menu>
-                </>
-            ) : (
-                <Button
-                    key="logg-inn"
-                    variant="primary"
-                    size="small"
-                    onClick={() => window.location.replace('/api/login')}
-                >
-                    Logg inn
-                </Button>
-            )}
-        </UserBox>
+        </CreateBox>
     )
+    return (<></>)
 }

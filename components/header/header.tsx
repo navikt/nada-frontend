@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import styled from 'styled-components'
 import User from './user'
+import Create from './create'
 import HeaderLogo from '../lib/icons/headerLogo'
 import SearchBox from '../search/searchBox'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 
 const HeaderBar = styled.header`
   display: flex;
@@ -13,17 +14,18 @@ const HeaderBar = styled.header`
 `
 
 export default function Header() {
-  const router = useRouter()
-  return (
-    <HeaderBar role="banner">
-      <Link href="/">
-        <div>
-          <HeaderLogo />
-        </div>
-      </Link>
+    const router = useRouter()
+    return (
+        <HeaderBar role="banner">
+            <Link href="/">
+                <div>
+                    <HeaderLogo/>
+                </div>
+            </Link>
 
-      {router.pathname !== '/' && <SearchBox />}
-      <User />
-    </HeaderBar>
-  )
+            {router.pathname !== '/' && <SearchBox/>}
+            <Create/>
+            <User/>
+        </HeaderBar>
+    )
 }
