@@ -58,7 +58,10 @@ export default function User() {
                         onClose={handleMenuClose}
                     >
                         <MenuItem onClick={handleMenuClose}>Mine tilganger</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Logg ut</MenuItem>
+                        <MenuItem onClick={() => {
+                            handleMenuClose()
+                            window.location.replace("/api/logout")
+                        }}>Logg ut</MenuItem>
                     </Menu>
                 </>
             ) : (

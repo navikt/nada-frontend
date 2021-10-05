@@ -15,15 +15,15 @@ const CreateBox = styled.div`
 
 export default function Create() {
     const authState = useContext(AuthState)
-    const menuId = 'primary-search-account-menu';
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const isMenuOpen = Boolean(anchorEl);
+    const menuId = 'primary-search-account-menu'
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const isMenuOpen = Boolean(anchorEl)
     const handleAddMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget)
     };
 
     const handleMenuClose = () => {
-        setAnchorEl(null);
+        setAnchorEl(null)
     };
 
     if (authState.user) return (
