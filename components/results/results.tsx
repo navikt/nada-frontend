@@ -50,9 +50,13 @@ export function Results() {
   return (
     <ResultsBox>
       <Panel border role="navigation">
-        {data.map((d) => {
-          return <SearchResult key={d.id} result={d} />
-        })}
+        {!data.length ? (
+          <div>Ingen resultater funnet</div>
+        ) : (
+          data.map((d) => {
+            return <SearchResult key={d.id} result={d} />
+          })
+        )}
       </Panel>
     </ResultsBox>
   )
