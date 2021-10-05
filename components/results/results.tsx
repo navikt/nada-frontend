@@ -51,7 +51,7 @@ export function Results() {
     <ResultsBox>
       <Panel border role="navigation">
         {data.map((d) => {
-          return <SearchResult key={d.id} searchResultEntry={d} />
+          return <SearchResult key={d.id} result={d} />
         })}
       </Panel>
     </ResultsBox>

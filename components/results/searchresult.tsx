@@ -2,9 +2,8 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { components } from '../../lib/schema'
-import BigQueryLogo from '../lib/icons/bigQueryLogo'
-import DataPackageLogo from '../lib/icons/dataPackageLogo'
-import DataProductLogo from '../lib/icons/dataProductLogo'
+import { SearchResultIcon } from './resultIcon'
+import { ResultAbstract } from './resultAbstract'
 
 const SearchResultDiv = styled.div`
   background-color: ${navGraBakgrunn};
@@ -18,46 +17,17 @@ const SearchResultDiv = styled.div`
   }
 `
 
-const SearchResultContent = styled.div`
-  flex-grow: 1;
-
-  h1 {
-    font-size: 1.5em;
-    margin: 0;
-  }
-`
-
 type SearchResultEntry = components['schemas']['SearchResultEntry']
 
 export interface SearchResultProps {
-  searchResultEntry: SearchResultEntry
+  result: SearchResultEntry
 }
 
-const SearchResultAbstract = ({ searchResultEntry }: SearchResultProps) => (
-  <SearchResultContent>
-    <h1>{searchResultEntry.name}</h1>
-    <p>{searchResultEntry.excerpt}</p>
-  </SearchResultContent>
-)
-
-const SearchResultIcon = ({ searchResultEntry }: SearchResultProps) => {
-  const iconMap = {
-    dataproduct: <DataProductLogo />,
-    dataset: <BigQueryLogo />,
-    datapackage: <DataPackageLogo />,
-  }
-
-  if (searchResultEntry.type && searchResultEntry.type in iconMap)
-    return iconMap[searchResultEntry.type]
-
-  return <DataProductLogo />
-}
-
-export const SearchResult = ({ searchResultEntry }: SearchResultProps) => (
-  <Link href={`/dataproduct/${searchResultEntry.id}`}>
+export const SearchResult = ({ result }: SearchResultProps) => (
+  <Link href={`/${result.type}/${result.id}`}>
     <SearchResultDiv>
-      <SearchResultAbstract searchResultEntry={searchResultEntry} />
-      <SearchResultIcon searchResultEntry={searchResultEntry} />
+      <ResultAbstract result={result} />
+      <SearchResultIcon result={result} />
     </SearchResultDiv>
   </Link>
 )

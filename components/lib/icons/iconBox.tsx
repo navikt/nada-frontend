@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
 export const IconBox = styled.div`
-  display: block;
+  display: flex;
+  align-items: center;
+  margin: 6px;
 `
 
 export default IconBox
