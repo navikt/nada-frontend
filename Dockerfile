@@ -1,4 +1,4 @@
-FROM node:16-alpine AS builder
+FROM node:16-alpine AS node-with-deps
 
 WORKDIR /usr/app
 
@@ -6,15 +6,13 @@ COPY package.json .
 
 RUN yarn install --quiet
 
-FROM builder
+FROM node-with-deps
 
 COPY . .
 
 ENV NODE_ENV production
 ENV NEXT_PUBLIC_ENV production
 
-RUN  rm -rf ./pages/api
+RUN yarn build
 
-USER node
-
-CMD yarn run build-and-start
+CMD yarn run start
