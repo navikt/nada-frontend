@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import {Button} from '@navikt/ds-react'
 import React, {useContext} from 'react'
 import {navGraBakgrunn} from '../../styles/constants'
-import { People } from '@navikt/ds-icons'
+import {People} from '@navikt/ds-icons'
 import {AuthState} from '../../lib/context'
 import {Menu, MenuItem} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +12,15 @@ const UserBox = styled.div`
   white-space: nowrap;
   display: flex;
   align-items: center;
+`
+
+const MenuLine = styled.div`
+  position: relative;
+  top: 5px;
+  border: none;
+  height: 1px;
+  background: ${navGraBakgrunn};
+  margin-bottom: 5px;
 `
 
 export default function User() {
@@ -31,17 +40,17 @@ export default function User() {
         <UserBox>
             {authState.user ? (
                 <>
-                <IconButton
-                    size="large"
-                    edge="end"
-                    aria-label="brukermeny"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    onClick={handleProfileMenuOpen}
-                    color="inherit"
-                >
-                    <People />
-                </IconButton>
+                    <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="brukermeny"
+                        aria-controls={menuId}
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                    >
+                        <People/>
+                    </IconButton>
                     <Menu
                         anchorEl={anchorEl}
                         anchorOrigin={{
@@ -57,8 +66,14 @@ export default function User() {
                         open={isMenuOpen}
                         onClose={handleMenuClose}
                     >
+                        <MenuItem dense disabled>{authState.user.name}</MenuItem>
+                        <MenuLine/>
+                        <MenuItem onClick={handleMenuClose}>Dokumentasjon</MenuItem>
                         <MenuItem onClick={handleMenuClose}>Mine tilganger</MenuItem>
-                        <MenuItem onClick={() => {
+                        <MenuItem onClick={handleMenuClose}>Mine favoritter</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Mine produkter</MenuItem>
+                        <MenuLine/>
+                        <MenuItem sx={{color: "red"}} onClick={() => {
                             handleMenuClose()
                             window.location.replace("/api/logout")
                         }}>Logg ut</MenuItem>
