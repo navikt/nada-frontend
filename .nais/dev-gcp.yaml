@@ -11,5 +11,5 @@ spec:
   ingresses:
     - "https://nada.dev.intern.nav.no/"
   env:
-    - name: NEXT_PRODUCTION_BACKEND
-      value: https://nada.dev.intern.nav.no/api
+    - name: NEXT_PUBLIC_BACKEND 
+      value: https://nada.dev.intern.nav.no/api/

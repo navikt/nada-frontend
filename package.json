@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier --write \"./components\" \"./pages\" \"./lib\""
+    "prettier": "prettier --write \"./components\" \"./pages\" \"./lib\"",
+    "build-and-start": "yarn run build && yarn run start"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",

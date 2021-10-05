@@ -4,20 +4,17 @@ WORKDIR /usr/app
 
 COPY package.json .
 
-ENV NODE_ENV production
-ENV NEXT_PUBLIC_ENV production
-ENV NEXT_PUBLIC_BACKEND https://nada.dev.intern.nav.no/api/
-
 RUN yarn install --quiet
 
 FROM builder
 
 COPY . .
 
-RUN  rm -rf ./pages/api
+ENV NODE_ENV production
+ENV NEXT_PUBLIC_ENV production
 
-RUN yarn build
+RUN  rm -rf ./pages/api
 
 USER node
 
-CMD yarn run start
+CMD yarn run start-docker
