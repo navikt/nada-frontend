@@ -1,0 +1,15 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: nada-frontend
+  namespace: dataplattform
+  labels:
+    team: dataplattform
+spec:
+  image: {{ image }}
+  port: 8080
+  ingresses:
+    - "https://nada.dev.intern.nav.no/"
+  env:
+    - name: NEXT_PUBLIC_BACKEND 
+      value: https://nada.dev.intern.nav.no/api/
