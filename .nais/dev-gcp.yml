@@ -7,7 +7,7 @@ metadata:
     team: dataplattform
 spec:
   image: {{ image }}
-  port: 8080
+  port: 3000
   ingresses:
     - "https://nada.dev.intern.nav.no/"
   env:
