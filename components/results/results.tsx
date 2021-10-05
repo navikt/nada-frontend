@@ -26,8 +26,8 @@ export function Results() {
 
   const { data, error } = useSWR<SearchResultEntry[], Error>(
     searchState.searchQuery.length
-      ? `/search?q=${searchState.searchQuery}`
-      : `/search?q=data`,
+      ? `/api/search?q=${searchState.searchQuery}`
+      : `/api/search?q=data`,
     fetcher
   )
 

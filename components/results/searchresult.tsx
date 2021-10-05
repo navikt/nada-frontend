@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { components } from '../../lib/schema'
-import { SearchResultIcon } from './resultIcon'
+import { ResultIcon } from './resultIcon'
 import { ResultAbstract } from './resultAbstract'
 
 const SearchResultDiv = styled.div`
@@ -27,7 +27,7 @@ export const SearchResult = ({ result }: SearchResultProps) => (
   <Link href={`/${result.type}/${result.id}`}>
     <SearchResultDiv>
       <ResultAbstract result={result} />
-      <SearchResultIcon result={result} />
+      <ResultIcon result={result} />
     </SearchResultDiv>
   </Link>
 )

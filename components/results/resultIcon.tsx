@@ -4,9 +4,7 @@ import DataPackageLogo from '../lib/icons/dataPackageLogo'
 import { SearchResultProps } from './searchresult'
 import styled from 'styled-components'
 
-const VerticallyCentered = styled.div``
-
-export const SearchResultIcon = ({ result }: SearchResultProps) => {
+export const ResultIcon = ({ result }: SearchResultProps) => {
   const iconMap = {
     dataproduct: <DataProductLogo />,
     dataset: <BigQueryLogo />,

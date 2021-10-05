@@ -11,7 +11,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [userState, setUserState] = useState<UserInfoSchema>()
 
-  const { data, error } = useSWR<UserInfoSchema, Error>('/userinfo', fetcher)
+  const { data, error } = useSWR<UserInfoSchema, Error>(
+    '/api/userinfo',
+    fetcher
+  )
   useEffect(() => setUserState(data), [data, error])
 
   return (

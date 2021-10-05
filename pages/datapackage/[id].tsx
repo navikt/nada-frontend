@@ -6,7 +6,7 @@ import fetcher from '../../lib/fetcher'
 const DataPackage = () => {
   const router = useRouter()
   const { id } = router.query
-  const { data, error } = useSWR('/katalogen/datapackage', fetcher)
+  const { data, error } = useSWR('/api/katalogen/datapackage', fetcher)
 
   return (
     <PageLayout>

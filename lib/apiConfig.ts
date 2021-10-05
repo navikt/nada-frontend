@@ -1,6 +1,9 @@
-export const getBackendURI = () => {
-  if (!('NEXT_PUBLIC_BACKEND' in process.env)) {
-    throw new Error('Environment NEXT_PUBLIC_BACKEND must be set!')
+export const getBackendURI = (): string => {
+  if (
+    process?.env?.NEXT_PUBLIC_BACKEND &&
+    process.env.NEXT_PUBLIC_BACKEND.length
+  ) {
+    return process.env.NEXT_PUBLIC_BACKEND
   }
-  return process.env.NEXT_PUBLIC_BACKEND
+  return 'http://localhost:3000/api'
 }
