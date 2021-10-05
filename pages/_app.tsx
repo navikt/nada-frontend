@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
   const {data, error} = useSWR<UserInfoSchema, Error>(
-      '/api/userinfo',
+      '/userinfo',
       fetcher
   )
   useEffect(() => setUserState(data), [data, error])

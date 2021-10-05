@@ -69,7 +69,7 @@ const Dataset = () => {
     const {id} = router.query
 
     const {data, error} = useSWR<DatasetSchema, Error>(
-        id ? `/api/dataset/${id}` : null,
+        id ? `/dataset/${id}` : null,
         fetcher
     )
     if (error) return <div>Error</div>

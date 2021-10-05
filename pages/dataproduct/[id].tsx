@@ -36,7 +36,7 @@ interface DataProductDetailProps {
 
 const DataProductDetail = ({id}: DataProductDetailProps) => {
     const {data, error} = useSWR<DataproductSchema>(
-        `/api/dataproducts/${id}`,
+        `/dataproducts/${id}`,
         fetcher
     )
 

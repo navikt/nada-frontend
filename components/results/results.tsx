@@ -15,7 +15,7 @@ const ResultsBox = styled.div`
 
 export function Results() {
   const searchState = useContext(SearchState)
-  const { data, error } = useSWR<SearchResultEntry[], Error>(`api/search?q=${searchState.query}`, fetcher)
+  const { data, error } = useSWR<SearchResultEntry[], Error>(`/search?q=${searchState.query}`, fetcher)
   
   if (error) {
     return <div>error</div>
