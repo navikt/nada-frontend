@@ -6,7 +6,6 @@ import {People} from '@navikt/ds-icons'
 import {AuthState} from '../../lib/context'
 import {Menu, MenuItem} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const UserBox = styled.div`
   white-space: nowrap;
