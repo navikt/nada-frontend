@@ -17,4 +17,4 @@ RUN  rm -rf ./pages/api
 
 USER node
 
-CMD yarn run start-docker
+CMD yarn run build-and-start
