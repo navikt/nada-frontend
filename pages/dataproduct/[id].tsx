@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
 import useSWR, { SWRConfig } from 'swr'
-import { DataproductSchema } from '../../lib/schema_types'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 import ReactMarkdown from 'react-markdown'
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import { GetServerSideProps } from 'next'
 import DataProductSpinner from '../../components/lib/spinner'
 import Link from 'next/link'
-import { getBackendURI } from '../../lib/apiConfig'
-import { fetcher } from '../../lib/fetcher'
+import { getBackendURI } from '../../lib/api/config'
+import { fetcher } from '../../lib/api/fetcher'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id

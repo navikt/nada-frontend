@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { components } from '../../lib/schema'
+import { components } from '../../lib/schema/schema'
 
 type SearchResultEntry = components['schemas']['SearchResultEntry']
 

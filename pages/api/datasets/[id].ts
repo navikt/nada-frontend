@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { DatasetSchema } from '../../../lib/schema_types'
+import { DatasetSchema } from '../../../lib/schema/schema_types'
 
-const response: DatasetSchema = {
+export const mockDataset: DatasetSchema = {
   id: 'DS_1',
   dataproduct_id: 'DP_1',
   name: 'Team Risk',
@@ -16,7 +16,7 @@ const response: DatasetSchema = {
 }
 
 export const handler = (req: NextApiRequest, res: NextApiResponse) => {
-  res.status(200).json(response)
+  res.status(200).json(mockDataset)
 }
 
 export default handler

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { DataproductSchema } from '../../../lib/schema_types'
+import { DataproductSchema } from '../../../lib/schema/schema_types'
 
 export const mockDataproduct: DataproductSchema = {
   id: 'test',

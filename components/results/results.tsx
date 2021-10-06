@@ -4,8 +4,8 @@ import { Loader, Panel } from '@navikt/ds-react'
 import { useContext } from 'react'
 
 import useSWR from 'swr'
-import fetcher from '../../lib/fetcher'
-import { SearchResultEntry } from '../../lib/schema_types'
+import fetcher from '../../lib/api/fetcher'
+import { SearchResultEntry } from '../../lib/schema/schema_types'
 import { SearchState } from '../../lib/context'
 
 const ResultsBox = styled.div`

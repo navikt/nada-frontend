@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
 import useSWR from 'swr'
-import fetcher from '../../lib/fetcher'
+import fetcher from '../../lib/api/fetcher'
 
 const DataPackage = () => {
   const router = useRouter()

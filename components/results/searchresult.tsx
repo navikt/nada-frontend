@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
-import { components } from '../../lib/schema'
+import { components } from '../../lib/schema/schema'
 import { ResultIcon } from './resultIcon'
 import { ResultAbstract } from './resultAbstract'
 

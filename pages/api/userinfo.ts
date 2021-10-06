@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { UserInfoSchema } from '../../lib/schema_types'
+import { UserInfoSchema } from '../../lib/schema/schema_types'
 
 const mockUserInfo: UserInfoSchema = {
   name: 'Bobby Brown',

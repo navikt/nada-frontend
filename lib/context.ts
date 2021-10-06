@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { UserInfoSchema } from './schema_types'
+import { UserInfoSchema } from './schema/schema_types'
 
 type SearchStateType = {
   searchQuery: string
