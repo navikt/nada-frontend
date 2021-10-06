@@ -1,9 +1,8 @@
 import styled from 'styled-components'
 import { Button, TextField } from '@navikt/ds-react'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Search } from '@navikt/ds-icons'
-import { SearchState } from '../../lib/context'
 
 interface SearchBoxProps {
   large?: boolean

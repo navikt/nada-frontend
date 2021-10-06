@@ -1,12 +1,10 @@
 import SearchResult from './searchresult'
 import styled from 'styled-components'
 import { Loader, Panel } from '@navikt/ds-react'
-import { useContext } from 'react'
-
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
 import { SearchResultEntry } from '../../lib/schema/schema_types'
-import { SearchState } from '../../lib/context'
+import { useRouter } from 'next/router'
 
 const ResultsBox = styled.div`
   flex-grow: 1;
@@ -22,12 +20,12 @@ const NoResultsYetBox = styled.div`
 `
 
 export function Results() {
-  const searchState = useContext(SearchState)
+  const router = useRouter()
+  let { q } = router.query
+  if (typeof q !== 'string') q = ''
 
   const { data, error } = useSWR<SearchResultEntry[], Error>(
-    searchState.searchQuery.length
-      ? `/api/search?q=${searchState.searchQuery}`
-      : `/api/search?q=data`,
+    q?.length ? `/api/search?q=${q}` : `/api/search?q=data`,
     fetcher
   )
 
