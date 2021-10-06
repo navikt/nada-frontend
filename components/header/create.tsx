@@ -54,7 +54,10 @@ export default function Create() {
                         open={isMenuOpen}
                         onClose={handleMenuClose}
                     >
-                        <MenuItem onClick={handleMenuClose}>dataprodukt</MenuItem>
+                        <MenuItem onClick={() => {
+                            handleMenuClose()
+                            window.location.replace("/dataproduct/new")
+                        }}>dataprodukt</MenuItem>
                         <MenuItem onClick={handleMenuClose}>datasett</MenuItem>
                         <MenuItem onClick={handleMenuClose}>datapakke</MenuItem>
                     </Menu>
