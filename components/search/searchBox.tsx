@@ -52,9 +52,10 @@ const redirectPath = (query: string) =>
       }
 
 export default function SearchBox({ large }: SearchBoxProps) {
-  const searchState = useContext(SearchState)
-  const [value, setValue] = useState<string>(searchState.searchQuery)
   const router = useRouter()
+  let { q } = router.query
+  if (typeof q !== 'string') q = ''
+  const [value, setValue] = useState<string>(q)
   const VariantDiv = large ? LargeSearchDiv : SearchDiv
 
   return (
@@ -67,7 +68,6 @@ export default function SearchBox({ large }: SearchBoxProps) {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              searchState.setSearchQuery(value)
               router.push(redirectPath(value))
             }
           }}
@@ -75,7 +75,6 @@ export default function SearchBox({ large }: SearchBoxProps) {
         <Button
           aria-label={'Søk'}
           onClick={() => {
-            searchState.setSearchQuery(value)
             router.push(redirectPath(value))
           }}
         >

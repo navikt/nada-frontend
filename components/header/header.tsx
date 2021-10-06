@@ -4,8 +4,10 @@ import Create from './create'
 import Logo from './logo'
 import SearchBox from '../search/searchBox'
 import { useRouter } from 'next/router'
-import { useContext } from 'react'
-import { SearchState } from '../../lib/context'
+
+interface HeaderProps {
+  forceSearch?: boolean
+}
 
 const HeaderBar = styled.header`
   display: flex;
@@ -14,14 +16,13 @@ const HeaderBar = styled.header`
   align-items: center;
 `
 
-export default function Header() {
-  const searchState = useContext(SearchState)
+export default function Header({ forceSearch }: HeaderProps) {
+  const router = useRouter()
 
   return (
     <HeaderBar role="banner">
       <Logo />
-
-      {searchState.searchQuery !== '' && <SearchBox />}
+      {router.pathname !== '/' && <SearchBox />}
       <Create />
       <User />
     </HeaderBar>
