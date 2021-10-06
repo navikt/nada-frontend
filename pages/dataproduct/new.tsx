@@ -1,23 +1,33 @@
-import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
-import useSWR, { SWRConfig } from 'swr'
-import { DataproductSchema } from '../../lib/schema_types'
-import ReactMarkdown from 'react-markdown'
-import { format, parseISO } from 'date-fns'
-import { nb } from 'date-fns/locale'
-import { GetServerSideProps } from 'next'
-import DataProductSpinner from '../../components/lib/spinner'
-import Link from 'next/link'
-import { getBackendURI } from '../../lib/apiConfig'
-import { fetcher } from '../../lib/fetcher'
+import {Button, Fieldset, TextField} from "@navikt/ds-react";
+import {FormControl} from "@mui/material";
 
 
 const NewDataProduct = () => {
-  return (
-    <PageLayout>
-        <div>nytt dataprodukt</div>
-    </PageLayout>
-  )
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(e.target.name.value)
+    }
+
+    return (
+        <PageLayout>
+            <form onSubmit={handleSubmit}>
+                <FormControl required>
+                    <Fieldset legend="Dataprodukt" errorPropagation={false}>
+                        <TextField id="name" label="Navn" />
+                        <TextField id="description" label="Beskrivelse"/>
+                        <TextField id="slug" label="Slug"/>
+                        <TextField id="repo" label="Repo"/>
+                        <TextField id="owner" label="Eier"/>
+                        <TextField id="keywords" label="Nøkkelord"/>
+                    </Fieldset>
+                    <Button type={"submit"}>Lagre</Button>
+                </FormControl>
+            </form>
+        </PageLayout>
+    )
 }
 
 export default NewDataProduct
