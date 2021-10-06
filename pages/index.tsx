@@ -6,11 +6,9 @@ import { useContext } from 'react'
 import { SearchState } from '../lib/context'
 
 const SearchPage: NextPage = () => {
-  const searchState = useContext(SearchState)
-
   return (
     <PageLayout>
-      <SearchBox />
+      <SearchBox large />
       <Results />
     </PageLayout>
   )

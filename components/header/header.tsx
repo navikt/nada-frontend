@@ -4,6 +4,8 @@ import Create from './create'
 import Logo from './logo'
 import SearchBox from '../search/searchBox'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import { SearchState } from '../../lib/context'
 
 const HeaderBar = styled.header`
   display: flex;
@@ -13,12 +15,13 @@ const HeaderBar = styled.header`
 `
 
 export default function Header() {
-  const router = useRouter()
+  const searchState = useContext(SearchState)
+
   return (
     <HeaderBar role="banner">
       <Logo />
 
-      {router.pathname !== '/' && <SearchBox />}
+      {searchState.searchQuery !== '' && <SearchBox />}
       <Create />
       <User />
     </HeaderBar>
