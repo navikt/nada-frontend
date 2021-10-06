@@ -47,7 +47,7 @@ const redirectPath = (query: string) =>
         query: { q: query },
       }
     : {
-        pathname: '/dataproducts',
+        pathname: '/',
       }
 
 export default function SearchBox({ large }: SearchBoxProps) {
