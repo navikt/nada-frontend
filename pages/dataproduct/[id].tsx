@@ -11,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id
   if (typeof id !== 'string') return { props: {} }
   const endpoint = `/api/dataproducts/${id}`
+  console.log(`Fetching from ${getBackendURI()}${endpoint}`)
   const dataproduct = await fetcher(`${getBackendURI()}${endpoint}`)
 
   return {
