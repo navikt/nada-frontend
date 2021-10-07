@@ -10,13 +10,16 @@ import { DataProductDetail } from '../../components/dataproducts/detail'
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id
   if (typeof id !== 'string') return { props: {} }
-  const endpoint = `/dataproducts/${id}`
-  const dataproduct = await fetcher(`${getBackendURI()}${endpoint}`)
+
+  const fallbackName = `/api/dataproducts/${id}`
+  const backendURL = `${getBackendURI()}/dataproducts/${id}`
+
+  const dataproduct = await fetcher(backendURL)
 
   return {
     props: {
       fallback: {
-        endpoint: dataproduct,
+        [fallbackName]: dataproduct,
       },
     },
   }
