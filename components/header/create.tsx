@@ -4,6 +4,7 @@ import { AuthState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { AddCircleFilled } from '@navikt/ds-icons'
+import { useRouter } from 'next/router'
 
 const CreateBox = styled.div`
   white-space: nowrap;
@@ -14,6 +15,7 @@ const CreateBox = styled.div`
 `
 
 export default function Create() {
+  const router = useRouter()
   const authState = useContext(AuthState)
   const menuId = 'primary-search-account-menu'
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
@@ -35,41 +37,11 @@ export default function Create() {
           aria-label="Add new item"
           aria-controls={menuId}
           aria-haspopup="true"
-          onClick={handleAddMenuOpen}
+          onClick={() => router.push('/dataproduct/new')}
           color="inherit"
         >
           <AddCircleFilled />
         </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          id={menuId}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={isMenuOpen}
-          onClose={handleMenuClose}
-        >
-          <MenuItem
-            onClick={() => {
-              handleMenuClose()
-              window.location.replace('/dataproduct/new')
-            }}
-          >
-            dataprodukt
-          </MenuItem>
-          <MenuItem  onClick={() => {
-              handleMenuClose()
-              window.location.replace('/dataset/new')
-            }}
-          >
-            dataset</MenuItem>
-        </Menu>
       </CreateBox>
     )
   return <></>
