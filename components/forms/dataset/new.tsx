@@ -1,8 +1,6 @@
 import {
-  Button,
   ConfirmationPanel,
   Fieldset,
-  Select,
   TextField,
 } from '@navikt/ds-react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -14,7 +12,7 @@ import styled from 'styled-components'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 
 interface NewDatasetFormProps {
-  onSubmit: (data: any) => Promise<void>
+  onSubmit: (data: any) => Promise<void>,
 }
 
 // Until ds-react serves our needs
@@ -27,13 +25,12 @@ const ConfirmationPanelWrapper = styled.div`
   }
 `
 
-export const NewDatasetForm = ({ onSubmit }: NewDatasetFormProps) => {
+export const NewDatasetForm = ({ onSubmit}: NewDatasetFormProps) => {
   const { register, handleSubmit, watch, formState } = useForm({
     resolver: yupResolver(newDatasetValidation),
   })
-  const teams = useContext(AuthState).user?.teams
+  // const teams = useContext(AuthState).user?.teams
 
-  const dataproducts = ['test']
   const piiValue = watch('pii', true)
   const { errors } = formState
 
@@ -52,26 +49,6 @@ export const NewDatasetForm = ({ onSubmit }: NewDatasetFormProps) => {
           {...register('description')}
           error={errors.description?.message}
         />
-        <Select
-          label="Dataprodukt"
-          {...register('dataproduct_id')}
-          error={errors.dataproduct_id?.message}
-        >
-          <option value="">Velg dataprodukt</option>
-          {dataproducts?.map((t) => (
-            <option value={t} key={'dataproduct_' + t}>
-              {t}
-            </option>
-          ))}
-        </Select>
-        <Select label="Team" {...register('team')} error={errors.team?.message}>
-          <option value="">Velg team</option>
-          {teams?.map((t) => (
-            <option value={t} key={'dataproduct_team_' + t}>
-              {t}
-            </option>
-          ))}
-        </Select>
         <Fieldset legend="BigQuery" errorPropagation={false}>
           <TextField
             label="Project ID"

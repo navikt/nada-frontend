@@ -63,8 +63,12 @@ export default function Create() {
           >
             dataprodukt
           </MenuItem>
-          <MenuItem onClick={handleMenuClose}>datasett</MenuItem>
-          <MenuItem onClick={handleMenuClose}>datapakke</MenuItem>
+          <MenuItem  onClick={() => {
+              handleMenuClose()
+              window.location.replace('/dataset/new')
+            }}
+          >
+            dataset</MenuItem>
         </Menu>
       </CreateBox>
     )
