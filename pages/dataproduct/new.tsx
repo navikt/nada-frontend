@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import { AuthState } from '../../lib/context'
 import { useRouter } from 'next/router'
 import { apiPOST } from '../../lib/api/post'
-import { NewDataProductForm } from '../../components/forms/dataproduct/new'
+import { NewDataProductForm } from '../../components/dataproducts/formNew'
 
 const NewDataProduct = () => {
   const router = useRouter()

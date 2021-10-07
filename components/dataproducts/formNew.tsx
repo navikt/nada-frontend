@@ -1,9 +1,10 @@
-import { Button, Fieldset, TextField, Select } from '@navikt/ds-react'
+import { Fieldset, TextField, Select } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { useContext } from 'react'
 import { AuthState } from '../../lib/context'
 import { dataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
+import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
 const NewDataproductFormOptions = {
   resolver: yupResolver(dataproductValidation),
@@ -61,7 +62,7 @@ export const NewDataProductForm = ({ onSubmit }: NewDataproductFormProps) => {
           ))}
         </Select>
       </Fieldset>
-      <Button type={'submit'}>Lagre</Button>
+      <RightJustifiedSubmitButton />
     </form>
   )
 }

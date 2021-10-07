@@ -11,21 +11,11 @@ import { newDatasetValidation } from '../../../lib/schema/yupValidations'
 import { useContext } from 'react'
 import { AuthState } from '../../../lib/context'
 import styled from 'styled-components'
+import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 
 interface NewDatasetFormProps {
   onSubmit: (data: any) => Promise<void>
 }
-
-const SubmitButton = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-
-  & button {
-    margin-top: 0.5em;
-    margin-left: auto;
-  }
-`
 
 // Until ds-react serves our needs
 const ConfirmationPanelWrapper = styled.div`
@@ -110,10 +100,8 @@ export const NewDatasetForm = ({ onSubmit }: NewDatasetFormProps) => {
             personidentifiserende informasjon
           </ConfirmationPanel>
         </ConfirmationPanelWrapper>
+        <RightJustifiedSubmitButton />
       </Fieldset>
-      <SubmitButton>
-        <Button type={'submit'}>Lagre</Button>
-      </SubmitButton>
     </form>
   )
 }
