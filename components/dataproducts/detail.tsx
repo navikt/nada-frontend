@@ -16,7 +16,7 @@ export const DataProductDetail = ({ id }: DataProductDetailProps) => {
     `/api/dataproducts/${id}`,
     fetcher
   )
-  return <DataProductSpinner />
+
   if (error) return <div>Error</div>
 
   if (!data) return <DataProductSpinner />
