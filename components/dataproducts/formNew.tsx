@@ -1,8 +1,8 @@
 import { Button, Fieldset, TextField, Select } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { useContext } from 'react'
-import { AuthState } from '../../../lib/context'
-import { dataproductValidation } from '../../../lib/schema/yupValidations'
+import { AuthState } from '../../lib/context'
+import { dataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 const NewDataproductFormOptions = {

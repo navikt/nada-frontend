@@ -1,15 +1,11 @@
 import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
-import useSWR, { SWRConfig } from 'swr'
+import { SWRConfig } from 'swr'
 import { DataproductSchema } from '../../lib/schema/schema_types'
-import ReactMarkdown from 'react-markdown'
-import { format, parseISO } from 'date-fns'
-import { nb } from 'date-fns/locale'
 import { GetServerSideProps } from 'next'
-import DataProductSpinner from '../../components/lib/spinner'
-import Link from 'next/link'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
+import { DataProductDetail } from '../../components/dataproducts/detail'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id
@@ -28,49 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 interface DataProductProps {
   fallback?: DataproductSchema
-}
-
-interface DataProductDetailProps {
-  id: string
-}
-
-const DataProductDetail = ({ id }: DataProductDetailProps) => {
-  const { data, error } = useSWR<DataproductSchema>(
-    `/api/dataproducts/${id}`,
-    fetcher
-  )
-
-  if (error) return <div>Error</div>
-
-  if (!data) return <DataProductSpinner />
-
-  const humanizeDate = (isoDate: string) =>
-    format(parseISO(isoDate), 'PPPP', { locale: nb })
-
-  return (
-    <div>
-      <h1>{data.name}</h1>
-      <p>
-        Opprettet: {humanizeDate(data.created)} &ndash; Oppdatert:{' '}
-        {humanizeDate(data.last_modified)}
-      </p>
-      <div>
-        <ReactMarkdown>
-          {data.description || '*ingen beskrivelse*'}
-        </ReactMarkdown>
-      </div>
-      <div>
-        <h2>Dataset i dataproduktet:</h2>
-        {data.datasets?.map((d, i) => {
-          return (
-            <div key={'dataproduct_datasets_' + i} style={{ display: 'block' }}>
-              <Link href={`/dataset/${d.id}`}>{d.name}</Link>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
 }
 
 const DataProduct = ({ fallback }: DataProductProps) => {
