@@ -24,11 +24,11 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
   const createAndAppend = async (requestData: any) => {
     try {
       const createdDataset = await apiPOST(`/api/datasets`, requestData)
-      setShowNewDataset(false)
       product.datasets
         ? product.datasets.push(createdDataset)
         : (product.datasets = [createdDataset])
       setBackendError(undefined)
+      setShowNewDataset(false)
     } catch (e: any) {
       setBackendError(e.toString())
     }
@@ -57,7 +57,10 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
       </div>
 
       {showNewDataset ? (
-        <NewDatasetForm onSubmit={createAndAppend} />
+        <NewDatasetForm
+          dataproduct_id={product.id}
+          onSubmit={createAndAppend}
+        />
       ) : (
         <Button onClick={() => setShowNewDataset(true)}>Legg til</Button>
       )}

@@ -1,8 +1,4 @@
-import {
-  ConfirmationPanel,
-  Fieldset,
-  TextField,
-} from '@navikt/ds-react'
+import { ConfirmationPanel, Fieldset, TextField } from '@navikt/ds-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { newDatasetValidation } from '../../../lib/schema/yupValidations'
@@ -12,7 +8,8 @@ import styled from 'styled-components'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 
 interface NewDatasetFormProps {
-  onSubmit: (data: any) => Promise<void>,
+  onSubmit: (data: any) => Promise<void>
+  dataproduct_id: string
 }
 
 // Until ds-react serves our needs
@@ -25,17 +22,25 @@ const ConfirmationPanelWrapper = styled.div`
   }
 `
 
-export const NewDatasetForm = ({ onSubmit}: NewDatasetFormProps) => {
+export const NewDatasetForm = ({
+  onSubmit,
+  dataproduct_id,
+}: NewDatasetFormProps) => {
   const { register, handleSubmit, watch, formState } = useForm({
     resolver: yupResolver(newDatasetValidation),
   })
-  // const teams = useContext(AuthState).user?.teams
 
   const piiValue = watch('pii', true)
   const { errors } = formState
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <input
+        type="hidden"
+        id="dataproduct_id"
+        value={dataproduct_id}
+        {...register('dataproduct_id')}
+      />
       <Fieldset legend="Datasett" errorPropagation={false}>
         <TextField
           id="name"
