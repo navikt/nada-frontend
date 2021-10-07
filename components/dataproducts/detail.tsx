@@ -7,38 +7,29 @@ import { nb } from 'date-fns/locale'
 import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
 
-interface DataProductDetailProps {
-  id: string
+export interface DataproductDetailProps {
+  product: DataproductSchema
 }
 
-export const DataProductDetail = ({ id }: DataProductDetailProps) => {
-  const { data, error } = useSWR<DataproductSchema>(
-    `/api/dataproducts/${id}`,
-    fetcher
-  )
-
-  if (error) return <div>Error</div>
-
-  if (!data) return <DataProductSpinner />
-
+export const DataProductDetail = ({ product }: DataproductDetailProps) => {
   const humanizeDate = (isoDate: string) =>
     format(parseISO(isoDate), 'PPPP', { locale: nb })
 
   return (
     <div>
-      <h1>{data.name}</h1>
+      <h1>{product.name}</h1>
       <p>
-        Opprettet: {humanizeDate(data.created)} &ndash; Oppdatert:{' '}
-        {humanizeDate(data.last_modified)}
+        Opprettet: {humanizeDate(product.created)} &ndash; Oppdatert:{' '}
+        {humanizeDate(product.last_modified)}
       </p>
       <div>
         <ReactMarkdown>
-          {data.description || '*ingen beskrivelse*'}
+          {product.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
       </div>
       <div>
         <h2>Dataset i dataproduktet:</h2>
-        {data.datasets?.map((d, i) => {
+        {product.datasets?.map((d, i) => {
           return (
             <div key={'dataproduct_datasets_' + i} style={{ display: 'block' }}>
               <Link href={`/dataset/${d.id}`}>{d.name}</Link>

@@ -1,11 +1,15 @@
 import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
-import { SWRConfig } from 'swr'
+import useSWR, { SWRConfig } from 'swr'
 import { DataproductSchema } from '../../lib/schema/schema_types'
 import { GetServerSideProps } from 'next'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
-import { DataProductDetail } from '../../components/dataproducts/detail'
+import {
+  DataProductDetail,
+  DataproductDetailProps,
+} from '../../components/dataproducts/detail'
+import DataProductSpinner from '../../components/lib/spinner'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id
@@ -14,19 +18,45 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const fallbackName = `/api/dataproducts/${id}`
   const backendURL = `${getBackendURI()}/dataproducts/${id}`
 
-  const dataproduct = await fetcher(backendURL)
+  try {
+    const dataproduct = await fetcher(backendURL)
 
-  return {
-    props: {
-      fallback: {
-        [fallbackName]: dataproduct,
+    return {
+      props: {
+        fallback: {
+          [fallbackName]: dataproduct,
+        },
       },
-    },
+    }
+  } catch (e: any) {
+    return { props: { fallback: {} } }
   }
 }
 
 interface DataProductProps {
   fallback?: DataproductSchema
+}
+
+interface DataFetcherProps {
+  id: string
+}
+
+const DataproductFetcher = ({ id }: DataFetcherProps) => {
+  const { data, error } = useSWR<DataproductSchema>(
+    `/api/dataproducts/${id}`,
+    fetcher
+  )
+
+  if (error)
+    return (
+      <div>
+        Error:<p>{error.toString()}</p>
+      </div>
+    )
+
+  if (!data) return <DataProductSpinner />
+
+  return <DataProductDetail product={data} />
 }
 
 const DataProduct = ({ fallback }: DataProductProps) => {
@@ -38,7 +68,7 @@ const DataProduct = ({ fallback }: DataProductProps) => {
   return (
     <PageLayout>
       <SWRConfig value={{ fallback }}>
-        <DataProductDetail id={id} />
+        <DataproductFetcher id={id} />
       </SWRConfig>
     </PageLayout>
   )
