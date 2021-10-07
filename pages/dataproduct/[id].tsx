@@ -3,20 +3,20 @@ import PageLayout from '../../components/pageLayout'
 import { SWRConfig } from 'swr'
 import { DataproductSchema } from '../../lib/schema/schema_types'
 import { GetServerSideProps } from 'next'
+import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
 import { DataProductDetail } from '../../components/dataproducts/detail'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id
   if (typeof id !== 'string') return { props: {} }
-  const key = `/api/dataproducts/${id}`
-  console.log(`fetching from ${key}`)
-  const dataproduct = await fetcher(key)
+  const endpoint = `/api/dataproducts/${id}`
+  const dataproduct = await fetcher(`${getBackendURI()}${endpoint}`)
 
   return {
     props: {
       fallback: {
-        key: dataproduct,
+        endpoint: dataproduct,
       },
     },
   }
