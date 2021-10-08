@@ -1,14 +1,22 @@
-import { ConfirmationPanel, Fieldset, TextField } from '@navikt/ds-react'
+import {
+  ConfirmationPanel,
+  ErrorSummary,
+  Fieldset,
+  TextField,
+} from '@navikt/ds-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { newDatasetValidation } from '../../../lib/schema/yupValidations'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AuthState } from '../../../lib/context'
 import styled from 'styled-components'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
+import apiPOST from '../../../lib/api/post'
+import { DatasetSchema } from '../../../lib/schema/schema_types'
+import ErrorMessage from '../../lib/error'
 
 interface NewDatasetFormProps {
-  onSubmit: (data: any) => Promise<void>
+  onCreate: (data: DatasetSchema) => Promise<void>
   dataproduct_id: string
 }
 
@@ -23,15 +31,26 @@ const ConfirmationPanelWrapper = styled.div`
 `
 
 export const NewDatasetForm = ({
-  onSubmit,
+  onCreate,
   dataproduct_id,
 }: NewDatasetFormProps) => {
+  const [backendError, setBackendError] = useState<Error>()
+
   const { register, handleSubmit, watch, formState } = useForm({
     resolver: yupResolver(newDatasetValidation),
   })
 
   const piiValue = watch('pii', true)
   const { errors } = formState
+
+  const onSubmit = async (requestData: DatasetSchema) => {
+    try {
+      const createdDataset = await apiPOST(`//\\\\/api/datasets`, requestData)
+      await onCreate(requestData)
+    } catch (e: any) {
+      setBackendError(e)
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,6 +60,7 @@ export const NewDatasetForm = ({
         value={dataproduct_id}
         {...register('dataproduct_id')}
       />
+      {backendError && <ErrorMessage error={backendError} />}
       <Fieldset legend="Datasett" errorPropagation={false}>
         <TextField
           id="name"
