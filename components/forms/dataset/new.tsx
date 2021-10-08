@@ -46,7 +46,7 @@ export const NewDatasetForm = ({
   const onSubmit = async (requestData: DatasetSchema) => {
     try {
       const createdDataset = await apiPOST(`/api/datasets`, requestData)
-      await onCreate(requestData)
+      await onCreate(createdDataset)
     } catch (e: any) {
       setBackendError(e)
     }
