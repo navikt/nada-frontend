@@ -4,111 +4,116 @@
  */
 
 export interface paths {
-  "/userinfo": {
+  '/userinfo': {
     /** get user info */
-    get: operations["getUserInfo"];
-  };
-  "/dataproducts": {
+    get: operations['getUserInfo']
+  }
+  '/dataproducts': {
     /** List all dataproducts */
-    get: operations["getDataproducts"];
+    get: operations['getDataproducts']
     /** Create a new dataproduct */
-    post: operations["createDataproduct"];
-  };
-  "/dataproducts/{id}": {
+    post: operations['createDataproduct']
+  }
+  '/dataproducts/{id}': {
     /** List a dataproduct with datasets */
-    get: operations["getDataproduct"];
+    get: operations['getDataproduct']
     /** Update a dataproduct */
-    put: operations["updateDataproduct"];
+    put: operations['updateDataproduct']
     /** Delete a dataproduct */
-    delete: operations["deleteDataproduct"];
-  };
-  "/datasets": {
+    delete: operations['deleteDataproduct']
+  }
+  '/datasets': {
     /** Create a new dataset */
-    post: operations["createDataset"];
-  };
-  "/datasets/{id}": {
+    post: operations['createDataset']
+  }
+  '/datasets/{id}': {
     /** Get dataset */
-    get: operations["getDataset"];
+    get: operations['getDataset']
     /** Update a dataset */
-    put: operations["updateDataset"];
+    put: operations['updateDataset']
     /** Delete a dataset */
-    delete: operations["deleteDataset"];
-  };
-  "/search": {
-    /** Search in Datakatalog */
-    get: operations["search"];
+    delete: operations['deleteDataset']
+  }
+  '/search': {
+    /** Search in NADA */
+    get: operations['search']
     parameters: {
       query: {
-        q?: string;
-      };
-    };
-  };
+        q?: string
+        limit?: number
+        offset?: number
+      }
+    }
+  }
 }
 
 export interface components {
   schemas: {
     Dataproduct: {
-      id: string;
-      name: string;
-      description?: string;
-      slug: string;
-      repo?: string;
-      last_modified: string;
-      created: string;
-      owner: components["schemas"]["Owner"];
-      keywords?: string[];
-      datasets?: {
-        id?: string;
-        type?: components["schemas"]["DatasetType"];
-        name?: string;
-      }[];
-    };
-    DatasetType: "bigquery";
+      id: string
+      name: string
+      description?: string
+      slug: string
+      repo?: string
+      last_modified: string
+      created: string
+      owner: components['schemas']['Owner']
+      keywords?: string[]
+      datasets: components['schemas']['DatasetSummary'][]
+    }
+    DatasetSummary: {
+      id: string
+      name: string
+      type: components['schemas']['DatasetType']
+    }
+    DatasetType: 'bigquery'
     Owner: {
-      team: string;
-      teamkatalogen?: string;
-    };
+      team: string
+      teamkatalogen?: string
+    }
     BigQuery: {
-      project_id: string;
-      dataset: string;
-      table: string;
-    };
+      project_id: string
+      dataset: string
+      table: string
+    }
     NewDataproduct: {
-      name: string;
-      description?: string;
-      slug?: string;
-      repo?: string;
-      owner: components["schemas"]["Owner"];
-      keywords?: string[];
-    };
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      owner: components['schemas']['Owner']
+      keywords?: string[]
+    }
     UserInfo: {
-      name?: string;
-      email?: string;
-      teams?: string[];
-    };
+      name: string
+      email: string
+      teams: string[]
+    }
     Dataset: {
-      id: string;
-      dataproduct_id: string;
-      name: string;
-      description?: string;
-      pii: boolean;
-      bigquery: components["schemas"]["BigQuery"];
-    };
+      id: string
+      dataproduct_id: string
+      name: string
+      description?: string
+      pii: boolean
+      type: components['schemas']['DatasetType']
+      bigquery: components['schemas']['BigQuery']
+    }
     NewDataset: {
-      name: string;
-      description?: string;
-      dataproduct_id: string;
-      pii: boolean;
-      bigquery: components["schemas"]["BigQuery"];
-    };
+      name: string
+      description?: string
+      dataproduct_id: string
+      pii: boolean
+      bigquery: components['schemas']['BigQuery']
+    }
     SearchResultEntry: {
-      url?: string;
-      type?: "dataset" | "dataproduct" | "datapackage";
-      id?: string;
-      name?: string;
-      excerpt?: string;
-    };
-  };
+      url: string
+      type: components['schemas']['SearchResultType']
+      id: string
+      name: string
+      excerpt: string
+    }
+    SearchResultType: 'dataset' | 'dataproduct' | 'datapackage'
+  }
 }
 
 export interface operations {
@@ -118,174 +123,182 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserInfo"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['UserInfo']
+        }
+      }
+    }
+  }
   /** List all dataproducts */
   getDataproducts: {
+    parameters: {
+      query: {
+        limit?: number
+        offset?: number
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Dataproduct'][]
+        }
+      }
+    }
+  }
   /** Create a new dataproduct */
   createDataproduct: {
     responses: {
       /** Created successfully */
       201: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"];
-        };
-      };
-    };
+          'application/json': components['schemas']['Dataproduct']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewDataproduct"];
-      };
-    };
-  };
+        'application/json': components['schemas']['NewDataproduct']
+      }
+    }
+  }
   /** List a dataproduct with datasets */
   getDataproduct: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Dataproduct'][]
+        }
+      }
+    }
+  }
   /** Update a dataproduct */
   updateDataproduct: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Updated OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"];
-        };
-      };
-    };
+          'application/json': components['schemas']['Dataproduct']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewDataproduct"];
-      };
-    };
-  };
+        'application/json': components['schemas']['NewDataproduct']
+      }
+    }
+  }
   /** Delete a dataproduct */
   deleteDataproduct: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Deleted OK */
-      204: never;
-    };
-  };
+      204: never
+    }
+  }
   /** Create a new dataset */
   createDataset: {
     responses: {
       /** Created successfully */
       201: {
         content: {
-          "application/json": components["schemas"]["Dataset"];
-        };
-      };
-    };
+          'application/json': components['schemas']['Dataset']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewDataset"];
-      };
-    };
-  };
+        'application/json': components['schemas']['NewDataset']
+      }
+    }
+  }
   /** Get dataset */
   getDataset: {
     parameters: {
       path: {
         /** Dataset ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataset"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Dataset']
+        }
+      }
+    }
+  }
   /** Update a dataset */
   updateDataset: {
     parameters: {
       path: {
         /** Dataset ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Updated OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataset"];
-        };
-      };
-    };
+          'application/json': components['schemas']['Dataset']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewDataset"];
-      };
-    };
-  };
+        'application/json': components['schemas']['NewDataset']
+      }
+    }
+  }
   /** Delete a dataset */
   deleteDataset: {
     parameters: {
       path: {
         /** Dataset ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Deleted OK */
-      204: never;
-    };
-  };
-  /** Search in Datakatalog */
+      204: never
+    }
+  }
+  /** Search in NADA */
   search: {
     parameters: {
       query: {
-        q?: string;
-      };
-    };
+        q?: string
+        limit?: number
+        offset?: number
+      }
+    }
     responses: {
       /** Search result */
       200: {
         content: {
-          "application/json": components["schemas"]["SearchResultEntry"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['SearchResultEntry'][]
+        }
+      }
+    }
+  }
 }
 
 export interface external {}
