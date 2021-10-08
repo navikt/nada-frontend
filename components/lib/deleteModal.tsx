@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import apiDELETE from '../../lib/api/delete'
 
 interface DeleteModalProps {
-  open: boolean,
-  onClose: () => {},
-  deleteUrl: string,
+  open: boolean
+  onClose: () => {}
+  deleteUrl: string
   dataName: string
 }
 
@@ -15,9 +15,18 @@ const ButtonStyledDiv = styled.div`
   justify-content: flex-end;
   width: 100%;
 `
+const ContentBox = styled.div`
+  height: 200px;
+  display: table-cell;
+  vertical-align: middle;
+`
 
-export const DeleteModal = ({ open, onClose, deleteUrl, dataName }: DeleteModalProps) => {
-
+export const DeleteModal = ({
+  open,
+  onClose,
+  deleteUrl,
+  dataName,
+}: DeleteModalProps) => {
   const deleteData = async () => {
     apiDELETE(deleteUrl)
   }
@@ -25,21 +34,12 @@ export const DeleteModal = ({ open, onClose, deleteUrl, dataName }: DeleteModalP
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Content>
-        <h1>
-          Er du sikkert på at du vil slette {dataName}?
-        </h1>
+        <ContentBox>Er du sikkert på at du vil slette {dataName}?</ContentBox>
         <ButtonStyledDiv>
-          <Button
-            onClick={onClose}
-          >
+          <Button onClick={onClose} style={{ marginRight: '10px' }}>
             Avbryt
           </Button>
-          <Button
-            variant="danger"
-            onClick={async () =>
-              await deleteData()
-            }
-          >
+          <Button variant="danger" onClick={async () => await deleteData()}>
             Slett
           </Button>
         </ButtonStyledDiv>
