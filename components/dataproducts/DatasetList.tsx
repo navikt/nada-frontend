@@ -2,12 +2,13 @@ import { DatasetSchema, DatasetSummary } from '../../lib/schema/schema_types'
 import Link from 'next/link'
 import { NewDatasetForm } from '../forms/dataset/new'
 import apiPOST from '../../lib/api/post'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 import { AddCircleFilled } from '@navikt/ds-icons'
 import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
 import ErrorMessage from '../lib/error'
+import { AuthState } from '../../lib/context'
 
 interface DatasetInlineProps {
   dataset: DatasetSummary
@@ -49,12 +50,16 @@ const AddDatasetButton = ({
   message,
   onClick,
   ariaLabel,
-}: AddDatasetButtonProps) => (
-  <AddButtonContainer>
-    {message && <p>{message}</p>}
-    <AddCircleFilled aria-label={ariaLabel} onClick={onClick} />
-  </AddButtonContainer>
-)
+}: AddDatasetButtonProps) => {
+  const user = useContext(AuthState).user
+
+  return (
+    <AddButtonContainer>
+      {message && <p>{message}</p>}
+      {user && <AddCircleFilled aria-label={ariaLabel} onClick={onClick} />}
+    </AddButtonContainer>
+  )
+}
 
 export const DatasetList = ({ productId, datasets }: DatasetListProps) => {
   const [showNewDataset, setShowNewDataset] = useState<boolean>(false)
