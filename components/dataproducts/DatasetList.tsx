@@ -8,6 +8,7 @@ import { navBla } from '../../styles/constants'
 import { AuthState } from '../../lib/context'
 import { Modal } from '@navikt/ds-react'
 import DatasetCard from './datasetCard'
+import NewDatasetCard from './newDatasetCard'
 
 interface DatasetListProps {
   productId: string
@@ -62,19 +63,11 @@ export const DatasetList = ({ productId, datasets }: DatasetListProps) => {
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {user && <NewDatasetCard onClick={() => setShowNewDataset(true)} />}
         {datasets.map((d) => (
           <DatasetCard key={d.id} id={d.id} />
         ))}
       </div>
-      {user && (
-        <AddDatasetButton
-          message={
-            datasets.length ? undefined : 'Ingen datasett tilknyttet produkt'
-          }
-          ariaLabel={'Legg til datasett'}
-          onClick={() => setShowNewDataset(true)}
-        />
-      )}
 
       <Modal open={showNewDataset} onClose={() => setShowNewDataset(false)}>
         <Modal.Content>

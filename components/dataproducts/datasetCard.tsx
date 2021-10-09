@@ -45,45 +45,52 @@ const DatasetCard = ({ id }: DatasetCardProps) => {
       sx={{
         padding: '10px',
         margin: '10px',
-        minWidth: '350px',
-        minHeight: '250px',
+        minWidth: '270px',
+        minHeight: '350px',
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'column',
       }}
     >
       <CardHeader
-        title={data.name}
+        avatar={<BigQueryLogo />}
         action={<DatasetCardMenu dataset={data} />}
       ></CardHeader>
       <CardContent>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '-45px',
-          }}
-        >
-          <BigQueryLogo />
-        </div>
         <CardContent>
-          <i>type:</i> {data.type}
-          <br />
-          {data.pii ? (
-            <PiiWrapper>
-              <i>pii:</i>
-              <Warning color={navRod} style={{ margin: '0 7px 0' }} />
-              ja
-            </PiiWrapper>
-          ) : (
-            <PiiWrapper>
-              <i>pii:</i>
-              <Success color={navGronn} style={{ margin: '0 7px 0' }} />
-              nei
-            </PiiWrapper>
-          )}
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <b>navn:</b>
+                </td>
+                <td>{data.name}</td>
+              </tr>
+              <tr>
+                <td>
+                  <b>type:</b>
+                </td>
+                <td>{data.type || 'bigquery'}</td>
+              </tr>
+              <tr>
+                <td>
+                  <b>pii:</b>
+                </td>
+                <td>
+                  {data.pii ? (
+                    <Warning color={navRod} />
+                  ) : (
+                    <Success color={navGronn} />
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </CardContent>
-        <Typography>{data.description}</Typography>
+        <br />
+        <Typography>
+          <i>{data.description}</i>
+        </Typography>
       </CardContent>
 
       <CardActions sx={{ marginBottom: '0' }}>
