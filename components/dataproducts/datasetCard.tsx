@@ -7,10 +7,9 @@ import CardHeader from '@mui/material/CardHeader'
 import { CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import { fetcher } from '../../lib/api/fetcher'
 import DataProductSpinner from '../lib/spinner'
-import DatasetCardMenu from './datasetCardMenu'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { Success, Warning } from '@navikt/ds-icons'
-import { navGronn, navRod } from '../../styles/constants'
+import { navBlaLighten80, navGronn, navRod } from '../../styles/constants'
 import styled from 'styled-components'
 
 interface DatasetCardProps {
@@ -21,7 +20,14 @@ const PiiWrapper = styled.div`
   display: flex;
   align-items: center;
 `
-
+const StyledCard = styled.div`
+  div {
+    cursor: pointer;
+    :hover {
+      background-color: ${navBlaLighten80};
+    }
+  }
+`
 const DatasetCard = ({ id }: DatasetCardProps) => {
   const { data, error } = useSWR<DatasetSchema>(`/api/datasets/${id}`, fetcher)
   if (error)
@@ -41,62 +47,65 @@ const DatasetCard = ({ id }: DatasetCardProps) => {
     )
 
   return (
-    <Card
-      sx={{
-        padding: '10px',
-        margin: '10px',
-        minWidth: '270px',
-        minHeight: '350px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-      }}
-    >
-      <CardHeader
-        avatar={<BigQueryLogo />}
-        action={<DatasetCardMenu dataset={data} />}
-      ></CardHeader>
-      <CardContent>
-        <CardContent>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <b>navn:</b>
-                </td>
-                <td>{data.name}</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>type:</b>
-                </td>
-                <td>{data.type || 'bigquery'}</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>pii:</b>
-                </td>
-                <td>
-                  {data.pii ? (
-                    <Warning color={navRod} />
-                  ) : (
-                    <Success color={navGronn} />
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </CardContent>
-        <br />
-        <Typography>
-          <i>{data.description}</i>
-        </Typography>
-      </CardContent>
-
-      <CardActions sx={{ marginBottom: '0' }}>
-        <Link href={`/dataset/${data.id}`}>Gå til datasettet</Link>
-      </CardActions>
-    </Card>
+    <Link href={`/dataset/${data.id}`} passHref>
+      <StyledCard>
+        <Card
+          sx={{
+            padding: '10px',
+            margin: '10px',
+            minWidth: '270px',
+            minHeight: '350px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+          }}
+        >
+          <CardHeader
+            avatar={
+              <div style={{ marginTop: '-10px' }}>
+                <BigQueryLogo size={48} />
+              </div>
+            }
+          ></CardHeader>
+          <CardContent>
+            <CardContent>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <b>navn:</b>
+                    </td>
+                    <td>{data.name}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>type:</b>
+                    </td>
+                    <td>{data.type || 'bigquery'}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>pii:</b>
+                    </td>
+                    <td>
+                      {data.pii ? (
+                        <Warning color={navRod} />
+                      ) : (
+                        <Success color={navGronn} />
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </CardContent>
+            <br />
+            <Typography>
+              <i>{data.description}</i>
+            </Typography>
+          </CardContent>
+        </Card>
+      </StyledCard>
+    </Link>
   )
 }
 

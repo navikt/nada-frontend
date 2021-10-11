@@ -16,6 +16,8 @@ const DatasetCardMenu = ({ dataset }: DatasetInlineProps) => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false)
 
   const handleProfileMenuOpen = (event: MouseEvent) => {
+    event.stopPropagation()
+    event.preventDefault()
     setAnchorEl(event.currentTarget)
   }
 

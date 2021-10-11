@@ -1,8 +1,13 @@
-import IconBox from './iconBox'
+import IconBox, { LogoProps } from './iconBox'
 
-const BigQueryLogo = () => (
+const BigQueryLogo = (logoProps: LogoProps) => (
   <IconBox aria-label="bigquery logo">
-    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={logoProps.size}
+      height={logoProps.size}
+      viewBox={'0 0 64 64'}
+    >
       <path
         d="M14.48 58.196L.558 34.082c-.744-1.288-.744-2.876 0-4.164L14.48 5.805c.743-1.287 2.115-2.08 3.6-2.082h27.857c1.48.007 2.845.8 3.585 2.082l13.92 24.113c.744 1.288.744 2.876 0 4.164L49.52 58.196c-.743 1.287-2.115 2.08-3.6 2.082H18.07c-1.483-.005-2.85-.798-3.593-2.082z"
         fill="#4386fa"
