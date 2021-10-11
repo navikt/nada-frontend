@@ -1,5 +1,5 @@
 import { DatasetSummary } from '../../lib/schema/schema_types'
-import React, { useState } from 'react'
+import React, { useState, MouseEvent } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { Menu, MenuItem } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
@@ -10,7 +10,6 @@ interface DatasetInlineProps {
 }
 
 const DatasetCardMenu = ({ dataset }: DatasetInlineProps) => {
-
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
   const isMenuOpen = Boolean(anchorEl)
   const menuId = 'edit-dataset-menu'

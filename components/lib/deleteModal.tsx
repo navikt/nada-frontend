@@ -5,7 +5,7 @@ import apiDELETE from '../../lib/api/delete'
 
 interface DeleteModalProps {
   open: boolean
-  onClose: () => {}
+  onClose: (data: any) => void
   deleteUrl: string
   dataName: string
 }
@@ -32,7 +32,7 @@ export const DeleteModal = ({
   }
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={() => onClose}>
       <Modal.Content>
         <ContentBox>Er du sikkert på at du vil slette {dataName}?</ContentBox>
         <ButtonStyledDiv>
