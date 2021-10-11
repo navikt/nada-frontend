@@ -5,7 +5,7 @@ import { navBlaLighten80, navGronn } from '../../styles/constants'
 import styled from 'styled-components'
 
 interface NewDatasetCardProps {
-  onClick: () => {}
+  onClick: (data: any) => void
 }
 
 const StyledCard = styled.div`
