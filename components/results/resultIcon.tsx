@@ -3,15 +3,17 @@ import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import DataPackageLogo from '../lib/icons/dataPackageLogo'
 import { SearchResultProps } from './searchresult'
 import styled from 'styled-components'
+import IconBox from '../lib/icons/iconBox'
 
 export const ResultIcon = ({ result }: SearchResultProps) => {
   const iconMap = {
-    dataproduct: <DataProductLogo />,
-    dataset: <BigQueryLogo />,
-    datapackage: <DataPackageLogo />,
+    dataproduct: <DataProductLogo size={64} />,
+    dataset: <BigQueryLogo size={64} />,
+    datapackage: <DataPackageLogo size={64} />,
   }
 
-  if (result.type && result.type in iconMap) return iconMap[result.type]
+  if (result.type && result.type in iconMap)
+    return <IconBox>{iconMap[result.type]}</IconBox>
 
-  return <DataProductLogo />
+  return <DataProductLogo size={64} />
 }

@@ -63,10 +63,10 @@ export const DatasetList = ({ productId, datasets }: DatasetListProps) => {
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {user && <NewDatasetCard onClick={() => setShowNewDataset(true)} />}
         {datasets.map((d) => (
           <DatasetCard key={d.id} id={d.id} />
         ))}
+        {user && <NewDatasetCard onClick={() => setShowNewDataset(true)} />}
       </div>
 
       <Modal open={showNewDataset} onClose={() => setShowNewDataset(false)}>

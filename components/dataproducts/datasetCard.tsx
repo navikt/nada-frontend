@@ -2,109 +2,75 @@ import { DatasetSchema } from '../../lib/schema/schema_types'
 import useSWR from 'swr'
 import Link from 'next/link'
 
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import { CardActions, CardContent, CardMedia, Typography } from '@mui/material'
+import { Card, CardHeader, CardContent } from '@mui/material'
 import { fetcher } from '../../lib/api/fetcher'
 import DataProductSpinner from '../lib/spinner'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
-import { Success, Warning } from '@navikt/ds-icons'
-import { navBlaLighten80, navGronn, navRod } from '../../styles/constants'
+import { navBlaLighten80 } from '../../styles/constants'
 import styled from 'styled-components'
+import { PiiIkon } from './PiiIkon'
 
 interface DatasetCardProps {
   id: string
 }
 
-const PiiWrapper = styled.div`
+const DatasetCardDiv = styled(Card)`
+  padding: 10px;
+  margin: 10px;
+  min-width: 270px;
+  min-height: 350px;
   display: flex;
-  align-items: center;
-`
-const StyledCard = styled.div`
-  div {
-    cursor: pointer;
-    :hover {
-      background-color: ${navBlaLighten80};
-    }
+
+  flex-direction: column;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${navBlaLighten80};
   }
 `
+
+const InertDatasetCardDiv = styled(DatasetCardDiv)`
+  cursor: unset;
+  :hover {
+    background-color: unset;
+  }
+`
+
 const DatasetCard = ({ id }: DatasetCardProps) => {
   const { data, error } = useSWR<DatasetSchema>(`/api/datasets/${id}`, fetcher)
+
   if (error)
     return (
-      <Card sx={{ margin: '10px', minWidth: '350px', minHeight: '350px' }}>
-        <CardHeader title={'Error fetching dataset'} />
-        Error:<p>{error.toString()}</p>
-      </Card>
+      <InertDatasetCardDiv>
+        <CardHeader title={'Kunne ikke hente datasett'} />
+        <CardContent>{error.toString()}</CardContent>
+      </InertDatasetCardDiv>
     )
 
   if (!data)
     return (
-      <Card sx={{ margin: '10px', minWidth: '350px', minHeight: '350px' }}>
-        <CardHeader title={'fetching dataset'} />
-        <DataProductSpinner />
-      </Card>
+      <InertDatasetCardDiv>
+        <CardHeader title={'Laster...'} />
+        <CardContent>
+          <DataProductSpinner />
+        </CardContent>
+      </InertDatasetCardDiv>
     )
 
   return (
     <Link href={`/dataset/${data.id}`} passHref>
-      <StyledCard>
-        <Card
-          sx={{
-            padding: '10px',
-            margin: '10px',
-            minWidth: '270px',
-            minHeight: '350px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'column',
-          }}
-        >
-          <CardHeader
-            avatar={
-              <div style={{ marginTop: '-10px' }}>
-                <BigQueryLogo size={48} />
-              </div>
-            }
-          ></CardHeader>
-          <CardContent>
-            <CardContent>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <b>navn:</b>
-                    </td>
-                    <td>{data.name}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>type:</b>
-                    </td>
-                    <td>{data.type || 'bigquery'}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>pii:</b>
-                    </td>
-                    <td>
-                      {data.pii ? (
-                        <Warning color={navRod} />
-                      ) : (
-                        <Success color={navGronn} />
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </CardContent>
-            <br />
-            <Typography>
-              <i>{data.description}</i>
-            </Typography>
-          </CardContent>
-        </Card>
-      </StyledCard>
+      <DatasetCardDiv>
+        <CardHeader
+          title={data.name}
+          subheader={data.type || 'BigQuery'}
+          avatar={<BigQueryLogo size={48} />}
+        />
+        <CardContent sx={{ flexGrow: 1 }}>
+          <i>{data.description}</i>
+        </CardContent>
+
+        <PiiIkon pii={data.pii} />
+      </DatasetCardDiv>
     </Link>
   )
 }

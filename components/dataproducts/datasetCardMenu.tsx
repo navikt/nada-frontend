@@ -16,12 +16,10 @@ const DatasetCardMenu = ({ dataset }: DatasetInlineProps) => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false)
 
   const handleProfileMenuOpen = (event: MouseEvent) => {
-    event.stopPropagation()
-    event.preventDefault()
     setAnchorEl(event.currentTarget)
   }
 
-  const handleMenuClose = () => {
+  const handleMenuClose = (event: MouseEvent) => {
     setAnchorEl(null)
   }
 
@@ -53,16 +51,10 @@ const DatasetCardMenu = ({ dataset }: DatasetInlineProps) => {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
+        <MenuItem onClick={handleMenuClose}>Rediger</MenuItem>
         <MenuItem
-          onClick={() => {
-            handleMenuClose()
-          }}
-        >
-          Rediger
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleMenuClose()
+          onClick={(e) => {
+            handleMenuClose(e)
             setDeleteModal(true)
           }}
         >

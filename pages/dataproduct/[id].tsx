@@ -1,7 +1,11 @@
 import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
 import useSWR, { SWRConfig } from 'swr'
-import { DataproductSchema } from '../../lib/schema/schema_types'
+import {
+  DataproductSchema,
+  DatasetSchema,
+  DatasetSummary,
+} from '../../lib/schema/schema_types'
 import { GetServerSideProps } from 'next'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
@@ -10,6 +14,35 @@ import {
   DataproductDetailProps,
 } from '../../components/dataproducts/detail'
 import DataProductSpinner from '../../components/lib/spinner'
+
+const getBothURLs = (apiEndpoint: string) => [
+  `/api${apiEndpoint}`,
+  `${getBackendURI()}${apiEndpoint}`,
+]
+
+const prefetchDatasets = async (
+  datasetIds: DatasetSummary[]
+): Promise<{ [url: string]: DatasetSchema }> => {
+  // First, we get them as [{url: foo, content: bar}]
+  const datasetPrefetches = datasetIds.map(
+    async (
+      ds: DatasetSummary
+    ): Promise<{ url: string; content: DatasetSchema }> => {
+      const [fallbackURL, backendURL] = getBothURLs(`/datasets/${ds.id}`)
+
+      return { url: fallbackURL, content: await fetcher(backendURL) }
+    }
+  )
+
+  // Then we wait for the promises to resolve
+  const fetches = await Promise.all(datasetPrefetches)
+
+  // Then we mangle the data until it fits into the expected { url: result }
+  let spreadableFetches: { [k: string]: DatasetSchema } = {}
+  for (const fetch of fetches) spreadableFetches[fetch.url] = fetch.content
+
+  return spreadableFetches
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context?.params?.id
@@ -21,10 +54,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const dataproduct = await fetcher(backendURL)
 
+    const datasetPrefetches = await prefetchDatasets(dataproduct.datasets)
+
     return {
       props: {
         fallback: {
           [fallbackName]: dataproduct,
+          ...datasetPrefetches,
         },
       },
     }
