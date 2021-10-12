@@ -17,8 +17,8 @@ interface DatasetCardProps {
 const DatasetCardDiv = styled(Card)`
   padding: 10px;
   margin: 10px;
-  min-width: 270px;
-  min-height: 350px;
+  width: 270px;
+  height: 350px;
   display: flex;
 
   flex-direction: column;
@@ -65,8 +65,15 @@ const DatasetCard = ({ id }: DatasetCardProps) => {
           subheader={data.type || 'BigQuery'}
           avatar={<BigQueryLogo size={48} />}
         />
-        <CardContent sx={{ flexGrow: 1 }}>
-          <i>{data.description}</i>
+        <CardContent
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <i>
+            {data.description && data.description.substr(0, 200)}
+            {data.description && data.description.length > 200 && '...'}
+          </i>
         </CardContent>
 
         <PiiIkon pii={data.pii} />
