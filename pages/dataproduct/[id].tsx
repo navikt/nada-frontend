@@ -12,7 +12,7 @@ import { fetcher } from '../../lib/api/fetcher'
 import {
   DataProductDetail,
   DataproductDetailProps,
-} from '../../components/dataproducts/detail'
+} from '../../components/dataproducts/dataproductDetail'
 import DataProductSpinner from '../../components/lib/spinner'
 
 const getBothURLs = (apiEndpoint: string) => [
@@ -98,6 +98,7 @@ const DataproductFetcher = ({ id }: DataFetcherProps) => {
 const DataProduct = ({ fallback }: DataProductProps) => {
   const router = useRouter()
   const { id } = router.query
+
 
   if (typeof id !== 'string') return null
 
