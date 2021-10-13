@@ -15,7 +15,7 @@ interface NewDataproductFormProps {
 }
 
 export const NewDataProductForm = ({ onSubmit }: NewDataproductFormProps) => {
-  const { register, handleSubmit, reset, formState } = useForm(
+  const { register, handleSubmit, formState } = useForm(
     NewDataproductFormOptions
   )
   const { errors } = formState

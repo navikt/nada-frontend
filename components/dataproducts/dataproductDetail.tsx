@@ -38,6 +38,7 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
     }
   }
 
+  // FIXME: Make Slett-knapp not synlig when not innlogga
   return edit ? (
     <EditDataProductForm dataproduct={product} close={setEdit} />
   ) : (
@@ -69,7 +70,7 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
         </ReactMarkdown>
       </div>
       <h2>Datasett i dataproduktet:</h2>
-      <DatasetList productId={product.id} datasets={product.datasets} />
+      <DatasetList product={product} />
     </div>
   )
 }

@@ -1,5 +1,9 @@
-import { DatasetSchema, DatasetSummary } from '../../lib/schema/schema_types'
-import { NewDatasetForm } from '../forms/dataset/new'
+import {
+  DataproductSchema,
+  DatasetSchema,
+  DatasetSummary,
+} from '../../lib/schema/schema_types'
+import { NewDatasetForm } from './newDatasetForm'
 import { useContext, useState } from 'react'
 
 import { AddCircleFilled } from '@navikt/ds-icons'
@@ -9,10 +13,10 @@ import { AuthState } from '../../lib/context'
 import { Modal } from '@navikt/ds-react'
 import DatasetCard from './datasetCard'
 import NewDatasetCard from './newDatasetCard'
+import { mutate } from 'swr'
 
 interface DatasetListProps {
-  productId: string
-  datasets: DatasetSummary[]
+  product: DataproductSchema
 }
 
 const AddButtonContainer = styled.div`
@@ -51,19 +55,19 @@ const AddDatasetButton = ({
   )
 }
 
-export const DatasetList = ({ productId, datasets }: DatasetListProps) => {
+export const DatasetList = ({ product }: DatasetListProps) => {
   const [showNewDataset, setShowNewDataset] = useState<boolean>(false)
   const user = useContext(AuthState).user
 
-  const createAndAppend = async (requestData: any) => {}
   const onCreate = async (newDataset: DatasetSchema) => {
-    datasets.push(newDataset)
+    await mutate(`/api/dataproducts/${product.id}`)
     setShowNewDataset(false)
   }
+
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {datasets.map((d) => (
+        {product.datasets.map((d) => (
           <DatasetCard key={d.id} id={d.id} />
         ))}
         {user && <NewDatasetCard onClick={() => setShowNewDataset(true)} />}
@@ -71,7 +75,7 @@ export const DatasetList = ({ productId, datasets }: DatasetListProps) => {
 
       <Modal open={showNewDataset} onClose={() => setShowNewDataset(false)}>
         <Modal.Content>
-          <NewDatasetForm dataproduct_id={productId} onCreate={onCreate} />
+          <NewDatasetForm product={product} onCreate={onCreate} />
         </Modal.Content>
       </Modal>
     </>

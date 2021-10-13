@@ -2,22 +2,25 @@ import {
   ConfirmationPanel,
   ErrorSummary,
   Fieldset,
+  Select,
   TextField,
 } from '@navikt/ds-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { newDatasetValidation } from '../../../lib/schema/yupValidations'
-import { useContext, useState } from 'react'
-import { AuthState } from '../../../lib/context'
+import { newDatasetValidation } from '../../lib/schema/yupValidations'
+import { useContext, useEffect, useState } from 'react'
+import { AuthState } from '../../lib/context'
 import styled from 'styled-components'
-import RightJustifiedSubmitButton from '../../widgets/formSubmit'
-import apiPOST from '../../../lib/api/post'
-import { DatasetSchema } from '../../../lib/schema/schema_types'
-import ErrorMessage from '../../lib/error'
+import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import apiPOST from '../../lib/api/post'
+import { DataproductSchema, DatasetSchema } from '../../lib/schema/schema_types'
+import ErrorMessage from '../lib/error'
+import useSWR from 'swr'
+import fetcher from '../../lib/api/fetcher'
 
 interface NewDatasetFormProps {
   onCreate: (data: DatasetSchema) => Promise<void>
-  dataproduct_id: string
+  product: DataproductSchema
 }
 
 // Until ds-react serves our needs
@@ -30,17 +33,27 @@ const ConfirmationPanelWrapper = styled.div`
   }
 `
 
-export const NewDatasetForm = ({
-  onCreate,
-  dataproduct_id,
-}: NewDatasetFormProps) => {
+export const NewDatasetForm = ({ onCreate, product }: NewDatasetFormProps) => {
   const [backendError, setBackendError] = useState<Error>()
 
   const { register, handleSubmit, watch, formState } = useForm({
     resolver: yupResolver(newDatasetValidation),
   })
 
+  const productTeamProjectIDs = useSWR(
+    `/api/team/${product.owner.team}/gcp_projects`,
+    fetcher
+  )
+
+  const projectID = watch('bigquery.project_id')
+  useEffect(() => {
+    if (projectID && projectID.length) {
+      // TODO: Update something here.
+      console.log('We should update something here')
+    }
+  }, [projectID])
   const piiValue = watch('pii', true)
+
   const { errors } = formState
 
   const onSubmit = async (requestData: DatasetSchema) => {
@@ -57,7 +70,7 @@ export const NewDatasetForm = ({
       <input
         type="hidden"
         id="dataproduct_id"
-        value={dataproduct_id}
+        value={product.id}
         {...register('dataproduct_id')}
       />
       {backendError && <ErrorMessage error={backendError} />}
@@ -75,11 +88,18 @@ export const NewDatasetForm = ({
           error={errors.description?.message}
         />
         <Fieldset legend="BigQuery" errorPropagation={false}>
-          <TextField
+          <Select
             label="Project ID"
             {...register('bigquery.project_id')}
             error={errors?.bigquery?.project_id?.message}
-          />
+          >
+            <option value={''}>Velg team</option>
+            {productTeamProjectIDs.data?.map((t: string) => (
+              <option value={t} key={t}>
+                {t}
+              </option>
+            ))}
+          </Select>
           <TextField
             label="Datasett"
             {...register('bigquery.dataset')}

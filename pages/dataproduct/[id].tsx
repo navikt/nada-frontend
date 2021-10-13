@@ -9,13 +9,8 @@ import {
 import { GetServerSideProps } from 'next'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
-import {
-  DataProductDetail,
-  DataproductDetailProps,
-} from '../../components/dataproducts/dataproductDetail'
+import { DataProductDetail } from '../../components/dataproducts/dataproductDetail'
 import DataProductSpinner from '../../components/lib/spinner'
-import apiDELETE from '../../lib/api/delete'
-import { useState } from 'react'
 
 const getBothURLs = (apiEndpoint: string) => [
   `/api${apiEndpoint}`,
