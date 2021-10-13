@@ -2,7 +2,7 @@ import { DataproductSchema } from '../../lib/schema/schema_types'
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import ReactMarkdown from 'react-markdown'
-import DatasetList from './DatasetList'
+import DatasetList from './datasetList'
 
 export interface DataproductDetailProps {
   product: DataproductSchema
@@ -15,10 +15,10 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
   return (
     <div>
       <h1>{product.name}</h1>
-      <p>
-        Opprettet: {humanizeDate(product.created)} &ndash; Oppdatert:{' '}
-        {humanizeDate(product.last_modified)}
-      </p>
+      <div>
+        <i>Opprettet:</i> {humanizeDate(product.created)}
+        <i>Oppdatert:</i> {humanizeDate(product.last_modified)}
+      </div>
       <div>
         <ReactMarkdown>
           {product.description || '*ingen beskrivelse*'}
