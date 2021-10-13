@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import DataProductSpinner from '../../components/lib/spinner'
 import PageLayout from '../../components/pageLayout'
 import { DatasetSchema } from '../../lib/schema/schema_types'
-import ErrorMessage from '../../components/lib/error'
+import ErrorMessageDiv from '../../components/lib/error'
 import fetcher from '../../lib/api/fetcher'
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
@@ -13,6 +13,8 @@ import ReactMarkdown from 'react-markdown'
 import { navBla } from '../../styles/constants'
 import styled from 'styled-components'
 import DatasetTableSchema from '../../components/datasets/datasetTableSchema'
+import { Button } from '@navikt/ds-react'
+import apiDELETE from '../../lib/api/delete'
 
 interface DatasetDetailProps {
   data: DatasetSchema
@@ -25,19 +27,29 @@ const LinkDiv = styled.div`
 
 const DatasetDetail = ({ data, error }: DatasetDetailProps) => {
   const [activeTab, setActiveTab] = useState(0)
-
+  const router = useRouter()
+  const deleteDataset = async (id: string) => {
+    try {
+      await apiDELETE(`/api/datasets/${id}`)
+      await router.push(`/dataproduct/${data.dataproduct_id}`)
+    } catch (e: any) {
+      setBackendError(e.toString())
+    }
+  }
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)
   }
+  const [backendError, setBackendError] = useState()
 
   const gcpUrl = 'https://console.cloud.google.com'
 
-  if (error) return <ErrorMessage error={error} />
+  if (error) return <ErrorMessageDiv error={error} />
 
   if (!data) return <DataProductSpinner />
 
   return (
     <div>
+      {backendError && <ErrorMessageDiv error={backendError} />}
       <h1>{data.name}</h1>
       <LinkDiv>
         <Link href={`/dataproduct/${data.dataproduct_id}`}>
@@ -51,6 +63,17 @@ const DatasetDetail = ({ data, error }: DatasetDetailProps) => {
           Åpne datasettet i BigQuery
         </Link>
       </LinkDiv>
+      <div>
+        <i>adresse: </i>
+        {`${data.bigquery.project_id}.${data.bigquery.dataset}.${data.bigquery.table}`}
+        <br />
+        <Button
+          onClick={async () => await deleteDataset(data.id)}
+          variant={'danger'}
+        >
+          Slett
+        </Button>
+      </div>
 
       <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>
         <Tabs

@@ -3,9 +3,7 @@ export const apiDELETE = async (url: string) => {
     method: 'DELETE',
   })
 
-  if (!res.ok) throw new Error(`${res.status} - ${res.statusText}`)
-
-  return await res.json()
+  if (res.status !== 204) throw new Error(`${res.status} - ${res.statusText}`)
 }
 
 export default apiDELETE
