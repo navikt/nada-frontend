@@ -8,6 +8,26 @@ export interface paths {
     /** get user info */
     get: operations['getUserInfo']
   }
+  '/team/{id}/gcp_projects': {
+    /** Query and return all GCP projects for the team */
+    get: operations['getGCPProjects']
+    parameters: {
+      path: {
+        /** Team ID */
+        id: string
+      }
+    }
+  }
+  '/gcp/{id}/tables': {
+    /** Return all BigQuery tables in gcp project */
+    get: operations['getBigQueryTables']
+    parameters: {
+      path: {
+        /** GCP project ID */
+        id: string
+      }
+    }
+  }
   '/dataproducts': {
     /** List all dataproducts */
     get: operations['getDataproducts']
@@ -33,6 +53,10 @@ export interface paths {
     put: operations['updateDataset']
     /** Delete a dataset */
     delete: operations['deleteDataset']
+  }
+  '/datasets/{id}/metadata': {
+    /** Get dataset metadata */
+    get: operations['getDatasetMetadata']
   }
   '/search': {
     /** Search in NADA */
@@ -84,6 +108,13 @@ export interface components {
       owner: components['schemas']['Owner']
       keywords?: string[]
     }
+    UpdateDataproduct: {
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      keywords?: string[]
+    }
     UserInfo: {
       name: string
       email: string
@@ -105,6 +136,18 @@ export interface components {
       pii: boolean
       bigquery: components['schemas']['BigQuery']
     }
+    TableColumn: {
+      name: string
+      type: string
+      mode: string
+      description: string
+    }
+    DatasetMetadata: {
+      dataset_id: string
+      schema: components['schemas']['TableColumn'][]
+    } & {
+      id: unknown
+    }
     SearchResultEntry: {
       url: string
       type: components['schemas']['SearchResultType']
@@ -124,6 +167,40 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['UserInfo']
+        }
+      }
+    }
+  }
+  /** Query and return all GCP projects for the team */
+  getGCPProjects: {
+    parameters: {
+      path: {
+        /** Team ID */
+        id: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': string[]
+        }
+      }
+    }
+  }
+  /** Return all BigQuery tables in gcp project */
+  getBigQueryTables: {
+    parameters: {
+      path: {
+        /** GCP project ID */
+        id: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['BigQuery'][]
         }
       }
     }
@@ -196,7 +273,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['NewDataproduct']
+        'application/json': components['schemas']['UpdateDataproduct']
       }
     }
   }
@@ -279,6 +356,23 @@ export interface operations {
     responses: {
       /** Deleted OK */
       204: never
+    }
+  }
+  /** Get dataset metadata */
+  getDatasetMetadata: {
+    parameters: {
+      path: {
+        /** Dataset ID */
+        id: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['DatasetMetadata']
+        }
+      }
     }
   }
   /** Search in NADA */
