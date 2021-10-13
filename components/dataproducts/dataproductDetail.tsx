@@ -7,6 +7,9 @@ import { Button, MicroCard } from '@navikt/ds-react'
 import { EditDataProductForm } from './editDataproductForm'
 import DatasetList from './datasetList'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import apiDELETE from '../../lib/api/delete'
+import ErrorMessage from '../lib/error'
 
 export interface DataproductDetailProps {
   product: DataproductSchema
@@ -24,11 +27,22 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
     format(parseISO(isoDate), 'PPPP', { locale: nb })
 
   const [edit, setEdit] = useState(false)
+  const [backendError, setBackendError] = useState()
+  const router = useRouter()
+  const deleteDataproduct = async (id: string) => {
+    try {
+      await apiDELETE(`/api/dataproducts/${id}`)
+      await router.push(`/`)
+    } catch (e: any) {
+      setBackendError(e.toString())
+    }
+  }
 
   return edit ? (
     <EditDataProductForm dataproduct={product} close={setEdit} />
   ) : (
     <div>
+      {backendError && <ErrorMessage error={backendError} />}
       <StyledEdit>
         <h1>{product.name}</h1>
         <Button onClick={() => setEdit(true)}>Edit</Button>
@@ -41,6 +55,13 @@ export const DataProductDetail = ({ product }: DataproductDetailProps) => {
           product.keywords.map((k, i) => (
             <MicroCard key={`dataproduct_keyword_${i}`}>k</MicroCard>
           ))}
+        <br />
+        <Button
+          onClick={async () => await deleteDataproduct(product.id)}
+          variant={'danger'}
+        >
+          Slett
+        </Button>
       </div>
       <div>
         <ReactMarkdown>

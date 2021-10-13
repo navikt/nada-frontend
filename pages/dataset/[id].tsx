@@ -3,18 +3,17 @@ import useSWR from 'swr'
 import DataProductSpinner from '../../components/lib/spinner'
 import PageLayout from '../../components/pageLayout'
 import { DatasetSchema } from '../../lib/schema/schema_types'
-import ErrorMessageDiv from '../../components/lib/error'
 import fetcher from '../../lib/api/fetcher'
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import Link from 'next/link'
 import TabPanel from '../../components/lib/tabPanel'
 import ReactMarkdown from 'react-markdown'
-import { navBla } from '../../styles/constants'
 import styled from 'styled-components'
 import DatasetTableSchema from '../../components/datasets/datasetTableSchema'
 import { Button } from '@navikt/ds-react'
 import apiDELETE from '../../lib/api/delete'
+import ErrorMessage from '../../components/lib/error'
 
 interface DatasetDetailProps {
   data: DatasetSchema
@@ -43,13 +42,13 @@ const DatasetDetail = ({ data, error }: DatasetDetailProps) => {
 
   const gcpUrl = 'https://console.cloud.google.com'
 
-  if (error) return <ErrorMessageDiv error={error} />
+  if (error) return <ErrorMessage error={error} />
 
   if (!data) return <DataProductSpinner />
 
   return (
     <div>
-      {backendError && <ErrorMessageDiv error={backendError} />}
+      {backendError && <ErrorMessage error={backendError} />}
       <h1>{data.name}</h1>
       <LinkDiv>
         <Link href={`/dataproduct/${data.dataproduct_id}`}>

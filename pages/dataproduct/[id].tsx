@@ -14,6 +14,8 @@ import {
   DataproductDetailProps,
 } from '../../components/dataproducts/dataproductDetail'
 import DataProductSpinner from '../../components/lib/spinner'
+import apiDELETE from '../../lib/api/delete'
+import { useState } from 'react'
 
 const getBothURLs = (apiEndpoint: string) => [
   `/api${apiEndpoint}`,
@@ -98,7 +100,6 @@ const DataproductFetcher = ({ id }: DataFetcherProps) => {
 const DataProduct = ({ fallback }: DataProductProps) => {
   const router = useRouter()
   const { id } = router.query
-
 
   if (typeof id !== 'string') return null
 
