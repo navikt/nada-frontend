@@ -4,7 +4,7 @@ import { AddCircleFilled } from '@navikt/ds-icons'
 import { navBlaLighten80, navGronn } from '../../styles/constants'
 import styled from 'styled-components'
 
-interface NewDatasetCardProps {
+interface NewDataproductCardProps {
   onClick: (data: any) => void
 }
 
@@ -20,7 +20,7 @@ const StyledCard = styled.div`
     }
   }
 `
-const NewDatasetCard = ({ onClick }: NewDatasetCardProps) => {
+const NewDataproductCard = ({ onClick }: NewDataproductCardProps) => {
   return (
     <StyledCard>
       <Card
@@ -47,7 +47,7 @@ const NewDatasetCard = ({ onClick }: NewDatasetCardProps) => {
         </div>
         <div>
           <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            Legg til dataset
+            Legg til dataprodukt
           </CardActions>
         </div>
       </Card>
@@ -55,4 +55,4 @@ const NewDatasetCard = ({ onClick }: NewDatasetCardProps) => {
   )
 }
 
-export default NewDatasetCard
+export default NewDataproductCard

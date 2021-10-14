@@ -6,10 +6,10 @@ const CenteredSpinner = styled.div`
   width: fit-content;
 `
 
-export const DataProductSpinner = () => (
+export const LoaderSpinner = () => (
   <CenteredSpinner>
     <Loader size="2xlarge" transparent />
   </CenteredSpinner>
 )
 
-export default DataProductSpinner
+export default LoaderSpinner

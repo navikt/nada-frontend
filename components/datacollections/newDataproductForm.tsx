@@ -1,15 +1,13 @@
 import {
   ConfirmationPanel,
-  ErrorSummary,
   Fieldset,
   Select,
   TextField,
 } from '@navikt/ds-react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { newDatasetValidation } from '../../lib/schema/yupValidations'
+import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import { useContext, useEffect, useState } from 'react'
-import { AuthState } from '../../lib/context'
 import styled from 'styled-components'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import apiPOST from '../../lib/api/post'
@@ -18,9 +16,9 @@ import ErrorMessage from '../lib/error'
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
 
-interface NewDatasetFormProps {
-  onCreate: (data: DatasetSchema) => Promise<void>
-  product: DataproductSchema
+interface NewDataproductFormProps {
+  onCreate: (dataproduct: DatasetSchema) => Promise<void>
+  collection: DataproductSchema
 }
 
 // Until ds-react serves our needs
@@ -33,15 +31,18 @@ const ConfirmationPanelWrapper = styled.div`
   }
 `
 
-export const NewDatasetForm = ({ onCreate, product }: NewDatasetFormProps) => {
+export const NewDataproductForm = ({
+  onCreate,
+  collection,
+}: NewDataproductFormProps) => {
   const [backendError, setBackendError] = useState<Error>()
 
   const { register, handleSubmit, watch, formState } = useForm({
-    resolver: yupResolver(newDatasetValidation),
+    resolver: yupResolver(newDataproductValidation),
   })
 
-  const productTeamProjectIDs = useSWR(
-    `/api/team/${product.owner.team}/gcp_projects`,
+  const collectionTeamProjectIDs = useSWR(
+    `/api/team/${collection.owner.team}/gcp_projects`,
     fetcher
   )
 
@@ -58,8 +59,8 @@ export const NewDatasetForm = ({ onCreate, product }: NewDatasetFormProps) => {
 
   const onSubmit = async (requestData: DatasetSchema) => {
     try {
-      const createdDataset = await apiPOST(`/api/datasets`, requestData)
-      await onCreate(createdDataset)
+      const createdDataproduct = await apiPOST(`/api/datasets`, requestData)
+      await onCreate(createdDataproduct)
     } catch (e: any) {
       setBackendError(e)
     }
@@ -70,11 +71,11 @@ export const NewDatasetForm = ({ onCreate, product }: NewDatasetFormProps) => {
       <input
         type="hidden"
         id="dataproduct_id"
-        value={product.id}
+        value={collection.id}
         {...register('dataproduct_id')}
       />
       {backendError && <ErrorMessage error={backendError} />}
-      <Fieldset legend="Datasett" errorPropagation={false}>
+      <Fieldset legend="Dataprodukt" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"
@@ -94,14 +95,14 @@ export const NewDatasetForm = ({ onCreate, product }: NewDatasetFormProps) => {
             error={errors?.bigquery?.project_id?.message}
           >
             <option value={''}>Velg team</option>
-            {productTeamProjectIDs.data?.map((t: string) => (
+            {collectionTeamProjectIDs.data?.map((t: string) => (
               <option value={t} key={t}>
                 {t}
               </option>
             ))}
           </Select>
           <TextField
-            label="Datasett"
+            label="Dataprodukt"
             {...register('bigquery.dataset')}
             error={errors?.bigquery?.dataset?.message}
           />
@@ -118,7 +119,7 @@ export const NewDatasetForm = ({ onCreate, product }: NewDatasetFormProps) => {
             label="Personidentifiserende informasjon"
             size="small"
           >
-            Dette datasettet inneholder {!piiValue && <b> IKKE </b>}
+            Dette dataproduktet inneholder {!piiValue && <b> IKKE </b>}
             personidentifiserende informasjon
           </ConfirmationPanel>
         </ConfirmationPanelWrapper>

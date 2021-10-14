@@ -12,34 +12,31 @@ const EditDataproductSchema = {
   resolver: yupResolver(dataproductValidation),
 }
 
-interface EditDataproductFormProps {
-  dataproduct: DataproductSchema
+interface EditDatacollectionFormProps {
+  datacollection: DataproductSchema
   close: Dispatch<SetStateAction<boolean>>
 }
 
-export const EditDataProductForm = ({
-  dataproduct,
+export const EditDatacollectionForm = ({
+  datacollection,
   close,
-}: EditDataproductFormProps) => {
+}: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
   const { register, handleSubmit, reset, formState } = useForm({
     resolver: yupResolver(dataproductValidation),
     defaultValues: {
-      name: dataproduct.name,
-      description: dataproduct.description,
-      slug: dataproduct.slug,
-      repo: dataproduct.repo,
-      owner: dataproduct.owner,
+      name: datacollection.name,
+      description: datacollection.description,
+      slug: datacollection.slug,
+      repo: datacollection.repo,
+      owner: datacollection.owner,
     },
   })
   const { errors } = formState
   const onSubmit = async (requestData: any) => {
     try {
-      const editedProduct = await apiPUT(
-        `/api/dataproducts/${dataproduct.id}`,
-        requestData
-      )
-      mutate(`/api/dataproducts/${dataproduct.id}`)
+      await apiPUT(`/api/dataproducts/${datacollection.id}`, requestData)
+      mutate(`/api/dataproducts/${datacollection.id}`)
       setBackendError(undefined)
       close(false)
     } catch (e: any) {
@@ -53,7 +50,7 @@ export const EditDataProductForm = ({
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Dataprodukt" errorPropagation={false}>
+      <Fieldset legend="Datacollection" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"

@@ -1,9 +1,5 @@
-import {
-  DataproductSchema,
-  DatasetSchema,
-  DatasetSummary,
-} from '../../lib/schema/schema_types'
-import { NewDatasetForm } from './newDatasetForm'
+import { DataproductSchema, DatasetSchema } from '../../lib/schema/schema_types'
+import { NewDataproductForm } from './newDataproductForm'
 import { useContext, useState } from 'react'
 
 import { AddCircleFilled } from '@navikt/ds-icons'
@@ -11,13 +7,9 @@ import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
 import { AuthState } from '../../lib/context'
 import { Modal } from '@navikt/ds-react'
-import DatasetCard from './datasetCard'
-import NewDatasetCard from './newDatasetCard'
+import DataproductCard from './dataproductCard'
+import NewDataproductCard from './newDataproductCard'
 import { mutate } from 'swr'
-
-interface DatasetListProps {
-  product: DataproductSchema
-}
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -55,31 +47,40 @@ const AddDatasetButton = ({
   )
 }
 
-export const DatasetList = ({ product }: DatasetListProps) => {
-  const [showNewDataset, setShowNewDataset] = useState<boolean>(false)
+interface DataproductListProps {
+  collection: DataproductSchema
+}
+
+export const DataproductList = ({ collection }: DataproductListProps) => {
+  const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const user = useContext(AuthState).user
 
-  const onCreate = async (newDataset: DatasetSchema) => {
-    await mutate(`/api/dataproducts/${product.id}`)
-    setShowNewDataset(false)
+  const onCreate = async (newDataproduct: DatasetSchema) => {
+    await mutate(`/api/datacollection/${collection.id}`)
+    setShowNewDataproduct(false)
   }
 
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {product.datasets.map((d) => (
-          <DatasetCard key={d.id} id={d.id} />
+        {collection.datasets.map((d) => (
+          <DataproductCard key={d.id} id={d.id} />
         ))}
-        {user && <NewDatasetCard onClick={() => setShowNewDataset(true)} />}
+        {user && (
+          <NewDataproductCard onClick={() => setShowNewDataproduct(true)} />
+        )}
       </div>
 
-      <Modal open={showNewDataset} onClose={() => setShowNewDataset(false)}>
+      <Modal
+        open={showNewDataproduct}
+        onClose={() => setShowNewDataproduct(false)}
+      >
         <Modal.Content>
-          <NewDatasetForm product={product} onCreate={onCreate} />
+          <NewDataproductForm collection={collection} onCreate={onCreate} />
         </Modal.Content>
       </Modal>
     </>
   )
 }
 
-export default DatasetList
+export default DataproductList

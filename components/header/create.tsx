@@ -37,7 +37,7 @@ export default function Create() {
           aria-label="Add new item"
           aria-controls={menuId}
           aria-haspopup="true"
-          onClick={() => router.push('/dataproduct/new')}
+          onClick={() => router.push('/datacollection/new')}
           color="inherit"
         >
           <AddCircleFilled />

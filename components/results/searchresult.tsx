@@ -23,13 +23,20 @@ export interface SearchResultProps {
   result: SearchResultEntry
 }
 
-export const SearchResult = ({ result }: SearchResultProps) => (
-  <Link href={`/${result.type}/${result.id}`}>
-    <SearchResultDiv>
-      <ResultAbstract result={result} />
-      <ResultIcon result={result} />
-    </SearchResultDiv>
-  </Link>
-)
+export const SearchResult = ({ result }: SearchResultProps) => {
+  const tmpHelper = (type: string) => {
+    if (type === 'dataset') return 'dataproduct'
+    if (type === 'dataproduct') return 'datacollection'
+    else return type
+  }
+  return (
+    <Link href={`/${tmpHelper(result.type)}/${result.id}`}>
+      <SearchResultDiv>
+        <ResultAbstract result={result} />
+        <ResultIcon result={result} />
+      </SearchResultDiv>
+    </Link>
+  )
+}
 
 export default SearchResult

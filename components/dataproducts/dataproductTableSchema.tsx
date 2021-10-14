@@ -17,7 +17,7 @@ interface DatasetTableSchemaProps {
   id: string
 }
 
-const DatasetTableSchema = ({ id }: DatasetTableSchemaProps) => {
+const DataproductTableSchema = ({ id }: DatasetTableSchemaProps) => {
   const { data, error } = useSWR<DatasetMetadata>(
     `/api/datasets/${id}/metadata`,
     fetcher
@@ -56,4 +56,4 @@ const DatasetTableSchema = ({ id }: DatasetTableSchemaProps) => {
     </TableContainer>
   )
 }
-export default DatasetTableSchema
+export default DataproductTableSchema

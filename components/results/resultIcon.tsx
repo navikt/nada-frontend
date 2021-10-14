@@ -2,7 +2,6 @@ import DataProductLogo from '../lib/icons/dataProductLogo'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import DataPackageLogo from '../lib/icons/dataPackageLogo'
 import { SearchResultProps } from './searchresult'
-import styled from 'styled-components'
 import IconBox from '../lib/icons/iconBox'
 
 export const ResultIcon = ({ result }: SearchResultProps) => {

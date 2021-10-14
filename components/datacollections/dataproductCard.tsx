@@ -8,7 +8,7 @@ import DataProductSpinner from '../lib/spinner'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { navBlaLighten80 } from '../../styles/constants'
 import styled from 'styled-components'
-import { PiiIkon } from './PiiIkon'
+import { PiiIkon } from './piiIkon'
 
 interface DatasetCardProps {
   id: string
@@ -36,7 +36,7 @@ const InertDatasetCardDiv = styled(DatasetCardDiv)`
   }
 `
 
-const DatasetCard = ({ id }: DatasetCardProps) => {
+const DataproductCard = ({ id }: DatasetCardProps) => {
   const { data, error } = useSWR<DatasetSchema>(`/api/datasets/${id}`, fetcher)
 
   if (error)
@@ -58,7 +58,7 @@ const DatasetCard = ({ id }: DatasetCardProps) => {
     )
 
   return (
-    <Link href={`/dataset/${data.id}`} passHref>
+    <Link href={`/dataproduct/${data.id}`} passHref>
       <DatasetCardDiv>
         <CardHeader
           title={data.name}
@@ -82,4 +82,4 @@ const DatasetCard = ({ id }: DatasetCardProps) => {
   )
 }
 
-export default DatasetCard
+export default DataproductCard

@@ -14,7 +14,7 @@ export const dataproductValidation = yup.object().shape({
   keywords: yup.array().of(yup.string()),
 })
 
-export const newDatasetValidation = yup.object().shape({
+export const newDataproductValidation = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
   dataproduct_id: yup

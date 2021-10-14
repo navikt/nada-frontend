@@ -6,24 +6,26 @@ import { dataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
-const NewDataproductFormOptions = {
+const NewDatacollectionFormOptions = {
   resolver: yupResolver(dataproductValidation),
 }
 
-interface NewDataproductFormProps {
+interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
 }
 
-export const NewDataProductForm = ({ onSubmit }: NewDataproductFormProps) => {
+export const NewDatacollectionForm = ({
+  onSubmit,
+}: NewDatacollectionFormProps) => {
   const { register, handleSubmit, formState } = useForm(
-    NewDataproductFormOptions
+    NewDatacollectionFormOptions
   )
   const { errors } = formState
   const teams = useContext(AuthState).user?.teams
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Dataprodukt" errorPropagation={false}>
+      <Fieldset legend="Datacollection" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"
@@ -56,7 +58,7 @@ export const NewDataProductForm = ({ onSubmit }: NewDataproductFormProps) => {
         >
           <option value="">Velg team</option>
           {teams?.map((t) => (
-            <option value={t} key={'dataproduct_team_' + t}>
+            <option value={t} key={'datacollection_team_' + t}>
               {t}
             </option>
           ))}

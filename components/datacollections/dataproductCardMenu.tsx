@@ -9,7 +9,7 @@ interface DatasetInlineProps {
   dataset: DatasetSummary
 }
 
-const DatasetCardMenu = ({ dataset }: DatasetInlineProps) => {
+const DataproductCardMenu = ({ dataset }: DatasetInlineProps) => {
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
   const isMenuOpen = Boolean(anchorEl)
   const menuId = 'edit-dataset-menu'
@@ -71,4 +71,4 @@ const DatasetCardMenu = ({ dataset }: DatasetInlineProps) => {
   )
 }
 
-export default DatasetCardMenu
+export default DataproductCardMenu
