@@ -2,7 +2,7 @@ import useSWR from 'swr'
 import { DatasetMetadata } from '../../lib/schema/schema_types'
 import { fetcher } from '../../lib/api/fetcher'
 import ErrorMessage from '../lib/error'
-import DataProductSpinner from '../lib/spinner'
+import LoaderSpinner from '../lib/spinner'
 import {
   Paper,
   Table,
@@ -24,7 +24,7 @@ const DataproductTableSchema = ({ id }: DatasetTableSchemaProps) => {
   )
   if (error) return <ErrorMessage error={error} />
 
-  if (!data) return <DataProductSpinner />
+  if (!data) return <LoaderSpinner />
 
   return (
     <TableContainer component={Paper}>

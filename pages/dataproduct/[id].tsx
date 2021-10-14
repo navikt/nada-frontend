@@ -59,7 +59,7 @@ const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
         <Link
           href={`${gcpUrl}/bigquery?d=${data.bigquery.dataset}&t=${data.bigquery.table}&p=${data.bigquery.project_id}&page=table`}
         >
-          Åpne datasettet i BigQuery
+          Åpne i BigQuery
         </Link>
       </LinkDiv>
       <div>
