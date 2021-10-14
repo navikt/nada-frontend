@@ -4,22 +4,12 @@ import {
   Select,
   TextField,
 } from '@navikt/ds-react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import { newDataproductValidation } from '../../lib/schema/yupValidations'
-import { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import apiPOST from '../../lib/api/post'
-import { DataproductSchema, DatasetSchema } from '../../lib/schema/schema_types'
 import ErrorMessage from '../lib/error'
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
-
-interface NewDataproductFormProps {
-  onCreate: (dataproduct: DatasetSchema) => Promise<void>
-  collection: DataproductSchema
-}
+import styled from 'styled-components'
+import { useEffect } from 'react'
 
 // Until ds-react serves our needs
 const ConfirmationPanelWrapper = styled.div`
@@ -31,18 +21,15 @@ const ConfirmationPanelWrapper = styled.div`
   }
 `
 
-export const NewDataproductForm = ({
-  onCreate,
-  collection,
-}: NewDataproductFormProps) => {
-  const [backendError, setBackendError] = useState<Error>()
+interface DataproductFormProps {
+  register: any
+  errors: any
+  watch: any
+}
 
-  const { register, handleSubmit, watch, formState } = useForm({
-    resolver: yupResolver(newDataproductValidation),
-  })
-
+const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
   const collectionTeamProjectIDs = useSWR(
-    `/api/team/${collection.owner.team}/gcp_projects`,
+    `/api/team/${`dataplattform`}/gcp_projects`,
     fetcher
   )
 
@@ -53,28 +40,11 @@ export const NewDataproductForm = ({
       console.log('We should update something here')
     }
   }, [projectID])
+
   const piiValue = watch('pii', true)
 
-  const { errors } = formState
-
-  const onSubmit = async (requestData: DatasetSchema) => {
-    try {
-      const createdDataproduct = await apiPOST(`/api/datasets`, requestData)
-      await onCreate(createdDataproduct)
-    } catch (e: any) {
-      setBackendError(e)
-    }
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="hidden"
-        id="dataproduct_id"
-        value={collection.id}
-        {...register('dataproduct_id')}
-      />
-      {backendError && <ErrorMessage error={backendError} />}
+    <div>
       <Fieldset legend="Dataprodukt" errorPropagation={false}>
         <TextField
           id="name"
@@ -95,8 +65,8 @@ export const NewDataproductForm = ({
             error={errors?.bigquery?.project_id?.message}
           >
             <option value={''}>Velg team</option>
-            {collectionTeamProjectIDs.data?.map((t: string) => (
-              <option value={t} key={t}>
+            {collectionTeamProjectIDs.data?.map((t: string, i: number) => (
+              <option value={t} key={`teamproject_id_${i}`}>
                 {t}
               </option>
             ))}
@@ -125,6 +95,7 @@ export const NewDataproductForm = ({
         </ConfirmationPanelWrapper>
         <RightJustifiedSubmitButton />
       </Fieldset>
-    </form>
+    </div>
   )
 }
+export default DataproductForm

@@ -2,12 +2,12 @@ import { Fieldset, TextField, Select } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { useContext } from 'react'
 import { AuthState } from '../../lib/context'
-import { dataproductValidation } from '../../lib/schema/yupValidations'
+import { datacollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
 const NewDatacollectionFormOptions = {
-  resolver: yupResolver(dataproductValidation),
+  resolver: yupResolver(datacollectionValidation),
 }
 
 interface NewDatacollectionFormProps {
@@ -25,7 +25,7 @@ export const NewDatacollectionForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Datacollection" errorPropagation={false}>
+      <Fieldset legend="Dataproduktsamling" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"

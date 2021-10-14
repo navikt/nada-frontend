@@ -1,5 +1,5 @@
 import { DataproductSchema, DatasetSchema } from '../../lib/schema/schema_types'
-import { NewDataproductForm } from './newDataproductForm'
+import { NewDataproduct } from '../dataproducts/newDataproductForm'
 import { useContext, useState } from 'react'
 
 import { AddCircleFilled } from '@navikt/ds-icons'
@@ -76,7 +76,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
         onClose={() => setShowNewDataproduct(false)}
       >
         <Modal.Content>
-          <NewDataproductForm collection={collection} onCreate={onCreate} />
+          <NewDataproduct collection={collection} onCreate={onCreate} />
         </Modal.Content>
       </Modal>
     </>

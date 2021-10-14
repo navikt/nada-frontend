@@ -37,7 +37,7 @@ export default function Create() {
           aria-label="Add new item"
           aria-controls={menuId}
           aria-haspopup="true"
-          onClick={() => router.push('/datacollection/new')}
+          onClick={handleAddMenuOpen}
           color="inherit"
         >
           <AddCircleFilled />
@@ -65,12 +65,14 @@ export default function Create() {
           >
             dataprodukt
           </MenuItem>
-          <MenuItem  onClick={() => {
+          <MenuItem
+            onClick={() => {
               handleMenuClose()
-              window.location.replace('/dataset/new')
+              window.location.replace('/datacollection/new')
             }}
           >
-            dataset</MenuItem>
+            datasamling
+          </MenuItem>
         </Menu>
       </CreateBox>
     )

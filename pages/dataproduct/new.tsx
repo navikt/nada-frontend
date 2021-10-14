@@ -4,9 +4,9 @@ import { useContext, useState } from 'react'
 import { AuthState } from '../../lib/context'
 import { useRouter } from 'next/router'
 import { apiPOST } from '../../lib/api/post'
-import { NewDatacollectionForm } from '../../components/datacollections/newDatacollectionForm'
+import { NewDataproductForm } from '../../components/dataproducts/newDataproductForm'
 
-const NewDatacollection = () => {
+const NewDataproduct = () => {
   const router = useRouter()
 
   const [backendError, setBackendError] = useState()
@@ -14,8 +14,8 @@ const NewDatacollection = () => {
 
   const onSubmit = async (requestData: any) => {
     try {
-      const createdCollection = await apiPOST(`/api/dataproducts`, requestData)
-      router.push(`/datacollection/${createdCollection.id}`)
+      const createdProduct = await apiPOST(`/api/datasets`, requestData)
+      router.push(`/dataproduct/${createdProduct.id}`)
       setBackendError(undefined)
     } catch (e: any) {
       setBackendError(e.toString())
@@ -36,9 +36,9 @@ const NewDatacollection = () => {
       {backendError && (
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
       )}
-      <NewDatacollectionForm onSubmit={onSubmit} />
+      <NewDataproductForm onCreate={onSubmit} />
     </PageLayout>
   )
 }
 
-export default NewDatacollection
+export default NewDataproduct
