@@ -42,6 +42,36 @@ export default function Create() {
         >
           <AddCircleFilled />
         </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          id={menuId}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={isMenuOpen}
+          onClose={handleMenuClose}
+        >
+          <MenuItem
+            onClick={() => {
+              handleMenuClose()
+              window.location.replace('/dataproduct/new')
+            }}
+          >
+            dataprodukt
+          </MenuItem>
+          <MenuItem  onClick={() => {
+              handleMenuClose()
+              window.location.replace('/dataset/new')
+            }}
+          >
+            dataset</MenuItem>
+        </Menu>
       </CreateBox>
     )
   return <></>
