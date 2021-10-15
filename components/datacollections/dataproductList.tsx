@@ -1,4 +1,8 @@
-import { DataproductSchema, DatasetSchema } from '../../lib/schema/schema_types'
+import {
+  DataproductCollectionSchema,
+  DataproductSchema,
+  DataproductSummary,
+} from '../../lib/schema/schema_types'
 import { useContext, useState } from 'react'
 
 import { AddCircleFilled } from '@navikt/ds-icons'
@@ -47,14 +51,14 @@ const AddDatasetButton = ({
 }
 
 interface DataproductListProps {
-  collection: DataproductSchema
+  collection: DataproductCollectionSchema
 }
 
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const user = useContext(AuthState).user
 
-  const onCreate = async (newDataproduct: DatasetSchema) => {
+  const onCreate = async (newDataproduct: DataproductSchema) => {
     await mutate(`/api/datacollection/${collection.id}`)
     setShowNewDataproduct(false)
   }
@@ -62,7 +66,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {collection.datasets.map((d) => (
+        {collection.dataproducts.map((d: DataproductSummary) => (
           <DataproductCard key={d.id} id={d.id} />
         ))}
         {user && (
@@ -76,8 +80,9 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       >
         <Modal.Content>
           <div>
-            "Her kommer det en komponent for å linke dataprodukter til
-            datasamlinger"
+            {
+              'Her kommer det en komponent for å linke dataprodukter til datasamlinger'
+            }
           </div>
         </Modal.Content>
       </Modal>

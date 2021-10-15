@@ -4,3 +4,6 @@ export type DataproductSchema = components['schemas']['Dataproduct']
 export type DataproductMetadata = components['schemas']['DataproductMetadata']
 export type NewDataproductSchema = components['schemas']['NewDataproduct']
 export type UserInfoSchema = components['schemas']['UserInfo']
+export type DataproductCollectionSchema =
+  components['schemas']['DataproductCollection']
+export type DataproductSummary = components['schemas']['DataproductSummary']

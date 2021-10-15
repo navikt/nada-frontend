@@ -1,4 +1,4 @@
-import { DatasetSummary } from '../../lib/schema/schema_types'
+import { DataproductSummary } from '../../lib/schema/schema_types'
 import React, { useState, MouseEvent } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { Menu, MenuItem } from '@mui/material'
@@ -6,7 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import DeleteModal from '../lib/deleteModal'
 
 interface DatasetInlineProps {
-  dataset: DatasetSummary
+  dataset: DataproductSummary
 }
 
 const DataproductCardMenu = ({ dataset }: DatasetInlineProps) => {

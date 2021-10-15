@@ -1,11 +1,7 @@
 import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
-import {
-  newDataproductValidation,
-  updateDataproductValidation,
-} from '../../lib/schema/yupValidations'
+import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
-import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { DataproductSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
 import { Dispatch, SetStateAction, useState } from 'react'

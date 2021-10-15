@@ -1,8 +1,8 @@
-import { DataproductSchema } from '../../lib/schema/schema_types'
+import { DataproductCollectionSchema } from '../../lib/schema/schema_types'
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import ReactMarkdown from 'react-markdown'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, MicroCard } from '@navikt/ds-react'
 import { EditDatacollectionForm } from './editDatacollectionForm'
 import DataproductList from './dataproductList'
@@ -12,7 +12,7 @@ import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 
 export interface DatacollectionDetailProps {
-  collection: DataproductSchema
+  collection: DataproductCollectionSchema
 }
 
 const StyledEdit = styled.div`

@@ -1,4 +1,4 @@
-import { DatasetSchema } from '../../lib/schema/schema_types'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 import useSWR from 'swr'
 import Link from 'next/link'
 
@@ -10,7 +10,7 @@ import { navBlaLighten80 } from '../../styles/constants'
 import styled from 'styled-components'
 import { PiiIkon } from './piiIkon'
 
-interface DatasetCardProps {
+interface DataproductCardProps {
   id: string
 }
 
@@ -36,8 +36,11 @@ const InertDatasetCardDiv = styled(DatasetCardDiv)`
   }
 `
 
-const DataproductCard = ({ id }: DatasetCardProps) => {
-  const { data, error } = useSWR<DatasetSchema>(`/api/datasets/${id}`, fetcher)
+const DataproductCard = ({ id }: DataproductCardProps) => {
+  const { data, error } = useSWR<DataproductSchema>(
+    `/api/datasets/${id}`,
+    fetcher
+  )
 
   if (error)
     return (

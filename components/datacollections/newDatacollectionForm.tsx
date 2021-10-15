@@ -2,12 +2,12 @@ import { Fieldset, TextField, Select } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { useContext } from 'react'
 import { AuthState } from '../../lib/context'
-import { datacollectionValidation } from '../../lib/schema/yupValidations'
+import { newDataproductCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
 const NewDatacollectionFormOptions = {
-  resolver: yupResolver(datacollectionValidation),
+  resolver: yupResolver(newDataproductCollectionValidation),
 }
 
 interface NewDatacollectionFormProps {
@@ -21,7 +21,11 @@ export const NewDatacollectionForm = ({
     NewDatacollectionFormOptions
   )
   const { errors } = formState
-  const teams = useContext(AuthState).user?.groups
+  const KeyCodes = {
+    comma: 188,
+    enter: [10, 13],
+  }
+  const delimiters = [...KeyCodes.enter, KeyCodes.comma]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -51,18 +55,6 @@ export const NewDatacollectionForm = ({
           {...register('repo')}
           error={errors.repo?.message}
         />
-        <Select
-          label="Team"
-          {...register('owner.team')}
-          error={errors.owner?.team?.message}
-        >
-          <option value="">Velg team</option>
-          {teams?.map((t) => (
-            <option value={t} key={'datacollection_team_' + t}>
-              {t}
-            </option>
-          ))}
-        </Select>
       </Fieldset>
       <RightJustifiedSubmitButton />
     </form>
