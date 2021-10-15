@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier --write \"./components\" \"./pages\" \"./lib\""
+    "prettier": "prettier --write \"./components\" \"./pages\" \"./lib\"",
+    "format-schema": "prettier --write \"lib/schema/schema.ts\""
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",

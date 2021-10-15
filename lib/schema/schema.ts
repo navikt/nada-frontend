@@ -4,171 +4,171 @@
  */
 
 export interface paths {
-  "/userinfo": {
+  '/userinfo': {
     /** get user info */
-    get: operations["getUserInfo"];
-  };
-  "/groups/{id}/gcp_projects": {
+    get: operations['getUserInfo']
+  }
+  '/groups/{id}/gcp_projects': {
     /** Query and return all GCP projects for the group */
-    get: operations["getGCPProjects"];
+    get: operations['getGCPProjects']
     parameters: {
       path: {
         /** Group ID */
-        id: string;
-      };
-    };
-  };
-  "/gcp/{id}/tables": {
+        id: string
+      }
+    }
+  }
+  '/gcp/{id}/tables': {
     /** Return all BigQuery tables in gcp project */
-    get: operations["getBigqueryTables"];
+    get: operations['getBigqueryTables']
     parameters: {
       path: {
         /** GCP project ID */
-        id: string;
-      };
-    };
-  };
-  "/collections": {
+        id: string
+      }
+    }
+  }
+  '/collections': {
     /** List all DataproductCollections */
-    get: operations["getDataproductCollections"];
+    get: operations['getDataproductCollections']
     /** Create a new DataproductCollection */
-    post: operations["createDataproductCollection"];
-  };
-  "/collections/{id}": {
+    post: operations['createDataproductCollection']
+  }
+  '/collections/{id}': {
     /** List a DataproductCollection with dataproducts */
-    get: operations["getDataproductCollection"];
+    get: operations['getDataproductCollection']
     /** Update a DataproductCollection */
-    put: operations["updateDataproductCollection"];
+    put: operations['updateDataproductCollection']
     /** Delete a DataproductCollection */
-    delete: operations["deleteDataproductCollection"];
-  };
-  "/dataproducts": {
+    delete: operations['deleteDataproductCollection']
+  }
+  '/dataproducts': {
     /** Get dataproducts */
-    get: operations["getDataproducts"];
+    get: operations['getDataproducts']
     /** Create a new dataproduct */
-    post: operations["createDataproduct"];
-  };
-  "/dataproducts/{id}": {
+    post: operations['createDataproduct']
+  }
+  '/dataproducts/{id}': {
     /** Get dataproduct */
-    get: operations["getDataproduct"];
+    get: operations['getDataproduct']
     /** Update a dataproduct */
-    put: operations["updateDataproduct"];
+    put: operations['updateDataproduct']
     /** Delete a dataproduct */
-    delete: operations["deleteDataproduct"];
-  };
-  "/dataproducts/{id}/metadata": {
+    delete: operations['deleteDataproduct']
+  }
+  '/dataproducts/{id}/metadata': {
     /** Get dataproduct metadata */
-    get: operations["getDataproductMetadata"];
-  };
-  "/search": {
+    get: operations['getDataproductMetadata']
+  }
+  '/search': {
     /** Search in NADA */
-    get: operations["search"];
+    get: operations['search']
     parameters: {
       query: {
-        q?: string;
-        limit?: number;
-        offset?: number;
-      };
-    };
-  };
+        q?: string
+        limit?: number
+        offset?: number
+      }
+    }
+  }
 }
 
 export interface components {
   schemas: {
     DataproductCollection: {
-      id: string;
-      name: string;
-      description?: string;
-      slug: string;
-      repo?: string;
-      last_modified: string;
-      created: string;
-      owner: components["schemas"]["Owner"];
-      keywords?: string[];
-      dataproducts: components["schemas"]["DataproductSummary"][];
-    };
+      id: string
+      name: string
+      description?: string
+      slug: string
+      repo?: string
+      last_modified: string
+      created: string
+      owner: components['schemas']['Owner']
+      keywords?: string[]
+      dataproducts: components['schemas']['DataproductSummary'][]
+    }
     NewDataproductCollection: {
-      name: string;
-      description?: string;
-      slug?: string;
-      repo?: string;
-      owner: components["schemas"]["Owner"];
-      keywords?: string[];
-    };
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      owner: components['schemas']['Owner']
+      keywords?: string[]
+    }
     UpdateDataproductCollection: {
-      name: string;
-      description?: string;
-      slug?: string;
-      repo?: string;
-      keywords?: string[];
-    };
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      keywords?: string[]
+    }
     Dataproduct: {
-      id: string;
-      name: string;
-      description?: string;
-      slug?: string;
-      repo?: string;
-      pii: boolean;
-      owner: components["schemas"]["Owner"];
-      type: components["schemas"]["DataproductType"];
-      datasource: components["schemas"]["Datasource"];
-    };
-    Datasource: components["schemas"]["Bigquery"];
+      id: string
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      pii: boolean
+      owner: components['schemas']['Owner']
+      type: components['schemas']['DataproductType']
+      datasource: components['schemas']['Datasource']
+    }
+    Datasource: components['schemas']['Bigquery']
     NewDataproduct: {
-      name: string;
-      description?: string;
-      slug?: string;
-      repo?: string;
-      pii: boolean;
-      owner: components["schemas"]["Owner"];
-      datasource: components["schemas"]["Datasource"];
-    };
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      pii: boolean
+      owner: components['schemas']['Owner']
+      datasource: components['schemas']['Datasource']
+    }
     UpdateDataproduct: {
-      name: string;
-      description?: string;
-      slug?: string;
-      repo?: string;
-      pii: boolean;
-    };
+      name: string
+      description?: string
+      slug?: string
+      repo?: string
+      pii: boolean
+    }
     DataproductSummary: {
-      id: string;
-      name: string;
-      type: components["schemas"]["DataproductType"];
-    };
-    DataproductType: "bigquery";
+      id: string
+      name: string
+      type: components['schemas']['DataproductType']
+    }
+    DataproductType: 'bigquery'
     Owner: {
-      group: string;
-      teamkatalogen?: string;
-    };
+      group: string
+      teamkatalogen?: string
+    }
     Bigquery: {
-      project_id: string;
-      dataset: string;
-      table: string;
-    };
+      project_id: string
+      dataset: string
+      table: string
+    }
     UserInfo: {
-      name: string;
-      email: string;
-      groups: string[];
-    };
+      name: string
+      email: string
+      groups: string[]
+    }
     TableColumn: {
-      name: string;
-      type: string;
-      mode: string;
-      description: string;
-    };
+      name: string
+      type: string
+      mode: string
+      description: string
+    }
     DataproductMetadata: {
-      dataproduct_id: string;
-      schema: components["schemas"]["TableColumn"][];
-    };
+      dataproduct_id: string
+      schema: components['schemas']['TableColumn'][]
+    }
     SearchResultEntry: {
-      url: string;
-      type: components["schemas"]["SearchResultType"];
-      id: string;
-      name: string;
-      excerpt: string;
-    };
-    SearchResultType: "dataproduct" | "DataproductCollection" | "datapackage";
-  };
+      url: string
+      type: components['schemas']['SearchResultType']
+      id: string
+      name: string
+      excerpt: string
+    }
+    SearchResultType: 'dataproduct' | 'DataproductCollection' | 'datapackage'
+  }
 }
 
 export interface operations {
@@ -178,250 +178,250 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UserInfo"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['UserInfo']
+        }
+      }
+    }
+  }
   /** Query and return all GCP projects for the group */
   getGCPProjects: {
     parameters: {
       path: {
         /** Group ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": string[];
-        };
-      };
-    };
-  };
+          'application/json': string[]
+        }
+      }
+    }
+  }
   /** Return all BigQuery tables in gcp project */
   getBigqueryTables: {
     parameters: {
       path: {
         /** GCP project ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Bigquery"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Bigquery'][]
+        }
+      }
+    }
+  }
   /** List all DataproductCollections */
   getDataproductCollections: {
     parameters: {
       query: {
-        limit?: number;
-        offset?: number;
-      };
-    };
+        limit?: number
+        offset?: number
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DataproductCollection"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['DataproductCollection'][]
+        }
+      }
+    }
+  }
   /** Create a new DataproductCollection */
   createDataproductCollection: {
     responses: {
       /** Created successfully */
       201: {
         content: {
-          "application/json": components["schemas"]["DataproductCollection"];
-        };
-      };
-    };
+          'application/json': components['schemas']['DataproductCollection']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewDataproductCollection"];
-      };
-    };
-  };
+        'application/json': components['schemas']['NewDataproductCollection']
+      }
+    }
+  }
   /** List a DataproductCollection with dataproducts */
   getDataproductCollection: {
     parameters: {
       path: {
         /** DataproductCollection ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DataproductCollection"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['DataproductCollection'][]
+        }
+      }
+    }
+  }
   /** Update a DataproductCollection */
   updateDataproductCollection: {
     parameters: {
       path: {
         /** DataproductCollection ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Updated OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DataproductCollection"];
-        };
-      };
-    };
+          'application/json': components['schemas']['DataproductCollection']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateDataproductCollection"];
-      };
-    };
-  };
+        'application/json': components['schemas']['UpdateDataproductCollection']
+      }
+    }
+  }
   /** Delete a DataproductCollection */
   deleteDataproductCollection: {
     parameters: {
       path: {
         /** DataproductCollection ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Deleted OK */
-      204: never;
-    };
-  };
+      204: never
+    }
+  }
   /** Get dataproducts */
   getDataproducts: {
     parameters: {
       query: {
-        limit?: number;
-        offset?: number;
-      };
-    };
+        limit?: number
+        offset?: number
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Dataproduct'][]
+        }
+      }
+    }
+  }
   /** Create a new dataproduct */
   createDataproduct: {
     responses: {
       /** Created successfully */
       201: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"];
-        };
-      };
-    };
+          'application/json': components['schemas']['Dataproduct']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["NewDataproduct"];
-      };
-    };
-  };
+        'application/json': components['schemas']['NewDataproduct']
+      }
+    }
+  }
   /** Get dataproduct */
   getDataproduct: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['Dataproduct']
+        }
+      }
+    }
+  }
   /** Update a dataproduct */
   updateDataproduct: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Updated OK */
       200: {
         content: {
-          "application/json": components["schemas"]["Dataproduct"];
-        };
-      };
-    };
+          'application/json': components['schemas']['Dataproduct']
+        }
+      }
+    }
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateDataproduct"];
-      };
-    };
-  };
+        'application/json': components['schemas']['UpdateDataproduct']
+      }
+    }
+  }
   /** Delete a dataproduct */
   deleteDataproduct: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** Deleted OK */
-      204: never;
-    };
-  };
+      204: never
+    }
+  }
   /** Get dataproduct metadata */
   getDataproductMetadata: {
     parameters: {
       path: {
         /** Dataproduct ID */
-        id: string;
-      };
-    };
+        id: string
+      }
+    }
     responses: {
       /** OK */
       200: {
         content: {
-          "application/json": components["schemas"]["DataproductMetadata"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['DataproductMetadata']
+        }
+      }
+    }
+  }
   /** Search in NADA */
   search: {
     parameters: {
       query: {
-        q?: string;
-        limit?: number;
-        offset?: number;
-      };
-    };
+        q?: string
+        limit?: number
+        offset?: number
+      }
+    }
     responses: {
       /** Search result */
       200: {
         content: {
-          "application/json": components["schemas"]["SearchResultEntry"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['SearchResultEntry'][]
+        }
+      }
+    }
+  }
 }
 
 export interface external {}
