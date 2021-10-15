@@ -9,7 +9,7 @@ import { Box, Tab, Tabs } from '@mui/material'
 import TabPanel from '../lib/tabPanel'
 import ReactMarkdown from 'react-markdown'
 import DataproductTableSchema from './dataproductTableSchema'
-import { DatasetSchema } from '../../lib/schema/schema_types'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 
@@ -17,7 +17,7 @@ const LinkDiv = styled.div`
   margin: 2em auto;
 `
 interface DataproductDetailProps {
-  data: DatasetSchema
+  data: DataproductSchema
   error: Error | undefined
 }
 
@@ -28,7 +28,6 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
   const deleteDatacollection = async (id: string) => {
     try {
       await apiDELETE(`/api/datasets/${id}`)
-      await router.push(`/datacollection/${data.dataproduct_id}`)
     } catch (e: any) {
       setBackendError(e.toString())
     }
@@ -51,20 +50,15 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
       {backendError && <ErrorMessage error={backendError} />}
       <h1>{data.name}</h1>
       <LinkDiv>
-        <Link href={`/datacollection/${data.dataproduct_id}`}>
-          Tilbake til datasamlingen
-        </Link>
-      </LinkDiv>
-      <LinkDiv>
         <Link
-          href={`${gcpUrl}/bigquery?d=${data.bigquery.dataset}&t=${data.bigquery.table}&p=${data.bigquery.project_id}&page=table`}
+          href={`${gcpUrl}/bigquery?d=${data.datasource.dataset}&t=${data.datasource.table}&p=${data.datasource.project_id}&page=table`}
         >
           Åpne i BigQuery
         </Link>
       </LinkDiv>
       <div>
         <i>adresse: </i>
-        {`${data.bigquery.project_id}.${data.bigquery.dataset}.${data.bigquery.table}`}
+        {`${data.datasource.project_id}.${data.datasource.dataset}.${data.datasource.table}`}
         <br />
         <Button
           onClick={async () => await deleteDatacollection(data.id)}

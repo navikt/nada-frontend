@@ -3,30 +3,29 @@ import { useForm } from 'react-hook-form'
 import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import { useState } from 'react'
 import apiPOST from '../../lib/api/post'
-import { DatasetSchema } from '../../lib/schema/schema_types'
+import {
+  DataproductSchema,
+  NewDataproductSchema,
+} from '../../lib/schema/schema_types'
 import ErrorMessage from '../lib/error'
 import DataproductForm from './dataproductForm'
+import { useRouter } from 'next/router'
 
-interface NewDataproductFormProps {
-  onCreate: (dataproduct: DatasetSchema) => Promise<void>
-}
-
-export const NewDataproductForm = ({ onCreate }: NewDataproductFormProps) => {
+export const NewDataproductForm = () => {
+  const router = useRouter()
   const [backendError, setBackendError] = useState<Error>()
 
   const { register, handleSubmit, watch, formState } = useForm({
     resolver: yupResolver(newDataproductValidation),
-    defaultValues: {
-      dataproduct_id: `564a52f2-b2e7-4dc0-9fca-289ae567fbf4`,
-    },
   })
 
   const { errors } = formState
 
-  const onSubmit = async (requestData: DatasetSchema) => {
+  const onSubmit = async (requestData: NewDataproductSchema) => {
     try {
-      const createdDataproduct = await apiPOST(`/api/datasets`, requestData)
-      await onCreate(createdDataproduct)
+      const createdDataproduct = await apiPOST(`/api/dataproducts`, requestData)
+      router.push(`/dataproduct/${createdDataproduct.id}`)
+      setBackendError(undefined)
     } catch (e: any) {
       setBackendError(e)
     }

@@ -21,7 +21,7 @@ export const NewDatacollectionForm = ({
     NewDatacollectionFormOptions
   )
   const { errors } = formState
-  const teams = useContext(AuthState).user?.teams
+  const teams = useContext(AuthState).user?.groups
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

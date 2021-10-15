@@ -9,7 +9,8 @@ import ErrorMessage from '../lib/error'
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
 import styled from 'styled-components'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
+import { AuthState } from '../../lib/context'
 
 // Until ds-react serves our needs
 const ConfirmationPanelWrapper = styled.div`
@@ -28,10 +29,14 @@ interface DataproductFormProps {
 }
 
 const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
+  const user = useContext(AuthState).user
+  const groups = user?.groups
   const collectionTeamProjectIDs = useSWR(
-    `/api/team/${`dataplattform`}/gcp_projects`,
+    // FIXME: use team selected to fetch projects
+    `/api/groups/${user?.groups[0]}/gcp_projects`,
     fetcher
   )
+  console.log(errors)
 
   const projectID = watch('bigquery.project_id')
   useEffect(() => {
@@ -58,13 +63,37 @@ const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
           {...register('description')}
           error={errors.description?.message}
         />
-        <Fieldset legend="BigQuery" errorPropagation={false}>
+        <TextField
+          id="slug"
+          label="Slug"
+          {...register('slug')}
+          error={errors.slug?.message}
+        />
+        <TextField
+          id="repo"
+          label="Repo"
+          {...register('repo')}
+          error={errors.repo?.message}
+        />
+        <Select
+          label="Team"
+          {...register('owner.group')}
+          error={errors.owner?.group?.message}
+        >
+          <option value="">Velg team</option>
+          {groups?.map((group: string) => (
+            <option value={group} key={'dataproduct_group' + group}>
+              {group}
+            </option>
+          ))}
+        </Select>
+        <Fieldset legend="Datakilde" errorPropagation={false}>
           <Select
             label="Project ID"
-            {...register('bigquery.project_id')}
-            error={errors?.bigquery?.project_id?.message}
+            {...register('datasource.project_id')}
+            error={errors?.datasource?.project_id?.message}
           >
-            <option value={''}>Velg team</option>
+            <option value={''}>Velg prosjekt</option>
             {collectionTeamProjectIDs.data?.map((t: string, i: number) => (
               <option value={t} key={`teamproject_id_${i}`}>
                 {t}
@@ -72,14 +101,14 @@ const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
             ))}
           </Select>
           <TextField
-            label="Dataprodukt"
-            {...register('bigquery.dataset')}
-            error={errors?.bigquery?.dataset?.message}
+            label="Dataset"
+            {...register('datasource.dataset')}
+            error={errors?.datasource?.dataset?.message}
           />
           <TextField
             label="Tabell"
-            {...register('bigquery.table')}
-            error={errors?.bigquery?.table?.message}
+            {...register('datasource.table')}
+            error={errors?.datasource?.table?.message}
           />
         </Fieldset>
         <ConfirmationPanelWrapper>
