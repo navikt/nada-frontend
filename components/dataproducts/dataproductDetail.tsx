@@ -25,7 +25,7 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
-  const deleteDatacollection = async (id: string) => {
+  const deleteDataproduct = async (id: string) => {
     try {
       await apiDELETE(`/api/dataproducts/${id}`)
       await router.push('/')
@@ -62,11 +62,12 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
         {`${data.datasource.project_id}.${data.datasource.dataset}.${data.datasource.table}`}
         <br />
         <Button
-          onClick={async () => await deleteDatacollection(data.id)}
+          onClick={async () => await deleteDataproduct(data.id)}
           variant={'danger'}
         >
           Slett
         </Button>
+        <Button onClick={() => setEdit(true)}>Endre</Button>
       </div>
 
       <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>

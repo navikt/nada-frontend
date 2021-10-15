@@ -1,16 +1,19 @@
 import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
-import { newDataproductValidation } from '../../lib/schema/yupValidations'
+import {
+  newDataproductValidation,
+  updateDataproductValidation,
+} from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { DataproductSchema, DatasetSchema } from '../../lib/schema/schema_types'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { mutate } from 'swr'
 import DataproductForm from './dataproductForm'
 
 interface EditDatacollectionFormProps {
-  dataproduct: DatasetSchema
+  dataproduct: DataproductSchema
   close: Dispatch<SetStateAction<boolean>>
 }
 
@@ -20,13 +23,13 @@ const EditDataproduct = ({
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
   const { register, handleSubmit, watch, formState } = useForm({
-    resolver: yupResolver(newDataproductValidation),
+    resolver: yupResolver(updateDataproductValidation),
     defaultValues: {
       name: dataproduct.name,
       description: dataproduct.description,
-      dataproduct_id: dataproduct.dataproduct_id,
+      repo: dataproduct.repo,
+      slug: dataproduct.slug,
       pii: dataproduct.pii,
-      bigquery: dataproduct.bigquery,
     },
   })
   const { errors } = formState

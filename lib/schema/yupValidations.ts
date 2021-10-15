@@ -23,6 +23,16 @@ export const newDataproductValidation = yup.object().shape({
   datasource: bigQuery,
 })
 
+export const updateDataproductValidation = yup.object().shape({
+  name: yup.string().required('Du må fylle inn navn'),
+  description: yup.string(),
+  slug: yup.string(),
+  repo: yup.string(),
+  pii: yup
+    .boolean()
+    .required('Inneholder datasettet personidentifiserende informasjon?'),
+})
+
 export const newDataproductCollection = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),

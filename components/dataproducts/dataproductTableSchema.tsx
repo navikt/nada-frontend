@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { DatasetMetadata } from '../../lib/schema/schema_types'
+import { DataproductMetadata } from '../../lib/schema/schema_types'
 import { fetcher } from '../../lib/api/fetcher'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
@@ -18,13 +18,15 @@ interface DatasetTableSchemaProps {
 }
 
 const DataproductTableSchema = ({ id }: DatasetTableSchemaProps) => {
-  const { data, error } = useSWR<DatasetMetadata>(
-    `/api/datasets/${id}/metadata`,
+  const { data, error } = useSWR<DataproductMetadata>(
+    `/api/dataproducts/${id}/metadata`,
     fetcher
   )
   if (error) return <ErrorMessage error={error} />
 
   if (!data) return <LoaderSpinner />
+
+  if (!data.schema) return <div>Ingen skjemainformasjon</div>
 
   return (
     <TableContainer component={Paper}>
