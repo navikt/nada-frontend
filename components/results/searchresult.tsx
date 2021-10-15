@@ -4,6 +4,7 @@ import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { components } from '../../lib/schema/schema'
 import { ResultIcon } from './resultIcon'
 import { ResultAbstract } from './resultAbstract'
+import { SearchResultEntry } from '../../lib/schema/schema_types'
 
 const SearchResultDiv = styled.div`
   background-color: ${navGraBakgrunn};
@@ -16,8 +17,6 @@ const SearchResultDiv = styled.div`
     background-color: ${navBlaLighten80};
   }
 `
-
-type SearchResultEntry = components['schemas']['SearchResultEntry']
 
 export interface SearchResultProps {
   result: SearchResultEntry
