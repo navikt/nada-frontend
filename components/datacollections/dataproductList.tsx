@@ -10,9 +10,9 @@ import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
 import { AuthState } from '../../lib/context'
 import { Modal } from '@navikt/ds-react'
-import DataproductCard from './dataproductCard'
 import NewDataproductCard from './newDataproductCard'
 import { mutate } from 'swr'
+import DataproductCard from './dataproductCard'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -59,16 +59,17 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   const user = useContext(AuthState).user
 
   const onCreate = async (newDataproduct: DataproductSchema) => {
-    await mutate(`/api/datacollection/${collection.id}`)
+    await mutate(`/api/collections/${collection.id}`)
     setShowNewDataproduct(false)
   }
 
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {collection.dataproducts.map((d: DataproductSummary) => (
-          <DataproductCard key={d.id} id={d.id} />
-        ))}
+        {collection.dataproducts &&
+          collection.dataproducts.map((d: DataproductSummary) => (
+            <DataproductCard key={d.id} id={d.id} />
+          ))}
         {user && (
           <NewDataproductCard onClick={() => setShowNewDataproduct(true)} />
         )}

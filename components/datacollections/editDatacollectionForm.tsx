@@ -30,8 +30,8 @@ export const EditDatacollectionForm = ({
   const { errors } = formState
   const onSubmit = async (requestData: any) => {
     try {
-      await apiPUT(`/api/dataproducts/${datacollection.id}`, requestData)
-      mutate(`/api/dataproducts/${datacollection.id}`)
+      await apiPUT(`/api/collections/${datacollection.id}`, requestData)
+      mutate(`/api/collections/${datacollection.id}`)
       setBackendError(undefined)
       close(false)
     } catch (e: any) {

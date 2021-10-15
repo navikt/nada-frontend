@@ -14,7 +14,7 @@ const NewDatacollection = () => {
 
   const onSubmit = async (requestData: any) => {
     try {
-      const createdCollection = await apiPOST(`/api/dataproducts`, requestData)
+      const createdCollection = await apiPOST(`/api/collections`, requestData)
       router.push(`/datacollection/${createdCollection.id}`)
       setBackendError(undefined)
     } catch (e: any) {

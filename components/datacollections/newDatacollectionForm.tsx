@@ -1,10 +1,11 @@
-import { Fieldset, TextField, Select } from '@navikt/ds-react'
+import { Fieldset, Select, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
-import { useContext } from 'react'
-import { AuthState } from '../../lib/context'
+import { useCallback, useContext, useState } from 'react'
 import { newDataproductCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import ReactTags, { Tag } from 'react-tag-autocomplete'
+import { AuthState } from '../../lib/context'
 
 const NewDatacollectionFormOptions = {
   resolver: yupResolver(newDataproductCollectionValidation),
@@ -17,16 +18,31 @@ interface NewDatacollectionFormProps {
 export const NewDatacollectionForm = ({
   onSubmit,
 }: NewDatacollectionFormProps) => {
-  const { register, handleSubmit, formState } = useForm(
+  const { register, handleSubmit, formState, setValue } = useForm(
     NewDatacollectionFormOptions
   )
   const { errors } = formState
-  const KeyCodes = {
-    comma: 188,
-    enter: [10, 13],
-  }
-  const delimiters = [...KeyCodes.enter, KeyCodes.comma]
 
+  const user = useContext(AuthState).user
+  const groups = user?.groups
+  const [tags, setTags] = useState<Tag[]>([])
+
+  const onDelete = useCallback(
+    (tagIndex) => {
+      setTags(tags.filter((_, i) => i !== tagIndex))
+      setValue('keywords', tags)
+    },
+    [tags]
+  )
+
+  const onAddition = useCallback(
+    (newTag) => {
+      setTags([...tags, newTag])
+      setValue('keywords', tags)
+    },
+    [tags]
+  )
+  console.log(errors)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Fieldset legend="Dataproduktsamling" errorPropagation={false}>
@@ -54,6 +70,25 @@ export const NewDatacollectionForm = ({
           label="Repo"
           {...register('repo')}
           error={errors.repo?.message}
+        />
+        <Select
+          label="Team"
+          {...register('owner.group')}
+          error={errors.owner?.group?.message}
+        >
+          <option value="">Velg team</option>
+          {groups?.map((group: string) => (
+            <option value={group} key={'dataproduct_group' + group}>
+              {group}
+            </option>
+          ))}
+        </Select>
+
+        <ReactTags
+          tags={tags}
+          onDelete={onDelete}
+          onAddition={onAddition}
+          allowNew
         />
       </Fieldset>
       <RightJustifiedSubmitButton />

@@ -33,7 +33,7 @@ export const DatacollectionDetail = ({
   const router = useRouter()
   const deleteDatacollection = async (id: string) => {
     try {
-      await apiDELETE(`/api/dataproducts/${id}`)
+      await apiDELETE(`/api/collections/${id}`)
       await router.push(`/`)
     } catch (e: any) {
       setBackendError(e.toString())
