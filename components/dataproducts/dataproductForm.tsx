@@ -11,16 +11,7 @@ import fetcher from '../../lib/api/fetcher'
 import styled from 'styled-components'
 import { useContext, useEffect } from 'react'
 import { AuthState } from '../../lib/context'
-
-// Until ds-react serves our needs
-const ConfirmationPanelWrapper = styled.div`
-  > div.navds-confirmation-panel {
-    background-color: #9bd0b0 !important;
-  }
-  > div.navds-confirmation-panel--checked {
-    background-color: #e3b0a8 !important;
-  }
-`
+import PiiCheckboxInput from './piiCheckboxInput'
 
 interface DataproductFormProps {
   register: any
@@ -29,8 +20,6 @@ interface DataproductFormProps {
 }
 
 const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
-  const piiValue = watch('pii', true)
-
   return (
     <div>
       <Fieldset legend="Dataprodukt" errorPropagation={false}>
@@ -58,18 +47,6 @@ const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
           {...register('repo')}
           error={errors.repo?.message}
         />
-        <ConfirmationPanelWrapper>
-          <ConfirmationPanel
-            {...register('pii')}
-            checked={piiValue}
-            label="Personidentifiserende informasjon"
-            size="small"
-          >
-            Dette dataproduktet inneholder {!piiValue && <b> IKKE </b>}
-            personidentifiserende informasjon
-          </ConfirmationPanel>
-        </ConfirmationPanelWrapper>
-        <RightJustifiedSubmitButton />
       </Fieldset>
     </div>
   )

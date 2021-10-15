@@ -53,10 +53,9 @@ export const DatacollectionDetail = ({
         <i>Opprettet:</i> {humanizeDate(collection.created)}
         <br />
         <i>Oppdatert:</i> {humanizeDate(collection.last_modified)}
+        <br />
         {collection.keywords &&
-          collection.keywords.map((k, i) => (
-            <MicroCard key={`dataproduct_keyword_${i}`}>k</MicroCard>
-          ))}
+          collection.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
         <br />
         <Button
           onClick={async () => await deleteDatacollection(collection.id)}

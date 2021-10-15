@@ -7,6 +7,8 @@ import { apiPUT } from '../../lib/api/put'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { mutate } from 'swr'
 import DataproductForm from './dataproductForm'
+import PiiCheckboxInput from './piiCheckboxInput'
+import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
 interface EditDatacollectionFormProps {
   dataproduct: DataproductSchema
@@ -47,6 +49,8 @@ const EditDataproduct = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DataproductForm register={register} errors={errors} watch={watch} />
+      <PiiCheckboxInput register={register} watch={watch} />
+      <RightJustifiedSubmitButton />
     </form>
   )
 }

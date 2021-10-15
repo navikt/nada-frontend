@@ -1,11 +1,12 @@
 import { Fieldset, Select, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
-import { useCallback, useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { newDataproductCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import ReactTags, { Tag } from 'react-tag-autocomplete'
+import { Tag } from 'react-tag-autocomplete'
 import { AuthState } from '../../lib/context'
+import KeywordsInput from '../lib/KeywordsInput'
 
 const NewDatacollectionFormOptions = {
   resolver: yupResolver(newDataproductCollectionValidation),
@@ -25,24 +26,11 @@ export const NewDatacollectionForm = ({
 
   const user = useContext(AuthState).user
   const groups = user?.groups
-  const [tags, setTags] = useState<Tag[]>([])
 
-  const onDelete = useCallback(
-    (tagIndex) => {
-      setTags(tags.filter((_, i) => i !== tagIndex))
-      setValue('keywords', tags)
-    },
-    [tags]
-  )
+  const [keywords, setKeywords] = useState<string[]>([])
+  // propagates change in keywords state to useForm state
+  useEffect(() => setValue('keywords', keywords), [keywords])
 
-  const onAddition = useCallback(
-    (newTag) => {
-      setTags([...tags, newTag])
-      setValue('keywords', tags)
-    },
-    [tags]
-  )
-  console.log(errors)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Fieldset legend="Dataproduktsamling" errorPropagation={false}>
@@ -83,12 +71,11 @@ export const NewDatacollectionForm = ({
             </option>
           ))}
         </Select>
-
-        <ReactTags
-          tags={tags}
-          onDelete={onDelete}
-          onAddition={onAddition}
-          allowNew
+        <KeywordsInput
+          keywords={keywords}
+          setKeywords={setKeywords}
+          {...register('keywords')}
+          error={errors.keywords?.[0].message}
         />
       </Fieldset>
       <RightJustifiedSubmitButton />

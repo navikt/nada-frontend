@@ -14,6 +14,8 @@ import { Fieldset, Select, TextField } from '@navikt/ds-react'
 import { AuthState } from '../../lib/context'
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
+import PiiCheckboxInput from './piiCheckboxInput'
+import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
 export const NewDataproductForm = () => {
   const { register, handleSubmit, watch, formState } = useForm({
@@ -60,7 +62,7 @@ export const NewDataproductForm = () => {
       >
         <option value="">Velg team</option>
         {groups?.map((group: string) => (
-          <option value={group} key={'dataproduct_group' + group}>
+          <option value={group} key={group}>
             {group}
           </option>
         ))}
@@ -72,8 +74,8 @@ export const NewDataproductForm = () => {
           error={errors?.datasource?.project_id?.message}
         >
           <option value={''}>Velg prosjekt</option>
-          {collectionTeamProjectIDs.data?.map((t: string, i: number) => (
-            <option value={t} key={`teamproject_id_${i}`}>
+          {collectionTeamProjectIDs.data?.map((t: string) => (
+            <option value={t} key={t}>
               {t}
             </option>
           ))}
@@ -89,6 +91,8 @@ export const NewDataproductForm = () => {
           error={errors?.datasource?.table?.message}
         />
       </Fieldset>
+      <PiiCheckboxInput register={register} watch={watch} />
+      <RightJustifiedSubmitButton />
     </form>
   )
 }
