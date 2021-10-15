@@ -27,7 +27,8 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
   const router = useRouter()
   const deleteDatacollection = async (id: string) => {
     try {
-      await apiDELETE(`/api/datasets/${id}`)
+      await apiDELETE(`/api/dataproducts/${id}`)
+      await router.push('/')
     } catch (e: any) {
       setBackendError(e.toString())
     }

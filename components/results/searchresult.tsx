@@ -24,13 +24,8 @@ export interface SearchResultProps {
 }
 
 export const SearchResult = ({ result }: SearchResultProps) => {
-  const tmpHelper = (type: string) => {
-    if (type === 'dataset') return 'dataproduct'
-    if (type === 'dataproduct') return 'datacollection'
-    else return type
-  }
   return (
-    <Link href={`/${tmpHelper(result.type)}/${result.id}`}>
+    <Link href={`/${result.type}/${result.id}`}>
       <SearchResultDiv>
         <ResultAbstract result={result} />
         <ResultIcon result={result} />
