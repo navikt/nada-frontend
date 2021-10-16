@@ -3,13 +3,14 @@ import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
-import { Button, MicroCard } from '@navikt/ds-react'
+import { MicroCard } from '@navikt/ds-react'
 import { EditDatacollectionForm } from './editDatacollectionForm'
 import DataproductList from './dataproductList'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
+import DotMenu from './editMenu'
 
 export interface DatacollectionDetailProps {
   collection: DataproductCollectionSchema
@@ -47,7 +48,10 @@ export const DatacollectionDetail = ({
       {backendError && <ErrorMessage error={backendError} />}
       <StyledEdit>
         <h1>{collection.name}</h1>
-        <Button onClick={() => setEdit(true)}>Edit</Button>
+        <DotMenu
+          onEdit={() => setEdit(true)}
+          onDelete={async () => await deleteDatacollection(collection.id)}
+        />
       </StyledEdit>
       <div>
         <i>Opprettet:</i> {humanizeDate(collection.created)}
@@ -57,13 +61,14 @@ export const DatacollectionDetail = ({
         {collection.keywords &&
           collection.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
         <br />
-        <Button
-          onClick={async () => await deleteDatacollection(collection.id)}
-          variant={'danger'}
-        >
-          Slett
-        </Button>
+        {/*<Button*/}
+        {/*  onClick={async () => await deleteDatacollection(collection.id)}*/}
+        {/*  variant={'danger'}*/}
+        {/*>*/}
+        {/*  Slett*/}
+        {/*</Button>*/}
       </div>
+
       <div>
         <ReactMarkdown>
           {collection.description || '*ingen beskrivelse*'}
