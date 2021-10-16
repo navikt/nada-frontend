@@ -20,7 +20,7 @@ const Dataproduct = () => {
 
   return (
     <PageLayout>
-      <DataproductDetail data={data} error={error} />
+      <DataproductDetail product={data} error={error} />
     </PageLayout>
   )
 }

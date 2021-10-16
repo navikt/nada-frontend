@@ -4,7 +4,6 @@ import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import Link from 'next/link'
-import { Button } from '@navikt/ds-react'
 import { Box, Tab, Tabs } from '@mui/material'
 import TabPanel from '../lib/tabPanel'
 import ReactMarkdown from 'react-markdown'
@@ -26,11 +25,11 @@ const StyledDiv = styled.div`
 `
 
 interface DataproductDetailProps {
-  data: DataproductSchema
+  product: DataproductSchema
   error: Error | undefined
 }
 
-export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
+export const DataproductDetail = ({ product, error }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
@@ -51,31 +50,31 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
 
   if (error) return <ErrorMessage error={error} />
 
-  if (!data) return <LoaderSpinner />
+  if (!product) return <LoaderSpinner />
 
   return edit ? (
-    <EditDataproduct dataproduct={data} close={setEdit} />
+    <EditDataproduct dataproduct={product} close={setEdit} />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
-        <h1>{data.name}</h1>
+        <h1>{product.name}</h1>
         <DotMenu
           onEdit={() => setEdit(true)}
-          onDelete={async () => await deleteDataproduct(data.id)}
+          onDelete={async () => await deleteDataproduct(product.id)}
         />
       </StyledDiv>
 
       <LinkDiv>
         <Link
-          href={`${gcpUrl}/bigquery?d=${data.datasource.dataset}&t=${data.datasource.table}&p=${data.datasource.project_id}&page=table`}
+          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
         >
           Åpne i BigQuery
         </Link>
       </LinkDiv>
       <div>
         <i>adresse: </i>
-        {`${data.datasource.project_id}.${data.datasource.dataset}.${data.datasource.table}`}
+        {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
         <br />
       </div>
 
@@ -94,11 +93,11 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
       </Box>
       <TabPanel index={0} value={activeTab}>
         <ReactMarkdown>
-          {data.description || '*ingen beskrivelse*'}
+          {product.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
       </TabPanel>
       <TabPanel index={1} value={activeTab}>
-        <DataproductTableSchema id={data.id} />
+        <DataproductTableSchema id={product.id} />
       </TabPanel>
     </div>
   )
