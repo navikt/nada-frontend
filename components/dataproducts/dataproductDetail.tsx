@@ -12,10 +12,19 @@ import DataproductTableSchema from './dataproductTableSchema'
 import { DataproductSchema } from '../../lib/schema/schema_types'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
+import DotMenu from '../lib/editMenu'
 
 const LinkDiv = styled.div`
   margin: 2em auto;
 `
+
+const StyledDiv = styled.div`
+  display: flex;
+  margin: 40px 0;
+  justify-content: space-between;
+  align-items: center;
+`
+
 interface DataproductDetailProps {
   data: DataproductSchema
   error: Error | undefined
@@ -49,7 +58,14 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
-      <h1>{data.name}</h1>
+      <StyledDiv>
+        <h1>{data.name}</h1>
+        <DotMenu
+          onEdit={() => setEdit(true)}
+          onDelete={async () => await deleteDataproduct(data.id)}
+        />
+      </StyledDiv>
+
       <LinkDiv>
         <Link
           href={`${gcpUrl}/bigquery?d=${data.datasource.dataset}&t=${data.datasource.table}&p=${data.datasource.project_id}&page=table`}
@@ -61,13 +77,6 @@ export const DataproductDetail = ({ data, error }: DataproductDetailProps) => {
         <i>adresse: </i>
         {`${data.datasource.project_id}.${data.datasource.dataset}.${data.datasource.table}`}
         <br />
-        <Button
-          onClick={async () => await deleteDataproduct(data.id)}
-          variant={'danger'}
-        >
-          Slett
-        </Button>
-        <Button onClick={() => setEdit(true)}>Endre</Button>
       </div>
 
       <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>

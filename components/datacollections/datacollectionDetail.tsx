@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
-import DotMenu from './editMenu'
+import DotMenu from '../lib/editMenu'
 
 export interface DatacollectionDetailProps {
   collection: DataproductCollectionSchema
