@@ -8,6 +8,8 @@ import fetcher from '../lib/api/fetcher'
 import { AuthState } from '../lib/context'
 import Head from 'next/head'
 
+import '@fontsource/source-sans-pro'
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [userState, setUserState] = useState<UserInfoSchema>()
 

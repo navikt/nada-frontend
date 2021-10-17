@@ -18,17 +18,37 @@ export interface DatacollectionDetailProps {
 
 const StyledEdit = styled.div`
   display: flex;
-  margin: 40px 0;
+  margin: 40px 0 0 0;
   justify-content: space-between;
   align-items: center;
 `
+const MetadataTable = ({ collection }: DatacollectionDetailProps) => {
+  const humanizeDate = (isoDate: string) =>
+    format(parseISO(isoDate), 'PPPP', { locale: nb })
+  return (
+    <table>
+      <tr>
+        <th>Opprettet:</th>
+        <td>{humanizeDate(collection.created)}</td>
+      </tr>
+      <tr>
+        <th>Oppdatert:</th>
+        <td>{humanizeDate(collection.last_modified)}</td>
+      </tr>
+      <tr>
+        <th>Nøkkelord:</th>
+        <td>
+          {collection.keywords &&
+            collection.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
+        </td>
+      </tr>
+    </table>
+  )
+}
 
 export const DatacollectionDetail = ({
   collection,
 }: DatacollectionDetailProps) => {
-  const humanizeDate = (isoDate: string) =>
-    format(parseISO(isoDate), 'PPPP', { locale: nb })
-
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
@@ -53,21 +73,7 @@ export const DatacollectionDetail = ({
           onDelete={async () => await deleteDatacollection(collection.id)}
         />
       </StyledEdit>
-      <div>
-        <i>Opprettet:</i> {humanizeDate(collection.created)}
-        <br />
-        <i>Oppdatert:</i> {humanizeDate(collection.last_modified)}
-        <br />
-        {collection.keywords &&
-          collection.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
-        <br />
-        {/*<Button*/}
-        {/*  onClick={async () => await deleteDatacollection(collection.id)}*/}
-        {/*  variant={'danger'}*/}
-        {/*>*/}
-        {/*  Slett*/}
-        {/*</Button>*/}
-      </div>
+      <MetadataTable collection={collection} />
 
       <div>
         <ReactMarkdown>

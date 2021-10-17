@@ -1,15 +1,14 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
-import { components } from '../../lib/schema/schema'
-import { ResultIcon } from './resultIcon'
 import { ResultAbstract } from './resultAbstract'
 import { SearchResultEntry } from '../../lib/schema/schema_types'
+import { LogoSidebar } from './logoSidebar'
 
 const SearchResultDiv = styled.div`
   background-color: ${navGraBakgrunn};
   display: flex;
-  padding: 8px;
+  padding: 16px 24px;
   margin-bottom: 15px;
 
   cursor: pointer;
@@ -30,8 +29,8 @@ export const SearchResult = ({ result }: SearchResultProps) => {
   return (
     <Link href={`/${helper(result.type)}/${result.id}`}>
       <SearchResultDiv>
+        <LogoSidebar result={result} />
         <ResultAbstract result={result} />
-        <ResultIcon result={result} />
       </SearchResultDiv>
     </Link>
   )

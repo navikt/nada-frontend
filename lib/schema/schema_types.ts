@@ -7,3 +7,5 @@ export type UserInfoSchema = components['schemas']['UserInfo']
 export type DataproductCollectionSchema =
   components['schemas']['DataproductCollection']
 export type DataproductSummary = components['schemas']['DataproductSummary']
+export type SearchResultEntryType =
+  components['schemas']['SearchResultEntry']['type']
