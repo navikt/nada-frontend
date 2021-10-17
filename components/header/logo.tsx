@@ -8,6 +8,7 @@ const LogoBox = styled.div`
   flex-shrink: 0;
   display: flex;
   align-contents: center;
+  margin-right: 12px;
 `
 
 export const Logo = () => (
