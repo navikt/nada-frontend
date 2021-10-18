@@ -14,10 +14,6 @@ import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { AuthState } from '../../lib/context'
 
-const LinkDiv = styled.div`
-  margin: 2em auto;
-`
-
 const StyledDiv = styled.div`
   display: flex;
   margin: 40px 0;
@@ -51,8 +47,6 @@ export const DataproductDetail = ({
   }
   const [backendError, setBackendError] = useState()
 
-  const gcpUrl = 'https://console.cloud.google.com'
-
   if (error) return <ErrorMessage error={error} />
 
   if (!product) return <LoaderSpinner />
@@ -80,13 +74,6 @@ export const DataproductDetail = ({
         <div>Team: {product.owner.group} </div>
       )}
 
-      <LinkDiv>
-        <Link
-          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
-        >
-          Åpne i BigQuery
-        </Link>
-      </LinkDiv>
       <div>
         <i>adresse: </i>
         {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
@@ -106,7 +93,7 @@ export const DataproductDetail = ({
         </Tabs>
       </Box>
       <TabPanel index={0} value={activeTab}>
-        <DataproductTableSchema id={product.id} />
+        <DataproductTableSchema product={product} />
       </TabPanel>
     </div>
   )
