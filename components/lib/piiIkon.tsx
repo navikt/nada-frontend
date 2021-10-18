@@ -17,11 +17,14 @@ const PiiIkonDiv = styled.div`
 export const PiiIkon = ({ pii }: PiiIkonProps) =>
   pii ? (
     <PiiIkonDiv>
-      <Warning color={navRod} /> Personsensitive data
+      <Warning color={navRod} />
+      <p>Inneholder personsensitive data</p>
     </PiiIkonDiv>
   ) : (
     <PiiIkonDiv>
       <Success color={navGronn} />
-      Ingen personsensitive data
+      <p>
+        Inneholder <b>ikke</b> personsensitive data
+      </p>
     </PiiIkonDiv>
   )

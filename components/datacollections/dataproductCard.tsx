@@ -8,7 +8,7 @@ import DataProductSpinner from '../lib/spinner'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { navBlaLighten80 } from '../../styles/constants'
 import styled from 'styled-components'
-import { PiiIkon } from './piiIkon'
+import { PiiIkon } from '../lib/piiIkon'
 
 interface DataproductCardProps {
   id: string

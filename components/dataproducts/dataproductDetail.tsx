@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { AuthState } from '../../lib/context'
+import { PiiIkon } from '../lib/piiIkon'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -78,6 +79,7 @@ export const DataproductDetail = ({
         <i>adresse: </i>
         {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
         <br />
+        <PiiIkon pii={product.pii} />
       </div>
 
       <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>
