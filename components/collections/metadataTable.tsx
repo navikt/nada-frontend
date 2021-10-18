@@ -27,22 +27,24 @@ const StyledMetadataTable = styled.table`
 
 export const MetadataTable = ({ collection }: CollectionDetailProps) => (
   <StyledMetadataTable>
-    <tr>
-      <th>Opprettet:</th>
-      <td>{humanizeDate(collection.created)}</td>
-    </tr>
-    <tr>
-      <th>Oppdatert:</th>
-      <td>{humanizeDate(collection.last_modified)}</td>
-    </tr>
-    <tr>
-      <th>Nøkkelord:</th>
-      <td>
-        {collection.keywords &&
-          collection.keywords.map((k: string) => (
-            <MicroCard key={k}>{k}</MicroCard>
-          ))}
-      </td>
-    </tr>
+    <tbody>
+      <tr>
+        <th>Opprettet:</th>
+        <td>{humanizeDate(collection.created)}</td>
+      </tr>
+      <tr>
+        <th>Oppdatert:</th>
+        <td>{humanizeDate(collection.last_modified)}</td>
+      </tr>
+      <tr>
+        <th>Nøkkelord:</th>
+        <td>
+          {collection.keywords &&
+            collection.keywords.map((k: string) => (
+              <MicroCard key={k}>{k}</MicroCard>
+            ))}
+        </td>
+      </tr>
+    </tbody>
   </StyledMetadataTable>
 )
