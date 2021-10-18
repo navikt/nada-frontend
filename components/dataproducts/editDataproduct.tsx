@@ -9,6 +9,7 @@ import { mutate } from 'swr'
 import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import KeywordsInput from '../lib/KeywordsInput'
 
 interface EditDatacollectionFormProps {
   dataproduct: DataproductSchema
@@ -20,16 +21,21 @@ const EditDataproduct = ({
   close,
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
-  const { register, handleSubmit, watch, formState } = useForm({
+  const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(updateDataproductValidation),
     defaultValues: {
       name: dataproduct.name,
       description: dataproduct.description,
       repo: dataproduct.repo,
       slug: dataproduct.slug,
+      keywords: dataproduct.keywords,
       pii: dataproduct.pii,
     },
   })
+  const keywords = watch('keywords')
+  const setKeywords = (value: string[]) => {
+    setValue('keywords', value)
+  }
   const { errors } = formState
   const onSubmit = async (requestData: any) => {
     try {
@@ -50,6 +56,12 @@ const EditDataproduct = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <DataproductForm register={register} errors={errors} watch={watch} />
       <PiiCheckboxInput register={register} watch={watch} />
+      <KeywordsInput
+        keywords={keywords}
+        setKeywords={setKeywords}
+        {...register('keywords')}
+        error={errors.keywords?.[0].message}
+      />
       <RightJustifiedSubmitButton onCancel={close} />
     </form>
   )

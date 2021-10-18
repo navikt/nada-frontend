@@ -3,13 +3,6 @@ import { nb } from 'date-fns/locale'
 import { MicroCard } from '@navikt/ds-react'
 import { DatacollectionDetailProps } from './datacollectionDetail'
 import styled from 'styled-components'
-import {
-  navDypBlaLighten80,
-  navGra80,
-  navLimeGronnLighten80,
-  navLysBlaLighten80,
-  navOransjeLighten80,
-} from '../../styles/constants'
 
 const humanizeDate = (isoDate: string) =>
   format(parseISO(isoDate), 'PPPP', { locale: nb })
@@ -46,7 +39,9 @@ export const MetadataTable = ({ collection }: DatacollectionDetailProps) => (
       <th>Nøkkelord:</th>
       <td>
         {collection.keywords &&
-          collection.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
+          collection.keywords.map((k: string) => (
+            <MicroCard key={k}>{k}</MicroCard>
+          ))}
       </td>
     </tr>
   </StyledMetadataTable>
