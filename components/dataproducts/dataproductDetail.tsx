@@ -14,6 +14,7 @@ import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { AuthState } from '../../lib/context'
 import { PiiIkon } from '../lib/piiIkon'
+import { MicroCard } from '@navikt/ds-react'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -80,6 +81,8 @@ export const DataproductDetail = ({
         <i>Type: </i>
         {product.type}
         <PiiIkon pii={product.pii} />
+        {product.keywords &&
+          product.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
       </div>
 
       <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>

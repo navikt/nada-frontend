@@ -3,10 +3,7 @@ import { useForm } from 'react-hook-form'
 import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import { useContext, useEffect, useState } from 'react'
 import apiPOST from '../../lib/api/post'
-import {
-  DataproductSchema,
-  NewDataproductSchema,
-} from '../../lib/schema/schema_types'
+import { NewDataproductSchema } from '../../lib/schema/schema_types'
 import ErrorMessage from '../lib/error'
 import DataproductForm from './dataproductForm'
 import { useRouter } from 'next/router'
@@ -16,12 +13,16 @@ import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import KeywordsInput from '../lib/KeywordsInput'
 
 export const NewDataproductForm = () => {
-  const { register, handleSubmit, watch, formState } = useForm({
+  const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(newDataproductValidation),
   })
-
+  const keywords = watch('keywords')
+  const setKeywords = (value: string[]) => {
+    setValue('keywords', value)
+  }
   const { errors } = formState
   const router = useRouter()
   const [backendError, setBackendError] = useState<Error>()
@@ -41,10 +42,8 @@ export const NewDataproductForm = () => {
     }/tables`,
     fetcher
   )
-  console.log(collectionProjectTables)
 
   const projectID = watch('bigquery.project_id')
-  const tables = []
   useEffect(() => {
     if (projectID && projectID.length) {
       // TODO: Update something here.
@@ -103,6 +102,12 @@ export const NewDataproductForm = () => {
         />
       </Fieldset>
       <PiiCheckboxInput register={register} watch={watch} />
+      <KeywordsInput
+        keywords={keywords}
+        setKeywords={setKeywords}
+        {...register('keywords')}
+        error={errors.keywords?.[0].message}
+      />
       <RightJustifiedSubmitButton onCancel={router.back} />
     </form>
   )

@@ -33,7 +33,6 @@ export const EditDatacollectionForm = ({
   const keywords = watch('keywords')
   const setKeywords = (value: string[]) => {
     setValue('keywords', value)
-    console.log(value)
   }
 
   const { errors } = formState

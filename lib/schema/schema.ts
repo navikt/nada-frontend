@@ -42,6 +42,10 @@ export interface paths {
     /** Delete a Collection */
     delete: operations['deleteCollection']
   }
+  '/collections/{id}/add': {
+    /** Add to collection */
+    post: operations['addToCollection']
+  }
   '/dataproducts': {
     /** Get dataproducts */
     get: operations['getDataproducts']
@@ -170,11 +174,16 @@ export interface components {
       name: string
       excerpt: string
     }
-    SearchResultType: 'dataproduct' | 'Collection' | 'datapackage'
+    SearchResultType: 'dataproduct' | 'collection' | 'datapackage'
     Group: {
       /** Email and ID of the group */
       email: string
       name: string
+    }
+    CollectionElementType: 'dataproduct'
+    CollectionElement: {
+      element_type: components['schemas']['CollectionElementType']
+      element_id: string
     }
   }
 }
@@ -308,6 +317,28 @@ export interface operations {
     responses: {
       /** Deleted OK */
       204: never
+    }
+  }
+  /** Add to collection */
+  addToCollection: {
+    parameters: {
+      path: {
+        /** Collection ID */
+        id: string
+      }
+    }
+    responses: {
+      /** Added OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['CollectionElement']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CollectionElement']
+      }
     }
   }
   /** Get dataproducts */
