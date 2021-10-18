@@ -15,16 +15,24 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
+import Link from 'next/link'
+import styled from 'styled-components'
 
 interface DatasetTableSchemaProps {
   product: DataproductSchema
 }
+
+const LinkDiv = styled.div`
+  margin: 2em auto;
+`
 
 const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
   const { data, error } = useSWR<DataproductMetadata>(
     `/api/dataproducts/${product.id}/metadata`,
     fetcher
   )
+
+  const gcpUrl = 'https://console.cloud.google.com'
 
   if (error) return <ErrorMessage error={error} />
 
