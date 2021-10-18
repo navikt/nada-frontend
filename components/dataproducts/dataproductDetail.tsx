@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
@@ -12,6 +12,7 @@ import { DataproductSchema } from '../../lib/schema/schema_types'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
+import { AuthState } from '../../lib/context'
 
 const LinkDiv = styled.div`
   margin: 2em auto;
@@ -36,6 +37,7 @@ export const DataproductDetail = ({
   const [edit, setEdit] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
+  const user = useContext(AuthState).user
   const deleteDataproduct = async (id: string) => {
     try {
       await apiDELETE(`/api/dataproducts/${id}`)
@@ -62,14 +64,22 @@ export const DataproductDetail = ({
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
         <h1>{product.name}</h1>
-        <DotMenu
-          onEdit={() => setEdit(true)}
-          onDelete={async () => await deleteDataproduct(product.id)}
-        />
+        {user?.groups.includes(product.owner.group) && (
+          <DotMenu
+            onEdit={() => setEdit(true)}
+            onDelete={async () => await deleteDataproduct(product.id)}
+          />
+        )}
       </StyledDiv>
       <ReactMarkdown>
         {product.description || '*ingen beskrivelse*'}
       </ReactMarkdown>
+      {product.owner.teamkatalogen ? (
+        <Link href={product.owner.teamkatalogen}>{product.owner.group}</Link>
+      ) : (
+        <div>Team: {product.owner.group} </div>
+      )}
+
       <LinkDiv>
         <Link
           href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
