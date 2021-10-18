@@ -15,8 +15,6 @@ import DataproductForm from './dataproductForm'
 import { useRouter } from 'next/router'
 import { Fieldset, Select, TextField } from '@navikt/ds-react'
 import { AuthState } from '../../lib/context'
-import useSWR from 'swr'
-import fetcher from '../../lib/api/fetcher'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import Tree, {
@@ -45,9 +43,6 @@ const DataproductSourceForm = ({
   watch,
   errors,
 }: DataproductSourceFormProps) => {
-  const team = watch('owner.group')
-  const projectID = watch('datasource.project_id')
-
   const [teams, setTeams] = useState<components['schemas']['Group'][]>([])
   type TeamID = string
   type ProjectID = string
