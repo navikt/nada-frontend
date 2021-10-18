@@ -79,6 +79,8 @@ export const DataproductDetail = ({
         <i>adresse: </i>
         {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
         <br />
+        <i>Type: </i>
+        {product.type}
         <PiiIkon pii={product.pii} />
       </div>
 

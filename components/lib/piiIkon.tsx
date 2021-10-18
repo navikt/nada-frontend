@@ -18,13 +18,13 @@ export const PiiIkon = ({ pii }: PiiIkonProps) =>
   pii ? (
     <PiiIkonDiv>
       <Warning color={navRod} />
-      <p>Inneholder personsensitive data</p>
+      <p>Inneholder personidentifiserende informasjon (PII)</p>
     </PiiIkonDiv>
   ) : (
     <PiiIkonDiv>
       <Success color={navGronn} />
       <p>
-        Inneholder <b>ikke</b> personsensitive data
+        Inneholder <b>ikke</b> personidentifiserende informasjon (PII)
       </p>
     </PiiIkonDiv>
   )
