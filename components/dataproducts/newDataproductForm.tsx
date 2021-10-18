@@ -26,7 +26,7 @@ export const NewDataproductForm = () => {
   const [backendError, setBackendError] = useState<Error>()
 
   const projectID = watch('bigquery.project_id')
-  const tables = []
+
   useEffect(() => {
     if (projectID && projectID.length) {
       // TODO: Update something here.
@@ -54,13 +54,12 @@ export const NewDataproductForm = () => {
         error={errors.keywords?.[0].message}
       />
       <DataproductForm register={register} errors={errors} watch={watch} />
-
       <DataproductSourceForm
         register={register}
         watch={watch}
         errors={errors}
+        setValue={setValue}
       />
-
       <PiiCheckboxInput register={register} watch={watch} />
       <RightJustifiedSubmitButton onCancel={router.back} />
     </form>
