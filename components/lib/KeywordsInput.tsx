@@ -46,26 +46,12 @@ export const KeywordsInput = ({
       margin-bottom: 8px;
     }
 
-    .react-tags__search-input {
+    .navds-text-field__input {
       width: 100% !important;
-      appearance: none;
-      background-color: rgb(255, 255, 255);
-      border-radius: 4px;
-      box-sizing: border-box;
-      color: rgb(0, 0, 0);
-      font-family: 'Source Sans Pro', Arial, sans-serif;
-      font-size: 18px;
-      font-weight: 400;
-      letter-spacing: normal;
-      line-height: 24px;
-      min-height: 48px;
-      padding-bottom: 8px;
-      padding-left: 8px;
-      padding-right: 8px;
-      padding-top: 8px;
     }
 
     .react-tags__selected-tag {
+      margin-right: 8px;
       appearance: none;
       background-color: #ffd799;
       border: none;
@@ -94,11 +80,27 @@ export const KeywordsInput = ({
 
   useEffect(() => setKeywords(tags.map((x) => x.name)), [tags])
 
+  const classNames = {
+    root: 'react-tags',
+    rootFocused: 'is-focused',
+    selected: 'react-tags__selected',
+    selectedTag: 'react-tags__selected-tag',
+    selectedTagName: 'react-tags__selected-tag-name',
+    search: 'react-tags__search',
+    searchWrapper: 'react-tags__search-wrapper',
+    searchInput: 'react-tags__search-input',
+    suggestions: 'react-tags__suggestions',
+    suggestionActive: 'is-active',
+    suggestionDisabled: 'is-disabled',
+    suggestionPrefix: 'react-tags__suggestion-prefix',
+  }
+
   return (
     <>
       <StyledRectTags>
         <label>Nøkkelord</label>
         <ReactTags
+          classNames={{ ...classNames, searchInput: 'navds-text-field__input' }}
           tags={tags}
           onDelete={onDelete}
           onAddition={onAddition}
