@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
@@ -12,7 +12,6 @@ import { DataproductSchema } from '../../lib/schema/schema_types'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
-import { AuthState } from '../../lib/context'
 import { PiiIkon } from '../lib/piiIkon'
 import { MicroCard } from '@navikt/ds-react'
 
@@ -35,7 +34,6 @@ export const DataproductDetail = ({
   const [edit, setEdit] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
-  const user = useContext(AuthState).user
   const deleteDataproduct = async (id: string) => {
     try {
       await apiDELETE(`/api/dataproducts/${id}`)
@@ -99,6 +97,9 @@ export const DataproductDetail = ({
       </Box>
       <TabPanel index={0} value={activeTab}>
         <DataproductTableSchema product={product} />
+      </TabPanel>
+      <TabPanel index={1} value={activeTab}>
+        <div>Placeholder</div>
       </TabPanel>
     </div>
   )

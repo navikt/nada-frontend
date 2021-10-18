@@ -22,6 +22,10 @@ interface DatasetTableSchemaProps {
   product: DataproductSchema
 }
 
+const LinkDiv = styled.div`
+  margin: 2em auto;
+`
+
 const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
   const { data, error } = useSWR<DataproductMetadata>(
     `/api/dataproducts/${product.id}/metadata`,
@@ -29,9 +33,6 @@ const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
   )
 
   const gcpUrl = 'https://console.cloud.google.com'
-  const LinkDiv = styled.div`
-    margin: 2em auto;
-  `
 
   if (error) return <ErrorMessage error={error} />
 
