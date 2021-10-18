@@ -32,8 +32,19 @@ export const NewDataproductForm = () => {
     `/api/groups/${user?.groups[1].email}/gcp_projects`,
     fetcher
   )
+  const collectionProjectTables = useSWR(
+    // FIXME: use project selected to fetch tables
+    `/api/gcp/${
+      collectionTeamProjectIDs.data
+        ? collectionTeamProjectIDs.data[0]
+        : 'dataplattform-dev-9da3'
+    }/tables`,
+    fetcher
+  )
+  console.log(collectionProjectTables)
 
   const projectID = watch('bigquery.project_id')
+  const tables = []
   useEffect(() => {
     if (projectID && projectID.length) {
       // TODO: Update something here.
