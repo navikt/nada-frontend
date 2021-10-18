@@ -1,9 +1,6 @@
 import { DataproductCollectionSchema } from '../../lib/schema/schema_types'
-import { format, parseISO } from 'date-fns'
-import { nb } from 'date-fns/locale'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
-import { MicroCard } from '@navikt/ds-react'
 import { EditDatacollectionForm } from './editDatacollectionForm'
 import DataproductList from './dataproductList'
 import styled from 'styled-components'
@@ -11,6 +8,7 @@ import { useRouter } from 'next/router'
 import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
+import { MetadataTable } from './metadataTable'
 
 export interface DatacollectionDetailProps {
   collection: DataproductCollectionSchema
@@ -22,29 +20,6 @@ const StyledEdit = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-const MetadataTable = ({ collection }: DatacollectionDetailProps) => {
-  const humanizeDate = (isoDate: string) =>
-    format(parseISO(isoDate), 'PPPP', { locale: nb })
-  return (
-    <table>
-      <tr>
-        <th>Opprettet:</th>
-        <td>{humanizeDate(collection.created)}</td>
-      </tr>
-      <tr>
-        <th>Oppdatert:</th>
-        <td>{humanizeDate(collection.last_modified)}</td>
-      </tr>
-      <tr>
-        <th>Nøkkelord:</th>
-        <td>
-          {collection.keywords &&
-            collection.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
-        </td>
-      </tr>
-    </table>
-  )
-}
 
 export const DatacollectionDetail = ({
   collection,
@@ -62,7 +37,10 @@ export const DatacollectionDetail = ({
   }
 
   return edit ? (
-    <EditDatacollectionForm datacollection={collection} close={setEdit} />
+    <EditDatacollectionForm
+      datacollection={collection}
+      close={() => setEdit(false)}
+    />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}

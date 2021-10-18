@@ -36,7 +36,7 @@ const NewDatacollection = () => {
       {backendError && (
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
       )}
-      <NewDatacollectionForm onSubmit={onSubmit} />
+      <NewDatacollectionForm onSubmit={onSubmit} onCancel={router.back} />
     </PageLayout>
   )
 }

@@ -29,7 +29,10 @@ interface DataproductDetailProps {
   error: Error | undefined
 }
 
-export const DataproductDetail = ({ product, error }: DataproductDetailProps) => {
+export const DataproductDetail = ({
+  product,
+  error,
+}: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
@@ -53,7 +56,7 @@ export const DataproductDetail = ({ product, error }: DataproductDetailProps) =>
   if (!product) return <LoaderSpinner />
 
   return edit ? (
-    <EditDataproduct dataproduct={product} close={setEdit} />
+    <EditDataproduct dataproduct={product} close={() => setEdit(false)} />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
@@ -64,7 +67,9 @@ export const DataproductDetail = ({ product, error }: DataproductDetailProps) =>
           onDelete={async () => await deleteDataproduct(product.id)}
         />
       </StyledDiv>
-
+      <ReactMarkdown>
+        {product.description || '*ingen beskrivelse*'}
+      </ReactMarkdown>
       <LinkDiv>
         <Link
           href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
@@ -86,17 +91,11 @@ export const DataproductDetail = ({ product, error }: DataproductDetailProps) =>
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          <Tab label="Beskrivelse" value={0} />
-          <Tab label="Skjema" value={1} />
+          <Tab label="Skjema" value={0} />
           <Tab label="Lineage" />
         </Tabs>
       </Box>
       <TabPanel index={0} value={activeTab}>
-        <ReactMarkdown>
-          {product.description || '*ingen beskrivelse*'}
-        </ReactMarkdown>
-      </TabPanel>
-      <TabPanel index={1} value={activeTab}>
         <DataproductTableSchema id={product.id} />
       </TabPanel>
     </div>

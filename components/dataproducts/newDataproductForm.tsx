@@ -92,7 +92,7 @@ export const NewDataproductForm = () => {
         />
       </Fieldset>
       <PiiCheckboxInput register={register} watch={watch} />
-      <RightJustifiedSubmitButton />
+      <RightJustifiedSubmitButton onCancel={router.back} />
     </form>
   )
 }

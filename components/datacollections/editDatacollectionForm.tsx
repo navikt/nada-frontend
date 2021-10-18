@@ -11,7 +11,7 @@ import KeywordsInput from '../lib/KeywordsInput'
 
 interface EditDatacollectionFormProps {
   datacollection: DataproductCollectionSchema
-  close: Dispatch<SetStateAction<boolean>>
+  close: () => void
 }
 
 export const EditDatacollectionForm = ({
@@ -42,7 +42,7 @@ export const EditDatacollectionForm = ({
       await apiPUT(`/api/collections/${datacollection.id}`, requestData)
       await mutate(`/api/collections/${datacollection.id}`)
       setBackendError(undefined)
-      close(false)
+      close()
     } catch (e: any) {
       setBackendError(e.toString())
     }
@@ -87,7 +87,7 @@ export const EditDatacollectionForm = ({
           error={errors.keywords?.[0].message}
         />
       </Fieldset>
-      <RightJustifiedSubmitButton />
+      <RightJustifiedSubmitButton onCancel={close} />
     </form>
   )
 }

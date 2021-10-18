@@ -12,7 +12,7 @@ import RightJustifiedSubmitButton from '../widgets/formSubmit'
 
 interface EditDatacollectionFormProps {
   dataproduct: DataproductSchema
-  close: Dispatch<SetStateAction<boolean>>
+  close: () => void
 }
 
 const EditDataproduct = ({
@@ -36,7 +36,7 @@ const EditDataproduct = ({
       await apiPUT(`/api/dataproducts/${dataproduct.id}`, requestData)
       mutate(`/api/dataproducts/${dataproduct.id}`)
       setBackendError(undefined)
-      close(false)
+      close()
     } catch (e: any) {
       setBackendError(e.toString())
     }
@@ -50,7 +50,7 @@ const EditDataproduct = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <DataproductForm register={register} errors={errors} watch={watch} />
       <PiiCheckboxInput register={register} watch={watch} />
-      <RightJustifiedSubmitButton />
+      <RightJustifiedSubmitButton onCancel={close} />
     </form>
   )
 }

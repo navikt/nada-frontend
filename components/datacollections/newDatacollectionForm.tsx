@@ -14,10 +14,12 @@ const NewDatacollectionFormOptions = {
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
+  onCancel: () => void
 }
 
 export const NewDatacollectionForm = ({
   onSubmit,
+  onCancel,
 }: NewDatacollectionFormProps) => {
   const { register, handleSubmit, formState, setValue } = useForm(
     NewDatacollectionFormOptions
@@ -78,7 +80,7 @@ export const NewDatacollectionForm = ({
           error={errors.keywords?.[0].message}
         />
       </Fieldset>
-      <RightJustifiedSubmitButton />
+      <RightJustifiedSubmitButton onCancel={onCancel} />
     </form>
   )
 }
