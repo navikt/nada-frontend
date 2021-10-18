@@ -489,6 +489,14 @@
     prop-types "^15.7.2"
     react-is "^17.0.2"
 
+"@naisutech/react-tree@^2.0.11":
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/@naisutech/react-tree/-/react-tree-2.0.11.tgz#0c723f6eaadeb0ad550ecdd6612900b0684f924b"
+  integrity sha512-ATFrZxBUcRQrbyQNMl/m2lvkzBX8MRUIJRBWKpFsjzJr3pJXadqK+bXopr7zXBlqJDjdvbYaCeoWuJltcYOBYg==
+  dependencies:
+    "@emotion/is-prop-valid" "^1.1.0"
+    nanoid "^3.1.23"
+
 "@napi-rs/triples@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
