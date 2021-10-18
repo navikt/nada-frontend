@@ -5,12 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { CollectionSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { mutate } from 'swr'
-import KeywordsInput from '../lib/keywordsInput'
+import KeywordsInput from '../lib/KeywordsInput'
 
 interface EditDatacollectionFormProps {
-  collection: CollectionSchema
+  datacollection: CollectionSchema
   close: () => void
 }
 

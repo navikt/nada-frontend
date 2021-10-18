@@ -35,7 +35,10 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   }
 
   return edit ? (
-    <EditCollectionForm collection={collection} close={() => setEdit(false)} />
+    <EditCollectionForm
+      collection={collection}
+      close={() => setEdit(false)}
+    />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
