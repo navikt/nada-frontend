@@ -22,6 +22,7 @@ export const KeywordsInput = ({
   )
   const StyledRectTags = styled.div`
     margin-top: 8px;
+
     label {
       box-sizing: border-box;
       color: rgb(38, 38, 38);
@@ -39,9 +40,10 @@ export const KeywordsInput = ({
     .react-tags {
       margin-top: 8px;
       display: flex;
+      flex-direction: column-reverse;
     }
     .react-tags__search {
-      width: 100%;
+      margin-bottom: 8px;
     }
 
     .react-tags__search-input {

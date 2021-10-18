@@ -25,6 +25,7 @@ import Tree, {
   NodeId as TreeNodeId,
 } from '@naisutech/react-tree'
 import { components } from '../../lib/schema/schema'
+import KeywordsInput from '../lib/KeywordsInput'
 
 interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
@@ -233,9 +234,13 @@ const DataproductSourceForm = ({
 }
 
 export const NewDataproductForm = () => {
-  const { register, handleSubmit, watch, formState } = useForm({
+  const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(newDataproductValidation),
   })
+  const keywords = watch('keywords')
+  const setKeywords = (value: string[]) => {
+    setValue('keywords', value)
+  }
 
   const { errors } = formState
   const router = useRouter()
@@ -263,6 +268,12 @@ export const NewDataproductForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {backendError && <ErrorMessage error={backendError} />}
+      <KeywordsInput
+        keywords={keywords}
+        setKeywords={setKeywords}
+        {...register('keywords')}
+        error={errors.keywords?.[0].message}
+      />
       <DataproductForm register={register} errors={errors} watch={watch} />
 
       <DataproductSourceForm
