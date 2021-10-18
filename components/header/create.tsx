@@ -71,7 +71,7 @@ export default function Create() {
               window.location.replace('/datacollection/new')
             }}
           >
-            datasamling
+            samling
           </MenuItem>
         </Menu>
       </CreateBox>

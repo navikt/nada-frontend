@@ -6,7 +6,7 @@ import IconBox from '../lib/icons/iconBox'
 
 export const ResultIcon = ({ result }: SearchResultProps) => {
   const iconMap = {
-    DataproductCollection: <DataProductLogo size={64} />,
+    Collection: <DataProductLogo size={64} />,
     dataproduct: <BigQueryLogo size={64} />,
     datapackage: <DataPackageLogo size={64} />,
   }

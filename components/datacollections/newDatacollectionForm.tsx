@@ -35,7 +35,7 @@ export const NewDatacollectionForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Dataproduktsamling" errorPropagation={false}>
+      <Fieldset legend="Samling" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"

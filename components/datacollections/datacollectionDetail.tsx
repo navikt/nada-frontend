@@ -58,7 +58,7 @@ export const DatacollectionDetail = ({
           {collection.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
       </div>
-      <h2>Dataprodukter i datasamlingen:</h2>
+      <h2>Dataprodukter i samlingen:</h2>
       <DataproductList collection={collection} />
     </div>
   )
