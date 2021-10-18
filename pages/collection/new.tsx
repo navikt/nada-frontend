@@ -4,9 +4,9 @@ import { useContext, useState } from 'react'
 import { AuthState } from '../../lib/context'
 import { useRouter } from 'next/router'
 import { apiPOST } from '../../lib/api/post'
-import { NewDatacollectionForm } from '../../components/datacollections/newDatacollectionForm'
+import { NewCollectionForm } from '../../components/collections/newCollectionForm'
 
-const NewDatacollection = () => {
+const NewCollection = () => {
   const router = useRouter()
 
   const [backendError, setBackendError] = useState()
@@ -36,9 +36,9 @@ const NewDatacollection = () => {
       {backendError && (
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
       )}
-      <NewDatacollectionForm onSubmit={onSubmit} onCancel={router.back} />
+      <NewCollectionForm onSubmit={onSubmit} onCancel={router.back} />
     </PageLayout>
   )
 }
 
-export default NewDatacollection
+export default NewCollection

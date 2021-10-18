@@ -1,7 +1,7 @@
-import { DataproductCollectionSchema } from '../../lib/schema/schema_types'
+import { CollectionSchema } from '../../lib/schema/schema_types'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
-import { EditDatacollectionForm } from './editDatacollectionForm'
+import { EditCollectionForm } from './editCollectionForm'
 import DataproductList from './dataproductList'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -10,8 +10,8 @@ import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 
-export interface DatacollectionDetailProps {
-  collection: DataproductCollectionSchema
+export interface CollectionDetailProps {
+  collection: CollectionSchema
 }
 
 const StyledEdit = styled.div`
@@ -21,13 +21,11 @@ const StyledEdit = styled.div`
   align-items: center;
 `
 
-export const DatacollectionDetail = ({
-  collection,
-}: DatacollectionDetailProps) => {
+export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
-  const deleteDatacollection = async (id: string) => {
+  const deleteCollection = async (id: string) => {
     try {
       await apiDELETE(`/api/collections/${id}`)
       await router.push(`/`)
@@ -37,7 +35,7 @@ export const DatacollectionDetail = ({
   }
 
   return edit ? (
-    <EditDatacollectionForm
+    <EditCollectionForm
       datacollection={collection}
       close={() => setEdit(false)}
     />
@@ -48,7 +46,7 @@ export const DatacollectionDetail = ({
         <h1>{collection.name}</h1>
         <DotMenu
           onEdit={() => setEdit(true)}
-          onDelete={async () => await deleteDatacollection(collection.id)}
+          onDelete={async () => await deleteCollection(collection.id)}
         />
       </StyledEdit>
       <MetadataTable collection={collection} />
