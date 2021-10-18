@@ -1,7 +1,7 @@
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import { MicroCard } from '@navikt/ds-react'
-import { DatacollectionDetailProps } from './datacollectionDetail'
+import { CollectionDetailProps } from './collectionDetail'
 import styled from 'styled-components'
 
 const humanizeDate = (isoDate: string) =>
@@ -25,7 +25,7 @@ const StyledMetadataTable = styled.table`
   }
 `
 
-export const MetadataTable = ({ collection }: DatacollectionDetailProps) => (
+export const MetadataTable = ({ collection }: CollectionDetailProps) => (
   <StyledMetadataTable>
     <tr>
       <th>Opprettet:</th>

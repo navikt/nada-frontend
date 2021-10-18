@@ -1,17 +1,4 @@
-import {
-  ConfirmationPanel,
-  Fieldset,
-  Select,
-  TextField,
-} from '@navikt/ds-react'
-import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import ErrorMessage from '../lib/error'
-import useSWR from 'swr'
-import fetcher from '../../lib/api/fetcher'
-import styled from 'styled-components'
-import { useContext, useEffect } from 'react'
-import { AuthState } from '../../lib/context'
-import PiiCheckboxInput from './piiCheckboxInput'
+import { Fieldset, TextField } from '@navikt/ds-react'
 
 interface DataproductFormProps {
   register: any

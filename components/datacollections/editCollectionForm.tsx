@@ -5,28 +5,28 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { DataproductCollectionSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { mutate } from 'swr'
-import KeywordsInput from '../lib/KeywordsInput'
+import KeywordsInput from '../lib/keywordsInput'
 
 interface EditDatacollectionFormProps {
-  datacollection: DataproductCollectionSchema
+  collection: DataproductCollectionSchema
   close: () => void
 }
 
-export const EditDatacollectionForm = ({
-  datacollection,
+export const EditCollectionForm = ({
+  collection,
   close,
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
   const { register, handleSubmit, formState, watch, setValue } = useForm({
     resolver: yupResolver(updateDataproductCollectionValidation),
     defaultValues: {
-      name: datacollection.name,
-      description: datacollection.description,
-      slug: datacollection.slug,
-      repo: datacollection.repo,
-      keywords: datacollection.keywords,
+      name: collection.name,
+      description: collection.description,
+      slug: collection.slug,
+      repo: collection.repo,
+      keywords: collection.keywords,
     },
   })
 
@@ -38,8 +38,8 @@ export const EditDatacollectionForm = ({
   const { errors } = formState
   const onSubmit = async (requestData: any) => {
     try {
-      await apiPUT(`/api/collections/${datacollection.id}`, requestData)
-      await mutate(`/api/collections/${datacollection.id}`)
+      await apiPUT(`/api/collections/${collection.id}`, requestData)
+      await mutate(`/api/collections/${collection.id}`)
       setBackendError(undefined)
       close()
     } catch (e: any) {
@@ -72,12 +72,6 @@ export const EditDatacollectionForm = ({
           {...register('slug')}
           error={errors.slug?.message}
           description={'Slug-teksten blir brukt som URL'}
-        />
-        <TextField
-          id="repo"
-          label="Repo"
-          {...register('repo')}
-          error={errors.repo?.message}
         />
         <KeywordsInput
           keywords={keywords}

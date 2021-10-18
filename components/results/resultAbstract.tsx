@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { SearchResultProps } from './searchresult'
-import { SearchResultEntryType } from '../../lib/schema/schema_types'
 
 const Slash = () => <img src="/result-icons/slash.svg" />
 

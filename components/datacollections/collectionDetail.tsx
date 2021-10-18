@@ -1,7 +1,7 @@
 import { DataproductCollectionSchema } from '../../lib/schema/schema_types'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
-import { EditDatacollectionForm } from './editDatacollectionForm'
+import { EditCollectionForm } from './editCollectionForm'
 import DataproductList from './dataproductList'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -10,7 +10,7 @@ import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 
-export interface DatacollectionDetailProps {
+export interface CollectionDetailProps {
   collection: DataproductCollectionSchema
 }
 
@@ -21,9 +21,7 @@ const StyledEdit = styled.div`
   align-items: center;
 `
 
-export const DatacollectionDetail = ({
-  collection,
-}: DatacollectionDetailProps) => {
+export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
@@ -37,10 +35,7 @@ export const DatacollectionDetail = ({
   }
 
   return edit ? (
-    <EditDatacollectionForm
-      datacollection={collection}
-      close={() => setEdit(false)}
-    />
+    <EditCollectionForm collection={collection} close={() => setEdit(false)} />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}

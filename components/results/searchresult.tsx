@@ -23,7 +23,7 @@ export interface SearchResultProps {
 
 export const SearchResult = ({ result }: SearchResultProps) => {
   const helper = (type: string) => {
-    if (type === 'Collection') return 'datacollection'
+    if (type === 'collection') return 'datacollection'
     return type
   }
   return (

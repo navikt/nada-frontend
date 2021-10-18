@@ -9,7 +9,7 @@ import {
 import { GetServerSideProps } from 'next'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
-import { DatacollectionDetail } from '../../components/datacollections/datacollectionDetail'
+import { CollectionDetail } from '../../components/datacollections/collectionDetail'
 import LoaderSpinner from '../../components/lib/spinner'
 
 const getBothURLs = (apiEndpoint: string) => [
@@ -87,7 +87,7 @@ const DatacollectionFetcher = ({ id }: DatacollectionFetcherProps) => {
 
   if (!data) return <LoaderSpinner />
 
-  return <DatacollectionDetail collection={data} />
+  return <CollectionDetail collection={data} />
 }
 
 interface DatacollectionProps {

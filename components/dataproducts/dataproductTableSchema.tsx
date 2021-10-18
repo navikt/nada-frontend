@@ -15,8 +15,6 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import Link from 'next/link'
-import styled from 'styled-components'
 
 interface DatasetTableSchemaProps {
   product: DataproductSchema
@@ -28,11 +26,6 @@ const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
     fetcher
   )
 
-  const gcpUrl = 'https://console.cloud.google.com'
-  const LinkDiv = styled.div`
-    margin: 2em auto;
-  `
-
   if (error) return <ErrorMessage error={error} />
 
   if (!data) return <LoaderSpinner />
@@ -41,13 +34,6 @@ const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
 
   return (
     <div>
-      <LinkDiv>
-        <Link
-          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
-        >
-          Åpne i BigQuery
-        </Link>
-      </LinkDiv>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

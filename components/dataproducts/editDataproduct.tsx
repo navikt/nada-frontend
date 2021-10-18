@@ -4,12 +4,12 @@ import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DataproductSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { mutate } from 'swr'
 import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import KeywordsInput from '../lib/KeywordsInput'
+import KeywordsInput from '../lib/keywordsInput'
 
 interface EditDatacollectionFormProps {
   dataproduct: DataproductSchema

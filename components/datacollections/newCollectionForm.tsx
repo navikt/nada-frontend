@@ -4,11 +4,10 @@ import { useContext, useEffect, useState } from 'react'
 import { newDataproductCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { Tag } from 'react-tag-autocomplete'
 import { AuthState } from '../../lib/context'
-import KeywordsInput from '../lib/KeywordsInput'
+import KeywordsInput from '../lib/keywordsInput'
 
-const NewDatacollectionFormOptions = {
+const NewCollectionFormOptions = {
   resolver: yupResolver(newDataproductCollectionValidation),
 }
 
@@ -17,12 +16,12 @@ interface NewDatacollectionFormProps {
   onCancel: () => void
 }
 
-export const NewDatacollectionForm = ({
+export const NewCollectionForm = ({
   onSubmit,
   onCancel,
 }: NewDatacollectionFormProps) => {
   const { register, handleSubmit, formState, setValue } = useForm(
-    NewDatacollectionFormOptions
+    NewCollectionFormOptions
   )
   const { errors } = formState
 
@@ -54,12 +53,6 @@ export const NewDatacollectionForm = ({
           {...register('slug')}
           error={errors.slug?.message}
           description={'Slug-teksten blir brukt som URL'}
-        />
-        <TextField
-          id="repo"
-          label="Repo"
-          {...register('repo')}
-          error={errors.repo?.message}
         />
         <Select
           label="Team"
