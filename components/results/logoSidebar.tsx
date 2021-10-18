@@ -27,13 +27,13 @@ const CollectionLogo = () => <img src="/result-icons/datacollection.svg" />
 const ProductLogo = () => <img src="/result-icons/dataproduct.svg" />
 
 const logoMap: Record<SearchResultEntryType, React.ReactNode> = {
-  DataproductCollection: <CollectionLogo />,
+  Collection: <CollectionLogo />,
   datapackage: <CollectionLogo />,
   dataproduct: <ProductLogo />,
 }
 
 const typeNameMap: Record<SearchResultEntryType, string> = {
-  DataproductCollection: 'Datasamling',
+  Collection: 'Datasamling',
   datapackage: 'Datapakke',
   dataproduct: 'Dataprodukt',
 }

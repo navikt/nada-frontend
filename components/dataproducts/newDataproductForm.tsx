@@ -29,7 +29,7 @@ export const NewDataproductForm = () => {
   const groups = user?.groups
   const collectionTeamProjectIDs = useSWR(
     // FIXME: use team selected to fetch projects
-    `/api/groups/${user?.groups[0]}/gcp_projects`,
+    `/api/groups/${user?.groups[1].email}/gcp_projects`,
     fetcher
   )
 
@@ -61,9 +61,9 @@ export const NewDataproductForm = () => {
         error={errors.owner?.group?.message}
       >
         <option value="">Velg team</option>
-        {groups?.map((group: string) => (
-          <option value={group} key={group}>
-            {group}
+        {groups?.map((groups) => (
+          <option value={groups.email} key={groups.email}>
+            {groups.name}
           </option>
         ))}
       </Select>

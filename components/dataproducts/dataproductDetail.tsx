@@ -59,12 +59,10 @@ export const DataproductDetail = ({
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
         <h1>{product.name}</h1>
-        {user?.groups.includes(product.owner.group) && (
-          <DotMenu
-            onEdit={() => setEdit(true)}
-            onDelete={async () => await deleteDataproduct(product.id)}
-          />
-        )}
+        <DotMenu
+          onEdit={() => setEdit(true)}
+          onDelete={async () => await deleteDataproduct(product.id)}
+        />
       </StyledDiv>
       <ReactMarkdown>
         {product.description || '*ingen beskrivelse*'}

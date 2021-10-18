@@ -29,18 +29,18 @@ export interface paths {
     }
   }
   '/collections': {
-    /** List all DataproductCollections */
-    get: operations['getDataproductCollections']
-    /** Create a new DataproductCollection */
-    post: operations['createDataproductCollection']
+    /** List all Collections */
+    get: operations['getCollections']
+    /** Create a new Collection */
+    post: operations['createCollection']
   }
   '/collections/{id}': {
-    /** List a DataproductCollection with dataproducts */
-    get: operations['getDataproductCollection']
-    /** Update a DataproductCollection */
-    put: operations['updateDataproductCollection']
-    /** Delete a DataproductCollection */
-    delete: operations['deleteDataproductCollection']
+    /** List a Collection of data types */
+    get: operations['getCollection']
+    /** Update a Collection */
+    put: operations['updateCollection']
+    /** Delete a Collection */
+    delete: operations['deleteCollection']
   }
   '/dataproducts': {
     /** Get dataproducts */
@@ -75,7 +75,7 @@ export interface paths {
 
 export interface components {
   schemas: {
-    DataproductCollection: {
+    Collection: {
       id: string
       name: string
       description?: string
@@ -87,7 +87,7 @@ export interface components {
       keywords?: string[]
       dataproducts: components['schemas']['DataproductSummary'][]
     }
-    NewDataproductCollection: {
+    NewCollection: {
       name: string
       description?: string
       slug?: string
@@ -95,7 +95,7 @@ export interface components {
       owner: components['schemas']['Owner']
       keywords?: string[]
     }
-    UpdateDataproductCollection: {
+    UpdateCollection: {
       name: string
       description?: string
       slug?: string
@@ -109,6 +109,7 @@ export interface components {
       slug?: string
       repo?: string
       pii: boolean
+      keywords: string[]
       owner: components['schemas']['Owner']
       type: components['schemas']['DataproductType']
       datasource: components['schemas']['Datasource']
@@ -120,6 +121,7 @@ export interface components {
       slug?: string
       repo?: string
       pii: boolean
+      keywords?: string[]
       owner: components['schemas']['Owner']
       datasource: components['schemas']['Datasource']
     }
@@ -129,6 +131,7 @@ export interface components {
       slug?: string
       repo?: string
       pii: boolean
+      keywords?: string[]
     }
     DataproductSummary: {
       id: string
@@ -148,7 +151,7 @@ export interface components {
     UserInfo: {
       name: string
       email: string
-      groups: string[]
+      groups: components['schemas']['Group'][]
     }
     TableColumn: {
       name: string
@@ -167,7 +170,12 @@ export interface components {
       name: string
       excerpt: string
     }
-    SearchResultType: 'dataproduct' | 'DataproductCollection' | 'datapackage'
+    SearchResultType: 'dataproduct' | 'Collection' | 'datapackage'
+    Group: {
+      /** Email and ID of the group */
+      email: string
+      name: string
+    }
   }
 }
 
@@ -217,8 +225,8 @@ export interface operations {
       }
     }
   }
-  /** List all DataproductCollections */
-  getDataproductCollections: {
+  /** List all Collections */
+  getCollections: {
     parameters: {
       query: {
         limit?: number
@@ -229,32 +237,32 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['DataproductCollection'][]
+          'application/json': components['schemas']['Collection'][]
         }
       }
     }
   }
-  /** Create a new DataproductCollection */
-  createDataproductCollection: {
+  /** Create a new Collection */
+  createCollection: {
     responses: {
       /** Created successfully */
       201: {
         content: {
-          'application/json': components['schemas']['DataproductCollection']
+          'application/json': components['schemas']['Collection']
         }
       }
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['NewDataproductCollection']
+        'application/json': components['schemas']['NewCollection']
       }
     }
   }
-  /** List a DataproductCollection with dataproducts */
-  getDataproductCollection: {
+  /** List a Collection of data types */
+  getCollection: {
     parameters: {
       path: {
-        /** DataproductCollection ID */
+        /** Collection ID */
         id: string
       }
     }
@@ -262,16 +270,16 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['DataproductCollection'][]
+          'application/json': components['schemas']['Collection'][]
         }
       }
     }
   }
-  /** Update a DataproductCollection */
-  updateDataproductCollection: {
+  /** Update a Collection */
+  updateCollection: {
     parameters: {
       path: {
-        /** DataproductCollection ID */
+        /** Collection ID */
         id: string
       }
     }
@@ -279,21 +287,21 @@ export interface operations {
       /** Updated OK */
       200: {
         content: {
-          'application/json': components['schemas']['DataproductCollection']
+          'application/json': components['schemas']['Collection']
         }
       }
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateDataproductCollection']
+        'application/json': components['schemas']['UpdateCollection']
       }
     }
   }
-  /** Delete a DataproductCollection */
-  deleteDataproductCollection: {
+  /** Delete a Collection */
+  deleteCollection: {
     parameters: {
       path: {
-        /** DataproductCollection ID */
+        /** Collection ID */
         id: string
       }
     }

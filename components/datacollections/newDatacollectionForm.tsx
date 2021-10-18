@@ -67,9 +67,9 @@ export const NewDatacollectionForm = ({
           error={errors.owner?.group?.message}
         >
           <option value="">Velg team</option>
-          {groups?.map((group: string) => (
-            <option value={group} key={'dataproduct_group' + group}>
-              {group}
+          {groups?.map((group) => (
+            <option value={group.email} key={group.name}>
+              {group.name}
             </option>
           ))}
         </Select>
