@@ -3,6 +3,7 @@ import {
   FieldValues,
   UseFormRegister,
   UseFormWatch,
+  SetFieldValue,
 } from 'react-hook-form'
 import { useContext, useEffect, useState } from 'react'
 import { components } from '../../lib/schema/schema'
@@ -14,10 +15,14 @@ import Tree, {
 import { AuthState } from '../../lib/context'
 import { Fieldset } from '@navikt/ds-react'
 
+// This is a bit of a mess. We are pulling data from three different sources, in three different formats,
+// and building an array with a relatively inexplicable format for use by the Tree component.
+
 interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
   watch: UseFormWatch<FieldValues>
   errors: FieldErrors<FieldValues>
+  setValue: SetFieldValue<FieldValues>
 }
 
 interface ProjectTableResponse {
@@ -27,10 +32,20 @@ interface ProjectTableResponse {
   TableName: string
 }
 
+const teamName = (id: string) => id.split(':', 2)[1]
+const projectName = (id: string) => id.split(':', 3)[2]
+const datasetName = (id: string) => id.split(':', 4)[3]
+const tableName = (id: string) => id.split(':', 5)[4]
+
+const nodeIsTeam = (id: string) => id.split(':', 1)[0] === 'team'
+const nodeIsProject = (id: string) => id.split(':', 1)[0] === 'project'
+const nodeIsTable = (id: string) => id.split(':', 1)[0] === 'table'
+
 export const DataproductSourceForm = ({
   register,
   watch,
   errors,
+  setValue,
 }: DataproductSourceFormProps) => {
   const [teams, setTeams] = useState<components['schemas']['Group'][]>([])
   type TeamID = string
@@ -41,23 +56,24 @@ export const DataproductSourceForm = ({
   const [teamProjects, setTeamProjects] = useState<Record<TeamID, ProjectID[]>>(
     {}
   )
-  const [projectContents, setProjectContents] = useState<
+  const [tablesInProject, setTablesInProject] = useState<
     Record<ProjectID, ProjectTableResponse[]>
   >({})
   const [datasets, setDatasets] = useState<Record<ProjectID, DatasetID[]>>({})
   const [tables, setTables] = useState<Record<DatasetID, TableID[]>>({})
 
-  const [loadedTeams, setLoadedTeams] = useState<string[]>([])
-  const [loadedProjects, setLoadedProjects] = useState<string[]>([])
+  const [viewedTeams, setViewedTeams] = useState<string[]>([])
+  const [viewedProjects, setViewedProjects] = useState<string[]>([])
 
   const [nodes, setNodes] = useState<NodeList>([])
 
   const user = useContext(AuthState).user
 
-  const teamName = (id: string) => id.split(':', 2)[1]
-  const projectName = (id: string) => id.split(':', 3)[2]
-  const datasetName = (id: string) => id.split(':', 4)[3]
-  const tableName = (id: string) => id.split(':', 5)[4]
+  console.log(errors)
+  register('owner.group')
+  register('datasource.project_id')
+  register('datasource.dataset')
+  register('datasource.table')
 
   useEffect(() => {
     if (!user?.groups) return
@@ -66,6 +82,13 @@ export const DataproductSourceForm = ({
 
   // Processes the full state to create a NodeList for the <Tree>
   useEffect(() => {
+    const tablesInDataset = (datasetID: string) =>
+      tables[datasetID].map((tableID) => ({
+        id: tableID,
+        parentId: datasetID,
+        label: tableName(tableID),
+      }))
+
     const teamsList = teams.map(
       (t): TreeNode => ({
         id: `team:${t.email}`,
@@ -88,24 +111,16 @@ export const DataproductSourceForm = ({
           id: datasetID,
           parentId: project,
           label: datasetName(datasetID),
+          items: tablesInDataset(datasetID),
         })
       })
     }
-    for (const [dataset, tableList] of Object.entries(tables)) {
-      tableList.forEach((tableID) => {
-        teamsList.push({
-          id: tableID,
-          parentId: dataset,
-          label: tableName(tableID),
-        })
-      })
-    }
+
     setNodes(teamsList)
   }, [teams, teamProjects, datasets, tables])
 
-  // When the list of opened teams changes, make sure the relevant Record is populated.
   useEffect(() => {
-    for (const teamID of loadedTeams.filter((t) => !(t in teamProjects))) {
+    for (const teamID of viewedTeams.filter((t) => !(t in teamProjects))) {
       fetch(`/api/groups/${teamName(teamID)}/gcp_projects`)
         .then((res) => res.json())
         .then((p: string[]) => {
@@ -115,104 +130,111 @@ export const DataproductSourceForm = ({
           })
         })
     }
-  }, [loadedTeams])
+  }, [viewedTeams])
 
-  // When the list of opened projects changes, make sure the relevant Record is populated.
+  // If the expanded tab is an unloaded project, load it.
   useEffect(() => {
-    for (const projectID of loadedProjects.filter(
-      (p) => !(p in projectContents)
+    for (const projectID of viewedProjects.filter(
+      (p) => !(p in tablesInProject)
     )) {
       fetch(`/api/gcp/${projectName(projectID)}/tables`)
         .then((res) => res.json())
         .then((d: ProjectTableResponse[]) => {
-          setProjectContents({
-            ...projectContents,
+          setTablesInProject({
+            ...tablesInProject,
             [projectID]: d,
           })
         })
     }
-  }, [loadedProjects])
+  }, [viewedProjects])
 
   useEffect(() => {
+    const getUnique = (datasetIDs: string[]) => Array.from(new Set(datasetIDs))
+
+    const responseToDatasetID = (projectID: string, ds: ProjectTableResponse) =>
+      `dataset:${teamName(projectID)}:${projectName(projectID)}:${ds.Dataset}`
+
+    const responseToTableID = (datasetID: string, ds: ProjectTableResponse) =>
+      `table:${teamName(datasetID)}:${projectName(datasetID)}:${datasetName(
+        datasetID
+      )}:${ds.TableName}`
+
     const datasetsInResponse = (
       projectID: string,
-      res: ProjectTableResponse[]
-    ) => {
-      return Array.from(
-        new Set(
-          res.map(
-            (s) =>
-              `dataset:${teamName(projectID)}:${projectName(projectID)}:${
-                s.Dataset
-              }`
-          )
-        )
-      )
-    }
+      tables: ProjectTableResponse[]
+    ) => getUnique(tables.map((s) => responseToDatasetID(projectID, s)))
 
-    const tablesInDataset = (
+    const hasSameProjectAndDataset = (
       datasetID: string,
-      res: ProjectTableResponse[]
-    ) => {
-      return Array.from(
-        new Set(
-          res
-            .filter(
-              (s) =>
-                s.Dataset === datasetName(datasetID) &&
-                s.ProjectID === projectName(datasetID)
-            )
-            .map(
-              (s) =>
-                `dataset:${teamName(datasetID)}:${projectName(
-                  datasetID
-                )}:${datasetName(datasetID)}:${s.TableName}`
-            )
-        )
-      )
-    }
+      res: ProjectTableResponse
+    ) =>
+      res.Dataset === datasetName(datasetID) &&
+      res.ProjectID === projectName(datasetID)
 
-    for (const project in projectContents) {
+    const tablesInDataset = (datasetID: string, res: ProjectTableResponse[]) =>
+      getUnique(
+        res
+          .filter((s) => hasSameProjectAndDataset(datasetID, s))
+          .map((s) => responseToTableID(datasetID, s))
+      )
+
+    for (const project in tablesInProject) {
       if (!(project in datasets)) {
-        setDatasets({
-          ...datasets,
-          [project]: datasetsInResponse(project, projectContents[project]),
-        })
+        setDatasets((ds) => ({
+          ...ds,
+          [project]: datasetsInResponse(project, tablesInProject[project]),
+        }))
 
         for (const dataset of datasetsInResponse(
           project,
-          projectContents[project]
+          tablesInProject[project]
         )) {
-          console.log(dataset)
           setTables((tables) => ({
             ...tables,
-            [dataset]: tablesInDataset(dataset, projectContents[project]),
+            [dataset]: tablesInDataset(dataset, tablesInProject[project]),
           }))
         }
       }
     }
-  }, [projectContents])
-  useEffect(() => console.log('tables:', tables), [tables])
+  }, [tablesInProject])
+
   const openCloseHandler = (nodeIds: TreeNodeId[]) => {
-    const nodeIsTeam = (id: string) => id.split(':', 1)[0] === 'team'
-    const nodeIsProject = (id: string) => id.split(':', 1)[0] === 'project'
+    console.log(nodeIds)
+    for (const nodeId of nodeIds) {
+      const id = nodeId as string
 
-    // Get the full node objects from just the ID
-    const openNodes = nodes.filter((n) => nodeIds.includes(n.id))
-
-    for (const { id } of openNodes) {
-      if (nodeIsTeam(id as string) && !(id in loadedTeams)) {
-        setLoadedTeams([...loadedTeams, id as string])
+      if (nodeIsTeam(id) && !(id in viewedTeams)) {
+        setViewedTeams([...viewedTeams, id])
       }
-      if (nodeIsProject(id as string) && !(id in loadedProjects)) {
-        setLoadedProjects([...loadedProjects, id as string])
+
+      if (nodeIsProject(id as string) && !(id in viewedProjects)) {
+        setViewedProjects([...viewedProjects, id])
       }
     }
   }
 
+  const selectHandler = (nodeId: TreeNodeId[]) => {
+    console.log(nodeId[0])
+    if (!nodeId.length) return
+
+    const id = nodeId[0] as string
+
+    if (!nodeIsTable(id)) return
+
+    setValue('owner.group', teamName(id))
+    setValue('datasource.project_id', projectName(id))
+    setValue('datasource.dataset', datasetName(id))
+    setValue('datasource.table', tableName(id))
+  }
+
   return (
     <Fieldset legend="Datakilde" errorPropagation={false}>
-      <Tree theme="light" nodes={nodes} onOpenClose={openCloseHandler} />
+      <Tree
+        theme="light"
+        nodes={nodes}
+        onOpenClose={openCloseHandler}
+        onSelect={selectHandler}
+      />
     </Fieldset>
   )
 }
