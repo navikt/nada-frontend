@@ -16,7 +16,7 @@ const SearchResultDiv = styled.div<{ selected: boolean }>`
   padding: 16px 24px;
   margin-bottom: 15px;
   border: ${(props) =>
-    props.selected ? `3px solid ${navGronnLighten20}` : 'none'};
+    props.selected ? `3px solid ${navGronnLighten20}` : `3px solid white`};
   cursor: pointer;
   :hover {
     background-color: ${(props) =>
@@ -27,11 +27,16 @@ const SearchResultDiv = styled.div<{ selected: boolean }>`
 export interface SearchResultProps {
   result: SearchResultEntry
   selected: boolean
+  handleClick: (id: string) => void
 }
 
-export const SearchResult = ({ result, selected }: SearchResultProps) => {
+export const SearchResult = ({
+  result,
+  selected,
+  handleClick,
+}: SearchResultProps) => {
   return (
-    <SearchResultDiv selected={selected}>
+    <SearchResultDiv selected={selected} onClick={() => handleClick(result.id)}>
       <LogoSidebar result={result} />
       <ResultAbstract result={result} />
     </SearchResultDiv>

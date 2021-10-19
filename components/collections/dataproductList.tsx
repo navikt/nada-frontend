@@ -1,21 +1,23 @@
 import {
   CollectionSchema,
+  CollectionElement,
   DataproductSchema,
   DataproductSummary,
   SearchResultEntry,
 } from '../../lib/schema/schema_types'
 import { useContext, useState } from 'react'
-
 import { AddCircleFilled } from '@navikt/ds-icons'
 import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
 import { AuthState } from '../../lib/context'
-import { Loader, Modal } from '@navikt/ds-react'
+import { Button, Loader, Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
 import useSWR, { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
 import fetcher from '../../lib/api/fetcher'
-import CollectionElement from './collectionElement'
+import SearchResult from './collectionElement'
+import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import apiPOST from '../../lib/api/post'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -60,13 +62,15 @@ interface DataproductListProps {
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const user = useContext(AuthState).user
-  const [selectedProduct, setSelectedProduct] = useState<string[]>([
-    'a725f420-0fa1-4eaf-8fd2-a69ae7043863',
-  ])
-
-  const onCreate = async (newDataproduct: DataproductSchema) => {
-    await mutate(`/api/collections/${collection.id}`)
-    setShowNewDataproduct(false)
+  const [selectedProduct, setSelectedProduct] = useState<string[]>([])
+  const handleClick = (id: string) => {
+    if (selectedProduct.includes(id)) {
+      setSelectedProduct((selectedProduct) =>
+        selectedProduct.splice(selectedProduct.indexOf(id), 1)
+      )
+    } else {
+      setSelectedProduct((selectedProduct) => [...selectedProduct, id])
+    }
   }
 
   const { data, error } = useSWR<SearchResultEntry[], Error>(
@@ -82,12 +86,24 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
     return <Loader transparent />
   }
 
+  const handleSubmit = async () => {
+    const posts = await Promise.all(
+      selectedProduct.map((product) => {
+        return apiPOST(`/api/collection/${collection.id}/add`, {
+          element_id: product,
+          element_type: 'dataproduct',
+        })
+      })
+    )
+    posts.map((p) => {p})
+  }
+
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {collection.dataproducts &&
-          collection.dataproducts.map((d: DataproductSummary) => (
-            <DataproductCard key={d.id} id={d.id} />
+        {collection.elements &&
+          collection.elements.map((d: CollectionElement) => (
+            <DataproductCard key={d.element_id} id={d.element_id} />
           ))}
         {user && (
           <NewDataproductCard onClick={() => setShowNewDataproduct(true)} />
@@ -107,14 +123,16 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
                 .filter((d) => d.type === 'dataproduct')
                 .map((d) => {
                   return (
-                    <CollectionElement
+                    <SearchResult
                       key={d.id}
                       result={d}
                       selected={selectedProduct.includes(d.id)}
+                      handleClick={handleClick}
                     />
                   )
                 })
             )}
+            <Button onClick={handleSubmit}>Ferdig</Button>
           </div>
         </Modal.Content>
       </Modal>
