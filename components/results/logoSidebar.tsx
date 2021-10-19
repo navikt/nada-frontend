@@ -1,6 +1,7 @@
 import { SearchResultEntryType } from '../../lib/schema/schema_types'
 import { SearchResultProps } from './searchresult'
 import styled from 'styled-components'
+import { logoMap } from '../lib/icons/logoMap'
 
 const LogoSidebarDiv = styled.div`
   flex: 0 0 90px;
@@ -22,15 +23,6 @@ const LogoSidebarDiv = styled.div`
     text-align: center;
   }
 `
-
-const CollectionLogo = () => <img src="/result-icons/datacollection.svg" />
-const ProductLogo = () => <img src="/result-icons/dataproduct.svg" />
-
-const logoMap: Record<SearchResultEntryType, React.ReactNode> = {
-  collection: <CollectionLogo />,
-  datapackage: <CollectionLogo />,
-  dataproduct: <ProductLogo />,
-}
 
 const typeNameMap: Record<SearchResultEntryType, string> = {
   collection: 'Datasamling',

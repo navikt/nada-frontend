@@ -1,14 +1,14 @@
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import { MicroCard } from '@navikt/ds-react'
-import { DatacollectionDetailProps } from '../datacollections/datacollectionDetail'
 import styled from 'styled-components'
 import { DataproductDetailProps } from './dataproductDetail'
 import Link from 'next/link'
 import { RepoKnapp } from '../widgets/RepoKnapp'
-import { PiiIkon } from '../lib/piiIkon'
 import GithubIcon from '../lib/icons/github'
 import IconBox from '../lib/icons/iconBox'
+import { navGronn, navRod } from '../../styles/constants'
+import { Success, Warning } from '@navikt/ds-icons'
 
 const humanizeDate = (isoDate: string) =>
   format(parseISO(isoDate), 'PPPP', { locale: nb })
@@ -76,9 +76,19 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       </td>
     </tr>
     <tr>
-      <th>PII:</th>
+      <th>
+        <IconBox size={24} justifyRight>
+          {product.pii ? (
+            <Warning style={{ fontSize: '1.5rem' }} color={navRod} />
+          ) : (
+            <Success style={{ fontSize: '1.5rem' }} color={navGronn} />
+          )}
+        </IconBox>
+      </th>
       <td>
-        <PiiIkon pii={product.pii} />
+        {' '}
+        Dette dataproduktet inneholder {!product.pii && <b> IKKE </b>}
+        personidentifiserende informasjon
       </td>
     </tr>
   </StyledMetadataTable>

@@ -12,10 +12,7 @@ import { DataproductSchema } from '../../lib/schema/schema_types'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
-import { PiiIkon } from '../lib/piiIkon'
-import { MicroCard } from '@navikt/ds-react'
 import { MetadataTable } from './metadataTable'
-import { RepoKnapp } from '../widgets/RepoKnapp'
 
 const StyledDiv = styled.div`
   display: flex;

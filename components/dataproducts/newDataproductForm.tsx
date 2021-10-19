@@ -9,7 +9,7 @@ import DataproductForm from './dataproductForm'
 import { useRouter } from 'next/router'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import KeywordsInput from '../lib/keywordsInput'
+import KeywordsInput from '../lib/KeywordsInput'
 import { DataproductSourceForm } from './dataproductSourceForm'
 
 export const NewDataproductForm = () => {

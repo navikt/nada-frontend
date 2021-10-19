@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { Card, CardHeader, CardContent } from '@mui/material'
 import { fetcher } from '../../lib/api/fetcher'
 import DataProductSpinner from '../lib/spinner'
-import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { navBlaLighten80 } from '../../styles/constants'
 import styled from 'styled-components'
 import { PiiIkon } from '../lib/piiIkon'
+import BigQueryLogo from '../lib/icons/bigQueryLogo'
 
 interface DataproductCardProps {
   id: string

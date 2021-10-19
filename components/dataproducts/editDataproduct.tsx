@@ -9,7 +9,7 @@ import { mutate } from 'swr'
 import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import KeywordsInput from '../lib/keywordsInput'
+import KeywordsInput from '../lib/KeywordsInput'
 
 interface EditDatacollectionFormProps {
   dataproduct: DataproductSchema
