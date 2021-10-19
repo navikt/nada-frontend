@@ -4,9 +4,9 @@ import { useContext, useState } from 'react'
 import { AuthState } from '../../lib/context'
 import { useRouter } from 'next/router'
 import { apiPOST } from '../../lib/api/post'
-import { NewCollectionForm } from '../../components/datacollections/newCollectionForm'
+import { NewCollectionForm } from '../../components/collections/newCollectionForm'
 
-const NewDatacollection = () => {
+const NewCollection = () => {
   const router = useRouter()
 
   const [backendError, setBackendError] = useState()
@@ -15,7 +15,7 @@ const NewDatacollection = () => {
   const onSubmit = async (requestData: any) => {
     try {
       const createdCollection = await apiPOST(`/api/collections`, requestData)
-      router.push(`/datacollection/${createdCollection.id}`)
+      router.push(`/collection/${createdCollection.id}`)
       setBackendError(undefined)
     } catch (e: any) {
       setBackendError(e.toString())
@@ -41,4 +41,4 @@ const NewDatacollection = () => {
   )
 }
 
-export default NewDatacollection
+export default NewCollection

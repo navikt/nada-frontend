@@ -1,4 +1,4 @@
-import { DataproductCollectionSchema } from '../../lib/schema/schema_types'
+import { CollectionSchema } from '../../lib/schema/schema_types'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
 import { EditCollectionForm } from './editCollectionForm'
@@ -11,7 +11,7 @@ import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 
 export interface CollectionDetailProps {
-  collection: DataproductCollectionSchema
+  collection: CollectionSchema
 }
 
 const StyledEdit = styled.div`
@@ -25,7 +25,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
-  const deleteDatacollection = async (id: string) => {
+  const deleteCollection = async (id: string) => {
     try {
       await apiDELETE(`/api/collections/${id}`)
       await router.push(`/`)
@@ -43,7 +43,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
         <h1>{collection.name}</h1>
         <DotMenu
           onEdit={() => setEdit(true)}
-          onDelete={async () => await deleteDatacollection(collection.id)}
+          onDelete={async () => await deleteCollection(collection.id)}
         />
       </StyledEdit>
       <MetadataTable collection={collection} />

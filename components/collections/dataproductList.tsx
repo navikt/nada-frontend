@@ -1,5 +1,5 @@
 import {
-  DataproductCollectionSchema,
+  CollectionSchema,
   DataproductSchema,
   DataproductSummary,
 } from '../../lib/schema/schema_types'
@@ -51,7 +51,7 @@ const AddDatasetButton = ({
 }
 
 interface DataproductListProps {
-  collection: DataproductCollectionSchema
+  collection: CollectionSchema
 }
 
 export const DataproductList = ({ collection }: DataproductListProps) => {

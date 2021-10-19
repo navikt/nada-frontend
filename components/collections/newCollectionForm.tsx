@@ -1,14 +1,15 @@
 import { Fieldset, Select, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { useContext, useEffect, useState } from 'react'
-import { newDataproductCollectionValidation } from '../../lib/schema/yupValidations'
+import { newCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import { Tag } from 'react-tag-autocomplete'
 import { AuthState } from '../../lib/context'
 import KeywordsInput from '../lib/keywordsInput'
 
 const NewCollectionFormOptions = {
-  resolver: yupResolver(newDataproductCollectionValidation),
+  resolver: yupResolver(newCollectionValidation),
 }
 
 interface NewDatacollectionFormProps {

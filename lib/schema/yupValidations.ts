@@ -41,7 +41,7 @@ export const dataproductValidation = yup.object().shape({
   }),
 })
 
-export const updateDataproductCollectionValidation = yup.object().shape({
+export const updateCollectionValidation = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
   slug: yup.string(),
@@ -49,9 +49,8 @@ export const updateDataproductCollectionValidation = yup.object().shape({
   keywords: yup.array().of(yup.string()),
 })
 
-export const newDataproductCollectionValidation =
-  updateDataproductCollectionValidation.concat(
-    yup.object().shape({
-      owner,
-    })
-  )
+export const newCollectionValidation = updateCollectionValidation.concat(
+  yup.object().shape({
+    owner,
+  })
+)

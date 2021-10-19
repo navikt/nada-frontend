@@ -2,14 +2,14 @@ import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
 import useSWR, { SWRConfig } from 'swr'
 import {
-  DataproductCollectionSchema,
+  CollectionSchema,
   DataproductSchema,
   DataproductSummary,
 } from '../../lib/schema/schema_types'
 import { GetServerSideProps } from 'next'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
-import { CollectionDetail } from '../../components/datacollections/collectionDetail'
+import { CollectionDetail } from '../../components/collections/collectionDetail'
 import LoaderSpinner from '../../components/lib/spinner'
 
 const getBothURLs = (apiEndpoint: string) => [
@@ -73,7 +73,7 @@ interface DatacollectionFetcherProps {
 }
 
 const DatacollectionFetcher = ({ id }: DatacollectionFetcherProps) => {
-  const { data, error } = useSWR<DataproductCollectionSchema>(
+  const { data, error } = useSWR<CollectionSchema>(
     `/api/collections/${id}`,
     fetcher
   )
