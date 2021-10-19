@@ -14,6 +14,8 @@ import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { PiiIkon } from '../lib/piiIkon'
 import { MicroCard } from '@navikt/ds-react'
+import { MetadataTable } from './metadataTable'
+import { RepoKnapp } from '../widgets/RepoKnapp'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -22,19 +24,14 @@ const StyledDiv = styled.div`
   align-items: center;
 `
 
-interface DataproductDetailProps {
+export interface DataproductDetailProps {
   product: DataproductSchema
-  error: Error | undefined
 }
 
-export const DataproductDetail = ({
-  product,
-  error,
-}: DataproductDetailProps) => {
+export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
-  const gcpUrl = 'https://console.cloud.google.com'
   const deleteDataproduct = async (id: string) => {
     try {
       await apiDELETE(`/api/dataproducts/${id}`)
@@ -47,8 +44,6 @@ export const DataproductDetail = ({
     setActiveTab(newValue)
   }
   const [backendError, setBackendError] = useState()
-
-  if (error) return <ErrorMessage error={error} />
 
   if (!product) return <LoaderSpinner />
 
@@ -64,40 +59,13 @@ export const DataproductDetail = ({
           onDelete={async () => await deleteDataproduct(product.id)}
         />
       </StyledDiv>
+
+      <MetadataTable product={product} />
+
+      <div></div>
       <ReactMarkdown>
         {product.description || '*ingen beskrivelse*'}
       </ReactMarkdown>
-      {product.owner.teamkatalogen ? (
-        <Link href={product.owner.teamkatalogen}>{product.owner.group}</Link>
-      ) : (
-        <div>
-          <i>Team: </i> {product.owner.group}{' '}
-        </div>
-      )}
-
-      <div>
-        <i>Adresse: </i>
-        <Link
-          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
-        >
-          {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
-        </Link>
-
-        <br />
-        <i>Type: </i>
-        {product.type}
-        <br />
-        <i>Repo: </i>
-        {product.repo}
-        <br />
-        <i>Slug: </i>
-        {product.slug}
-
-        <PiiIkon pii={product.pii} />
-        {product.keywords &&
-          product.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
-      </div>
-
       <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>
         <Tabs
           value={activeTab}

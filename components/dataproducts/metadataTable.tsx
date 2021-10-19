@@ -3,6 +3,12 @@ import { nb } from 'date-fns/locale'
 import { MicroCard } from '@navikt/ds-react'
 import { DatacollectionDetailProps } from '../datacollections/datacollectionDetail'
 import styled from 'styled-components'
+import { DataproductDetailProps } from './dataproductDetail'
+import Link from 'next/link'
+import { RepoKnapp } from '../widgets/RepoKnapp'
+import { PiiIkon } from '../lib/piiIkon'
+import GithubIcon from '../lib/icons/github'
+import IconBox from '../lib/icons/iconBox'
 
 const humanizeDate = (isoDate: string) =>
   format(parseISO(isoDate), 'PPPP', { locale: nb })
@@ -24,24 +30,55 @@ const StyledMetadataTable = styled.table`
     font-weight: bold;
   }
 `
+const gcpUrl = 'https://console.cloud.google.com'
 
-export const MetadataTable = ({ collection }: DatacollectionDetailProps) => (
+export const MetadataTable = ({ product }: DataproductDetailProps) => (
   <StyledMetadataTable>
     <tr>
-      <th>Opprettet:</th>
-      <td>{humanizeDate(collection.created)}</td>
+      <th>Type:</th>
+      <td>{product.type}</td>
     </tr>
     <tr>
-      <th>Oppdatert:</th>
-      <td>{humanizeDate(collection.last_modified)}</td>
+      <th>Team:</th>
+      <td>
+        {product.owner.teamkatalogen ? (
+          <Link href={product.owner.teamkatalogen}>{product.owner.group}</Link>
+        ) : (
+          product.owner.group
+        )}
+      </td>
+    </tr>
+    <tr>
+      <th>Adresse:</th>
+      <td>
+        <Link
+          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
+        >
+          {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
+        </Link>
+      </td>
     </tr>
     <tr>
       <th>Nøkkelord:</th>
       <td>
-        {collection.keywords &&
-          collection.keywords.map((k: string) => (
-            <MicroCard key={k}>{k}</MicroCard>
-          ))}
+        {product.keywords &&
+          product.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <IconBox size={24} justifyRight>
+          <GithubIcon />
+        </IconBox>
+      </th>
+      <td>
+        <RepoKnapp url={product.repo} />
+      </td>
+    </tr>
+    <tr>
+      <th>PII:</th>
+      <td>
+        <PiiIkon pii={product.pii} />
       </td>
     </tr>
   </StyledMetadataTable>
