@@ -89,13 +89,15 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   const handleSubmit = async () => {
     const posts = await Promise.all(
       selectedProduct.map((product) => {
-        return apiPOST(`/api/collection/${collection.id}/add`, {
+        return apiPOST(`/api/collections/${collection.id}/add`, {
           element_id: product,
           element_type: 'dataproduct',
         })
       })
     )
-    posts.map((p) => {p})
+    posts.map((p) => {
+      p
+    })
   }
 
   return (

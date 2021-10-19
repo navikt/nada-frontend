@@ -38,7 +38,7 @@ const InertDatasetCardDiv = styled(DatasetCardDiv)`
 
 const DataproductCard = ({ id }: DataproductCardProps) => {
   const { data, error } = useSWR<DataproductSchema>(
-    `/api/datasets/${id}`,
+    `/api/dataproducts/${id}`,
     fetcher
   )
 
