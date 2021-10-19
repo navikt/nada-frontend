@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import User from './user'
 import Create from './create'
 import Logo from './logo'
-import SearchBox from '../search/searchBox'
+import HeaderSearchBox from '../search/headerSearchBox'
 import { useRouter } from 'next/router'
 
 interface HeaderProps {
@@ -22,7 +22,7 @@ export default function Header({ forceSearch }: HeaderProps) {
   return (
     <HeaderBar role="banner">
       <Logo />
-      {router.pathname !== '/' && <SearchBox />}
+      {router.pathname !== '/' && <HeaderSearchBox />}
       <Create />
       <User />
     </HeaderBar>

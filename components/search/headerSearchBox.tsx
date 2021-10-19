@@ -54,7 +54,7 @@ const redirectPath = (query: string) =>
         pathname: '/',
       }
 
-export default function SearchBox({ large }: SearchBoxProps) {
+export default function HeaderSearchBox({ large }: SearchBoxProps) {
   const router = useRouter()
   let { q } = router.query
   if (typeof q !== 'string') q = ''

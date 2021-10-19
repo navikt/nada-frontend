@@ -1,8 +1,9 @@
 import type { NextPage } from 'next'
-import SearchBox from '../components/search/searchBox'
+import HeaderSearchBox from '../components/search/headerSearchBox'
 import Results from '../components/results/results'
 import PageLayout from '../components/pageLayout'
 import styled from 'styled-components'
+import LargeSearchBox from '../components/search/mainPageSearchBox'
 
 const LandingPageDiv = styled.div`
   display: flex;
@@ -14,7 +15,7 @@ const LandingPageDiv = styled.div`
 const SearchPage: NextPage = () => (
   <PageLayout>
     <LandingPageDiv>
-      <SearchBox large />
+      <LargeSearchBox />
       <h1>Nyeste ressurser</h1>
       <Results limit={4} />
     </LandingPageDiv>
