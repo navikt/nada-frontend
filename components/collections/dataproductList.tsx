@@ -2,6 +2,7 @@ import {
   CollectionSchema,
   DataproductSchema,
   DataproductSummary,
+  SearchResultEntry,
 } from '../../lib/schema/schema_types'
 import { useContext, useState } from 'react'
 
@@ -9,10 +10,12 @@ import { AddCircleFilled } from '@navikt/ds-icons'
 import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
 import { AuthState } from '../../lib/context'
-import { Modal } from '@navikt/ds-react'
+import { Loader, Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
-import { mutate } from 'swr'
+import useSWR, { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
+import fetcher from '../../lib/api/fetcher'
+import CollectionElement from './collectionElement'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -57,10 +60,26 @@ interface DataproductListProps {
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const user = useContext(AuthState).user
+  const [selectedProduct, setSelectedProduct] = useState<string[]>([
+    'a725f420-0fa1-4eaf-8fd2-a69ae7043863',
+  ])
 
   const onCreate = async (newDataproduct: DataproductSchema) => {
     await mutate(`/api/collections/${collection.id}`)
     setShowNewDataproduct(false)
+  }
+
+  const { data, error } = useSWR<SearchResultEntry[], Error>(
+    `/api/search?q=${''}`,
+    fetcher
+  )
+
+  if (error) {
+    return <h1>Error</h1>
+  }
+
+  if (!data) {
+    return <Loader transparent />
   }
 
   return (
@@ -81,9 +100,21 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       >
         <Modal.Content>
           <div>
-            {
-              'Her kommer det en komponent for å linke dataprodukter til datasamlinger'
-            }
+            {!data.length ? (
+              <div>Ingen resultater funnet</div>
+            ) : (
+              data
+                .filter((d) => d.type === 'dataproduct')
+                .map((d) => {
+                  return (
+                    <CollectionElement
+                      key={d.id}
+                      result={d}
+                      selected={selectedProduct.includes(d.id)}
+                    />
+                  )
+                })
+            )}
           </div>
         </Modal.Content>
       </Modal>

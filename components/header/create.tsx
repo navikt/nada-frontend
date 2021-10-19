@@ -68,7 +68,7 @@ export default function Create() {
           <MenuItem
             onClick={() => {
               handleMenuClose()
-              window.location.replace('/datacollection/new')
+              window.location.replace('/collection/new')
             }}
           >
             samling

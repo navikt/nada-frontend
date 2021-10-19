@@ -1,5 +1,5 @@
 import { SearchResultEntryType } from '../../lib/schema/schema_types'
-import { SearchResultProps } from './searchresult'
+import { SearchResultLinkProps } from './searchResult'
 import styled from 'styled-components'
 import { logoMap } from '../lib/icons/logoMap'
 
@@ -30,7 +30,7 @@ const typeNameMap: Record<SearchResultEntryType, string> = {
   dataproduct: 'Dataprodukt',
 }
 
-export const LogoSidebar = ({ result }: SearchResultProps) => (
+export const LogoSidebar = ({ result }: SearchResultLinkProps) => (
   <LogoSidebarDiv>
     {logoMap[result.type]}
     <p>{typeNameMap[result.type]}</p>

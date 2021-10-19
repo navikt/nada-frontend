@@ -1,10 +1,11 @@
-import SearchResult from './searchresult'
+import SearchResult from './searchResult'
 import styled from 'styled-components'
 import { Loader } from '@navikt/ds-react'
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
 import { SearchResultEntry } from '../../lib/schema/schema_types'
 import { useRouter } from 'next/router'
+import SearchResultLink from './searchResult'
 
 const NoResultsYetBox = styled.div`
   margin: 0 auto;
@@ -42,7 +43,7 @@ export function Results() {
         <div>Ingen resultater funnet</div>
       ) : (
         data.map((d) => {
-          return <SearchResult key={d.id} result={d} />
+          return <SearchResultLink key={d.id} result={d} />
         })
       )}
     </div>

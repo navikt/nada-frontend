@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { SearchResultProps } from './searchresult'
+import { SearchResultLinkProps } from './searchResult'
 
 const Slash = () => <img src="/result-icons/slash.svg" />
 
@@ -21,13 +21,13 @@ const StyledResultAbstract = styled.div`
   }
 `
 
-export const TitleLine = ({ result }: SearchResultProps) => (
+export const TitleLine = ({ result }: SearchResultLinkProps) => (
   <StyledTitleLine>
     <h1>{result.name}</h1>
   </StyledTitleLine>
 )
 
-export const ResultAbstract = ({ result }: SearchResultProps) => (
+export const ResultAbstract = ({ result }: SearchResultLinkProps) => (
   <StyledResultAbstract>
     <TitleLine result={result} />
 

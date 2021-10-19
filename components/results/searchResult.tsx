@@ -5,7 +5,7 @@ import { ResultAbstract } from './resultAbstract'
 import { SearchResultEntry } from '../../lib/schema/schema_types'
 import { LogoSidebar } from './logoSidebar'
 
-const SearchResultDiv = styled.div`
+const SearchResultLinkDiv = styled.div`
   background-color: ${navGraBakgrunn};
   display: flex;
   padding: 16px 24px;
@@ -17,19 +17,19 @@ const SearchResultDiv = styled.div`
   }
 `
 
-export interface SearchResultProps {
+export interface SearchResultLinkProps {
   result: SearchResultEntry
 }
 
-export const SearchResult = ({ result }: SearchResultProps) => {
+export const SearchResultLink = ({ result }: SearchResultLinkProps) => {
   return (
     <Link href={`/${result.type}/${result.id}`}>
-      <SearchResultDiv>
+      <SearchResultLinkDiv>
         <LogoSidebar result={result} />
         <ResultAbstract result={result} />
-      </SearchResultDiv>
+      </SearchResultLinkDiv>
     </Link>
   )
 }
 
-export default SearchResult
+export default SearchResultLink
