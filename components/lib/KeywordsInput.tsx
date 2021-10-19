@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import ReactTags, { Tag } from 'react-tag-autocomplete'
 import styled from 'styled-components'
+import Keyword, { ReactTagKeywordShim } from '../widgets/Keyword'
 
 export interface KeywordsInputProps {
   keywords?: string[]
@@ -100,6 +101,7 @@ export const KeywordsInput = ({
         <ReactTags
           classNames={{ ...classNames, searchInput: 'navds-text-field__input' }}
           tags={tags}
+          tagComponent={ReactTagKeywordShim}
           onDelete={onDelete}
           onAddition={onAddition}
           placeholderText={'nøkkelord'}

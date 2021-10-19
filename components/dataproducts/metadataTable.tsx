@@ -9,6 +9,7 @@ import GithubIcon from '../lib/icons/github'
 import IconBox from '../lib/icons/iconBox'
 import { navGronn, navRod } from '../../styles/constants'
 import { Success, Warning } from '@navikt/ds-icons'
+import Keyword from '../widgets/Keyword'
 
 const humanizeDate = (isoDate: string) =>
   format(parseISO(isoDate), 'PPPP', { locale: nb })
@@ -62,7 +63,7 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       <th>Nøkkelord:</th>
       <td>
         {product.keywords &&
-          product.keywords.map((k) => <MicroCard key={k}>{k}</MicroCard>)}
+          product.keywords.map((k) => <Keyword key={k} keyword={k} />)}
       </td>
     </tr>
     <tr>
