@@ -47,12 +47,6 @@ export const NewDataproductForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {backendError && <ErrorMessage error={backendError} />}
-      <KeywordsInput
-        keywords={keywords}
-        setKeywords={setKeywords}
-        {...register('keywords')}
-        error={errors.keywords?.[0].message}
-      />
       <DataproductForm register={register} errors={errors} watch={watch} />
       <DataproductSourceForm
         register={register}
@@ -61,6 +55,12 @@ export const NewDataproductForm = () => {
         setValue={setValue}
       />
       <PiiCheckboxInput register={register} watch={watch} />
+      <KeywordsInput
+        keywords={keywords}
+        setKeywords={setKeywords}
+        {...register('keywords')}
+        error={errors.keywords?.[0].message}
+      />
       <RightJustifiedSubmitButton onCancel={router.back} />
     </form>
   )
