@@ -43,7 +43,6 @@ const nodeIsTable = (id: string) => id.split(':', 1)[0] === 'table'
 
 export const DataproductSourceForm = ({
   register,
-  watch,
   errors,
   setValue,
 }: DataproductSourceFormProps) => {
@@ -69,7 +68,6 @@ export const DataproductSourceForm = ({
 
   const user = useContext(AuthState).user
 
-  console.log(errors)
   register('owner.group')
   register('datasource.project_id')
   register('datasource.dataset')

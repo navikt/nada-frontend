@@ -14,7 +14,7 @@ const LogoBox = styled.div`
 export const Logo = () => (
   <LogoBox aria-label="Datakatalogen">
     <Link href="/">
-      <img src="/nada.svg" />
+      <img src="/navdata-logo.svg" />
     </Link>
   </LogoBox>
 )
