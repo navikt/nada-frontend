@@ -22,12 +22,8 @@ export interface SearchResultProps {
 }
 
 export const SearchResult = ({ result }: SearchResultProps) => {
-  const helper = (type: string) => {
-    if (type === 'collection') return 'datacollection'
-    return type
-  }
   return (
-    <Link href={`/${helper(result.type)}/${result.id}`}>
+    <Link href={`/${result.type}/${result.id}`}>
       <SearchResultDiv>
         <LogoSidebar result={result} />
         <ResultAbstract result={result} />
