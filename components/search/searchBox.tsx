@@ -27,7 +27,11 @@ const SearchDiv = styled.div`
 `
 
 const LargeSearchDiv = styled(SearchDiv)`
-  margin: 50px auto;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
   .navds-form-field {
     > input {
       border-radius: 0.25em;

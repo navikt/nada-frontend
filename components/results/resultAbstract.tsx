@@ -30,7 +30,6 @@ export const TitleLine = ({ result }: SearchResultLinkProps) => (
 export const ResultAbstract = ({ result }: SearchResultLinkProps) => (
   <StyledResultAbstract>
     <TitleLine result={result} />
-
     <p>{result.excerpt}</p>
   </StyledResultAbstract>
 )

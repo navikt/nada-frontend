@@ -11,7 +11,11 @@ const NoResultsYetBox = styled.div`
   margin: 0 auto;
 `
 
-export function Results() {
+interface ResultsProps {
+  limit?: number
+}
+
+export function Results({ limit }: ResultsProps) {
   const router = useRouter()
   let { q } = router.query
   if (typeof q !== 'string') q = ''
@@ -37,15 +41,22 @@ export function Results() {
     )
   }
 
+  if (!data.length) return <div>Ingen resultater funnet</div>
+
+  if (limit)
+    return (
+      <div>
+        {data.slice(0, limit).map((d) => (
+          <SearchResultLink key={d.id} result={d} />
+        ))}
+      </div>
+    )
+
   return (
     <div>
-      {!data.length ? (
-        <div>Ingen resultater funnet</div>
-      ) : (
-        data.map((d) => {
-          return <SearchResultLink key={d.id} result={d} />
-        })
-      )}
+      {data.map((d) => (
+        <SearchResultLink key={d.id} result={d} />
+      ))}
     </div>
   )
 }

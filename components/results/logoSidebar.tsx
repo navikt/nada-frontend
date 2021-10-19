@@ -27,7 +27,7 @@ const LogoSidebarDiv = styled.div`
 const typeNameMap: Record<SearchResultEntryType, string> = {
   collection: 'Datasamling',
   datapackage: 'Datapakke',
-  dataproduct: 'Dataprodukt',
+  dataproduct: 'Dataprodukt bigquery',
 }
 
 export const LogoSidebar = ({ result }: SearchResultLinkProps) => (
