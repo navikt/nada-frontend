@@ -30,7 +30,7 @@ const NewDataproductCard = ({ onClick }: NewDataproductCardProps) => {
           margin: '10px',
           minWidth: '270px',
           maxWidth: '270px',
-          minHeight: '370px',
+          minHeight: '350px',
         }}
       >
         <div

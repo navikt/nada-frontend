@@ -9,6 +9,7 @@ export interface IconBoxProps {
 export const StyledIconBox = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-left: ${(p: IconBoxProps) => (p.justifyRight ? 'auto' : 'default')};
   height: ${(p: IconBoxProps) => p.size}px;
   width: ${(p: IconBoxProps) => p.size}px;

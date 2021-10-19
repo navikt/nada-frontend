@@ -2,13 +2,20 @@ import { DataproductSchema } from '../../lib/schema/schema_types'
 import useSWR from 'swr'
 import Link from 'next/link'
 
-import { Card, CardHeader, CardContent } from '@mui/material'
+import { Card, CardHeader, CardContent, CardActions } from '@mui/material'
 import { fetcher } from '../../lib/api/fetcher'
 import DataProductSpinner from '../lib/spinner'
-import { navBlaLighten80 } from '../../styles/constants'
+import {
+  navBlaLighten80,
+  navGra20,
+  navGronn,
+  navRod,
+} from '../../styles/constants'
 import styled from 'styled-components'
-import { PiiIkon } from '../lib/piiIkon'
+import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
+import { Success, Warning } from '@navikt/ds-icons'
+import Keyword from '../widgets/Keyword'
 
 interface DataproductCardProps {
   id: string
@@ -28,7 +35,19 @@ const DatasetCardDiv = styled(Card)`
     background-color: ${navBlaLighten80};
   }
 `
+const PiiBox = styled.div`
+  border-right: 1px solid ${navGra20};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 10px;
+`
 
+const TagsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+`
 const InertDatasetCardDiv = styled(DatasetCardDiv)`
   cursor: unset;
   :hover {
@@ -78,8 +97,27 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
             {data.description && data.description.length > 200 && '...'}
           </i>
         </CardContent>
-
-        <PiiIkon pii={data.pii} />
+        <CardActions
+          style={{ borderTop: `1px solid ${navGra20}`, paddingTop: '0px' }}
+        >
+          <PiiBox>
+            <i style={{ fontSize: 'small' }}>PII</i>
+            <IconBox size={24}>
+              {data.pii ? (
+                <Success color={navGronn} />
+              ) : (
+                <Warning color={navRod} />
+              )}
+            </IconBox>
+          </PiiBox>
+          <TagsBox>
+            <i style={{ fontSize: 'small' }}>Nøkkelord</i>
+            <div>
+              {data.keywords &&
+                data.keywords.map((k) => <Keyword key={k} keyword={k} small />)}
+            </div>
+          </TagsBox>
+        </CardActions>
       </DatasetCardDiv>
     </Link>
   )
