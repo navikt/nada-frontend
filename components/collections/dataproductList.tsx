@@ -1,8 +1,6 @@
 import {
-  CollectionSchema,
   CollectionElement,
-  DataproductSchema,
-  DataproductSummary,
+  CollectionSchema,
   SearchResultEntry,
 } from '../../lib/schema/schema_types'
 import { useContext, useState } from 'react'
@@ -16,8 +14,8 @@ import useSWR, { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
 import fetcher from '../../lib/api/fetcher'
 import SearchResult from './collectionElement'
-import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import apiPOST from '../../lib/api/post'
+import { useRouter } from 'next/router'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -62,7 +60,19 @@ interface DataproductListProps {
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const user = useContext(AuthState).user
-  const [selectedProduct, setSelectedProduct] = useState<string[]>([])
+
+  const initCollectionElements = collection.elements
+    ? collection.elements.map((e: CollectionElement) => {
+        return e.element_id
+      })
+    : []
+
+  console.log(initCollectionElements)
+
+  const [selectedProduct, setSelectedProduct] = useState<string[]>(
+    initCollectionElements
+  )
+  const router = useRouter()
   const handleClick = (id: string) => {
     if (selectedProduct.includes(id)) {
       setSelectedProduct((selectedProduct) =>
@@ -87,17 +97,20 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   }
 
   const handleSubmit = async () => {
-    const posts = await Promise.all(
-      selectedProduct.map((product) => {
-        return apiPOST(`/api/collections/${collection.id}/add`, {
+    for (const product of selectedProduct.filter(
+      (element) => !initCollectionElements.includes(element)
+    )) {
+      try {
+        await apiPOST(`/api/collections/${collection.id}/add`, {
           element_id: product,
           element_type: 'dataproduct',
         })
-      })
-    )
-    posts.map((p) => {
-      p
-    })
+      } catch (e) {
+        console.log('Api kall feilet', e)
+      }
+    }
+    setShowNewDataproduct(false)
+    await mutate(`/api/collections/${collection.id}`)
   }
 
   return (
