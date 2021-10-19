@@ -57,28 +57,41 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         />
       </StyledDiv>
 
-      <MetadataTable product={product} />
-
       <div></div>
-      <ReactMarkdown>
-        {product.description || '*ingen beskrivelse*'}
-      </ReactMarkdown>
-      <Box sx={{ maxWidth: 480, bgcolor: 'background.paper' }}>
+      <Box sx={{ bgcolor: 'background.paper' }}>
         <Tabs
           value={activeTab}
           onChange={handleChange}
-          variant="scrollable"
+          variant="standard"
           scrollButtons="auto"
-          aria-label="scrollable auto tabs example"
+          aria-label="auto tabs example"
         >
-          <Tab label="Skjema" value={0} />
-          <Tab label="Lineage" />
+          <Tab label="Detaljer" value={0} />
+          <Tab label="Beskrivelse" value={1} />
+          <Tab label="Skjema" value={2} />
+          <Tab label="Tilganger" value={3} />
+          <Tab label="Lineage" value={4} />
+          <Tab label="Statz" value={5} />
         </Tabs>
       </Box>
       <TabPanel index={0} value={activeTab}>
-        <DataproductTableSchema product={product} />
+        <MetadataTable product={product} />
       </TabPanel>
       <TabPanel index={1} value={activeTab}>
+        <ReactMarkdown>
+          {product.description || '*ingen beskrivelse*'}
+        </ReactMarkdown>
+      </TabPanel>
+      <TabPanel index={2} value={activeTab}>
+        <DataproductTableSchema product={product} />
+      </TabPanel>
+      <TabPanel index={3} value={activeTab}>
+        <div>Placeholder</div>
+      </TabPanel>
+      <TabPanel index={4} value={activeTab}>
+        <div>Placeholder</div>
+      </TabPanel>
+      <TabPanel index={5} value={activeTab}>
         <div>Placeholder</div>
       </TabPanel>
     </div>

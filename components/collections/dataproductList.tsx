@@ -67,7 +67,6 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       })
     : []
 
-  console.log(initCollectionElements)
 
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
     initCollectionElements
