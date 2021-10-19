@@ -28,6 +28,28 @@ export interface paths {
       }
     }
   }
+  '/gcp/{id}/datasets': {
+    /** Return all BigQuery datasets in gcp project */
+    get: operations['getBigqueryDatasets']
+    parameters: {
+      path: {
+        /** GCP project ID */
+        id: string
+      }
+    }
+  }
+  '/gcp/{projectId}/datasets/{datasetId}': {
+    /** Return all BigQuery tables and views in dataset in gcp project */
+    get: operations['getBigqueryDataset']
+    parameters: {
+      path: {
+        /** GCP project ID */
+        projectId: string
+        /** BigQuery Dataset ID */
+        datasetId: string
+      }
+    }
+  }
   '/collections': {
     /** List all Collections */
     get: operations['getCollections']
@@ -89,7 +111,7 @@ export interface components {
       created: string
       owner: components['schemas']['Owner']
       keywords?: string[]
-      dataproducts: components['schemas']['DataproductSummary'][]
+      elements: components['schemas']['CollectionElement'][]
     }
     NewCollection: {
       name: string
@@ -151,6 +173,13 @@ export interface components {
       project_id: string
       dataset: string
       table: string
+    }
+    BigqueryType: 'table' | 'view'
+    BigqueryTypeMetadata: {
+      name: string
+      type: components['schemas']['BigqueryType']
+      description: string
+      last_modified: string
     }
     UserInfo: {
       name: string
@@ -230,6 +259,42 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['Bigquery'][]
+        }
+      }
+    }
+  }
+  /** Return all BigQuery datasets in gcp project */
+  getBigqueryDatasets: {
+    parameters: {
+      path: {
+        /** GCP project ID */
+        id: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': string[]
+        }
+      }
+    }
+  }
+  /** Return all BigQuery tables and views in dataset in gcp project */
+  getBigqueryDataset: {
+    parameters: {
+      path: {
+        /** GCP project ID */
+        projectId: string
+        /** BigQuery Dataset ID */
+        datasetId: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['BigqueryTypeMetadata'][]
         }
       }
     }
