@@ -5,8 +5,12 @@ module.exports = {
   reactStrictMode: true,
   rewrites: async () => [
     {
+      source: '/api/query',
+      destination: `${getBackendURI()}/query`, // Proxy to backend
+    },
+    {
       source: '/api/:path*',
-      destination: `${getBackendURI()}/:path*`, // Proxy to backend
+      destination: `${getBackendURI()}/api/:path*`, // Proxy to backend
     },
   ],
 }
