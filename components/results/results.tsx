@@ -3,9 +3,14 @@ import styled from 'styled-components'
 import { Loader } from '@navikt/ds-react'
 import useSWR from 'swr'
 import fetcher from '../../lib/api/fetcher'
-import { SearchResultEntry } from '../../lib/schema/schema_types'
+import {
+  AllDataproductsSchema,
+  DataproductSchema,
+} from '../../lib/schema/schema_types'
 import { useRouter } from 'next/router'
 import SearchResultLink from './searchResult'
+import { request } from 'graphql-request'
+import { allDataProducts } from '../lib/queries/dataproduct'
 
 const NoResultsYetBox = styled.div`
   margin: 0 auto;
@@ -19,9 +24,10 @@ export function Results({ limit }: ResultsProps) {
   const router = useRouter()
   let { q } = router.query
   if (typeof q !== 'string') q = ''
+  const fetcher = (query: string) => request('/api/query', query)
 
-  const { data, error } = useSWR<SearchResultEntry[], Error>(
-    `/api/search?q=${q}`,
+  const { data, error } = useSWR<AllDataproductsSchema, Error>(
+    allDataProducts,
     fetcher
   )
 
@@ -40,13 +46,14 @@ export function Results({ limit }: ResultsProps) {
       </NoResultsYetBox>
     )
   }
+  console.log(data)
 
-  if (!data.length) return <div>Ingen resultater funnet</div>
+  if (!data.dataproducts.length) return <div>Ingen resultater funnet</div>
 
   if (limit)
     return (
       <div>
-        {data.slice(0, limit).map((d) => (
+        {data.dataproducts.slice(0, limit).map((d) => (
           <SearchResultLink key={d.id} result={d} />
         ))}
       </div>
@@ -54,7 +61,7 @@ export function Results({ limit }: ResultsProps) {
 
   return (
     <div>
-      {data.map((d) => (
+      {data.dataproducts.map((d) => (
         <SearchResultLink key={d.id} result={d} />
       ))}
     </div>

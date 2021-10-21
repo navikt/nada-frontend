@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { SearchResultLinkProps } from './searchResult'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 
 const Slash = () => <img src="/result-icons/slash.svg" />
 
@@ -21,15 +22,19 @@ const StyledResultAbstract = styled.div`
   }
 `
 
+export interface ResultAbstractProps {
+  result: DataproductSchema
+}
+
 export const TitleLine = ({ result }: SearchResultLinkProps) => (
   <StyledTitleLine>
     <h1>{result.name}</h1>
   </StyledTitleLine>
 )
 
-export const ResultAbstract = ({ result }: SearchResultLinkProps) => (
+export const ResultAbstract = ({ result }: ResultAbstractProps) => (
   <StyledResultAbstract>
     <TitleLine result={result} />
-    <p>{result.excerpt}</p>
+    <p>{result.type}</p>
   </StyledResultAbstract>
 )

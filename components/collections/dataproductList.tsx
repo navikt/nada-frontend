@@ -1,6 +1,7 @@
 import {
   CollectionElement,
   CollectionSchema,
+  DataproductSchema,
   SearchResultEntry,
 } from '../../lib/schema/schema_types'
 import { useContext, useState } from 'react'
@@ -16,6 +17,8 @@ import fetcher from '../../lib/api/fetcher'
 import SearchResult from './collectionElement'
 import apiPOST from '../../lib/api/post'
 import { useRouter } from 'next/router'
+import { allDataProducts } from '../lib/queries/dataproduct'
+import { request } from 'graphql-request'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -60,13 +63,13 @@ interface DataproductListProps {
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const user = useContext(AuthState).user
+  const fetcher = (query: string) => request('/api/query', query)
 
   const initCollectionElements = collection.elements
     ? collection.elements.map((e: CollectionElement) => {
         return e.element_id
       })
     : []
-
 
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
     initCollectionElements
@@ -82,8 +85,8 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
     }
   }
 
-  const { data, error } = useSWR<SearchResultEntry[], Error>(
-    `/api/search?q=${''}`,
+  const { data, error } = useSWR<DataproductSchema[], Error>(
+    allDataProducts,
     fetcher
   )
 

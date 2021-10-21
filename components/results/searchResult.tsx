@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { ResultAbstract } from './resultAbstract'
-import { SearchResultEntry } from '../../lib/schema/schema_types'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 import { LogoSidebar } from './logoSidebar'
 
 const SearchResultLinkDiv = styled.div`
@@ -18,12 +18,17 @@ const SearchResultLinkDiv = styled.div`
 `
 
 export interface SearchResultLinkProps {
-  result: SearchResultEntry
+  result: DataproductSchema
 }
 
 export const SearchResultLink = ({ result }: SearchResultLinkProps) => {
+  console.log(result.name)
+  const helper = (type: string) => {
+    if (type === 'Dataproduct') return 'dataproduct'
+    return type
+  }
   return (
-    <Link href={`/${result.type}/${result.id}`}>
+    <Link href={`/${helper(result.type)}/${result.id}`}>
       <SearchResultLinkDiv>
         <LogoSidebar result={result} />
         <ResultAbstract result={result} />

@@ -53,9 +53,9 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       <th>Adresse:</th>
       <td>
         <Link
-          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.project_id}&page=table`}
+          href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.projectID}&page=table`}
         >
-          {`${product.datasource.project_id}.${product.datasource.dataset}.${product.datasource.table}`}
+          {`${product.datasource.projectID}.${product.datasource.dataset}.${product.datasource.table}`}
         </Link>
       </td>
     </tr>

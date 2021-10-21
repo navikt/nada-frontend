@@ -5,7 +5,10 @@ import {
   navGronnLighten20,
   navGronnLighten60,
 } from '../../styles/constants'
-import { SearchResultEntry } from '../../lib/schema/schema_types'
+import {
+  DataproductSchema,
+  SearchResultEntry,
+} from '../../lib/schema/schema_types'
 import { ResultAbstract } from '../results/resultAbstract'
 import { LogoSidebar } from '../results/logoSidebar'
 
@@ -25,7 +28,7 @@ const SearchResultDiv = styled.div<{ selected: boolean }>`
 `
 
 export interface SearchResultProps {
-  result: SearchResultEntry
+  result: DataproductSchema
   selected: boolean
   handleClick: (id: string) => void
 }

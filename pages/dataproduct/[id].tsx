@@ -1,44 +1,43 @@
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import PageLayout from '../../components/pageLayout'
-import { DataproductSchema } from '../../lib/schema/schema_types'
-import fetcher from '../../lib/api/fetcher'
 import LoaderSpinner from '../../components/lib/spinner'
 import DataproductDetail from '../../components/dataproducts/dataproductDetail'
 import ErrorMessage from '../../components/lib/error'
-import { request, gql } from 'graphql-request'
+import { request } from 'graphql-request'
+import { DataproductSchema } from '../../lib/schema/schema_types'
 
 const Dataproduct = () => {
   const router = useRouter()
   const { id } = router.query
-  const fetcher = (query: any) => request('/api/query', query)
+  const fetcher = (query: string) => request('/api/query', query)
+  const dataproduct = `{
+  dataproduct(id: "388f71fe-58ae-43dc-ab26-0bb773baac66")
+  {
+    name,
+    description,
+    created,
+    slug,
+    repo,
+    pii,
+    keywords,
+    owner{
+      group,
+      teamkatalogen
+    }
+    datasource{
+      type: __typename,
+      ... on BigQuery {
+        projectID,
+        dataset,
+        table
+      }
+    }
+  }
+}`
 
-  const { data, error } = useSWR(
-    `{
-        dataproduct(id:"57bde086-92a0-47ca-866d-605e5fc98076"){
-          name
-              description
-              created
-              lastModified
-              slug
-              repo
-              pii
-              keywords
-              owner{
-            group
-                teamkatalogen
-          }
-          datasource{
-            type: __typename
-          ... on BigQuery {
-              projectID
-                  table
-                  dataset
-            }`,
-    fetcher
-  )
+  const { data, error } = useSWR(dataproduct, fetcher)
   console.log(error)
-  console.log(data)
 
   if (error) return <ErrorMessage error={error} />
 
@@ -46,7 +45,7 @@ const Dataproduct = () => {
 
   return (
     <PageLayout>
-      <DataproductDetail product={data} />
+      <DataproductDetail product={data.dataproduct} />
     </PageLayout>
   )
 }

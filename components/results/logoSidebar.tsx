@@ -1,4 +1,7 @@
-import { SearchResultEntryType } from '../../lib/schema/schema_types'
+import {
+  DataproductSchema,
+  SearchResultEntryType,
+} from '../../lib/schema/schema_types'
 import { SearchResultLinkProps } from './searchResult'
 import styled from 'styled-components'
 import { logoMap } from '../lib/icons/logoMap'
@@ -24,13 +27,17 @@ const LogoSidebarDiv = styled.div`
   }
 `
 
-const typeNameMap: Record<SearchResultEntryType, string> = {
+const typeNameMap: Record<string, string> = {
   collection: 'Datasamling',
   datapackage: 'Datapakke',
-  dataproduct: 'Dataprodukt bigquery',
+  dataproduct: 'Dataprodukt',
 }
 
-export const LogoSidebar = ({ result }: SearchResultLinkProps) => (
+export interface LogoSideProps {
+  result: DataproductSchema
+}
+
+export const LogoSidebar = ({ result }: LogoSideProps) => (
   <LogoSidebarDiv>
     {logoMap[result.type]}
     <p>{typeNameMap[result.type]}</p>
