@@ -324,6 +324,16 @@ export type DataproductQuery = {
   }
 }
 
+export type UpdateDataproductMutationVariables = Exact<{
+  id: Scalars['ID']
+  input: UpdateDataproduct
+}>
+
+export type UpdateDataproductMutation = {
+  __typename?: 'Mutation'
+  updateDataproduct: { __typename?: 'Dataproduct'; id: string }
+}
+
 export const CollectionProductsDocument = gql`
   query CollectionProducts($id: ID!) {
     collection(id: $id) {
@@ -556,4 +566,55 @@ export type DataproductLazyQueryHookResult = ReturnType<
 export type DataproductQueryResult = Apollo.QueryResult<
   DataproductQuery,
   DataproductQueryVariables
+>
+export const UpdateDataproductDocument = gql`
+  mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
+    updateDataproduct(id: $id, input: $input) {
+      id
+    }
+  }
+`
+export type UpdateDataproductMutationFn = Apollo.MutationFunction<
+  UpdateDataproductMutation,
+  UpdateDataproductMutationVariables
+>
+
+/**
+ * __useUpdateDataproductMutation__
+ *
+ * To run a mutation, you first call `useUpdateDataproductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDataproductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDataproductMutation, { data, loading, error }] = useUpdateDataproductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateDataproductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateDataproductMutation,
+    UpdateDataproductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateDataproductMutation,
+    UpdateDataproductMutationVariables
+  >(UpdateDataproductDocument, options)
+}
+export type UpdateDataproductMutationHookResult = ReturnType<
+  typeof useUpdateDataproductMutation
+>
+export type UpdateDataproductMutationResult =
+  Apollo.MutationResult<UpdateDataproductMutation>
+export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDataproductMutation,
+  UpdateDataproductMutationVariables
 >
