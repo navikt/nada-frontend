@@ -324,6 +324,31 @@ export type DataproductQuery = {
   }
 }
 
+export type CreateDataproductMutationVariables = Exact<{
+  input: NewDataproduct
+}>
+
+export type CreateDataproductMutation = {
+  __typename?: 'Mutation'
+  createDataproduct: {
+    __typename?: 'Dataproduct'
+    name: string
+    description?: string | null | undefined
+    repo?: string | null | undefined
+    pii: boolean
+    keywords: Array<string>
+    created: any
+    lastModified: any
+    owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+    datasource: {
+      __typename?: 'BigQuery'
+      projectID: string
+      dataset: string
+      table: string
+    }
+  }
+}
+
 export type UpdateDataproductMutationVariables = Exact<{
   id: Scalars['ID']
   input: UpdateDataproduct
@@ -574,6 +599,73 @@ export type DataproductLazyQueryHookResult = ReturnType<
 export type DataproductQueryResult = Apollo.QueryResult<
   DataproductQuery,
   DataproductQueryVariables
+>
+export const CreateDataproductDocument = gql`
+  mutation createDataproduct($input: NewDataproduct!) {
+    createDataproduct(input: $input) {
+      name
+      description
+      repo
+      pii
+      keywords
+      created
+      lastModified
+      owner {
+        group
+        teamkatalogen
+      }
+      datasource {
+        ... on BigQuery {
+          projectID
+          dataset
+          table
+        }
+      }
+    }
+  }
+`
+export type CreateDataproductMutationFn = Apollo.MutationFunction<
+  CreateDataproductMutation,
+  CreateDataproductMutationVariables
+>
+
+/**
+ * __useCreateDataproductMutation__
+ *
+ * To run a mutation, you first call `useCreateDataproductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDataproductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDataproductMutation, { data, loading, error }] = useCreateDataproductMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDataproductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDataproductMutation,
+    CreateDataproductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateDataproductMutation,
+    CreateDataproductMutationVariables
+  >(CreateDataproductDocument, options)
+}
+export type CreateDataproductMutationHookResult = ReturnType<
+  typeof useCreateDataproductMutation
+>
+export type CreateDataproductMutationResult =
+  Apollo.MutationResult<CreateDataproductMutation>
+export type CreateDataproductMutationOptions = Apollo.BaseMutationOptions<
+  CreateDataproductMutation,
+  CreateDataproductMutationVariables
 >
 export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {

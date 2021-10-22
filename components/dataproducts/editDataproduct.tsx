@@ -9,7 +9,6 @@ import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
 
 import { Dataproduct } from '../../lib/schema/graphql'
-import { UpdateDataproduct } from '../../lib/schema/graphql'
 import { useMutation } from '@apollo/client'
 import { UPDATE_DATAPRODUCT } from '../../lib/queries/dataproduct/updateDataproduct'
 
@@ -42,7 +41,7 @@ const EditDataproduct = ({
   const { errors } = formState
   const onSubmit = (requestData: any) => {
     console.log(requestData)
-    const noe = updateDataproduct({
+    updateDataproduct({
       variables: { id: dataproduct.id, input: requestData },
     })
     setBackendError(undefined)

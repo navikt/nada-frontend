@@ -12,7 +12,7 @@ import '@fontsource/source-sans-pro'
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
 const client = new ApolloClient({
   ssrMode: typeof window === 'undefined',
-  uri: 'http://localhost:8080/query',
+  uri: 'http://localhost:8080/api/query',
   cache: new InMemoryCache(),
 })
 function MyApp({ Component, pageProps }: AppProps) {

@@ -11,11 +11,15 @@ import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
 import { DataproductSourceForm } from './dataproductSourceForm'
+import { NEW_DATAPRODUCT } from '../../lib/queries/dataproduct/newDataproduct'
+import { useMutation } from '@apollo/client'
 
 export const NewDataproductForm = () => {
   const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(newDataproductValidation),
   })
+  const [createDataproduct, { data, loading, error }] =
+    useMutation(NEW_DATAPRODUCT)
   const keywords = watch('keywords')
   const setKeywords = (value: string[]) => {
     setValue('keywords', value)
@@ -35,13 +39,13 @@ export const NewDataproductForm = () => {
   }, [projectID])
 
   const onSubmit = async (requestData: NewDataproductSchema) => {
-    try {
-      const createdDataproduct = await apiPOST(`/api/dataproducts`, requestData)
-      router.push(`/dataproduct/${createdDataproduct.id}`)
-      setBackendError(undefined)
-    } catch (e: any) {
-      setBackendError(e)
-    }
+    const createdDataproduct = createDataproduct({
+      variables: { input: requestData },
+    })
+    console.log('data' + data)
+    //const createdDataproduct = await apiPOST(`/api/dataproducts`, requestData)
+    router.push(`/dataproduct/${data.id}`)
+    setBackendError(undefined)
   }
 
   return (
