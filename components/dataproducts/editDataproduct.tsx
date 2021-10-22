@@ -2,7 +2,6 @@ import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { DataproductSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
 import { useState } from 'react'
 import { mutate } from 'swr'
@@ -10,7 +9,7 @@ import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
-import { Dataproduct, DataproductQuery } from '../../lib/schema/graphql'
+import { Dataproduct } from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
   dataproduct: Dataproduct

@@ -20,7 +20,7 @@ import {
   useCollectionProductsQuery,
 } from '../../lib/schema/graphql'
 import { request } from 'graphql-request'
-import { CollectionProducts } from '../../lib/queries/dataproduct'
+import { CollectionProducts } from '../../lib/queries/dataproduct/dataproduct'
 
 const AddButtonContainer = styled.div`
   display: flex;

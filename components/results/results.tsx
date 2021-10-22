@@ -1,16 +1,7 @@
-import SearchResult from './searchResult'
 import styled from 'styled-components'
 import { Loader } from '@navikt/ds-react'
-import useSWR from 'swr'
-import fetcher from '../../lib/api/fetcher'
-import {
-  AllDataproductsSchema,
-  DataproductSchema,
-} from '../../lib/schema/schema_types'
 import { useRouter } from 'next/router'
 import SearchResultLink from './searchResult'
-import { request } from 'graphql-request'
-import { AllDataproducts } from '../../lib/queries/dataproduct'
 import { useAllDataproductsQuery } from '../../lib/schema/graphql'
 
 const NoResultsYetBox = styled.div`
@@ -36,10 +27,17 @@ export function Results({ limit }: ResultsProps) {
     )
   }
 
-  if (!data) {
+  if (loading) {
     return (
       <NoResultsYetBox>
         <Loader transparent />
+      </NoResultsYetBox>
+    )
+  }
+  if (!data) {
+    return (
+      <NoResultsYetBox>
+        <h1>No data found</h1>
       </NoResultsYetBox>
     )
   }

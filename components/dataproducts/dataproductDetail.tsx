@@ -7,7 +7,6 @@ import { Box, Tab, Tabs } from '@mui/material'
 import TabPanel from '../lib/tabPanel'
 import ReactMarkdown from 'react-markdown'
 import DataproductTableSchema from './dataproductTableSchema'
-import { DataproductSchema } from '../../lib/schema/schema_types'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
@@ -27,8 +26,10 @@ export interface DataproductDetailProps {
 
 export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
+  const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
+
   const deleteDataproduct = async (id: string) => {
     try {
       await apiDELETE(`/api/dataproducts/${id}`)
@@ -37,10 +38,10 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       setBackendError(e.toString())
     }
   }
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)
   }
-  const [backendError, setBackendError] = useState()
 
   if (!product) return <LoaderSpinner />
 

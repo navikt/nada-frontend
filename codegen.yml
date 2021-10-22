@@ -1,7 +1,7 @@
 overwrite: true
 schema: "http://localhost:8080/query"
 documents:
-  - "lib/queries/*.ts"
+  - "lib/queries/*/*.ts"
 generates:
   lib/schema/graphql.ts:
     plugins:

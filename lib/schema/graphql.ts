@@ -242,6 +242,36 @@ export type UserInfo = {
   name: Scalars['String']
 }
 
+export type CollectionProductsQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type CollectionProductsQuery = {
+  __typename?: 'Query'
+  collection: {
+    __typename?: 'Collection'
+    id: string
+    elements: Array<{
+      __typename?: 'Dataproduct'
+      id: string
+      created: any
+      keywords: Array<string>
+      lastModified: any
+      name: string
+      pii: boolean
+      type: 'Dataproduct'
+      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      datasource: {
+        __typename?: 'BigQuery'
+        projectID: string
+        dataset: string
+        table: string
+        type: 'BigQuery'
+      }
+    }>
+  }
+}
+
 export type AllDataproductsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AllDataproductsQuery = {
@@ -294,36 +324,87 @@ export type DataproductQuery = {
   }
 }
 
-export type CollectionProductsQueryVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type CollectionProductsQuery = {
-  __typename?: 'Query'
-  collection: {
-    __typename?: 'Collection'
-    id: string
-    elements: Array<{
-      __typename?: 'Dataproduct'
-      id: string
-      created: any
-      keywords: Array<string>
-      lastModified: any
-      name: string
-      pii: boolean
-      type: 'Dataproduct'
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
-      datasource: {
-        __typename?: 'BigQuery'
-        projectID: string
-        dataset: string
-        table: string
-        type: 'BigQuery'
+export const CollectionProductsDocument = gql`
+  query CollectionProducts($id: ID!) {
+    collection(id: $id) {
+      id
+      elements {
+        type: __typename
+        ... on Dataproduct {
+          id
+          created
+          keywords
+          lastModified
+          name
+          owner {
+            group
+            teamkatalogen
+          }
+          pii
+          datasource {
+            type: __typename
+            ... on BigQuery {
+              projectID
+              dataset
+              table
+            }
+          }
+        }
       }
-    }>
+    }
   }
-}
+`
 
+/**
+ * __useCollectionProductsQuery__
+ *
+ * To run a query within a React component, call `useCollectionProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollectionProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCollectionProductsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCollectionProductsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CollectionProductsQuery,
+    CollectionProductsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    CollectionProductsQuery,
+    CollectionProductsQueryVariables
+  >(CollectionProductsDocument, options)
+}
+export function useCollectionProductsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CollectionProductsQuery,
+    CollectionProductsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    CollectionProductsQuery,
+    CollectionProductsQueryVariables
+  >(CollectionProductsDocument, options)
+}
+export type CollectionProductsQueryHookResult = ReturnType<
+  typeof useCollectionProductsQuery
+>
+export type CollectionProductsLazyQueryHookResult = ReturnType<
+  typeof useCollectionProductsLazyQuery
+>
+export type CollectionProductsQueryResult = Apollo.QueryResult<
+  CollectionProductsQuery,
+  CollectionProductsQueryVariables
+>
 export const AllDataproductsDocument = gql`
   query AllDataproducts {
     dataproducts {
@@ -475,85 +556,4 @@ export type DataproductLazyQueryHookResult = ReturnType<
 export type DataproductQueryResult = Apollo.QueryResult<
   DataproductQuery,
   DataproductQueryVariables
->
-export const CollectionProductsDocument = gql`
-  query CollectionProducts($id: ID!) {
-    collection(id: $id) {
-      id
-      elements {
-        type: __typename
-        ... on Dataproduct {
-          id
-          created
-          keywords
-          lastModified
-          name
-          owner {
-            group
-            teamkatalogen
-          }
-          pii
-          datasource {
-            type: __typename
-            ... on BigQuery {
-              projectID
-              dataset
-              table
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useCollectionProductsQuery__
- *
- * To run a query within a React component, call `useCollectionProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollectionProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCollectionProductsQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useCollectionProductsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
-  >(CollectionProductsDocument, options)
-}
-export function useCollectionProductsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
-  >(CollectionProductsDocument, options)
-}
-export type CollectionProductsQueryHookResult = ReturnType<
-  typeof useCollectionProductsQuery
->
-export type CollectionProductsLazyQueryHookResult = ReturnType<
-  typeof useCollectionProductsLazyQuery
->
-export type CollectionProductsQueryResult = Apollo.QueryResult<
-  CollectionProductsQuery,
-  CollectionProductsQueryVariables
 >
