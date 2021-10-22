@@ -10,6 +10,8 @@ generates:
       - "typescript-react-apollo"
     config:
       withHooks: true
+      withMutationFn: true
+      withMutationOptionsType: true
 hooks:
   afterAllFileWrite:
     - prettier --write lib/queries

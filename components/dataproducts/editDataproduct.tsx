@@ -1,15 +1,15 @@
-import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
+import { ErrorSummary } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { apiPUT } from '../../lib/api/put'
 import { useState } from 'react'
-import { mutate } from 'swr'
 import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
+
 import { Dataproduct } from '../../lib/schema/graphql'
+import { UpdateDataproduct } from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
   dataproduct: Dataproduct
@@ -21,6 +21,8 @@ const EditDataproduct = ({
   close,
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
+  // const [updateDataproduct, { data, loading, error }] =
+  //   useMutation(UpdateDataproduct)
   const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(updateDataproductValidation),
     defaultValues: {
@@ -36,15 +38,12 @@ const EditDataproduct = ({
     setValue('keywords', value)
   }
   const { errors } = formState
-  const onSubmit = async (requestData: any) => {
-    try {
-      await apiPUT(`/api/dataproducts/${dataproduct.id}`, requestData)
-      mutate(`/api/dataproducts/${dataproduct.id}`)
-      setBackendError(undefined)
-      close()
-    } catch (e: any) {
-      setBackendError(e.toString())
-    }
+  const onSubmit = (requestData: any) => {
+    // const noe = updateDataproduct({
+    //   variables: { id: dataproduct.id, input: { name: 'noe', pii: true } },
+    // })
+    setBackendError(undefined)
+    close()
   }
   {
     backendError && (
@@ -66,3 +65,15 @@ const EditDataproduct = ({
   )
 }
 export default EditDataproduct
+
+const sdsd = {
+  errors: [
+    {
+      message:
+        'Field "updateDataproduct" argument "input" of type "UpdateDataproduct!" is required but not provided.',
+      locations: [{ line: 2, column: 3 }],
+      extensions: { code: 'GRAPHQL_VALIDATION_FAILED' },
+    },
+  ],
+  data: null,
+}
