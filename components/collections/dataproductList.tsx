@@ -10,17 +10,13 @@ import { navBla } from '../../styles/constants'
 import { AuthState } from '../../lib/context'
 import { Button, Loader, Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
-import useSWR, { mutate } from 'swr'
+import { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
 import SearchResult from './collectionElement'
 import apiPOST from '../../lib/api/post'
 import { useRouter } from 'next/router'
-import {
-  CollectionElement,
-  useCollectionProductsQuery,
-} from '../../lib/schema/graphql'
+import { useCollectionProductsQuery } from '../../lib/schema/graphql'
 import { request } from 'graphql-request'
-import { CollectionProducts } from '../../lib/queries/dataproduct/dataproduct'
 
 const AddButtonContainer = styled.div`
   display: flex;
