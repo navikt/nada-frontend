@@ -23,7 +23,6 @@ export interface SearchResultLinkProps {
 }
 
 export const SearchResultLink = ({ result }: SearchResultLinkProps) => {
-  console.log(result.name)
   const helper = (type: string) => {
     if (type === 'Dataproduct') return 'dataproduct'
     return type

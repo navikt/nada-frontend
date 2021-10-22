@@ -2,31 +2,39 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import '@navikt/ds-css'
 import { useEffect, useState } from 'react'
-import { UserInfoSchema } from '../lib/schema/schema_types'
-import useSWR from 'swr'
-import fetcher from '../lib/api/fetcher'
-import { AuthState } from '../lib/context'
+import { UserState } from '../lib/context'
 import Head from 'next/head'
 
 import '@fontsource/source-sans-pro'
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+import { User_InfoDocument, User_InfoQuery } from '../lib/schema/graphql'
+
 const client = new ApolloClient({
   ssrMode: typeof window === 'undefined',
-  uri: 'http://localhost:8080/api/query',
+  uri: 'http://localhost:3000/api/query',
   cache: new InMemoryCache(),
 })
-function MyApp({ Component, pageProps }: AppProps) {
-  const [userState, setUserState] = useState<UserInfoSchema>()
 
-  const { data, error } = useSWR<UserInfoSchema, Error>(
-    '/api/userinfo',
-    fetcher
-  )
-  useEffect(() => setUserState(data), [data, error])
+function MyApp({ Component, pageProps }: AppProps) {
+  const [userState, setUserState] = useState<User_InfoQuery>()
+  client
+    .query({ query: User_InfoDocument })
+    .then((response) => {
+      if (response.error) {
+        setUserState(undefined)
+        console.log('no user for you!')
+      } else {
+        setUserState(response.data)
+      }
+    })
+    .catch((e) => {
+      console.log('No be logged in')
+      setUserState(undefined)
+    })
 
   return (
     <ApolloProvider client={client}>
-      <AuthState.Provider value={{ user: userState, setUser: setUserState }}>
+      <UserState.Provider value={userState?.userInfo}>
         <Head>
           <link
             rel="apple-touch-icon"
@@ -51,8 +59,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <Component {...pageProps} />
-      </AuthState.Provider>
+      </UserState.Provider>
     </ApolloProvider>
   )
 }
+
 export default MyApp

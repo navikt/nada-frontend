@@ -174,6 +174,7 @@ export type Query = {
   dataproducts: Array<Dataproduct>
   gcpGetDatasets: Array<Scalars['String']>
   gcpGetTables: Array<BigQueryTable>
+  getTableMetadata: TableMetadata
   search: Array<SearchResult>
   userInfo: UserInfo
   version: Scalars['String']
@@ -206,6 +207,10 @@ export type QueryGcpGetTablesArgs = {
   projectID: Scalars['String']
 }
 
+export type QueryGetTableMetadataArgs = {
+  id: Scalars['ID']
+}
+
 export type QuerySearchArgs = {
   q?: Maybe<SearchQuery>
 }
@@ -220,6 +225,20 @@ export type SearchQuery = {
 }
 
 export type SearchResult = Collection | Dataproduct
+
+export type TableColumn = {
+  __typename?: 'TableColumn'
+  description: Scalars['String']
+  mode: Scalars['String']
+  name: Scalars['String']
+  type: Scalars['String']
+}
+
+export type TableMetadata = {
+  __typename?: 'TableMetadata'
+  id: Scalars['ID']
+  schema: Array<TableColumn>
+}
 
 export type UpdateCollection = {
   description?: Maybe<Scalars['String']>
@@ -364,6 +383,18 @@ export type UpdateDataproductMutation = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
+  }
+}
+
+export type User_InfoQueryVariables = Exact<{ [key: string]: never }>
+
+export type User_InfoQuery = {
+  __typename?: 'Query'
+  userInfo: {
+    __typename?: 'UserInfo'
+    name: string
+    email: string
+    groups: Array<{ __typename?: 'Group'; name: string; email: string }>
   }
 }
 
@@ -722,4 +753,61 @@ export type UpdateDataproductMutationResult =
 export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
   UpdateDataproductMutation,
   UpdateDataproductMutationVariables
+>
+export const User_InfoDocument = gql`
+  query USER_INFO {
+    userInfo {
+      name
+      email
+      groups {
+        name
+        email
+      }
+    }
+  }
+`
+
+/**
+ * __useUser_InfoQuery__
+ *
+ * To run a query within a React component, call `useUser_InfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUser_InfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUser_InfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUser_InfoQuery(
+  baseOptions?: Apollo.QueryHookOptions<User_InfoQuery, User_InfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<User_InfoQuery, User_InfoQueryVariables>(
+    User_InfoDocument,
+    options
+  )
+}
+export function useUser_InfoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    User_InfoQuery,
+    User_InfoQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<User_InfoQuery, User_InfoQueryVariables>(
+    User_InfoDocument,
+    options
+  )
+}
+export type User_InfoQueryHookResult = ReturnType<typeof useUser_InfoQuery>
+export type User_InfoLazyQueryHookResult = ReturnType<
+  typeof useUser_InfoLazyQuery
+>
+export type User_InfoQueryResult = Apollo.QueryResult<
+  User_InfoQuery,
+  User_InfoQueryVariables
 >

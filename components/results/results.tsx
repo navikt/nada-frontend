@@ -41,7 +41,6 @@ export function Results({ limit }: ResultsProps) {
       </NoResultsYetBox>
     )
   }
-  console.log(data)
 
   if (!data.dataproducts.length) return <div>Ingen resultater funnet</div>
 

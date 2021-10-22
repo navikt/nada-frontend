@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import React, { useContext, MouseEvent } from 'react'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { AddCircleFilled } from '@navikt/ds-icons'
@@ -15,8 +15,7 @@ const CreateBox = styled.div`
 `
 
 export default function Create() {
-  const router = useRouter()
-  const authState = useContext(AuthState)
+  const userState = useContext(UserState)
   const menuId = 'primary-search-account-menu'
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
   const isMenuOpen = Boolean(anchorEl)
@@ -28,7 +27,7 @@ export default function Create() {
     setAnchorEl(null)
   }
 
-  if (authState.user)
+  if (userState)
     return (
       <CreateBox>
         <IconButton

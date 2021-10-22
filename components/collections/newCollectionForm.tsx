@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { newCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
 
 const NewCollectionFormOptions = {
@@ -25,7 +25,7 @@ export const NewCollectionForm = ({
   )
   const { errors } = formState
 
-  const user = useContext(AuthState).user
+  const user = useContext(UserState).user
   const groups = user?.groups
 
   const [keywords, setKeywords] = useState<string[]>([])

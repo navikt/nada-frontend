@@ -1,11 +1,11 @@
 import { createContext } from 'react'
-import { UserInfoSchema } from './schema/schema_types'
+import { UserInfo, Group } from './schema/graphql'
 
-type AuthStateType = {
-  user?: UserInfoSchema
-  setUser: Function
+type UserStateType = {
+  __typename?: 'UserInfo'
+  email: string
+  groups: Group[]
+  name: string
 }
 
-export const AuthState = createContext<AuthStateType>({
-  setUser: () => {},
-})
+export const UserState = createContext<UserStateType | undefined>(undefined)

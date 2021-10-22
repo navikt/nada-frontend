@@ -40,7 +40,6 @@ const EditDataproduct = ({
   }
   const { errors } = formState
   const onSubmit = (requestData: any) => {
-    console.log(requestData)
     updateDataproduct({
       variables: { id: dataproduct.id, input: requestData },
     })

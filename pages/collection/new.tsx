@@ -1,7 +1,7 @@
 import PageLayout from '../../components/pageLayout'
 import { ErrorSummary } from '@navikt/ds-react'
 import { useContext, useState } from 'react'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import { useRouter } from 'next/router'
 import { apiPOST } from '../../lib/api/post'
 import { NewCollectionForm } from '../../components/collections/newCollectionForm'
@@ -10,7 +10,7 @@ const NewCollection = () => {
   const router = useRouter()
 
   const [backendError, setBackendError] = useState()
-  const user = useContext(AuthState).user
+  const user = useContext(UserState).user
 
   const onSubmit = async (requestData: any) => {
     try {

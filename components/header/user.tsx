@@ -3,7 +3,7 @@ import { Button } from '@navikt/ds-react'
 import React, { useContext, MouseEvent } from 'react'
 import { navGraBakgrunn } from '../../styles/constants'
 import { People } from '@navikt/ds-icons'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 
@@ -23,7 +23,7 @@ const MenuLine = styled.div`
 `
 
 export default function User() {
-  const authState = useContext(AuthState)
+  const userState = useContext(UserState)
   const menuId = 'primary-search-account-menu'
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
   const isMenuOpen = Boolean(anchorEl)
@@ -37,7 +37,7 @@ export default function User() {
 
   return (
     <UserBox>
-      {authState.user ? (
+      {userState ? (
         <>
           <IconButton
             size="large"
@@ -66,7 +66,7 @@ export default function User() {
             onClose={handleMenuClose}
           >
             <MenuItem dense disabled>
-              {authState.user.name}
+              {userState.name}
             </MenuItem>
             <MenuLine />
             <MenuItem onClick={handleMenuClose}>Dokumentasjon</MenuItem>

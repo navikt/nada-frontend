@@ -7,7 +7,7 @@ import { useContext, useState } from 'react'
 import { AddCircleFilled } from '@navikt/ds-icons'
 import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import { Button, Loader, Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
 import { mutate } from 'swr'
@@ -44,7 +44,7 @@ const AddDatasetButton = ({
   onClick,
   ariaLabel,
 }: AddDatasetButtonProps) => {
-  const user = useContext(AuthState).user
+  const user = useContext(UserState).user
 
   return (
     <AddButtonContainer>
@@ -60,7 +60,7 @@ interface DataproductListProps {
 
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
-  const user = useContext(AuthState).user
+  const user = useContext(UserState).user
   const fetcher = (query: string) => request('/api/query', query)
 
   const initCollectionElements = collection.elements

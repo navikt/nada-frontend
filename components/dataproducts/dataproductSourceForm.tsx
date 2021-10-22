@@ -12,7 +12,7 @@ import Tree, {
   NodeId as TreeNodeId,
   NodeList,
 } from '@naisutech/react-tree'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import { Fieldset } from '@navikt/ds-react'
 
 // This is a bit of a mess. We are pulling data from three different sources, in three different formats,
@@ -66,7 +66,7 @@ export const DataproductSourceForm = ({
 
   const [nodes, setNodes] = useState<NodeList>([])
 
-  const user = useContext(AuthState).user
+  const user = useContext(UserState).user
 
   register('owner.group')
   register('datasource.project_id')
@@ -197,7 +197,6 @@ export const DataproductSourceForm = ({
   }, [tablesInProject])
 
   const openCloseHandler = (nodeIds: TreeNodeId[]) => {
-    console.log(nodeIds)
     for (const nodeId of nodeIds) {
       const id = nodeId as string
 
@@ -212,7 +211,6 @@ export const DataproductSourceForm = ({
   }
 
   const selectHandler = (nodeId: TreeNodeId[]) => {
-    console.log(nodeId[0])
     if (!nodeId.length) return
 
     const id = nodeId[0] as string

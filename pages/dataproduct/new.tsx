@@ -1,10 +1,10 @@
 import PageLayout from '../../components/pageLayout'
 import { useContext } from 'react'
-import { AuthState } from '../../lib/context'
+import { UserState } from '../../lib/context'
 import { NewDataproductForm } from '../../components/dataproducts/newDataproductForm'
 
 const NewDataproduct = () => {
-  const user = useContext(AuthState).user
+  const user = useContext(UserState).user
 
   // FIXME: Blaffer feilmelding i påvente av user
   if (!user)

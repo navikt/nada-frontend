@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
@@ -12,6 +12,7 @@ import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import { Dataproduct } from '../../lib/schema/graphql'
+import { UserState } from '../../lib/context'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -28,6 +29,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
+  const userState = useContext(UserState)
   const router = useRouter()
 
   const deleteDataproduct = async (id: string) => {
@@ -52,13 +54,14 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
         <h1>{product.name}</h1>
-        <DotMenu
-          onEdit={() => setEdit(true)}
-          onDelete={async () => await deleteDataproduct(product.id)}
-        />
+        {userState ? (
+          <DotMenu
+            onEdit={() => setEdit(true)}
+            onDelete={async () => await deleteDataproduct(product.id)}
+          />
+        ) : null}
       </StyledDiv>
 
-      <div></div>
       <Box sx={{ bgcolor: 'background.paper' }}>
         <Tabs
           value={activeTab}

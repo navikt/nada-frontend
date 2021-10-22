@@ -42,7 +42,6 @@ export const NewDataproductForm = () => {
     const createdDataproduct = createDataproduct({
       variables: { input: requestData },
     })
-    console.log('data' + data)
     //const createdDataproduct = await apiPOST(`/api/dataproducts`, requestData)
     router.push(`/dataproduct/${data.id}`)
     setBackendError(undefined)
