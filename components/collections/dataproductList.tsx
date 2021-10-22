@@ -33,35 +33,13 @@ const AddButtonContainer = styled.div`
   }
 `
 
-interface AddDatasetButtonProps {
-  message?: string
-  onClick: React.MouseEventHandler
-  ariaLabel?: string
-}
-
-const AddDatasetButton = ({
-  message,
-  onClick,
-  ariaLabel,
-}: AddDatasetButtonProps) => {
-  const user = useContext(UserState).user
-
-  return (
-    <AddButtonContainer>
-      {message && <p>{message}</p>}
-      {user && <AddCircleFilled aria-label={ariaLabel} onClick={onClick} />}
-    </AddButtonContainer>
-  )
-}
-
 interface DataproductListProps {
   collection: CollectionSchema
 }
 
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
-  const user = useContext(UserState).user
-  const fetcher = (query: string) => request('/api/query', query)
+  const userState = useContext(UserState)
 
   const initCollectionElements = collection.elements
     ? collection.elements.map((e) => {
@@ -72,7 +50,6 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
     initCollectionElements
   )
-  const router = useRouter()
   const handleClick = (id: string) => {
     if (selectedProduct.includes(id)) {
       setSelectedProduct((selectedProduct) =>
@@ -119,7 +96,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
           collection.elements.map((d) => (
             <DataproductCard key={d.element_id} id={d.element_id} />
           ))}
-        {user && (
+        {userState && (
           <NewDataproductCard onClick={() => setShowNewDataproduct(true)} />
         )}
       </div>
