@@ -23,12 +23,6 @@ const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
           error={errors.description?.message}
         />
         <TextField
-          id="slug"
-          label="Slug"
-          {...register('slug')}
-          error={errors.slug?.message}
-        />
-        <TextField
           id="repo"
           label="Repo"
           {...register('repo')}

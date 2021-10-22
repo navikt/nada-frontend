@@ -10,6 +10,8 @@ import KeywordsInput from '../lib/KeywordsInput'
 
 import { Dataproduct } from '../../lib/schema/graphql'
 import { UpdateDataproduct } from '../../lib/schema/graphql'
+import { useMutation } from '@apollo/client'
+import { UPDATE_DATAPRODUCT } from '../../lib/queries/dataproduct/updateDataproduct'
 
 interface EditDatacollectionFormProps {
   dataproduct: Dataproduct
@@ -21,8 +23,8 @@ const EditDataproduct = ({
   close,
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
-  // const [updateDataproduct, { data, loading, error }] =
-  //   useMutation(UpdateDataproduct)
+  const [updateDataproduct, { data, loading, error }] =
+    useMutation(UPDATE_DATAPRODUCT)
   const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(updateDataproductValidation),
     defaultValues: {
@@ -39,9 +41,10 @@ const EditDataproduct = ({
   }
   const { errors } = formState
   const onSubmit = (requestData: any) => {
-    // const noe = updateDataproduct({
-    //   variables: { id: dataproduct.id, input: { name: 'noe', pii: true } },
-    // })
+    console.log(requestData)
+    const noe = updateDataproduct({
+      variables: { id: dataproduct.id, input: requestData },
+    })
     setBackendError(undefined)
     close()
   }
@@ -65,15 +68,3 @@ const EditDataproduct = ({
   )
 }
 export default EditDataproduct
-
-const sdsd = {
-  errors: [
-    {
-      message:
-        'Field "updateDataproduct" argument "input" of type "UpdateDataproduct!" is required but not provided.',
-      locations: [{ line: 2, column: 3 }],
-      extensions: { code: 'GRAPHQL_VALIDATION_FAILED' },
-    },
-  ],
-  data: null,
-}

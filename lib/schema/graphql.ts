@@ -331,7 +331,15 @@ export type UpdateDataproductMutationVariables = Exact<{
 
 export type UpdateDataproductMutation = {
   __typename?: 'Mutation'
-  updateDataproduct: { __typename?: 'Dataproduct'; id: string }
+  updateDataproduct: {
+    __typename?: 'Dataproduct'
+    id: string
+    name: string
+    description?: string | null | undefined
+    repo?: string | null | undefined
+    pii: boolean
+    keywords: Array<string>
+  }
 }
 
 export const CollectionProductsDocument = gql`
@@ -571,6 +579,11 @@ export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
     updateDataproduct(id: $id, input: $input) {
       id
+      name
+      description
+      repo
+      pii
+      keywords
     }
   }
 `
