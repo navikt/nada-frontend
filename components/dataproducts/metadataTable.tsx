@@ -37,15 +37,15 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
   <StyledMetadataTable>
     <tr>
       <th>Type:</th>
-      <td>{product.type}</td>
+      <td>{product.datasource?.__typename || 'who knows right'}</td>
     </tr>
     <tr>
       <th>Team:</th>
       <td>
-        {product.owner.teamkatalogen ? (
+        {product.owner?.teamkatalogen ? (
           <Link href={product.owner.teamkatalogen}>{product.owner.group}</Link>
         ) : (
-          product.owner.group
+          product.owner?.group
         )}
       </td>
     </tr>

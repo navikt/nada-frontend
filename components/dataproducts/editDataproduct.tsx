@@ -10,9 +10,10 @@ import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
+import { Dataproduct, DataproductQuery } from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
-  dataproduct: DataproductSchema
+  dataproduct: Dataproduct
   close: () => void
 }
 
@@ -27,7 +28,6 @@ const EditDataproduct = ({
       name: dataproduct.name,
       description: dataproduct.description,
       repo: dataproduct.repo,
-      slug: dataproduct.slug,
       keywords: dataproduct.keywords,
       pii: dataproduct.pii,
     },

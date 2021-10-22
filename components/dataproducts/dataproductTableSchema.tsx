@@ -17,9 +17,10 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { Dataproduct } from '../../lib/schema/graphql'
 
 interface DatasetTableSchemaProps {
-  product: DataproductSchema
+  product: Dataproduct
 }
 
 const LinkDiv = styled.div`

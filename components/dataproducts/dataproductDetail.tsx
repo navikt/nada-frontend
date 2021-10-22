@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
+import { Dataproduct } from '../../lib/schema/graphql'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const StyledDiv = styled.div`
 `
 
 export interface DataproductDetailProps {
-  product: DataproductSchema
+  product: Dataproduct
 }
 
 export const DataproductDetail = ({ product }: DataproductDetailProps) => {

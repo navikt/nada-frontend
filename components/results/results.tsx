@@ -10,7 +10,8 @@ import {
 import { useRouter } from 'next/router'
 import SearchResultLink from './searchResult'
 import { request } from 'graphql-request'
-import { allDataProducts } from '../lib/queries/dataproduct'
+import { AllDataproducts } from '../../lib/queries/dataproduct'
+import { useAllDataproductsQuery } from '../../lib/schema/graphql'
 
 const NoResultsYetBox = styled.div`
   margin: 0 auto;
@@ -24,12 +25,8 @@ export function Results({ limit }: ResultsProps) {
   const router = useRouter()
   let { q } = router.query
   if (typeof q !== 'string') q = ''
-  const fetcher = (query: string) => request('/api/query', query)
 
-  const { data, error } = useSWR<AllDataproductsSchema, Error>(
-    allDataProducts,
-    fetcher
-  )
+  const { data, loading, error } = useAllDataproductsQuery()
 
   if (error) {
     return (

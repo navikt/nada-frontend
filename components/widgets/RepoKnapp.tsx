@@ -1,18 +1,12 @@
 import GithubIcon from '../lib/icons/github'
 import styled from 'styled-components'
 import Link from 'next/link'
+import { Maybe } from '../../lib/schema/graphql'
 
 interface RepoKnappProps {
-  url?: string
+  url?: Maybe<string>
 }
-const RepoKnappDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0.5em auto;
-  svg {
-    margin-right: 0.5em;
-  }
-`
+
 const isValidHttpUrl = (candidate: string) => {
   let url
 

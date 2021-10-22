@@ -1,5 +1,4 @@
 import {
-  CollectionElement,
   CollectionSchema,
   DataproductSchema,
   SearchResultEntry,
@@ -13,12 +12,15 @@ import { Button, Loader, Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
 import useSWR, { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
-import fetcher from '../../lib/api/fetcher'
 import SearchResult from './collectionElement'
 import apiPOST from '../../lib/api/post'
 import { useRouter } from 'next/router'
-import { allDataProducts } from '../lib/queries/dataproduct'
+import {
+  CollectionElement,
+  useCollectionProductsQuery,
+} from '../../lib/schema/graphql'
 import { request } from 'graphql-request'
+import { CollectionProducts } from '../../lib/queries/dataproduct'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -66,7 +68,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   const fetcher = (query: string) => request('/api/query', query)
 
   const initCollectionElements = collection.elements
-    ? collection.elements.map((e: CollectionElement) => {
+    ? collection.elements.map((e) => {
         return e.element_id
       })
     : []
@@ -85,10 +87,9 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
     }
   }
 
-  const { data, error } = useSWR<DataproductSchema[], Error>(
-    allDataProducts,
-    fetcher
-  )
+  const { data, loading, error } = useCollectionProductsQuery({
+    variables: { id: collection.id },
+  })
 
   if (error) {
     return <h1>Error</h1>
@@ -119,7 +120,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {collection.elements &&
-          collection.elements.map((d: CollectionElement) => (
+          collection.elements.map((d) => (
             <DataproductCard key={d.element_id} id={d.element_id} />
           ))}
         {user && (
@@ -133,11 +134,11 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       >
         <Modal.Content>
           <div>
-            {!data.length ? (
+            {!data.collection.elements.length ? (
               <div>Ingen resultater funnet</div>
             ) : (
-              data
-                .filter((d) => d.type === 'dataproduct')
+              data.collection.elements
+                .filter((d) => d.__typename === 'Dataproduct')
                 .map((d) => {
                   return (
                     <SearchResult

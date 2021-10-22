@@ -9,7 +9,12 @@ import { AuthState } from '../lib/context'
 import Head from 'next/head'
 
 import '@fontsource/source-sans-pro'
-
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+const client = new ApolloClient({
+  ssrMode: typeof window === 'undefined',
+  uri: 'http://localhost:8080/query',
+  cache: new InMemoryCache(),
+})
 function MyApp({ Component, pageProps }: AppProps) {
   const [userState, setUserState] = useState<UserInfoSchema>()
 
@@ -20,32 +25,34 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => setUserState(data), [data, error])
 
   return (
-    <AuthState.Provider value={{ user: userState, setUser: setUserState }}>
-      <Head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-        <meta name="msapplication-TileColor" content="#00aba9" />
-        <meta name="theme-color" content="#ffffff" />
-      </Head>
-      <Component {...pageProps} />
-    </AuthState.Provider>
+    <ApolloProvider client={client}>
+      <AuthState.Provider value={{ user: userState, setUser: setUserState }}>
+        <Head>
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+          />
+          <link rel="manifest" href="/site.webmanifest" />
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+          <meta name="msapplication-TileColor" content="#00aba9" />
+          <meta name="theme-color" content="#ffffff" />
+        </Head>
+        <Component {...pageProps} />
+      </AuthState.Provider>
+    </ApolloProvider>
   )
 }
 export default MyApp

@@ -1,10 +1,6 @@
-import {
-  DataproductSchema,
-  SearchResultEntryType,
-} from '../../lib/schema/schema_types'
-import { SearchResultLinkProps } from './searchResult'
 import styled from 'styled-components'
 import { logoMap } from '../lib/icons/logoMap'
+import { Dataproduct } from '../../lib/schema/graphql'
 
 const LogoSidebarDiv = styled.div`
   flex: 0 0 90px;
@@ -34,12 +30,13 @@ const typeNameMap: Record<string, string> = {
 }
 
 export interface LogoSideProps {
-  result: DataproductSchema
+  result: Dataproduct
 }
 
+//FIXME: Bad handling of potentially undefined to get GraphQL up and running
 export const LogoSidebar = ({ result }: LogoSideProps) => (
   <LogoSidebarDiv>
-    {logoMap[result.type]}
-    <p>{typeNameMap[result.type]}</p>
+    {logoMap[result.__typename || 'Dataproduct']}
+    <p>{typeNameMap[result.__typename || 'Dataproduct']}</p>
   </LogoSidebarDiv>
 )
