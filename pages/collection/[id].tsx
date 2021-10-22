@@ -11,6 +11,11 @@ import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
 import { CollectionDetail } from '../../components/collections/collectionDetail'
 import LoaderSpinner from '../../components/lib/spinner'
+import {
+  useCollectionProductsQuery,
+  useCollectionQuery,
+  useDataproductQuery,
+} from '../../lib/schema/graphql'
 
 const getBothURLs = (apiEndpoint: string) => [
   `/api${apiEndpoint}`,
@@ -42,30 +47,9 @@ const prefetchDataproducts = async (
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = context?.params?.id
-  if (typeof id !== 'string') return { props: {} }
+  const { id } = context.query
 
-  const fallbackName = `/api/collections/${id}`
-  const backendURL = `${getBackendURI()}/collections/${id}`
-
-  try {
-    const datacollection = await fetcher(backendURL)
-
-    const dataproductPrefetches = await prefetchDataproducts(
-      datacollection.datasets
-    )
-
-    return {
-      props: {
-        fallback: {
-          [fallbackName]: datacollection,
-          ...dataproductPrefetches,
-        },
-      },
-    }
-  } catch (e: any) {
-    return { props: { fallback: {} } }
-  }
+  return { props: { id } }
 }
 
 interface DatacollectionFetcherProps {
@@ -73,10 +57,10 @@ interface DatacollectionFetcherProps {
 }
 
 const DatacollectionFetcher = ({ id }: DatacollectionFetcherProps) => {
-  const { data, error } = useSWR<CollectionSchema>(
-    `/api/collections/${id}`,
-    fetcher
-  )
+  // FIXME: Overly broad GraphQL query for this
+  const { data, loading, error } = useCollectionQuery({
+    variables: { id },
+  })
 
   if (error)
     return (
@@ -87,7 +71,7 @@ const DatacollectionFetcher = ({ id }: DatacollectionFetcherProps) => {
 
   if (!data) return <LoaderSpinner />
 
-  return <CollectionDetail collection={data} />
+  return <CollectionDetail collection={data.collection} />
 }
 
 interface DatacollectionProps {

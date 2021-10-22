@@ -5,17 +5,23 @@ import { UserState } from '../../lib/context'
 import { useRouter } from 'next/router'
 import { apiPOST } from '../../lib/api/post'
 import { NewCollectionForm } from '../../components/collections/newCollectionForm'
+import { useMutation } from '@apollo/client'
+import { CREATE_COLLECTION } from '../../lib/queries/collection/newCollection'
 
 const NewCollection = () => {
   const router = useRouter()
 
   const [backendError, setBackendError] = useState()
-  const user = useContext(UserState).user
+  const user = useContext(UserState)
+  const [createCollection, { data, loading, error }] =
+    useMutation(CREATE_COLLECTION)
 
-  const onSubmit = async (requestData: any) => {
+  const onSubmit = async (input: any) => {
     try {
-      const createdCollection = await apiPOST(`/api/collections`, requestData)
-      router.push(`/collection/${createdCollection.id}`)
+      const { data } = await createCollection({
+        variables: { input },
+      })
+      router.push(`/collection/${data.createCollection.id}`)
       setBackendError(undefined)
     } catch (e: any) {
       setBackendError(e.toString())

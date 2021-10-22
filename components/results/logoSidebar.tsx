@@ -26,7 +26,7 @@ const LogoSidebarDiv = styled.div`
 const typeNameMap: Record<string, string> = {
   collection: 'Datasamling',
   datapackage: 'Datapakke',
-  dataproduct: 'Dataprodukt',
+  Dataproduct: 'Dataprodukt',
 }
 
 export interface LogoSideProps {

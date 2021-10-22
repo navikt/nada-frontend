@@ -11,9 +11,6 @@ import { navGronn, navRod } from '../../styles/constants'
 import { Success, Warning } from '@navikt/ds-icons'
 import Keyword from '../widgets/Keyword'
 
-const humanizeDate = (isoDate: string) =>
-  format(parseISO(isoDate), 'PPPP', { locale: nb })
-
 const StyledMetadataTable = styled.table`
   th,
   td {

@@ -4,8 +4,13 @@ import { MicroCard } from '@navikt/ds-react'
 import { CollectionDetailProps } from './collectionDetail'
 import styled from 'styled-components'
 
-const humanizeDate = (isoDate: string) =>
-  format(parseISO(isoDate), 'PPPP', { locale: nb })
+const humanizeDate = (isoDate: string) => {
+  try {
+    return format(parseISO(isoDate), 'PPPP', { locale: nb })
+  } catch (e) {
+    return ''
+  }
+}
 
 const StyledMetadataTable = styled.table`
   th,
@@ -34,7 +39,7 @@ export const MetadataTable = ({ collection }: CollectionDetailProps) => (
       </tr>
       <tr>
         <th>Oppdatert:</th>
-        <td>{humanizeDate(collection.last_modified)}</td>
+        <td>{humanizeDate(collection.lastModified)}</td>
       </tr>
       <tr>
         <th>Nøkkelord:</th>

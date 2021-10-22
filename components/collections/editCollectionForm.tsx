@@ -8,9 +8,10 @@ import { apiPUT } from '../../lib/api/put'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { mutate } from 'swr'
 import KeywordsInput from '../lib/KeywordsInput'
+import { Collection, CollectionQuery } from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
-  collection: CollectionSchema
+  collection: CollectionQuery['collection']
   close: () => void
 }
 

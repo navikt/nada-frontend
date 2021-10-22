@@ -4,9 +4,8 @@ import { UserState } from '../../lib/context'
 import { NewDataproductForm } from '../../components/dataproducts/newDataproductForm'
 
 const NewDataproduct = () => {
-  const user = useContext(UserState).user
+  const user = useContext(UserState)
 
-  // FIXME: Blaffer feilmelding i påvente av user
   if (!user)
     return (
       <PageLayout>

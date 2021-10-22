@@ -6,10 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
-
-const NewCollectionFormOptions = {
-  resolver: yupResolver(newCollectionValidation),
-}
+import { useMutation } from '@apollo/client'
+import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
+import { CREATE_COLLECTION } from '../../lib/queries/collection/newCollection'
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
@@ -20,17 +19,15 @@ export const NewCollectionForm = ({
   onSubmit,
   onCancel,
 }: NewDatacollectionFormProps) => {
-  const { register, handleSubmit, formState, setValue } = useForm(
-    NewCollectionFormOptions
-  )
-  const { errors } = formState
-
-  const user = useContext(UserState).user
-  const groups = user?.groups
-
   const [keywords, setKeywords] = useState<string[]>([])
+  const { register, handleSubmit, formState, setValue } = useForm({
+    resolver: yupResolver(newCollectionValidation),
+  })
   // propagates change in keywords state to useForm state
   useEffect(() => setValue('keywords', keywords), [keywords])
+  const { errors } = formState
+
+  const groups = useContext(UserState)?.groups
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -47,17 +44,10 @@ export const NewCollectionForm = ({
           {...register('description')}
           error={errors.description?.message}
         />
-        <TextField
-          id="slug"
-          label="Slug"
-          {...register('slug')}
-          error={errors.slug?.message}
-          description={'Slug-teksten blir brukt som URL'}
-        />
         <Select
           label="Team"
-          {...register('owner.group')}
-          error={errors.owner?.group?.message}
+          {...register('group')}
+          error={errors.group?.message}
         >
           <option value="">Velg team</option>
           {groups?.map((group) => (

@@ -1,10 +1,4 @@
-import {
-  CollectionSchema,
-  DataproductSchema,
-  SearchResultEntry,
-} from '../../lib/schema/schema_types'
 import { useContext, useState } from 'react'
-import { AddCircleFilled } from '@navikt/ds-icons'
 import styled from 'styled-components'
 import { navBla } from '../../styles/constants'
 import { UserState } from '../../lib/context'
@@ -14,9 +8,7 @@ import { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
 import SearchResult from './collectionElement'
 import apiPOST from '../../lib/api/post'
-import { useRouter } from 'next/router'
-import { useCollectionProductsQuery } from '../../lib/schema/graphql'
-import { request } from 'graphql-request'
+import { CollectionQuery } from '../../lib/schema/graphql'
 
 const AddButtonContainer = styled.div`
   display: flex;
@@ -34,7 +26,7 @@ const AddButtonContainer = styled.div`
 `
 
 interface DataproductListProps {
-  collection: CollectionSchema
+  collection: CollectionQuery['collection']
 }
 
 export const DataproductList = ({ collection }: DataproductListProps) => {
@@ -42,9 +34,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   const userState = useContext(UserState)
 
   const initCollectionElements = collection.elements
-    ? collection.elements.map((e) => {
-        return e.element_id
-      })
+    ? collection.elements.map((e) => e.id)
     : []
 
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
@@ -58,18 +48,6 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
     } else {
       setSelectedProduct((selectedProduct) => [...selectedProduct, id])
     }
-  }
-
-  const { data, loading, error } = useCollectionProductsQuery({
-    variables: { id: collection.id },
-  })
-
-  if (error) {
-    return <h1>Error</h1>
-  }
-
-  if (!data) {
-    return <Loader transparent />
   }
 
   const handleSubmit = async () => {
@@ -94,7 +72,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {collection.elements &&
           collection.elements.map((d) => (
-            <DataproductCard key={d.element_id} id={d.element_id} />
+            <DataproductCard key={d.id} id={d.id} />
           ))}
         {userState && (
           <NewDataproductCard onClick={() => setShowNewDataproduct(true)} />
@@ -107,12 +85,14 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       >
         <Modal.Content>
           <div>
-            {!data.collection.elements.length ? (
+            {!collection.elements.length ? (
               <div>Ingen resultater funnet</div>
             ) : (
-              data.collection.elements
+              collection.elements
                 .filter((d) => d.__typename === 'Dataproduct')
                 .map((d) => {
+                  return <p>Placeholder</p>
+                  /*
                   return (
                     <SearchResult
                       key={d.id}
@@ -120,7 +100,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
                       selected={selectedProduct.includes(d.id)}
                       handleClick={handleClick}
                     />
-                  )
+                  )*/
                 })
             )}
             <Button onClick={handleSubmit}>Ferdig</Button>

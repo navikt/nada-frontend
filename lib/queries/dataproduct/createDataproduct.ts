@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag'
 
-export const NEW_DATAPRODUCT = gql`
+export const CREATE_DATAPRODUCT = gql`
   mutation createDataproduct($input: NewDataproduct!) {
     createDataproduct(input: $input) {
       name
@@ -9,7 +9,6 @@ export const NEW_DATAPRODUCT = gql`
       pii
       keywords
       created
-      lastModified
       owner {
         group
         teamkatalogen

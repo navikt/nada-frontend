@@ -1,9 +1,5 @@
-import { DataproductSchema } from '../../lib/schema/schema_types'
-import useSWR from 'swr'
 import Link from 'next/link'
-
 import { Card, CardHeader, CardContent, CardActions } from '@mui/material'
-import { fetcher } from '../../lib/api/fetcher'
 import DataProductSpinner from '../lib/spinner'
 import {
   navBlaLighten80,
@@ -16,6 +12,7 @@ import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { Success, Warning } from '@navikt/ds-icons'
 import Keyword from '../widgets/Keyword'
+import { useDataproductSummaryQuery } from '../../lib/schema/graphql'
 
 interface DataproductCardProps {
   id: string
@@ -56,10 +53,9 @@ const InertDatasetCardDiv = styled(DatasetCardDiv)`
 `
 
 const DataproductCard = ({ id }: DataproductCardProps) => {
-  const { data, error } = useSWR<DataproductSchema>(
-    `/api/dataproducts/${id}`,
-    fetcher
-  )
+  const { data, loading, error } = useDataproductSummaryQuery({
+    variables: { id },
+  })
 
   if (error)
     return (
@@ -79,12 +75,14 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
       </InertDatasetCardDiv>
     )
 
+  const dataproduct = data.dataproduct
+
   return (
-    <Link href={`/dataproduct/${data.id}`} passHref>
+    <Link href={`/dataproduct/${dataproduct.id}`} passHref>
       <DatasetCardDiv>
         <CardHeader
-          title={data.name}
-          subheader={data.type || 'BigQuery'}
+          title={dataproduct.name}
+          subheader={dataproduct.datasource.__typename || '?'}
           avatar={<BigQueryLogo size={48} />}
         />
         <CardContent
@@ -93,8 +91,10 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
           }}
         >
           <i>
-            {data.description && data.description.substr(0, 200)}
-            {data.description && data.description.length > 200 && '...'}
+            {dataproduct.description && dataproduct.description.substr(0, 200)}
+            {dataproduct.description &&
+              dataproduct.description.length > 200 &&
+              '...'}
           </i>
         </CardContent>
         <CardActions
@@ -103,7 +103,7 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
           <PiiBox>
             <i style={{ fontSize: 'small' }}>PII</i>
             <IconBox size={24}>
-              {data.pii ? (
+              {dataproduct.pii ? (
                 <Success color={navGronn} />
               ) : (
                 <Warning color={navRod} />
@@ -113,8 +113,10 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
           <TagsBox>
             <i style={{ fontSize: 'small' }}>Nøkkelord</i>
             <div>
-              {data.keywords &&
-                data.keywords.map((k) => <Keyword key={k} keyword={k} small />)}
+              {dataproduct.keywords &&
+                dataproduct.keywords.map((k) => (
+                  <Keyword key={k} keyword={k} small />
+                ))}
             </div>
           </TagsBox>
         </CardActions>

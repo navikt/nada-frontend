@@ -1,4 +1,3 @@
-import { CollectionSchema } from '../../lib/schema/schema_types'
 import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
 import { EditCollectionForm } from './editCollectionForm'
@@ -9,9 +8,10 @@ import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
+import { CollectionQuery } from '../../lib/schema/graphql'
 
 export interface CollectionDetailProps {
-  collection: CollectionSchema
+  collection: CollectionQuery['collection']
 }
 
 const StyledEdit = styled.div`
@@ -22,6 +22,7 @@ const StyledEdit = styled.div`
 `
 
 export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
+  console.log('Hello I have a collection and that is', collection)
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
@@ -35,10 +36,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   }
 
   return edit ? (
-    <EditCollectionForm
-      collection={collection}
-      close={() => setEdit(false)}
-    />
+    <EditCollectionForm collection={collection} close={() => setEdit(false)} />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}

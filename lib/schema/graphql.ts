@@ -261,34 +261,35 @@ export type UserInfo = {
   name: Scalars['String']
 }
 
-export type CollectionProductsQueryVariables = Exact<{
+export type CollectionQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type CollectionProductsQuery = {
+export type CollectionQuery = {
   __typename?: 'Query'
   collection: {
     __typename?: 'Collection'
     id: string
+    name: string
+    description?: string | null | undefined
+    created: any
+    keywords: Array<string>
+    lastModified: any
     elements: Array<{
       __typename?: 'Dataproduct'
       id: string
-      created: any
-      keywords: Array<string>
-      lastModified: any
-      name: string
-      pii: boolean
       type: 'Dataproduct'
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
-      datasource: {
-        __typename?: 'BigQuery'
-        projectID: string
-        dataset: string
-        table: string
-        type: 'BigQuery'
-      }
     }>
   }
+}
+
+export type CreateCollectionMutationVariables = Exact<{
+  input: NewCollection
+}>
+
+export type CreateCollectionMutation = {
+  __typename?: 'Mutation'
+  createCollection: { __typename?: 'Collection'; id: string }
 }
 
 export type AllDataproductsQueryVariables = Exact<{ [key: string]: never }>
@@ -314,6 +315,30 @@ export type AllDataproductsQuery = {
       table: string
     }
   }>
+}
+
+export type CreateDataproductMutationVariables = Exact<{
+  input: NewDataproduct
+}>
+
+export type CreateDataproductMutation = {
+  __typename?: 'Mutation'
+  createDataproduct: {
+    __typename?: 'Dataproduct'
+    name: string
+    description?: string | null | undefined
+    repo?: string | null | undefined
+    pii: boolean
+    keywords: Array<string>
+    created: any
+    owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+    datasource: {
+      __typename?: 'BigQuery'
+      projectID: string
+      dataset: string
+      table: string
+    }
+  }
 }
 
 export type DataproductQueryVariables = Exact<{
@@ -343,28 +368,22 @@ export type DataproductQuery = {
   }
 }
 
-export type CreateDataproductMutationVariables = Exact<{
-  input: NewDataproduct
+export type DataproductSummaryQueryVariables = Exact<{
+  id: Scalars['ID']
 }>
 
-export type CreateDataproductMutation = {
-  __typename?: 'Mutation'
-  createDataproduct: {
+export type DataproductSummaryQuery = {
+  __typename?: 'Query'
+  dataproduct: {
     __typename?: 'Dataproduct'
+    id: string
+    lastModified: any
     name: string
     description?: string | null | undefined
-    repo?: string | null | undefined
+    created: any
     pii: boolean
     keywords: Array<string>
-    created: any
-    lastModified: any
-    owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
-    datasource: {
-      __typename?: 'BigQuery'
-      projectID: string
-      dataset: string
-      table: string
-    }
+    datasource: { __typename?: 'BigQuery'; type: 'BigQuery' }
   }
 }
 
@@ -398,31 +417,19 @@ export type User_InfoQuery = {
   }
 }
 
-export const CollectionProductsDocument = gql`
-  query CollectionProducts($id: ID!) {
+export const CollectionDocument = gql`
+  query Collection($id: ID!) {
     collection(id: $id) {
       id
+      name
+      description
+      created
+      keywords
+      lastModified
       elements {
         type: __typename
         ... on Dataproduct {
           id
-          created
-          keywords
-          lastModified
-          name
-          owner {
-            group
-            teamkatalogen
-          }
-          pii
-          datasource {
-            type: __typename
-            ... on BigQuery {
-              projectID
-              dataset
-              table
-            }
-          }
         }
       }
     }
@@ -430,54 +437,102 @@ export const CollectionProductsDocument = gql`
 `
 
 /**
- * __useCollectionProductsQuery__
+ * __useCollectionQuery__
  *
- * To run a query within a React component, call `useCollectionProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollectionProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCollectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCollectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCollectionProductsQuery({
+ * const { data, loading, error } = useCollectionQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useCollectionProductsQuery(
+export function useCollectionQuery(
   baseOptions: Apollo.QueryHookOptions<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
+    CollectionQuery,
+    CollectionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
-  >(CollectionProductsDocument, options)
+  return Apollo.useQuery<CollectionQuery, CollectionQueryVariables>(
+    CollectionDocument,
+    options
+  )
 }
-export function useCollectionProductsLazyQuery(
+export function useCollectionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
+    CollectionQuery,
+    CollectionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    CollectionProductsQuery,
-    CollectionProductsQueryVariables
-  >(CollectionProductsDocument, options)
+  return Apollo.useLazyQuery<CollectionQuery, CollectionQueryVariables>(
+    CollectionDocument,
+    options
+  )
 }
-export type CollectionProductsQueryHookResult = ReturnType<
-  typeof useCollectionProductsQuery
+export type CollectionQueryHookResult = ReturnType<typeof useCollectionQuery>
+export type CollectionLazyQueryHookResult = ReturnType<
+  typeof useCollectionLazyQuery
 >
-export type CollectionProductsLazyQueryHookResult = ReturnType<
-  typeof useCollectionProductsLazyQuery
+export type CollectionQueryResult = Apollo.QueryResult<
+  CollectionQuery,
+  CollectionQueryVariables
 >
-export type CollectionProductsQueryResult = Apollo.QueryResult<
-  CollectionProductsQuery,
-  CollectionProductsQueryVariables
+export const CreateCollectionDocument = gql`
+  mutation createCollection($input: NewCollection!) {
+    createCollection(input: $input) {
+      id
+    }
+  }
+`
+export type CreateCollectionMutationFn = Apollo.MutationFunction<
+  CreateCollectionMutation,
+  CreateCollectionMutationVariables
+>
+
+/**
+ * __useCreateCollectionMutation__
+ *
+ * To run a mutation, you first call `useCreateCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCollectionMutation, { data, loading, error }] = useCreateCollectionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCollectionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCollectionMutation,
+    CreateCollectionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateCollectionMutation,
+    CreateCollectionMutationVariables
+  >(CreateCollectionDocument, options)
+}
+export type CreateCollectionMutationHookResult = ReturnType<
+  typeof useCreateCollectionMutation
+>
+export type CreateCollectionMutationResult =
+  Apollo.MutationResult<CreateCollectionMutation>
+export type CreateCollectionMutationOptions = Apollo.BaseMutationOptions<
+  CreateCollectionMutation,
+  CreateCollectionMutationVariables
 >
 export const AllDataproductsDocument = gql`
   query AllDataproducts {
@@ -556,6 +611,72 @@ export type AllDataproductsQueryResult = Apollo.QueryResult<
   AllDataproductsQuery,
   AllDataproductsQueryVariables
 >
+export const CreateDataproductDocument = gql`
+  mutation createDataproduct($input: NewDataproduct!) {
+    createDataproduct(input: $input) {
+      name
+      description
+      repo
+      pii
+      keywords
+      created
+      owner {
+        group
+        teamkatalogen
+      }
+      datasource {
+        ... on BigQuery {
+          projectID
+          dataset
+          table
+        }
+      }
+    }
+  }
+`
+export type CreateDataproductMutationFn = Apollo.MutationFunction<
+  CreateDataproductMutation,
+  CreateDataproductMutationVariables
+>
+
+/**
+ * __useCreateDataproductMutation__
+ *
+ * To run a mutation, you first call `useCreateDataproductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDataproductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDataproductMutation, { data, loading, error }] = useCreateDataproductMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDataproductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDataproductMutation,
+    CreateDataproductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateDataproductMutation,
+    CreateDataproductMutationVariables
+  >(CreateDataproductDocument, options)
+}
+export type CreateDataproductMutationHookResult = ReturnType<
+  typeof useCreateDataproductMutation
+>
+export type CreateDataproductMutationResult =
+  Apollo.MutationResult<CreateDataproductMutation>
+export type CreateDataproductMutationOptions = Apollo.BaseMutationOptions<
+  CreateDataproductMutation,
+  CreateDataproductMutationVariables
+>
 export const DataproductDocument = gql`
   query Dataproduct($id: ID!) {
     dataproduct(id: $id) {
@@ -631,72 +752,72 @@ export type DataproductQueryResult = Apollo.QueryResult<
   DataproductQuery,
   DataproductQueryVariables
 >
-export const CreateDataproductDocument = gql`
-  mutation createDataproduct($input: NewDataproduct!) {
-    createDataproduct(input: $input) {
+export const DataproductSummaryDocument = gql`
+  query DataproductSummary($id: ID!) {
+    dataproduct(id: $id) {
+      id
+      lastModified
       name
       description
-      repo
+      created
       pii
       keywords
-      created
-      lastModified
-      owner {
-        group
-        teamkatalogen
-      }
       datasource {
-        ... on BigQuery {
-          projectID
-          dataset
-          table
-        }
+        type: __typename
       }
     }
   }
 `
-export type CreateDataproductMutationFn = Apollo.MutationFunction<
-  CreateDataproductMutation,
-  CreateDataproductMutationVariables
->
 
 /**
- * __useCreateDataproductMutation__
+ * __useDataproductSummaryQuery__
  *
- * To run a mutation, you first call `useCreateDataproductMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDataproductMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useDataproductSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDataproductSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [createDataproductMutation, { data, loading, error }] = useCreateDataproductMutation({
+ * const { data, loading, error } = useDataproductSummaryQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useCreateDataproductMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateDataproductMutation,
-    CreateDataproductMutationVariables
+export function useDataproductSummaryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    DataproductSummaryQuery,
+    DataproductSummaryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateDataproductMutation,
-    CreateDataproductMutationVariables
-  >(CreateDataproductDocument, options)
+  return Apollo.useQuery<
+    DataproductSummaryQuery,
+    DataproductSummaryQueryVariables
+  >(DataproductSummaryDocument, options)
 }
-export type CreateDataproductMutationHookResult = ReturnType<
-  typeof useCreateDataproductMutation
+export function useDataproductSummaryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    DataproductSummaryQuery,
+    DataproductSummaryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    DataproductSummaryQuery,
+    DataproductSummaryQueryVariables
+  >(DataproductSummaryDocument, options)
+}
+export type DataproductSummaryQueryHookResult = ReturnType<
+  typeof useDataproductSummaryQuery
 >
-export type CreateDataproductMutationResult =
-  Apollo.MutationResult<CreateDataproductMutation>
-export type CreateDataproductMutationOptions = Apollo.BaseMutationOptions<
-  CreateDataproductMutation,
-  CreateDataproductMutationVariables
+export type DataproductSummaryLazyQueryHookResult = ReturnType<
+  typeof useDataproductSummaryLazyQuery
+>
+export type DataproductSummaryQueryResult = Apollo.QueryResult<
+  DataproductSummaryQuery,
+  DataproductSummaryQueryVariables
 >
 export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
