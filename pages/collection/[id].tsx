@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
 import useSWR, { SWRConfig } from 'swr'
 import {
-  CollectionSchema,
   DataproductSchema,
   DataproductSummary,
 } from '../../lib/schema/schema_types'
@@ -11,11 +10,7 @@ import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
 import { CollectionDetail } from '../../components/collections/collectionDetail'
 import LoaderSpinner from '../../components/lib/spinner'
-import {
-  useCollectionProductsQuery,
-  useCollectionQuery,
-  useDataproductQuery,
-} from '../../lib/schema/graphql'
+import { useCollectionQuery } from '../../lib/schema/graphql'
 
 const getBothURLs = (apiEndpoint: string) => [
   `/api${apiEndpoint}`,
@@ -56,24 +51,6 @@ interface DatacollectionFetcherProps {
   id: string
 }
 
-const DatacollectionFetcher = ({ id }: DatacollectionFetcherProps) => {
-  // FIXME: Overly broad GraphQL query for this
-  const { data, loading, error } = useCollectionQuery({
-    variables: { id },
-  })
-
-  if (error)
-    return (
-      <div>
-        Error:<p>{error.toString()}</p>
-      </div>
-    )
-
-  if (!data) return <LoaderSpinner />
-
-  return <CollectionDetail collection={data.collection} />
-}
-
 interface DatacollectionProps {
   fallback?: DataproductSchema
 }
@@ -86,9 +63,7 @@ const Datacollection = ({ fallback }: DatacollectionProps) => {
 
   return (
     <PageLayout>
-      <SWRConfig value={{ fallback }}>
-        <DatacollectionFetcher id={id} />
-      </SWRConfig>
+      <CollectionDetail id={id} />
     </PageLayout>
   )
 }

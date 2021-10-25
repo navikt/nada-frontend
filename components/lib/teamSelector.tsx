@@ -10,7 +10,11 @@ type TeamSelectorProps = {
 export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
   const user = useContext(UserState)
   return (
-    <Select label="Team" {...register('group')} error={errors.group?.message}>
+    <Select
+      label="Team"
+      {...register('owner.group')}
+      error={errors.owner?.group?.message}
+    >
       <option value="">Velg team</option>
       {user?.groups?.map((group) => (
         <option value={group.email} key={group.name}>

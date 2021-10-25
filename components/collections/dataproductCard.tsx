@@ -83,7 +83,11 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
         <CardHeader
           title={dataproduct.name}
           subheader={dataproduct.datasource.__typename || '?'}
-          avatar={<BigQueryLogo size={48} />}
+          avatar={
+            <IconBox size={48}>
+              <BigQueryLogo />
+            </IconBox>
+          }
         />
         <CardContent
           sx={{

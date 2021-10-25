@@ -1,8 +1,8 @@
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
 import { MicroCard } from '@navikt/ds-react'
-import { CollectionDetailProps } from './collectionDetail'
 import styled from 'styled-components'
+import { CollectionQuery } from '../../lib/schema/graphql'
 
 const humanizeDate = (isoDate: string) => {
   try {
@@ -30,7 +30,11 @@ const StyledMetadataTable = styled.table`
   }
 `
 
-export const MetadataTable = ({ collection }: CollectionDetailProps) => (
+export interface MetadataTableProps {
+  collection: CollectionQuery['collection']
+}
+
+export const MetadataTable = ({ collection }: MetadataTableProps) => (
   <StyledMetadataTable>
     <tbody>
       <tr>

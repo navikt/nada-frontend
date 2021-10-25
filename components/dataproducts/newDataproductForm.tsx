@@ -50,6 +50,12 @@ export const NewDataproductForm = () => {
       {backendError && <ErrorMessage error={backendError} />}
       <DataproductForm register={register} errors={errors} watch={watch} />
       <TeamSelector register={register} errors={errors} />
+      <DataproductSourceForm
+        register={register}
+        watch={watch}
+        errors={errors}
+        setValue={setValue}
+      />
       <PiiCheckboxInput register={register} watch={watch} />
       <KeywordsInput
         keywords={keywords}

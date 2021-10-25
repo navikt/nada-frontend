@@ -17,7 +17,7 @@ const SearchPage: NextPage = () => (
     <LandingPageDiv>
       <LargeSearchBox />
       <h1>Nyeste ressurser</h1>
-      <Results limit={4} />
+      <Results />
     </LandingPageDiv>
   </PageLayout>
 )

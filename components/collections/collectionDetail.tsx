@@ -8,10 +8,11 @@ import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
-import { CollectionQuery } from '../../lib/schema/graphql'
+import { CollectionQuery, useCollectionQuery } from '../../lib/schema/graphql'
+import LoaderSpinner from '../lib/spinner'
 
 export interface CollectionDetailProps {
-  collection: CollectionQuery['collection']
+  id: string
 }
 
 const StyledEdit = styled.div`
@@ -21,8 +22,11 @@ const StyledEdit = styled.div`
   align-items: center;
 `
 
-export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
-  console.log('Hello I have a collection and that is', collection)
+export const CollectionDetail = ({ id }: CollectionDetailProps) => {
+  const { data, loading, error } = useCollectionQuery({
+    variables: { id },
+  })
+
   const [edit, setEdit] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
@@ -34,6 +38,17 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
       setBackendError(e.toString())
     }
   }
+
+  if (error)
+    return (
+      <div>
+        Error:<p>{error.toString()}</p>
+      </div>
+    )
+
+  if (loading || !data) return <LoaderSpinner />
+
+  const { collection } = data
 
   return edit ? (
     <EditCollectionForm collection={collection} close={() => setEdit(false)} />

@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import '@navikt/ds-css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { UserState } from '../lib/context'
 import Head from 'next/head'
 
