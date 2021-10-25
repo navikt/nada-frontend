@@ -87,7 +87,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         </ReactMarkdown>
       </TabPanel>
       <TabPanel index={2} value={activeTab}>
-        <DataproductTableSchema product={product} />
+        <DataproductTableSchema id={product.id} />
       </TabPanel>
       <TabPanel index={3} value={activeTab}>
         <div>Placeholder</div>

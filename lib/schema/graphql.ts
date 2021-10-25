@@ -387,6 +387,24 @@ export type DataproductSummaryQuery = {
   }
 }
 
+export type GetSchemaQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type GetSchemaQuery = {
+  __typename?: 'Query'
+  getTableMetadata: {
+    __typename?: 'TableMetadata'
+    schema: Array<{
+      __typename?: 'TableColumn'
+      type: string
+      name: string
+      description: string
+      mode: string
+    }>
+  }
+}
+
 export type UpdateDataproductMutationVariables = Exact<{
   id: Scalars['ID']
   input: UpdateDataproduct
@@ -818,6 +836,64 @@ export type DataproductSummaryLazyQueryHookResult = ReturnType<
 export type DataproductSummaryQueryResult = Apollo.QueryResult<
   DataproductSummaryQuery,
   DataproductSummaryQueryVariables
+>
+export const GetSchemaDocument = gql`
+  query getSchema($id: ID!) {
+    getTableMetadata(id: $id) {
+      schema {
+        type
+        name
+        description
+        mode
+      }
+    }
+  }
+`
+
+/**
+ * __useGetSchemaQuery__
+ *
+ * To run a query within a React component, call `useGetSchemaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSchemaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSchemaQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetSchemaQuery(
+  baseOptions: Apollo.QueryHookOptions<GetSchemaQuery, GetSchemaQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetSchemaQuery, GetSchemaQueryVariables>(
+    GetSchemaDocument,
+    options
+  )
+}
+export function useGetSchemaLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSchemaQuery,
+    GetSchemaQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetSchemaQuery, GetSchemaQueryVariables>(
+    GetSchemaDocument,
+    options
+  )
+}
+export type GetSchemaQueryHookResult = ReturnType<typeof useGetSchemaQuery>
+export type GetSchemaLazyQueryHookResult = ReturnType<
+  typeof useGetSchemaLazyQuery
+>
+export type GetSchemaQueryResult = Apollo.QueryResult<
+  GetSchemaQuery,
+  GetSchemaQueryVariables
 >
 export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {

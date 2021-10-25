@@ -1,8 +1,5 @@
 import useSWR from 'swr'
-import {
-  DataproductMetadata,
-  DataproductSchema,
-} from '../../lib/schema/schema_types'
+import { DataproductMetadata } from '../../lib/schema/schema_types'
 import { fetcher } from '../../lib/api/fetcher'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
@@ -15,31 +12,23 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import Link from 'next/link'
-import styled from 'styled-components'
-import { Dataproduct } from '../../lib/schema/graphql'
+import { useGetSchemaQuery } from '../../lib/schema/graphql'
 
-interface DatasetTableSchemaProps {
-  product: Dataproduct
+interface DataproductTableSchemaProps {
+  id: string
 }
 
-const LinkDiv = styled.div`
-  margin: 2em auto;
-`
-
-const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
-  const { data, error } = useSWR<DataproductMetadata>(
-    `/api/dataproducts/${product.id}/metadata`,
-    fetcher
-  )
+const DataproductTableSchema = ({ id }: DataproductTableSchemaProps) => {
+  const { data, error, loading } = useGetSchemaQuery({ variables: { id } })
 
   const gcpUrl = 'https://console.cloud.google.com'
 
   if (error) return <ErrorMessage error={error} />
 
-  if (!data) return <LoaderSpinner />
+  if (loading || !data) return <LoaderSpinner />
+  const { schema } = data.getTableMetadata
 
-  if (!data.schema) return <div>Ingen skjemainformasjon</div>
+  if (!schema) return <div>Ingen skjemainformasjon</div>
 
   return (
     <div>
@@ -54,7 +43,7 @@ const DataproductTableSchema = ({ product }: DatasetTableSchemaProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.schema.map((row) => (
+            {schema.map((row) => (
               <TableRow
                 key={row.name}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
