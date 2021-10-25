@@ -9,6 +9,13 @@ export const USER_INFO = gql`
         name
         email
       }
+      gcpProjects {
+        id
+        group {
+          name
+          email
+        }
+      }
     }
   }
 `

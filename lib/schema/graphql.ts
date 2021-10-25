@@ -76,6 +76,12 @@ export type Dataproduct = {
 
 export type Datasource = BigQuery
 
+export type GcpProject = {
+  __typename?: 'GCPProject'
+  group: Group
+  id: Scalars['String']
+}
+
 export type Group = {
   __typename?: 'Group'
   email: Scalars['String']
@@ -257,6 +263,7 @@ export type UpdateDataproduct = {
 export type UserInfo = {
   __typename?: 'UserInfo'
   email: Scalars['String']
+  gcpProjects: Array<GcpProject>
   groups: Array<Group>
   name: Scalars['String']
 }
@@ -456,6 +463,11 @@ export type User_InfoQuery = {
     name: string
     email: string
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
+    gcpProjects: Array<{
+      __typename?: 'GCPProject'
+      id: string
+      group: { __typename?: 'Group'; name: string; email: string }
+    }>
   }
 }
 
@@ -1100,6 +1112,13 @@ export const User_InfoDocument = gql`
       groups {
         name
         email
+      }
+      gcpProjects {
+        id
+        group {
+          name
+          email
+        }
       }
     }
   }
