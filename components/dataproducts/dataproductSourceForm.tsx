@@ -66,7 +66,7 @@ export const DataproductSourceForm = ({
 
   const [nodes, setNodes] = useState<NodeList>([])
 
-  const user = useContext(UserState).user
+  const user = useContext(UserState)
 
   register('owner.group')
   register('datasource.project_id')

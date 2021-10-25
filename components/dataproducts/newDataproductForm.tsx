@@ -2,8 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import { useEffect, useState } from 'react'
-import apiPOST from '../../lib/api/post'
-import { NewDataproductSchema } from '../../lib/schema/schema_types'
 import ErrorMessage from '../lib/error'
 import DataproductForm from './dataproductForm'
 import { useRouter } from 'next/router'
@@ -13,6 +11,7 @@ import KeywordsInput from '../lib/KeywordsInput'
 import { DataproductSourceForm } from './dataproductSourceForm'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
+import TeamSelector from '../lib/teamSelector'
 
 export const NewDataproductForm = () => {
   const { register, handleSubmit, watch, formState, setValue } = useForm({
@@ -38,24 +37,19 @@ export const NewDataproductForm = () => {
     }
   }, [projectID])
 
-  const onSubmit = async (requestData: NewDataproductSchema) => {
+  /*  const onSubmit = async (requestData: NewDataproductSchema) => {
     const createdDataproduct = createDataproduct({
       variables: { input: requestData },
     })
     router.push(`/dataproduct/${data.id}`)
     setBackendError(undefined)
   }
-
+*/
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(() => {})}>
       {backendError && <ErrorMessage error={backendError} />}
       <DataproductForm register={register} errors={errors} watch={watch} />
-      <DataproductSourceForm
-        register={register}
-        watch={watch}
-        errors={errors}
-        setValue={setValue}
-      />
+      <TeamSelector register={register} errors={errors} />
       <PiiCheckboxInput register={register} watch={watch} />
       <KeywordsInput
         keywords={keywords}
