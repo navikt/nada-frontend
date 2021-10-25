@@ -3,10 +3,9 @@ import { Fieldset, TextField } from '@navikt/ds-react'
 interface DataproductFormProps {
   register: any
   errors: any
-  watch: any
 }
 
-const DataproductForm = ({ register, errors, watch }: DataproductFormProps) => {
+const DataproductForm = ({ register, errors }: DataproductFormProps) => {
   return (
     <div>
       <Fieldset legend="Dataprodukt" errorPropagation={false}>

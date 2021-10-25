@@ -1,4 +1,4 @@
-import { Button } from '@navikt/ds-react'
+import { Button, Loader } from '@navikt/ds-react'
 import styled from 'styled-components'
 
 export const SubmitButton = styled.div`
@@ -10,11 +10,15 @@ export const SubmitButton = styled.div`
     margin: 1em 0 1em 1em;
   }
 `
+
 interface RightJustifiedSubmitButtonProps {
   onCancel?: () => void
+  loading?: boolean
 }
+
 export const RightJustifiedSubmitButton = ({
   onCancel,
+  loading,
 }: RightJustifiedSubmitButtonProps) => (
   <SubmitButton>
     {onCancel && (
@@ -22,7 +26,15 @@ export const RightJustifiedSubmitButton = ({
         Avbryt
       </Button>
     )}
-    <Button type={'submit'}>Lagre</Button>
+    <Button type={'submit'}>
+      {loading ? (
+        <>
+          <Loader /> Lagrer
+        </>
+      ) : (
+        'Lagre'
+      )}
+    </Button>
   </SubmitButton>
 )
 

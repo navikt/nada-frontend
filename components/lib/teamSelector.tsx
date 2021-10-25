@@ -12,7 +12,7 @@ export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
   return (
     <Select
       label="Team"
-      {...register('owner.group')}
+      {...register('group')}
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>

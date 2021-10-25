@@ -330,22 +330,7 @@ export type CreateDataproductMutationVariables = Exact<{
 
 export type CreateDataproductMutation = {
   __typename?: 'Mutation'
-  createDataproduct: {
-    __typename?: 'Dataproduct'
-    name: string
-    description?: string | null | undefined
-    repo?: string | null | undefined
-    pii: boolean
-    keywords: Array<string>
-    created: any
-    owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
-    datasource: {
-      __typename?: 'BigQuery'
-      projectID: string
-      dataset: string
-      table: string
-    }
-  }
+  createDataproduct: { __typename?: 'Dataproduct'; id: string }
 }
 
 export type DataproductQueryVariables = Exact<{
@@ -668,23 +653,7 @@ export type AllDataproductsQueryResult = Apollo.QueryResult<
 export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
     createDataproduct(input: $input) {
-      name
-      description
-      repo
-      pii
-      keywords
-      created
-      owner {
-        group
-        teamkatalogen
-      }
-      datasource {
-        ... on BigQuery {
-          projectID
-          dataset
-          table
-        }
-      }
+      id
     }
   }
 `
