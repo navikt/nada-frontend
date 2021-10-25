@@ -44,7 +44,7 @@ const DataproductTableItem = ({
 }: DataproductTableItemProps) => {
   return (
     <TreeItem
-      endIcon={<BigQueryLogo size={16} />}
+      endIcon={<BigQueryLogo />}
       key={`${projectID}/${datasetID}/${name}`}
       nodeId={`${projectID}/${datasetID}/${name}`}
       label={name}

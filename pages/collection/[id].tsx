@@ -1,10 +1,5 @@
 import { useRouter } from 'next/router'
 import PageLayout from '../../components/pageLayout'
-import useSWR, { SWRConfig } from 'swr'
-import {
-  DataproductSchema,
-  DataproductSummary,
-} from '../../lib/schema/schema_types'
 import { GetServerSideProps } from 'next'
 import { getBackendURI } from '../../lib/api/config'
 import { fetcher } from '../../lib/api/fetcher'
@@ -17,6 +12,7 @@ const getBothURLs = (apiEndpoint: string) => [
   `${getBackendURI()}${apiEndpoint}`,
 ]
 
+/*
 const prefetchDataproducts = async (
   dataproductIds: DataproductSummary[]
 ): Promise<{ [url: string]: DataproductSchema }> => {
@@ -40,7 +36,7 @@ const prefetchDataproducts = async (
 
   return spreadableFetches
 }
-
+*/
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
 
@@ -51,14 +47,7 @@ interface DatacollectionFetcherProps {
   id: string
 }
 
-interface DatacollectionProps {
-  fallback?: DataproductSchema
-}
-
-const Datacollection = ({ fallback }: DatacollectionProps) => {
-  const router = useRouter()
-  const { id } = router.query
-
+const Datacollection = ({ id }: DatacollectionFetcherProps) => {
   if (typeof id !== 'string') return null
 
   return (

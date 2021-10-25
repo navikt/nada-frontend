@@ -1,6 +1,3 @@
-import useSWR from 'swr'
-import { DataproductMetadata } from '../../lib/schema/schema_types'
-import { fetcher } from '../../lib/api/fetcher'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import {

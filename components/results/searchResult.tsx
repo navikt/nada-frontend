@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { ResultAbstract } from './resultAbstract'
-import { DataproductSchema } from '../../lib/schema/schema_types'
 import { LogoSidebar } from './logoSidebar'
 import { Dataproduct } from '../../lib/schema/graphql'
 

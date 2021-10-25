@@ -91,7 +91,7 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
               collection.elements
                 .filter((d) => d.__typename === 'Dataproduct')
                 .map((d) => {
-                  return <p>Placeholder</p>
+                  return <p key={d.id}>Placeholder</p>
                   /*
                   return (
                     <SearchResult

@@ -3,12 +3,11 @@ import { useForm } from 'react-hook-form'
 import { updateCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { CollectionSchema } from '../../lib/schema/schema_types'
 import { apiPUT } from '../../lib/api/put'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { mutate } from 'swr'
 import KeywordsInput from '../lib/KeywordsInput'
-import { Collection, CollectionQuery } from '../../lib/schema/graphql'
+import { CollectionQuery } from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
   collection: CollectionQuery['collection']
@@ -25,8 +24,6 @@ export const EditCollectionForm = ({
     defaultValues: {
       name: collection.name,
       description: collection.description,
-      slug: collection.slug,
-      repo: collection.repo,
       keywords: collection.keywords,
     },
   })
@@ -66,13 +63,6 @@ export const EditCollectionForm = ({
           label="Beskrivelse"
           {...register('description')}
           error={errors.description?.message}
-        />
-        <TextField
-          id="slug"
-          label="Slug"
-          {...register('slug')}
-          error={errors.slug?.message}
-          description={'Slug-teksten blir brukt som URL'}
         />
         <KeywordsInput
           keywords={keywords}

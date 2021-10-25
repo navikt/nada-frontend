@@ -75,7 +75,7 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
       </InertDatasetCardDiv>
     )
 
-  const dataproduct = data.dataproduct
+  const { dataproduct } = data
 
   return (
     <Link href={`/dataproduct/${dataproduct.id}`} passHref>
