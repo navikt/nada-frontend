@@ -439,6 +439,28 @@ export type UpdateDataproductMutation = {
   }
 }
 
+export type SearchContentQueryVariables = Exact<{
+  q: SearchQuery
+}>
+
+export type SearchContentQuery = {
+  __typename?: 'Query'
+  search: Array<
+    | {
+        __typename: 'Collection'
+        id: string
+        name: string
+        description?: string | null | undefined
+      }
+    | {
+        __typename: 'Dataproduct'
+        id: string
+        name: string
+        description?: string | null | undefined
+      }
+  >
+}
+
 export type User_InfoQueryVariables = Exact<{ [key: string]: never }>
 
 export type User_InfoQuery = {
@@ -1072,6 +1094,75 @@ export type UpdateDataproductMutationResult =
 export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
   UpdateDataproductMutation,
   UpdateDataproductMutationVariables
+>
+export const SearchContentDocument = gql`
+  query searchContent($q: SearchQuery!) {
+    search(q: $q) {
+      ... on Collection {
+        __typename
+        id
+        name
+        description
+      }
+      ... on Dataproduct {
+        __typename
+        id
+        name
+        description
+      }
+    }
+  }
+`
+
+/**
+ * __useSearchContentQuery__
+ *
+ * To run a query within a React component, call `useSearchContentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchContentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchContentQuery({
+ *   variables: {
+ *      q: // value for 'q'
+ *   },
+ * });
+ */
+export function useSearchContentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchContentQuery,
+    SearchContentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SearchContentQuery, SearchContentQueryVariables>(
+    SearchContentDocument,
+    options
+  )
+}
+export function useSearchContentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchContentQuery,
+    SearchContentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SearchContentQuery, SearchContentQueryVariables>(
+    SearchContentDocument,
+    options
+  )
+}
+export type SearchContentQueryHookResult = ReturnType<
+  typeof useSearchContentQuery
+>
+export type SearchContentLazyQueryHookResult = ReturnType<
+  typeof useSearchContentLazyQuery
+>
+export type SearchContentQueryResult = Apollo.QueryResult<
+  SearchContentQuery,
+  SearchContentQueryVariables
 >
 export const User_InfoDocument = gql`
   query USER_INFO {

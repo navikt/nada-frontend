@@ -3,7 +3,12 @@ import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { ResultAbstract } from './resultAbstract'
 import { LogoSidebar } from './logoSidebar'
-import { Dataproduct } from '../../lib/schema/graphql'
+import {
+  BananQuery,
+  Collection,
+  Dataproduct,
+  SearchResult,
+} from '../../lib/schema/graphql'
 
 const SearchResultLinkDiv = styled.div`
   background-color: ${navGraBakgrunn};
@@ -17,13 +22,21 @@ const SearchResultLinkDiv = styled.div`
   }
 `
 
-export interface SearchResultLinkProps {
-  result: Dataproduct
+export type SearchResultType = {
+  __typename: string
+  id: string
+  name?: string | null
+  description?: string | null
 }
 
-export const SearchResultLink = ({ result }: SearchResultLinkProps) => {
+export interface SearchResultProps {
+  result: SearchResultType
+}
+
+export const SearchResultLink = ({ result }: SearchResultProps) => {
   const helper = (type: string) => {
     if (type === 'Dataproduct') return 'dataproduct'
+    if (type === 'Collection') return 'collection'
     return type
   }
   // FIXME: This hack (|| 'dataproduct') is here because typename is possibly

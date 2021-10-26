@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { SearchResultLinkProps } from './searchResult'
-import { Dataproduct } from '../../lib/schema/graphql'
+import { SearchResultType } from './searchResult'
 
 const StyledTitleLine = styled.div`
   h1 {
@@ -21,10 +20,10 @@ const StyledResultAbstract = styled.div`
 `
 
 export interface ResultAbstractProps {
-  result: Dataproduct
+  result: SearchResultType
 }
 
-export const TitleLine = ({ result }: SearchResultLinkProps) => (
+export const TitleLine = ({ result }: ResultAbstractProps) => (
   <StyledTitleLine>
     <h1>{result.name}</h1>
   </StyledTitleLine>

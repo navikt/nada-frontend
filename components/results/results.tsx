@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Loader } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import SearchResultLink from './searchResult'
-import { useAllDataproductsQuery } from '../../lib/schema/graphql'
+import { useSearchContentQuery } from '../../lib/schema/graphql'
 
 const NoResultsYetBox = styled.div`
   margin: 0 auto;
@@ -17,7 +17,9 @@ export function Results({ limit }: ResultsProps) {
   let { q } = router.query
   if (typeof q !== 'string') q = ''
 
-  const { data, loading, error } = useAllDataproductsQuery()
+  const { data, loading, error } = useSearchContentQuery({
+    variables: { q: { text: q } },
+  })
 
   if (error) {
     return (
@@ -42,12 +44,12 @@ export function Results({ limit }: ResultsProps) {
     )
   }
 
-  if (!data.dataproducts.length) return <div>Ingen resultater funnet</div>
+  if (!data.search.length) return <div>Ingen resultater funnet</div>
 
   if (limit)
     return (
       <div>
-        {data.dataproducts.slice(0, limit).map((d) => (
+        {data.search.slice(0, limit).map((d) => (
           <SearchResultLink key={d.id} result={d} />
         ))}
       </div>
@@ -55,7 +57,7 @@ export function Results({ limit }: ResultsProps) {
 
   return (
     <div>
-      {data.dataproducts.map((d) => (
+      {data.search.map((d) => (
         <SearchResultLink key={d.id} result={d} />
       ))}
     </div>
