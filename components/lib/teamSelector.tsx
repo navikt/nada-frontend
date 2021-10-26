@@ -9,6 +9,8 @@ type TeamSelectorProps = {
 }
 export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
   const user = useContext(UserState)
+  const teams = [...new Set(user?.gcpProjects.map((p) => p.group.name))]
+
   return (
     <Select
       label="Team"
@@ -16,9 +18,12 @@ export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>
-      {user?.groups?.map((group) => (
-        <option value={group.email} key={group.name}>
-          {group.name}
+      {teams.map((team, i) => (
+        <option
+          value={user?.groups.filter((g) => g.name === team)[0].email}
+          key={team}
+        >
+          {team}
         </option>
       ))}
     </Select>
