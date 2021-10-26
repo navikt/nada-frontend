@@ -6,9 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
-import { useMutation } from '@apollo/client'
-import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
-import { CREATE_COLLECTION } from '../../lib/queries/collection/newCollection'
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>

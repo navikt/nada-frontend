@@ -8,6 +8,7 @@ import {
 import { Dataproduct } from '../../lib/schema/graphql'
 import { ResultAbstract } from '../results/resultAbstract'
 import { LogoSidebar } from '../results/logoSidebar'
+import { SearchResultType } from '../results/searchResult'
 
 const SearchResultDiv = styled.div<{ selected: boolean }>`
   background-color: ${(props) =>
@@ -25,7 +26,7 @@ const SearchResultDiv = styled.div<{ selected: boolean }>`
 `
 
 export interface SearchResultProps {
-  result: Dataproduct
+  result: SearchResultType
   selected: boolean
   handleClick: (id: string) => void
 }

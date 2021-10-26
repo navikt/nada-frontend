@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { logoMap } from '../lib/icons/logoMap'
-import { BananQuery, Dataproduct, SearchResult } from '../../lib/schema/graphql'
-import { SearchResultProps, SearchResultType } from './searchResult'
+import { SearchResultType } from './searchResult'
 
 const LogoSidebarDiv = styled.div`
   flex: 0 0 90px;

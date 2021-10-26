@@ -63,9 +63,9 @@ const DataproductCardMenu = ({ dataset }: DatasetInlineProps) => {
       </Menu>
       <DeleteModal
         open={deleteModal}
-        onClose={() => setDeleteModal(false)}
+        onCancel={() => setDeleteModal(false)}
         name={dataset.name}
-        deleteUrl={'/api/dataset/' + dataset.id}
+        onConfirm={() => alert('not converted to graphQL')}
       />
     </div>
   )
