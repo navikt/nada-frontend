@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import { Box, Tab, Tabs } from '@mui/material'
@@ -11,8 +10,12 @@ import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
-import { Dataproduct } from '../../lib/schema/graphql'
+import {
+  Dataproduct,
+  useDeleteDataproductMutation,
+} from '../../lib/schema/graphql'
 import { UserState } from '../../lib/context'
+import DeleteModal from '../lib/deleteModal'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -27,14 +30,19 @@ export interface DataproductDetailProps {
 
 export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
+  const [confirm, setConfirm] = useState(false)
   const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
   const userState = useContext(UserState)
   const router = useRouter()
 
-  const deleteDataproduct = async (id: string) => {
+  const [deleteDataproduct] = useDeleteDataproductMutation({
+    variables: { id: product.id },
+  })
+
+  const onDelete = async () => {
     try {
-      await apiDELETE(`/api/dataproducts/${id}`)
+      await deleteDataproduct()
       await router.push('/')
     } catch (e: any) {
       setBackendError(e.toString())
@@ -57,7 +65,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         {userState ? (
           <DotMenu
             onEdit={() => setEdit(true)}
-            onDelete={async () => await deleteDataproduct(product.id)}
+            onDelete={() => setConfirm(true)}
           />
         ) : null}
       </StyledDiv>
@@ -98,6 +106,12 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       <TabPanel index={5} value={activeTab}>
         <div>Placeholder</div>
       </TabPanel>
+      <DeleteModal
+        open={confirm}
+        onCancel={() => setConfirm(false)}
+        onConfirm={() => onDelete()}
+        name={product.name}
+      />
     </div>
   )
 }

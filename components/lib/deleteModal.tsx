@@ -3,13 +3,6 @@ import { Modal, Button } from '@navikt/ds-react'
 import styled from 'styled-components'
 import apiDELETE from '../../lib/api/delete'
 
-interface DeleteModalProps {
-  open: boolean
-  onClose: (data: any) => void
-  deleteUrl: string
-  dataName: string
-}
-
 const ButtonStyledDiv = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -21,25 +14,27 @@ const ContentBox = styled.div`
   vertical-align: middle;
 `
 
+interface DeleteModalProps {
+  open: boolean
+  onCancel: () => void
+  onConfirm: () => void
+  name: string
+}
 export const DeleteModal = ({
   open,
-  onClose,
-  deleteUrl,
-  dataName,
+  onCancel,
+  onConfirm,
+  name,
 }: DeleteModalProps) => {
-  const deleteData = async () => {
-    apiDELETE(deleteUrl)
-  }
-
   return (
-    <Modal open={open} onClose={() => onClose}>
+    <Modal open={open} onClose={() => onCancel}>
       <Modal.Content>
-        <ContentBox>Er du sikkert på at du vil slette {dataName}?</ContentBox>
+        <ContentBox>Er du sikkert på at du vil slette {name}?</ContentBox>
         <ButtonStyledDiv>
-          <Button onClick={onClose} style={{ marginRight: '10px' }}>
+          <Button onClick={onCancel} style={{ marginRight: '10px' }}>
             Avbryt
           </Button>
-          <Button variant="danger" onClick={async () => await deleteData()}>
+          <Button variant="danger" onClick={onConfirm}>
             Slett
           </Button>
         </ButtonStyledDiv>

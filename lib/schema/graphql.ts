@@ -379,6 +379,15 @@ export type DataproductSummaryQuery = {
   }
 }
 
+export type DeleteDataproductMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DeleteDataproductMutation = {
+  __typename?: 'Mutation'
+  deleteDataproduct: boolean
+}
+
 export type GcpGetDatasetsQueryVariables = Exact<{
   projectID: Scalars['String']
 }>
@@ -863,6 +872,54 @@ export type DataproductSummaryLazyQueryHookResult = ReturnType<
 export type DataproductSummaryQueryResult = Apollo.QueryResult<
   DataproductSummaryQuery,
   DataproductSummaryQueryVariables
+>
+export const DeleteDataproductDocument = gql`
+  mutation deleteDataproduct($id: ID!) {
+    deleteDataproduct(id: $id)
+  }
+`
+export type DeleteDataproductMutationFn = Apollo.MutationFunction<
+  DeleteDataproductMutation,
+  DeleteDataproductMutationVariables
+>
+
+/**
+ * __useDeleteDataproductMutation__
+ *
+ * To run a mutation, you first call `useDeleteDataproductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDataproductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDataproductMutation, { data, loading, error }] = useDeleteDataproductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteDataproductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteDataproductMutation,
+    DeleteDataproductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DeleteDataproductMutation,
+    DeleteDataproductMutationVariables
+  >(DeleteDataproductDocument, options)
+}
+export type DeleteDataproductMutationHookResult = ReturnType<
+  typeof useDeleteDataproductMutation
+>
+export type DeleteDataproductMutationResult =
+  Apollo.MutationResult<DeleteDataproductMutation>
+export type DeleteDataproductMutationOptions = Apollo.BaseMutationOptions<
+  DeleteDataproductMutation,
+  DeleteDataproductMutationVariables
 >
 export const GcpGetDatasetsDocument = gql`
   query gcpGetDatasets($projectID: String!) {

@@ -64,7 +64,7 @@ const DataproductCardMenu = ({ dataset }: DatasetInlineProps) => {
       <DeleteModal
         open={deleteModal}
         onClose={() => setDeleteModal(false)}
-        dataName={dataset.name}
+        name={dataset.name}
         deleteUrl={'/api/dataset/' + dataset.id}
       />
     </div>
