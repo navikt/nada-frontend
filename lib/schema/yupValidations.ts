@@ -23,10 +23,14 @@ export const newDataproductValidation = updateDataproductValidation.concat(
   })
 )
 
+export const owner = yup.object().shape({
+  group: yup.string().required('trenger teamnavn'),
+  teamkatalogen: yup.string(),
+})
+
 export const updateCollectionValidation = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
-  repo: yup.string(),
   keywords: yup.array().of(yup.string()),
 })
 

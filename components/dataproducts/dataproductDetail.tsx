@@ -12,6 +12,7 @@ import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import {
   Dataproduct,
+  DataproductQuery,
   useDeleteDataproductMutation,
 } from '../../lib/schema/graphql'
 import { UserState } from '../../lib/context'
@@ -25,12 +26,12 @@ const StyledDiv = styled.div`
 `
 
 export interface DataproductDetailProps {
-  product: Dataproduct
+  product: DataproductQuery['dataproduct']
 }
 
 export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
-  const [confirm, setConfirm] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
   const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
   const userState = useContext(UserState)
@@ -38,6 +39,8 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
 
   const [deleteDataproduct] = useDeleteDataproductMutation({
     variables: { id: product.id },
+    awaitRefetchQueries: true,
+    refetchQueries: ['searchContent'],
   })
 
   const onDelete = async () => {
@@ -56,7 +59,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   if (!product) return <LoaderSpinner />
 
   return edit ? (
-    <EditDataproduct dataproduct={product} close={() => setEdit(false)} />
+    <EditDataproduct product={product} close={() => setEdit(false)} />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
@@ -65,7 +68,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         {userState ? (
           <DotMenu
             onEdit={() => setEdit(true)}
-            onDelete={() => setConfirm(true)}
+            onDelete={() => setShowDelete(true)}
           />
         ) : null}
       </StyledDiv>
@@ -107,8 +110,8 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         <div>Placeholder</div>
       </TabPanel>
       <DeleteModal
-        open={confirm}
-        onCancel={() => setConfirm(false)}
+        open={showDelete}
+        onCancel={() => setShowDelete(false)}
         onConfirm={() => onDelete()}
         name={product.name}
       />

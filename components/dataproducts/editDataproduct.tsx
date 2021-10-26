@@ -8,41 +8,41 @@ import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
 
-import { Dataproduct } from '../../lib/schema/graphql'
-import { useMutation } from '@apollo/client'
-import { UPDATE_DATAPRODUCT } from '../../lib/queries/dataproduct/updateDataproduct'
+import {
+  Dataproduct,
+  DataproductQuery,
+  useUpdateDataproductMutation,
+} from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
-  dataproduct: Dataproduct
+  product: DataproductQuery['dataproduct']
   close: () => void
 }
 
-const EditDataproduct = ({
-  dataproduct,
-  close,
-}: EditDatacollectionFormProps) => {
+const EditDataproduct = ({ product, close }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
-  const [updateDataproduct, { data, loading, error }] =
-    useMutation(UPDATE_DATAPRODUCT)
+  const [updateDataproduct] = useUpdateDataproductMutation()
   const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(updateDataproductValidation),
     defaultValues: {
-      name: dataproduct.name,
-      description: dataproduct.description,
-      repo: dataproduct.repo,
-      keywords: dataproduct.keywords,
-      pii: dataproduct.pii,
+      name: product.name,
+      description: product.description,
+      repo: product.repo,
+      keywords: product.keywords,
+      pii: product.pii,
     },
   })
   const keywords = watch('keywords')
   const setKeywords = (value: string[]) => {
     setValue('keywords', value)
   }
-  console.log(dataproduct)
+
   const { errors } = formState
   const onSubmit = (requestData: any) => {
     updateDataproduct({
-      variables: { id: dataproduct.id, input: requestData },
+      variables: { id: product.id, input: requestData },
+      awaitRefetchQueries: true,
+      refetchQueries: ['Dataproduct'],
     })
     setBackendError(undefined)
     close()

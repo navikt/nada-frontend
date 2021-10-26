@@ -21,6 +21,16 @@ export type Scalars = {
   Time: any
 }
 
+export type Access = {
+  __typename?: 'Access'
+  created: Scalars['Time']
+  expires?: Maybe<Scalars['Time']>
+  granter: Scalars['String']
+  id: Scalars['ID']
+  revoked?: Maybe<Scalars['Time']>
+  subject: Scalars['String']
+}
+
 export type BigQuery = {
   __typename?: 'BigQuery'
   dataset: Scalars['String']
@@ -62,6 +72,7 @@ export enum CollectionElementType {
 
 export type Dataproduct = {
   __typename?: 'Dataproduct'
+  access: Array<Access>
   created: Scalars['Time']
   datasource: Datasource
   description?: Maybe<Scalars['String']>
@@ -72,6 +83,7 @@ export type Dataproduct = {
   owner: Owner
   pii: Scalars['Boolean']
   repo?: Maybe<Scalars['String']>
+  requesters: Array<Scalars['String']>
 }
 
 export type Datasource = BigQuery
@@ -90,15 +102,24 @@ export type Group = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  addRequesterToDataproduct: Scalars['Boolean']
   addToCollection: Scalars['Boolean']
   createCollection: Collection
   createDataproduct: Dataproduct
   deleteCollection: Scalars['Boolean']
   deleteDataproduct: Scalars['Boolean']
   dummy?: Maybe<Scalars['String']>
+  grantAccessToDataproduct: Access
   removeFromCollection: Scalars['Boolean']
+  removeRequesterFromDataproduct: Scalars['Boolean']
+  revokeAccessToDataproduct: Scalars['Boolean']
   updateCollection: Collection
   updateDataproduct: Dataproduct
+}
+
+export type MutationAddRequesterToDataproductArgs = {
+  dataproductID: Scalars['ID']
+  subject: Scalars['String']
 }
 
 export type MutationAddToCollectionArgs = {
@@ -127,9 +148,25 @@ export type MutationDummyArgs = {
   no?: Maybe<Scalars['String']>
 }
 
+export type MutationGrantAccessToDataproductArgs = {
+  dataproductID: Scalars['ID']
+  expires?: Maybe<Scalars['Time']>
+  subject?: Maybe<Scalars['String']>
+  subjectType?: Maybe<SubjectType>
+}
+
 export type MutationRemoveFromCollectionArgs = {
   elementID: Scalars['ID']
   elementType: CollectionElementType
+  id: Scalars['ID']
+}
+
+export type MutationRemoveRequesterFromDataproductArgs = {
+  dataproductID: Scalars['ID']
+  subject: Scalars['String']
+}
+
+export type MutationRevokeAccessToDataproductArgs = {
   id: Scalars['ID']
 }
 
@@ -164,6 +201,7 @@ export type NewDataproduct = {
   name: Scalars['String']
   pii: Scalars['Boolean']
   repo?: Maybe<Scalars['String']>
+  requesters?: Maybe<Array<Scalars['String']>>
 }
 
 export type Owner = {
@@ -232,6 +270,12 @@ export type SearchQuery = {
 
 export type SearchResult = Collection | Dataproduct
 
+export enum SubjectType {
+  Group = 'group',
+  ServiceAccount = 'serviceAccount',
+  User = 'user',
+}
+
 export type TableColumn = {
   __typename?: 'TableColumn'
   description: Scalars['String']
@@ -258,6 +302,7 @@ export type UpdateDataproduct = {
   name: Scalars['String']
   pii: Scalars['Boolean']
   repo?: Maybe<Scalars['String']>
+  requesters?: Maybe<Array<Scalars['String']>>
 }
 
 export type UserInfo = {
@@ -297,6 +342,25 @@ export type CreateCollectionMutationVariables = Exact<{
 export type CreateCollectionMutation = {
   __typename?: 'Mutation'
   createCollection: { __typename?: 'Collection'; id: string }
+}
+
+export type DeleteCollectionMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DeleteCollectionMutation = {
+  __typename?: 'Mutation'
+  deleteCollection: boolean
+}
+
+export type UpdateCollectionMutationVariables = Exact<{
+  id: Scalars['ID']
+  input: UpdateCollection
+}>
+
+export type UpdateCollectionMutation = {
+  __typename?: 'Mutation'
+  updateCollection: { __typename?: 'Collection'; id: string }
 }
 
 export type AllDataproductsQueryVariables = Exact<{ [key: string]: never }>
@@ -437,15 +501,7 @@ export type UpdateDataproductMutationVariables = Exact<{
 
 export type UpdateDataproductMutation = {
   __typename?: 'Mutation'
-  updateDataproduct: {
-    __typename?: 'Dataproduct'
-    id: string
-    name: string
-    description?: string | null | undefined
-    repo?: string | null | undefined
-    pii: boolean
-    keywords: Array<string>
-  }
+  updateDataproduct: { __typename?: 'Dataproduct'; id: string }
 }
 
 export type SearchContentQueryVariables = Exact<{
@@ -603,6 +659,105 @@ export type CreateCollectionMutationResult =
 export type CreateCollectionMutationOptions = Apollo.BaseMutationOptions<
   CreateCollectionMutation,
   CreateCollectionMutationVariables
+>
+export const DeleteCollectionDocument = gql`
+  mutation deleteCollection($id: ID!) {
+    deleteCollection(id: $id)
+  }
+`
+export type DeleteCollectionMutationFn = Apollo.MutationFunction<
+  DeleteCollectionMutation,
+  DeleteCollectionMutationVariables
+>
+
+/**
+ * __useDeleteCollectionMutation__
+ *
+ * To run a mutation, you first call `useDeleteCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCollectionMutation, { data, loading, error }] = useDeleteCollectionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCollectionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCollectionMutation,
+    DeleteCollectionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DeleteCollectionMutation,
+    DeleteCollectionMutationVariables
+  >(DeleteCollectionDocument, options)
+}
+export type DeleteCollectionMutationHookResult = ReturnType<
+  typeof useDeleteCollectionMutation
+>
+export type DeleteCollectionMutationResult =
+  Apollo.MutationResult<DeleteCollectionMutation>
+export type DeleteCollectionMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCollectionMutation,
+  DeleteCollectionMutationVariables
+>
+export const UpdateCollectionDocument = gql`
+  mutation updateCollection($id: ID!, $input: UpdateCollection!) {
+    updateCollection(id: $id, input: $input) {
+      id
+    }
+  }
+`
+export type UpdateCollectionMutationFn = Apollo.MutationFunction<
+  UpdateCollectionMutation,
+  UpdateCollectionMutationVariables
+>
+
+/**
+ * __useUpdateCollectionMutation__
+ *
+ * To run a mutation, you first call `useUpdateCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCollectionMutation, { data, loading, error }] = useUpdateCollectionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCollectionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateCollectionMutation,
+    UpdateCollectionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateCollectionMutation,
+    UpdateCollectionMutationVariables
+  >(UpdateCollectionDocument, options)
+}
+export type UpdateCollectionMutationHookResult = ReturnType<
+  typeof useUpdateCollectionMutation
+>
+export type UpdateCollectionMutationResult =
+  Apollo.MutationResult<UpdateCollectionMutation>
+export type UpdateCollectionMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCollectionMutation,
+  UpdateCollectionMutationVariables
 >
 export const AllDataproductsDocument = gql`
   query AllDataproducts {
@@ -1100,11 +1255,6 @@ export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
     updateDataproduct(id: $id, input: $input) {
       id
-      name
-      description
-      repo
-      pii
-      keywords
     }
   }
 `

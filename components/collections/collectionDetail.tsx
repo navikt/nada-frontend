@@ -4,12 +4,15 @@ import { EditCollectionForm } from './editCollectionForm'
 import DataproductList from './dataproductList'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import apiDELETE from '../../lib/api/delete'
 import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
-import { CollectionQuery, useCollectionQuery } from '../../lib/schema/graphql'
+import {
+  useCollectionQuery,
+  useDeleteCollectionMutation,
+} from '../../lib/schema/graphql'
 import LoaderSpinner from '../lib/spinner'
+import DeleteModal from '../lib/deleteModal'
 
 export interface CollectionDetailProps {
   id: string
@@ -28,12 +31,20 @@ export const CollectionDetail = ({ id }: CollectionDetailProps) => {
   })
 
   const [edit, setEdit] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
-  const deleteCollection = async (id: string) => {
+
+  const [deleteCollection] = useDeleteCollectionMutation({
+    variables: { id },
+    awaitRefetchQueries: true,
+    refetchQueries: ['searchContent'],
+  })
+
+  const onDelete = async () => {
     try {
-      await apiDELETE(`/api/collections/${id}`)
-      await router.push(`/`)
+      await deleteCollection()
+      await router.push('/')
     } catch (e: any) {
       setBackendError(e.toString())
     }
@@ -59,7 +70,7 @@ export const CollectionDetail = ({ id }: CollectionDetailProps) => {
         <h1>{collection.name}</h1>
         <DotMenu
           onEdit={() => setEdit(true)}
-          onDelete={async () => await deleteCollection(collection.id)}
+          onDelete={() => setShowDelete(true)}
         />
       </StyledEdit>
       <MetadataTable collection={collection} />
@@ -71,6 +82,12 @@ export const CollectionDetail = ({ id }: CollectionDetailProps) => {
       </div>
       <h2>Dataprodukter i samlingen:</h2>
       <DataproductList collection={collection} />
+      <DeleteModal
+        open={showDelete}
+        onCancel={() => setShowDelete(false)}
+        onConfirm={async () => await onDelete()}
+        name={collection.name}
+      />
     </div>
   )
 }
