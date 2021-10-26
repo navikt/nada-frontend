@@ -3,10 +3,9 @@ import { ErrorSummary } from '@navikt/ds-react'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import { useRouter } from 'next/router'
-import { apiPOST } from '../../lib/api/post'
 import { NewCollectionForm } from '../../components/collections/newCollectionForm'
 import { useMutation } from '@apollo/client'
-import { CREATE_COLLECTION } from '../../lib/queries/collection/newCollection'
+import { CREATE_COLLECTION } from '../../lib/queries/collection/createCollection'
 
 const NewCollection = () => {
   const router = useRouter()

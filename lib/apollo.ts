@@ -5,7 +5,7 @@ import {
 } from '@apollo/client'
 
 const isServer = typeof window === 'undefined'
-const windowApolloState = !isServer && window.__NEXT_DATA__.apolloState
+const windowApolloState = !isServer && (window.__NEXT_DATA__ as any).apolloState
 
 let CLIENT: ApolloClient<NormalizedCacheObject> | undefined = undefined
 

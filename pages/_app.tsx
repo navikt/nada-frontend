@@ -6,14 +6,10 @@ import { UserState } from '../lib/context'
 import Head from 'next/head'
 
 import '@fontsource/source-sans-pro'
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 import { User_InfoDocument, User_InfoQuery } from '../lib/schema/graphql'
-
-const client = new ApolloClient({
-  ssrMode: typeof window === 'undefined',
-  uri: 'http://localhost:3000/api/query',
-  cache: new InMemoryCache(),
-})
+import { getApolloClient } from '../lib/apollo'
+const client = getApolloClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [userState, setUserState] = useState<User_InfoQuery>()

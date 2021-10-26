@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
+    "@apollo/react-ssr": "^4.0.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@fontsource/source-sans-pro": "^4.5.0",
