@@ -39,7 +39,7 @@ export default class extends Document<DocumentProps> {
    * @param {DocumentContext} ctx
    */
   static async getInitialProps(ctx: DocumentContext) {
-    const apolloClient = getApolloClient()
+    const apolloClient = getApolloClient(false, ctx?.req?.headers?.cookie)
 
     // render props
     const renderPage = ctx.renderPage

@@ -1,36 +1,29 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppContext, AppProps } from 'next/app'
 import '@navikt/ds-css'
-import { useState } from 'react'
 import { UserState } from '../lib/context'
 import Head from 'next/head'
 
 import '@fontsource/source-sans-pro'
-import { ApolloProvider } from '@apollo/client'
-import { User_InfoDocument, User_InfoQuery } from '../lib/schema/graphql'
-import { getApolloClient } from '../lib/apollo'
-const client = getApolloClient()
+import {
+  ApolloClient,
+  ApolloProvider,
+  NormalizedCacheObject,
+} from '@apollo/client'
+import { UserInfoQuery } from '../lib/schema/graphql'
+import { getApolloClient, getUserInfo } from '../lib/apollo'
+import App from 'next/app'
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const [userState, setUserState] = useState<User_InfoQuery>()
-  client
-    .query({ query: User_InfoDocument })
-    .then((response) => {
-      if (response.error) {
-        setUserState(undefined)
-        console.log('no user for you!')
-      } else {
-        setUserState(response.data)
-      }
-    })
-    .catch((e) => {
-      console.log('No be logged in')
-      setUserState(undefined)
-    })
+export type MyAppProps = AppProps & {
+  user: UserInfoQuery
+  apolloClient: ApolloClient<NormalizedCacheObject>
+}
+const apolloClient = getApolloClient()
 
+function MyApp({ Component, pageProps, user: data }: MyAppProps) {
   return (
-    <ApolloProvider client={client}>
-      <UserState.Provider value={userState?.userInfo}>
+    <ApolloProvider client={apolloClient}>
+      <UserState.Provider value={data?.userInfo}>
         <Head>
           <link
             rel="apple-touch-icon"
@@ -58,6 +51,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       </UserState.Provider>
     </ApolloProvider>
   )
+}
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await App.getInitialProps(appContext)
+  const user = await getUserInfo(appContext?.ctx?.req?.headers?.cookie)
+  return { ...appProps, user }
 }
 
 export default MyApp

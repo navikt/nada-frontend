@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag'
 
 export const USER_INFO = gql`
-  query USER_INFO {
+  query userInfo {
     userInfo {
       name
       email
