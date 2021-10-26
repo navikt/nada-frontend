@@ -75,7 +75,7 @@ export const getUserInfo = async (cookie?: string) => {
     })
     return data
   } catch (e: any) {
-    if (e.graphQLErrors[0].message === 'access denied') return undefined
+    if (e?.graphQLErrors?.[0]?.message === 'access denied') return undefined
     else throw e
   }
 }
