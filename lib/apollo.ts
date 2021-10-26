@@ -1,94 +1,79 @@
+import { useMemo } from 'react'
 import {
   ApolloClient,
-  ApolloError,
-  createHttpLink,
+  HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client'
+import merge from 'deepmerge'
+import isEqual from 'lodash/isEqual'
 import { USER_INFO } from './queries/userInfo/userInfo'
-
 const isServer = typeof window === 'undefined'
-const windowApolloState = !isServer && (window.__NEXT_DATA__ as any).apolloState
 
-// The currently loaded nada-backend Apollo client.
-let CLIENT: ApolloClient<NormalizedCacheObject> | undefined = undefined
-// The currently loaded nada-backend Apollo client for user profile fetching.
-// The need for a separate fetcher just for userInfo is questionable.
-let USER_CLIENT: ApolloClient<NormalizedCacheObject> | undefined = undefined
-
-// FIXME: I don't see how this can be anything but wrong
-// Cached user client cookies. Intention is to flush cache on any change of user cookies.
-// But is this local to user context or will two people using the same node.js server compete over it?
-let USER_CLIENT_COOKIE: string | undefined
-let CLIENT_COOKIE: string | undefined
-
-// TODO: Refactor. The logic of this file is not yet properly thought through.
-// - We probably don't need to duplicate a whole client just for UserInfo.
-// - We are using the entire cookie object to compare user state, meaning that if any client-side cookies change,
-//      we trigger a re-query. Varying on all cookies could be an overly defensive caching strategy?
-
-// Returns the appropriate URI depending on whether this is running on client or server.
-// Apollo Client requires absolute URLs on servers, but supports relative URLs on clients, which is convenient.
-// On the server, we know 'localhost:3000/api' will proxy to the configured back-end anyway.
+export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 const apolloQueryURI = isServer
   ? 'http://localhost:3000/api/query'
   : '/api/query'
 
-// Returns a nada-backend apolloClient.
-export function getApolloClient(forceNew?: boolean, cookie?: string) {
-  if (cookie != USER_CLIENT_COOKIE) {
-    USER_CLIENT_COOKIE = cookie
-    USER_CLIENT = undefined
-  }
+let apolloClient: ApolloClient<NormalizedCacheObject>
 
-  if (!CLIENT || forceNew) {
-    if (!cookie) {
-      CLIENT = new ApolloClient({
-        ssrMode: isServer,
-        uri: apolloQueryURI,
-        cache: new InMemoryCache().restore(windowApolloState || {}),
-      })
-    } else {
-      CLIENT = new ApolloClient({
-        ssrMode: isServer,
-        uri: apolloQueryURI,
-        cache: new InMemoryCache().restore(windowApolloState || {}),
-        credentials: 'same-origin',
-        headers: {
-          cookie,
-        },
-      })
-    }
-  }
-
-  return CLIENT
+function createApolloClient() {
+  return new ApolloClient({
+    ssrMode: typeof window === 'undefined',
+    link: new HttpLink({
+      uri: apolloQueryURI,
+      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+    }),
+    cache: new InMemoryCache().restore({}),
+  })
 }
 
-// Returns a nada-backend apolloClient, specifically for user fetching.
-const getUserFetcher = (cookie?: string) => {
-  if (cookie != USER_CLIENT_COOKIE) {
-    USER_CLIENT_COOKIE = cookie
-    console.log('invalidating client')
-    USER_CLIENT = undefined
-  }
-  if (!USER_CLIENT) {
-    USER_CLIENT = new ApolloClient({
-      ssrMode: true,
-      link: createHttpLink({
-        uri: apolloQueryURI,
-        credentials: 'same-origin',
-        headers: {
-          cookie,
-        },
-      }),
-      cache: new InMemoryCache(),
+export function initializeApollo(initialState = null) {
+  const _apolloClient = apolloClient ?? createApolloClient()
+
+  // If your page has Next.js data fetching methods that use Apollo Client, the initial state
+  // gets hydrated here
+  if (initialState) {
+    // Get existing cache, loaded during client side data fetching
+    const existingCache = _apolloClient.extract()
+
+    // Merge the existing cache into data passed from getStaticProps/getServerSideProps
+    const data = merge(initialState, existingCache, {
+      // combine arrays using object equality (like in sets)
+      arrayMerge: (destinationArray, sourceArray) => [
+        ...sourceArray,
+        ...destinationArray.filter((d) =>
+          sourceArray.every((s) => !isEqual(d, s))
+        ),
+      ],
     })
+
+    // Restore the cache with the merged data
+    _apolloClient.cache.restore(data)
   }
-  return USER_CLIENT
+  // For SSG and SSR always create a new Apollo Client
+  if (typeof window === 'undefined') return _apolloClient
+  // Create the Apollo Client once in the client
+  if (!apolloClient) apolloClient = _apolloClient
+
+  return _apolloClient
 }
 
-export const getUserInfo = async (cookie?: string) => {
-  const client = getUserFetcher(cookie)
+export function addApolloState(client: any, pageProps: any) {
+  if (pageProps?.props) {
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
+  }
+
+  return pageProps
+}
+
+export function useApollo(pageProps: any) {
+  const state = pageProps[APOLLO_STATE_PROP_NAME]
+  return useMemo(() => initializeApollo(state), [state])
+}
+
+export const getUserInfo = async () => {
+  const client = initializeApollo()
 
   try {
     const { data } = await client.query({

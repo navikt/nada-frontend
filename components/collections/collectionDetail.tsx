@@ -8,6 +8,7 @@ import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import {
+  CollectionQuery,
   useCollectionQuery,
   useDeleteCollectionMutation,
 } from '../../lib/schema/graphql'
@@ -15,7 +16,7 @@ import LoaderSpinner from '../lib/spinner'
 import DeleteModal from '../lib/deleteModal'
 
 export interface CollectionDetailProps {
-  id: string
+  collection: CollectionQuery['collection']
 }
 
 const StyledEdit = styled.div`
@@ -25,10 +26,8 @@ const StyledEdit = styled.div`
   align-items: center;
 `
 
-export const CollectionDetail = ({ id }: CollectionDetailProps) => {
-  const { data, loading, error } = useCollectionQuery({
-    variables: { id },
-  })
+export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
+  const { id } = collection
 
   const [edit, setEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -49,17 +48,6 @@ export const CollectionDetail = ({ id }: CollectionDetailProps) => {
       setBackendError(e.toString())
     }
   }
-
-  if (error)
-    return (
-      <div>
-        Error:<p>{error.toString()}</p>
-      </div>
-    )
-
-  if (loading || !data) return <LoaderSpinner />
-
-  const { collection } = data
 
   return edit ? (
     <EditCollectionForm collection={collection} close={() => setEdit(false)} />

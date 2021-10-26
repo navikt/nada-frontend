@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag'
 
-export const Collection = gql`
+export const GET_COLLECTION = gql`
   query Collection($id: ID!) {
     collection(id: $id) {
       id

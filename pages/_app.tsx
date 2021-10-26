@@ -3,27 +3,26 @@ import type { AppContext, AppProps } from 'next/app'
 import '@navikt/ds-css'
 import { UserState } from '../lib/context'
 import Head from 'next/head'
-
 import '@fontsource/source-sans-pro'
-import {
-  ApolloClient,
-  ApolloProvider,
-  NormalizedCacheObject,
-} from '@apollo/client'
+import { ApolloProvider, NormalizedCacheObject } from '@apollo/client'
 import { UserInfoQuery } from '../lib/schema/graphql'
-import { getApolloClient, getUserInfo } from '../lib/apollo'
+import { getUserInfo } from '../lib/apollo'
 import App from 'next/app'
-
-export type MyAppProps = AppProps & {
-  user: UserInfoQuery
-  apolloClient: ApolloClient<NormalizedCacheObject>
+import { getDataFromTree } from '@apollo/react-ssr'
+import React from 'react'
+import { ALL_DATAPRODUCTS } from '../lib/queries/dataproduct/allDataproducts'
+import { useApollo } from '../lib/apollo'
+type MyAppProps = AppProps & {
+  apolloData: NormalizedCacheObject
+  user: UserInfoQuery['userInfo']
 }
-const apolloClient = getApolloClient()
 
-function MyApp({ Component, pageProps, user: data }: MyAppProps) {
+function MyApp({ Component, pageProps, user, apolloData }: MyAppProps) {
+  const apolloClient = useApollo(pageProps)
+
   return (
     <ApolloProvider client={apolloClient}>
-      <UserState.Provider value={data?.userInfo}>
+      <UserState.Provider value={user}>
         <Head>
           <link
             rel="apple-touch-icon"
@@ -54,9 +53,19 @@ function MyApp({ Component, pageProps, user: data }: MyAppProps) {
 }
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
-  const appProps = await App.getInitialProps(appContext)
-  const user = await getUserInfo(appContext?.ctx?.req?.headers?.cookie)
-  return { ...appProps, user }
+  const cookies = appContext.ctx?.req?.headers?.cookie
+
+  const documentProps = await App.getInitialProps(appContext)
+
+  let user
+
+  const { userInfo } = (await getUserInfo()) || { undefined }
+  user = userInfo
+
+  return {
+    user,
+    ...documentProps,
+  }
 }
 
 export default MyApp
