@@ -44,22 +44,21 @@ export default class extends Document<DocumentProps> {
     // render props
     const renderPage = ctx.renderPage
     const renderPageEnhancer = {
-      enhanceApp: (App: any) => (ctx: any) => <MyApp {...ctx} />,
+      enhanceApp: (App: any) =>
+        function EnhanceApp(ctx: any) {
+          return <MyApp {...ctx} />
+        },
     }
 
     // swizzle render logic
     ctx.renderPage = () => renderPage(renderPageEnhancer)
 
-    const initialProps = await Document.getInitialProps(ctx)
     // run apollo before nextjs render
     await getDataFromTree(
       /* ctx.AppTree is App without appProps
        * and without being renderPageEnhanced */
 
-      <ctx.AppTree
-        pageProps={{ ...initialProps }}
-        apolloClient={apolloClient}
-      />
+      <ctx.AppTree pageProps={{ ...ctx }} apolloClient={apolloClient} />
     )
 
     // collect apollo state
