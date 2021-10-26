@@ -6,7 +6,7 @@ module.exports = {
   rewrites: async () => [
     {
       source: '/api/:path*',
-      destination: `${getBackendURI()}/api/:path*`, // Proxy to backend
+      destination: `${getBackendURI()}/:path*`, // Proxy to backend
     },
   ],
 }
