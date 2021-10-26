@@ -6,10 +6,9 @@ metadata:
   labels:
     team: dataplattform
 spec:
+  # Note: As the backend URL is baked into source at build time,
+  # the environment has been moved to the Dockerfile.
   image: {{ image }}
   port: 3000
   ingresses:
     - "https://nada.dev.intern.nav.no/"
-  env:
-    - name: NEXT_PUBLIC_BACKEND 
-      value: https://nada.dev.intern.nav.no/api
