@@ -20,7 +20,7 @@ export const PiiCheckboxInput = ({
   register,
   watch,
 }: PiiCheckboxInputProps) => {
-  const piiValue = watch('pii', true)
+  const piiValue = watch('pii')
 
   return (
     <ConfirmationPanelWrapper>

@@ -38,6 +38,7 @@ const EditDataproduct = ({
   const setKeywords = (value: string[]) => {
     setValue('keywords', value)
   }
+  console.log(dataproduct)
   const { errors } = formState
   const onSubmit = (requestData: any) => {
     updateDataproduct({
@@ -53,7 +54,7 @@ const EditDataproduct = ({
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <DataproductForm register={register} errors={errors} watch={watch} />
+      <DataproductForm register={register} errors={errors} />
       <PiiCheckboxInput register={register} watch={watch} />
       <KeywordsInput
         keywords={keywords}

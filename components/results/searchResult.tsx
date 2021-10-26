@@ -3,12 +3,7 @@ import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { ResultAbstract } from './resultAbstract'
 import { LogoSidebar } from './logoSidebar'
-import {
-  BananQuery,
-  Collection,
-  Dataproduct,
-  SearchResult,
-} from '../../lib/schema/graphql'
+import { Dataproduct } from '../../lib/schema/graphql'
 
 const SearchResultLinkDiv = styled.div`
   background-color: ${navGraBakgrunn};

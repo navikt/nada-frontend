@@ -32,6 +32,6 @@ export const TitleLine = ({ result }: ResultAbstractProps) => (
 export const ResultAbstract = ({ result }: ResultAbstractProps) => (
   <StyledResultAbstract>
     <TitleLine result={result} />
-    <p>{result.__typename}</p>
+    <p>{result.description}</p>
   </StyledResultAbstract>
 )

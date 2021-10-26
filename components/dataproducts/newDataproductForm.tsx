@@ -12,12 +12,17 @@ import { useMutation } from '@apollo/client'
 import TeamSelector from '../lib/teamSelector'
 import { DataproductSourceForm } from './dataproductSourceForm'
 import { NewDataproduct } from '../../lib/schema/graphql'
+import { useEffect } from 'react'
 
 export const NewDataproductForm = () => {
   const router = useRouter()
   const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(newDataproductValidation),
   })
+  useEffect(() => {
+    setValue('pii', true)
+  }, [])
+
   const [createDataproduct, { data, loading, error: backendError }] =
     useMutation(CREATE_DATAPRODUCT, {
       onCompleted: (data) =>
