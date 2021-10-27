@@ -1,5 +1,3 @@
-import ErrorMessage from '../lib/error'
-import LoaderSpinner from '../lib/spinner'
 import {
   Paper,
   Table,
@@ -9,22 +7,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import { useGetSchemaQuery } from '../../lib/schema/graphql'
+import { TableColumn } from '../../lib/schema/graphql'
 
 interface DataproductTableSchemaProps {
-  id: string
+  schema: TableColumn[]
 }
 
-const DataproductTableSchema = ({ id }: DataproductTableSchemaProps) => {
-  const { data, error, loading } = useGetSchemaQuery({ variables: { id } })
-
-  const gcpUrl = 'https://console.cloud.google.com'
-
-  if (error) return <ErrorMessage error={error} />
-
-  if (loading || !data) return <LoaderSpinner />
-  const { schema } = data.getTableMetadata
-
+const DataproductTableSchema = ({ schema }: DataproductTableSchemaProps) => {
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
   return (

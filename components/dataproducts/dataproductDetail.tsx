@@ -11,7 +11,6 @@ import EditDataproduct from './editDataproduct'
 import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import {
-  Dataproduct,
   DataproductQuery,
   useDeleteDataproductMutation,
 } from '../../lib/schema/graphql'
@@ -98,7 +97,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         </ReactMarkdown>
       </TabPanel>
       <TabPanel index={2} value={activeTab}>
-        <DataproductTableSchema id={product.id} />
+        <DataproductTableSchema schema={product.datasource.schema} />
       </TabPanel>
       <TabPanel index={3} value={activeTab}>
         <div>Placeholder</div>
