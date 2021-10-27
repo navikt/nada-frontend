@@ -2,15 +2,14 @@ import PageLayout from '../../components/pageLayout'
 import { GetServerSideProps } from 'next'
 import { CollectionDetail } from '../../components/collections/collectionDetail'
 import { CollectionQuery, useCollectionQuery } from '../../lib/schema/graphql'
-import { addApolloState, initializeApollo } from '../../lib/apollo'
+import { addApolloState, getApolloClient } from '../../lib/apollo'
 import { GET_COLLECTION } from '../../lib/queries/collection/collection'
 
 interface DatacollectionFetcherProps {
   id: string
-  collection?: CollectionQuery['collection']
 }
 
-const Datacollection = ({ id, collection }: DatacollectionFetcherProps) => {
+const Datacollection = ({ id }: DatacollectionFetcherProps) => {
   const { data } = useCollectionQuery({
     variables: { id },
   })
@@ -25,7 +24,7 @@ const Datacollection = ({ id, collection }: DatacollectionFetcherProps) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
 
-  const apolloClient = initializeApollo()
+  const apolloClient = getApolloClient()
 
   await apolloClient.query({
     query: GET_COLLECTION,

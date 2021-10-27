@@ -4,25 +4,28 @@ import '@navikt/ds-css'
 import { UserState } from '../lib/context'
 import Head from 'next/head'
 import '@fontsource/source-sans-pro'
-import { ApolloProvider, NormalizedCacheObject } from '@apollo/client'
-import { UserInfoQuery } from '../lib/schema/graphql'
-import { getUserInfo } from '../lib/apollo'
+import { ApolloProvider } from '@apollo/client'
+import { UserInfoQuery, useUserInfoQuery } from '../lib/schema/graphql'
+import { APOLLO_APP_STATE_PROP_NAME, getUserInfoCache } from '../lib/apollo'
 import App from 'next/app'
-import { getDataFromTree } from '@apollo/react-ssr'
 import React from 'react'
-import { ALL_DATAPRODUCTS } from '../lib/queries/dataproduct/allDataproducts'
 import { useApollo } from '../lib/apollo'
+
 type MyAppProps = AppProps & {
-  apolloData: NormalizedCacheObject
-  user: UserInfoQuery['userInfo']
+  initialUser: UserInfoQuery['userInfo']
 }
 
-function MyApp({ Component, pageProps, user, apolloData }: MyAppProps) {
+function MyApp({ Component, pageProps, initialUser }: MyAppProps) {
   const apolloClient = useApollo(pageProps)
+
+  const { data, error } = useUserInfoQuery({
+    client: apolloClient,
+    pollInterval: 3_000,
+  })
 
   return (
     <ApolloProvider client={apolloClient}>
-      <UserState.Provider value={user}>
+      <UserState.Provider value={!error ? data?.userInfo : undefined}>
         <Head>
           <link
             rel="apple-touch-icon"
@@ -52,19 +55,24 @@ function MyApp({ Component, pageProps, user, apolloData }: MyAppProps) {
   )
 }
 
+// Make sure app has a defined user state when it is mounted,
+// to avoid the "unauth flash" when first paint occurs before
+// the user state is defined.
 MyApp.getInitialProps = async (appContext: AppContext) => {
-  const cookies = appContext.ctx?.req?.headers?.cookie
+  const appProps = await App.getInitialProps(appContext)
 
-  const documentProps = await App.getInitialProps(appContext)
+  const cookie = appContext.ctx?.req?.headers?.cookie || ''
 
-  let user
+  const appState = await getUserInfoCache({
+    cookie,
+  })
 
-  const { userInfo } = (await getUserInfo()) || { undefined }
-  user = userInfo
+  appProps.pageProps = {
+    [APOLLO_APP_STATE_PROP_NAME]: appState,
+  }
 
   return {
-    user,
-    ...documentProps,
+    ...appProps,
   }
 }
 
