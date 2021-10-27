@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form'
 import { updateCollectionValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { apiPUT } from '../../lib/api/put'
 import { useState } from 'react'
-import { mutate } from 'swr'
 import KeywordsInput from '../lib/KeywordsInput'
-import { CollectionQuery } from '../../lib/schema/graphql'
+import {
+  CollectionQuery,
+  useUpdateCollectionMutation,
+} from '../../lib/schema/graphql'
 
 interface EditDatacollectionFormProps {
   collection: CollectionQuery['collection']
@@ -19,6 +20,7 @@ export const EditCollectionForm = ({
   close,
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
+  const [updateCollection] = useUpdateCollectionMutation()
   const { register, handleSubmit, formState, watch, setValue } = useForm({
     resolver: yupResolver(updateCollectionValidation),
     defaultValues: {
@@ -34,15 +36,14 @@ export const EditCollectionForm = ({
   }
 
   const { errors } = formState
-  const onSubmit = async (requestData: any) => {
-    try {
-      await apiPUT(`/api/collections/${collection.id}`, requestData)
-      await mutate(`/api/collections/${collection.id}`)
-      setBackendError(undefined)
-      close()
-    } catch (e: any) {
-      setBackendError(e.toString())
-    }
+  const onSubmit = (requestData: any) => {
+    updateCollection({
+      variables: { id: collection.id, input: requestData },
+      awaitRefetchQueries: true,
+      refetchQueries: ['Collection'],
+    })
+    setBackendError(undefined)
+    close()
   }
   {
     backendError ? (

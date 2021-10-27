@@ -21,6 +21,12 @@ export const GET_DATAPRODUCT = gql`
           projectID
           dataset
           table
+          schema {
+            name
+            description
+            mode
+            type
+          }
         }
       }
     }

@@ -1,29 +1,14 @@
 import { gql } from 'graphql-tag'
 
-export const ALL_DATAPRODUCTS = gql`
-  query AllDataproducts {
+export const ALL_DATAPRODUCTS_FOR_TEAM = gql`
+  query allDataproductsForTeam {
     dataproducts {
       id
       name
       description
-      created
-      lastModified
-      repo
-      pii
-      keywords
+      __typename
       owner {
         group
-        teamkatalogen
-      }
-
-      type: __typename
-      datasource {
-        __typename
-        ... on BigQuery {
-          projectID
-          dataset
-          table
-        }
       }
     }
   }

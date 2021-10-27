@@ -1,29 +1,15 @@
 import { useContext, useState } from 'react'
-import styled from 'styled-components'
-import { navBla } from '../../styles/constants'
 import { UserState } from '../../lib/context'
-import { Button, Loader, Modal } from '@navikt/ds-react'
+import { Button, Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
 import { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
-import SearchResult from './collectionElement'
 import apiPOST from '../../lib/api/post'
-import { CollectionQuery } from '../../lib/schema/graphql'
-
-const AddButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  cursor: pointer;
-  svg {
-    font-size: 32px;
-    color: ${navBla};
-  }
-
-  p {
-    flex-grow: 1;
-  }
-`
+import {
+  CollectionQuery,
+  useAllDataproductsForTeamQuery,
+} from '../../lib/schema/graphql'
+import SearchResult from './collectionElement'
 
 interface DataproductListProps {
   collection: CollectionQuery['collection']
@@ -36,10 +22,11 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
   const initCollectionElements = collection.elements
     ? collection.elements.map((e) => e.id)
     : []
-
+  const { data, loading, error } = useAllDataproductsForTeamQuery()
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
     initCollectionElements
   )
+
   const handleClick = (id: string) => {
     if (selectedProduct.includes(id)) {
       setSelectedProduct((selectedProduct) =>
@@ -85,23 +72,20 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
       >
         <Modal.Content>
           <div>
-            {!collection.elements.length ? (
+            {!data?.dataproducts.length ? (
               <div>Ingen resultater funnet</div>
             ) : (
-              collection.elements
-                .filter((d) => d.__typename === 'Dataproduct')
-                .map((d) => {
-                  return <p key={d.id}>Placeholder</p>
-                  /*
-                  return (
-                    <SearchResult
-                      key={d.id}
-                      result={d}
-                      selected={selectedProduct.includes(d.id)}
-                      handleClick={handleClick}
-                    />
-                  )*/
-                })
+              data?.dataproducts.map((d) => {
+                //    return <p key={d.id}>Placeholder</p>
+                return (
+                  <SearchResult
+                    key={d.id}
+                    result={d}
+                    selected={selectedProduct.includes(d.id)}
+                    handleClick={handleClick}
+                  />
+                )
+              })
             )}
             <Button onClick={handleSubmit}>Ferdig</Button>
           </div>

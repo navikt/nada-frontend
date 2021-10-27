@@ -10,10 +10,11 @@ export const GET_COLLECTION = gql`
       keywords
       lastModified
       elements {
-        type: __typename
-
         ... on Dataproduct {
+          __typename
           id
+          name
+          description
         }
       }
     }

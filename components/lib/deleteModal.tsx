@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Modal, Button } from '@navikt/ds-react'
 import styled from 'styled-components'
-import apiDELETE from '../../lib/api/delete'
 
 const ButtonStyledDiv = styled.div`
   display: flex;
