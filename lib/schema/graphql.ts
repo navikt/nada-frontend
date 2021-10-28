@@ -303,6 +303,31 @@ export type UserInfo = {
   name: Scalars['String']
 }
 
+export type GrantAccessMutationVariables = Exact<{
+  dataproductID: Scalars['ID']
+  subject: Scalars['String']
+  subjectType: SubjectType
+}>
+
+export type GrantAccessMutation = {
+  __typename?: 'Mutation'
+  grantAccessToDataproduct: {
+    __typename?: 'Access'
+    id: string
+    subject: string
+    granter: string
+  }
+}
+
+export type RevokeAccessMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RevokeAccessMutation = {
+  __typename?: 'Mutation'
+  revokeAccessToDataproduct: boolean
+}
+
 export type AddToCollectionMutationVariables = Exact<{
   id: Scalars['ID']
   elementID: Scalars['ID']
@@ -509,6 +534,116 @@ export type UserInfoQuery = {
   }
 }
 
+export const GrantAccessDocument = gql`
+  mutation GrantAccess(
+    $dataproductID: ID!
+    $subject: String!
+    $subjectType: SubjectType!
+  ) {
+    grantAccessToDataproduct(
+      dataproductID: $dataproductID
+      subject: $subject
+      subjectType: $subjectType
+    ) {
+      id
+      subject
+      granter
+    }
+  }
+`
+export type GrantAccessMutationFn = Apollo.MutationFunction<
+  GrantAccessMutation,
+  GrantAccessMutationVariables
+>
+
+/**
+ * __useGrantAccessMutation__
+ *
+ * To run a mutation, you first call `useGrantAccessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGrantAccessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [grantAccessMutation, { data, loading, error }] = useGrantAccessMutation({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *      subject: // value for 'subject'
+ *      subjectType: // value for 'subjectType'
+ *   },
+ * });
+ */
+export function useGrantAccessMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    GrantAccessMutation,
+    GrantAccessMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<GrantAccessMutation, GrantAccessMutationVariables>(
+    GrantAccessDocument,
+    options
+  )
+}
+export type GrantAccessMutationHookResult = ReturnType<
+  typeof useGrantAccessMutation
+>
+export type GrantAccessMutationResult =
+  Apollo.MutationResult<GrantAccessMutation>
+export type GrantAccessMutationOptions = Apollo.BaseMutationOptions<
+  GrantAccessMutation,
+  GrantAccessMutationVariables
+>
+export const RevokeAccessDocument = gql`
+  mutation RevokeAccess($id: ID!) {
+    revokeAccessToDataproduct(id: $id)
+  }
+`
+export type RevokeAccessMutationFn = Apollo.MutationFunction<
+  RevokeAccessMutation,
+  RevokeAccessMutationVariables
+>
+
+/**
+ * __useRevokeAccessMutation__
+ *
+ * To run a mutation, you first call `useRevokeAccessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRevokeAccessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [revokeAccessMutation, { data, loading, error }] = useRevokeAccessMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRevokeAccessMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RevokeAccessMutation,
+    RevokeAccessMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RevokeAccessMutation,
+    RevokeAccessMutationVariables
+  >(RevokeAccessDocument, options)
+}
+export type RevokeAccessMutationHookResult = ReturnType<
+  typeof useRevokeAccessMutation
+>
+export type RevokeAccessMutationResult =
+  Apollo.MutationResult<RevokeAccessMutation>
+export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<
+  RevokeAccessMutation,
+  RevokeAccessMutationVariables
+>
 export const AddToCollectionDocument = gql`
   mutation addToCollection(
     $id: ID!
