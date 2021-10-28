@@ -80,7 +80,8 @@ export function getApolloClient(initialState?: NormalizedCacheObject) {
   return _apolloClient
 }
 
-export function addApolloState(client: any, pageProps: any) {
+export function addApolloState(client: any, pageProps?: any) {
+  if (typeof pageProps === 'undefined') pageProps = { props: {} }
   pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
 
   return pageProps

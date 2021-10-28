@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import { Button, TextField } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import { Search } from '@navikt/ds-icons'
 
 const StyledLargeSearchDiv = styled.div`
@@ -70,11 +69,14 @@ const redirectPath = (query: string) =>
         pathname: '/',
       }
 
-export default function LargeSearchBox() {
-  const router = useRouter()
-  let { q } = router.query
-  if (typeof q !== 'string') q = ''
-  const [value, setValue] = useState<string>(q)
+export interface FrontPageSearchBoxProps {
+  onSearch: (query: string) => void
+}
+
+export default function FrontPageSearchBox({
+  onSearch,
+}: FrontPageSearchBoxProps) {
+  const [value, setValue] = useState<string>('')
 
   return (
     <StyledLargeSearchDiv role="navigation">
@@ -83,9 +85,7 @@ export default function LargeSearchBox() {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              router.push(redirectPath(value))
-            }
+            if (e.key === 'Enter') onSearch(value)
           }}
         />
         <div>
@@ -96,9 +96,7 @@ export default function LargeSearchBox() {
         <Button
           variant={'secondary'}
           aria-label={'Søk'}
-          onClick={() => {
-            router.push(redirectPath(value))
-          }}
+          onClick={() => onSearch(value)}
         >
           Søk
         </Button>
