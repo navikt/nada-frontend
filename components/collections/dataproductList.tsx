@@ -10,7 +10,7 @@ import {
   useSearchContentQuery,
 } from '../../lib/schema/graphql'
 import SearchResult from './collectionElement'
-import ProductSearchBox from '../search/productSearcBox'
+import ProductSearchBox from '../search/productSearchBox'
 
 interface DataproductListProps {
   collection: CollectionQuery['collection']
