@@ -1,15 +1,16 @@
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
-import { Button, Modal } from '@navikt/ds-react'
+import { Modal } from '@navikt/ds-react'
 import NewDataproductCard from './newDataproductCard'
-import { mutate } from 'swr'
 import DataproductCard from './dataproductCard'
-import apiPOST from '../../lib/api/post'
 import {
+  CollectionElementType,
   CollectionQuery,
-  useAllDataproductsForTeamQuery,
+  useAddToCollectionMutation,
+  useSearchContentQuery,
 } from '../../lib/schema/graphql'
 import SearchResult from './collectionElement'
+import ProductSearchBox from '../search/productSearcBox'
 
 interface DataproductListProps {
   collection: CollectionQuery['collection']
@@ -18,40 +19,35 @@ interface DataproductListProps {
 export const DataproductList = ({ collection }: DataproductListProps) => {
   const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
   const userState = useContext(UserState)
+  const [q, setQ] = useState('')
 
   const initCollectionElements = collection.elements
     ? collection.elements.map((e) => e.id)
     : []
-  const { data, loading, error } = useAllDataproductsForTeamQuery()
+  const { data } = useSearchContentQuery({
+    variables: { q: { text: q } },
+  })
+  const [addToCollection] = useAddToCollectionMutation()
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
     initCollectionElements
   )
 
-  const handleClick = (id: string) => {
-    if (selectedProduct.includes(id)) {
-      setSelectedProduct((selectedProduct) =>
-        selectedProduct.splice(selectedProduct.indexOf(id), 1)
-      )
-    } else {
-      setSelectedProduct((selectedProduct) => [...selectedProduct, id])
-    }
+  const onSubmit = (value: string) => {
+    setQ(value)
   }
 
-  const handleSubmit = async () => {
-    for (const product of selectedProduct.filter(
-      (element) => !initCollectionElements.includes(element)
-    )) {
-      try {
-        await apiPOST(`/api/collections/${collection.id}/add`, {
-          element_id: product,
-          element_type: 'dataproduct',
-        })
-      } catch (e) {
-        console.log('Api kall feilet', e)
-      }
-    }
+  const handleClick = (id: string) => {
+    addToCollection({
+      variables: {
+        id: collection.id,
+        elementID: id,
+        elementType: CollectionElementType.Dataproduct,
+      },
+      awaitRefetchQueries: true,
+      refetchQueries: ['Collection'],
+    })
     setShowNewDataproduct(false)
-    await mutate(`/api/collections/${collection.id}`)
+    close()
   }
 
   return (
@@ -71,12 +67,12 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
         onClose={() => setShowNewDataproduct(false)}
       >
         <Modal.Content>
+          <ProductSearchBox onSubmit={onSubmit} />
           <div>
-            {!data?.dataproducts.length ? (
+            {!data?.search.length ? (
               <div>Ingen resultater funnet</div>
             ) : (
-              data?.dataproducts.map((d) => {
-                //    return <p key={d.id}>Placeholder</p>
+              data?.search.map((d) => {
                 return (
                   <SearchResult
                     key={d.id}
@@ -87,7 +83,6 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
                 )
               })
             )}
-            <Button onClick={handleSubmit}>Ferdig</Button>
           </div>
         </Modal.Content>
       </Modal>

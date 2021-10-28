@@ -365,21 +365,6 @@ export type UpdateCollectionMutation = {
   updateCollection: { __typename?: 'Collection'; id: string }
 }
 
-export type AllDataproductsForTeamQueryVariables = Exact<{
-  [key: string]: never
-}>
-
-export type AllDataproductsForTeamQuery = {
-  __typename?: 'Query'
-  dataproducts: Array<{
-    __typename: 'Dataproduct'
-    id: string
-    name: string
-    description?: string | null | undefined
-    owner: { __typename?: 'Owner'; group: string }
-  }>
-}
-
 export type CreateDataproductMutationVariables = Exact<{
   input: NewDataproduct
 }>
@@ -795,69 +780,6 @@ export type UpdateCollectionMutationResult =
 export type UpdateCollectionMutationOptions = Apollo.BaseMutationOptions<
   UpdateCollectionMutation,
   UpdateCollectionMutationVariables
->
-export const AllDataproductsForTeamDocument = gql`
-  query allDataproductsForTeam {
-    dataproducts {
-      id
-      name
-      description
-      __typename
-      owner {
-        group
-      }
-    }
-  }
-`
-
-/**
- * __useAllDataproductsForTeamQuery__
- *
- * To run a query within a React component, call `useAllDataproductsForTeamQuery` and pass it any options that fit your needs.
- * When your component renders, `useAllDataproductsForTeamQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAllDataproductsForTeamQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAllDataproductsForTeamQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    AllDataproductsForTeamQuery,
-    AllDataproductsForTeamQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    AllDataproductsForTeamQuery,
-    AllDataproductsForTeamQueryVariables
-  >(AllDataproductsForTeamDocument, options)
-}
-export function useAllDataproductsForTeamLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AllDataproductsForTeamQuery,
-    AllDataproductsForTeamQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    AllDataproductsForTeamQuery,
-    AllDataproductsForTeamQueryVariables
-  >(AllDataproductsForTeamDocument, options)
-}
-export type AllDataproductsForTeamQueryHookResult = ReturnType<
-  typeof useAllDataproductsForTeamQuery
->
-export type AllDataproductsForTeamLazyQueryHookResult = ReturnType<
-  typeof useAllDataproductsForTeamLazyQuery
->
-export type AllDataproductsForTeamQueryResult = Apollo.QueryResult<
-  AllDataproductsForTeamQuery,
-  AllDataproductsForTeamQueryVariables
 >
 export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
