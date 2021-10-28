@@ -34,10 +34,9 @@ export const SearchResultLink = ({ result }: SearchResultProps) => {
     if (type === 'Collection') return 'collection'
     return type
   }
-  // FIXME: This hack (|| 'dataproduct') is here because typename is possibly
-  // undefined. This is probably a schema bug?
+
   return (
-    <Link href={`/${helper(result.__typename || 'dataproduct')}/${result.id}`}>
+    <Link href={`/${helper(result.__typename)}/${result.id}`}>
       <SearchResultLinkDiv>
         <LogoSidebar result={result} />
         <ResultAbstract result={result} />
