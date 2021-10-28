@@ -8,7 +8,7 @@ import ReactMarkdown from 'react-markdown'
 import DataproductTableSchema from './dataproductTableSchema'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
-import DotMenu from '../lib/editMenu'
+import EditMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import {
   DataproductQuery,
@@ -64,12 +64,12 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
         <h1>{product.name}</h1>
-        {userState ? (
-          <DotMenu
+        {userState && (
+          <EditMenu
             onEdit={() => setEdit(true)}
             onDelete={() => setShowDelete(true)}
           />
-        ) : null}
+        )}
       </StyledDiv>
 
       <Box sx={{ bgcolor: 'background.paper' }}>
