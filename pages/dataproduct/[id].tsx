@@ -14,7 +14,7 @@ interface DataproductProps {
 
 const Dataproduct = (props: DataproductProps) => {
   const { id } = props
-  console.log(props)
+
   const { data, loading, error } = useDataproductQuery({
     variables: { id },
     ssr: true,
