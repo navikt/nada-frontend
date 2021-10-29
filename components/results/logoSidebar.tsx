@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import { logoMap } from '../lib/icons/logoMap'
-import { SearchResultType } from './searchResult'
+import { SearchContentQuery } from '../../lib/schema/graphql'
+import { ArrayElement } from '../../lib/schema/ArrayElement'
 
 const LogoSidebarDiv = styled.div`
-  flex: 0 0 90px;
-  margin-right: 24px;
+  flex: 0 0 20px;
+  margin-right: 12px;
 
   img {
     width: 90%;
@@ -18,7 +19,7 @@ const LogoSidebarDiv = styled.div`
     margin: 0;
     margin-top: 8px;
     color: rgba(0, 0, 0, 0.7);
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
   }
 `
@@ -30,7 +31,7 @@ const typeNameMap: Record<string, string> = {
 }
 
 export interface LogoSideProps {
-  result: SearchResultType
+  result: ArrayElement<SearchContentQuery['search']>
 }
 
 //FIXME: Bad handling of potentially undefined to get GraphQL up and running

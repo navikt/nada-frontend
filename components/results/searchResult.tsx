@@ -3,43 +3,51 @@ import Link from 'next/link'
 import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
 import { ResultAbstract } from './resultAbstract'
 import { LogoSidebar } from './logoSidebar'
-import { Dataproduct } from '../../lib/schema/graphql'
+import { SearchContentQuery } from '../../lib/schema/graphql'
+import { ArrayElement } from '../../lib/schema/ArrayElement'
 
 const SearchResultLinkDiv = styled.div`
-  background-color: ${navGraBakgrunn};
-  display: flex;
-  padding: 16px 24px;
   margin-bottom: 15px;
+  width: 50%;
 
-  cursor: pointer;
-  :hover {
-    background-color: ${navBlaLighten80};
+  > div {
+    padding: 5px 10px;
+
+    > div {
+      box-shadow: 4px 4px 6px 1px rgba(0, 0, 0, 0.1);
+      padding: 16px 24px;
+      background-color: ${navGraBakgrunn};
+      display: flex;
+
+      cursor: pointer;
+
+      :hover {
+        box-shadow: 4px 4px 6px 1px rgba(102, 165, 244, 0.3);
+
+        // box-shadow: 15px 25px 44px -11px rgba(102, 165, 244, 0.6); // navBlaLighten80
+        background-color: ${navBlaLighten80};
+      }
+    }
   }
 `
 
-export type SearchResultType = {
-  __typename: string
-  id: string
-  name?: string | null
-  description?: string | null
-}
-
 export interface SearchResultProps {
-  result: SearchResultType
+  result: ArrayElement<SearchContentQuery['search']>
 }
 
 export const SearchResultLink = ({ result }: SearchResultProps) => {
-  const helper = (type: string) => {
-    if (type === 'Dataproduct') return 'dataproduct'
-    if (type === 'Collection') return 'collection'
-    return type
-  }
+  const getLink = (result: ArrayElement<SearchContentQuery['search']>) =>
+    `/${result.__typename.toLowerCase()}/${result.id}`
 
   return (
-    <Link href={`/${helper(result.__typename)}/${result.id}`}>
+    <Link href={getLink(result)}>
       <SearchResultLinkDiv>
-        <LogoSidebar result={result} />
-        <ResultAbstract result={result} />
+        <div>
+          <div>
+            <LogoSidebar result={result} />
+            <ResultAbstract result={result} />
+          </div>
+        </div>
       </SearchResultLinkDiv>
     </Link>
   )

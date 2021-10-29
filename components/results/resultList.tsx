@@ -11,13 +11,20 @@ interface ResultsProps {
   results?: SearchContentQuery['search']
 }
 
+const ResultListDiv = styled.div`
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
 export function ResultList({ results }: ResultsProps) {
   return (
-    <div>
+    <ResultListDiv>
       {results?.map((d) => (
         <SearchResultLink key={d.id} result={d} />
       ))}
-    </div>
+    </ResultListDiv>
   )
 }
 

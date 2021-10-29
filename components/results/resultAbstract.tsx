@@ -1,37 +1,29 @@
 import styled from 'styled-components'
-import { SearchResultType } from './searchResult'
+import { ArrayElement } from '../../lib/schema/ArrayElement'
+import { SearchContentQuery } from '../../lib/schema/graphql'
 
-const StyledTitleLine = styled.div`
-  h1 {
-    font-size: 2em;
-    line-height: 1em;
+const StyledTitle = styled.h2`
+  line-height: 1em;
 
-    font-family: 'Source Sans Pro';
-    margin: 0 8px 0 0;
-  }
+  font-family: 'Source Sans Pro';
+  margin: 0 8px 0 0;
+`
+
+const StyledDescription = styled.p`
+  margin: 0.25em 1em 0 0.125em;
 `
 
 const StyledResultAbstract = styled.div`
   flex-grow: 1;
-
-  p {
-    margin: 5px 15px 0 2px;
-  }
 `
 
 export interface ResultAbstractProps {
-  result: SearchResultType
+  result: ArrayElement<SearchContentQuery['search']>
 }
-
-export const TitleLine = ({ result }: ResultAbstractProps) => (
-  <StyledTitleLine>
-    <h1>{result.name}</h1>
-  </StyledTitleLine>
-)
 
 export const ResultAbstract = ({ result }: ResultAbstractProps) => (
   <StyledResultAbstract>
-    <TitleLine result={result} />
+    <StyledTitle>{result.name}</StyledTitle>
     <p>{result.description}</p>
   </StyledResultAbstract>
 )

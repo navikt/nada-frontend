@@ -11,6 +11,7 @@ const UserBox = styled.div`
   white-space: nowrap;
   display: flex;
   align-items: center;
+  margin-left: auto;
 `
 
 const MenuLine = styled.div`

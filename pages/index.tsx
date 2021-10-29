@@ -1,7 +1,7 @@
 import ResultList from '../components/results/resultList'
 import PageLayout from '../components/pageLayout'
 import styled from 'styled-components'
-import FrontPageSearchBox from '../components/search/mainPageSearchBox'
+import FrontPageSearchBox from '../components/index/searchField'
 import { GetServerSideProps } from 'next'
 import { addApolloState, getApolloClient } from '../lib/apollo'
 import {
@@ -9,14 +9,16 @@ import {
   useSearchContentQuery,
 } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
+import { FrontPageLogo } from '../components/index/frontPageLogo'
 
 const SEARCH_LIMIT = 5
 
 const LandingPageDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
   margin-bottom: 1.5rem;
+`
+
+const QuickHackForDemo = styled.h1`
+  padding-top: 3em;
 `
 
 const LandingPage = () => {
@@ -28,10 +30,11 @@ const LandingPage = () => {
   return (
     <PageLayout>
       <LandingPageDiv>
+        <FrontPageLogo />
         <FrontPageSearchBox
           onSearch={(q) => router.push({ pathname: '/search', query: { q } })}
         />
-        <h1>Nyeste ressurser</h1>
+        <QuickHackForDemo>Nyeste ressurser</QuickHackForDemo>
         <ResultList results={data?.search} />
       </LandingPageDiv>
     </PageLayout>
