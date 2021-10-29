@@ -5,10 +5,10 @@ import {
   navGronnLighten20,
   navGronnLighten60,
 } from '../../styles/constants'
-import { Dataproduct } from '../../lib/schema/graphql'
 import { ResultAbstract } from '../results/resultAbstract'
 import { LogoSidebar } from '../results/logoSidebar'
-import { SearchResultType } from '../results/searchResult'
+import { ArrayElement } from '../../lib/schema/ArrayElement'
+import { SearchContentQuery } from '../../lib/schema/graphql'
 
 const SearchResultDiv = styled.div<{ selected: boolean }>`
   background-color: ${(props) =>
@@ -26,7 +26,7 @@ const SearchResultDiv = styled.div<{ selected: boolean }>`
 `
 
 export interface SearchResultProps {
-  result: SearchResultType
+  result: ArrayElement<SearchContentQuery['search']>
   selected: boolean
   handleClick: (id: string) => void
 }
