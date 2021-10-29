@@ -4,6 +4,9 @@ export const GET_DATAPRODUCT = gql`
   query Dataproduct($id: ID!) {
     dataproduct(id: $id) {
       id
+      access {
+        subject
+      }
       lastModified
       name
       description

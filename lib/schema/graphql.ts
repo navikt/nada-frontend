@@ -18,103 +18,217 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  /** Time is a string in [RFC 3339](https://rfc-editor.org/rfc/rfc3339.html) format, with sub-second precision added if present. */
   Time: any
 }
 
+/** Access contains metadata on an access entry. */
 export type Access = {
   __typename?: 'Access'
+  /** created is timestamp for when access was created */
   created: Scalars['Time']
+  /** expires is timestamp for when access expires */
   expires?: Maybe<Scalars['Time']>
+  /** name of the granter */
   granter: Scalars['String']
+  /** id for the access entry */
   id: Scalars['ID']
+  /** revoked is timestamp for when access was revoked */
   revoked?: Maybe<Scalars['Time']>
+  /** subject to grant access */
   subject: Scalars['String']
 }
 
+/** BigQuery contains metadata on a BigQuery table. */
 export type BigQuery = {
   __typename?: 'BigQuery'
+  /** dataset is the dataset that contains the BigQuery table */
   dataset: Scalars['String']
+  /** projectID is the GCP project ID that contains the BigQuery table */
   projectID: Scalars['String']
+  /** schema for the BigQuery table */
   schema: Array<TableColumn>
+  /** table name for BigQuery table */
   table: Scalars['String']
 }
 
+/** BigQueryTable contains information about a BigQuery table. */
 export type BigQueryTable = {
   __typename?: 'BigQueryTable'
+  /** description defined on the bigquery table. */
   description: Scalars['String']
+  /** lastModified defines the last modified time of the BigQuery metadata. */
   lastModified: Scalars['Time']
+  /** name of the BigQuery table. */
   name: Scalars['String']
+  /** type of the BigQuery table. */
   type: BigQueryType
 }
 
+/** BigQueryType defines supported table types in a BigQuery set. */
 export enum BigQueryType {
+  /** materialized_view is when the table is a BigQuery materialized view. */
   MaterializedView = 'materialized_view',
+  /** table is when the table is a regular BigQuery table. */
   Table = 'table',
+  /** view is when the table is a BigQuery view. */
   View = 'view',
 }
 
+/** Collection contains metadata about a collection of elements. */
 export type Collection = {
   __typename?: 'Collection'
+  /** created contains the timestamp when the collection was created. */
   created: Scalars['Time']
+  /** description of the collection. */
   description?: Maybe<Scalars['String']>
+  /** elements of the collection. */
   elements: Array<CollectionElement>
+  /** id is the identifier for the collection. */
   id: Scalars['ID']
+  /** keywords for the collection used as tags. */
   keywords: Array<Scalars['String']>
+  /** lastModified contains the timestamp when the collection was last modified. */
   lastModified: Scalars['Time']
+  /** name of the collection. */
   name: Scalars['String']
+  /** owner of the collection. Changes to the collection can only be done by a member of the owner. */
   owner: Owner
 }
 
+/** CollectionElement defines all types that can be returned as a collection element. */
 export type CollectionElement = Dataproduct
 
+/** CollectionElementType defines all possible types that can be stored as a collection element. */
 export enum CollectionElementType {
   Dataproduct = 'dataproduct',
 }
 
+/** Dataproduct contains metadata on a datasource. */
 export type Dataproduct = {
   __typename?: 'Dataproduct'
+  /** access contains list of users, groups and service accounts which have access to the dataproduct */
   access: Array<Access>
+  /** created is the timestamp for when the dataproduct was created */
   created: Scalars['Time']
+  /** datasource contains metadata on the datasource */
   datasource: Datasource
+  /** description of the dataproduct */
   description?: Maybe<Scalars['String']>
+  /** id is the identifier for the dataproduct */
   id: Scalars['ID']
+  /** keywords for the dataproduct used as tags. */
   keywords: Array<Scalars['String']>
+  /** lastModified is the timestamp for when the dataproduct was last modified */
   lastModified: Scalars['Time']
+  /** name of the dataproduct */
   name: Scalars['String']
+  /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
   owner: Owner
+  /** pii indicates whether it is personal identifiable information in the dataproduct */
   pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataproduct */
   repo?: Maybe<Scalars['String']>
+  /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters: Array<Scalars['String']>
 }
 
+/** Datasource defines types that can be returned as a dataproduct datasource. */
 export type Datasource = BigQuery
 
+/** GCPProject contains metadata on a GCP project. */
 export type GcpProject = {
   __typename?: 'GCPProject'
+  /** group is owner group of GCP project */
   group: Group
+  /** id of GCP project */
   id: Scalars['String']
 }
 
+/** Group contains metadata on a GCP group */
 export type Group = {
   __typename?: 'Group'
+  /** email of the group */
   email: Scalars['String']
+  /** name of the group */
   name: Scalars['String']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
+  /**
+   * addRequesterToDataproduct adds a requester to the dataproduct.
+   *
+   * Requires authentication.
+   */
   addRequesterToDataproduct: Scalars['Boolean']
+  /**
+   *    addToCollection adds a new element to the collection.
+   *
+   * Requires authentication.
+   */
   addToCollection: Scalars['Boolean']
+  /**
+   *    createCollection creates a new collection.
+   *
+   * Requires authentication.
+   */
   createCollection: Collection
+  /**
+   * createDataproduct creates a new dataproduct
+   *
+   * Requires authentication.
+   */
   createDataproduct: Dataproduct
+  /**
+   *    deleteCollection deletes a collection.
+   *
+   * Requires authentication.
+   */
   deleteCollection: Scalars['Boolean']
+  /**
+   * deleteDataproduct deletes a dataproduct.
+   *
+   * Requires authentication.
+   */
   deleteDataproduct: Scalars['Boolean']
+  /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
+  /**
+   * grantAccessToDataproduct grants access for a subject to the dataproduct.
+   *
+   * Requires authentication.
+   */
   grantAccessToDataproduct: Access
+  /**
+   *    removeFromCollection removes a collection.
+   *
+   * Requires authentication.
+   */
   removeFromCollection: Scalars['Boolean']
+  /**
+   * removeRequesterFromDataproduct removes a requester from the dataproduct.
+   *
+   * Requires authentication.
+   */
   removeRequesterFromDataproduct: Scalars['Boolean']
+  /**
+   * revokeAccessToDataproduct revokes access for a subject to the dataproduct.
+   *
+   * Requires authentication.
+   */
   revokeAccessToDataproduct: Scalars['Boolean']
+  /**
+   *    updateCollection updates the metadata of a collection.
+   *
+   * Requires authentication.
+   */
   updateCollection: Collection
+  /**
+   * updateDataproduct updates an existing dataproduct
+   *
+   * Requires authentication.
+   */
   updateDataproduct: Dataproduct
 }
 
@@ -181,46 +295,87 @@ export type MutationUpdateDataproductArgs = {
   input: UpdateDataproduct
 }
 
+/** NewBigQuery contains metadata for creating a new bigquery data source */
 export type NewBigQuery = {
+  /** dataset is the name of the dataset. */
   dataset: Scalars['String']
+  /** projectID is the GCP project ID that contains the dataset. */
   projectID: Scalars['String']
+  /** table is the name of the table */
   table: Scalars['String']
 }
 
+/**
+ * NewCollection contains metadata for creating a new collection.
+ * Group must match one of the groups the authenticated user is part of.
+ */
 export type NewCollection = {
+  /** description of the colection. */
   description?: Maybe<Scalars['String']>
+  /** group the collection belongs to. Used for authorization. */
   group: Scalars['String']
+  /** keywords for the collection used as tags. */
   keywords?: Maybe<Array<Scalars['String']>>
+  /** name of the collection. */
   name: Scalars['String']
 }
 
+/** NewDataproduct contains metadata for creating a new dataproduct */
 export type NewDataproduct = {
+  /** bigquery contains metadata for the bigquery datasource added to the dataproduct. */
   bigquery: NewBigQuery
+  /** description of the dataproduct */
   description?: Maybe<Scalars['String']>
+  /** owner group email for the dataproduct. */
   group: Scalars['String']
+  /** keywords for the dataproduct used as tags. */
   keywords?: Maybe<Array<Scalars['String']>>
+  /** name of dataproduct */
   name: Scalars['String']
+  /** pii indicates whether it is personal identifiable information in the dataproduct */
   pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataproduct */
   repo?: Maybe<Scalars['String']>
+  /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters?: Maybe<Array<Scalars['String']>>
 }
 
+/** Owner contains metadata on the owner of the dataproduct. */
 export type Owner = {
   __typename?: 'Owner'
+  /** owner group is the email for the group. */
   group: Scalars['String']
+  /** teamkatalogen is url for the team in the NAV team catalog. */
   teamkatalogen: Scalars['String']
 }
 
 export type Query = {
   __typename?: 'Query'
+  /** collection returns the given collection. */
   collection: Collection
+  /** collections returns a list of collections. Pagination done using the arguments. */
   collections: Array<Collection>
+  /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
+  /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
   dataproducts: Array<Dataproduct>
+  /**
+   * gcpGetDatasets returns all datasets for a given project.
+   *
+   * Requires authentication.
+   */
   gcpGetDatasets: Array<Scalars['String']>
+  /**
+   * gcpGetTables returns all tables for a given dataset.
+   *
+   * Requires authentication.
+   */
   gcpGetTables: Array<BigQueryTable>
+  /** search through existing dataproducts and collections. */
   search: Array<SearchResult>
+  /** userInfo returns information about the logged in user. */
   userInfo: UserInfo
+  /** version returns the API version. */
   version: Scalars['String']
 }
 
@@ -256,50 +411,82 @@ export type QuerySearchArgs = {
 }
 
 export type SearchQuery = {
-  /** Filter on keyword */
+  /** keyword filters results on the keyword. */
   keyword?: Maybe<Scalars['String']>
+  /** limit the number of returned search results. */
   limit?: Maybe<Scalars['Int']>
+  /** offset the list of returned search results. Used as pagination with PAGE-INDEX * limit. */
   offset?: Maybe<Scalars['Int']>
-  /** Freetext search */
+  /**
+   * text is used as freetext search.
+   *
+   * Use " to identify phrases. Example: "hello world"
+   *
+   * Use - to exclude words. Example "include this -exclude -those"
+   *
+   * Use OR as a keyword for the OR operator. Example "night OR day"
+   */
   text?: Maybe<Scalars['String']>
 }
 
 export type SearchResult = Collection | Dataproduct
 
+/** SubjectType defines all possible types that can request access to a dataproduct. */
 export enum SubjectType {
   Group = 'group',
   ServiceAccount = 'serviceAccount',
   User = 'user',
 }
 
+/** TableColumn contains metadata on a BigQuery table column. */
 export type TableColumn = {
   __typename?: 'TableColumn'
+  /** description of column. */
   description: Scalars['String']
+  /** mode of column (NULLABLE, REQUIRED or REPEATED). */
   mode: Scalars['String']
+  /** name of column. */
   name: Scalars['String']
+  /** type is the datatype of the column. */
   type: Scalars['String']
 }
 
+/** UpdateCollection contains data for updating the metadata of a collection. */
 export type UpdateCollection = {
+  /** description of the collection. */
   description?: Maybe<Scalars['String']>
+  /** keywords for the collection used as tags. */
   keywords?: Maybe<Array<Scalars['String']>>
+  /** name of the collection. */
   name: Scalars['String']
 }
 
+/** UpdateDataproduct contains metadata for updating a dataproduct */
 export type UpdateDataproduct = {
+  /** description of the dataproduct */
   description?: Maybe<Scalars['String']>
+  /** keywords for the dataproduct used as tags. */
   keywords?: Maybe<Array<Scalars['String']>>
+  /** name of dataproduct */
   name: Scalars['String']
+  /** pii indicates whether it is personal identifiable information in the dataproduct */
   pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataproduct */
   repo?: Maybe<Scalars['String']>
+  /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters?: Maybe<Array<Scalars['String']>>
 }
 
+/** UserInfo contains metadata on a logged in user */
 export type UserInfo = {
   __typename?: 'UserInfo'
+  /** email of user. */
   email: Scalars['String']
+  /** gcpProjects is GCP projects the user is a member of. */
   gcpProjects: Array<GcpProject>
+  /** groups the user is a member of. */
   groups: Array<Group>
+  /** name of user. */
   name: Scalars['String']
 }
 
@@ -415,6 +602,7 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
+    access: Array<{ __typename?: 'Access'; subject: string }>
     owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
     datasource: {
       __typename?: 'BigQuery'
@@ -970,6 +1158,9 @@ export const DataproductDocument = gql`
   query Dataproduct($id: ID!) {
     dataproduct(id: $id) {
       id
+      access {
+        subject
+      }
       lastModified
       name
       description
