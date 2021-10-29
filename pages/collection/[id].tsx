@@ -23,12 +23,18 @@ const Datacollection = ({ id }: DatacollectionFetcherProps) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
+  const cookie = context.req.headers.cookie
 
   const apolloClient = getApolloClient()
 
   await apolloClient.query({
     query: GET_COLLECTION,
     variables: { id },
+    context: {
+      headers: {
+        cookie,
+      },
+    },
   })
 
   return addApolloState(apolloClient, {

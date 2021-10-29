@@ -33,12 +33,18 @@ const Dataproduct = (props: DataproductProps) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
+  const cookie = context.req.headers.cookie
 
   const apolloClient = getApolloClient()
 
   await apolloClient.query({
     query: GET_DATAPRODUCT,
     variables: { id },
+    context: {
+      headers: {
+        cookie,
+      },
+    },
   })
 
   return addApolloState(apolloClient, {
