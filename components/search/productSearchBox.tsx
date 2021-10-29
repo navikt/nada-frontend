@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Search } from '@navikt/ds-icons'
 
 const SearchDiv = styled.div`
-  width: 70%;
+  width: 100%;
   padding: 0 5px;
   margin: 0 auto;
 

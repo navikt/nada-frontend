@@ -1,11 +1,12 @@
 import Card from '@mui/material/Card'
 import { CardActions } from '@mui/material'
-import { AddCircleFilled } from '@navikt/ds-icons'
-import { navBlaLighten80, navGronn } from '../../styles/constants'
+import { AddCircleFilled, AutomaticSystem } from '@navikt/ds-icons'
+import { navBla, navBlaLighten80, navGronn } from '../../styles/constants'
 import styled from 'styled-components'
 
 interface NewDataproductCardProps {
   onClick: (data: any) => void
+  updateCard: boolean
 }
 
 const StyledCard = styled.div`
@@ -20,7 +21,10 @@ const StyledCard = styled.div`
     }
   }
 `
-const NewDataproductCard = ({ onClick }: NewDataproductCardProps) => {
+const NewDataproductCard = ({
+  onClick,
+  updateCard,
+}: NewDataproductCardProps) => {
   return (
     <StyledCard>
       <Card
@@ -40,14 +44,21 @@ const NewDataproductCard = ({ onClick }: NewDataproductCardProps) => {
             flex: '1 0 auto',
           }}
         >
-          <AddCircleFilled
-            style={{ color: navGronn, display: 'flex', alignItems: 'center' }}
-            fontSize={'100'}
-          />
+          {updateCard ? (
+            <AutomaticSystem
+              style={{ color: navBla, display: 'flex', alignItems: 'center' }}
+              fontSize={'100'}
+            />
+          ) : (
+            <AddCircleFilled
+              style={{ color: navGronn, display: 'flex', alignItems: 'center' }}
+              fontSize={'100'}
+            />
+          )}
         </div>
         <div>
           <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            Legg til dataprodukt
+            {updateCard ? 'Oppdater produkter' : 'Legg til dataprodukter'}
           </CardActions>
         </div>
       </Card>

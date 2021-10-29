@@ -567,6 +567,17 @@ export type DeleteCollectionMutation = {
   deleteCollection: boolean
 }
 
+export type RemoveFromCollectionMutationVariables = Exact<{
+  id: Scalars['ID']
+  elementID: Scalars['ID']
+  elementType: CollectionElementType
+}>
+
+export type RemoveFromCollectionMutation = {
+  __typename?: 'Mutation'
+  removeFromCollection: boolean
+}
+
 export type UpdateCollectionMutationVariables = Exact<{
   id: Scalars['ID']
   input: UpdateCollection
@@ -1052,6 +1063,64 @@ export type DeleteCollectionMutationResult =
 export type DeleteCollectionMutationOptions = Apollo.BaseMutationOptions<
   DeleteCollectionMutation,
   DeleteCollectionMutationVariables
+>
+export const RemoveFromCollectionDocument = gql`
+  mutation removeFromCollection(
+    $id: ID!
+    $elementID: ID!
+    $elementType: CollectionElementType!
+  ) {
+    removeFromCollection(
+      id: $id
+      elementID: $elementID
+      elementType: $elementType
+    )
+  }
+`
+export type RemoveFromCollectionMutationFn = Apollo.MutationFunction<
+  RemoveFromCollectionMutation,
+  RemoveFromCollectionMutationVariables
+>
+
+/**
+ * __useRemoveFromCollectionMutation__
+ *
+ * To run a mutation, you first call `useRemoveFromCollectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFromCollectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFromCollectionMutation, { data, loading, error }] = useRemoveFromCollectionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      elementID: // value for 'elementID'
+ *      elementType: // value for 'elementType'
+ *   },
+ * });
+ */
+export function useRemoveFromCollectionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveFromCollectionMutation,
+    RemoveFromCollectionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RemoveFromCollectionMutation,
+    RemoveFromCollectionMutationVariables
+  >(RemoveFromCollectionDocument, options)
+}
+export type RemoveFromCollectionMutationHookResult = ReturnType<
+  typeof useRemoveFromCollectionMutation
+>
+export type RemoveFromCollectionMutationResult =
+  Apollo.MutationResult<RemoveFromCollectionMutation>
+export type RemoveFromCollectionMutationOptions = Apollo.BaseMutationOptions<
+  RemoveFromCollectionMutation,
+  RemoveFromCollectionMutationVariables
 >
 export const UpdateCollectionDocument = gql`
   mutation updateCollection($id: ID!, $input: UpdateCollection!) {

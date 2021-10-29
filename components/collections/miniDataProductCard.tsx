@@ -1,5 +1,13 @@
 import Link from 'next/link'
-import { Card, CardHeader, CardContent, CardActions } from '@mui/material'
+import { Information } from '@navikt/ds-icons'
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Popover,
+  Typography,
+} from '@mui/material'
 import DataProductSpinner from '../lib/spinner'
 import {
   navBlaLighten80,
@@ -13,13 +21,13 @@ import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { Success, Warning } from '@navikt/ds-icons'
 import Keyword from '../widgets/Keyword'
 import { useDataproductSummaryQuery } from '../../lib/schema/graphql'
-
+import React from 'react'
 
 const DatasetCardDiv = styled(Card)`
-  padding: 10px;
-  margin: 10px;
-  width: 270px;
-  height: 350px;
+  padding: 5px;
+  margin: 5px;
+  width: 130px;
+  height: 150px;
   display: flex;
 
   flex-direction: column;
@@ -49,10 +57,24 @@ const InertDatasetCardDiv = styled(DatasetCardDiv)`
   }
 `
 
-interface DataproductCardProps {
+interface MiniDataproductCardProps {
+  handleClick: (id: string) => void
   id: string
 }
-const DataproductCard = ({ id }: DataproductCardProps) => {
+
+const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<SVGElement | null>(null)
+
+  const handlePopoverOpen = (event: React.MouseEvent<SVGElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null)
+  }
+
+  const open = Boolean(anchorEl)
+
   const { data, loading, error } = useDataproductSummaryQuery({
     variables: { id },
   })
@@ -78,29 +100,30 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
   const { dataproduct } = data
 
   return (
-    <Link href={`/dataproduct/${dataproduct.id}`} passHref>
-      <DatasetCardDiv>
+    <>
+      <DatasetCardDiv onClick={() => handleClick(id)}>
         <CardHeader
-          title={dataproduct.name}
-          subheader={dataproduct.datasource.__typename || '?'}
+          sx={{ padding: '0px' }}
           avatar={
-            <IconBox size={48}>
+            <IconBox size={16}>
               <BigQueryLogo />
             </IconBox>
           }
         />
         <CardContent
           sx={{
+            padding: '0px',
             flexGrow: 1,
           }}
         >
-          <i>
-            {dataproduct.description && dataproduct.description.substr(0, 200)}
-            {dataproduct.description &&
-              dataproduct.description.length > 200 &&
-              '...'}
+          <p style={{ fontSize: 'small', marginBottom: '0px' }}>
+            {dataproduct.name}
+          </p>
+          <i style={{ fontSize: 'small' }}>
+            {dataproduct.datasource.__typename || '?'}
           </i>
         </CardContent>
+
         <CardActions
           style={{ borderTop: `1px solid ${navGra20}`, paddingTop: '0px' }}
         >
@@ -115,18 +138,48 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
             </IconBox>
           </PiiBox>
           <TagsBox>
-            <i style={{ fontSize: 'small' }}>Nøkkelord</i>
-            <div>
-              {dataproduct.keywords &&
-                dataproduct.keywords.map((k) => (
-                  <Keyword key={k} keyword={k} small />
-                ))}
+            <i style={{ fontSize: 'small' }}>Beskrivelse</i>
+            <div style={{ margin: 'auto' }}>
+              <IconBox size={24}>
+                <Information
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                  aria-owns={open ? 'mouse-over-popover' : undefined}
+                  aria-haspopup="true"
+                />
+              </IconBox>
             </div>
           </TagsBox>
         </CardActions>
       </DatasetCardDiv>
-    </Link>
+      <Popover
+        id="mouse-over-popover"
+        sx={{
+          zIndex: 2001,
+          pointerEvents: 'none',
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 1 }}>
+          {dataproduct.description && dataproduct.description.substr(0, 200)}
+          {dataproduct.description &&
+            dataproduct.description.length > 200 &&
+            '...'}
+        </Typography>
+      </Popover>
+    </>
   )
 }
 
-export default DataproductCard
+export default MiniDataProductCard
