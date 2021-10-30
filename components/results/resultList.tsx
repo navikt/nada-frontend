@@ -1,11 +1,6 @@
 import styled from 'styled-components'
-import { Loader } from '@navikt/ds-react'
-import { useRouter } from 'next/router'
 import SearchResultLink from './searchResult'
-import {
-  SearchContentQuery,
-  useSearchContentQuery,
-} from '../../lib/schema/graphql'
+import { SearchContentQuery } from '../../lib/schema/graphql'
 
 interface ResultsProps {
   results?: SearchContentQuery['search']

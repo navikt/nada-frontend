@@ -16,6 +16,7 @@ import {
 } from '../../lib/schema/graphql'
 import { UserState } from '../../lib/context'
 import DeleteModal from '../lib/deleteModal'
+import { DataproductAccess } from '../access/dataproductAccess'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -83,7 +84,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           <Tab label="Detaljer" value={0} />
           <Tab label="Beskrivelse" value={1} />
           <Tab label="Skjema" value={2} />
-          <Tab label="Tilganger" value={3} />
+          {userState?.email && <Tab label="Tilganger" value={3} />}
           <Tab label="Lineage" value={4} />
           <Tab label="Statz" value={5} />
         </Tabs>
@@ -99,9 +100,11 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       <TabPanel index={2} value={activeTab}>
         <DataproductTableSchema schema={product.datasource.schema} />
       </TabPanel>
-      <TabPanel index={3} value={activeTab}>
-        <div>Placeholder</div>
-      </TabPanel>
+      {userState?.email && (
+        <TabPanel index={3} value={activeTab}>
+          <DataproductAccess id={product.id} />
+        </TabPanel>
+      )}
       <TabPanel index={4} value={activeTab}>
         <div>Placeholder</div>
       </TabPanel>

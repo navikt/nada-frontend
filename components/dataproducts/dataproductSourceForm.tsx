@@ -1,8 +1,6 @@
-import { useGcpGetDatasetsQuery } from '../../lib/schema/graphql'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import TreeView from '@mui/lab/TreeView'
-import TreeItem from '@mui/lab/TreeItem'
 import {
   FieldErrors,
   FieldValues,
@@ -10,7 +8,6 @@ import {
   UseFormRegister,
   UseFormWatch,
 } from 'react-hook-form'
-import { Dataset } from './datasource/dataset'
 import { Project } from './datasource/project'
 
 interface DataproductSourceFormProps {

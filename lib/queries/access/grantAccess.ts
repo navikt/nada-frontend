@@ -12,8 +12,6 @@ export const GRANT_ACCESS = gql`
       subjectType: $subjectType
     ) {
       id
-      subject
-      granter
     }
   }
 `

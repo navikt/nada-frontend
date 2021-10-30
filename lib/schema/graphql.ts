@@ -490,6 +490,38 @@ export type UserInfo = {
   name: Scalars['String']
 }
 
+export type AddRequesterMutationVariables = Exact<{
+  dataproductID: Scalars['ID']
+  subject: Scalars['String']
+}>
+
+export type AddRequesterMutation = {
+  __typename?: 'Mutation'
+  addRequesterToDataproduct: boolean
+}
+
+export type DataproductAccessQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DataproductAccessQuery = {
+  __typename?: 'Query'
+  dataproduct: {
+    __typename?: 'Dataproduct'
+    id: string
+    requesters: Array<string>
+    access: Array<{
+      __typename?: 'Access'
+      id: string
+      subject: string
+      granter: string
+      expires?: any | null | undefined
+      created: any
+      revoked?: any | null | undefined
+    }>
+  }
+}
+
 export type GrantAccessMutationVariables = Exact<{
   dataproductID: Scalars['ID']
   subject: Scalars['String']
@@ -498,12 +530,17 @@ export type GrantAccessMutationVariables = Exact<{
 
 export type GrantAccessMutation = {
   __typename?: 'Mutation'
-  grantAccessToDataproduct: {
-    __typename?: 'Access'
-    id: string
-    subject: string
-    granter: string
-  }
+  grantAccessToDataproduct: { __typename?: 'Access'; id: string }
+}
+
+export type RemoveRequesterMutationVariables = Exact<{
+  dataproductID: Scalars['ID']
+  subject: Scalars['String']
+}>
+
+export type RemoveRequesterMutation = {
+  __typename?: 'Mutation'
+  removeRequesterFromDataproduct: boolean
 }
 
 export type RevokeAccessMutationVariables = Exact<{
@@ -613,7 +650,6 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
-    access: Array<{ __typename?: 'Access'; subject: string }>
     owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
     datasource: {
       __typename?: 'BigQuery'
@@ -733,6 +769,122 @@ export type UserInfoQuery = {
   }
 }
 
+export const AddRequesterDocument = gql`
+  mutation AddRequester($dataproductID: ID!, $subject: String!) {
+    addRequesterToDataproduct(dataproductID: $dataproductID, subject: $subject)
+  }
+`
+export type AddRequesterMutationFn = Apollo.MutationFunction<
+  AddRequesterMutation,
+  AddRequesterMutationVariables
+>
+
+/**
+ * __useAddRequesterMutation__
+ *
+ * To run a mutation, you first call `useAddRequesterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddRequesterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addRequesterMutation, { data, loading, error }] = useAddRequesterMutation({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *      subject: // value for 'subject'
+ *   },
+ * });
+ */
+export function useAddRequesterMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddRequesterMutation,
+    AddRequesterMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    AddRequesterMutation,
+    AddRequesterMutationVariables
+  >(AddRequesterDocument, options)
+}
+export type AddRequesterMutationHookResult = ReturnType<
+  typeof useAddRequesterMutation
+>
+export type AddRequesterMutationResult =
+  Apollo.MutationResult<AddRequesterMutation>
+export type AddRequesterMutationOptions = Apollo.BaseMutationOptions<
+  AddRequesterMutation,
+  AddRequesterMutationVariables
+>
+export const DataproductAccessDocument = gql`
+  query DataproductAccess($id: ID!) {
+    dataproduct(id: $id) {
+      id
+      access {
+        id
+        subject
+        granter
+        expires
+        created
+        revoked
+      }
+      requesters
+    }
+  }
+`
+
+/**
+ * __useDataproductAccessQuery__
+ *
+ * To run a query within a React component, call `useDataproductAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDataproductAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDataproductAccessQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDataproductAccessQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >(DataproductAccessDocument, options)
+}
+export function useDataproductAccessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >(DataproductAccessDocument, options)
+}
+export type DataproductAccessQueryHookResult = ReturnType<
+  typeof useDataproductAccessQuery
+>
+export type DataproductAccessLazyQueryHookResult = ReturnType<
+  typeof useDataproductAccessLazyQuery
+>
+export type DataproductAccessQueryResult = Apollo.QueryResult<
+  DataproductAccessQuery,
+  DataproductAccessQueryVariables
+>
 export const GrantAccessDocument = gql`
   mutation GrantAccess(
     $dataproductID: ID!
@@ -745,8 +897,6 @@ export const GrantAccessDocument = gql`
       subjectType: $subjectType
     ) {
       id
-      subject
-      granter
     }
   }
 `
@@ -794,6 +944,58 @@ export type GrantAccessMutationResult =
 export type GrantAccessMutationOptions = Apollo.BaseMutationOptions<
   GrantAccessMutation,
   GrantAccessMutationVariables
+>
+export const RemoveRequesterDocument = gql`
+  mutation RemoveRequester($dataproductID: ID!, $subject: String!) {
+    removeRequesterFromDataproduct(
+      dataproductID: $dataproductID
+      subject: $subject
+    )
+  }
+`
+export type RemoveRequesterMutationFn = Apollo.MutationFunction<
+  RemoveRequesterMutation,
+  RemoveRequesterMutationVariables
+>
+
+/**
+ * __useRemoveRequesterMutation__
+ *
+ * To run a mutation, you first call `useRemoveRequesterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveRequesterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeRequesterMutation, { data, loading, error }] = useRemoveRequesterMutation({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *      subject: // value for 'subject'
+ *   },
+ * });
+ */
+export function useRemoveRequesterMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveRequesterMutation,
+    RemoveRequesterMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RemoveRequesterMutation,
+    RemoveRequesterMutationVariables
+  >(RemoveRequesterDocument, options)
+}
+export type RemoveRequesterMutationHookResult = ReturnType<
+  typeof useRemoveRequesterMutation
+>
+export type RemoveRequesterMutationResult =
+  Apollo.MutationResult<RemoveRequesterMutation>
+export type RemoveRequesterMutationOptions = Apollo.BaseMutationOptions<
+  RemoveRequesterMutation,
+  RemoveRequesterMutationVariables
 >
 export const RevokeAccessDocument = gql`
   mutation RevokeAccess($id: ID!) {
@@ -1227,9 +1429,6 @@ export const DataproductDocument = gql`
   query Dataproduct($id: ID!) {
     dataproduct(id: $id) {
       id
-      access {
-        subject
-      }
       lastModified
       name
       description
