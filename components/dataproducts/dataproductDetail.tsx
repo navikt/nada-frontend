@@ -12,11 +12,13 @@ import EditMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import {
   DataproductQuery,
+  Group,
   useDeleteDataproductMutation,
 } from '../../lib/schema/graphql'
 import { UserState } from '../../lib/context'
 import DeleteModal from '../lib/deleteModal'
 import { DataproductAccess } from '../access/dataproductAccess'
+import * as React from 'react'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -37,6 +39,10 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const userState = useContext(UserState)
   const router = useRouter()
 
+  const isOwner =
+    userState?.groups.some((g: Group) => {
+      return g.email === product?.owner.group
+    }) || false
   const [deleteDataproduct] = useDeleteDataproductMutation({
     variables: { id: product.id },
     awaitRefetchQueries: true,
@@ -84,7 +90,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           <Tab label="Detaljer" value={0} />
           <Tab label="Beskrivelse" value={1} />
           <Tab label="Skjema" value={2} />
-          {userState?.email && <Tab label="Tilganger" value={3} />}
+          <Tab label="Tilganger" value={3} />
           <Tab label="Lineage" value={4} />
           <Tab label="Statz" value={5} />
         </Tabs>
@@ -100,11 +106,17 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       <TabPanel index={2} value={activeTab}>
         <DataproductTableSchema schema={product.datasource.schema} />
       </TabPanel>
-      {userState?.email && (
-        <TabPanel index={3} value={activeTab}>
-          <DataproductAccess id={product.id} />
-        </TabPanel>
-      )}
+      <TabPanel index={3} value={activeTab}>
+        {!userState ? (
+          <ErrorMessage
+            error={
+              new Error('Du må logge inn for å se tilganger på dette produktet')
+            }
+          />
+        ) : (
+          <DataproductAccess id={product.id} isOwner={isOwner} />
+        )}
+      </TabPanel>
       <TabPanel index={4} value={activeTab}>
         <div>Placeholder</div>
       </TabPanel>

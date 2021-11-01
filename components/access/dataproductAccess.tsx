@@ -8,12 +8,14 @@ import {
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import * as React from 'react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import RightJustifiedGiveAccess from '../lib/rightJustifiedGiveAccess'
 import AccessItem from './accessItem'
 import styled from 'styled-components'
 import { UserState } from '../../lib/context'
 import Requesters from './requesters'
+import { Fieldset, Modal, TextField } from '@navikt/ds-react'
+import AddAccess from './addAccess'
 
 const AccessListDiv = styled.div`
   flex-wrap: wrap;
@@ -28,36 +30,17 @@ export const removeSubjectType = (subject: string) => {
 
 interface DataproductAccessProps {
   id: string
+  isOwner: boolean
 }
 
-export const DataproductAccess = ({ id }: DataproductAccessProps) => {
+export const DataproductAccess = ({ id, isOwner }: DataproductAccessProps) => {
   const userState = useContext(UserState)
+  const [open, setOpen] = useState(false)
+
   const { data, loading, error } = useDataproductAccessQuery({
     variables: { id },
     ssr: true,
   })
-
-  const [grantAccess] = useGrantAccessMutation(
-    !userState?.email
-      ? {}
-      : {
-          variables: {
-            dataproductID: id,
-            subject: userState.email,
-            subjectType: SubjectType.User,
-          },
-          awaitRefetchQueries: true,
-          refetchQueries: ['DataproductAccess'],
-        }
-  )
-
-  const onGrantAccess = () => {
-    try {
-      grantAccess()
-    } catch (e: any) {
-      console.log(e)
-    }
-  }
 
   if (error) return <ErrorMessage error={error} />
 
@@ -68,18 +51,30 @@ export const DataproductAccess = ({ id }: DataproductAccessProps) => {
       removeSubjectType(a.subject) === userState?.email && a.revoked === null
   )
 
-  const isOwner = userState?.groups.some(
-    (g: Group) => g.email === data?.dataproduct.owner.group
-  )
+  const canRequest = data?.dataproduct.requesters.some((requester) => {
+    if (!userState) return false
+    userState.email === requester ||
+      userState.groups.some((group) => group.email === requester)
+  })
 
+  if (!userState)
+    return (
+      <ErrorMessage
+        error={
+          new Error('Du må logge inn for å se tilganger på dette produktet')
+        }
+      />
+    )
   return (
     <div>
-      <Requesters
-        id={data.dataproduct.id}
-        isOwner={isOwner}
-        requesters={data.dataproduct.requesters}
-      />
-      {!hasAccess && <RightJustifiedGiveAccess onClick={onGrantAccess} />}
+      <Requesters id={id} isOwner={isOwner} />
+
+      {!isOwner && !hasAccess && canRequest && (
+        <RightJustifiedGiveAccess onClick={() => setOpen(true)} />
+      )}
+
+      <RightJustifiedGiveAccess onClick={() => setOpen(true)} />
+
       <AccessListDiv>
         {data.dataproduct.access
           .filter((a: Access) => a.revoked === null)
@@ -102,6 +97,12 @@ export const DataproductAccess = ({ id }: DataproductAccessProps) => {
             </AccessListDiv>
           </div>
         )}
+      <AddAccess
+        open={open}
+        setOpen={setOpen}
+        dataproductID={id}
+        subject={userState.email}
+      />
     </div>
   )
 }

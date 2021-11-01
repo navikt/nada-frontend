@@ -523,6 +523,15 @@ export type DataproductAccessQuery = {
   }
 }
 
+export type DataproductRequestersQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DataproductRequestersQuery = {
+  __typename?: 'Query'
+  dataproduct: { __typename?: 'Dataproduct'; requesters: Array<string> }
+}
+
 export type GrantAccessMutationVariables = Exact<{
   dataproductID: Scalars['ID']
   subject: Scalars['String']
@@ -888,6 +897,64 @@ export type DataproductAccessLazyQueryHookResult = ReturnType<
 export type DataproductAccessQueryResult = Apollo.QueryResult<
   DataproductAccessQuery,
   DataproductAccessQueryVariables
+>
+export const DataproductRequestersDocument = gql`
+  query DataproductRequesters($id: ID!) {
+    dataproduct(id: $id) {
+      requesters
+    }
+  }
+`
+
+/**
+ * __useDataproductRequestersQuery__
+ *
+ * To run a query within a React component, call `useDataproductRequestersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDataproductRequestersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDataproductRequestersQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDataproductRequestersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    DataproductRequestersQuery,
+    DataproductRequestersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    DataproductRequestersQuery,
+    DataproductRequestersQueryVariables
+  >(DataproductRequestersDocument, options)
+}
+export function useDataproductRequestersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    DataproductRequestersQuery,
+    DataproductRequestersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    DataproductRequestersQuery,
+    DataproductRequestersQueryVariables
+  >(DataproductRequestersDocument, options)
+}
+export type DataproductRequestersQueryHookResult = ReturnType<
+  typeof useDataproductRequestersQuery
+>
+export type DataproductRequestersLazyQueryHookResult = ReturnType<
+  typeof useDataproductRequestersLazyQuery
+>
+export type DataproductRequestersQueryResult = Apollo.QueryResult<
+  DataproductRequestersQuery,
+  DataproductRequestersQueryVariables
 >
 export const GrantAccessDocument = gql`
   mutation GrantAccess(

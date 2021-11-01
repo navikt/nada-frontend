@@ -6,38 +6,52 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
   useAddRequesterMutation,
+  useDataproductAccessQuery,
+  useDataproductRequestersQuery,
   useRemoveRequesterMutation,
 } from '../../lib/schema/graphql'
 import { addRequesterValidation } from '../../lib/schema/yupValidations'
 import { UserState } from '../../lib/context'
+import ErrorMessage from '../lib/error'
+import LoaderSpinner from '../lib/spinner'
+import {
+  navBlaLighten20,
+  navBlaLighten80,
+  navRod,
+} from '../../styles/constants'
 
-const StyledMetadataTable = styled.table`
-  th,
-  td {
-    padding: 3px 5px;
+const AddAccess = styled.td`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  :hover {
+    background-color: ${navBlaLighten80};
   }
-
-  th {
-    text-align: right;
-    padding-left: 10px;
-  }
-
-  .navds-card__micro {
-    margin-right: 7px;
-    text-transform: uppercase;
-    font-weight: bold;
+`
+const RemoveAccess = styled.td`
+  height: 31px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: ${navRod};
+  :hover {
+    color: ${navBlaLighten20};
   }
 `
 
 interface RequesterProps {
   id: string
   isOwner: boolean | undefined
-  requesters: string[]
 }
 
-const Requesters = ({ id, isOwner, requesters }: RequesterProps) => {
+const Requesters = ({ id, isOwner }: RequesterProps) => {
   const [open, setOpen] = useState(false)
-  const userState = useContext(UserState)
+
+  const { data, loading, error } = useDataproductRequestersQuery({
+    variables: { id },
+    ssr: true,
+  })
 
   const { register, handleSubmit, watch, formState, setValue } = useForm({
     resolver: yupResolver(addRequesterValidation),
@@ -47,13 +61,13 @@ const Requesters = ({ id, isOwner, requesters }: RequesterProps) => {
   const [addRequester] = useAddRequesterMutation()
   const [removeRequester] = useRemoveRequesterMutation()
 
-  const onSubmit = (requestData: any) => {
-    addRequester({
+  const onSubmit = async (requestData: any) => {
+    await addRequester({
       variables: {
         dataproductID: id,
         subject: requestData.subject,
       },
-      refetchQueries: ['DataproductAccess'],
+      refetchQueries: ['DataproductRequesters'],
     })
     setOpen(false)
   }
@@ -64,39 +78,40 @@ const Requesters = ({ id, isOwner, requesters }: RequesterProps) => {
         dataproductID: id,
         subject: subject,
       },
-      refetchQueries: ['DataproductAccess'],
+      refetchQueries: ['DataproductRequesters'],
     })
   }
-
+  if (error) return <ErrorMessage error={error} />
+  if (loading || !data?.dataproduct) return <LoaderSpinner />
   return (
     <div>
-      <StyledMetadataTable>
+      <table>
         <tbody>
           <tr>
-            <th>Requesters:</th>
+            <th>Kan be om tilgang</th>
             <th></th>
           </tr>
-          {requesters.map((r) => {
+          {data.dataproduct.requesters.map((r) => {
             return (
               <tr key={r}>
                 <td>{r}</td>
                 {isOwner && (
-                  <td onClick={() => onDelete(r)}>
+                  <RemoveAccess onClick={() => onDelete(r)}>
                     <Delete />
-                  </td>
+                  </RemoveAccess>
                 )}
               </tr>
             )
           })}
           {isOwner && (
             <tr>
-              <td onClick={() => setOpen(true)}>
-                <AddCircle /> Legg til
-              </td>
+              <AddAccess onClick={() => setOpen(true)}>
+                <AddCircle style={{ marginRight: '10px' }} /> Legg til
+              </AddAccess>
             </tr>
           )}
         </tbody>
-      </StyledMetadataTable>
+      </table>
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <Modal.Content style={{ paddingTop: '60px' }}>
