@@ -1,5 +1,6 @@
 import {
   Access,
+  Group,
   SubjectType,
   useDataproductAccessQuery,
   useGrantAccessMutation,
@@ -12,6 +13,7 @@ import RightJustifiedGiveAccess from '../lib/rightJustifiedGiveAccess'
 import AccessItem from './accessItem'
 import styled from 'styled-components'
 import { UserState } from '../../lib/context'
+import Requesters from './requesters'
 
 const AccessListDiv = styled.div`
   flex-wrap: wrap;
@@ -66,8 +68,17 @@ export const DataproductAccess = ({ id }: DataproductAccessProps) => {
       removeSubjectType(a.subject) === userState?.email && a.revoked === null
   )
 
+  const isOwner = userState?.groups.some(
+    (g: Group) => g.email === data?.dataproduct.owner.group
+  )
+
   return (
     <div>
+      <Requesters
+        id={data.dataproduct.id}
+        isOwner={isOwner}
+        requesters={data.dataproduct.requesters}
+      />
       {!hasAccess && <RightJustifiedGiveAccess onClick={onGrantAccess} />}
       <AccessListDiv>
         {data.dataproduct.access
@@ -78,18 +89,19 @@ export const DataproductAccess = ({ id }: DataproductAccessProps) => {
       </AccessListDiv>
       {data.dataproduct.access.filter(
         (a: Access) => a.revoked !== null || a.revoked === ''
-      ).length > 0 && (
-        <div>
-          <h3>Tidligere tilganger: </h3>
-          <AccessListDiv>
-            {data.dataproduct.access
-              .filter((a: Access) => a.revoked !== null || a.revoked === '')
-              .map((a: Access) => (
-                <AccessItem key={a.id} access={a} />
-              ))}
-          </AccessListDiv>
-        </div>
-      )}
+      ).length > 0 &&
+        isOwner && (
+          <div>
+            <h3>Tidligere tilganger: </h3>
+            <AccessListDiv>
+              {data.dataproduct.access
+                .filter((a: Access) => a.revoked !== null || a.revoked === '')
+                .map((a: Access) => (
+                  <AccessItem key={a.id} access={a} />
+                ))}
+            </AccessListDiv>
+          </div>
+        )}
     </div>
   )
 }

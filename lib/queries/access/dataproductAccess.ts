@@ -4,6 +4,9 @@ export const GET_DATAPRODUCT_ACCESS = gql`
   query DataproductAccess($id: ID!) {
     dataproduct(id: $id) {
       id
+      owner {
+        group
+      }
       access {
         id
         subject

@@ -39,3 +39,7 @@ export const newCollectionValidation = updateCollectionValidation.concat(
     group: yup.string().required('trenger teamnavn'),
   })
 )
+
+export const addRequesterValidation = yup.object().shape({
+  subject: yup.string().email().required('Gruppe- eller person-email'),
+})
