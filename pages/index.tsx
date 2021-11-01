@@ -11,14 +11,19 @@ import {
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 
-const SEARCH_LIMIT = 5
-
-const LandingPageDiv = styled.div`
-  margin-bottom: 1.5rem;
-`
+const SEARCH_LIMIT = 6
 
 const QuickHackForDemo = styled.h1`
   padding-top: 3em;
+`
+
+const SearchContainer = styled.div`
+  display: flex;
+  margin: 80px auto;
+  gap: 80px;
+  flex-direction: column;
+  min-width: 500px;
+  width: 60%;
 `
 
 const LandingPage = () => {
@@ -29,14 +34,14 @@ const LandingPage = () => {
 
   return (
     <PageLayout>
-      <LandingPageDiv>
+      <SearchContainer>
         <FrontPageLogo />
         <FrontPageSearchBox
           onSearch={(q) => router.push({ pathname: '/search', query: { q } })}
         />
-        <QuickHackForDemo>Nyeste ressurser</QuickHackForDemo>
-        <ResultList results={data?.search} />
-      </LandingPageDiv>
+      </SearchContainer>
+      <h1>Nyeste ressurser</h1>
+      <ResultList results={data?.search} />
     </PageLayout>
   )
 }

@@ -2,8 +2,7 @@ import styled from 'styled-components'
 
 const LogoImage = styled.img`
   display: block;
-  width: 60%;
-  padding: 80px 40px;
+  width: 80%;
   margin: 0 auto;
 `
 

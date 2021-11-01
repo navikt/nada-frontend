@@ -1,20 +1,19 @@
 import styled from 'styled-components'
 import React, { FormEvent, useState } from 'react'
 import { Search } from '@navikt/ds-icons'
-import { navBlaLighten60, navBlaLighten80 } from '../../styles/constants'
+import { navBlaLighten20 } from '../../styles/constants'
 
 const SearchDiv = styled.form`
   display: flex;
   font-size: 1.25em;
   align-items: center;
-  border: 5px solid ${navBlaLighten60};
+  border: 3px solid ${navBlaLighten20};
   border-radius: 10px;
   padding: 5px 10px;
 `
 
 const SearchInput = styled.input`
   flex-grow: 1;
-  margin-left: 0.5em;
   border: none;
   padding: 0;
   :focus-visible {
@@ -25,12 +24,13 @@ const SearchInput = styled.input`
 const SearchButton = styled.button`
   border: none;
   background: none;
+  line-height: 1;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
 `
 
-const SearchIcon = styled(Search)`
-  text-align: center;
-  background: none;
-`
+const SearchIcon = styled(Search)``
 
 const redirectPath = (query: string) =>
   query.length
@@ -58,12 +58,14 @@ export default function FrontPageSearchBox({
 
   return (
     <SearchDiv role="navigation" onSubmit={onSubmit}>
-      <SearchIcon />
-
-      <SearchInput value={value} onChange={(e) => setValue(e.target.value)} />
+      <SearchInput
+        aria-label={'Søkefelt'}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
 
       <SearchButton aria-label={'Søk'} onClick={() => onSearch(value)}>
-        Søk
+        <SearchIcon />
       </SearchButton>
     </SearchDiv>
   )
