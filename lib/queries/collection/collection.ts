@@ -9,6 +9,9 @@ export const GET_COLLECTION = gql`
       created
       keywords
       lastModified
+      owner {
+        group
+      }
       elements {
         ... on Dataproduct {
           __typename

@@ -596,6 +596,7 @@ export type CollectionQuery = {
     created: any
     keywords: Array<string>
     lastModified: any
+    owner: { __typename?: 'Owner'; group: string }
     elements: Array<{
       __typename: 'Dataproduct'
       id: string
@@ -1195,6 +1196,9 @@ export const CollectionDocument = gql`
       created
       keywords
       lastModified
+      owner {
+        group
+      }
       elements {
         ... on Dataproduct {
           __typename

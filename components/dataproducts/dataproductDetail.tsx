@@ -71,7 +71,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
         <h1>{product.name}</h1>
-        {userState && (
+        {isOwner && (
           <EditMenu
             onEdit={() => setEdit(true)}
             onDelete={() => setShowDelete(true)}

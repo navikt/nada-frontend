@@ -1,10 +1,8 @@
-import GithubIcon from '../lib/icons/github'
-import styled from 'styled-components'
-import Link from 'next/link'
 import { Maybe } from '../../lib/schema/graphql'
 
-interface RepoKnappProps {
+interface UrlLinkProps {
   url?: Maybe<string>
+  text?: string
 }
 
 const isValidHttpUrl = (candidate: string) => {
@@ -19,9 +17,14 @@ const isValidHttpUrl = (candidate: string) => {
   return url.protocol === 'http:' || url.protocol === 'https:'
 }
 
-export const RepoKnapp = ({ url }: RepoKnappProps) => {
+export const UrlLink = ({ url, text }: UrlLinkProps) => {
   if (!url) return null
+  if (!text) text = url
   if (!isValidHttpUrl(url)) return <>{url}</>
 
-  return <Link href={url}>{url}</Link>
+  return (
+    <a target="_blank" rel="noreferrer" href={`${url}`}>
+      <div>{`${text}`}</div>
+    </a>
+  )
 }

@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { EditCollectionForm } from './editCollectionForm'
 import DataproductList from './dataproductList'
 import styled from 'styled-components'
@@ -9,11 +9,11 @@ import DotMenu from '../lib/editMenu'
 import { MetadataTable } from './metadataTable'
 import {
   CollectionQuery,
-  useCollectionQuery,
+  Group,
   useDeleteCollectionMutation,
 } from '../../lib/schema/graphql'
-import LoaderSpinner from '../lib/spinner'
 import DeleteModal from '../lib/deleteModal'
+import { UserState } from '../../lib/context'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
@@ -28,7 +28,7 @@ const StyledEdit = styled.div`
 
 export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   const { id } = collection
-
+  const userState = useContext(UserState)
   const [edit, setEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [backendError, setBackendError] = useState()
@@ -49,18 +49,27 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
     }
   }
 
+  const isOwner =
+    userState?.groups.some((g: Group) => {
+      return g.email === collection?.owner.group
+    }) || false
+
   return edit ? (
     <EditCollectionForm collection={collection} close={() => setEdit(false)} />
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
+
       <StyledEdit>
         <h1>{collection.name}</h1>
-        <DotMenu
-          onEdit={() => setEdit(true)}
-          onDelete={() => setShowDelete(true)}
-        />
+        {isOwner && (
+          <DotMenu
+            onEdit={() => setEdit(true)}
+            onDelete={() => setShowDelete(true)}
+          />
+        )}
       </StyledEdit>
+
       <MetadataTable collection={collection} />
 
       <div>

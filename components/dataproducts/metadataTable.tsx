@@ -4,7 +4,7 @@ import { MicroCard } from '@navikt/ds-react'
 import styled from 'styled-components'
 import { DataproductDetailProps } from './dataproductDetail'
 import Link from 'next/link'
-import { RepoKnapp } from '../widgets/RepoKnapp'
+import { UrlLink } from '../widgets/UrlLink'
 import GithubIcon from '../lib/icons/github'
 import IconBox from '../lib/icons/iconBox'
 import { navGronn, navRod } from '../../styles/constants'
@@ -28,7 +28,6 @@ const StyledMetadataTable = styled.table`
     font-weight: bold;
   }
 `
-const gcpUrl = 'https://console.cloud.google.com'
 
 export const MetadataTable = ({ product }: DataproductDetailProps) => (
   <StyledMetadataTable>
@@ -52,11 +51,10 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       <tr>
         <th>Adresse:</th>
         <td>
-          <Link
-            href={`${gcpUrl}/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.projectID}&page=table`}
-          >
-            {`${product.datasource.projectID}.${product.datasource.dataset}.${product.datasource.table}`}
-          </Link>
+          <UrlLink
+            url={`https://console.cloud.google.com/bigquery?d=${product.datasource.dataset}&t=${product.datasource.table}&p=${product.datasource.projectID}&page=table`}
+            text={`${product.datasource.projectID}.${product.datasource.dataset}.${product.datasource.table}`}
+          />
         </td>
       </tr>
       <tr>
@@ -73,7 +71,7 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
           </IconBox>
         </th>
         <td>
-          <RepoKnapp url={product.repo} />
+          <UrlLink url={product.repo} />
         </td>
       </tr>
       <tr>
