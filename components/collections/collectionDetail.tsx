@@ -77,7 +77,6 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           {collection.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
       </div>
-      <h2>Dataprodukter i samlingen:</h2>
       <DataproductList collection={collection} />
       <DeleteModal
         open={showDelete}
