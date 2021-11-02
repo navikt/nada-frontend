@@ -11,11 +11,11 @@ const SearchResultLinkDiv = styled.div`
   width: 50%;
 
   > div {
-    padding: 5px 10px;
+    padding: 5px 8px;
 
     > div {
       box-shadow: 4px 4px 6px 1px rgba(0, 0, 0, 0.1);
-      padding: 16px 24px;
+      padding: 12px 16px;
       background-color: ${navGraBakgrunn};
       display: flex;
 

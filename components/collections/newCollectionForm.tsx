@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
+import DescriptionEditor from '../lib/DescriptionEditor'
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
@@ -17,7 +18,7 @@ export const NewCollectionForm = ({
   onCancel,
 }: NewDatacollectionFormProps) => {
   const [keywords, setKeywords] = useState<string[]>([])
-  const { register, handleSubmit, formState, setValue } = useForm({
+  const { register, handleSubmit, formState, setValue, control } = useForm({
     resolver: yupResolver(newCollectionValidation),
   })
   // propagates change in keywords state to useForm state
@@ -28,18 +29,17 @@ export const NewCollectionForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Samling" errorPropagation={false}>
+      <Fieldset legend="Opprett samling" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"
           {...register('name')}
           error={errors.name?.message}
         />
-        <TextField
-          id="description"
+        <DescriptionEditor
           label="Beskrivelse"
-          {...register('description')}
-          error={errors.description?.message}
+          name="description"
+          control={control}
         />
         <Select
           label="Team"

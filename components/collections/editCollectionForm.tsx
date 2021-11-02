@@ -54,7 +54,7 @@ export const EditCollectionForm = ({
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Datacollection" errorPropagation={false}>
+      <Fieldset legend="Rediger datasamling" errorPropagation={false}>
         <TextField
           id="name"
           label="Navn"
@@ -65,12 +65,6 @@ export const EditCollectionForm = ({
           label="Beskrivelse"
           name="description"
           control={control}
-        />
-        <TextField
-          id="description"
-          label="Beskrivelse"
-          {...register('description')}
-          error={errors.description?.message}
         />
         <KeywordsInput
           keywords={keywords}
