@@ -1,10 +1,4 @@
-import {
-  Access,
-  Group,
-  SubjectType,
-  useDataproductAccessQuery,
-  useGrantAccessMutation,
-} from '../../lib/schema/graphql'
+import { Access, useDataproductAccessQuery } from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import * as React from 'react'
@@ -14,7 +8,6 @@ import AccessItem from './accessItem'
 import styled from 'styled-components'
 import { UserState } from '../../lib/context'
 import Requesters from './requesters'
-import { Fieldset, Modal, TextField } from '@navikt/ds-react'
 import AddAccess from './addAccess'
 
 const AccessListDiv = styled.div`
@@ -74,7 +67,6 @@ export const DataproductAccess = ({ id, isOwner }: DataproductAccessProps) => {
       )}
 
       <RightJustifiedGiveAccess onClick={() => setOpen(true)} />
-
       <AccessListDiv>
         {data.dataproduct.access
           .filter((a: Access) => a.revoked === null)

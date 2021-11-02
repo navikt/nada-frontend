@@ -46,8 +46,8 @@ export type BigQuery = {
   created: Scalars['Time']
   /** dataset is the dataset that contains the BigQuery table */
   dataset: Scalars['String']
-  /** expired, if set, is when the table expires */
-  expired?: Maybe<Scalars['Time']>
+  /** expires, if set, is when the table expires */
+  expires?: Maybe<Scalars['Time']>
   /** lastModified is the time when the table was last modified */
   lastModified: Scalars['Time']
   /** projectID is the GCP project ID that contains the BigQuery table */
@@ -675,6 +675,10 @@ export type DataproductQuery = {
       projectID: string
       dataset: string
       table: string
+      lastModified: any
+      created: any
+      expires?: any | null | undefined
+      tableType: BigQueryType
       type: 'BigQuery'
       schema: Array<{
         __typename?: 'TableColumn'
@@ -1529,6 +1533,10 @@ export const DataproductDocument = gql`
           projectID
           dataset
           table
+          lastModified
+          created
+          expires
+          tableType
           schema {
             name
             description

@@ -1,17 +1,9 @@
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import {
-  GrantAccessMutationVariables,
-  SubjectType,
-  useGrantAccessMutation,
-} from '../../lib/schema/graphql'
-import { addAccessValidation } from '../../lib/schema/yupValidations'
+import { SubjectType, useGrantAccessMutation } from '../../lib/schema/graphql'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { useState } from 'react'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TextField from '@mui/material/TextField'
-import styled from 'styled-components'
 import { Box, Modal } from '@mui/material'
 
 interface AddAccessProps {
@@ -35,30 +27,20 @@ const AddAccess = ({
   const [grantAccess] = useGrantAccessMutation()
 
   const onSubmit = () => {
-    /*
-    let variables: GrantAccessMutationVariables = {
-      dataproductID,
-      subject,
-      subjectType: SubjectType.User,
-    }
-    //    if (date) variables.expires = date
-*/
-
-    try {
-      grantAccess({
-        variables: {
-          dataproductID,
-          subject,
-          subjectType: SubjectType.User,
-          expires: date,
-        },
-        refetchQueries: ['DataproductAccess'],
-      })
-    } catch (e) {
-      console.log('this be error, ', e)
-    }
+    grantAccess({
+      variables: {
+        dataproductID,
+        subject,
+        subjectType: SubjectType.User,
+        expires: date,
+      },
+      refetchQueries: ['DataproductAccess'],
+    })
+      .then()
+      .catch(console.log)
     setOpen(false)
   }
+
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -70,6 +52,7 @@ const AddAccess = ({
     boxShadow: 24,
     p: 4,
   }
+
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box sx={style}>

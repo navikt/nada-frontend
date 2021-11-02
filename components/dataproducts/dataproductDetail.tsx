@@ -91,8 +91,6 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           <Tab label="Beskrivelse" value={1} />
           <Tab label="Skjema" value={2} />
           <Tab label="Tilganger" value={3} />
-          <Tab label="Lineage" value={4} />
-          <Tab label="Statz" value={5} />
         </Tabs>
       </Box>
       <TabPanel index={0} value={activeTab}>
@@ -116,12 +114,6 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         ) : (
           <DataproductAccess id={product.id} isOwner={isOwner} />
         )}
-      </TabPanel>
-      <TabPanel index={4} value={activeTab}>
-        <div>Placeholder</div>
-      </TabPanel>
-      <TabPanel index={5} value={activeTab}>
-        <div>Placeholder</div>
       </TabPanel>
       <DeleteModal
         open={showDelete}

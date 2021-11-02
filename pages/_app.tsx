@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps, initialUser }: MyAppProps) {
 
   const { data, error } = useUserInfoQuery({
     client: apolloClient,
-    pollInterval: 3_000,
+    pollInterval: 30_000,
   })
 
   return (
