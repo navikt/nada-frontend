@@ -9,6 +9,7 @@ import {
   CollectionQuery,
   useUpdateCollectionMutation,
 } from '../../lib/schema/graphql'
+import DescriptionEditor from '../lib/DescriptionEditor'
 
 interface EditDatacollectionFormProps {
   collection: CollectionQuery['collection']
@@ -21,14 +22,15 @@ export const EditCollectionForm = ({
 }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
   const [updateCollection] = useUpdateCollectionMutation()
-  const { register, handleSubmit, formState, watch, setValue } = useForm({
-    resolver: yupResolver(updateCollectionValidation),
-    defaultValues: {
-      name: collection.name,
-      description: collection.description,
-      keywords: collection.keywords,
-    },
-  })
+  const { register, handleSubmit, formState, watch, setValue, control } =
+    useForm({
+      resolver: yupResolver(updateCollectionValidation),
+      defaultValues: {
+        name: collection.name,
+        description: collection.description,
+        keywords: collection.keywords,
+      },
+    })
 
   const keywords = watch('keywords')
   const setKeywords = (value: string[]) => {
@@ -58,6 +60,11 @@ export const EditCollectionForm = ({
           label="Navn"
           {...register('name')}
           error={errors.name?.message}
+        />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="description"
+          control={control}
         />
         <TextField
           id="description"

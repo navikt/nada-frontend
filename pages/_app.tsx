@@ -11,6 +11,9 @@ import App from 'next/app'
 import React from 'react'
 import { useApollo } from '../lib/apollo'
 
+import '@uiw/react-md-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
+
 type MyAppProps = AppProps & {
   initialUser: UserInfoQuery['userInfo']
 }
