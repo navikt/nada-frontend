@@ -1,17 +1,16 @@
 import styled from 'styled-components'
 import { AddCircle, Delete } from '@navikt/ds-icons'
-import { useContext, useState } from 'react'
-import { Fieldset, Modal, TextField } from '@navikt/ds-react'
+import { useState } from 'react'
+import { Button, Fieldset, Modal, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import {
   useAddRequesterMutation,
-  useDataproductAccessQuery,
   useDataproductRequestersQuery,
   useRemoveRequesterMutation,
 } from '../../lib/schema/graphql'
 import { addRequesterValidation } from '../../lib/schema/yupValidations'
-import { UserState } from '../../lib/context'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import {
@@ -20,17 +19,7 @@ import {
   navRod,
 } from '../../styles/constants'
 
-const AddAccess = styled.td`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  :hover {
-    background-color: ${navBlaLighten80};
-  }
-`
 const RemoveAccess = styled.td`
-  height: 31px;
-  padding-left: 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -81,37 +70,50 @@ const Requesters = ({ id, isOwner }: RequesterProps) => {
       refetchQueries: ['DataproductRequesters'],
     })
   }
+
   if (error) return <ErrorMessage error={error} />
   if (loading || !data?.dataproduct) return <LoaderSpinner />
+
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'bruker/gruppe', width: 300 },
+    {
+      field: 'remove',
+      headerName: 'Fjern',
+      sortable: false,
+      width: 50,
+      renderCell: (params) => {
+        return (
+          <RemoveAccess>
+            <Delete onClick={() => onDelete(params.row.id)} />
+          </RemoveAccess>
+        )
+      },
+    },
+  ]
+  const rows = data?.dataproduct.requesters.map((requester) => {
+    return { id: requester, remove: id }
+  })
+
   return (
     <div>
-      <table>
-        <tbody>
-          <tr>
-            <th>Kan be om tilgang</th>
-            <th></th>
-          </tr>
-          {data.dataproduct.requesters.map((r) => {
-            return (
-              <tr key={r}>
-                <td>{r}</td>
-                {isOwner && (
-                  <RemoveAccess onClick={() => onDelete(r)}>
-                    <Delete />
-                  </RemoveAccess>
-                )}
-              </tr>
-            )
-          })}
-          {isOwner && (
-            <tr>
-              <AddAccess onClick={() => setOpen(true)}>
-                <AddCircle style={{ marginRight: '10px' }} /> Legg til
-              </AddAccess>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <p>Brukere eller grupper som kan be om tilgang til produktet</p>
+      <Button onClick={() => setOpen(true)}>
+        <AddCircle style={{ marginRight: '10px' }} /> Legg til
+      </Button>
+      {data.dataproduct.requesters.length > 0 ? (
+        <div style={{ height: 400, width: 360 }}>
+          <DataGrid
+            disableColumnSelector
+            hideFooterSelectedRowCount
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+          />
+        </div>
+      ) : (
+        <div>Det er ingen brukere med tilgang til produktet</div>
+      )}
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <Modal.Content style={{ paddingTop: '60px' }}>

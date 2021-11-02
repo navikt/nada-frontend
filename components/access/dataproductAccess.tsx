@@ -46,8 +46,10 @@ export const DataproductAccess = ({ id, isOwner }: DataproductAccessProps) => {
 
   const canRequest = data?.dataproduct.requesters.some((requester) => {
     if (!userState) return false
-    userState.email === requester ||
+    return (
+      userState.email === requester ||
       userState.groups.some((group) => group.email === requester)
+    )
   })
 
   if (!userState)
@@ -58,43 +60,67 @@ export const DataproductAccess = ({ id, isOwner }: DataproductAccessProps) => {
         }
       />
     )
-  return (
-    <div>
-      <Requesters id={id} isOwner={isOwner} />
 
-      {!isOwner && !hasAccess && canRequest && (
+  if (isOwner) {
+    return (
+      <>
+        <Requesters id={id} isOwner={isOwner} />
+        <AccessListDiv>
+          {data.dataproduct.access
+            .filter((a: Access) => a.revoked === null)
+            .map((a: Access) => (
+              <AccessItem key={a.id} access={a} />
+            ))}
+        </AccessListDiv>
+        {data.dataproduct.access.filter(
+          (a: Access) => a.revoked !== null || a.revoked === ''
+        ).length > 0 &&
+          isOwner && (
+            <div>
+              <h3>Tidligere tilganger: </h3>
+              <AccessListDiv>
+                {data.dataproduct.access
+                  .filter((a: Access) => a.revoked !== null || a.revoked === '')
+                  .map((a: Access) => (
+                    <AccessItem key={a.id} access={a} />
+                  ))}
+              </AccessListDiv>
+            </div>
+          )}
+        <AddAccess
+          open={open}
+          setOpen={setOpen}
+          dataproductID={id}
+          subject={userState.email}
+        />
+      </>
+    )
+  }
+  if (canRequest && !hasAccess) {
+    return (
+      <>
         <RightJustifiedGiveAccess onClick={() => setOpen(true)} />
-      )}
-
-      <RightJustifiedGiveAccess onClick={() => setOpen(true)} />
-      <AccessListDiv>
-        {data.dataproduct.access
-          .filter((a: Access) => a.revoked === null)
-          .map((a: Access) => (
-            <AccessItem key={a.id} access={a} />
-          ))}
-      </AccessListDiv>
-      {data.dataproduct.access.filter(
-        (a: Access) => a.revoked !== null || a.revoked === ''
-      ).length > 0 &&
-        isOwner && (
-          <div>
-            <h3>Tidligere tilganger: </h3>
-            <AccessListDiv>
-              {data.dataproduct.access
-                .filter((a: Access) => a.revoked !== null || a.revoked === '')
-                .map((a: Access) => (
-                  <AccessItem key={a.id} access={a} />
-                ))}
-            </AccessListDiv>
-          </div>
-        )}
-      <AddAccess
-        open={open}
-        setOpen={setOpen}
-        dataproductID={id}
-        subject={userState.email}
-      />
-    </div>
-  )
+        <AddAccess
+          open={open}
+          setOpen={setOpen}
+          dataproductID={id}
+          subject={userState.email}
+        />
+      </>
+    )
+  }
+  if (hasAccess) {
+    return (
+      <div>
+        <AccessListDiv>
+          {data.dataproduct.access
+            .filter((a: Access) => a.revoked === null)
+            .map((a: Access) => (
+              <AccessItem key={a.id} access={a} />
+            ))}
+        </AccessListDiv>
+      </div>
+    )
+  }
+  return <div>du har ikke mulighet til å be om tilgang til dette produktet</div>
 }
