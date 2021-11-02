@@ -5,11 +5,13 @@ export const GRANT_ACCESS = gql`
     $dataproductID: ID!
     $subject: String!
     $subjectType: SubjectType!
+    $expires: Time
   ) {
     grantAccessToDataproduct(
       dataproductID: $dataproductID
       subject: $subject
       subjectType: $subjectType
+      expires: $expires
     ) {
       id
     }

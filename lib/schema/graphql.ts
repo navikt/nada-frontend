@@ -42,14 +42,22 @@ export type Access = {
 /** BigQuery contains metadata on a BigQuery table. */
 export type BigQuery = {
   __typename?: 'BigQuery'
+  /** created is when the table was created */
+  created: Scalars['Time']
   /** dataset is the dataset that contains the BigQuery table */
   dataset: Scalars['String']
+  /** expired, if set, is when the table expires */
+  expired?: Maybe<Scalars['Time']>
+  /** lastModified is the time when the table was last modified */
+  lastModified: Scalars['Time']
   /** projectID is the GCP project ID that contains the BigQuery table */
   projectID: Scalars['String']
   /** schema for the BigQuery table */
   schema: Array<TableColumn>
   /** table name for BigQuery table */
   table: Scalars['String']
+  /** tableType is what type the table is */
+  tableType: BigQueryType
 }
 
 /** BigQueryTable contains information about a BigQuery table. */
@@ -536,6 +544,7 @@ export type GrantAccessMutationVariables = Exact<{
   dataproductID: Scalars['ID']
   subject: Scalars['String']
   subjectType: SubjectType
+  expires?: Maybe<Scalars['Time']>
 }>
 
 export type GrantAccessMutation = {
@@ -961,11 +970,13 @@ export const GrantAccessDocument = gql`
     $dataproductID: ID!
     $subject: String!
     $subjectType: SubjectType!
+    $expires: Time
   ) {
     grantAccessToDataproduct(
       dataproductID: $dataproductID
       subject: $subject
       subjectType: $subjectType
+      expires: $expires
     ) {
       id
     }
@@ -992,6 +1003,7 @@ export type GrantAccessMutationFn = Apollo.MutationFunction<
  *      dataproductID: // value for 'dataproductID'
  *      subject: // value for 'subject'
  *      subjectType: // value for 'subjectType'
+ *      expires: // value for 'expires'
  *   },
  * });
  */
