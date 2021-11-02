@@ -1,5 +1,8 @@
-import { SubjectType, useGrantAccessMutation } from '../../lib/schema/graphql'
-import RightJustifiedSubmitButton from '../widgets/formSubmit'
+import {
+  SubjectType,
+  useGrantAccessMutation,
+} from '../../../lib/schema/graphql'
+import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { useState } from 'react'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'

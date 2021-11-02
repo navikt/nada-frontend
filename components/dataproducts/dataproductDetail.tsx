@@ -17,7 +17,7 @@ import {
 } from '../../lib/schema/graphql'
 import { UserState } from '../../lib/context'
 import DeleteModal from '../lib/deleteModal'
-import { DataproductAccess } from '../access/dataproductAccess'
+import { AccessControls } from './access/accessControls'
 import * as React from 'react'
 
 const StyledDiv = styled.div`
@@ -112,7 +112,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
             }
           />
         ) : (
-          <DataproductAccess id={product.id} isOwner={isOwner} />
+          <AccessControls id={product.id} isOwner={isOwner} />
         )}
       </TabPanel>
       <DeleteModal

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { format, parseISO } from 'date-fns'
 import { nb } from 'date-fns/locale'
-import { Access } from '../../lib/schema/graphql'
+import { Access } from '../../../lib/schema/graphql'
 
 const humanizeDate = (isoDate: string) => {
   try {

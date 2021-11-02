@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Dataproduct } from '../../../lib/schema/graphql'
 import { AddCircle, Delete } from '@navikt/ds-icons'
 import { useState } from 'react'
 import { Button, Fieldset, Modal, TextField } from '@navikt/ds-react'
@@ -7,19 +8,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import {
   useAddRequesterMutation,
-  useDataproductRequestersQuery,
   useRemoveRequesterMutation,
-} from '../../lib/schema/graphql'
-import { addRequesterValidation } from '../../lib/schema/yupValidations'
-import ErrorMessage from '../lib/error'
-import LoaderSpinner from '../lib/spinner'
-import {
-  navBlaLighten20,
-  navBlaLighten80,
-  navRod,
-} from '../../styles/constants'
+} from '../../../lib/schema/graphql'
+import { addRequesterValidation } from '../../../lib/schema/yupValidations'
+import { navBlaLighten20, navRod } from '../../../styles/constants'
 
-const RemoveAccess = styled.td`
+const RemoveAccess = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -31,18 +25,13 @@ const RemoveAccess = styled.td`
 
 interface RequesterProps {
   id: string
-  isOwner: boolean | undefined
+  requesters: Dataproduct['requesters']
 }
 
-const Requesters = ({ id, isOwner }: RequesterProps) => {
+const Requesters = ({ id, requesters }: RequesterProps) => {
   const [open, setOpen] = useState(false)
 
-  const { data, loading, error } = useDataproductRequestersQuery({
-    variables: { id },
-    ssr: true,
-  })
-
-  const { register, handleSubmit, watch, formState, setValue } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(addRequesterValidation),
   })
   const { errors } = formState
@@ -56,7 +45,7 @@ const Requesters = ({ id, isOwner }: RequesterProps) => {
         dataproductID: id,
         subject: requestData.subject,
       },
-      refetchQueries: ['DataproductRequesters'],
+      refetchQueries: ['DataproductAccess'],
     })
     setOpen(false)
   }
@@ -67,12 +56,9 @@ const Requesters = ({ id, isOwner }: RequesterProps) => {
         dataproductID: id,
         subject: subject,
       },
-      refetchQueries: ['DataproductRequesters'],
+      refetchQueries: ['DataproductAccess'],
     })
   }
-
-  if (error) return <ErrorMessage error={error} />
-  if (loading || !data?.dataproduct) return <LoaderSpinner />
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'bruker/gruppe', width: 300 },
@@ -90,30 +76,25 @@ const Requesters = ({ id, isOwner }: RequesterProps) => {
       },
     },
   ]
-  const rows = data?.dataproduct.requesters.map((requester) => {
+  const rows = requesters.map((requester) => {
     return { id: requester, remove: id }
   })
 
   return (
     <div>
-      <p>Brukere eller grupper som kan be om tilgang til produktet</p>
-      <Button onClick={() => setOpen(true)}>
+      <div style={{ height: 400, width: 360 }}>
+        <DataGrid
+          disableColumnSelector
+          hideFooterSelectedRowCount
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+        />
+      </div>
+      <Button onClick={() => setOpen(true)} style={{ marginTop: '20px' }}>
         <AddCircle style={{ marginRight: '10px' }} /> Legg til
       </Button>
-      {data.dataproduct.requesters.length > 0 ? (
-        <div style={{ height: 400, width: 360 }}>
-          <DataGrid
-            disableColumnSelector
-            hideFooterSelectedRowCount
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        </div>
-      ) : (
-        <div>Det er ingen brukere med tilgang til produktet</div>
-      )}
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <Modal.Content style={{ paddingTop: '60px' }}>

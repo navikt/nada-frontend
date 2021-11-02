@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import { navGraBakgrunn } from '../../styles/constants'
+import { navGraBakgrunn } from '../../../styles/constants'
 import { AccessDetails } from './accessDetails'
-import { Access, useRevokeAccessMutation } from '../../lib/schema/graphql'
-import { StyledButtonDiv } from '../lib/rightJustifiedGiveAccess'
+import { Access, useRevokeAccessMutation } from '../../../lib/schema/graphql'
+import { StyledButtonDiv } from '../../lib/rightJustifiedGiveAccess'
 import { Button } from '@navikt/ds-react'
-import { removeSubjectType } from './dataproductAccess'
+import { removeSubjectType } from './accessControls'
 
 const AccessItemLinkDiv = styled.div`
   background-color: ${navGraBakgrunn};
