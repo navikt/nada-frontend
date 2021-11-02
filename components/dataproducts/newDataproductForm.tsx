@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import ErrorMessage from '../lib/error'
-import DataproductForm from './dataproductForm'
 import { useRouter } from 'next/router'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
@@ -13,12 +12,15 @@ import TeamSelector from '../lib/teamSelector'
 import { DataproductSourceForm } from './dataproductSourceForm'
 import { NewDataproduct } from '../../lib/schema/graphql'
 import { useEffect } from 'react'
+import DescriptionEditor from '../lib/DescriptionEditor'
+import { Fieldset, TextField } from '@navikt/ds-react'
 
 export const NewDataproductForm = () => {
   const router = useRouter()
-  const { register, handleSubmit, watch, formState, setValue } = useForm({
-    resolver: yupResolver(newDataproductValidation),
-  })
+  const { register, handleSubmit, watch, formState, setValue, control } =
+    useForm({
+      resolver: yupResolver(newDataproductValidation),
+    })
   useEffect(() => {
     setValue('pii', true)
   }, [])
@@ -47,23 +49,41 @@ export const NewDataproductForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {backendError && <ErrorMessage error={backendError} />}
-      <DataproductForm register={register} errors={errors} />
-      <TeamSelector register={register} errors={errors} />
-      <DataproductSourceForm
-        register={register}
-        watch={watch}
-        errors={errors}
-        setValue={setValue}
-      />
-      <PiiCheckboxInput register={register} watch={watch} />
-      <KeywordsInput
-        keywords={keywords}
-        setKeywords={setKeywords}
-        {...register('keywords')}
-        error={errors.keywords?.[0].message}
-      />
-      <RightJustifiedSubmitButton onCancel={router.back} loading={loading} />
+      <Fieldset legend="Dataprodukt" errorPropagation={false}>
+        {backendError && <ErrorMessage error={backendError} />}
+        <TextField
+          id="name"
+          label="Navn"
+          {...register('name')}
+          error={errors.name?.message}
+        />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="description"
+          control={control}
+        />
+        <TextField
+          id="repo"
+          label="Repo"
+          {...register('repo')}
+          error={errors.repo?.message}
+        />
+        <TeamSelector register={register} errors={errors} />
+        <DataproductSourceForm
+          register={register}
+          watch={watch}
+          errors={errors}
+          setValue={setValue}
+        />
+        <KeywordsInput
+          keywords={keywords}
+          setKeywords={setKeywords}
+          {...register('keywords')}
+          error={errors.keywords?.[0].message}
+        />
+        <PiiCheckboxInput register={register} watch={watch} />
+        <RightJustifiedSubmitButton onCancel={router.back} loading={loading} />
+      </Fieldset>
     </form>
   )
 }

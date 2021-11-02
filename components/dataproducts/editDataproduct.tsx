@@ -1,9 +1,8 @@
-import { ErrorSummary } from '@navikt/ds-react'
+import { ErrorSummary, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
-import DataproductForm from './dataproductForm'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
@@ -13,6 +12,7 @@ import {
   DataproductQuery,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
+import DescriptionEditor from '../lib/DescriptionEditor'
 
 interface EditDatacollectionFormProps {
   product: DataproductQuery['dataproduct']
@@ -22,16 +22,17 @@ interface EditDatacollectionFormProps {
 const EditDataproduct = ({ product, close }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
   const [updateDataproduct] = useUpdateDataproductMutation()
-  const { register, handleSubmit, watch, formState, setValue } = useForm({
-    resolver: yupResolver(updateDataproductValidation),
-    defaultValues: {
-      name: product.name,
-      description: product.description,
-      repo: product.repo,
-      keywords: product.keywords,
-      pii: product.pii,
-    },
-  })
+  const { register, handleSubmit, watch, formState, setValue, control } =
+    useForm({
+      resolver: yupResolver(updateDataproductValidation),
+      defaultValues: {
+        name: product.name,
+        description: product.description,
+        repo: product.repo,
+        keywords: product.keywords,
+        pii: product.pii,
+      },
+    })
   const keywords = watch('keywords')
   const setKeywords = (value: string[]) => {
     setValue('keywords', value)
@@ -54,14 +55,30 @@ const EditDataproduct = ({ product, close }: EditDatacollectionFormProps) => {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <DataproductForm register={register} errors={errors} />
-      <PiiCheckboxInput register={register} watch={watch} />
+      <TextField
+        id="name"
+        label="Navn"
+        {...register('name')}
+        error={errors.name?.message}
+      />
+      <DescriptionEditor
+        label="Beskrivelse"
+        name="description"
+        control={control}
+      />
+      <TextField
+        id="repo"
+        label="Repo"
+        {...register('repo')}
+        error={errors.repo?.message}
+      />
       <KeywordsInput
         keywords={keywords}
         setKeywords={setKeywords}
         {...register('keywords')}
         error={errors.keywords?.[0].message}
       />
+      <PiiCheckboxInput register={register} watch={watch} />
       <RightJustifiedSubmitButton onCancel={close} />
     </form>
   )

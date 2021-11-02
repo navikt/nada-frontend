@@ -2,7 +2,27 @@ import dynamic from 'next/dynamic'
 import { useController, UseControllerProps } from 'react-hook-form'
 import styled from 'styled-components'
 import Link from 'next/link'
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
+import { Loader } from '@navikt/ds-react'
+
+const MDEditorPlaceholder = styled.div`
+  height: 200px;
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 3px;
+`
+
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+  loading: () => (
+    <MDEditorPlaceholder>
+      <Loader size="2xlarge" />
+    </MDEditorPlaceholder>
+  ),
+})
 
 type DescriptionEditorProps<T> = { label: string } & UseControllerProps<T>
 
@@ -32,19 +52,21 @@ export const DescriptionEditor = <FV extends Record<string, any>>({
 
   return (
     <div>
-      <label
-        style={{ display: 'inline' }}
-        htmlFor={name}
-        className={'navds-text-field__label navds-label'}
-      >
-        {label}
-      </label>
-      <MarkdownNotice>
-        formattering i Markdown,{' '}
-        <Link href={'https://guides.github.com/features/mastering-markdown/'}>
-          se innføring
-        </Link>
-      </MarkdownNotice>
+      <div>
+        <label
+          style={{ display: 'inline' }}
+          htmlFor={name}
+          className={'navds-text-field__label navds-label'}
+        >
+          {label}
+        </label>
+        <MarkdownNotice>
+          formattering i Markdown,{' '}
+          <Link href={'https://guides.github.com/features/mastering-markdown/'}>
+            se innføring
+          </Link>
+        </MarkdownNotice>
+      </div>
       <MDEditorNAVLook
         {...inputProps}
         className={'navds-body-short navds-body-medium'}
