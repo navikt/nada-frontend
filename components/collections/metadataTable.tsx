@@ -1,39 +1,7 @@
-import { format, parseISO } from 'date-fns'
-import { nb } from 'date-fns/locale'
 import { MicroCard } from '@navikt/ds-react'
-import styled from 'styled-components'
 import { CollectionQuery } from '../../lib/schema/graphql'
-
-const humanizeDate = (isoDate: string) => {
-  try {
-    return format(parseISO(isoDate), 'PPPP', { locale: nb })
-  } catch (e) {
-    return ''
-  }
-}
-
-const StyledMetadataTable = styled.table`
-  background-color: #f5f5f7;
-  width: 100%;
-  border-top: 1px solid #999;
-
-  th,
-  td {
-    padding: 3px 5px;
-  }
-
-  th {
-    text-align: right;
-    padding-left: 10px;
-    width: 1px;
-  }
-
-  .navds-card__micro {
-    margin-right: 7px;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-`
+import StyledMetadataTable from '../lib/styledMetadataTable'
+import humanizeDate from '../lib/humanizeDate'
 
 export interface MetadataTableProps {
   collection: CollectionQuery['collection']

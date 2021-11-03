@@ -1,8 +1,6 @@
-import ReactMarkdown from 'react-markdown'
 import { useContext, useState } from 'react'
 import { EditCollectionForm } from './editCollectionForm'
 import DataproductList from './dataproductList'
-import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
@@ -15,17 +13,11 @@ import {
 import DeleteModal from '../lib/deleteModal'
 import { UserState } from '../../lib/context'
 import { Description, Name } from '../lib/detailTypography'
+import TopBar from '../lib/topBar'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
 }
-
-const StyledEdit = styled.div`
-  display: flex;
-  margin: 40px 0 0 0;
-  justify-content: space-between;
-  align-items: center;
-`
 
 export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   const { id } = collection
@@ -61,7 +53,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
     <div>
       {backendError && <ErrorMessage error={backendError} />}
 
-      <StyledEdit>
+      <TopBar>
         <Name>{collection.name}</Name>
         {isOwner && (
           <DotMenu
@@ -69,7 +61,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
             onDelete={() => setShowDelete(true)}
           />
         )}
-      </StyledEdit>
+      </TopBar>
       <MetadataTable collection={collection} />
       <Description>
         {collection.description || '*ingen beskrivelse*'}

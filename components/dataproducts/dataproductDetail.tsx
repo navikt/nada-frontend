@@ -20,12 +20,14 @@ import DeleteModal from '../lib/deleteModal'
 import { AccessControls } from './access/accessControls'
 import * as React from 'react'
 import { Name } from '../lib/detailTypography'
+import TopBar from '../lib/topBar'
+import DataproductInfo from './dataproductInfo'
 
-const StyledDiv = styled.div`
-  display: flex;
-  margin: 40px 0 0 0;
-  justify-content: space-between;
-  align-items: center;
+const StyledTabPanel = styled(TabPanel)`
+  div {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 `
 
 export interface DataproductDetailProps {
@@ -70,7 +72,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   ) : (
     <div>
       {backendError && <ErrorMessage error={backendError} />}
-      <StyledDiv>
+      <TopBar>
         <Name>{product.name}</Name>
         {isOwner && (
           <EditMenu
@@ -78,9 +80,10 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
             onDelete={() => setShowDelete(true)}
           />
         )}
-      </StyledDiv>
+      </TopBar>
+      <MetadataTable product={product} />
 
-      <Box sx={{ bgcolor: 'background.paper' }}>
+      <div>
         <Tabs
           value={activeTab}
           onChange={handleChange}
@@ -88,24 +91,18 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           scrollButtons="auto"
           aria-label="auto tabs example"
         >
-          <Tab label="Detaljer" value={0} />
-          <Tab label="Beskrivelse" value={1} />
-          <Tab label="Skjema" value={2} />
+          <Tab label="Informasjon" value={0} />
+          <Tab label="Datakilde" value={2} />
           <Tab label="Tilganger" value={3} />
         </Tabs>
-      </Box>
-      <TabPanel index={0} value={activeTab}>
-        <MetadataTable product={product} />
-      </TabPanel>
-      <TabPanel index={1} value={activeTab}>
-        <ReactMarkdown>
-          {product.description || '*ingen beskrivelse*'}
-        </ReactMarkdown>
-      </TabPanel>
-      <TabPanel index={2} value={activeTab}>
-        <DataproductTableSchema schema={product.datasource.schema} />
-      </TabPanel>
-      <TabPanel index={3} value={activeTab}>
+      </div>
+      <StyledTabPanel index={0} value={activeTab}>
+        <DataproductInfo product={product} />
+      </StyledTabPanel>
+      <StyledTabPanel index={2} value={activeTab}>
+        <DataproductTableSchema datasource={product.datasource} />
+      </StyledTabPanel>
+      <StyledTabPanel index={3} value={activeTab}>
         {!userState ? (
           <ErrorMessage
             error={
@@ -115,7 +112,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         ) : (
           <AccessControls id={product.id} isOwner={isOwner} />
         )}
-      </TabPanel>
+      </StyledTabPanel>
       <DeleteModal
         open={showDelete}
         onCancel={() => setShowDelete(false)}
