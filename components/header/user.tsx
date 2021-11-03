@@ -79,7 +79,7 @@ export default function User() {
               sx={{ color: 'red' }}
               onClick={() => {
                 handleMenuClose()
-                window.location.replace('/api/logout')
+                window.location.href = '/api/logout'
               }}
             >
               Logg ut
@@ -91,7 +91,7 @@ export default function User() {
           key="logg-inn"
           variant="primary"
           size="small"
-          onClick={() => window.location.replace('/api/login')}
+          onClick={() => (window.location.href = '/api/login')}
         >
           Logg inn
         </Button>
