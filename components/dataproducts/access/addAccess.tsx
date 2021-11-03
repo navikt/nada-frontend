@@ -1,4 +1,5 @@
 import {
+  GrantAccessMutationVariables,
   SubjectType,
   useGrantAccessMutation,
 } from '../../../lib/schema/graphql'
@@ -8,6 +9,9 @@ import { useState } from 'react'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TextField from '@mui/material/TextField'
 import { Box, Modal } from '@mui/material'
+import moment from 'moment'
+import { Button } from '@navikt/ds-react'
+import AccessSubmit from './accessSubmit'
 
 interface AddAccessProps {
   dataproductID: string
@@ -22,21 +26,27 @@ const AddAccess = ({
   setOpen,
   subject,
 }: AddAccessProps) => {
-  const [date, setDate] = useState<Date | null>(new Date())
+  const [date, setDate] = useState<Date | null>(
+    moment(new Date()).endOf('day').toDate()
+  )
   const handleChange = (newValue: Date | null) => {
     setDate(newValue)
   }
 
   const [grantAccess] = useGrantAccessMutation()
 
-  const onSubmit = () => {
+  const onSubmit = (evig: boolean = false) => {
+    let variables: GrantAccessMutationVariables = {
+      dataproductID,
+      subject,
+      subjectType: SubjectType.User,
+    }
+    if (!evig) {
+      variables.expires = moment(date).endOf('day').toDate()
+    }
+    console.log(variables)
     grantAccess({
-      variables: {
-        dataproductID,
-        subject,
-        subjectType: SubjectType.User,
-        expires: date,
-      },
+      variables,
       refetchQueries: ['DataproductAccess'],
     })
       .then()
@@ -59,18 +69,20 @@ const AddAccess = ({
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box sx={style}>
-        <p>Tilgang til</p>
         <form onSubmit={() => onSubmit()}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
-              label="Date desktop"
+              label="Gi meg tilgang til"
               inputFormat="MM/dd/yyyy"
               value={date}
               onChange={handleChange}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-          <RightJustifiedSubmitButton onCancel={() => setOpen(false)} />
+          <AccessSubmit
+            onCancel={() => setOpen(false)}
+            onEvig={() => onSubmit(true)}
+          />
         </form>
       </Box>
     </Modal>

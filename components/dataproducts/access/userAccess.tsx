@@ -70,7 +70,7 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
         <UserAccessDiv>
           <CardHeader
             title={'Du har ikke tilgang'}
-            subTitle={'og kan ikke be om det'}
+            subheader={'og kan ikke be om det'}
             avatar={
               <IconBox size={48}>
                 <Locked style={{ color: navRod }} />
@@ -90,7 +90,7 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
             />
           </CardContent>
           <CardActions>
-            <i>Kontakt produkteier for å få tilgang</i>
+            <i>Kontakt produkteier</i>
           </CardActions>
         </UserAccessDiv>
       </>
@@ -100,7 +100,7 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
       <UserAccessDiv>
         <CardHeader
           title={hasAccess ? 'Du har tilgang' : 'Du har ikke tilgang'}
-          subTitle={!hasAccess && 'men kan be om det'}
+          subheader={!hasAccess && 'men kan be om det'}
           avatar={
             <IconBox size={48}>
               {hasAccess ? (
@@ -111,12 +111,15 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
             </IconBox>
           }
         />
-        <CardContent
-          style={{
-            display: 'flex',
-          }}
-        >
-          {hasAccess && (
+        {hasAccess ? (
+          <CardContent
+            style={{
+              flexGrow: 1,
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             <table>
               <tbody>
                 <tr>
@@ -137,9 +140,22 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
                 </tr>
               </tbody>
             </table>
-          )}
-        </CardContent>
-        <CardActions>
+          </CardContent>
+        ) : (
+          <CardContent
+            style={{
+              height: '200px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Close
+              style={{ fontSize: '64px', color: navRod, display: 'flex' }}
+            />
+          </CardContent>
+        )}
+        <CardActions sx={{ justifyContent: 'center' }}>
           {hasAccess ? (
             <Button variant={'danger'} onClick={() => onSubmit()}>
               Fjern tilgang
