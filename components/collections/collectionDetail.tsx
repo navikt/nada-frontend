@@ -77,7 +77,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           {collection.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
       </div>
-      <DataproductList collection={collection} />
+      <DataproductList isOwner={isOwner} collection={collection} />
       <DeleteModal
         open={showDelete}
         onCancel={() => setShowDelete(false)}
