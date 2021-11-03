@@ -1,5 +1,6 @@
 import { Maybe } from '../../lib/schema/graphql'
 import { ExternalLink } from '@navikt/ds-icons'
+import styled from 'styled-components'
 
 const isValidHttpUrl = (candidate: string) => {
   let url
@@ -18,6 +19,16 @@ interface UrlLinkProps {
   text?: string
 }
 
+const CenterAligned = styled.div`
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-left: 0.3em;
+    margin-bottom: 0.1em;
+  }
+`
+
 export const UrlLink = ({ url, text }: UrlLinkProps) => {
   if (!url) return null
   if (!text) text = url
@@ -25,10 +36,10 @@ export const UrlLink = ({ url, text }: UrlLinkProps) => {
 
   return (
     <a target="_blank" rel="noreferrer" href={`${url}`}>
-      <div>
+      <CenterAligned>
         {`${text}`}
-        <ExternalLink width="2em" />
-      </div>
+        <ExternalLink />
+      </CenterAligned>
     </a>
   )
 }
