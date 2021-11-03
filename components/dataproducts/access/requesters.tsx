@@ -82,14 +82,14 @@ const Requesters = ({ id, requesters }: RequesterProps) => {
 
   return (
     <div>
-      <div style={{ height: 400, width: 360 }}>
+      <div style={{ height: 400, width: '100%' }}>
         <DataGrid
           disableColumnSelector
           hideFooterSelectedRowCount
           rows={rows}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
         />
       </div>
       <Button onClick={() => setOpen(true)} style={{ marginTop: '20px' }}>

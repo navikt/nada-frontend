@@ -12,6 +12,7 @@ import AddAccess from './addAccess'
 import CurrentAccess from './currentAccess'
 import PreviousAccess from './previousAccess'
 import { Accordion } from '@navikt/ds-react'
+import UserAccess from './userAccess'
 
 const AccessListDiv = styled.div`
   flex-wrap: wrap;
@@ -31,42 +32,29 @@ interface DataproductAccessProps {
 
 export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
   const userState = useContext(UserState)
-  const [open, setOpen] = useState(false)
 
   const { data, loading, error } = useDataproductAccessQuery({
     variables: { id },
     ssr: true,
   })
 
-  if (!userState)
-    return (
-      <ErrorMessage error={new Error('Du må logge inn for å se tilganger')} />
-    )
   if (error) return <ErrorMessage error={error} />
   if (loading || !data?.dataproduct) return <LoaderSpinner />
 
   const access = data.dataproduct.access
   const requesters = data.dataproduct.requesters
 
-  const hasAccess = access.some(
-    (a: Access) =>
-      removeSubjectType(a.subject) === userState?.email && a.revoked === null
-  )
-
-  const canRequest = requesters.some((requester) => {
-    if (!userState) return false
+  if (!userState)
     return (
-      userState.email === requester ||
-      userState.groups.some((group) => group.email === requester)
+      <ErrorMessage error={new Error('Du må logge inn for å se tilganger')} />
     )
-  })
 
   if (isOwner) {
     return (
       <Accordion>
         <Accordion.Item>
           <Accordion.Header style={{ fontSize: 'smaller' }}>
-            Brukere eller grupper som kan be om tilgang til produktet
+            Kan gi seg selv tilgang
           </Accordion.Header>
           <Accordion.Content>
             <Requesters id={id} requesters={requesters} />
@@ -91,28 +79,6 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
       </Accordion>
     )
   }
-  if (!canRequest) <div>Du kan ikke gi deg selv tilgang på dette produktet</div>
 
-  return (
-    <>
-      {hasAccess ? (
-        <AccessListDiv>
-          {data.dataproduct.access
-            .filter((a: Access) => a.revoked === null)
-            .map((a: Access) => (
-              <AccessItem key={a.id} access={a} />
-            ))}
-        </AccessListDiv>
-      ) : (
-        <RightJustifiedGiveAccess onClick={() => setOpen(true)} />
-      )}
-
-      <AddAccess
-        open={open}
-        setOpen={setOpen}
-        dataproductID={id}
-        subject={userState.email}
-      />
-    </>
-  )
+  return <UserAccess id={id} access={access} requesters={requesters} />
 }

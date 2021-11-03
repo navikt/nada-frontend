@@ -59,6 +59,7 @@ const AddAccess = ({
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box sx={style}>
+        <p>Tilgang til</p>
         <form onSubmit={() => onSubmit()}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
