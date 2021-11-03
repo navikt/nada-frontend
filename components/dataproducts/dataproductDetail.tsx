@@ -92,17 +92,17 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           aria-label="auto tabs example"
         >
           <Tab label="Informasjon" value={0} />
-          <Tab label="Datakilde" value={2} />
-          <Tab label="Tilganger" value={3} />
+          <Tab label="Datakilde" value={1} />
+          <Tab label="Tilganger" value={2} />
         </Tabs>
       </div>
       <StyledTabPanel index={0} value={activeTab}>
         <DataproductInfo product={product} />
       </StyledTabPanel>
-      <StyledTabPanel index={2} value={activeTab}>
+      <StyledTabPanel index={1} value={activeTab}>
         <DataproductTableSchema datasource={product.datasource} />
       </StyledTabPanel>
-      <StyledTabPanel index={3} value={activeTab}>
+      <StyledTabPanel index={2} value={activeTab}>
         {!userState ? (
           <ErrorMessage
             error={

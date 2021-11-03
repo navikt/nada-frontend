@@ -22,13 +22,16 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
             <th>Type:</th>
             <td>{product.datasource.__typename}</td>
           </tr>
-          <tr>
-            <th>Nøkkelord:</th>
-            <td>
-              {product.keywords &&
-                product.keywords.map((k) => <Keyword key={k} keyword={k} />)}
-            </td>
-          </tr>
+          {!!product.keywords.length && (
+            <tr>
+              <th>Nøkkelord:</th>
+              <td>
+                {product.keywords.map((k) => (
+                  <Keyword key={k} keyword={k} />
+                ))}
+              </td>
+            </tr>
+          )}
           <tr>
             <th>
               <IconBox size={24} justifyRight>
