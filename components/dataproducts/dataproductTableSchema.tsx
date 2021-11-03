@@ -46,13 +46,19 @@ const DataproductTableSchema = ({
           </td>
         </tr>
         <tr>
-          <th>opprettet:</th>
+          <th>Opprettet:</th>
           <td>{humanizeDate(datasource.created)}</td>
         </tr>
         <tr>
-          <th>oppdatert:</th>
+          <th>Oppdatert:</th>
           <td>{humanizeDate(datasource.lastModified)}</td>
         </tr>
+        {datasource.expires && (
+          <tr>
+            <th>Utgår:</th>
+            <td>{humanizeDate(datasource.expires)}</td>
+          </tr>
+        )}
       </StyledTable>
       <StyledAccordion>
         <Accordion.Item>
