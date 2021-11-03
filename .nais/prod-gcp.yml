@@ -12,4 +12,7 @@ spec:
   port: 3000
   ingresses:
     - "https://nada.intern.nav.no/"
-
+  accessPolicy:
+    outbound:
+      rules:
+        - application: nada-backend
