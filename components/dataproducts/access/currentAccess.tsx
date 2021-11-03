@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Delete } from '@navikt/ds-icons'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import moment from 'moment'
 import {
   DataproductAccessQuery,
   useRevokeAccessMutation,
@@ -9,6 +8,7 @@ import {
 import { navBlaLighten20, navRod } from '../../../styles/constants'
 import { removeSubjectType } from './accessControls'
 import * as React from 'react'
+import humanizeDate from '../../lib/humanizeDate'
 
 const RemoveAccess = styled.td`
   display: flex;
@@ -26,7 +26,6 @@ interface CurrentAccessProps {
 
 const CurrentAccess = ({ access }: CurrentAccessProps) => {
   const [revokeAccess] = useRevokeAccessMutation()
-  moment.locale('nb')
 
   const onDelete = (id: string) => {
     revokeAccess({
@@ -65,9 +64,9 @@ const CurrentAccess = ({ access }: CurrentAccessProps) => {
       return {
         id: a.id,
         subject: removeSubjectType(a.subject),
-        expires: moment(a.expires).format('LL'),
+        expires: humanizeDate(a.expires),
         granter: a.granter,
-        created: moment(a.created).format('LL'),
+        created: humanizeDate(a.created),
         remove: a.id,
       }
     })

@@ -13,6 +13,7 @@ import { UrlLink } from '../widgets/UrlLink'
 import { Accordion } from '@navikt/ds-react'
 import * as React from 'react'
 import styled from 'styled-components'
+import humanizeDate from '../lib/humanizeDate'
 
 const StyledAccordion = styled(Accordion)`
   div {
@@ -46,11 +47,11 @@ const DataproductTableSchema = ({
         </tr>
         <tr>
           <th>opprettet:</th>
-          <td>{datasource.created}</td>
+          <td>{humanizeDate(datasource.created)}</td>
         </tr>
         <tr>
           <th>oppdatert:</th>
-          <td>{datasource.lastModified}</td>
+          <td>{humanizeDate(datasource.lastModified)}</td>
         </tr>
       </StyledTable>
       <StyledAccordion>

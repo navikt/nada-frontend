@@ -3,14 +3,12 @@ import {
   SubjectType,
   useGrantAccessMutation,
 } from '../../../lib/schema/graphql'
-import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { useState } from 'react'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TextField from '@mui/material/TextField'
 import { Box, Modal } from '@mui/material'
-import moment from 'moment'
-import { Button } from '@navikt/ds-react'
+import { endOfDay } from 'date-fns'
 import AccessSubmit from './accessSubmit'
 
 interface AddAccessProps {
@@ -26,9 +24,7 @@ const AddAccess = ({
   setOpen,
   subject,
 }: AddAccessProps) => {
-  const [date, setDate] = useState<Date | null>(
-    moment(new Date()).endOf('day').toDate()
-  )
+  const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
   const handleChange = (newValue: Date | null) => {
     setDate(newValue)
   }
@@ -41,8 +37,8 @@ const AddAccess = ({
       subject,
       subjectType: SubjectType.User,
     }
-    if (!evig) {
-      variables.expires = moment(date).endOf('day').toDate()
+    if (!evig && date) {
+      variables.expires = endOfDay(date)
     }
     grantAccess({
       variables,

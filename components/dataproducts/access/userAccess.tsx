@@ -15,7 +15,7 @@ import * as React from 'react'
 import { useContext, useState } from 'react'
 import { UserState } from '../../../lib/context'
 import { Button } from '@navikt/ds-react'
-import moment from 'moment'
+import humanizeDate from '../../lib/humanizeDate'
 
 const UserAccessDiv = styled(Card)`
   padding: 10px;
@@ -124,7 +124,7 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
                   <td>
                     <i>fra:</i>
                   </td>
-                  <td>{moment(activeAccess.created).format('LL')}</td>
+                  <td>{humanizeDate(activeAccess.created)}</td>
                 </tr>
                 <tr>
                   <td>
@@ -132,7 +132,7 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
                   </td>
                   <td>
                     {activeAccess.expires
-                      ? moment(activeAccess.expires).format('LL')
+                      ? humanizeDate(activeAccess.expires)
                       : 'Evig'}
                   </td>
                 </tr>

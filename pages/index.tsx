@@ -10,6 +10,7 @@ import {
 } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
+import { Alert } from '@navikt/ds-react'
 
 const SEARCH_LIMIT = 6
 
@@ -40,6 +41,16 @@ const LandingPage = () => {
           onSearch={(q) => router.push({ pathname: '/search', query: { q } })}
         />
       </SearchContainer>
+      <Alert variant="info">
+        Datapakker er nå tilgjengelige{' '}
+        <a
+          href={'https://datapakker.intern.nav.no'}
+          target="_blank"
+          rel="noreferrer"
+        >
+          her
+        </a>
+      </Alert>
       <h1>Nyeste ressurser</h1>
       <ResultList results={data?.search} />
     </PageLayout>

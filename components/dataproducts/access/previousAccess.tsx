@@ -2,7 +2,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { DataproductAccessQuery } from '../../../lib/schema/graphql'
 import { removeSubjectType } from './accessControls'
 import * as React from 'react'
-import moment from 'moment'
+import humanizeDate from '../../lib/humanizeDate'
 
 interface CurrentAccessProps {
   access: DataproductAccessQuery['dataproduct']['access']
@@ -25,10 +25,10 @@ const PreviousAccess = ({ access }: CurrentAccessProps) => {
       return {
         id: a.id,
         subject: removeSubjectType(a.subject),
-        expires: moment(a.expires).format('LL'),
+        expires: humanizeDate(a.expires),
         granter: a.granter,
-        created: moment(a.created).format('LL'),
-        revoked: moment(a.revoked).format('LL'),
+        created: humanizeDate(a.created),
+        revoked: humanizeDate(a.revoked),
       }
     })
 
