@@ -1,9 +1,5 @@
 import { Maybe } from '../../lib/schema/graphql'
-
-interface UrlLinkProps {
-  url?: Maybe<string>
-  text?: string
-}
+import { ExternalLink } from '@navikt/ds-icons'
 
 const isValidHttpUrl = (candidate: string) => {
   let url
@@ -17,6 +13,11 @@ const isValidHttpUrl = (candidate: string) => {
   return url.protocol === 'http:' || url.protocol === 'https:'
 }
 
+interface UrlLinkProps {
+  url?: Maybe<string>
+  text?: string
+}
+
 export const UrlLink = ({ url, text }: UrlLinkProps) => {
   if (!url) return null
   if (!text) text = url
@@ -24,7 +25,10 @@ export const UrlLink = ({ url, text }: UrlLinkProps) => {
 
   return (
     <a target="_blank" rel="noreferrer" href={`${url}`}>
-      <div>{`${text}`}</div>
+      <div>
+        {`${text}`}
+        <ExternalLink width="2em" />
+      </div>
     </a>
   )
 }
