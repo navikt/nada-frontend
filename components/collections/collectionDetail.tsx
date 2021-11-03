@@ -14,6 +14,7 @@ import {
 } from '../../lib/schema/graphql'
 import DeleteModal from '../lib/deleteModal'
 import { UserState } from '../../lib/context'
+import { Description, Name } from '../lib/detailTypography'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
@@ -61,7 +62,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
       {backendError && <ErrorMessage error={backendError} />}
 
       <StyledEdit>
-        <h1>{collection.name}</h1>
+        <Name>{collection.name}</Name>
         {isOwner && (
           <DotMenu
             onEdit={() => setEdit(true)}
@@ -69,14 +70,10 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           />
         )}
       </StyledEdit>
-
       <MetadataTable collection={collection} />
-
-      <div>
-        <ReactMarkdown>
-          {collection.description || '*ingen beskrivelse*'}
-        </ReactMarkdown>
-      </div>
+      <Description>
+        {collection.description || '*ingen beskrivelse*'}
+      </Description>
       <DataproductList isOwner={isOwner} collection={collection} />
       <DeleteModal
         open={showDelete}

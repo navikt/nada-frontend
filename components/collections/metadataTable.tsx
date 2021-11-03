@@ -13,6 +13,10 @@ const humanizeDate = (isoDate: string) => {
 }
 
 const StyledMetadataTable = styled.table`
+  background-color: #f5f5f7;
+  width: 100%;
+  border-top: 1px solid #999;
+
   th,
   td {
     padding: 3px 5px;
@@ -21,6 +25,7 @@ const StyledMetadataTable = styled.table`
   th {
     text-align: right;
     padding-left: 10px;
+    width: 1px;
   }
 
   .navds-card__micro {
@@ -48,10 +53,13 @@ export const MetadataTable = ({ collection }: MetadataTableProps) => (
       <tr>
         <th>Nøkkelord:</th>
         <td>
-          {collection.keywords &&
+          {collection.keywords.length ? (
             collection.keywords.map((k: string) => (
               <MicroCard key={k}>{k}</MicroCard>
-            ))}
+            ))
+          ) : (
+            <div>ingen nøkkelord</div>
+          )}
         </td>
       </tr>
     </tbody>

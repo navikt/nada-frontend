@@ -19,10 +19,11 @@ import { UserState } from '../../lib/context'
 import DeleteModal from '../lib/deleteModal'
 import { AccessControls } from './access/accessControls'
 import * as React from 'react'
+import { Name } from '../lib/detailTypography'
 
 const StyledDiv = styled.div`
   display: flex;
-  margin: 40px 0;
+  margin: 40px 0 0 0;
   justify-content: space-between;
   align-items: center;
 `
@@ -70,7 +71,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
     <div>
       {backendError && <ErrorMessage error={backendError} />}
       <StyledDiv>
-        <h1>{product.name}</h1>
+        <Name>{product.name}</Name>
         {isOwner && (
           <EditMenu
             onEdit={() => setEdit(true)}
