@@ -46,6 +46,14 @@ const DataproductTableSchema = ({
           </td>
         </tr>
         <tr>
+          <th>Type:</th>
+          <td>{datasource.__typename}</td>
+        </tr>
+        <tr>
+          <th>Tabelltype:</th>
+          <td>{datasource.tableType.toUpperCase()}</td>
+        </tr>
+        <tr>
           <th>Opprettet:</th>
           <td>{humanizeDate(datasource.created)}</td>
         </tr>
