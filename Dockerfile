@@ -12,7 +12,7 @@ COPY . .
 
 ENV NODE_ENV production
 ENV NEXT_PUBLIC_ENV production
-ENV NEXT_PUBLIC_BACKEND https://nada.dev.intern.nav.no/api
+ENV NEXT_PUBLIC_BACKEND http://nada-backend/api
 
 RUN yarn build
 
