@@ -44,7 +44,6 @@ const AddAccess = ({
     if (!evig) {
       variables.expires = moment(date).endOf('day').toDate()
     }
-    console.log(variables)
     grantAccess({
       variables,
       refetchQueries: ['DataproductAccess'],

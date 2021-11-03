@@ -39,14 +39,12 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
   if (!userState) return null
 
   const onSubmit = async () => {
-    console.log(activeAccess)
     await revokeAccess({
       variables: {
         id: activeAccess.id,
       },
       refetchQueries: ['DataproductAccess'],
     })
-    console.log('revoked')
   }
 
   const hasAccess = access.some(
