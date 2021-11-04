@@ -24,7 +24,7 @@ import TopBar from '../lib/topBar'
 import DataproductInfo from './dataproductInfo'
 
 const StyledTabPanel = styled(TabPanel)`
-  div {
+  > div {
     padding-left: 0px;
     padding-right: 0px;
   }
@@ -83,19 +83,17 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       </TopBar>
       <MetadataTable product={product} />
 
-      <div>
-        <Tabs
-          value={activeTab}
-          onChange={handleChange}
-          variant="standard"
-          scrollButtons="auto"
-          aria-label="auto tabs example"
-        >
-          <Tab label="Informasjon" value={0} />
-          <Tab label="Datakilde" value={1} />
-          <Tab label="Tilganger" value={2} />
-        </Tabs>
-      </div>
+      <Tabs
+        value={activeTab}
+        onChange={handleChange}
+        variant="standard"
+        scrollButtons="auto"
+        aria-label="auto tabs example"
+      >
+        <Tab label="Informasjon" value={0} />
+        <Tab label="Datakilde" value={1} />
+        <Tab label="Tilganger" value={2} />
+      </Tabs>
       <StyledTabPanel index={0} value={activeTab}>
         <DataproductInfo product={product} />
       </StyledTabPanel>
