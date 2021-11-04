@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 import React, { FormEvent, useState } from 'react'
 import { Search } from '@navikt/ds-icons'
-import { navBlaLighten20 } from '../../styles/constants'
+import { navBlaLighten40 } from '../../styles/constants'
 
 const SearchDiv = styled.form`
   display: flex;
   font-size: 1.25em;
   align-items: center;
-  border: 3px solid ${navBlaLighten20};
+  border: 2px solid ${navBlaLighten40};
   border-radius: 10px;
   padding: 5px 10px;
 `
