@@ -28,6 +28,15 @@ const StyledDescription = styled.div`
   color: #555;
   font-size: 16px;
   font-style: italic;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 16px;
+  }
 `
 interface DescriptionProps {
   children: string
