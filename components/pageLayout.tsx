@@ -10,11 +10,18 @@ interface HeaderProps {
 }
 
 const HeaderBar = styled.header`
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95vw;
+    max-width: 1500px;
+  }
   display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.25em 1em;
   border-bottom: 1px solid #aaa;
-  justify-content: space-between;
-  align-items: center;
 `
 
 const Container = styled.div`
@@ -36,11 +43,13 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Container>
       <HeaderBar role="banner">
-        {router.pathname !== '/' && <Logo />}
-        {router.pathname !== '/' && <HeaderSearchBox />}
-        <div style={{ display: 'flex', marginLeft: 'auto' }}>
-          <Create />
-          <User />
+        <div>
+          {router.pathname !== '/' && <Logo />}
+          {router.pathname !== '/' && <HeaderSearchBox />}
+          <div style={{ display: 'flex', marginLeft: 'auto' }}>
+            <Create />
+            <User />
+          </div>
         </div>
       </HeaderBar>
       <Main role="content">{children}</Main>
