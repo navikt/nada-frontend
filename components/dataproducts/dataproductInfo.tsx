@@ -4,15 +4,15 @@ import GithubIcon from '../lib/icons/github'
 import { UrlLink } from '../widgets/UrlLink'
 import { Success, Warning } from '@navikt/ds-icons'
 import { navGronn, navRod } from '../../styles/constants'
-import ReactMarkdown from 'react-markdown'
 import * as React from 'react'
 import { DataproductQuery } from '../../lib/schema/graphql'
-import styled from 'styled-components'
 import StyledTable from '../lib/styledTable'
+import { Description } from '../lib/detailTypography'
 
 export interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
 }
+
 const DataproductInfo = ({ product }: DataproductDetailProps) => {
   return (
     <>
@@ -53,16 +53,14 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
               </IconBox>
             </th>
             <td>
-              {' '}
               Dette dataproduktet inneholder {!product.pii && <b> IKKE </b>}
               personidentifiserende informasjon
             </td>
           </tr>
         </tbody>
       </StyledTable>
-      <ReactMarkdown>
-        {product.description || '*ingen beskrivelse*'}
-      </ReactMarkdown>
+      <h3>Beskrivelse</h3>
+      <Description>{product.description || '*ingen beskrivelse*'}</Description>
     </>
   )
 }
