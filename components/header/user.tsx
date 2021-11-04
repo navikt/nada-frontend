@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
 import React, { useContext, MouseEvent } from 'react'
 import { navGraBakgrunn } from '../../styles/constants'
-import { People } from '@navikt/ds-icons'
+import { ExternalLink, People } from '@navikt/ds-icons'
 import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
@@ -23,6 +23,9 @@ const MenuLine = styled.div`
   margin-bottom: 5px;
 `
 
+const StyledA = styled.a`
+  color: inherit;
+`
 export default function User() {
   const userState = useContext(UserState)
   const menuId = 'primary-search-account-menu'
@@ -70,7 +73,11 @@ export default function User() {
               {userState.name}
             </MenuItem>
             <MenuLine />
-            <MenuItem onClick={handleMenuClose}>Dokumentasjon</MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <StyledA href={'https://docs.knada.io/'}>
+                Dokumentasjon <ExternalLink />
+              </StyledA>
+            </MenuItem>
             <MenuItem onClick={handleMenuClose}>Mine tilganger</MenuItem>
             <MenuItem onClick={handleMenuClose}>Mine favoritter</MenuItem>
             <MenuItem onClick={handleMenuClose}>Mine produkter</MenuItem>
