@@ -1,6 +1,4 @@
 import styled from 'styled-components'
-import ReactMarkdown from 'react-markdown'
-
 import { ArrayElement } from '../../lib/schema/ArrayElement'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 import { unified } from 'unified'
@@ -21,7 +19,7 @@ const StyledTitle = styled.h2`
 `
 
 const StyledResultAbstract = styled.div`
-  height: 100px;
+  height: 120px;
   width: 100%;
 `
 
@@ -51,8 +49,8 @@ const Description = ({ children }: DescriptionProps) => {
     <StyledDescription>
       <HTMLEllipsis
         unsafeHTML={description}
-        maxLine="4"
-        ellipsis="..."
+        maxLine="3"
+        ellipsis="…"
         basedOn="letters"
       />
     </StyledDescription>
