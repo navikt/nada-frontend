@@ -5,7 +5,7 @@ import { Search } from '@navikt/ds-icons'
 
 const SearchDiv = styled.div`
   width: 100%;
-  padding: 0 5px;
+  padding: 5px;
   margin: 0 auto;
 
   .navds-form-field {

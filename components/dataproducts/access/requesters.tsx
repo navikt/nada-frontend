@@ -15,7 +15,9 @@ import { navBlaLighten20, navRod } from '../../../styles/constants'
 
 const RemoveAccess = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
   cursor: pointer;
   color: ${navRod};
   :hover {
@@ -61,7 +63,7 @@ const Requesters = ({ id, requesters }: RequesterProps) => {
   }
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'bruker/gruppe', width: 300 },
+    { field: 'id', headerName: 'Bruker/gruppe', flex: 1 },
     {
       field: 'remove',
       headerName: 'Fjern',
@@ -105,7 +107,7 @@ const Requesters = ({ id, requesters }: RequesterProps) => {
             >
               <TextField
                 id="subject"
-                label="Email"
+                label="Epost"
                 {...register('subject')}
                 error={errors.subject?.message}
               />
