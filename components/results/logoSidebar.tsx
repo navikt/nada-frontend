@@ -24,9 +24,11 @@ const LogoSidebarDiv = styled.div`
   }
 `
 
-const typeNameMap: Record<string, string> = {
+const typeNameMap: Record<
+  ArrayElement<SearchContentQuery['search']>['__typename'],
+  string
+> = {
   Collection: 'Datasamling',
-  datapackage: 'Datapakke',
   Dataproduct: 'Dataprodukt',
 }
 
