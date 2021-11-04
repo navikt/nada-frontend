@@ -12,6 +12,8 @@ import {
 } from '../../../lib/schema/graphql'
 import { addRequesterValidation } from '../../../lib/schema/yupValidations'
 import { navBlaLighten20, navRod } from '../../../styles/constants'
+import { Stack } from '@mui/material'
+import * as React from 'react'
 
 const RemoveAccess = styled.div`
   display: flex;
@@ -84,6 +86,13 @@ const Requesters = ({ id, requesters }: RequesterProps) => {
 
   return (
     <div>
+      <Button
+        onClick={() => setOpen(true)}
+        style={{ marginBottom: '20px' }}
+        size={'small'}
+      >
+        <AddCircle style={{ marginRight: '10px' }} /> Legg til
+      </Button>
       <div style={{ height: 400, width: '100%' }}>
         <DataGrid
           disableColumnSelector
@@ -92,11 +101,16 @@ const Requesters = ({ id, requesters }: RequesterProps) => {
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}
+          components={{
+            NoRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                Det er ingen som har mulighet til å gi seg selv tilgang til
+                dette produktet
+              </Stack>
+            ),
+          }}
         />
       </div>
-      <Button onClick={() => setOpen(true)} style={{ marginTop: '20px' }}>
-        <AddCircle style={{ marginRight: '10px' }} /> Legg til
-      </Button>
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <Modal.Content style={{ paddingTop: '60px' }}>

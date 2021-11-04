@@ -12,7 +12,14 @@ import AddAccess from './addAccess'
 import CurrentAccess from './currentAccess'
 import PreviousAccess from './previousAccess'
 import { Accordion } from '@navikt/ds-react'
-import UserAccess from './userAccess'
+import UserAccess, { UserAccessDiv } from './userAccess'
+import { CardActions, CardContent, CardHeader, Tab, Tabs } from '@mui/material'
+import DataproductInfo from '../dataproductInfo'
+import TabPanel from '../../lib/tabPanel'
+import SubHeader from '../../lib/subHeader'
+import IconBox from '../../lib/icons/iconBox'
+import { Close, Locked } from '@navikt/ds-icons'
+import { navRod } from '../../../styles/constants'
 
 const AccessListDiv = styled.div`
   flex-wrap: wrap;
@@ -46,15 +53,46 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
 
   if (!userState)
     return (
-      <ErrorMessage error={new Error('Du må logge inn for å se tilganger')} />
+      <UserAccessDiv>
+        <CardHeader
+          title={'Ikke innlogget'}
+          avatar={
+            <IconBox size={48}>
+              <Locked style={{ color: navRod }} />
+            </IconBox>
+          }
+        />
+        <CardContent
+          style={{
+            height: '200px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Close style={{ fontSize: '64px', color: navRod, display: 'flex' }} />
+        </CardContent>
+        <CardActions>
+          <i>Logg inn for å se tilganger</i>
+        </CardActions>
+      </UserAccessDiv>
     )
 
   if (isOwner) {
     return (
       <>
+        <SubHeader>
+          Brukere i listen nedenfor kan gi seg selv tilgang til produktet
+        </SubHeader>
         <Requesters id={id} requesters={requesters} />
-        <CurrentAccess access={access} />
-        <PreviousAccess access={access} />
+        <div style={{ marginTop: '20px' }}>
+          <SubHeader>Aktive brukere</SubHeader>
+          <CurrentAccess access={access} />
+        </div>
+        <div style={{ marginTop: '20px' }}>
+          <SubHeader>Tidligere brukere</SubHeader>
+          <PreviousAccess access={access} />
+        </div>
       </>
     )
   }

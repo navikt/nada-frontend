@@ -8,7 +8,7 @@ import * as React from 'react'
 import { DataproductQuery } from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
 import { Description } from '../lib/detailTypography'
-import SubHeader from '../lib/subHeader'
+import humanizeDate from '../lib/humanizeDate'
 
 export interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
@@ -22,6 +22,10 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
           <tr>
             <th>Type:</th>
             <td>{product.datasource.__typename}</td>
+          </tr>
+          <tr>
+            <th>Oppdatert:</th>
+            <td>{humanizeDate(product.lastModified)}</td>
           </tr>
           {!!product.keywords.length && (
             <tr>
@@ -60,7 +64,6 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
           </tr>
         </tbody>
       </StyledTable>
-      <SubHeader>Beskrivelse</SubHeader>
       <Description>{product.description || '*ingen beskrivelse*'}</Description>
     </>
   )

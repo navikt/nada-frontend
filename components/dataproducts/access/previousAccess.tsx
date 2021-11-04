@@ -3,6 +3,7 @@ import { DataproductAccessQuery } from '../../../lib/schema/graphql'
 import { removeSubjectType } from './accessControls'
 import * as React from 'react'
 import humanizeDate from '../../lib/humanizeDate'
+import { Stack } from '@mui/material'
 
 interface CurrentAccessProps {
   access: DataproductAccessQuery['dataproduct']['access']
@@ -41,6 +42,13 @@ const PreviousAccess = ({ access }: CurrentAccessProps) => {
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
+        components={{
+          NoRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              Det er ingen som har brukt dette produktet
+            </Stack>
+          ),
+        }}
       />
     </div>
   )

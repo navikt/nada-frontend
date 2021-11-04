@@ -2,9 +2,8 @@ import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
-import { Box, Tab, Tabs } from '@mui/material'
+import { CardActions, CardContent, CardHeader, Tab, Tabs } from '@mui/material'
 import TabPanel from '../lib/tabPanel'
-import ReactMarkdown from 'react-markdown'
 import DataproductTableSchema from './dataproductTableSchema'
 import styled from 'styled-components'
 import EditDataproduct from './editDataproduct'
@@ -22,6 +21,10 @@ import * as React from 'react'
 import { Name } from '../lib/detailTypography'
 import TopBar from '../lib/topBar'
 import DataproductInfo from './dataproductInfo'
+import { UserAccessDiv } from './access/userAccess'
+import IconBox from '../lib/icons/iconBox'
+import { Close, Locked } from '@navikt/ds-icons'
+import { navRod } from '../../styles/constants'
 
 const StyledTabPanel = styled(TabPanel)`
   > div {
@@ -102,11 +105,31 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       </StyledTabPanel>
       <StyledTabPanel index={2} value={activeTab}>
         {!userState ? (
-          <ErrorMessage
-            error={
-              new Error('Du må logge inn for å se tilganger på dette produktet')
-            }
-          />
+          <UserAccessDiv>
+            <CardHeader
+              title={'Ikke innlogget'}
+              avatar={
+                <IconBox size={48}>
+                  <Locked style={{ color: navRod }} />
+                </IconBox>
+              }
+            />
+            <CardContent
+              style={{
+                height: '200px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Close
+                style={{ fontSize: '64px', color: navRod, display: 'flex' }}
+              />
+            </CardContent>
+            <CardActions>
+              <i>Logg inn for å se tilganger</i>
+            </CardActions>
+          </UserAccessDiv>
         ) : (
           <AccessControls id={product.id} isOwner={isOwner} />
         )}

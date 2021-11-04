@@ -9,6 +9,7 @@ import { navBlaLighten20, navRod } from '../../../styles/constants'
 import { removeSubjectType } from './accessControls'
 import * as React from 'react'
 import humanizeDate from '../../lib/humanizeDate'
+import { Stack } from '@mui/material'
 
 const RemoveAccess = styled.td`
   display: flex;
@@ -80,6 +81,13 @@ const CurrentAccess = ({ access }: CurrentAccessProps) => {
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
+        components={{
+          NoRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              Ingen aktive brukere av dataproduktet
+            </Stack>
+          ),
+        }}
       />
     </div>
   )

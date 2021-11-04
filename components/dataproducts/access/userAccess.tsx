@@ -17,7 +17,7 @@ import { UserState } from '../../../lib/context'
 import { Button } from '@navikt/ds-react'
 import humanizeDate from '../../lib/humanizeDate'
 
-const UserAccessDiv = styled(Card)`
+export const UserAccessDiv = styled(Card)`
   padding: 10px;
   margin: 10px;
   width: 270px;

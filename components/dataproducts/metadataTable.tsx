@@ -23,10 +23,6 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
         <th>Opprettet:</th>
         <td>{humanizeDate(product.created)}</td>
       </tr>
-      <tr>
-        <th>Oppdatert:</th>
-        <td>{humanizeDate(product.lastModified)}</td>
-      </tr>
     </tbody>
   </StyledMetadataTable>
 )
