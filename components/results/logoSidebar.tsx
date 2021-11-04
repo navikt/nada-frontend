@@ -34,10 +34,9 @@ export interface LogoSideProps {
   result: ArrayElement<SearchContentQuery['search']>
 }
 
-//FIXME: Bad handling of potentially undefined to get GraphQL up and running
 export const LogoSidebar = ({ result }: LogoSideProps) => (
   <LogoSidebarDiv>
-    {logoMap[result.__typename || 'Dataproduct']}
-    <p>{typeNameMap[result.__typename || 'Dataproduct']}</p>
+    {logoMap[result.__typename]}
+    <p>{typeNameMap[result.__typename]}</p>
   </LogoSidebarDiv>
 )
