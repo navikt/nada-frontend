@@ -17,6 +17,48 @@ interface addProductModalProps {
   setOpen: (value: boolean) => void
 }
 
+const ProductCards = styled.div`
+  display: flex;
+`
+const SearchBox = styled.div`
+  width: 303px;
+  margin: 10px;
+  padding: 10px;
+  max-height: 600px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+`
+const SearchResults = styled.div`
+  flex-grow: 1;
+  border: 1px solid #d5d5d5;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+`
+
+const AddedProductsBox = styled.div`
+  width: 303px;
+  margin: 10px;
+  padding: 10px;
+  max-height: 600px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+`
+const AddedProducts = styled.div`
+  border-radius: 5px;
+  border: 1px solid #d5d5d5;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+`
+const BoxHeader = styled.div`
+  height: 80px;
+  justify-content: center;
+  display: flex;
+`
+
 export const AddProductModal = ({
   collection,
   open,
@@ -68,80 +110,52 @@ export const AddProductModal = ({
     setSelectedProduct(selectedProduct.filter((p) => p !== id))
   }
 
-  const ProductCards = styled.div`
-    display: flex;
-  `
-  const SearchResultsBox = styled.div`
-    width: 303px;
-    border: 1px solid #d5d5d5;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    max-height: 600px;
-    overflow-y: auto;
-  `
-  const SearchResults = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-  `
-  const AddedProductsBox = styled.div`
-    border: 1px solid #d5d5d5;
-    width: 303px;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    max-height: 600px;
-    overflow-y: auto;
-  `
-  const AddedProducts = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-  `
-  const BoxHeader = styled.div`
-    height: 80px;
-    justify-content: center;
-    display: flex;
-  `
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <Modal.Content style={{ paddingTop: '60px' }}>
-        <ProductCards>
-          <SearchResultsBox>
-            <BoxHeader>
-              <ProductSearchBox onSubmit={onSubmit} />
-            </BoxHeader>
-            <SearchResults>
-              {!filteredProducts?.length ? (
-                <div>Ingen resultater funnet</div>
-              ) : (
-                filteredProducts?.map((p) => {
-                  return (
+      <Modal.Content>
+        <div>
+          <h2>Administrer dataprodukter</h2>
+          <ProductCards>
+            <SearchBox>
+              <BoxHeader>
+                <h2>Tilgjengelige produkter</h2>
+              </BoxHeader>
+
+              <SearchResults>
+                <ProductSearchBox onSubmit={onSubmit} />
+
+                {!filteredProducts?.length ? (
+                  <div style={{ textAlign: 'center', width: '100%' }}>
+                    Ingen resultater
+                  </div>
+                ) : (
+                  filteredProducts?.map((p) => (
                     <MiniDataProductCard
                       key={p.id}
                       id={p.id}
                       handleClick={handleAddToCollection}
                     />
-                  )
-                })
-              )}
-            </SearchResults>
-          </SearchResultsBox>
-          <AddedProductsBox>
-            <BoxHeader>
-              <p>Innhold</p>
-            </BoxHeader>
-            <AddedProducts>
-              {collection.elements &&
-                collection.elements.map((d) => (
-                  <MiniDataProductCard
-                    key={d.id}
-                    id={d.id}
-                    handleClick={handleRemoveFromCollection}
-                  />
-                ))}
-            </AddedProducts>
-          </AddedProductsBox>
-        </ProductCards>
+                  ))
+                )}
+              </SearchResults>
+            </SearchBox>
+            <AddedProductsBox>
+              <BoxHeader>
+                <h2>Inkluderte produkter</h2>
+              </BoxHeader>
+              <AddedProducts>
+                {collection.elements &&
+                  collection.elements.map((d) => (
+                    <MiniDataProductCard
+                      key={d.id}
+                      id={d.id}
+                      handleClick={handleRemoveFromCollection}
+                    />
+                  ))}
+              </AddedProducts>
+            </AddedProductsBox>
+          </ProductCards>
+        </div>
       </Modal.Content>
     </Modal>
   )
