@@ -7,6 +7,7 @@ import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
 import DescriptionEditor from '../lib/DescriptionEditor'
+import { CreateForm } from '../lib/CreateForm'
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
@@ -28,7 +29,7 @@ export const NewCollectionForm = ({
   const groups = useContext(UserState)?.groups
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <CreateForm onSubmit={handleSubmit(onSubmit)}>
       <Fieldset legend="Opprett samling" errorPropagation={false}>
         <TextField
           id="name"
@@ -61,6 +62,6 @@ export const NewCollectionForm = ({
         />
       </Fieldset>
       <RightJustifiedSubmitButton onCancel={onCancel} />
-    </form>
+    </CreateForm>
   )
 }

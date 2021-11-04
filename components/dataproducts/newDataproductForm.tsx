@@ -14,6 +14,7 @@ import { NewDataproduct } from '../../lib/schema/graphql'
 import { useEffect } from 'react'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import { Fieldset, TextField } from '@navikt/ds-react'
+import { CreateForm } from '../lib/CreateForm'
 
 export const NewDataproductForm = () => {
   const router = useRouter()
@@ -48,8 +49,8 @@ export const NewDataproductForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Dataprodukt" errorPropagation={false}>
+    <CreateForm onSubmit={handleSubmit(onSubmit)}>
+      <Fieldset legend="Nytt dataprodukt" errorPropagation={false}>
         {backendError && <ErrorMessage error={backendError} />}
         <TextField
           id="name"
@@ -84,6 +85,6 @@ export const NewDataproductForm = () => {
         <PiiCheckboxInput register={register} watch={watch} />
         <RightJustifiedSubmitButton onCancel={router.back} loading={loading} />
       </Fieldset>
-    </form>
+    </CreateForm>
   )
 }
