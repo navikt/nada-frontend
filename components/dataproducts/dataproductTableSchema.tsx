@@ -14,6 +14,7 @@ import { Accordion } from '@navikt/ds-react'
 import * as React from 'react'
 import styled from 'styled-components'
 import humanizeDate from '../lib/humanizeDate'
+import SubHeader from '../lib/subHeader'
 
 const StyledAccordion = styled(Accordion)`
   div {
@@ -68,42 +69,34 @@ const DataproductTableSchema = ({
           </tr>
         )}
       </StyledTable>
-      <StyledAccordion>
-        <Accordion.Item>
-          <Accordion.Header style={{ fontSize: 'smaller' }}>
-            Skjema
-          </Accordion.Header>
-          <Accordion.Content>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell align="right">Mode</TableCell>
-                    <TableCell align="right">Type</TableCell>
-                    <TableCell align="right">Description</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {schema.map((row) => (
-                    <TableRow
-                      key={row.name}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.mode}</TableCell>
-                      <TableCell align="right">{row.type}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Accordion.Content>
-        </Accordion.Item>
-      </StyledAccordion>
+      <SubHeader>Skjema</SubHeader>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Mode</TableCell>
+              <TableCell align="right">Type</TableCell>
+              <TableCell align="right">Description</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {schema.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.mode}</TableCell>
+                <TableCell align="right">{row.type}</TableCell>
+                <TableCell align="right">{row.description}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

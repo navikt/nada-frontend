@@ -43,7 +43,10 @@ export const newCollectionValidation = updateCollectionValidation.concat(
 )
 
 export const addRequesterValidation = yup.object().shape({
-  subject: yup.string().email().required('Gruppe- eller person-email'),
+  subject: yup
+    .string()
+    .email('Gyldig epost for gruppe eller bruker')
+    .required('Gruppe- eller person-email'),
 })
 
 export const addAccessValidation = yup.object().shape({

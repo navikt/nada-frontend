@@ -51,32 +51,11 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
 
   if (isOwner) {
     return (
-      <Accordion>
-        <Accordion.Item>
-          <Accordion.Header style={{ fontSize: 'smaller' }}>
-            Kan gi seg selv tilgang
-          </Accordion.Header>
-          <Accordion.Content>
-            <Requesters id={id} requesters={requesters} />
-          </Accordion.Content>
-        </Accordion.Item>
-        <Accordion.Item>
-          <Accordion.Header style={{ fontSize: 'smaller' }}>
-            Aktive tilganger
-          </Accordion.Header>
-          <Accordion.Content>
-            <CurrentAccess access={access} />
-          </Accordion.Content>
-        </Accordion.Item>
-        <Accordion.Item>
-          <Accordion.Header style={{ fontSize: 'smaller' }}>
-            Revokerte tilganger
-          </Accordion.Header>
-          <Accordion.Content>
-            <PreviousAccess access={access} />
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
+      <>
+        <Requesters id={id} requesters={requesters} />
+        <CurrentAccess access={access} />
+        <PreviousAccess access={access} />
+      </>
     )
   }
 

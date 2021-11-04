@@ -8,6 +8,7 @@ import * as React from 'react'
 import { DataproductQuery } from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
 import { Description } from '../lib/detailTypography'
+import SubHeader from '../lib/subHeader'
 
 export interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
@@ -59,7 +60,7 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
           </tr>
         </tbody>
       </StyledTable>
-      <h3>Beskrivelse</h3>
+      <SubHeader>Beskrivelse</SubHeader>
       <Description>{product.description || '*ingen beskrivelse*'}</Description>
     </>
   )
