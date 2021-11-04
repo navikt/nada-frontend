@@ -3,25 +3,61 @@ import ReactMarkdown from 'react-markdown'
 
 import { ArrayElement } from '../../lib/schema/ArrayElement'
 import { SearchContentQuery } from '../../lib/schema/graphql'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import rehypeFormat from 'rehype-format'
+import rehypeStringify from 'rehype-stringify'
+import { useState } from 'react'
+
+import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 
 const StyledTitle = styled.h2`
   line-height: 1;
+  font-weight: 300;
   font-size: 20px;
   font-family: 'Source Sans Pro';
   margin: 0 8px 0 0;
 `
 
-const StyledDescription = styled(ReactMarkdown)`
-  margin: 0.25em 1em 0 0.125em;
-  > :not(:first-child) {
-    display: none;
-  }
-  height: 5em;
+const StyledResultAbstract = styled.div`
+  height: 100px;
+  width: 100%;
 `
 
-const StyledResultAbstract = styled.div`
-  flex-grow: 1;
+const StyledDescription = styled.div`
+  width: 100%;
+  color: #555;
+  font-size: 16px;
+  font-style: italic;
 `
+interface DescriptionProps {
+  children: string
+}
+
+// Temporary workaround until backend does the excerpt for us
+const Description = ({ children }: DescriptionProps) => {
+  const [description, setDescription] = useState<string>('')
+
+  unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeFormat)
+    .use(rehypeStringify)
+    .process(children)
+    .then((x) => setDescription(x.toString()))
+
+  return (
+    <StyledDescription>
+      <HTMLEllipsis
+        unsafeHTML={description}
+        maxLine="4"
+        ellipsis="..."
+        basedOn="letters"
+      />
+    </StyledDescription>
+  )
+}
 
 export interface ResultAbstractProps {
   result: ArrayElement<SearchContentQuery['search']>
@@ -30,6 +66,6 @@ export interface ResultAbstractProps {
 export const ResultAbstract = ({ result }: ResultAbstractProps) => (
   <StyledResultAbstract>
     <StyledTitle>{result.name}</StyledTitle>
-    <StyledDescription>{result.description || ''}</StyledDescription>
+    <Description>{result.description || ''}</Description>
   </StyledResultAbstract>
 )

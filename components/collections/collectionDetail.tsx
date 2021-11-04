@@ -14,6 +14,7 @@ import DeleteModal from '../lib/deleteModal'
 import { UserState } from '../../lib/context'
 import { Description, Name } from '../lib/detailTypography'
 import TopBar from '../lib/topBar'
+import * as React from 'react'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
@@ -63,6 +64,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
         )}
       </TopBar>
       <MetadataTable collection={collection} />
+      <h3>Beskrivelse</h3>
       <Description>
         {collection.description || '*ingen beskrivelse*'}
       </Description>

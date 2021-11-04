@@ -8,7 +8,8 @@ export const Name = styled.h1`
 `
 
 export const StyledDescription = styled.div`
-  padding-left: 10px;
+  padding: 0 2em;
+  text-align: justify;
 `
 
 export const Description = ({ children }: { children: string }) => (
