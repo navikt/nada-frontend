@@ -21,7 +21,7 @@ export const Project = ({
 
   useEffect(() => {
     if (activePaths.includes(projectID)) getDatasets()
-  }, [activePaths, getDatasets, projectID])
+  }, [activePaths, projectID])
 
   const LoaderDataset = (
     <TreeItem
