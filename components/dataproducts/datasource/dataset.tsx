@@ -15,26 +15,6 @@ export interface DataproductSourceDatasetProps {
   datasetID: string
 }
 
-interface PlaceholderProps {
-  datasetID: string
-  projectID: string
-}
-
-const loadingPlaceholder = ({ datasetID, projectID }: PlaceholderProps) => (
-  <TreeItem
-    endIcon={<Loader />}
-    nodeId={`${projectID}/${datasetID}/loadingPlaceholder`}
-    label={'laster...'}
-  />
-)
-
-const emptyPlaceholder = ({ datasetID, projectID }: PlaceholderProps) => (
-  <TreeItem
-    nodeId={`${projectID}/${datasetID}/emptyPlaceholder`}
-    label={'ingenting her'}
-  />
-)
-
 export const Dataset = ({
   projectID,
   datasetID,
@@ -44,9 +24,24 @@ export const Dataset = ({
     variables: { projectID, datasetID },
   })
 
+  const loadingPlaceholder = (
+    <TreeItem
+      endIcon={<Loader />}
+      nodeId={`${projectID}/${datasetID}/loadingPlaceholder`}
+      label={'laster...'}
+    />
+  )
+
+  const emptyPlaceholder = (
+    <TreeItem
+      nodeId={`${projectID}/${datasetID}/emptyPlaceholder`}
+      label={'ingenting her'}
+    />
+  )
+
   useEffect(() => {
     if (active) getTables()
-  }, [active, getTables])
+  }, [active])
 
   return (
     <TreeItem
@@ -55,16 +50,16 @@ export const Dataset = ({
       nodeId={`${projectID}/${datasetID}`}
       label={datasetID}
     >
-      {loading && loadingPlaceholder({ datasetID, projectID })}
-      {!loading &&
-        !data?.gcpGetTables?.length &&
-        emptyPlaceholder({ datasetID, projectID })}
-      {!loading && !!data?.gcpGetTables?.length && (
+      {loading ? (
+        loadingPlaceholder
+      ) : data?.gcpGetTables?.length ? (
         <DatasetContents
           projectID={projectID}
           datasetID={datasetID}
           contents={data?.gcpGetTables}
         />
+      ) : (
+        emptyPlaceholder
       )}
     </TreeItem>
   )
