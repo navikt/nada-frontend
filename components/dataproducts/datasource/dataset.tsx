@@ -7,7 +7,6 @@ import { TreeItem } from '@mui/lab'
 import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 
-import Table from './table'
 import DatasetContents from './table'
 
 export interface DataproductSourceDatasetProps {
@@ -16,17 +15,24 @@ export interface DataproductSourceDatasetProps {
   datasetID: string
 }
 
-const loadingPlaceholder = (
+interface PlaceholderProps {
+  datasetID: string
+  projectID: string
+}
+
+const loadingPlaceholder = ({ datasetID, projectID }: PlaceholderProps) => (
   <TreeItem
     endIcon={<Loader />}
-    key={'loading'}
-    nodeId={'loading'}
+    nodeId={`${projectID}/${datasetID}/loadingPlaceholder`}
     label={'laster...'}
   />
 )
 
-const emptyPlaceholder = (
-  <TreeItem key={'empty'} nodeId={'empty'} label={'ingenting her'} />
+const emptyPlaceholder = ({ datasetID, projectID }: PlaceholderProps) => (
+  <TreeItem
+    nodeId={`${projectID}/${datasetID}/emptyPlaceholder`}
+    label={'ingenting her'}
+  />
 )
 
 export const Dataset = ({
@@ -49,9 +55,11 @@ export const Dataset = ({
       nodeId={`${projectID}/${datasetID}`}
       label={datasetID}
     >
-      {loading && loadingPlaceholder}
-      {!loading && !data?.gcpGetTables?.length && emptyPlaceholder}
-      {!loading && data?.gcpGetTables?.length && (
+      {loading && loadingPlaceholder({ datasetID, projectID })}
+      {!loading &&
+        !data?.gcpGetTables?.length &&
+        emptyPlaceholder({ datasetID, projectID })}
+      {!loading && !!data?.gcpGetTables?.length && (
         <DatasetContents
           projectID={projectID}
           datasetID={datasetID}
