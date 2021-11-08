@@ -1,22 +1,34 @@
 import TreeItem from '@mui/lab/TreeItem'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
-import { BigQueryType } from '../../../lib/schema/graphql'
+import { BigQueryType, GcpGetTablesQuery } from '../../../lib/schema/graphql'
 
-interface DataproductTableItemProps {
+const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
+  materialized_view: <BigQueryLogo />,
+  table: <BigQueryLogo />,
+  view: <BigQueryLogo />,
+}
+
+interface DatasetContentsProps {
+  contents: GcpGetTablesQuery['gcpGetTables']
   datasetID: string
   projectID: string
-  name: string
-  type: BigQueryType
 }
 
-const Table = ({ datasetID, projectID, name }: DataproductTableItemProps) => {
-  return (
-    <TreeItem
-      endIcon={<BigQueryLogo />}
-      key={`${projectID}/${datasetID}/${name}`}
-      nodeId={`${projectID}/${datasetID}/${name}`}
-      label={name}
-    />
-  )
-}
-export default Table
+const DatasetContents = ({
+  contents,
+  projectID,
+  datasetID,
+}: DatasetContentsProps) => (
+  <>
+    {contents?.map(({ name, type }) => (
+      <TreeItem
+        endIcon={DataproductTableIconMap[type]}
+        nodeId={`${projectID}/${datasetID}/${name}`}
+        label={name}
+        key={`${projectID}/${datasetID}/${name}`}
+      />
+    ))}
+  </>
+)
+
+export default DatasetContents

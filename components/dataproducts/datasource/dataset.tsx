@@ -1,9 +1,14 @@
-import { TreeItem } from '@mui/lab'
-import { Loader } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+
 import { useGcpGetTablesLazyQuery } from '../../../lib/schema/graphql'
-import Table from './table'
+
+import { TreeItem } from '@mui/lab'
+
+import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
+
+import Table from './table'
+import DatasetContents from './table'
 
 export interface DataproductSourceDatasetProps {
   active: boolean
@@ -11,13 +16,17 @@ export interface DataproductSourceDatasetProps {
   datasetID: string
 }
 
-const loaderTable = (
+const loadingPlaceholder = (
   <TreeItem
     endIcon={<Loader />}
     key={'loading'}
     nodeId={'loading'}
-    label={'loading...'}
+    label={'laster...'}
   />
+)
+
+const emptyPlaceholder = (
+  <TreeItem key={'empty'} nodeId={'empty'} label={'ingenting her'} />
 )
 
 export const Dataset = ({
@@ -25,44 +34,13 @@ export const Dataset = ({
   datasetID,
   active,
 }: DataproductSourceDatasetProps) => {
-  const [tables, setTables] = useState<JSX.Element[]>()
-
-  const [getTables, { data, loading, error, refetch }] =
-    useGcpGetTablesLazyQuery({
-      variables: { projectID, datasetID },
-    })
+  const [getTables, { data, loading, error }] = useGcpGetTablesLazyQuery({
+    variables: { projectID, datasetID },
+  })
 
   useEffect(() => {
     if (active) getTables()
   }, [active, getTables])
-
-  useEffect(() => {
-    if (!data) {
-      setTables([loaderTable])
-    } else {
-      if (data?.gcpGetTables?.length) {
-        setTables(
-          data.gcpGetTables.map(({ name, type }) => (
-            <Table
-              key={`${projectID}/${datasetID}/${name}`}
-              datasetID={datasetID}
-              projectID={projectID}
-              name={name}
-              type={type}
-            />
-          ))
-        )
-      } else {
-        setTables([
-          <TreeItem
-            key={'loading'}
-            nodeId={'loading'}
-            label={'Ingen tabeller'}
-          />,
-        ])
-      }
-    }
-  }, [data, loading, datasetID, projectID])
 
   return (
     <TreeItem
@@ -71,7 +49,15 @@ export const Dataset = ({
       nodeId={`${projectID}/${datasetID}`}
       label={datasetID}
     >
-      {tables?.length ? tables : loaderTable}
+      {loading && loadingPlaceholder}
+      {!loading && !data?.gcpGetTables?.length && emptyPlaceholder}
+      {!loading && data?.gcpGetTables?.length && (
+        <DatasetContents
+          projectID={projectID}
+          datasetID={datasetID}
+          contents={data?.gcpGetTables}
+        />
+      )}
     </TreeItem>
   )
 }
