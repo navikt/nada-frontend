@@ -77,7 +77,7 @@ export const KeywordsInput = ({
     [tags]
   )
 
-  useEffect(() => setKeywords(tags.map((x) => x.name)), [tags])
+  useEffect(() => setKeywords(tags.map((x) => x.name)), [tags, setKeywords])
 
   const classNames = {
     root: 'react-tags',

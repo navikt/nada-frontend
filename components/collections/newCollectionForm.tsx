@@ -23,7 +23,7 @@ export const NewCollectionForm = ({
     resolver: yupResolver(newCollectionValidation),
   })
   // propagates change in keywords state to useForm state
-  useEffect(() => setValue('keywords', keywords), [keywords])
+  useEffect(() => setValue('keywords', keywords), [keywords, setValue])
   const { errors } = formState
 
   const groups = useContext(UserState)?.groups

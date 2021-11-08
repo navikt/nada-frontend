@@ -24,7 +24,7 @@ export const NewDataproductForm = () => {
     })
   useEffect(() => {
     setValue('pii', true)
-  }, [])
+  }, [setValue])
 
   const [createDataproduct, { data, loading, error: backendError }] =
     useMutation(CREATE_DATAPRODUCT, {
