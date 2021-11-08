@@ -12,16 +12,6 @@ const LogoSidebarDiv = styled.div`
     margin: 0 auto;
     display: block;
   }
-
-  p {
-    text-transform: uppercase;
-    font-weight: bold;
-    margin: 0;
-    margin-top: 8px;
-    color: rgba(0, 0, 0, 0.7);
-    font-size: 12px;
-    text-align: center;
-  }
 `
 
 const typeNameMap: Record<
@@ -36,9 +26,19 @@ export interface LogoSideProps {
   result: ArrayElement<SearchContentQuery['search']>
 }
 
+const SearchResultType = styled.div`
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 0;
+  margin-top: 8px;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 12px;
+  text-align: center;
+`
+
 export const LogoSidebar = ({ result }: LogoSideProps) => (
   <LogoSidebarDiv>
     {logoMap[result.__typename]}
-    <p>{typeNameMap[result.__typename]}</p>
+    <SearchResultType>{typeNameMap[result.__typename]}</SearchResultType>
   </LogoSidebarDiv>
 )

@@ -1,13 +1,4 @@
-import Link from 'next/link'
-import { Information } from '@navikt/ds-icons'
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Popover,
-  Typography,
-} from '@mui/material'
+import { Card, CardHeader, CardContent } from '@mui/material'
 import DataProductSpinner from '../lib/spinner'
 import {
   navBlaLighten80,
@@ -20,15 +11,20 @@ import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { Success, Warning } from '@navikt/ds-icons'
 import Keyword from '../widgets/Keyword'
-import { useDataproductSummaryQuery } from '../../lib/schema/graphql'
+import {
+  DataproductSummaryQuery,
+  useDataproductSummaryQuery,
+} from '../../lib/schema/graphql'
 import React from 'react'
+import { DescriptionExcerpt } from '../../lib/descriptionExcerpt'
 
-const DatasetCardDiv = styled(Card)`
-  padding: 5px;
+const DatasetCardDiv = styled.div`
+  width: 100%;
   margin: 5px;
-  width: 130px;
-  height: 150px;
+  max-height: 150px;
   display: flex;
+  border: 1px solid #999;
+  border-radius: 5px;
 
   flex-direction: column;
   cursor: pointer;
@@ -36,25 +32,46 @@ const DatasetCardDiv = styled(Card)`
   :hover {
     background-color: ${navBlaLighten80};
   }
-`
-const PiiBox = styled.div`
-  border-right: 1px solid ${navGra20};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-right: 10px;
+
+  > div {
+    padding: 5px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0.1em 0.5em;
+    font-weight: bold;
+    color: black;
+  }
+
+  p {
+    margin: 0 0.5em;
+  }
 `
 
-const TagsBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-right: 10px;
-`
-const InertDatasetCardDiv = styled(DatasetCardDiv)`
+const InertDatasetCardDiv = styled.div`
   cursor: unset;
   :hover {
     background-color: unset;
   }
+`
+
+const DataproductTopline = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.7);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  > * {
+    margin-right: 0.25em;
+    margin-left: 0.25em;
+  }
+  border-bottom: 1px solid #999;
 `
 
 interface MiniDataproductCardProps {
@@ -63,18 +80,6 @@ interface MiniDataproductCardProps {
 }
 
 const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<SVGElement | null>(null)
-
-  const handlePopoverOpen = (event: React.MouseEvent<SVGElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null)
-  }
-
-  const open = Boolean(anchorEl)
-
   const { data, loading, error } = useDataproductSummaryQuery({
     variables: { id },
   })
@@ -87,7 +92,7 @@ const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
       </InertDatasetCardDiv>
     )
 
-  if (!data)
+  if (loading)
     return (
       <InertDatasetCardDiv>
         <CardHeader title={'Laster...'} />
@@ -97,88 +102,31 @@ const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
       </InertDatasetCardDiv>
     )
 
-  const { dataproduct } = data
+  const { dataproduct } = data as DataproductSummaryQuery
 
   return (
-    <>
-      <DatasetCardDiv onClick={() => handleClick(id)}>
-        <CardHeader
-          sx={{ padding: '0px' }}
-          avatar={
-            <IconBox size={16}>
-              <BigQueryLogo />
-            </IconBox>
-          }
-        />
-        <CardContent
-          sx={{
-            padding: '0px',
-            flexGrow: 1,
-          }}
-        >
-          <p style={{ fontSize: 'small', marginBottom: '0px' }}>
-            {dataproduct.name}
-          </p>
-          <i style={{ fontSize: 'small' }}>
-            {dataproduct.datasource.__typename || '?'}
-          </i>
-        </CardContent>
-
-        <CardActions
-          style={{ borderTop: `1px solid ${navGra20}`, paddingTop: '0px' }}
-        >
-          <PiiBox>
-            <i style={{ fontSize: 'small' }}>PII</i>
-            <IconBox size={24}>
-              {dataproduct.pii ? (
-                <Success color={navGronn} />
-              ) : (
-                <Warning color={navRod} />
-              )}
-            </IconBox>
-          </PiiBox>
-          <TagsBox>
-            <i style={{ fontSize: 'small' }}>Beskrivelse</i>
-            <div style={{ margin: 'auto' }}>
-              <IconBox size={24}>
-                <Information
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
-                  aria-owns={open ? 'mouse-over-popover' : undefined}
-                  aria-haspopup="true"
-                />
-              </IconBox>
-            </div>
-          </TagsBox>
-        </CardActions>
-      </DatasetCardDiv>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          zIndex: 2001,
-          pointerEvents: 'none',
-        }}
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <Typography sx={{ p: 1 }}>
-          {dataproduct.description && dataproduct.description.substr(0, 200)}
-          {dataproduct.description &&
-            dataproduct.description.length > 200 &&
-            '...'}
-        </Typography>
-      </Popover>
-    </>
+    <DatasetCardDiv onClick={() => handleClick(id)}>
+      <DataproductTopline>
+        <IconBox size={16}>
+          <BigQueryLogo />
+        </IconBox>
+        <div>{dataproduct.datasource.__typename || '?'}</div>
+        {dataproduct.pii ? (
+          <Success
+            color={navGronn}
+            aria-label={'inneholder personidentifiserende informasjon'}
+          />
+        ) : (
+          <Warning
+            color={navRod}
+            aria-label={'inneholder ikke personidentifiserende informasjon'}
+          />
+        )}
+        <div>PII</div>
+      </DataproductTopline>
+      <h4>{dataproduct.name}</h4>
+      <DescriptionExcerpt>{dataproduct.description || ''}</DescriptionExcerpt>
+    </DatasetCardDiv>
   )
 }
 
