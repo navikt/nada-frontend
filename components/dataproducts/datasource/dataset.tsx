@@ -1,13 +1,21 @@
-import { useEffect } from 'react'
-
-import { useGcpGetTablesLazyQuery } from '../../../lib/schema/graphql'
+import {
+  BigQueryType,
+  GcpGetTablesQuery,
+  useGcpGetTablesLazyQuery,
+} from '../../../lib/schema/graphql'
 
 import { TreeItem } from '@mui/lab'
 
 import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 
-import DatasetContents from './table'
+import BigQueryLogo from '../../lib/icons/bigQueryLogo'
+
+const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
+  materialized_view: <BigQueryLogo />,
+  table: <BigQueryLogo />,
+  view: <BigQueryLogo />,
+}
 
 export interface DataproductSourceDatasetProps {
   active: boolean
@@ -20,9 +28,11 @@ export const Dataset = ({
   datasetID,
   active,
 }: DataproductSourceDatasetProps) => {
-  const [getTables, { data, loading, error }] = useGcpGetTablesLazyQuery({
+  const [getTables, { data, loading, called }] = useGcpGetTablesLazyQuery({
     variables: { projectID, datasetID },
   })
+
+  if (active && !called) getTables()
 
   const loadingPlaceholder = (
     <TreeItem
@@ -39,9 +49,15 @@ export const Dataset = ({
     />
   )
 
-  useEffect(() => {
-    if (active) getTables()
-  }, [active])
+  const datasetContents = (contents: GcpGetTablesQuery['gcpGetTables']) =>
+    contents?.map(({ name, type }) => (
+      <TreeItem
+        endIcon={DataproductTableIconMap[type]}
+        nodeId={`${projectID}/${datasetID}/${name}`}
+        key={`${projectID}/${datasetID}/${name}`}
+        label={name}
+      />
+    ))
 
   return (
     <TreeItem
@@ -50,17 +66,11 @@ export const Dataset = ({
       nodeId={`${projectID}/${datasetID}`}
       label={datasetID}
     >
-      {loading ? (
-        loadingPlaceholder
-      ) : data?.gcpGetTables?.length ? (
-        <DatasetContents
-          projectID={projectID}
-          datasetID={datasetID}
-          contents={data?.gcpGetTables}
-        />
-      ) : (
-        emptyPlaceholder
-      )}
+      {loading
+        ? loadingPlaceholder
+        : data?.gcpGetTables?.length
+        ? datasetContents(data?.gcpGetTables)
+        : emptyPlaceholder}
     </TreeItem>
   )
 }
