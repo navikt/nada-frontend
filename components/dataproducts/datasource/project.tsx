@@ -1,6 +1,5 @@
 import { TreeItem } from '@mui/lab'
 import { Loader } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
 import { useGcpGetDatasetsLazyQuery } from '../../../lib/schema/graphql'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 import { Dataset } from './dataset'
@@ -14,21 +13,25 @@ export const Project = ({
   projectID,
   activePaths,
 }: DataproductSourceDatasetProps) => {
-  const [getDatasets, { data, loading, error, refetch }] =
+  const [getDatasets, { data, loading, error, called }] =
     useGcpGetDatasetsLazyQuery({
       variables: { projectID },
     })
 
-  useEffect(() => {
-    if (activePaths.includes(projectID)) getDatasets()
-  }, [activePaths, projectID])
+  if (!called && activePaths.includes(projectID)) getDatasets()
 
-  const LoaderDataset = (
+  const emptyPlaceholder = (
+    <TreeItem
+      nodeId={`${projectID}/emptyPlaceholder`}
+      label={'ingen datasett i prosjekt'}
+    />
+  )
+
+  const loadingPlaceholder = (
     <TreeItem
       endIcon={<Loader />}
-      key={'loading'}
-      nodeId={'loading'}
-      label={'loading...'}
+      nodeId={`${projectID}/loadingPlaceholder`}
+      label={'laster...'}
     />
   )
 
@@ -39,16 +42,18 @@ export const Project = ({
       nodeId={projectID}
       label={projectID}
     >
-      {data
-        ? data?.gcpGetDatasets.map((s) => (
+      {loading
+        ? loadingPlaceholder
+        : !data?.gcpGetDatasets?.length
+        ? emptyPlaceholder
+        : data?.gcpGetDatasets.map((datasetID) => (
             <Dataset
-              key={s}
+              key={datasetID}
               projectID={projectID}
-              datasetID={s}
-              active={activePaths.includes(`${projectID}/${s}`)}
+              datasetID={datasetID}
+              active={activePaths.includes(`${projectID}/${datasetID}`)}
             />
-          ))
-        : LoaderDataset}
+          ))}
     </TreeItem>
   )
 }
