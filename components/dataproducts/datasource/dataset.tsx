@@ -11,19 +11,20 @@ export interface DataproductSourceDatasetProps {
   datasetID: string
 }
 
+const loaderTable = (
+  <TreeItem
+    endIcon={<Loader />}
+    key={'loading'}
+    nodeId={'loading'}
+    label={'loading...'}
+  />
+)
+
 export const Dataset = ({
   projectID,
   datasetID,
   active,
 }: DataproductSourceDatasetProps) => {
-  const loaderTable = (
-    <TreeItem
-      endIcon={<Loader />}
-      key={'loading'}
-      nodeId={'loading'}
-      label={'loading...'}
-    />
-  )
   const [tables, setTables] = useState<JSX.Element[]>()
 
   const [getTables, { data, loading, error, refetch }] =
@@ -61,7 +62,7 @@ export const Dataset = ({
         ])
       }
     }
-  }, [data, loading, datasetID, loaderTable, projectID])
+  }, [data, loading, datasetID, projectID])
 
   return (
     <TreeItem
