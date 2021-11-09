@@ -6,6 +6,7 @@ import { ExternalLink, People } from '@navikt/ds-icons'
 import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
+import { useRouter } from 'next/router'
 
 const UserBox = styled.div`
   white-space: nowrap;
@@ -28,6 +29,8 @@ const StyledA = styled.a`
 `
 export default function User() {
   const userState = useContext(UserState)
+
+  const router = useRouter()
   const menuId = 'primary-search-account-menu'
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
   const isMenuOpen = Boolean(anchorEl)
@@ -78,11 +81,10 @@ export default function User() {
                 Dokumentasjon <ExternalLink />
               </StyledA>
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>Mine tilganger</MenuItem>
             <MenuItem
-              onClick={() => {
+              onClick={(q) => {
                 handleMenuClose()
-                window.location.href = '/'
+                router.push({ pathname: '/user' })
               }}
             >
               Mine produkter

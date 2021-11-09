@@ -819,8 +819,18 @@ export type UserInfoQuery = {
       id: string
       group: { __typename?: 'Group'; name: string; email: string }
     }>
-    dataproducts: Array<{ __typename?: 'Dataproduct'; id: string }>
-    collections: Array<{ __typename?: 'Collection'; id: string }>
+    dataproducts: Array<{
+      __typename: 'Dataproduct'
+      id: string
+      name: string
+      description?: string | null | undefined
+    }>
+    collections: Array<{
+      __typename: 'Collection'
+      id: string
+      name: string
+      description?: string | null | undefined
+    }>
   }
 }
 
@@ -2006,10 +2016,16 @@ export const UserInfoDocument = gql`
         }
       }
       dataproducts {
+        __typename
         id
+        name
+        description
       }
       collections {
+        __typename
         id
+        name
+        description
       }
     }
   }

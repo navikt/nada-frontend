@@ -17,10 +17,16 @@ export const USER_INFO = gql`
         }
       }
       dataproducts {
+        __typename
         id
+        name
+        description
       }
       collections {
+        __typename
         id
+        name
+        description
       }
     }
   }
