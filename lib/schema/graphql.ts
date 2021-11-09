@@ -117,6 +117,8 @@ export type Dataproduct = {
   __typename?: 'Dataproduct'
   /** access contains list of users, groups and service accounts which have access to the dataproduct */
   access: Array<Access>
+  /** access collections that dataproduct is part of */
+  collections: Array<Collection>
   /** created is the timestamp for when the dataproduct was created */
   created: Scalars['Time']
   /** datasource contains metadata on the datasource */
@@ -139,6 +141,12 @@ export type Dataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters: Array<Scalars['String']>
+}
+
+/** Dataproduct contains metadata on a datasource. */
+export type DataproductCollectionsArgs = {
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 /** Datasource defines types that can be returned as a dataproduct datasource. */
@@ -381,6 +389,8 @@ export type Query = {
   gcpGetTables: Array<BigQueryTable>
   /** search through existing dataproducts and collections. */
   search: Array<SearchResult>
+  /** searches teamkatalogen for teams where team name matches query input */
+  teamkatalogen: Array<TeamkatalogenResult>
   /** userInfo returns information about the logged in user. */
   userInfo: UserInfo
   /** version returns the API version. */
@@ -416,6 +426,10 @@ export type QueryGcpGetTablesArgs = {
 
 export type QuerySearchArgs = {
   q?: Maybe<SearchQuery>
+}
+
+export type QueryTeamkatalogenArgs = {
+  q: Scalars['String']
 }
 
 export type SearchQuery = {
@@ -459,6 +473,16 @@ export type TableColumn = {
   type: Scalars['String']
 }
 
+export type TeamkatalogenResult = {
+  __typename?: 'TeamkatalogenResult'
+  /** team description. */
+  description: Scalars['String']
+  /** team name. */
+  name: Scalars['String']
+  /** url to team in teamkatalogen. */
+  url: Scalars['String']
+}
+
 /** UpdateCollection contains data for updating the metadata of a collection. */
 export type UpdateCollection = {
   /** description of the collection. */
@@ -488,6 +512,10 @@ export type UpdateDataproduct = {
 /** UserInfo contains metadata on a logged in user */
 export type UserInfo = {
   __typename?: 'UserInfo'
+  /** collections is a list of collections with one of the users groups as owner */
+  collections: Array<Collection>
+  /** dataproducts is a list of dataproducts with one of the users groups as owner */
+  dataproducts: Array<Dataproduct>
   /** email of user. */
   email: Scalars['String']
   /** gcpProjects is GCP projects the user is a member of. */
@@ -670,6 +698,7 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
+    collections: Array<{ __typename: 'Collection'; id: string; name: string }>
     owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
     datasource: {
       __typename?: 'BigQuery'
@@ -790,6 +819,8 @@ export type UserInfoQuery = {
       id: string
       group: { __typename?: 'Group'; name: string; email: string }
     }>
+    dataproducts: Array<{ __typename?: 'Dataproduct'; id: string }>
+    collections: Array<{ __typename?: 'Collection'; id: string }>
   }
 }
 
@@ -1527,6 +1558,11 @@ export const DataproductDocument = gql`
       repo
       pii
       keywords
+      collections {
+        __typename
+        id
+        name
+      }
       owner {
         group
         teamkatalogen
@@ -1968,6 +2004,12 @@ export const UserInfoDocument = gql`
           name
           email
         }
+      }
+      dataproducts {
+        id
+      }
+      collections {
+        id
       }
     }
   }

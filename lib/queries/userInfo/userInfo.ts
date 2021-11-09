@@ -16,6 +16,12 @@ export const USER_INFO = gql`
           email
         }
       }
+      dataproducts {
+        id
+      }
+      collections {
+        id
+      }
     }
   }
 `

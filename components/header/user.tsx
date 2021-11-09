@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
-import React, { useContext, MouseEvent } from 'react'
+import React, { MouseEvent, useContext } from 'react'
 import { navGraBakgrunn } from '../../styles/constants'
 import { ExternalLink, People } from '@navikt/ds-icons'
 import { UserState } from '../../lib/context'
@@ -79,8 +79,14 @@ export default function User() {
               </StyledA>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>Mine tilganger</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Mine favoritter</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Mine produkter</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleMenuClose()
+                window.location.href = '/'
+              }}
+            >
+              Mine produkter
+            </MenuItem>
             <MenuLine />
             <MenuItem
               sx={{ color: 'red' }}

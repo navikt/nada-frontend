@@ -11,6 +11,11 @@ export const GET_DATAPRODUCT = gql`
       repo
       pii
       keywords
+      collections {
+        __typename
+        id
+        name
+      }
       owner {
         group
         teamkatalogen
