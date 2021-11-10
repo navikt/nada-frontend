@@ -31,7 +31,10 @@ const Container = styled.div`
 `
 const Main = styled.main`
   width: 80vw;
-  max-width: 900px;
+  @media only screen and (max-width: 768px) {
+    width: 95vw;
+  }
+  max-width: 768px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
