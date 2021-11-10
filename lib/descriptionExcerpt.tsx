@@ -6,6 +6,9 @@ import remarkRehype from 'remark-rehype'
 import rehypeFormat from 'rehype-format'
 // @ts-ignore
 import remarkBehead from 'remark-behead'
+// @ts-ignore
+import remarkTitle from 'remark-title'
+
 import rehypeStringify from 'rehype-stringify'
 import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 
@@ -51,6 +54,7 @@ export const DescriptionExcerpt = ({ children }: DescriptionProps) => {
 
   unified()
     .use(remarkParse)
+    .use(remarkTitle, { title: '' })
     .use(remarkBehead, { depth: 4 })
     .use(remarkRehype)
     .use(rehypeFormat)
