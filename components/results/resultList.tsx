@@ -4,6 +4,8 @@ import { SearchContentQuery } from '../../lib/schema/graphql'
 
 interface ResultsProps {
   results?: SearchContentQuery['search']
+  // Omit excerpts and pass full description in stead.
+  noExcerpts?: boolean
 }
 
 const ResultListDiv = styled.div`
@@ -13,11 +15,15 @@ const ResultListDiv = styled.div`
   justify-content: space-between;
 `
 
-export function ResultList({ results }: ResultsProps) {
+export function ResultList({ results, noExcerpts }: ResultsProps) {
   return (
     <ResultListDiv>
-      {results?.map((d) => (
-        <SearchResultLink key={d.id} result={d} />
+      {results?.map((d, idx) => (
+        <SearchResultLink
+          key={idx}
+          result={d.result}
+          excerpt={noExcerpts ? undefined : d.excerpt}
+        />
       ))}
     </ResultListDiv>
   )

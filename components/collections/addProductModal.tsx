@@ -82,7 +82,9 @@ export const AddProductModal = ({
   const [removeFromCollection] = useRemoveFromCollectionMutation()
 
   const filteredProducts = data?.search.filter(
-    (p) => !selectedProduct.includes(p.id) && p.__typename !== 'Collection'
+    (p) =>
+      !selectedProduct.includes(p.result.id) &&
+      p.result.__typename !== 'Collection'
   )
 
   const handleAddToCollection = (id: string) => {
@@ -131,8 +133,8 @@ export const AddProductModal = ({
                 ) : (
                   filteredProducts?.map((p) => (
                     <MiniDataProductCard
-                      key={p.id}
-                      id={p.id}
+                      key={p.result.id}
+                      id={p.result.id}
                       handleClick={handleAddToCollection}
                     />
                   ))

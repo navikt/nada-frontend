@@ -1,18 +1,11 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import {
-  navBla,
   navBlaDarken40,
   navBlaLighten20,
-  navBlaLighten40,
   navBlaLighten60,
   navBlaLighten80,
-  navLilla,
-  navLillaDarken20,
   navLillaDarken40,
-  navLillaDarken60,
-  navLillaDarken80,
-  navLillaLighten40,
   navLillaLighten60,
 } from '../../styles/constants'
 import { SearchContentQuery } from '../../lib/schema/graphql'
@@ -67,13 +60,15 @@ const ResultInfo = styled.div`
   display: flex;
   gap: 0.75em;
 `
+type SearchResponse = ArrayElement<SearchContentQuery['search']>
 
 export interface SearchResultProps {
-  result: ArrayElement<SearchContentQuery['search']>
+  result: SearchResponse['result']
+  excerpt?: string
 }
 
-export const SearchResultLink = ({ result }: SearchResultProps) => {
-  const getLink = (result: ArrayElement<SearchContentQuery['search']>) =>
+export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
+  const getLink = (result: SearchResponse['result']) =>
     `/${result.__typename.toLowerCase()}/${result.id}`
 
   return (
@@ -87,7 +82,9 @@ export const SearchResultLink = ({ result }: SearchResultProps) => {
         </BottomLine>
         <ResultInfo>
           <ResultIcon result={result} />
-          <DescriptionExcerpt>{result.description || ''}</DescriptionExcerpt>
+          <DescriptionExcerpt>
+            {(excerpt && `...${excerpt}...`) || result.description || ''}
+          </DescriptionExcerpt>
         </ResultInfo>
       </SearchResultLinkDiv>
     </Link>

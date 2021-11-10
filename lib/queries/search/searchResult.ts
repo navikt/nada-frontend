@@ -3,28 +3,31 @@ import { gql } from 'graphql-tag'
 export const SEARCH_CONTENT = gql`
   query searchContent($q: SearchQuery!) {
     search(q: $q) {
-      ... on Collection {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
+      excerpt
+      result {
+        ... on Collection {
+          __typename
+          id
+          name
+          description
+          created
+          lastModified
+          owner {
+            group
+            teamkatalogen
+          }
         }
-      }
-      ... on Dataproduct {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
+        ... on Dataproduct {
+          __typename
+          id
+          name
+          description
+          created
+          lastModified
+          owner {
+            group
+            teamkatalogen
+          }
         }
       }
     }

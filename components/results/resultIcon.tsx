@@ -1,7 +1,6 @@
 import { ArrayElement } from '../../lib/schema/ArrayElement'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 import styled from 'styled-components'
-import { resultTypenameMap } from './resultTypenameMap'
 
 interface LogoProps {
   size?: number | undefined
@@ -20,8 +19,13 @@ export const ProductLogo = ({ size = undefined }: LogoProps) =>
     <img src="/result-icons/dataproduct.svg" />
   )
 
-type Result = ArrayElement<SearchContentQuery['search']>
-type ResultType = ArrayElement<SearchContentQuery['search']>['__typename']
+type Result = ArrayElement<SearchContentQuery['search']>['result']
+type ResultType = Result['__typename']
+
+export const resultTypenameMap: Record<ResultType, string> = {
+  Collection: 'Datasamling',
+  Dataproduct: 'Dataprodukt',
+}
 
 export const resultIconMap: Record<ResultType, React.ReactNode> = {
   Collection: <CollectionLogo />,

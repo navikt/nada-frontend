@@ -388,7 +388,7 @@ export type Query = {
    */
   gcpGetTables: Array<BigQueryTable>
   /** search through existing dataproducts and collections. */
-  search: Array<SearchResult>
+  search: Array<SearchResultRow>
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>
   /** userInfo returns information about the logged in user. */
@@ -452,6 +452,12 @@ export type SearchQuery = {
 }
 
 export type SearchResult = Collection | Dataproduct
+
+export type SearchResultRow = {
+  __typename?: 'SearchResultRow'
+  excerpt: Scalars['String']
+  result: SearchResult
+}
 
 /** SubjectType defines all possible types that can request access to a dataproduct. */
 export enum SubjectType {
@@ -789,26 +795,29 @@ export type SearchContentQueryVariables = Exact<{
 
 export type SearchContentQuery = {
   __typename?: 'Query'
-  search: Array<
-    | {
-        __typename: 'Collection'
-        id: string
-        name: string
-        description?: string | null | undefined
-        created: any
-        lastModified: any
-        owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
-      }
-    | {
-        __typename: 'Dataproduct'
-        id: string
-        name: string
-        description?: string | null | undefined
-        created: any
-        lastModified: any
-        owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
-      }
-  >
+  search: Array<{
+    __typename?: 'SearchResultRow'
+    excerpt: string
+    result:
+      | {
+          __typename: 'Collection'
+          id: string
+          name: string
+          description?: string | null | undefined
+          created: any
+          lastModified: any
+          owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+        }
+      | {
+          __typename: 'Dataproduct'
+          id: string
+          name: string
+          description?: string | null | undefined
+          created: any
+          lastModified: any
+          owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+        }
+  }>
 }
 
 export type UserInfoQueryVariables = Exact<{ [key: string]: never }>
@@ -1945,28 +1954,31 @@ export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {
     search(q: $q) {
-      ... on Collection {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
+      excerpt
+      result {
+        ... on Collection {
+          __typename
+          id
+          name
+          description
+          created
+          lastModified
+          owner {
+            group
+            teamkatalogen
+          }
         }
-      }
-      ... on Dataproduct {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
+        ... on Dataproduct {
+          __typename
+          id
+          name
+          description
+          created
+          lastModified
+          owner {
+            group
+            teamkatalogen
+          }
         }
       }
     }
