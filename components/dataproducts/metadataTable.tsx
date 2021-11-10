@@ -4,6 +4,7 @@ import StyledMetadataTable from '../lib/styledMetadataTable'
 import humanizeDate from '../lib/humanizeDate'
 import { DataproductQuery } from '../../lib/schema/graphql'
 import styled from 'styled-components'
+import * as React from 'react'
 
 interface CollectionProps {
   collections: DataproductQuery['dataproduct']['collections']
@@ -52,6 +53,10 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
   <StyledMetadataTable>
     <tbody>
       <tr>
+        <th>Type:</th>
+        <td>{product.datasource.__typename}</td>
+      </tr>
+      <tr>
         <th>Eier:</th>
         <td>
           {product.owner?.teamkatalogen ? (
@@ -66,6 +71,10 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       <tr>
         <th>Opprettet:</th>
         <td>{humanizeDate(product.created)}</td>
+      </tr>
+      <tr>
+        <th>Oppdatert:</th>
+        <td>{humanizeDate(product.lastModified)}</td>
       </tr>
       {product.collections.length > 0 && (
         <tr>
