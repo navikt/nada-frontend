@@ -67,10 +67,12 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
         <th>Opprettet:</th>
         <td>{humanizeDate(product.created)}</td>
       </tr>
-      <tr>
-        <th>Samling(er):</th>
-        <td>{CollectionLinks(product)}</td>
-      </tr>
+      {product.collections.length > 0 && (
+        <tr>
+          <th>Samling(er):</th>
+          <td>{CollectionLinks(product)}</td>
+        </tr>
+      )}
     </tbody>
   </StyledMetadataTable>
 )
