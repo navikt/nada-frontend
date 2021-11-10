@@ -18,7 +18,7 @@ const SearchResultLinkDiv = styled.div`
   margin-bottom: 15px;
   width: 100%;
   background-color: #f9f9f9;
-  border: 1px solid ${navLillaDarken40};
+  border: 2px solid ${navLillaDarken40};
   border-radius: 5px;
   cursor: pointer;
 
@@ -83,7 +83,7 @@ export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
         <ResultInfo>
           <ResultIcon result={result} />
           <DescriptionExcerpt>
-            {(excerpt && `...${excerpt}...`) || result.description || ''}
+            {(excerpt && `…${excerpt}…`) || result.description || ''}
           </DescriptionExcerpt>
         </ResultInfo>
       </SearchResultLinkDiv>
