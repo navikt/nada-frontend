@@ -15,4 +15,4 @@ spec:
   accessPolicy:
     outbound:
       rules:
-      - application: nada-backend
+        - application: nada-backend
