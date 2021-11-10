@@ -795,12 +795,18 @@ export type SearchContentQuery = {
         id: string
         name: string
         description?: string | null | undefined
+        created: any
+        lastModified: any
+        owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
       }
     | {
         __typename: 'Dataproduct'
         id: string
         name: string
         description?: string | null | undefined
+        created: any
+        lastModified: any
+        owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
       }
   >
 }
@@ -1938,12 +1944,24 @@ export const SearchContentDocument = gql`
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
       ... on Dataproduct {
         __typename
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
     }
   }

@@ -11,7 +11,7 @@ import {
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { Alert } from '@navikt/ds-react'
-import { CollectionLogo, ProductLogo } from '../components/lib/icons/logoMap'
+import { CollectionLogo, ProductLogo } from '../components/results/resultIcon'
 import DatapakkerLogo from '../components/lib/icons/datapakkerLogo'
 import { ExternalLink } from '@navikt/ds-icons'
 
@@ -99,7 +99,7 @@ const LandingPage = () => {
           her
         </a>
       </Alert>
-      <h1>Nyeste ressurser</h1>
+      <h2>Nyeste ressurser</h2>
       <ResultList results={data?.search} />
     </PageLayout>
   )

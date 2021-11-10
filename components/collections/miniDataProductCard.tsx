@@ -10,7 +10,6 @@ import styled from 'styled-components'
 import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { Success, Warning } from '@navikt/ds-icons'
-import Keyword from '../widgets/Keyword'
 import {
   DataproductSummaryQuery,
   useDataproductSummaryQuery,
@@ -35,17 +34,6 @@ const DatasetCardDiv = styled.div`
 
   > div {
     padding: 5px;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0.1em 0.5em;
-    font-weight: bold;
-    color: black;
   }
 
   p {
@@ -124,7 +112,7 @@ const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
         )}
         <div>PII</div>
       </DataproductTopline>
-      <h4>{dataproduct.name}</h4>
+      <h3>{dataproduct.name}</h3>
       <DescriptionExcerpt>{dataproduct.description || ''}</DescriptionExcerpt>
     </DatasetCardDiv>
   )

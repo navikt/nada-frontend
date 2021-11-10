@@ -12,15 +12,31 @@ import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 const StyledDescription = styled.div`
   width: 100%;
   color: #555;
-  font-size: 16px;
-  font-style: italic;
+  line-height: 1;
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  > div {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: bold;
+      color: #222;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      display: inline;
+    }
+  }
+
+  * {
     font-size: 16px;
   }
 `
@@ -44,12 +60,14 @@ export const DescriptionExcerpt = ({ children }: DescriptionProps) => {
 
   return (
     <StyledDescription>
-      <HTMLEllipsis
-        unsafeHTML={description}
-        maxLine="3"
-        ellipsis="…"
-        basedOn="letters"
-      />
+      <div>
+        <HTMLEllipsis
+          unsafeHTML={description}
+          maxLine="5"
+          ellipsis="…"
+          basedOn="letters"
+        />
+      </div>
     </StyledDescription>
   )
 }

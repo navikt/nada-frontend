@@ -6,7 +6,7 @@ import {
   navGronnLighten60,
 } from '../../styles/constants'
 import { ResultAbstract } from '../results/resultAbstract'
-import { LogoSidebar } from '../results/logoSidebar'
+import { ResultIcon } from '../results/resultIcon'
 import { ArrayElement } from '../../lib/schema/ArrayElement'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 
@@ -38,7 +38,7 @@ export const SearchResult = ({
 }: SearchResultProps) => {
   return (
     <SearchResultDiv selected={selected} onClick={() => handleClick(result.id)}>
-      <LogoSidebar result={result} />
+      <ResultIcon result={result} />
       <ResultAbstract result={result} />
     </SearchResultDiv>
   )

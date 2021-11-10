@@ -1,34 +1,60 @@
 import styled from 'styled-components'
 import Link from 'next/link'
-import { navBlaLighten80, navGraBakgrunn } from '../../styles/constants'
-import { ResultAbstract } from './resultAbstract'
-import { LogoSidebar } from './logoSidebar'
+import {
+  navBlaLighten20,
+  navBlaLighten40,
+  navBlaLighten60,
+  navBlaLighten80,
+} from '../../styles/constants'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 import { ArrayElement } from '../../lib/schema/ArrayElement'
+import { ResultIcon } from './resultIcon'
+import { DescriptionExcerpt } from '../../lib/descriptionExcerpt'
+import humanizeDate from '../lib/humanizeDate'
 
 const SearchResultLinkDiv = styled.div`
   margin-bottom: 15px;
-  width: 50%;
+  width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #557;
+  border-radius: 5px;
+  cursor: pointer;
 
-  > div {
-    padding: 5px 8px;
-
-    > div {
-      box-shadow: 4px 4px 6px 1px rgba(0, 0, 0, 0.1);
-      padding: 10px 13px;
-      background-color: ${navGraBakgrunn};
-      display: flex;
-
-      cursor: pointer;
-
-      :hover {
-        box-shadow: 4px 4px 6px 1px rgba(102, 165, 244, 0.3);
-
-        // box-shadow: 15px 25px 44px -11px rgba(102, 165, 244, 0.6); // navBlaLighten80
-        background-color: ${navBlaLighten80};
-      }
-    }
+  > * {
+    padding: 0.25em 0.75rem;
   }
+
+  :hover {
+    h3 {
+      background-color: ${navBlaLighten20};
+    }
+    aside {
+      background-color: ${navBlaLighten40};
+    }
+
+    background-color: ${navBlaLighten80};
+    border-color: ${navBlaLighten20};
+  }
+`
+
+const TopLine = styled.h3`
+  background-color: #557;
+  color: white;
+  margin: 0;
+`
+
+const BottomLine = styled.aside`
+  background-color: #bbc;
+  text-transform: uppercase;
+  font-size: 14px;
+  display: flex;
+  gap: 1rem;
+`
+
+const ResultInfo = styled.div`
+  padding: 0.75rem 0.75rem;
+  display: flex;
+  gap: 0.75em;
 `
 
 export interface SearchResultProps {
@@ -42,12 +68,16 @@ export const SearchResultLink = ({ result }: SearchResultProps) => {
   return (
     <Link href={getLink(result)}>
       <SearchResultLinkDiv>
-        <div>
-          <div>
-            <LogoSidebar result={result} />
-            <ResultAbstract result={result} />
-          </div>
-        </div>
+        <TopLine>{result.name}</TopLine>
+        <BottomLine>
+          <div>Fra {result.owner.group}</div>
+          <div>Opprettet {humanizeDate(result.created, 'PP')}</div>
+          <div>Oppdatert {humanizeDate(result.lastModified, 'PP')}</div>
+        </BottomLine>
+        <ResultInfo>
+          <ResultIcon result={result} />
+          <DescriptionExcerpt>{result.description || ''}</DescriptionExcerpt>
+        </ResultInfo>
       </SearchResultLinkDiv>
     </Link>
   )

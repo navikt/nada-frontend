@@ -8,12 +8,24 @@ export const SEARCH_CONTENT = gql`
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
       ... on Dataproduct {
         __typename
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 overwrite: true
-schema: "http://localhost:8080/api/query"
+schema: "http://127.0.0.1:8080/api/query"
 documents:
   - "lib/queries/*/*.ts"
 generates:
