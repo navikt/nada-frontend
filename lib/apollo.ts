@@ -16,7 +16,7 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 export const APOLLO_APP_STATE_PROP_NAME = '__APOLLO_APP_STATE__'
 
 const apolloQueryURI = isServer
-  ? 'http://localhost:3000/api/query'
+  ? 'http://127.0.0.1:3000/api/query'
   : '/api/query'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
