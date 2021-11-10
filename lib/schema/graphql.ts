@@ -830,12 +830,18 @@ export type UserInfoQuery = {
       id: string
       name: string
       description?: string | null | undefined
+      created: any
+      lastModified: any
+      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
     }>
     collections: Array<{
       __typename: 'Collection'
       id: string
       name: string
       description?: string | null | undefined
+      created: any
+      lastModified: any
+      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
     }>
   }
 }
@@ -2038,12 +2044,24 @@ export const UserInfoDocument = gql`
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
       collections {
         __typename
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
     }
   }

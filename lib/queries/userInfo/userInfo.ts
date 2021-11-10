@@ -21,12 +21,24 @@ export const USER_INFO = gql`
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
       collections {
         __typename
         id
         name
         description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
       }
     }
   }

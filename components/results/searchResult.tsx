@@ -1,10 +1,19 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import {
+  navBla,
+  navBlaDarken40,
   navBlaLighten20,
   navBlaLighten40,
   navBlaLighten60,
   navBlaLighten80,
+  navLilla,
+  navLillaDarken20,
+  navLillaDarken40,
+  navLillaDarken60,
+  navLillaDarken80,
+  navLillaLighten40,
+  navLillaLighten60,
 } from '../../styles/constants'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 import { ArrayElement } from '../../lib/schema/ArrayElement'
@@ -16,7 +25,7 @@ const SearchResultLinkDiv = styled.div`
   margin-bottom: 15px;
   width: 100%;
   background-color: #f9f9f9;
-  border: 1px solid #557;
+  border: 1px solid ${navLillaDarken40};
   border-radius: 5px;
   cursor: pointer;
 
@@ -26,10 +35,10 @@ const SearchResultLinkDiv = styled.div`
 
   :hover {
     h3 {
-      background-color: ${navBlaLighten20};
+      background-color: ${navBlaDarken40};
     }
     aside {
-      background-color: ${navBlaLighten40};
+      background-color: ${navBlaLighten60};
     }
 
     background-color: ${navBlaLighten80};
@@ -38,15 +47,17 @@ const SearchResultLinkDiv = styled.div`
 `
 
 const TopLine = styled.h3`
-  background-color: #557;
+  background-color: ${navLillaDarken40};
   color: white;
   margin: 0;
 `
 
 const BottomLine = styled.aside`
-  background-color: #bbc;
+  background-color: ${navLillaLighten60};
   text-transform: uppercase;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #333;
   display: flex;
   gap: 1rem;
 `
@@ -70,9 +81,9 @@ export const SearchResultLink = ({ result }: SearchResultProps) => {
       <SearchResultLinkDiv>
         <TopLine>{result.name}</TopLine>
         <BottomLine>
-          <div>Fra {result.owner.group}</div>
-          <div>Opprettet {humanizeDate(result.created, 'PP')}</div>
-          <div>Oppdatert {humanizeDate(result.lastModified, 'PP')}</div>
+          <div>Eier: {result.owner.group}</div>
+          <div>Opprettet: {humanizeDate(result.created, 'PP')}</div>
+          <div>Oppdatert: {humanizeDate(result.lastModified, 'PP')}</div>
         </BottomLine>
         <ResultInfo>
           <ResultIcon result={result} />

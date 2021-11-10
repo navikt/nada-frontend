@@ -40,7 +40,7 @@ const Container = styled.div`
 
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px;
   color: #555;
 
   img {
