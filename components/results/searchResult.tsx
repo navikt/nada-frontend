@@ -29,11 +29,13 @@ const SearchResultLinkDiv = styled.div`
   :hover {
     h3 {
       background-color: ${navBlaDarken40};
+      transition: background-color 0.15s;
     }
     aside {
       background-color: ${navBlaLighten60};
+      transition: background-color 0.15s;
     }
-
+    transition: background-color 0.15s;
     background-color: ${navBlaLighten80};
     border-color: ${navBlaLighten20};
   }

@@ -16,7 +16,7 @@ import { Description, Name } from '../lib/detailTypography'
 import * as React from 'react'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
-import { BackButton } from '../lib/backButton'
+import { BackButton } from '../lib/BackButton'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']

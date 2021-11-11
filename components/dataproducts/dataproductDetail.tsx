@@ -25,8 +25,7 @@ import { UserAccessDiv } from './access/userAccess'
 import IconBox from '../lib/icons/iconBox'
 import { Close, Locked } from '@navikt/ds-icons'
 import { navRod } from '../../styles/constants'
-import { Back } from '@navikt/ds-icons'
-import { BackButton } from '../lib/backButton'
+import { BackButton } from '../lib/BackButton'
 
 const StyledTabPanel = styled(TabPanel)`
   > div {
@@ -98,7 +97,6 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           )}
         </TopBar>
         <MetadataTable product={product} />
-
         <Tabs
           value={activeTab}
           onChange={handleChange}
