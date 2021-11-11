@@ -19,14 +19,6 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
     <>
       <StyledTable>
         <tbody>
-          <tr>
-            <th>Type:</th>
-            <td>{product.datasource.__typename}</td>
-          </tr>
-          <tr>
-            <th>Oppdatert:</th>
-            <td>{humanizeDate(product.lastModified)}</td>
-          </tr>
           {!!product.keywords.length && (
             <tr>
               <th>Nøkkelord:</th>

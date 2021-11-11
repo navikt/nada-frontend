@@ -29,6 +29,8 @@ const LandingPage = () => {
     variables: { q: { limit: SEARCH_LIMIT } },
   })
 
+  if (error) console.log(error)
+
   return (
     <PageLayout>
       <SearchContainer>
@@ -55,13 +57,18 @@ const LandingPage = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apolloClient = getApolloClient()
+  try {
+    const apolloClient = getApolloClient()
 
-  await apolloClient.query({
-    query: SearchContentDocument,
-    variables: { q: { limit: SEARCH_LIMIT } },
-  })
+    await apolloClient.query({
+      query: SearchContentDocument,
+      variables: { q: { limit: SEARCH_LIMIT } },
+    })
 
-  return addApolloState(apolloClient)
+    return addApolloState(apolloClient)
+  } catch (e) {
+    console.log(e)
+    return {}
+  }
 }
 export default LandingPage

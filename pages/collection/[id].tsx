@@ -4,6 +4,7 @@ import { CollectionDetail } from '../../components/collections/collectionDetail'
 import { CollectionQuery, useCollectionQuery } from '../../lib/schema/graphql'
 import { addApolloState, getApolloClient } from '../../lib/apollo'
 import { GET_COLLECTION } from '../../lib/queries/collection/collection'
+import styled from 'styled-components'
 
 interface DatacollectionFetcherProps {
   id: string

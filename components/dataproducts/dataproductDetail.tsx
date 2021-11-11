@@ -25,17 +25,28 @@ import { UserAccessDiv } from './access/userAccess'
 import IconBox from '../lib/icons/iconBox'
 import { Close, Locked } from '@navikt/ds-icons'
 import { navRod } from '../../styles/constants'
+import { Back } from '@navikt/ds-icons'
+import { BackButton } from '../lib/backButton'
 
 const StyledTabPanel = styled(TabPanel)`
   > div {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `
 
 export interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
 }
+
+const Container = styled.div`
+  margin-top: 40px;
+`
+
+const Product = styled.div`
+  border-radius: 5px;
+  border: 1px solid black;
+`
 
 export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [edit, setEdit] = useState(false)
@@ -73,74 +84,77 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   return edit ? (
     <EditDataproduct product={product} close={() => setEdit(false)} />
   ) : (
-    <div>
+    <Container>
       {backendError && <ErrorMessage error={backendError} />}
-      <TopBar>
-        <Name>{product.name}</Name>
-        {isOwner && (
-          <EditMenu
-            onEdit={() => setEdit(true)}
-            onDelete={() => setShowDelete(true)}
-          />
-        )}
-      </TopBar>
-      <MetadataTable product={product} />
-
-      <Tabs
-        value={activeTab}
-        onChange={handleChange}
-        variant="standard"
-        scrollButtons="auto"
-        aria-label="auto tabs example"
-      >
-        <Tab label="Informasjon" value={0} />
-        <Tab label="Datakilde" value={1} />
-        <Tab label="Tilganger" value={2} />
-      </Tabs>
-      <StyledTabPanel index={0} value={activeTab}>
-        <DataproductInfo product={product} />
-      </StyledTabPanel>
-      <StyledTabPanel index={1} value={activeTab}>
-        <DataproductTableSchema datasource={product.datasource} />
-      </StyledTabPanel>
-      <StyledTabPanel index={2} value={activeTab}>
-        {!userState ? (
-          <UserAccessDiv>
-            <CardHeader
-              title={'Ikke innlogget'}
-              avatar={
-                <IconBox size={48}>
-                  <Locked style={{ color: navRod }} />
-                </IconBox>
-              }
+      <BackButton />
+      <Product>
+        <TopBar>
+          <Name>{product.name}</Name>
+          {isOwner && (
+            <EditMenu
+              onEdit={() => setEdit(true)}
+              onDelete={() => setShowDelete(true)}
             />
-            <CardContent
-              style={{
-                height: '200px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Close
-                style={{ fontSize: '64px', color: navRod, display: 'flex' }}
+          )}
+        </TopBar>
+        <MetadataTable product={product} />
+
+        <Tabs
+          value={activeTab}
+          onChange={handleChange}
+          variant="standard"
+          scrollButtons="auto"
+          aria-label="auto tabs example"
+        >
+          <Tab label="Informasjon" value={0} />
+          <Tab label="Datakilde" value={1} />
+          {userState && <Tab label="Tilganger" value={2} />}
+        </Tabs>
+        <StyledTabPanel index={0} value={activeTab}>
+          <DataproductInfo product={product} />
+        </StyledTabPanel>
+        <StyledTabPanel index={1} value={activeTab}>
+          <DataproductTableSchema datasource={product.datasource} />
+        </StyledTabPanel>
+        <StyledTabPanel index={2} value={activeTab}>
+          {!userState ? (
+            <UserAccessDiv>
+              <CardHeader
+                title={'Ikke innlogget'}
+                avatar={
+                  <IconBox size={48}>
+                    <Locked style={{ color: navRod }} />
+                  </IconBox>
+                }
               />
-            </CardContent>
-            <CardActions>
-              <i>Logg inn for å se tilganger</i>
-            </CardActions>
-          </UserAccessDiv>
-        ) : (
-          <AccessControls id={product.id} isOwner={isOwner} />
-        )}
-      </StyledTabPanel>
-      <DeleteModal
-        open={showDelete}
-        onCancel={() => setShowDelete(false)}
-        onConfirm={() => onDelete()}
-        name={product.name}
-      />
-    </div>
+              <CardContent
+                style={{
+                  height: '200px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Close
+                  style={{ fontSize: '64px', color: navRod, display: 'flex' }}
+                />
+              </CardContent>
+              <CardActions>
+                <i>Logg inn for å se tilganger</i>
+              </CardActions>
+            </UserAccessDiv>
+          ) : (
+            <AccessControls id={product.id} isOwner={isOwner} />
+          )}
+        </StyledTabPanel>
+        <DeleteModal
+          open={showDelete}
+          onCancel={() => setShowDelete(false)}
+          onConfirm={() => onDelete()}
+          name={product.name}
+        />
+      </Product>
+    </Container>
   )
 }
 export default DataproductDetail
