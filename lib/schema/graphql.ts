@@ -518,6 +518,8 @@ export type UpdateDataproduct = {
 /** UserInfo contains metadata on a logged in user */
 export type UserInfo = {
   __typename?: 'UserInfo'
+  /** accessable is a list of dataproducts which the user has explicit access to */
+  accessable: Array<Dataproduct>
   /** collections is a list of collections with one of the users groups as owner */
   collections: Array<Collection>
   /** dataproducts is a list of dataproducts with one of the users groups as owner */
@@ -845,6 +847,15 @@ export type UserInfoQuery = {
     }>
     collections: Array<{
       __typename: 'Collection'
+      id: string
+      name: string
+      description?: string | null | undefined
+      created: any
+      lastModified: any
+      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+    }>
+    accessable: Array<{
+      __typename: 'Dataproduct'
       id: string
       name: string
       description?: string | null | undefined
@@ -2075,6 +2086,18 @@ export const UserInfoDocument = gql`
           teamkatalogen
         }
       }
+      accessable {
+        __typename
+        id
+        name
+        description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
+      }
     }
   }
 `
@@ -2115,11 +2138,3 @@ export function useUserInfoLazyQuery(
     options
   )
 }
-export type UserInfoQueryHookResult = ReturnType<typeof useUserInfoQuery>
-export type UserInfoLazyQueryHookResult = ReturnType<
-  typeof useUserInfoLazyQuery
->
-export type UserInfoQueryResult = Apollo.QueryResult<
-  UserInfoQuery,
-  UserInfoQueryVariables
->

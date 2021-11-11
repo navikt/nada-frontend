@@ -40,6 +40,18 @@ export const USER_INFO = gql`
           teamkatalogen
         }
       }
+      accessable {
+        __typename
+        id
+        name
+        description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogen
+        }
+      }
     }
   }
 `
