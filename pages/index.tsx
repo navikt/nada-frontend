@@ -25,6 +25,7 @@ const SearchContainer = styled.div`
   min-width: 500px;
   width: 60%;
 `
+
 const LandingPage = () => {
   const router = useRouter()
   const { data, error } = useSearchContentQuery({
@@ -64,13 +65,18 @@ const LandingPage = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apolloClient = getApolloClient()
+  try {
+    const apolloClient = getApolloClient()
 
-  await apolloClient.query({
-    query: SearchContentDocument,
-    variables: { q: { limit: SEARCH_LIMIT } },
-  })
+    await apolloClient.query({
+      query: SearchContentDocument,
+      variables: { q: { limit: SEARCH_LIMIT } },
+    })
 
-  return addApolloState(apolloClient)
+    return addApolloState(apolloClient)
+  } catch (e) {
+    console.log(e)
+    return {}
+  }
 }
 export default LandingPage

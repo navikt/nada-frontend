@@ -1,12 +1,13 @@
 import styled from 'styled-components'
+import { navLillaLighten60 } from '../../styles/constants'
 
 const StyledMetadataTable = styled.table`
-  background-color: #fafafa;
+  background-color: ${navLillaLighten60};
   width: 100%;
-  border-top: 1px solid #dde;
-  border-bottom: 1px solid #dde;
-  font-size: smaller;
-  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1;
+
+  padding: 0.5rem;
 
   th,
   td {
@@ -15,7 +16,7 @@ const StyledMetadataTable = styled.table`
 
   th {
     text-align: right;
-    padding-left: 10px;
+    padding-left: 15px;
     width: 1px;
   }
 

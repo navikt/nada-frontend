@@ -57,7 +57,9 @@ export const UserProductLink = () => {
         ))}
       </StyledTabPanel>
       <StyledTabPanel index={1} value={activeTab}>
-        <div>Mine tilganger</div>
+        {userState.accessable?.map((p) => (
+          <SearchResultLink key={p.id} result={p} />
+        ))}
       </StyledTabPanel>
     </PageLayout>
   )
