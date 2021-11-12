@@ -6,7 +6,8 @@ import { useDataproductQuery } from '../../lib/schema/graphql'
 import { GetServerSideProps, GetStaticProps } from 'next'
 import { addApolloState, getApolloClient } from '../../lib/apollo'
 import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
-import App from 'next/app'
+import { useEffect } from 'react'
+import amplitudeLog from '../../lib/amplitude'
 
 interface DataproductProps {
   id: string
@@ -19,6 +20,13 @@ const Dataproduct = (props: DataproductProps) => {
     variables: { id },
     ssr: true,
   })
+  useEffect(() => {
+    const eventProperties = {
+      sidetittel: 'produktside',
+      title: data?.dataproduct.name,
+    }
+    amplitudeLog('sidevisning', eventProperties)
+  }, [])
 
   if (error) return <ErrorMessage error={error} />
 

@@ -11,6 +11,9 @@ import {
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { Alert } from '@navikt/ds-react'
+import amplitude from 'amplitude-js'
+import { useEffect } from 'react'
+import amplitudeLog from '../lib/amplitude'
 
 const SEARCH_LIMIT = 6
 
@@ -22,12 +25,18 @@ const SearchContainer = styled.div`
   min-width: 500px;
   width: 60%;
 `
-
 const LandingPage = () => {
   const router = useRouter()
   const { data, error } = useSearchContentQuery({
     variables: { q: { limit: SEARCH_LIMIT } },
   })
+
+  useEffect(() => {
+    const eventProperties = {
+      sidetittel: 'hovedside',
+    }
+    amplitudeLog('hovedside', eventProperties)
+  }, [])
 
   return (
     <PageLayout>
