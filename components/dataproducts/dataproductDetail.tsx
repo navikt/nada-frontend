@@ -87,7 +87,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
       {backendError && <ErrorMessage error={backendError} />}
       <BackButton />
       <Product>
-        <TopBar>
+        <TopBar type={'Dataproduct'}>
           <Name>{product.name}</Name>
           {isOwner && (
             <EditMenu

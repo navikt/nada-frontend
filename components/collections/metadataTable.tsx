@@ -8,7 +8,7 @@ export interface MetadataTableProps {
 }
 
 export const MetadataTable = ({ collection }: MetadataTableProps) => (
-  <StyledMetadataTable>
+  <StyledMetadataTable type={'Collection'}>
     <tbody>
       <tr>
         <th>Opprettet:</th>

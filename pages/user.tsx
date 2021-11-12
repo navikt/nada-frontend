@@ -37,7 +37,7 @@ export const UserProductLink = () => {
 
   return (
     <PageLayout>
-      <TopBar>
+      <TopBar type={'User'}>
         <Name>{userState.name}</Name>
       </TopBar>
       {userState.groups && <MetadataTable user={userState} />}

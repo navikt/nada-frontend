@@ -68,7 +68,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
       <Collection>
         {backendError && <ErrorMessage error={backendError} />}
 
-        <TopBar>
+        <TopBar type={'Collection'}>
           <Name>{collection.name}</Name>
           {isOwner && (
             <DotMenu

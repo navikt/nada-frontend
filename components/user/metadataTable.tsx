@@ -13,7 +13,7 @@ export const MetadataTable = ({ user }: MetadataTableProps) => {
     .join(', ')
 
   return (
-    <StyledMetadataTable>
+    <StyledMetadataTable type={'User'}>
       <tbody>
         <tr>
           <th>Team:</th>

@@ -50,7 +50,7 @@ const CollectionLinks = ({ collections }: CollectionProps) => {
 }
 
 export const MetadataTable = ({ product }: DataproductDetailProps) => (
-  <StyledMetadataTable>
+  <StyledMetadataTable type={'Dataproduct'}>
     <tbody>
       <tr>
         <th>Type:</th>

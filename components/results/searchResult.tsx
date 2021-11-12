@@ -5,20 +5,23 @@ import {
   navBlaLighten20,
   navBlaLighten60,
   navBlaLighten80,
-  navLillaDarken40,
-  navLillaLighten60,
 } from '../../styles/constants'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 import { ArrayElement } from '../../lib/schema/ArrayElement'
 import { ResultIcon } from './resultIcon'
 import { DescriptionExcerpt } from '../../lib/descriptionExcerpt'
 import humanizeDate from '../lib/humanizeDate'
+import { colorScheme } from '../lib/colorScheme'
 
-const SearchResultLinkDiv = styled.div`
+type SearchResponse = ArrayElement<SearchContentQuery['search']>
+type SearchResult = SearchResponse['result']
+type SearchResultType = SearchResult['__typename']
+
+const SearchResultLinkDiv = styled.div<SearchResultProps>`
   margin-bottom: 15px;
   width: 100%;
   background-color: #f9f9f9;
-  border: 2px solid ${navLillaDarken40};
+  border: 2px solid ${({ result }) => colorScheme[result.__typename].dark};
   border-radius: 5px;
   cursor: pointer;
 
@@ -41,14 +44,15 @@ const SearchResultLinkDiv = styled.div`
   }
 `
 
-const TopLine = styled.h3`
-  background-color: ${navLillaDarken40};
+const TopLine = styled.h3<SearchResultProps>`
+  background-color: ${({ result }) => colorScheme[result.__typename].dark};
   color: white;
   margin: 0;
 `
 
-const BottomLine = styled.aside`
-  background-color: ${navLillaLighten60};
+const BottomLine = styled.aside<SearchResultProps>`
+  background-color: ${({ result }) => colorScheme[result.__typename].light};
+
   text-transform: uppercase;
   font-weight: 700;
   font-size: 12px;
@@ -62,7 +66,6 @@ const ResultInfo = styled.div`
   display: flex;
   gap: 0.75em;
 `
-type SearchResponse = ArrayElement<SearchContentQuery['search']>
 
 export interface SearchResultProps {
   result: SearchResponse['result']
@@ -75,9 +78,9 @@ export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
 
   return (
     <Link href={getLink(result)}>
-      <SearchResultLinkDiv>
-        <TopLine>{result.name}</TopLine>
-        <BottomLine>
+      <SearchResultLinkDiv result={result}>
+        <TopLine result={result}>{result.name}</TopLine>
+        <BottomLine result={result}>
           <div>Eier: {result.owner.group}</div>
           <div>Opprettet: {humanizeDate(result.created, 'PP')}</div>
           <div>Oppdatert: {humanizeDate(result.lastModified, 'PP')}</div>

@@ -1,8 +1,12 @@
 import styled from 'styled-components'
-import { navLillaDarken40 } from '../../styles/constants'
+import { colorScheme, ColorSchemeTypes } from './colorScheme'
 
-const TopBar = styled.div`
-  background-color: ${navLillaDarken40};
+interface TopBarProps {
+  type: ColorSchemeTypes
+}
+
+const TopBar = styled.div<TopBarProps>`
+  background-color: ${({ type }) => colorScheme[type].dark};
   color: white;
   display: flex;
   padding: 1em;
