@@ -1,8 +1,8 @@
-import { UserInfoQuery } from '../../lib/schema/graphql'
+import { UserInfoDetailsQuery } from '../../lib/schema/graphql'
 import StyledMetadataTable from '../lib/styledMetadataTable'
 
 export interface MetadataTableProps {
-  user: UserInfoQuery['userInfo']
+  user: UserInfoDetailsQuery['userInfo']
 }
 
 export const MetadataTable = ({ user }: MetadataTableProps) => {

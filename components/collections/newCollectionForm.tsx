@@ -8,6 +8,10 @@ import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import { CreateForm } from '../lib/CreateForm'
+import {
+  SearchContentQuery,
+  UserInfoDetailsQuery,
+} from '../../lib/schema/graphql'
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
@@ -26,7 +30,9 @@ export const NewCollectionForm = ({
   useEffect(() => setValue('keywords', keywords), [keywords, setValue])
   const { errors } = formState
 
-  const groups = useContext(UserState)?.groups
+  const groups = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
+    UserState
+  )?.groups
 
   return (
     <CreateForm onSubmit={handleSubmit(onSubmit)}>

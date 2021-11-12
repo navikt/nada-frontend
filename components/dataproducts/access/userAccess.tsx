@@ -8,6 +8,7 @@ import {
   Dataproduct,
   DataproductAccessQuery,
   useRevokeAccessMutation,
+  UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { removeSubjectType } from './accessControls'
 import AddAccess from './addAccess'
@@ -34,7 +35,9 @@ interface UserAccessProps {
 
 const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
   const [open, setOpen] = useState(false)
-  const userState = useContext(UserState)
+  const userState = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
+    UserState
+  )
   const [revokeAccess] = useRevokeAccessMutation()
   if (!userState) return null
 

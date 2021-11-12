@@ -9,6 +9,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import { Project } from './datasource/project'
+import { UserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
@@ -23,7 +24,9 @@ export const DataproductSourceForm = ({
   watch,
   setValue,
 }: DataproductSourceFormProps) => {
-  const user = useContext(UserState)
+  const user = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
+    UserState
+  )
 
   const [activePaths, setActivePaths] = useState<string[]>([])
   register('bigquery.projectID')

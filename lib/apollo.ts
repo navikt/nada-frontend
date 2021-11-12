@@ -8,7 +8,7 @@ import {
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
 import { USER_INFO } from './queries/userInfo/userInfo'
-import { UserInfoDocument } from './schema/graphql'
+import { UserInfoDetailsDocument } from './schema/graphql'
 const isServer = typeof window === 'undefined'
 import { defaultDataIdFromObject } from '@apollo/client'
 
@@ -127,7 +127,7 @@ export const getUserInfoCache = async ({
   }
 
   try {
-    await client.query({ query: UserInfoDocument })
+    await client.query({ query: UserInfoDetailsDocument })
     return client.cache.extract()
   } catch (e: any) {
     if (e?.graphQLErrors?.[0]?.message === 'access denied') return undefined

@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag'
 
 export const USER_INFO = gql`
-  query userInfo {
+  query userInfoDetails {
     userInfo {
       name
       email
@@ -14,42 +14,6 @@ export const USER_INFO = gql`
         group {
           name
           email
-        }
-      }
-      dataproducts {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
-        }
-      }
-      collections {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
-        }
-      }
-      accessable {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogen
         }
       }
     }

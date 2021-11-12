@@ -2,13 +2,16 @@ import * as React from 'react'
 import { Select } from '@navikt/ds-react'
 import { useContext } from 'react'
 import { UserState } from '../../lib/context'
+import { UserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 type TeamSelectorProps = {
   register: any
   errors: any
 }
 export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
-  const user = useContext(UserState)
+  const user = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
+    UserState
+  )
   const teams = [...new Set(user?.gcpProjects.map((p) => p.group.name))]
 
   return (

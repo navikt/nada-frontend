@@ -9,6 +9,9 @@ import { Tab, Tabs } from '@mui/material'
 import TabPanel from '../components/lib/tabPanel'
 import { MetadataTable } from '../components/user/metadataTable'
 import SearchResultLink from '../components/results/searchResult'
+import { useDeleteDataproductMutation } from '../lib/schema/graphql'
+import UserProductResultLink from '../components/user/userProductResult'
+import UserAccessableProduct from '../components/user/userProductAccess'
 
 const StyledTabPanel = styled(TabPanel)`
   > div {
@@ -49,17 +52,10 @@ export const UserProductLink = () => {
         <Tab label="Mine tilganger" value={1} />
       </Tabs>
       <StyledTabPanel index={0} value={activeTab}>
-        {userState.dataproducts?.map((p) => (
-          <SearchResultLink key={p.id} result={p} />
-        ))}
-        {userState.collections?.map((p) => (
-          <SearchResultLink key={p.id} result={p} />
-        ))}
+        <UserProductResultLink />
       </StyledTabPanel>
       <StyledTabPanel index={1} value={activeTab}>
-        {userState.accessable?.map((p) => (
-          <SearchResultLink key={p.id} result={p} />
-        ))}
+        <UserAccessableProduct />
       </StyledTabPanel>
     </PageLayout>
   )

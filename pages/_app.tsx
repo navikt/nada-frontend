@@ -5,7 +5,10 @@ import { UserState } from '../lib/context'
 import Head from 'next/head'
 import '@fontsource/source-sans-pro'
 import { ApolloProvider } from '@apollo/client'
-import { UserInfoQuery, useUserInfoQuery } from '../lib/schema/graphql'
+import {
+  UserInfoDetailsQuery,
+  useUserInfoDetailsQuery,
+} from '../lib/schema/graphql'
 import { APOLLO_APP_STATE_PROP_NAME, getUserInfoCache } from '../lib/apollo'
 import App from 'next/app'
 import React, { useEffect } from 'react'
@@ -16,13 +19,13 @@ import '@uiw/react-markdown-preview/markdown.css'
 import amplitude from 'amplitude-js'
 
 type MyAppProps = AppProps & {
-  initialUser: UserInfoQuery['userInfo']
+  initialUser: UserInfoDetailsQuery['userInfo']
 }
 
 function MyApp({ Component, pageProps, initialUser }: MyAppProps) {
   const apolloClient = useApollo(pageProps)
 
-  const { data, error } = useUserInfoQuery({
+  const { data, error } = useUserInfoDetailsQuery({
     client: apolloClient,
     pollInterval: 30_000,
   })
