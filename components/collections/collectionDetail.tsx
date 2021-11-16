@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { EditCollectionForm } from './editCollectionForm'
-import DataproductList from './dataproductList'
+import DataproductList from './dataproducts/DataproductList'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../lib/error'
 import DotMenu from '../lib/editMenu'
@@ -12,11 +12,12 @@ import {
 } from '../../lib/schema/graphql'
 import DeleteModal from '../lib/deleteModal'
 import { UserState } from '../../lib/context'
-import { Description, Name } from '../lib/detailTypography'
+import { Description, Name, SectionHeader } from '../lib/detailTypography'
 import * as React from 'react'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
 import { BackButton } from '../lib/BackButton'
+import { DataproductsEditButton } from './dataproducts/DataproductsEditButton'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
@@ -29,6 +30,10 @@ const Container = styled.div`
 const Collection = styled.div`
   border-radius: 5px;
   border: 1px solid black;
+`
+
+const CollectionBody = styled.div`
+  padding: 1em 1em 2em 1em;
 `
 
 export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
@@ -78,16 +83,21 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           )}
         </TopBar>
         <MetadataTable collection={collection} />
-        <Description>
-          {collection.description || '*ingen beskrivelse*'}
-        </Description>
-        <DataproductList isOwner={isOwner} collection={collection} />
-        <DeleteModal
-          open={showDelete}
-          onCancel={() => setShowDelete(false)}
-          onConfirm={async () => await onDelete()}
-          name={collection.name}
-        />
+        <CollectionBody>
+          <SectionHeader>Beskrivelse</SectionHeader>
+          <Description>
+            {collection.description || '*ingen beskrivelse*'}
+          </Description>
+          <SectionHeader>Dataprodukter</SectionHeader>
+          <DataproductList collection={collection} />
+          {isOwner && <DataproductsEditButton collection={collection} />}
+          <DeleteModal
+            open={showDelete}
+            onCancel={() => setShowDelete(false)}
+            onConfirm={async () => await onDelete()}
+            name={collection.name}
+          />
+        </CollectionBody>
       </Collection>
     </Container>
   )

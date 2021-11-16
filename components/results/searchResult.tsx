@@ -17,17 +17,13 @@ type SearchResponse = ArrayElement<SearchContentQuery['search']>
 type SearchResult = SearchResponse['result']
 type SearchResultType = SearchResult['__typename']
 
-const SearchResultLinkDiv = styled.div<SearchResultProps>`
+export const SearchResultLinkDiv = styled.div<SearchResultProps>`
   margin-bottom: 15px;
   width: 100%;
   background-color: #f9f9f9;
   border: 2px solid ${({ result }) => colorScheme[result.__typename].dark};
   border-radius: 5px;
   cursor: pointer;
-
-  > * {
-    padding: 0.25em 0.75rem;
-  }
 
   :hover {
     h3 {
@@ -45,12 +41,16 @@ const SearchResultLinkDiv = styled.div<SearchResultProps>`
 `
 
 const TopLine = styled.h3<SearchResultProps>`
+  padding: 0.25em 0.75rem;
+
   background-color: ${({ result }) => colorScheme[result.__typename].dark};
   color: white;
   margin: 0;
 `
 
 const BottomLine = styled.aside<SearchResultProps>`
+  padding: 0.25em 0.75rem;
+
   background-color: ${({ result }) => colorScheme[result.__typename].light};
 
   text-transform: uppercase;
@@ -62,9 +62,7 @@ const BottomLine = styled.aside<SearchResultProps>`
 `
 
 const ResultInfo = styled.div`
-  padding: 0.75rem 0.75rem;
   display: flex;
-  gap: 0.75em;
 `
 
 export interface SearchResultProps {

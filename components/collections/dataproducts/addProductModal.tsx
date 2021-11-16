@@ -4,9 +4,9 @@ import {
   useAddToCollectionMutation,
   useRemoveFromCollectionMutation,
   useSearchContentQuery,
-} from '../../lib/schema/graphql'
+} from '../../../lib/schema/graphql'
 import { Modal } from '@navikt/ds-react'
-import ProductSearchBox from '../search/productSearchBox'
+import ProductSearchBox from '../../search/productSearchBox'
 import { useState } from 'react'
 import styled from 'styled-components'
 import MiniDataProductCard from './miniDataProductCard'

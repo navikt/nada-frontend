@@ -1,21 +1,21 @@
 import { Card, CardHeader, CardContent } from '@mui/material'
-import DataProductSpinner from '../lib/spinner'
+import DataProductSpinner from '../../lib/spinner'
 import {
   navBlaLighten80,
   navGra20,
   navGronn,
   navRod,
-} from '../../styles/constants'
+} from '../../../styles/constants'
 import styled from 'styled-components'
-import IconBox from '../lib/icons/iconBox'
-import BigQueryLogo from '../lib/icons/bigQueryLogo'
+import IconBox from '../../lib/icons/iconBox'
+import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import { Success, Warning } from '@navikt/ds-icons'
 import {
   DataproductSummaryQuery,
   useDataproductSummaryQuery,
-} from '../../lib/schema/graphql'
+} from '../../../lib/schema/graphql'
 import React from 'react'
-import { DescriptionExcerpt } from '../../lib/descriptionExcerpt'
+import { DescriptionExcerpt } from '../../../lib/descriptionExcerpt'
 
 const DatasetCardDiv = styled.div`
   width: 100%;

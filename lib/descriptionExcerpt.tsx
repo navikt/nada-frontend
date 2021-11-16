@@ -16,6 +16,7 @@ const StyledDescription = styled.div`
   width: 100%;
   color: #555;
   line-height: 1;
+  padding: 1rem 1rem;
 
   > div {
     h1,
@@ -64,14 +65,12 @@ export const DescriptionExcerpt = ({ children }: DescriptionProps) => {
 
   return (
     <StyledDescription>
-      <div>
-        <HTMLEllipsis
-          unsafeHTML={description}
-          maxLine="5"
-          ellipsis="…"
-          basedOn="letters"
-        />
-      </div>
+      <HTMLEllipsis
+        unsafeHTML={description}
+        maxLine="5"
+        ellipsis="…"
+        basedOn="letters"
+      />
     </StyledDescription>
   )
 }
