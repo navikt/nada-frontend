@@ -1,17 +1,17 @@
-import PageLayout from '../../components/pageLayout'
+import PageLayout from '../../../components/pageLayout'
 import { GetServerSideProps } from 'next'
-import { CollectionDetail } from '../../components/collections/collectionDetail'
-import { CollectionQuery, useCollectionQuery } from '../../lib/schema/graphql'
-import { addApolloState, getApolloClient } from '../../lib/apollo'
-import { GET_COLLECTION } from '../../lib/queries/collection/collection'
+import { CollectionDetail } from '../../../components/collections/collectionDetail'
+import { useCollectionQuery } from '../../../lib/schema/graphql'
+import { addApolloState, getApolloClient } from '../../../lib/apollo'
+import { GET_COLLECTION } from '../../../lib/queries/collection/collection'
 import { useEffect } from 'react'
-import amplitudeLog from '../../lib/amplitude'
+import amplitudeLog from '../../../lib/amplitude'
 
 interface DatacollectionFetcherProps {
   id: string
 }
 
-const Datacollection = ({ id }: DatacollectionFetcherProps) => {
+export const Datacollection = ({ id }: DatacollectionFetcherProps) => {
   const { data } = useCollectionQuery({
     variables: { id },
   })
@@ -21,7 +21,7 @@ const Datacollection = ({ id }: DatacollectionFetcherProps) => {
       title: data?.collection.name,
     }
     amplitudeLog('sidevisning', eventProperties)
-  }, [])
+  }, [data?.collection.name])
 
   return (
     <PageLayout>
