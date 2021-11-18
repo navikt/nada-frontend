@@ -15,6 +15,7 @@ import { useEffect } from 'react'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import { Fieldset, TextField } from '@navikt/ds-react'
 import { CreateForm } from '../lib/CreateForm'
+import amplitudeLog from '../../lib/amplitude'
 
 export const NewDataproductForm = () => {
   const router = useRouter()
@@ -43,13 +44,38 @@ export const NewDataproductForm = () => {
       await createDataproduct({
         variables: { input: requestData },
       })
+      amplitudeLog('skjema fullført', { skjemanavn: 'nytt-dataprodukt' })
     } catch (e) {
+      amplitudeLog('skjemainnsending feilet', {
+        skjemanavn: 'nytt-dataprodukt',
+      })
       console.log(e)
     }
   }
 
+  const onCancel = () => {
+    amplitudeLog(
+      'Klikker på: Avbryt',
+      {
+        pageName: 'nytt-dataprodukt',
+      },
+      () => {
+        router.back()
+      }
+    )
+  }
+
+  const onError = (errors: any) => {
+    amplitudeLog('skjemavalidering feilet', {
+      skjemanavn: 'nytt-dataprodukt',
+      feilmeldinger: Object.keys(errors)
+        .map((errorKey) => errorKey)
+        .join(','),
+    })
+  }
+
   return (
-    <CreateForm onSubmit={handleSubmit(onSubmit)}>
+    <CreateForm onSubmit={handleSubmit(onSubmit, onError)}>
       <Fieldset legend="Nytt dataprodukt" errorPropagation={false}>
         {backendError && <ErrorMessage error={backendError} />}
         <TextField
@@ -83,7 +109,7 @@ export const NewDataproductForm = () => {
           error={errors.keywords?.[0].message}
         />
         <PiiCheckboxInput register={register} watch={watch} />
-        <RightJustifiedSubmitButton onCancel={router.back} loading={loading} />
+        <RightJustifiedSubmitButton onCancel={onCancel} loading={loading} />
       </Fieldset>
     </CreateForm>
   )

@@ -17,6 +17,7 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../../lib/context'
 import { Button } from '@navikt/ds-react'
 import humanizeDate from '../../lib/humanizeDate'
+import amplitudeLog from '../../../lib/amplitude'
 
 export const UserAccessDiv = styled(Card)`
   padding: 10px;
@@ -29,11 +30,12 @@ export const UserAccessDiv = styled(Card)`
 
 interface UserAccessProps {
   id: string
+  name: string
   access: DataproductAccessQuery['dataproduct']['access']
   requesters: Dataproduct['requesters']
 }
 
-const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
+const UserAccess = ({ id, requesters, access, name }: UserAccessProps) => {
   const [open, setOpen] = useState(false)
   const userState = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
     UserState
@@ -42,6 +44,11 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
   if (!userState) return null
 
   const onSubmit = async () => {
+    amplitudeLog('klikk', {
+      title: 'fjern-tilgang',
+      version: id,
+      context: name,
+    })
     await revokeAccess({
       variables: {
         id: activeAccess.id,
@@ -170,6 +177,7 @@ const UserAccess = ({ id, requesters, access }: UserAccessProps) => {
         open={open}
         setOpen={setOpen}
         dataproductID={id}
+        dataproductName={name}
         subject={userState.email}
       />
     </>
