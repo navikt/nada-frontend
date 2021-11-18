@@ -17,6 +17,7 @@ import { useApollo } from '../lib/apollo'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 import amplitude from 'amplitude-js'
+import PageLayout from '../components/pageLayout'
 
 type MyAppProps = AppProps & {
   initialUser: UserInfoDetailsQuery['userInfo']
@@ -56,7 +57,9 @@ function MyApp({ Component, pageProps, initialUser }: MyAppProps) {
           <meta name="msapplication-TileColor" content="#00aba9" />
           <meta name="theme-color" content="#ffffff" />
         </Head>
-        <Component {...pageProps} />
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
       </UserState.Provider>
     </ApolloProvider>
   )

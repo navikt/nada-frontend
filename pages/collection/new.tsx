@@ -27,22 +27,22 @@ const NewCollection = () => {
     }
   }
 
-  // FIXME: Blaffer feilmelding i påvente av user
+  // FIXME: Should be replaced by <RequireAuth> component
   if (!user)
     return (
-      <PageLayout>
+      <div>
         <h1>Du må være logget inn!</h1>
         <p>Bruk login-knappen øverst.</p>
-      </PageLayout>
+      </div>
     )
 
   return (
-    <PageLayout>
+    <>
       {backendError && (
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
       )}
       <NewCollectionForm onSubmit={onSubmit} onCancel={router.back} />
-    </PageLayout>
+    </>
   )
 }
 

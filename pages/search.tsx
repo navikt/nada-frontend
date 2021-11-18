@@ -42,10 +42,10 @@ const ResultsPage = ({ q }: ResultsPageProps) => {
   }
 
   return (
-    <PageLayout>
+    <div>
       <ResultCount resultCount={data?.search?.length} />
       <ResultList results={data?.search} />
-    </PageLayout>
+    </div>
   )
 }
 

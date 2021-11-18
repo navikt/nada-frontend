@@ -32,11 +32,7 @@ const Dataproduct = (props: DataproductProps) => {
 
   if (loading || !data?.dataproduct) return <LoaderSpinner />
 
-  return (
-    <PageLayout>
-      <DataproductDetail product={data.dataproduct} />
-    </PageLayout>
-  )
+  return <DataproductDetail product={data.dataproduct} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

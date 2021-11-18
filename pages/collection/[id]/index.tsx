@@ -6,6 +6,7 @@ import { addApolloState, getApolloClient } from '../../../lib/apollo'
 import { GET_COLLECTION } from '../../../lib/queries/collection/collection'
 import { useEffect } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
+import LoaderSpinner from '../../../components/lib/spinner'
 
 interface DatacollectionFetcherProps {
   id: string
@@ -15,6 +16,7 @@ export const Datacollection = ({ id }: DatacollectionFetcherProps) => {
   const { data } = useCollectionQuery({
     variables: { id },
   })
+
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'collectionside',
@@ -23,11 +25,9 @@ export const Datacollection = ({ id }: DatacollectionFetcherProps) => {
     amplitudeLog('sidevisning', eventProperties)
   }, [data?.collection.name])
 
-  return (
-    <PageLayout>
-      {data?.collection && <CollectionDetail collection={data?.collection} />}
-    </PageLayout>
-  )
+  if (!data) return <LoaderSpinner />
+
+  return <CollectionDetail collection={data.collection} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
