@@ -8,17 +8,13 @@ const NewDataproduct = () => {
 
   if (!user)
     return (
-      <PageLayout>
+      <div>
         <h1>Du må være logget inn!</h1>
         <p>Bruk login-knappen øverst.</p>
-      </PageLayout>
+      </div>
     )
 
-  return (
-    <PageLayout>
-      <NewDataproductForm />
-    </PageLayout>
-  )
+  return <NewDataproductForm />
 }
 
 export default NewDataproduct

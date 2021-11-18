@@ -29,14 +29,14 @@ export const UserProductLink = () => {
 
   if (!userState)
     return (
-      <PageLayout>
+      <div>
         <h1>Du må være logget inn!</h1>
         <p>Bruk login-knappen øverst.</p>
-      </PageLayout>
+      </div>
     )
 
   return (
-    <PageLayout>
+    <div>
       <TopBar type={'User'}>
         <Name>{userState.name}</Name>
       </TopBar>
@@ -57,7 +57,7 @@ export const UserProductLink = () => {
       <StyledTabPanel index={1} value={activeTab}>
         <UserAccessableProduct />
       </StyledTabPanel>
-    </PageLayout>
+    </div>
   )
 }
 

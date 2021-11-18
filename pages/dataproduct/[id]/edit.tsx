@@ -1,19 +1,21 @@
-import PageLayout from '../../components/pageLayout'
-import LoaderSpinner from '../../components/lib/spinner'
-import DataproductDetail from '../../components/dataproducts/dataproductDetail'
-import ErrorMessage from '../../components/lib/error'
-import { useDataproductQuery } from '../../lib/schema/graphql'
+import PageLayout from '../../../components/pageLayout'
+import LoaderSpinner from '../../../components/lib/spinner'
+import DataproductDetail from '../../../components/dataproducts/dataproductDetail'
+import ErrorMessage from '../../../components/lib/error'
+import { useDataproductQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps, GetStaticProps } from 'next'
-import { addApolloState, getApolloClient } from '../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
+import { addApolloState, getApolloClient } from '../../../lib/apollo'
+import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import { useEffect } from 'react'
-import amplitudeLog from '../../lib/amplitude'
+import amplitudeLog from '../../../lib/amplitude'
+import EditDataproduct from '../../../components/dataproducts/editDataproduct'
+import * as React from 'react'
 
 interface DataproductProps {
   id: string
 }
 
-const Dataproduct = (props: DataproductProps) => {
+const DataproductEdit = (props: DataproductProps) => {
   const { id } = props
 
   const { data, loading, error } = useDataproductQuery({
@@ -32,11 +34,7 @@ const Dataproduct = (props: DataproductProps) => {
 
   if (loading || !data?.dataproduct) return <LoaderSpinner />
 
-  return (
-    <PageLayout>
-      <DataproductDetail product={data.dataproduct} />
-    </PageLayout>
-  )
+  return <EditDataproduct product={data.dataproduct} />
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -60,4 +58,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
 }
 
-export default Dataproduct
+export default DataproductEdit

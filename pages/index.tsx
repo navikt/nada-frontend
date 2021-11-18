@@ -40,7 +40,7 @@ const LandingPage = () => {
   }, [])
 
   return (
-    <PageLayout>
+    <div>
       <SearchContainer>
         <FrontPageLogo />
         <FrontPageSearchBox
@@ -60,7 +60,7 @@ const LandingPage = () => {
       </Alert>
       <h2>Nyeste ressurser</h2>
       <ResultList results={data?.search} noExcerpts />
-    </PageLayout>
+    </div>
   )
 }
 

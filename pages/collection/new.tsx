@@ -47,10 +47,10 @@ const NewCollection = () => {
   // FIXME: Blaffer feilmelding i påvente av user
   if (!user)
     return (
-      <PageLayout>
+      <div>
         <h1>Du må være logget inn!</h1>
         <p>Bruk login-knappen øverst.</p>
-      </PageLayout>
+      </div>
     )
 
   return (

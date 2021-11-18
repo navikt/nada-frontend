@@ -10,16 +10,32 @@ import {
   useUpdateCollectionMutation,
 } from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
+import styled from 'styled-components'
+import TopBar from '../lib/topBar'
+import { Name } from '../lib/detailTypography'
+import { useRouter } from 'next/router'
 
 interface EditDatacollectionFormProps {
   collection: CollectionQuery['collection']
-  close: () => void
 }
+
+const Container = styled.div`
+  margin-top: 40px;
+`
+
+const Collection = styled.div`
+  border-radius: 5px;
+  border: 1px solid black;
+`
+
+const CollectionBody = styled.div`
+  padding: 1em 1em 2em 1em;
+`
 
 export const EditCollectionForm = ({
   collection,
-  close,
 }: EditDatacollectionFormProps) => {
+  const router = useRouter()
   const [backendError, setBackendError] = useState()
   const [updateCollection] = useUpdateCollectionMutation()
   const { register, handleSubmit, formState, watch, setValue, control } =
@@ -43,9 +59,10 @@ export const EditCollectionForm = ({
       variables: { id: collection.id, input: requestData },
       awaitRefetchQueries: true,
       refetchQueries: ['Collection'],
+    }).then(() => {
+      setBackendError(undefined)
+      router.push(`/collection/${collection.id}`)
     })
-    setBackendError(undefined)
-    close()
   }
   {
     backendError ? (
@@ -53,27 +70,38 @@ export const EditCollectionForm = ({
     ) : null
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Fieldset legend="Rediger datasamling" errorPropagation={false}>
-        <TextField
-          id="name"
-          label="Navn"
-          {...register('name')}
-          error={errors.name?.message}
-        />
-        <DescriptionEditor
-          label="Beskrivelse"
-          name="description"
-          control={control}
-        />
-        <KeywordsInput
-          keywords={keywords}
-          setKeywords={setKeywords}
-          {...register('keywords')}
-          error={errors.keywords?.[0].message}
-        />
-      </Fieldset>
-      <RightJustifiedSubmitButton onCancel={close} />
-    </form>
+    <Container>
+      <Collection>
+        <TopBar type={'Collection'}>
+          <Name>Rediger datasamling</Name>
+        </TopBar>
+        <CollectionBody>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Fieldset legend="" errorPropagation={false}>
+              <TextField
+                id="name"
+                label="Navn"
+                {...register('name')}
+                error={errors.name?.message}
+              />
+              <DescriptionEditor
+                label="Beskrivelse"
+                name="description"
+                control={control}
+              />
+              <KeywordsInput
+                keywords={keywords}
+                setKeywords={setKeywords}
+                {...register('keywords')}
+                error={errors.keywords?.[0].message}
+              />
+            </Fieldset>
+            <RightJustifiedSubmitButton
+              onCancel={() => router.push(`/collection/${collection.id}`)}
+            />
+          </form>
+        </CollectionBody>
+      </Collection>
+    </Container>
   )
 }
