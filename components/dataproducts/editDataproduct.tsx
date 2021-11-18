@@ -1,4 +1,4 @@
-import { ErrorSummary, TextField } from '@navikt/ds-react'
+import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -6,22 +6,37 @@ import { useState } from 'react'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
-
+import { Name } from '../lib/detailTypography'
 import {
   Dataproduct,
   DataproductQuery,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
+import { useRouter } from 'next/router'
+import styled from 'styled-components'
+import TopBar from '../lib/topBar'
 
 interface EditDatacollectionFormProps {
   product: DataproductQuery['dataproduct']
-  close: () => void
 }
 
-const EditDataproduct = ({ product, close }: EditDatacollectionFormProps) => {
+const Container = styled.div`
+  margin-top: 40px;
+`
+
+const DataproductBox = styled.div`
+  border-radius: 5px;
+  border: 1px solid black;
+`
+
+const DataproductBody = styled.div`
+  padding: 1em 1em 2em 1em;
+`
+const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
   const [updateDataproduct] = useUpdateDataproductMutation()
+  const router = useRouter()
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
       resolver: yupResolver(updateDataproductValidation),
@@ -44,9 +59,10 @@ const EditDataproduct = ({ product, close }: EditDatacollectionFormProps) => {
       variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
       refetchQueries: ['Dataproduct'],
+    }).then(() => {
+      setBackendError(undefined)
+      router.push(`/dataproduct/${product.id}`)
     })
-    setBackendError(undefined)
-    close()
   }
   {
     backendError && (
@@ -54,33 +70,46 @@ const EditDataproduct = ({ product, close }: EditDatacollectionFormProps) => {
     )
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <TextField
-        id="name"
-        label="Navn"
-        {...register('name')}
-        error={errors.name?.message}
-      />
-      <DescriptionEditor
-        label="Beskrivelse"
-        name="description"
-        control={control}
-      />
-      <TextField
-        id="repo"
-        label="Repo"
-        {...register('repo')}
-        error={errors.repo?.message}
-      />
-      <KeywordsInput
-        keywords={keywords}
-        setKeywords={setKeywords}
-        {...register('keywords')}
-        error={errors.keywords?.[0].message}
-      />
-      <PiiCheckboxInput register={register} watch={watch} />
-      <RightJustifiedSubmitButton onCancel={close} />
-    </form>
+    <Container>
+      <DataproductBox>
+        <TopBar type={'Dataproduct'}>
+          <Name>Rediger dataprodukt</Name>
+        </TopBar>
+        <DataproductBody>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Fieldset legend={''}>
+              <TextField
+                id="name"
+                label="Navn"
+                {...register('name')}
+                error={errors.name?.message}
+              />
+              <DescriptionEditor
+                label="Beskrivelse"
+                name="description"
+                control={control}
+              />
+              <TextField
+                id="repo"
+                label="Repo"
+                {...register('repo')}
+                error={errors.repo?.message}
+              />
+              <KeywordsInput
+                keywords={keywords}
+                setKeywords={setKeywords}
+                {...register('keywords')}
+                error={errors.keywords?.[0].message}
+              />
+              <PiiCheckboxInput register={register} watch={watch} />
+              <RightJustifiedSubmitButton
+                onCancel={() => router.push(`/dataproduct/${product.id}`)}
+              />
+            </Fieldset>
+          </form>
+        </DataproductBody>
+      </DataproductBox>
+    </Container>
   )
 }
 export default EditDataproduct
