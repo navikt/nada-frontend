@@ -39,6 +39,11 @@ const DatasetCardDiv = styled.div`
   p {
     margin: 0 0.5em;
   }
+
+  h3 {
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+  }
 `
 
 const InertDatasetCardDiv = styled.div`

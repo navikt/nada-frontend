@@ -7,6 +7,7 @@ const Container = styled.div`
   align-items: center;
   margin: 1em 0;
   font-size: 20px;
+  cursor: pointer;
 `
 
 export const BackButton = () => (
