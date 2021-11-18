@@ -26,6 +26,7 @@ import IconBox from '../lib/icons/iconBox'
 import { Close, Locked } from '@navikt/ds-icons'
 import { navRod } from '../../styles/constants'
 import { BackButton } from '../lib/BackButton'
+import amplitudeLog from '../../lib/amplitude'
 
 const StyledTabPanel = styled(TabPanel)`
   > div {
@@ -105,8 +106,31 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           aria-label="auto tabs example"
         >
           <Tab label="Informasjon" value={0} />
-          <Tab label="Datakilde" value={1} />
-          {userState && <Tab label="Tilganger" value={2} />}
+          <Tab
+            label="Datakilde"
+            value={1}
+            onClick={() => {
+              const { datasource } = product
+              const eventProperties = {
+                sidetittel: 'skjemavisning',
+                title: `${datasource.projectID}.${datasource.dataset}.${datasource.table}`,
+              }
+              amplitudeLog('sidevisning', eventProperties)
+            }}
+          />
+          {userState && (
+            <Tab
+              label="Tilganger"
+              value={2}
+              onClick={() => {
+                const eventProperties = {
+                  sidetittel: 'tilgangsvisning',
+                  title: `${product.name}`,
+                }
+                amplitudeLog('sidevisning', eventProperties)
+              }}
+            />
+          )}
         </Tabs>
         <StyledTabPanel index={0} value={activeTab}>
           <DataproductInfo product={product} />

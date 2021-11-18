@@ -12,6 +12,7 @@ import {
   SearchContentQuery,
   UserInfoDetailsQuery,
 } from '../../lib/schema/graphql'
+import amplitudeLog from '../../lib/amplitude'
 
 interface NewDatacollectionFormProps {
   onSubmit: (data: any) => Promise<void>
@@ -34,8 +35,17 @@ export const NewCollectionForm = ({
     UserState
   )?.groups
 
+  const onError = (errors: any) => {
+    amplitudeLog('skjemavalidering feilet', {
+      skjemanavn: 'ny-collection',
+      feilmeldinger: Object.keys(errors)
+        .map((errorKey) => errorKey)
+        .join(','),
+    })
+  }
+
   return (
-    <CreateForm onSubmit={handleSubmit(onSubmit)}>
+    <CreateForm onSubmit={handleSubmit(onSubmit, onError)}>
       <Fieldset legend="Opprett samling" errorPropagation={false}>
         <TextField
           id="name"

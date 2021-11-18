@@ -15,6 +15,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import humanizeDate from '../lib/humanizeDate'
 import SubHeader from '../lib/subHeader'
+import amplitudeLog from '../../lib/amplitude'
 
 const StyledAccordion = styled(Accordion)`
   div {
@@ -34,6 +35,7 @@ const DataproductTableSchema = ({
   const schema = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
+  const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
   return (
     <div>
       <StyledTable>
@@ -41,8 +43,14 @@ const DataproductTableSchema = ({
           <th>Adresse:</th>
           <td>
             <UrlLink
-              url={`https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`}
+              url={bigQueryUrl}
               text={`${datasource.projectID}.${datasource.dataset}.${datasource.table}`}
+              onClick={() => {
+                const eventProperties = {
+                  til: bigQueryUrl,
+                }
+                amplitudeLog('navigere', eventProperties)
+              }}
             />
           </td>
         </tr>

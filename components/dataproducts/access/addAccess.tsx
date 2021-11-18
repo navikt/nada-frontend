@@ -10,9 +10,11 @@ import TextField from '@mui/material/TextField'
 import { Box, Modal } from '@mui/material'
 import { endOfDay } from 'date-fns'
 import AccessSubmit from './accessSubmit'
+import amplitudeLog from '../../../lib/amplitude'
 
 interface AddAccessProps {
   dataproductID: string
+  dataproductName: string
   open: boolean
   setOpen: (value: boolean) => void
   subject: string
@@ -20,6 +22,7 @@ interface AddAccessProps {
 
 const AddAccess = ({
   dataproductID,
+  dataproductName,
   open,
   setOpen,
   subject,
@@ -40,6 +43,13 @@ const AddAccess = ({
     if (!evig && date) {
       variables.expires = endOfDay(date)
     }
+
+    amplitudeLog('klikk', {
+      title: 'tilgang',
+      version: dataproductID,
+      context: dataproductName,
+      type: evig ? 'Evig' : 'Dato',
+    })
     grantAccess({
       variables,
       refetchQueries: ['DataproductAccess'],

@@ -17,6 +17,7 @@ const isValidHttpUrl = (candidate: string) => {
 interface UrlLinkProps {
   url?: Maybe<string>
   text?: string
+  onClick?: () => void
 }
 
 const CenterAligned = styled.div`
@@ -29,13 +30,13 @@ const CenterAligned = styled.div`
   }
 `
 
-export const UrlLink = ({ url, text }: UrlLinkProps) => {
+export const UrlLink = ({ url, text, onClick }: UrlLinkProps) => {
   if (!url) return null
   if (!text) text = url
   if (!isValidHttpUrl(url)) return <>{url}</>
 
   return (
-    <a target="_blank" rel="noreferrer" href={`${url}`}>
+    <a target="_blank" rel="noreferrer" href={`${url}`} onClick={onClick}>
       <CenterAligned>
         {`${text}`}
         <ExternalLink />
