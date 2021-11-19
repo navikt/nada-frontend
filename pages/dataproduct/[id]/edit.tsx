@@ -24,7 +24,7 @@ const DataproductEdit = (props: DataproductProps) => {
   })
   useEffect(() => {
     const eventProperties = {
-      sidetittel: 'produktside',
+      sidetittel: 'productEdit',
       title: data?.dataproduct.name,
     }
     amplitudeLog('sidevisning', eventProperties)
