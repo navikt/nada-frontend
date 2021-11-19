@@ -14,6 +14,7 @@ import { Alert } from '@navikt/ds-react'
 import amplitude from 'amplitude-js'
 import { useEffect } from 'react'
 import amplitudeLog from '../lib/amplitude'
+import Head from 'next/head'
 
 const SEARCH_LIMIT = 6
 
@@ -41,6 +42,9 @@ const LandingPage = () => {
 
   return (
     <div>
+      <Head>
+        <title>Nada</title>
+      </Head>
       <SearchContainer>
         <FrontPageLogo />
         <FrontPageSearchBox
