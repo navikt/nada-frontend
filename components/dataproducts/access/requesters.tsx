@@ -4,7 +4,7 @@ import { AddCircle, Delete } from '@navikt/ds-icons'
 import { useState } from 'react'
 import { Button, Fieldset, Modal, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import {
   useAddRequesterMutation,

@@ -12,4 +12,8 @@ module.exports = removeImports({
       destination: `${getBackendURI()}/:path*`, // Proxy to backend
     },
   ],
+  experimental: {
+    // Enables the styled-components SWC transform
+    styledComponents: true
+  }
 })
