@@ -82,7 +82,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   if (!product) return <LoaderSpinner />
 
   return edit ? (
-    <EditDataproduct product={product} close={() => setEdit(false)} />
+    <EditDataproduct product={product} />
   ) : (
     <Container>
       {backendError && <ErrorMessage error={backendError} />}

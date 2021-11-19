@@ -65,7 +65,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
     }) || false
 
   return edit ? (
-    <EditCollectionForm collection={collection} close={() => setEdit(false)} />
+    <EditCollectionForm collection={collection} />
   ) : (
     <Container>
       <BackButton />
