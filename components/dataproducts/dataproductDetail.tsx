@@ -49,7 +49,6 @@ const Product = styled.div`
 `
 
 export const DataproductDetail = ({ product }: DataproductDetailProps) => {
-  const [edit, setEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
@@ -81,9 +80,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
 
   if (!product) return <LoaderSpinner />
 
-  return edit ? (
-    <EditDataproduct product={product} />
-  ) : (
+  return (
     <Container>
       {backendError && <ErrorMessage error={backendError} />}
       <BackButton />
@@ -92,7 +89,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           <Name>{product.name}</Name>
           {isOwner && (
             <EditMenu
-              onEdit={() => setEdit(true)}
+              onEdit={() => router.push(`/dataproduct/${product.id}/edit`)}
               onDelete={() => setShowDelete(true)}
             />
           )}

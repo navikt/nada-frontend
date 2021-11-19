@@ -39,7 +39,6 @@ const CollectionBody = styled.div`
 export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
   const { id } = collection
   const userState = useContext(UserState)
-  const [edit, setEdit] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [backendError, setBackendError] = useState()
   const router = useRouter()
@@ -64,9 +63,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
       return g.email === collection?.owner.group
     }) || false
 
-  return edit ? (
-    <EditCollectionForm collection={collection} />
-  ) : (
+  return (
     <Container>
       <BackButton />
 
@@ -77,7 +74,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           <Name>{collection.name}</Name>
           {isOwner && (
             <DotMenu
-              onEdit={() => setEdit(true)}
+              onEdit={() => router.push(`/collection/${collection.id}/edit`)}
               onDelete={() => setShowDelete(true)}
             />
           )}
