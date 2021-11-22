@@ -21,6 +21,7 @@ export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>
+      <option value="test@nav.no" key="test">test</option>
       {teams.map((team, i) => (
         <option
           value={user?.groups.filter((g) => g.name === team)[0].email}

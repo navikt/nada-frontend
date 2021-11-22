@@ -3,14 +3,19 @@ import {
   SubjectType,
   useGrantAccessMutation,
 } from '../../../lib/schema/graphql'
+import dynamic from 'next/dynamic'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { useState } from 'react'
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
+import { LocalizationProvider } from '@mui/lab'
 import TextField from '@mui/material/TextField'
 import { Box, Modal } from '@mui/material'
 import { endOfDay } from 'date-fns'
 import AccessSubmit from './accessSubmit'
 import amplitudeLog from '../../../lib/amplitude'
+
+const DesktopDatePicker = dynamic(() => import('@mui/lab/DesktopDatePicker'), {
+  ssr: false,
+})
 
 interface AddAccessProps {
   dataproductID: string

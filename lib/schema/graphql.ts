@@ -823,6 +823,19 @@ export type SearchContentQuery = {
   }>
 }
 
+export type TeamkatalogenQueryVariables = Exact<{
+  q: Scalars['String']
+}>
+
+export type TeamkatalogenQuery = {
+  __typename?: 'Query'
+  teamkatalogen: Array<{
+    __typename?: 'TeamkatalogenResult'
+    name: string
+    url: string
+  }>
+}
+
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never }>
 
 export type UserInfoDetailsQuery = {
@@ -2067,6 +2080,65 @@ export type SearchContentLazyQueryHookResult = ReturnType<
 export type SearchContentQueryResult = Apollo.QueryResult<
   SearchContentQuery,
   SearchContentQueryVariables
+>
+export const TeamkatalogenDocument = gql`
+  query Teamkatalogen($q: String!) {
+    teamkatalogen(q: $q) {
+      name
+      url
+    }
+  }
+`
+
+/**
+ * __useTeamkatalogenQuery__
+ *
+ * To run a query within a React component, call `useTeamkatalogenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamkatalogenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamkatalogenQuery({
+ *   variables: {
+ *      q: // value for 'q'
+ *   },
+ * });
+ */
+export function useTeamkatalogenQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TeamkatalogenQuery,
+    TeamkatalogenQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(
+    TeamkatalogenDocument,
+    options
+  )
+}
+export function useTeamkatalogenLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TeamkatalogenQuery,
+    TeamkatalogenQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(
+    TeamkatalogenDocument,
+    options
+  )
+}
+export type TeamkatalogenQueryHookResult = ReturnType<
+  typeof useTeamkatalogenQuery
+>
+export type TeamkatalogenLazyQueryHookResult = ReturnType<
+  typeof useTeamkatalogenLazyQuery
+>
+export type TeamkatalogenQueryResult = Apollo.QueryResult<
+  TeamkatalogenQuery,
+  TeamkatalogenQueryVariables
 >
 export const UserInfoDetailsDocument = gql`
   query userInfoDetails {
