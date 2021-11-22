@@ -44,10 +44,10 @@ const AddAccess = ({
       variables.expires = endOfDay(date)
     }
 
-    amplitudeLog('Klikk på knapp eller lenke', {
-      skjemanavn: 'tilgang',
+    amplitudeLog('klikk', {
+      sidetittel: 'tilgang',
+      version: dataproductID,
       title: dataproductName,
-      label: dataproductID,
       type: evig ? 'Evig' : 'Dato',
     })
     grantAccess({

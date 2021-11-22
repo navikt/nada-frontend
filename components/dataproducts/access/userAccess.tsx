@@ -44,10 +44,10 @@ const UserAccess = ({ id, requesters, access, name }: UserAccessProps) => {
   if (!userState) return null
 
   const onSubmit = async () => {
-    amplitudeLog('Klikk på knapp eller lenke', {
-      skjemanavn: 'fjern-tilgang',
+    amplitudeLog('klikk', {
+      sidetittel: 'fjern-tilgang',
+      version: id,
       title: name,
-      label: id,
     })
     await revokeAccess({
       variables: {
