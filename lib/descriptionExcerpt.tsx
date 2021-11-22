@@ -56,7 +56,7 @@ export const DescriptionExcerpt = ({ children }: DescriptionProps) => {
   unified()
     .use(remarkParse)
     .use(remarkTitle, { title: '' })
-    .use(remarkBehead, { depth: 4 })
+    .use(remarkBehead, { depth: 3 })
     .use(remarkRehype)
     .use(rehypeFormat)
     .use(rehypeStringify)
