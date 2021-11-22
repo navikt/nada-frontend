@@ -35,12 +35,12 @@ const SearchIcon = styled(Search)``
 const redirectPath = (query: string) =>
   query.length
     ? {
-        pathname: '/search',
-        query: { q: query },
-      }
+      pathname: '/search',
+      query: { q: query },
+    }
     : {
-        pathname: '/',
-      }
+      pathname: '/',
+    }
 
 export interface FrontPageSearchBoxProps {
   onSearch: (query: string) => void
@@ -57,16 +57,18 @@ export default function FrontPageSearchBox({
   }
 
   return (
-    <SearchDiv role="navigation" onSubmit={onSubmit}>
-      <SearchInput
-        aria-label={'Søkefelt'}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+    <div role="navigation">
+      <SearchDiv onSubmit={onSubmit}>
+        <SearchInput
+          aria-label={'Søkefelt'}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
 
-      <SearchButton aria-label={'Søk'} onClick={() => onSearch(value)}>
-        <SearchIcon />
-      </SearchButton>
-    </SearchDiv>
+        <SearchButton aria-label={'Søk'} onClick={() => onSearch(value)}>
+          <SearchIcon title="Søk" />
+        </SearchButton>
+      </SearchDiv>
+    </div>
   )
 }
