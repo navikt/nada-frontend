@@ -55,7 +55,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </HeaderBar>
-      <Main role="content">{children}</Main>
+      <Main>{children}</Main>
     </Container>
   )
 }
