@@ -21,6 +21,7 @@ const Dataproduct = (props: DataproductProps) => {
     variables: { id },
     ssr: true,
   })
+
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'produktside',

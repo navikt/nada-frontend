@@ -10,6 +10,7 @@ import { colorScheme } from '../../lib/colorScheme'
 import { DescriptionExcerpt } from '../../../lib/descriptionExcerpt'
 import LoaderSpinner from '../../lib/spinner'
 import ErrorMessage from '../../lib/error'
+import * as React from 'react'
 
 export const DataproductDiv = styled.div`
   margin-bottom: 15px;
@@ -81,7 +82,11 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
         </DataproductHeading>
         <DataproductMeta>
           <div>PII:</div>
-          {pii ? <Success color={navGronn} /> : <Warning color={navRod} />}
+          {pii ? (
+            <Warning style={{ fontSize: '1em' }} color={navRod} />
+          ) : (
+            <Success style={{ fontSize: '1em' }} color={navGronn} />
+          )}
           <div>Nøkkelord:</div>
           {keywords.map((k) => (
             <Keyword key={k} keyword={k} small />

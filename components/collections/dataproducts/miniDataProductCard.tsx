@@ -97,13 +97,13 @@ const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
         </IconBox>
         <div>{dataproduct.datasource.__typename || '?'}</div>
         {dataproduct.pii ? (
-          <Success
-            color={navGronn}
+          <Warning
+            color={navRod}
             aria-label={'inneholder personidentifiserende informasjon'}
           />
         ) : (
-          <Warning
-            color={navRod}
+          <Success
+            color={navGronn}
             aria-label={'inneholder ikke personidentifiserende informasjon'}
           />
         )}
