@@ -56,7 +56,7 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
           </tr>
         </tbody>
       </StyledTable>
-      <Description>{product.description || '*ingen beskrivelse*'}</Description>
+      <Description markdown={product.description} />
     </>
   )
 }

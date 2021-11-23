@@ -21,8 +21,10 @@ export const StyledDescription = styled.div`
   text-align: justify;
 `
 
-export const Description = ({ children }: { children: string }) => (
+export const Description = ({ markdown }: { markdown?: string | null }) => (
   <StyledDescription>
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>{children}</ReactMarkdown>
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      {markdown || '*ingen beskrivelse*'}
+    </ReactMarkdown>
   </StyledDescription>
 )

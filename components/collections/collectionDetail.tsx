@@ -82,9 +82,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
         <MetadataTable collection={collection} />
         <CollectionBody>
           <SectionHeader>Beskrivelse</SectionHeader>
-          <Description>
-            {collection.description || '*ingen beskrivelse*'}
-          </Description>
+          <Description markdown={collection.description} />
           <SectionHeader>Dataprodukter</SectionHeader>
           <DataproductList collection={collection} />
           {isOwner && <DataproductListEditButton collection={collection} />}
