@@ -59,8 +59,8 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       <tr>
         <th>Eier:</th>
         <td>
-          {product.owner?.teamkatalogen ? (
-            <Link href={product.owner.teamkatalogen}>
+          {product.owner?.teamkatalogenURL ? (
+            <Link href={product.owner.teamkatalogenURL}>
               {product.owner.group}
             </Link>
           ) : (
