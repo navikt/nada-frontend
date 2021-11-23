@@ -9,6 +9,7 @@ import ProductSearchBox from '../../search/productSearchBox'
 import { useState } from 'react'
 import styled from 'styled-components'
 import MiniDataProductCard from './miniDataProductCard'
+import DataproductCard from './DataproductCard'
 
 interface ProductManagerProps {
   collection: CollectionQuery['collection']
@@ -30,11 +31,9 @@ const ColumnBox = styled.div`
 const SearchBox = styled(ColumnBox)``
 
 const SearchResults = styled.div`
-  flex-grow: 1;
   border: 1px solid #d5d5d5;
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
 `
 
 const AddedProductsBox = styled(ColumnBox)`
@@ -45,9 +44,7 @@ const AddedProductsBox = styled(ColumnBox)`
 const AddedProducts = styled.div`
   border-radius: 5px;
   border: 1px solid #d5d5d5;
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
+  height: 100%;
 `
 
 const BoxHeader = styled.div`
@@ -99,11 +96,13 @@ const ProductSearchResults = ({
   return (
     <>
       {filteredProducts.map((p) => (
-        <MiniDataProductCard
+        <div
           key={p.result.id}
-          id={p.result.id}
-          handleClick={handleAddToCollection}
-        />
+          onClick={() => handleAddToCollection(p.result.id)}
+          style={{ margin: '5px' }}
+        >
+          <DataproductCard id={p.result.id} />
+        </div>
       ))}
     </>
   )
@@ -155,14 +154,15 @@ export const ProductManager = ({ collection }: ProductManagerProps) => {
           <h2>Inkluderte produkter</h2>
         </BoxHeader>
         <AddedProducts>
-          {collection.elements &&
-            collection.elements.map((d) => (
-              <MiniDataProductCard
-                key={d.id}
-                id={d.id}
-                handleClick={handleRemoveFromCollection}
-              />
-            ))}
+          {collection.elements.map((p) => (
+            <div
+              key={p.id}
+              onClick={() => handleRemoveFromCollection(p.id)}
+              style={{ margin: '5px' }}
+            >
+              <DataproductCard id={p.id} />
+            </div>
+          ))}
         </AddedProducts>
       </AddedProductsBox>
     </ProductCards>

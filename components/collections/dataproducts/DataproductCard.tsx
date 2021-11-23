@@ -69,34 +69,32 @@ const DataproductCard = ({ id }: DataproductCardProps) => {
   } = data
 
   return (
-    <Link href={`/dataproduct/${id}`} passHref>
-      <DataproductDiv>
-        <DataproductHeading>
-          <IconBox size={48}>
-            <BigQueryLogo />
-          </IconBox>
-          <div>
-            <h3>{name}</h3>
-            <h4>{datasource.type}</h4>
-          </div>
-        </DataproductHeading>
-        <DataproductMeta>
-          <div>PII:</div>
-          {pii ? (
-            <Warning style={{ fontSize: '1em' }} color={navRod} />
-          ) : (
-            <Success style={{ fontSize: '1em' }} color={navGronn} />
-          )}
-          <div>Nøkkelord:</div>
-          {keywords.map((k) => (
-            <Keyword key={k} keyword={k} small />
-          ))}
-        </DataproductMeta>
-        <DescriptionExcerpt>
-          {description || '*ingen beskrivelse*'}
-        </DescriptionExcerpt>
-      </DataproductDiv>
-    </Link>
+    <DataproductDiv>
+      <DataproductHeading>
+        <IconBox size={48}>
+          <BigQueryLogo />
+        </IconBox>
+        <div>
+          <h3>{name}</h3>
+          <h4>{datasource.type}</h4>
+        </div>
+      </DataproductHeading>
+      <DataproductMeta>
+        <div>PII:</div>
+        {pii ? (
+          <Warning style={{ fontSize: '1em' }} color={navRod} />
+        ) : (
+          <Success style={{ fontSize: '1em' }} color={navGronn} />
+        )}
+        <div>Nøkkelord:</div>
+        {keywords.map((k) => (
+          <Keyword key={k} keyword={k} small />
+        ))}
+      </DataproductMeta>
+      <DescriptionExcerpt>
+        {description || '*ingen beskrivelse*'}
+      </DescriptionExcerpt>
+    </DataproductDiv>
   )
 }
 

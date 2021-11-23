@@ -2,6 +2,7 @@ import DataproductCard from './DataproductCard'
 import { CollectionQuery } from '../../../lib/schema/graphql'
 import styled from 'styled-components'
 import amplitudeLog from '../../../lib/amplitude'
+import Link from 'next/link'
 
 interface DataproductListProps {
   collection: CollectionQuery['collection']
@@ -16,13 +17,15 @@ export const DataproductList = ({ collection }: DataproductListProps) => {
     <Container
       onClick={() => {
         const eventProperties = {
-          fra: `collection-${collection.name}`
+          fra: `collection-${collection.name}`,
         }
         amplitudeLog('navigere', eventProperties)
       }}
     >
       {collection?.elements.map((d) => (
-        <DataproductCard key={d.id} id={d.id} />
+        <Link key={d.id} href={`/dataproduct/${d.id}`} passHref>
+          <DataproductCard id={d.id} />
+        </Link>
       ))}
     </Container>
   )
