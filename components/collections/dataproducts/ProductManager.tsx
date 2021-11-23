@@ -8,7 +8,6 @@ import {
 import ProductSearchBox from '../../search/productSearchBox'
 import { useState } from 'react'
 import styled from 'styled-components'
-import MiniDataProductCard from './miniDataProductCard'
 import DataproductCard from './DataproductCard'
 
 interface ProductManagerProps {
