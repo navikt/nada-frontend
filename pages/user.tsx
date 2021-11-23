@@ -2,16 +2,14 @@ import styled from 'styled-components'
 import * as React from 'react'
 import { useContext, useState } from 'react'
 import { UserState } from '../lib/context'
-import PageLayout from '../components/pageLayout'
 import TopBar from '../components/lib/topBar'
 import { Name } from '../components/lib/detailTypography'
 import { Tab, Tabs } from '@mui/material'
 import TabPanel from '../components/lib/tabPanel'
 import { MetadataTable } from '../components/user/metadataTable'
-import SearchResultLink from '../components/results/searchResult'
-import { useDeleteDataproductMutation } from '../lib/schema/graphql'
 import UserProductResultLink from '../components/user/userProductResult'
 import UserAccessableProduct from '../components/user/userProductAccess'
+import Head from 'next/head'
 
 const StyledTabPanel = styled(TabPanel)`
   > div {
@@ -37,6 +35,9 @@ export const UserProductLink = () => {
 
   return (
     <div>
+      <Head>
+        <title>nada // Brukerside</title>
+      </Head>
       <TopBar type={'User'}>
         <Name>{userState.name}</Name>
       </TopBar>

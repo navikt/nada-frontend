@@ -1,5 +1,4 @@
 import ResultList from '../components/results/resultList'
-import PageLayout from '../components/pageLayout'
 import styled from 'styled-components'
 import FrontPageSearchBox from '../components/index/searchField'
 import { GetServerSideProps } from 'next'
@@ -11,7 +10,6 @@ import {
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { Alert } from '@navikt/ds-react'
-import amplitude from 'amplitude-js'
 import { useEffect } from 'react'
 import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
@@ -43,7 +41,7 @@ const LandingPage = () => {
   return (
     <div>
       <Head>
-        <title>Nada</title>
+        <title>nada</title>
       </Head>
       <SearchContainer>
         <FrontPageLogo />

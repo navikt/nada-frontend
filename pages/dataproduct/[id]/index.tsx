@@ -1,4 +1,3 @@
-import PageLayout from '../../../components/pageLayout'
 import LoaderSpinner from '../../../components/lib/spinner'
 import DataproductDetail from '../../../components/dataproducts/dataproductDetail'
 import ErrorMessage from '../../../components/lib/error'
@@ -8,6 +7,8 @@ import { addApolloState, getApolloClient } from '../../../lib/apollo'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import { useEffect } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
+import Head from 'next/head'
+import * as React from 'react'
 
 interface DataproductProps {
   id: string
@@ -32,7 +33,14 @@ const Dataproduct = (props: DataproductProps) => {
 
   if (loading || !data?.dataproduct) return <LoaderSpinner />
 
-  return <DataproductDetail product={data.dataproduct} />
+  return (
+    <>
+      <Head>
+        <title>nada // {data.dataproduct.name}</title>
+      </Head>
+      <DataproductDetail product={data.dataproduct} />
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

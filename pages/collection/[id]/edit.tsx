@@ -7,6 +7,7 @@ import amplitudeLog from '../../../lib/amplitude'
 import LoaderSpinner from '../../../components/lib/spinner'
 import { EditCollectionForm } from '../../../components/collections/editCollectionForm'
 import * as React from 'react'
+import Head from 'next/head'
 
 interface DatacollectionFetcherProps {
   id: string
@@ -27,7 +28,14 @@ export const DatacollectionEdit = ({ id }: DatacollectionFetcherProps) => {
 
   if (!data) return <LoaderSpinner />
 
-  return <EditCollectionForm collection={data.collection} />
+  return (
+    <>
+      <Head>
+        <title>nada // rediger {data.collection.name}</title>
+      </Head>
+      <EditCollectionForm collection={data.collection} />
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

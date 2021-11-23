@@ -7,6 +7,8 @@ import { GET_COLLECTION } from '../../../lib/queries/collection/collection'
 import { useEffect } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import LoaderSpinner from '../../../components/lib/spinner'
+import Head from 'next/head'
+import * as React from 'react'
 
 interface DatacollectionFetcherProps {
   id: string
@@ -27,7 +29,14 @@ export const Datacollection = ({ id }: DatacollectionFetcherProps) => {
 
   if (!data) return <LoaderSpinner />
 
-  return <CollectionDetail collection={data.collection} />
+  return (
+    <>
+      <Head>
+        <title>nada // {data.collection.name}</title>
+      </Head>
+      <CollectionDetail collection={data.collection} />
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

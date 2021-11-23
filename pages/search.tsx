@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next'
-import PageLayout from '../components/pageLayout'
 import ResultList from '../components/results/resultList'
 import {
   SearchContentDocument,
@@ -9,6 +8,8 @@ import { ResultCount } from '../lib/queries/search/resultCount'
 import { Loader } from '@navikt/ds-react'
 import styled from 'styled-components'
 import { addApolloState, getApolloClient } from '../lib/apollo'
+import Head from 'next/head'
+import * as React from 'react'
 
 const NoResultsYetBox = styled.div`
   margin: 0 auto;
@@ -43,6 +44,9 @@ const ResultsPage = ({ q }: ResultsPageProps) => {
 
   return (
     <div>
+      <Head>
+        <title>nada // Søk</title>
+      </Head>
       <ResultCount resultCount={data?.search?.length} />
       <ResultList results={data?.search} />
     </div>

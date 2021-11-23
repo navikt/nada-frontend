@@ -1,7 +1,8 @@
-import PageLayout from '../../components/pageLayout'
 import { useContext } from 'react'
 import { UserState } from '../../lib/context'
 import { NewDataproductForm } from '../../components/dataproducts/newDataproductForm'
+import Head from 'next/head'
+import * as React from 'react'
 
 const NewDataproduct = () => {
   const user = useContext(UserState)
@@ -14,7 +15,14 @@ const NewDataproduct = () => {
       </div>
     )
 
-  return <NewDataproductForm />
+  return (
+    <>
+      <Head>
+        <title>nada // nytt dataprodukt</title>
+      </Head>
+      <NewDataproductForm />
+    </>
+  )
 }
 
 export default NewDataproduct

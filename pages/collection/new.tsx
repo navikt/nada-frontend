@@ -7,6 +7,7 @@ import PageLayout from '../../components/pageLayout'
 import amplitudeLog from '../../lib/amplitude'
 import { UserState } from '../../lib/context'
 import { CREATE_COLLECTION } from '../../lib/queries/collection/createCollection'
+import Head from 'next/head'
 
 const NewCollection = () => {
   React.useEffect(() => {
@@ -40,11 +41,10 @@ const NewCollection = () => {
   const onCancel = () => {
     amplitudeLog('Klikker på: Avbryt', {
       pageName: 'ny-collection',
-    });
-    router.back();
+    })
+    router.back()
   }
 
-  // FIXME: Blaffer feilmelding i påvente av user
   if (!user)
     return (
       <div>
@@ -55,6 +55,9 @@ const NewCollection = () => {
 
   return (
     <PageLayout>
+      <Head>
+        <title>nada // ny datasamling</title>
+      </Head>
       {backendError && (
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
       )}
