@@ -334,6 +334,8 @@ export type NewCollection = {
   keywords?: Maybe<Array<Scalars['String']>>
   /** name of the collection. */
   name: Scalars['String']
+  /** owner Teamkatalogen URL for the collection. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
@@ -354,6 +356,8 @@ export type NewDataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters?: Maybe<Array<Scalars['String']>>
+  /** owner Teamkatalogen URL for the dataproduct. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** Owner contains metadata on the owner of the dataproduct. */
@@ -361,8 +365,8 @@ export type Owner = {
   __typename?: 'Owner'
   /** owner group is the email for the group. */
   group: Scalars['String']
-  /** teamkatalogen is url for the team in the NAV team catalog. */
-  teamkatalogen: Scalars['String']
+  /** teamkatalogenURL is url for the team in the NAV team catalog. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 export type Query = {
@@ -497,6 +501,8 @@ export type UpdateCollection = {
   keywords?: Maybe<Array<Scalars['String']>>
   /** name of the collection. */
   name: Scalars['String']
+  /** owner Teamkatalogen URL for the collection. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** UpdateDataproduct contains metadata for updating a dataproduct */
@@ -513,6 +519,8 @@ export type UpdateDataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters?: Maybe<Array<Scalars['String']>>
+  /** owner Teamkatalogen URL for the dataproduct. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** UserInfo contains metadata on a logged in user */
@@ -708,7 +716,11 @@ export type DataproductQuery = {
     pii: boolean
     keywords: Array<string>
     collections: Array<{ __typename: 'Collection'; id: string; name: string }>
-    owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
     datasource: {
       __typename?: 'BigQuery'
       projectID: string
@@ -809,7 +821,11 @@ export type SearchContentQuery = {
           description?: string | null | undefined
           created: any
           lastModified: any
-          owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
         }
       | {
           __typename: 'Dataproduct'
@@ -818,7 +834,11 @@ export type SearchContentQuery = {
           description?: string | null | undefined
           created: any
           lastModified: any
-          owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
         }
   }>
 }
@@ -868,7 +888,11 @@ export type UserInfoAccessableDataproductQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
     }>
   }
 }
@@ -886,7 +910,11 @@ export type UserInfoUserProductsQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
     }>
     collections: Array<{
       __typename: 'Collection'
@@ -895,7 +923,11 @@ export type UserInfoUserProductsQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
     }>
   }
 }
@@ -1642,7 +1674,7 @@ export const DataproductDocument = gql`
       }
       owner {
         group
-        teamkatalogen
+        teamkatalogenURL
       }
       datasource {
         type: __typename
@@ -2011,7 +2043,7 @@ export const SearchContentDocument = gql`
           lastModified
           owner {
             group
-            teamkatalogen
+            teamkatalogenURL
           }
         }
         ... on Dataproduct {
@@ -2023,7 +2055,7 @@ export const SearchContentDocument = gql`
           lastModified
           owner {
             group
-            teamkatalogen
+            teamkatalogenURL
           }
         }
       }
@@ -2221,7 +2253,7 @@ export const UserInfoAccessableDataproductDocument = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
     }
@@ -2289,7 +2321,7 @@ export const UserInfoUserProductsDocument = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
       collections {
@@ -2301,7 +2333,7 @@ export const UserInfoUserProductsDocument = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
     }

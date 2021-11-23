@@ -14,7 +14,7 @@ export const SEARCH_CONTENT = gql`
           lastModified
           owner {
             group
-            teamkatalogen
+            teamkatalogenURL
           }
         }
         ... on Dataproduct {
@@ -26,7 +26,7 @@ export const SEARCH_CONTENT = gql`
           lastModified
           owner {
             group
-            teamkatalogen
+            teamkatalogenURL
           }
         }
       }
