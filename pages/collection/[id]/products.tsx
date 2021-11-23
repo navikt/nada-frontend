@@ -7,7 +7,7 @@ import amplitudeLog from '../../../lib/amplitude'
 import LoaderSpinner from '../../../components/lib/spinner'
 import * as React from 'react'
 import Head from 'next/head'
-import ProductManager from '../../../components/collections/dataproducts/ProductManager'
+import DataproductManager from '../../../components/collections/dataproducts/DataproductManager'
 import Link from 'next/link'
 import styled from 'styled-components'
 import TopBar from '../../../components/lib/topBar'
@@ -55,7 +55,7 @@ export const DatacollectionEdit = ({ id }: DatacollectionFetcherProps) => {
           <Name>Administrer dataprodukter</Name>
         </TopBar>
         <CollectionBody>
-          <ProductManager collection={data.collection} />
+          <DataproductManager collection={data.collection} />
           <Link href={`/collection/${data.collection.id}`}>Tilbake</Link>
         </CollectionBody>
       </Collection>

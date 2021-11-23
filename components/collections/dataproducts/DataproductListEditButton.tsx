@@ -37,7 +37,9 @@ interface DataproductsEditButtonProps {
   collection: CollectionQuery['collection']
 }
 
-const DataproductsEditButton = ({ collection }: DataproductsEditButtonProps) =>
+const DataproductListEditButton = ({
+  collection,
+}: DataproductsEditButtonProps) =>
   collection.elements.length ? (
     <Link href={`/collection/${collection.id}/products`}>
       <Container>
@@ -54,4 +56,4 @@ const DataproductsEditButton = ({ collection }: DataproductsEditButtonProps) =>
     </Link>
   )
 
-export default DataproductsEditButton
+export default DataproductListEditButton

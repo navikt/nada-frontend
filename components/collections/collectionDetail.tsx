@@ -17,7 +17,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
 import { BackButton } from '../lib/BackButton'
-import DataproductsEditButton from './dataproducts/dataproductsEditButton'
+import DataproductListEditButton from './dataproducts/DataproductListEditButton'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
@@ -87,7 +87,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           </Description>
           <SectionHeader>Dataprodukter</SectionHeader>
           <DataproductList collection={collection} />
-          {isOwner && <DataproductsEditButton collection={collection} />}
+          {isOwner && <DataproductListEditButton collection={collection} />}
           <DeleteModal
             open={showDelete}
             onCancel={() => setShowDelete(false)}

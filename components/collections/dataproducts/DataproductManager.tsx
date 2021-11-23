@@ -107,7 +107,7 @@ const ProductSearchResults = ({
   )
 }
 
-export const ProductManager = ({ collection }: ProductManagerProps) => {
+export const DataproductManager = ({ collection }: ProductManagerProps) => {
   const initCollectionElements = collection?.elements?.map((e) => e.id) || []
 
   const [selectedProduct, setSelectedProduct] = useState<string[]>(
@@ -167,4 +167,4 @@ export const ProductManager = ({ collection }: ProductManagerProps) => {
     </ProductCards>
   )
 }
-export default ProductManager
+export default DataproductManager
