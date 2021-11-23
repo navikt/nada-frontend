@@ -33,12 +33,11 @@ const Container = styled.div`
   }
 `
 
-interface NewDataproductCardProps {
-  onClick: (data: any) => void
+interface DataproductsEditButtonProps {
   collection: CollectionQuery['collection']
 }
 
-const NewDataproductCard = ({ collection }: NewDataproductCardProps) =>
+const DataproductsEditButton = ({ collection }: DataproductsEditButtonProps) =>
   collection.elements.length ? (
     <Link href={`/collection/${collection.id}/products`}>
       <Container>
@@ -55,4 +54,4 @@ const NewDataproductCard = ({ collection }: NewDataproductCardProps) =>
     </Link>
   )
 
-export default NewDataproductCard
+export default DataproductsEditButton

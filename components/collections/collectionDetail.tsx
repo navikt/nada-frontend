@@ -17,7 +17,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
 import { BackButton } from '../lib/BackButton'
-import { DataproductsEditButton } from './dataproducts/DataproductsEditButton'
+import DataproductsEditButton from './dataproducts/dataproductsEditButton'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']

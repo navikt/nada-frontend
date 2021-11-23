@@ -1,11 +1,6 @@
-import { Card, CardHeader, CardContent } from '@mui/material'
+import { CardHeader, CardContent } from '@mui/material'
 import DataProductSpinner from '../../lib/spinner'
-import {
-  navBlaLighten80,
-  navGra20,
-  navGronn,
-  navRod,
-} from '../../../styles/constants'
+import { navBlaLighten80, navGronn, navRod } from '../../../styles/constants'
 import styled from 'styled-components'
 import IconBox from '../../lib/icons/iconBox'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
@@ -70,7 +65,7 @@ interface MiniDataproductCardProps {
 }
 
 const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
-  const { data, loading, error } = useDataproductSummaryQuery({
+  const { data, error } = useDataproductSummaryQuery({
     variables: { id },
   })
 
@@ -82,7 +77,7 @@ const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
       </InertDatasetCardDiv>
     )
 
-  if (loading)
+  if (!data)
     return (
       <InertDatasetCardDiv>
         <CardHeader title={'Laster...'} />
@@ -92,7 +87,7 @@ const MiniDataProductCard = ({ id, handleClick }: MiniDataproductCardProps) => {
       </InertDatasetCardDiv>
     )
 
-  const { dataproduct } = data as DataproductSummaryQuery
+  const { dataproduct } = data
 
   return (
     <DatasetCardDiv onClick={() => handleClick(id)}>
