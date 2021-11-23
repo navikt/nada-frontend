@@ -22,10 +22,10 @@ const SearchDiv = styled.div`
 `
 
 interface ProductSearchBoxProps {
-  onSubmit: (value: string) => void
+  onSearch: (value: string) => void
 }
 
-export default function ProductSearchBox({ onSubmit }: ProductSearchBoxProps) {
+export default function ProductSearchBox({ onSearch }: ProductSearchBoxProps) {
   const [value, setValue] = useState<string>('')
 
   return (
@@ -38,14 +38,14 @@ export default function ProductSearchBox({ onSubmit }: ProductSearchBoxProps) {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              onSubmit(value)
+              onSearch(value)
             }
           }}
         />
         <Button
           aria-label={'Søk'}
           onClick={() => {
-            onSubmit(value)
+            onSearch(value)
           }}
         >
           <Search />

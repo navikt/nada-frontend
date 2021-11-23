@@ -20,6 +20,7 @@ import { DescriptionExcerpt } from '../../../lib/descriptionExcerpt'
 const DatasetCardDiv = styled.div`
   width: 100%;
   margin: 5px;
+
   max-height: 150px;
   display: flex;
   border: 1px solid #999;
@@ -30,10 +31,6 @@ const DatasetCardDiv = styled.div`
 
   :hover {
     background-color: ${navBlaLighten80};
-  }
-
-  > div {
-    padding: 5px;
   }
 
   p {

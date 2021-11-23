@@ -1,7 +1,7 @@
 import { CollectionQuery } from '../../../lib/schema/graphql'
 import { useState } from 'react'
 import NewDataproductCard from './newDataproductCard'
-import AddProductModal from './addProductModal'
+import ProductManager from './ProductManager'
 
 interface DataproductListProps {
   collection: CollectionQuery['collection']
@@ -10,19 +10,5 @@ interface DataproductListProps {
 export const DataproductsEditButton = ({
   collection,
 }: DataproductListProps) => {
-  const [showNewDataproduct, setShowNewDataproduct] = useState<boolean>(false)
-
-  return (
-    <>
-      <NewDataproductCard
-        collection={collection}
-        onClick={() => setShowNewDataproduct(true)}
-      />
-      <AddProductModal
-        collection={collection}
-        open={showNewDataproduct}
-        setOpen={setShowNewDataproduct}
-      />
-    </>
-  )
+  return <NewDataproductCard collection={collection} />
 }
