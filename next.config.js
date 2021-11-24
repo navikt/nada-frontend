@@ -4,7 +4,11 @@ const { getBackendURI } = require('./lib/api/config.js')
 // for react-md-editor. see https://github.com/uiwjs/react-md-editor#support-nextjs
 const removeImports = require('next-remove-imports')()
 
-module.exports = removeImports({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withBundleAnalyzer(removeImports({
   reactStrictMode: true,
   rewrites: async () => [
     {
@@ -12,4 +16,4 @@ module.exports = removeImports({
       destination: `${getBackendURI()}/:path*`, // Proxy to backend
     },
   ],
-})
+}))

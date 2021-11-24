@@ -334,6 +334,8 @@ export type NewCollection = {
   keywords?: Maybe<Array<Scalars['String']>>
   /** name of the collection. */
   name: Scalars['String']
+  /** owner Teamkatalogen URL for the collection. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
@@ -354,6 +356,8 @@ export type NewDataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters?: Maybe<Array<Scalars['String']>>
+  /** owner Teamkatalogen URL for the dataproduct. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** Owner contains metadata on the owner of the dataproduct. */
@@ -361,8 +365,8 @@ export type Owner = {
   __typename?: 'Owner'
   /** owner group is the email for the group. */
   group: Scalars['String']
-  /** teamkatalogen is url for the team in the NAV team catalog. */
-  teamkatalogen: Scalars['String']
+  /** teamkatalogenURL is url for the team in the NAV team catalog. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 export type Query = {
@@ -497,6 +501,8 @@ export type UpdateCollection = {
   keywords?: Maybe<Array<Scalars['String']>>
   /** name of the collection. */
   name: Scalars['String']
+  /** owner Teamkatalogen URL for the collection. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** UpdateDataproduct contains metadata for updating a dataproduct */
@@ -513,6 +519,8 @@ export type UpdateDataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters?: Maybe<Array<Scalars['String']>>
+  /** owner Teamkatalogen URL for the dataproduct. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** UserInfo contains metadata on a logged in user */
@@ -708,7 +716,11 @@ export type DataproductQuery = {
     pii: boolean
     keywords: Array<string>
     collections: Array<{ __typename: 'Collection'; id: string; name: string }>
-    owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
     datasource: {
       __typename?: 'BigQuery'
       projectID: string
@@ -809,7 +821,11 @@ export type SearchContentQuery = {
           description?: string | null | undefined
           created: any
           lastModified: any
-          owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
         }
       | {
           __typename: 'Dataproduct'
@@ -818,8 +834,25 @@ export type SearchContentQuery = {
           description?: string | null | undefined
           created: any
           lastModified: any
-          owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
         }
+  }>
+}
+
+export type TeamkatalogenQueryVariables = Exact<{
+  q: Scalars['String']
+}>
+
+export type TeamkatalogenQuery = {
+  __typename?: 'Query'
+  teamkatalogen: Array<{
+    __typename?: 'TeamkatalogenResult'
+    name: string
+    url: string
   }>
 }
 
@@ -855,7 +888,11 @@ export type UserInfoAccessableDataproductQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
     }>
   }
 }
@@ -873,7 +910,11 @@ export type UserInfoUserProductsQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
     }>
     collections: Array<{
       __typename: 'Collection'
@@ -882,7 +923,11 @@ export type UserInfoUserProductsQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
-      owner: { __typename?: 'Owner'; group: string; teamkatalogen: string }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
     }>
   }
 }
@@ -1629,7 +1674,7 @@ export const DataproductDocument = gql`
       }
       owner {
         group
-        teamkatalogen
+        teamkatalogenURL
       }
       datasource {
         type: __typename
@@ -1998,7 +2043,7 @@ export const SearchContentDocument = gql`
           lastModified
           owner {
             group
-            teamkatalogen
+            teamkatalogenURL
           }
         }
         ... on Dataproduct {
@@ -2010,7 +2055,7 @@ export const SearchContentDocument = gql`
           lastModified
           owner {
             group
-            teamkatalogen
+            teamkatalogenURL
           }
         }
       }
@@ -2067,6 +2112,65 @@ export type SearchContentLazyQueryHookResult = ReturnType<
 export type SearchContentQueryResult = Apollo.QueryResult<
   SearchContentQuery,
   SearchContentQueryVariables
+>
+export const TeamkatalogenDocument = gql`
+  query Teamkatalogen($q: String!) {
+    teamkatalogen(q: $q) {
+      name
+      url
+    }
+  }
+`
+
+/**
+ * __useTeamkatalogenQuery__
+ *
+ * To run a query within a React component, call `useTeamkatalogenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamkatalogenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamkatalogenQuery({
+ *   variables: {
+ *      q: // value for 'q'
+ *   },
+ * });
+ */
+export function useTeamkatalogenQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TeamkatalogenQuery,
+    TeamkatalogenQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(
+    TeamkatalogenDocument,
+    options
+  )
+}
+export function useTeamkatalogenLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TeamkatalogenQuery,
+    TeamkatalogenQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(
+    TeamkatalogenDocument,
+    options
+  )
+}
+export type TeamkatalogenQueryHookResult = ReturnType<
+  typeof useTeamkatalogenQuery
+>
+export type TeamkatalogenLazyQueryHookResult = ReturnType<
+  typeof useTeamkatalogenLazyQuery
+>
+export type TeamkatalogenQueryResult = Apollo.QueryResult<
+  TeamkatalogenQuery,
+  TeamkatalogenQueryVariables
 >
 export const UserInfoDetailsDocument = gql`
   query userInfoDetails {
@@ -2149,7 +2253,7 @@ export const UserInfoAccessableDataproductDocument = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
     }
@@ -2217,7 +2321,7 @@ export const UserInfoUserProductsDocument = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
       collections {
@@ -2229,7 +2333,7 @@ export const UserInfoUserProductsDocument = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
     }

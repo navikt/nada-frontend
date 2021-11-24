@@ -18,7 +18,7 @@ export const GET_DATAPRODUCT = gql`
       }
       owner {
         group
-        teamkatalogen
+        teamkatalogenURL
       }
       datasource {
         type: __typename

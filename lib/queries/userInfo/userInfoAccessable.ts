@@ -12,7 +12,7 @@ export const USER_INFO_ACCESSABLE_DATAPRODUCT = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
     }

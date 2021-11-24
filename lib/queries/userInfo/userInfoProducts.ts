@@ -12,7 +12,7 @@ export const USER_INFO_USER_Products = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
       collections {
@@ -24,7 +24,7 @@ export const USER_INFO_USER_Products = gql`
         lastModified
         owner {
           group
-          teamkatalogen
+          teamkatalogenURL
         }
       }
     }

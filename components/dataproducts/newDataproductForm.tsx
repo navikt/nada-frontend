@@ -9,6 +9,7 @@ import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
 import TeamSelector from '../lib/teamSelector'
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { DataproductSourceForm } from './dataproductSourceForm'
 import { NewDataproduct } from '../../lib/schema/graphql'
 import { useEffect } from 'react'
@@ -26,6 +27,8 @@ export const NewDataproductForm = () => {
   useEffect(() => {
     setValue('pii', true)
   }, [setValue])
+
+  const group = watch('group')
 
   const [createDataproduct, { data, loading, error: backendError }] =
     useMutation(CREATE_DATAPRODUCT, {
@@ -102,6 +105,7 @@ export const NewDataproductForm = () => {
           errors={errors}
           setValue={setValue}
         />
+        {group ? <TeamkatalogenSelector group={group} register={register} errors={errors} watch={watch} /> : null }
         <KeywordsInput
           keywords={keywords}
           setKeywords={setKeywords}
