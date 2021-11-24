@@ -12,10 +12,7 @@ import { Box, Modal } from '@mui/material'
 import { endOfDay } from 'date-fns'
 import AccessSubmit from './accessSubmit'
 import amplitudeLog from '../../../lib/amplitude'
-
-const DesktopDatePicker = dynamic(() => import('@mui/lab/DesktopDatePicker'), {
-  ssr: false,
-})
+import { DesktopDatePicker } from '@mui/lab'
 
 interface AddAccessProps {
   dataproductID: string
