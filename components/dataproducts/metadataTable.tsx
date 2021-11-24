@@ -5,6 +5,7 @@ import humanizeDate from '../lib/humanizeDate'
 import { DataproductQuery } from '../../lib/schema/graphql'
 import styled from 'styled-components'
 import * as React from 'react'
+import { ExternalLink } from '@navikt/ds-icons'
 
 interface CollectionProps {
   collections: DataproductQuery['dataproduct']['collections']
@@ -60,9 +61,9 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
         <th>Eier:</th>
         <td>
           {product.owner?.teamkatalogenURL ? (
-            <Link href={product.owner.teamkatalogenURL}>
-              {product.owner.group}
-            </Link>
+            <a href={product.owner.teamkatalogenURL} target="_blank" rel="noreferrer" >
+              {product.owner.group.split('@')[0]}{' '} <ExternalLink />
+            </a>
           ) : (
             product.owner?.group
           )}

@@ -7,6 +7,7 @@ import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
 import { Name } from '../lib/detailTypography'
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import {
   Dataproduct,
   DataproductQuery,
@@ -45,6 +46,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
         description: product.description,
         repo: product.repo,
         keywords: product.keywords,
+        teamkatalogenURL: product.owner.teamkatalogenURL,
         pii: product.pii,
       },
     })
@@ -95,6 +97,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 {...register('repo')}
                 error={errors.repo?.message}
               />
+              <TeamkatalogenSelector group={product.owner.group} register={register} errors={errors} watch={watch} />
               <KeywordsInput
                 keywords={keywords}
                 setKeywords={setKeywords}

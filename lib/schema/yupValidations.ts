@@ -13,6 +13,7 @@ export const updateDataproductValidation = yup.object().shape({
   description: yup.string(),
   slug: yup.string(),
   repo: yup.string(),
+  teamkatalogenURL: yup.string().url(),
   pii: yup
     .boolean()
     .required('Inneholder datasettet personidentifiserende informasjon?'),

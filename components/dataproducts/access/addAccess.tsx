@@ -3,7 +3,6 @@ import {
   SubjectType,
   useGrantAccessMutation,
 } from '../../../lib/schema/graphql'
-import dynamic from 'next/dynamic'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { useState } from 'react'
 import { LocalizationProvider } from '@mui/lab'
