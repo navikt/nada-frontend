@@ -2,7 +2,7 @@ name: build and push
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   set-version:
     name: Set version
