@@ -105,7 +105,14 @@ export const NewDataproductForm = () => {
           errors={errors}
           setValue={setValue}
         />
-        {group ? <TeamkatalogenSelector group={group} register={register} errors={errors} watch={watch} /> : null }
+        {group ? (
+          <TeamkatalogenSelector
+            group={group}
+            register={register}
+            errors={errors}
+            watch={watch}
+          />
+        ) : null}
         <KeywordsInput
           keywords={keywords}
           setKeywords={setKeywords}

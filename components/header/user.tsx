@@ -47,13 +47,13 @@ export default function User() {
       {userState ? (
         <>
           <IconButton
-            size="large"
-            edge="end"
-            aria-label="brukermeny"
+            size='large'
+            edge='end'
+            aria-label='brukermeny'
             aria-controls={menuId}
-            aria-haspopup="true"
+            aria-haspopup='true'
             onClick={handleProfileMenuOpen}
-            color="inherit"
+            color='inherit'
           >
             <People />
           </IconButton>
@@ -103,9 +103,9 @@ export default function User() {
         </>
       ) : (
         <Button
-          key="logg-inn"
-          variant="primary"
-          size="small"
+          key='logg-inn'
+          variant='primary'
+          size='small'
           onClick={() => (window.location.href = '/api/login')}
         >
           Logg inn

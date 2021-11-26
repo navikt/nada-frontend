@@ -11,12 +11,11 @@ import {
 } from '../lib/schema/graphql'
 import { APOLLO_APP_STATE_PROP_NAME, getUserInfoCache } from '../lib/apollo'
 import App from 'next/app'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useApollo } from '../lib/apollo'
 
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
-import amplitude from 'amplitude-js'
 import PageLayout from '../components/pageLayout'
 
 type MyAppProps = AppProps & {

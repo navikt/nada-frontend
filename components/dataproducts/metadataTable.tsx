@@ -61,8 +61,12 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
         <th>Eier:</th>
         <td>
           {product.owner?.teamkatalogenURL ? (
-            <a href={product.owner.teamkatalogenURL} target="_blank" rel="noreferrer" >
-              {product.owner.group.split('@')[0]}{' '} <ExternalLink />
+            <a
+              href={product.owner.teamkatalogenURL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {product.owner.group.split('@')[0]} <ExternalLink />
             </a>
           ) : (
             product.owner?.group

@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import { Datasource, TableColumn } from '../../lib/schema/graphql'
+import { Datasource } from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
 import { UrlLink } from '../widgets/UrlLink'
 import { Accordion } from '@navikt/ds-react'

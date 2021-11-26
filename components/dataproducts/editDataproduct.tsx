@@ -97,7 +97,12 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 {...register('repo')}
                 error={errors.repo?.message}
               />
-              <TeamkatalogenSelector group={product.owner.group} register={register} errors={errors} watch={watch} />
+              <TeamkatalogenSelector
+                group={product.owner.group}
+                register={register}
+                errors={errors}
+                watch={watch}
+              />
               <KeywordsInput
                 keywords={keywords}
                 setKeywords={setKeywords}

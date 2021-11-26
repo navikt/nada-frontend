@@ -1,13 +1,13 @@
 import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
 import { useDataproductQuery } from '../../../lib/schema/graphql'
-import { GetServerSideProps, GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import { addApolloState, getApolloClient } from '../../../lib/apollo'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
+import * as React from 'react'
 import { useEffect } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import EditDataproduct from '../../../components/dataproducts/editDataproduct'
-import * as React from 'react'
 import Head from 'next/head'
 
 interface DataproductProps {

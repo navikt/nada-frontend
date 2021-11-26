@@ -6,4 +6,6 @@ const LogoImage = styled.img`
   margin: 0 auto;
 `
 
-export const FrontPageLogo = () => <LogoImage src="/navdata-logo.svg" alt="nav data logo"/>
+export const FrontPageLogo = () => (
+  <LogoImage src="/navdata-logo.svg" alt="nav data logo" />
+)

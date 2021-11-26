@@ -1,10 +1,9 @@
 import styled from 'styled-components'
-import React, { useContext, MouseEvent } from 'react'
+import React, { MouseEvent, useContext } from 'react'
 import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { AddCircleFilled } from '@navikt/ds-icons'
-import { useRouter } from 'next/router'
 
 const CreateBox = styled.div`
   white-space: nowrap;

@@ -35,12 +35,12 @@ const SearchIcon = styled(Search)``
 const redirectPath = (query: string) =>
   query.length
     ? {
-      pathname: '/search',
-      query: { q: query },
-    }
+        pathname: '/search',
+        query: { q: query },
+      }
     : {
-      pathname: '/',
-    }
+        pathname: '/',
+      }
 
 export interface FrontPageSearchBoxProps {
   onSearch: (query: string) => void

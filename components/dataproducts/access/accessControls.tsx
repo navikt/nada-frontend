@@ -50,7 +50,7 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
 
   const access = data.dataproduct.access
   const requesters = data.dataproduct.requesters
-  const name = data.dataproduct.name;
+  const name = data.dataproduct.name
 
   if (!userState)
     return (
@@ -98,5 +98,7 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
     )
   }
 
-  return <UserAccess id={id} name={name} access={access} requesters={requesters} />
+  return (
+    <UserAccess id={id} name={name} access={access} requesters={requesters} />
+  )
 }

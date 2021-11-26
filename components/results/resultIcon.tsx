@@ -8,15 +8,25 @@ interface LogoProps {
 
 export const CollectionLogo = ({ size = undefined }: LogoProps) =>
   size ? (
-    <img width={size} height={size} src="/result-icons/datacollection.svg" alt="data collection logo"/>
+    <img
+      width={size}
+      height={size}
+      src="/result-icons/datacollection.svg"
+      alt="data collection logo"
+    />
   ) : (
-    <img src="/result-icons/datacollection.svg" alt="data collection logo"/>
+    <img src="/result-icons/datacollection.svg" alt="data collection logo" />
   )
 export const ProductLogo = ({ size = undefined }: LogoProps) =>
   size ? (
-    <img width={size} height={size} src="/result-icons/dataproduct.svg" alt="data product logo"/>
+    <img
+      width={size}
+      height={size}
+      src="/result-icons/dataproduct.svg"
+      alt="data product logo"
+    />
   ) : (
-    <img src="/result-icons/dataproduct.svg" alt="data product logo"/>
+    <img src="/result-icons/dataproduct.svg" alt="data product logo" />
   )
 
 type Result = ArrayElement<SearchContentQuery['search']>['result']

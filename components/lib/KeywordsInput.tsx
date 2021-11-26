@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import ReactTags, { Tag } from 'react-tag-autocomplete'
 import styled from 'styled-components'
-import Keyword, { ReactTagKeywordShim } from '../widgets/Keyword'
+import { ReactTagKeywordShim } from '../widgets/Keyword'
 
 export interface KeywordsInputProps {
   keywords?: string[]
   setKeywords: (value: string[]) => void
   error?: string
 }
+
 const StyledRectTags = styled.div`
   margin-top: 8px;
 

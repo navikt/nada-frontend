@@ -8,10 +8,7 @@ import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import { CreateForm } from '../lib/CreateForm'
-import {
-  SearchContentQuery,
-  UserInfoDetailsQuery,
-} from '../../lib/schema/graphql'
+import { UserInfoDetailsQuery } from '../../lib/schema/graphql'
 import amplitudeLog from '../../lib/amplitude'
 
 interface NewDatacollectionFormProps {
