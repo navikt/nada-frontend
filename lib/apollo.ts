@@ -1,139 +1,145 @@
-import { useMemo } from 'react'
+import {useMemo} from 'react'
 import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
+    ApolloClient,
+    HttpLink,
+    InMemoryCache,
+    NormalizedCacheObject,
 } from '@apollo/client'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
-import { USER_INFO } from './queries/userInfo/userInfo'
-import { UserInfoDetailsDocument } from './schema/graphql'
+import {USER_INFO} from './queries/userInfo/userInfo'
+import {UserInfoDetailsDocument} from './schema/graphql'
+
 const isServer = typeof window === 'undefined'
-import { defaultDataIdFromObject } from '@apollo/client'
+import {defaultDataIdFromObject} from '@apollo/client'
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 export const APOLLO_APP_STATE_PROP_NAME = '__APOLLO_APP_STATE__'
 
-const apolloQueryURI = isServer
-  ? 'http://127.0.0.1:3000/api/query'
-  : '/api/query'
-
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
+const getQueryURI = () => {
+    if (process.env.NODE_ENV === "development") {
+        return "http://127.0.0.1:8080/api/query"
+    }
+
+    return isServer ? "http://nada-backend/api/query" : "/api/query"
+}
+
 function createApolloClient() {
-  return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: apolloQueryURI,
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-    }),
-    cache: new InMemoryCache({
-      dataIdFromObject(responseObject) {
-        switch (responseObject.__typename) {
-          case 'UserInfo':
-            return `UserInfo:${responseObject.email}`
-          case 'Group':
-            return `Group:${responseObject.email}`
-          default:
-            return defaultDataIdFromObject(responseObject)
-        }
-      },
-    }),
-  })
+
+    return new ApolloClient({
+        ssrMode: typeof window === 'undefined',
+        link: new HttpLink({
+            uri: getQueryURI(),
+            credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+        }),
+        cache: new InMemoryCache({
+            dataIdFromObject(responseObject) {
+                switch (responseObject.__typename) {
+                    case 'UserInfo':
+                        return `UserInfo:${responseObject.email}`
+                    case 'Group':
+                        return `Group:${responseObject.email}`
+                    default:
+                        return defaultDataIdFromObject(responseObject)
+                }
+            },
+        }),
+    })
 }
 
 const mergeCaches = (
-  newCache: NormalizedCacheObject,
-  existing: NormalizedCacheObject
+    newCache: NormalizedCacheObject,
+    existing: NormalizedCacheObject
 ) =>
-  merge(newCache, existing, {
-    // combine arrays using object equality (like in sets)
-    arrayMerge: (destinationArray, sourceArray) => [
-      ...sourceArray,
-      ...destinationArray.filter((d) =>
-        sourceArray.every((s) => !isEqual(d, s))
-      ),
-    ],
-  })
+    merge(newCache, existing, {
+        // combine arrays using object equality (like in sets)
+        arrayMerge: (destinationArray, sourceArray) => [
+            ...sourceArray,
+            ...destinationArray.filter((d) =>
+                sourceArray.every((s) => !isEqual(d, s))
+            ),
+        ],
+    })
 
 export function getApolloClient(initialState?: NormalizedCacheObject) {
-  const _apolloClient = apolloClient ?? createApolloClient()
+    const _apolloClient = apolloClient ?? createApolloClient()
 
-  // If your page has Next.js data fetching methods that use Apollo Client, the initial state
-  // gets hydrated here
-  if (initialState) {
-    // Get existing cache, loaded during client side data fetching
-    const existingCache = _apolloClient.extract()
+    // If your page has Next.js data fetching methods that use Apollo Client, the initial state
+    // gets hydrated here
+    if (initialState) {
+        // Get existing cache, loaded during client side data fetching
+        const existingCache = _apolloClient.extract()
 
-    // Merge the existing cache into data passed from getStaticProps/getServerSideProps
-    const data = mergeCaches(initialState, existingCache)
+        // Merge the existing cache into data passed from getStaticProps/getServerSideProps
+        const data = mergeCaches(initialState, existingCache)
 
-    // Restore the cache with the merged data
-    _apolloClient.cache.restore(data)
-  }
-  // For SSG and SSR always create a new Apollo Client
-  if (typeof window === 'undefined') return _apolloClient
-  // Create the Apollo Client once in the client
-  if (!apolloClient) apolloClient = _apolloClient
+        // Restore the cache with the merged data
+        _apolloClient.cache.restore(data)
+    }
+    // For SSG and SSR always create a new Apollo Client
+    if (typeof window === 'undefined') return _apolloClient
+    // Create the Apollo Client once in the client
+    if (!apolloClient) apolloClient = _apolloClient
 
-  return _apolloClient
+    return _apolloClient
 }
 
 export function addApolloState(client: any, pageProps?: any) {
-  if (typeof pageProps === 'undefined') pageProps = { props: {} }
-  pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
+    if (typeof pageProps === 'undefined') pageProps = {props: {}}
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
 
-  return pageProps
+    return pageProps
 }
 
 export function useApollo(pageProps: any) {
-  // we cannot read a prop generated by getInitialProps inside getServerSideProps...
-  // so we have to kludge around this by generating two caches, then merging them.
+    // we cannot read a prop generated by getInitialProps inside getServerSideProps...
+    // so we have to kludge around this by generating two caches, then merging them.
 
-  return useMemo(
-    () =>
-      getApolloClient(
-        mergeCaches(
-          pageProps[APOLLO_STATE_PROP_NAME] || {},
-          pageProps[APOLLO_APP_STATE_PROP_NAME] || {}
-        )
-      ),
-    [pageProps]
-  )
+    return useMemo(
+        () =>
+            getApolloClient(
+                mergeCaches(
+                    pageProps[APOLLO_STATE_PROP_NAME] || {},
+                    pageProps[APOLLO_APP_STATE_PROP_NAME] || {}
+                )
+            ),
+        [pageProps]
+    )
 }
 
 export interface getUserInfoParams {
-  cookie?: string
-  client?: ApolloClient<NormalizedCacheObject>
+    cookie?: string
+    client?: ApolloClient<NormalizedCacheObject>
 }
 
 export const getUserInfoCache = async ({
-  cookie,
-  client,
-}: getUserInfoParams) => {
-  if (typeof client === 'undefined') {
-    client = new ApolloClient({
-      ssrMode: true,
-      link: new HttpLink({
-        uri: apolloQueryURI,
-        credentials: 'same-origin',
-        headers: {
-          cookie,
-        },
-      }),
-      cache: new InMemoryCache(),
-    })
-  }
-
-  try {
-    await client.query({ query: UserInfoDetailsDocument })
-    return client.cache.extract()
-  } catch (e: any) {
-    if (e?.graphQLErrors?.[0]?.message === 'access denied') return undefined
-    else {
-      console.log('unexpected error while pre-fetching user info:', e)
-      return undefined
+                                           cookie,
+                                           client,
+                                       }: getUserInfoParams) => {
+    if (typeof client === 'undefined') {
+        client = new ApolloClient({
+            ssrMode: true,
+            link: new HttpLink({
+                uri: getQueryURI(),
+                credentials: 'same-origin',
+                headers: {
+                    cookie,
+                },
+            }),
+            cache: new InMemoryCache(),
+        })
     }
-  }
+
+    try {
+        await client.query({query: UserInfoDetailsDocument})
+        return client.cache.extract()
+    } catch (e: any) {
+        if (e?.graphQLErrors?.[0]?.message === 'access denied') return undefined
+        else {
+            console.log('unexpected error while pre-fetching user info:', e)
+            return undefined
+        }
+    }
 }
