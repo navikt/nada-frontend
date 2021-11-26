@@ -2,9 +2,9 @@ FROM node:16-alpine AS node-with-deps
 
 WORKDIR /usr/app
 
-COPY package.json .
+COPY package*.json .
 
-RUN yarn install --quiet
+RUN npm install --quiet
 
 FROM node-with-deps
 
@@ -14,6 +14,6 @@ ENV NODE_ENV production
 ENV NEXT_PUBLIC_ENV production
 ENV NEXT_PUBLIC_BACKEND http://nada-backend/api
 
-RUN yarn build
+RUN npm run build
 
-CMD yarn run start
+CMD npm run start
