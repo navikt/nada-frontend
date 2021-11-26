@@ -13,7 +13,6 @@ import {
   DataproductQuery,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
-import DescriptionEditor from '../lib/DescriptionEditor'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
@@ -85,11 +84,6 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 label="Navn"
                 {...register('name')}
                 error={errors.name?.message}
-              />
-              <DescriptionEditor
-                label="Beskrivelse"
-                name="description"
-                control={control}
               />
               <TextField
                 id="repo"

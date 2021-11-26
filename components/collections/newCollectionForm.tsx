@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { UserState } from '../../lib/context'
 import KeywordsInput from '../lib/KeywordsInput'
-import DescriptionEditor from '../lib/DescriptionEditor'
 import { CreateForm } from '../lib/CreateForm'
 import {
   SearchContentQuery,
@@ -52,11 +51,6 @@ export const NewCollectionForm = ({
           label="Navn"
           {...register('name')}
           error={errors.name?.message}
-        />
-        <DescriptionEditor
-          label="Beskrivelse"
-          name="description"
-          control={control}
         />
         <Select
           label="Team"

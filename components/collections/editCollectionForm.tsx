@@ -9,7 +9,6 @@ import {
   CollectionQuery,
   useUpdateCollectionMutation,
 } from '../../lib/schema/graphql'
-import DescriptionEditor from '../lib/DescriptionEditor'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
 import { Name } from '../lib/detailTypography'
@@ -83,11 +82,6 @@ export const EditCollectionForm = ({
                 label="Navn"
                 {...register('name')}
                 error={errors.name?.message}
-              />
-              <DescriptionEditor
-                label="Beskrivelse"
-                name="description"
-                control={control}
               />
               <KeywordsInput
                 keywords={keywords}
