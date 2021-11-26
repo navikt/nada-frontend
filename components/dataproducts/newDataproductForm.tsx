@@ -13,6 +13,7 @@ import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { DataproductSourceForm } from './dataproductSourceForm'
 import { NewDataproduct } from '../../lib/schema/graphql'
 import { useEffect } from 'react'
+import DescriptionEditor from '../lib/DescriptionEditor'
 import { Fieldset, TextField } from '@navikt/ds-react'
 import { CreateForm } from '../lib/CreateForm'
 import amplitudeLog from '../../lib/amplitude'
@@ -85,6 +86,11 @@ export const NewDataproductForm = () => {
           label="Navn"
           {...register('name')}
           error={errors.name?.message}
+        />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="description"
+          control={control}
         />
         <TextField
           id="repo"
