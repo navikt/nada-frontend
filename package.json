@@ -38,7 +38,7 @@
     "nav-frontend-ikoner-assets": "^3.0.1",
     "nav-frontend-spinner": "^3.0.1",
     "nav-frontend-spinner-style": "^1.0.2",
-    "next": "11.1.2",
+    "next": "12.0.4",
     "next-remove-imports": "^1.0.6",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

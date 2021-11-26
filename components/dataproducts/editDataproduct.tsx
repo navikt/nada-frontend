@@ -1,7 +1,7 @@
 import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { useState } from 'react'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'

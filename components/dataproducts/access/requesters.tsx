@@ -4,15 +4,15 @@ import { AddCircle, Delete } from '@navikt/ds-icons'
 import { useState } from 'react'
 import { Button, Fieldset, Modal, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import {
   useAddRequesterMutation,
   useRemoveRequesterMutation,
 } from '../../../lib/schema/graphql'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { addRequesterValidation } from '../../../lib/schema/yupValidations'
 import { navBlaLighten20, navRod } from '../../../styles/constants'
-import { Stack } from '@mui/material'
+import Stack from '@mui/material/Stack'
 import * as React from 'react'
 
 const RemoveAccess = styled.div`

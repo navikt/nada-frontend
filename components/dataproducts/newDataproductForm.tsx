@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { useForm } from 'react-hook-form'
 import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import ErrorMessage from '../lib/error'
