@@ -2,7 +2,6 @@ import {
   CollectionElementType,
   CollectionQuery,
   useAddToCollectionMutation,
-  useRemoveFromCollectionMutation,
   useSearchContentQuery,
 } from '../../../lib/schema/graphql'
 import ProductSearchBox from '../../search/productSearchBox'
@@ -19,7 +18,7 @@ const ProductCards = styled.div`
 `
 
 const ColumnBox = styled.div`
-  width: 50%;
+  width: 90%;
   margin: 10px;
   padding: 10px;
   min-height: 600px;
@@ -35,17 +34,6 @@ const SearchResults = styled.div`
   height: 100%;
 `
 
-const AddedProductsBox = styled(ColumnBox)`
-  max-height: 600px;
-  display: flex;
-  flex-direction: column;
-`
-const AddedProducts = styled.div`
-  border-radius: 5px;
-  border: 1px solid #d5d5d5;
-  height: 100%;
-`
-
 const BoxHeader = styled.div`
   text-align: center;
 `
@@ -53,18 +41,12 @@ const BoxHeader = styled.div`
 interface ProductSearchResultsProps {
   q: string
   collection: CollectionQuery['collection']
-
-  // FIXME: This is an ugly kludge. State management should be handled by Apollo.
-  selectedProduct: string[]
-  setSelectedProduct: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const ProductSearchResults = ({
-  q,
-  collection,
-  selectedProduct,
-  setSelectedProduct,
-}: ProductSearchResultsProps) => {
+                                q,
+                                collection,
+                              }: ProductSearchResultsProps) => {
   const [addToCollection] = useAddToCollectionMutation()
   const { data } = useSearchContentQuery({ variables: { q: { text: q } } })
 
@@ -78,13 +60,12 @@ const ProductSearchResults = ({
       awaitRefetchQueries: true,
       refetchQueries: ['Collection'],
     })
-    setSelectedProduct([...selectedProduct, id])
   }
 
   const filteredProducts = data?.search.filter(
     (p) =>
-      !selectedProduct.includes(p.result.id) &&
-      p.result.__typename !== 'Collection'
+      !collection.elements.map((e) => e.id).includes(p.result.id) &&
+      p.result.__typename !== 'Collection',
   )
 
   if (!filteredProducts?.length)
@@ -108,28 +89,7 @@ const ProductSearchResults = ({
 }
 
 export const DataproductManager = ({ collection }: ProductManagerProps) => {
-  const initCollectionElements = collection?.elements?.map((e) => e.id) || []
-
-  const [selectedProduct, setSelectedProduct] = useState<string[]>(
-    initCollectionElements
-  )
-
   const [q, setQ] = useState('')
-
-  const [removeFromCollection] = useRemoveFromCollectionMutation()
-
-  const handleRemoveFromCollection = (id: string) => {
-    removeFromCollection({
-      variables: {
-        id: collection.id,
-        elementID: id,
-        elementType: CollectionElementType.Dataproduct,
-      },
-      awaitRefetchQueries: true,
-      refetchQueries: ['Collection'],
-    })
-    setSelectedProduct(selectedProduct.filter((p) => p !== id))
-  }
 
   return (
     <ProductCards>
@@ -137,33 +97,14 @@ export const DataproductManager = ({ collection }: ProductManagerProps) => {
         <BoxHeader>
           <h2>Tilgjengelige produkter</h2>
         </BoxHeader>
-
         <SearchResults>
           <ProductSearchBox onSearch={setQ} />
           <ProductSearchResults
             q={q}
             collection={collection}
-            selectedProduct={selectedProduct}
-            setSelectedProduct={setSelectedProduct}
           />
         </SearchResults>
       </SearchBox>
-      <AddedProductsBox>
-        <BoxHeader>
-          <h2>Inkluderte produkter</h2>
-        </BoxHeader>
-        <AddedProducts>
-          {collection.elements.map((p) => (
-            <div
-              key={p.id}
-              onClick={() => handleRemoveFromCollection(p.id)}
-              style={{ margin: '5px' }}
-            >
-              <DataproductCard id={p.id} />
-            </div>
-          ))}
-        </AddedProducts>
-      </AddedProductsBox>
     </ProductCards>
   )
 }

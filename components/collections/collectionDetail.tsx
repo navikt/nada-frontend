@@ -16,7 +16,7 @@ import { Description, Name, SectionHeader } from '../lib/detailTypography'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
 import { BackButton } from '../lib/BackButton'
-import DataproductListEditButton from './dataproducts/DataproductListEditButton'
+import AddDataproductToCollectionButton from './dataproducts/AddDataproductToCollectionButton'
 
 export interface CollectionDetailProps {
   collection: CollectionQuery['collection']
@@ -84,7 +84,7 @@ export const CollectionDetail = ({ collection }: CollectionDetailProps) => {
           <Description markdown={collection.description} />
           <SectionHeader>Dataprodukter</SectionHeader>
           <DataproductList collection={collection} />
-          {isOwner && <DataproductListEditButton collection={collection} />}
+          {isOwner && <AddDataproductToCollectionButton collection={collection} />}
           <DeleteModal
             open={showDelete}
             onCancel={() => setShowDelete(false)}
