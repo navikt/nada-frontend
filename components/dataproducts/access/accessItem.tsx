@@ -11,7 +11,6 @@ const AccessItemLinkDiv = styled.div`
   display: flex;
   padding: 16px 24px;
   margin-bottom: 15px;
-
   cursor: pointer;
 `
 

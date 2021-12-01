@@ -5,18 +5,6 @@ export const SEARCH_CONTENT = gql`
     search(q: $q) {
       excerpt
       result {
-        ... on Collection {
-          __typename
-          id
-          name
-          description
-          created
-          lastModified
-          owner {
-            group
-            teamkatalogenURL
-          }
-        }
         ... on Dataproduct {
           __typename
           id

@@ -391,7 +391,7 @@ export type Query = {
    * Requires authentication.
    */
   gcpGetTables: Array<BigQueryTable>
-  /** search through existing dataproducts and collections. */
+  /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>
@@ -455,7 +455,7 @@ export type SearchQuery = {
   text?: Maybe<Scalars['String']>
 }
 
-export type SearchResult = Collection | Dataproduct
+export type SearchResult = Dataproduct
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow'
@@ -538,6 +538,8 @@ export type UserInfo = {
   gcpProjects: Array<GcpProject>
   /** groups the user is a member of. */
   groups: Array<Group>
+  /** loginExpiration is when the token expires */
+  loginExpiration: Scalars['Time']
   /** name of user. */
   name: Scalars['String']
 }
@@ -616,80 +618,6 @@ export type RevokeAccessMutation = {
   revokeAccessToDataproduct: boolean
 }
 
-export type AddToCollectionMutationVariables = Exact<{
-  id: Scalars['ID']
-  elementID: Scalars['ID']
-  elementType: CollectionElementType
-}>
-
-export type AddToCollectionMutation = {
-  __typename?: 'Mutation'
-  addToCollection: boolean
-}
-
-export type CollectionQueryVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type CollectionQuery = {
-  __typename?: 'Query'
-  collection: {
-    __typename?: 'Collection'
-    id: string
-    name: string
-    description?: string | null | undefined
-    created: any
-    keywords: Array<string>
-    lastModified: any
-    owner: { __typename?: 'Owner'; group: string }
-    elements: Array<{
-      __typename: 'Dataproduct'
-      id: string
-      name: string
-      description?: string | null | undefined
-    }>
-  }
-}
-
-export type CreateCollectionMutationVariables = Exact<{
-  input: NewCollection
-}>
-
-export type CreateCollectionMutation = {
-  __typename?: 'Mutation'
-  createCollection: { __typename?: 'Collection'; id: string }
-}
-
-export type DeleteCollectionMutationVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type DeleteCollectionMutation = {
-  __typename?: 'Mutation'
-  deleteCollection: boolean
-}
-
-export type RemoveFromCollectionMutationVariables = Exact<{
-  id: Scalars['ID']
-  elementID: Scalars['ID']
-  elementType: CollectionElementType
-}>
-
-export type RemoveFromCollectionMutation = {
-  __typename?: 'Mutation'
-  removeFromCollection: boolean
-}
-
-export type UpdateCollectionMutationVariables = Exact<{
-  id: Scalars['ID']
-  input: UpdateCollection
-}>
-
-export type UpdateCollectionMutation = {
-  __typename?: 'Mutation'
-  updateCollection: { __typename?: 'Collection'; id: string }
-}
-
 export type CreateDataproductMutationVariables = Exact<{
   input: NewDataproduct
 }>
@@ -715,7 +643,6 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
-    collections: Array<{ __typename: 'Collection'; id: string; name: string }>
     owner: {
       __typename?: 'Owner'
       group: string
@@ -813,33 +740,19 @@ export type SearchContentQuery = {
   search: Array<{
     __typename?: 'SearchResultRow'
     excerpt: string
-    result:
-      | {
-          __typename: 'Collection'
-          id: string
-          name: string
-          description?: string | null | undefined
-          created: any
-          lastModified: any
-          owner: {
-            __typename?: 'Owner'
-            group: string
-            teamkatalogenURL?: string | null | undefined
-          }
-        }
-      | {
-          __typename: 'Dataproduct'
-          id: string
-          name: string
-          description?: string | null | undefined
-          created: any
-          lastModified: any
-          owner: {
-            __typename?: 'Owner'
-            group: string
-            teamkatalogenURL?: string | null | undefined
-          }
-        }
+    result: {
+      __typename: 'Dataproduct'
+      id: string
+      name: string
+      description?: string | null | undefined
+      created: any
+      lastModified: any
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
+    }
   }>
 }
 
@@ -883,41 +796,6 @@ export type UserInfoAccessableDataproductQuery = {
     __typename?: 'UserInfo'
     accessable: Array<{
       __typename: 'Dataproduct'
-      id: string
-      name: string
-      description?: string | null | undefined
-      created: any
-      lastModified: any
-      owner: {
-        __typename?: 'Owner'
-        group: string
-        teamkatalogenURL?: string | null | undefined
-      }
-    }>
-  }
-}
-
-export type UserInfoUserProductsQueryVariables = Exact<{ [key: string]: never }>
-
-export type UserInfoUserProductsQuery = {
-  __typename?: 'Query'
-  userInfo: {
-    __typename?: 'UserInfo'
-    dataproducts: Array<{
-      __typename: 'Dataproduct'
-      id: string
-      name: string
-      description?: string | null | undefined
-      created: any
-      lastModified: any
-      owner: {
-        __typename?: 'Owner'
-        group: string
-        teamkatalogenURL?: string | null | undefined
-      }
-    }>
-    collections: Array<{
-      __typename: 'Collection'
       id: string
       name: string
       description?: string | null | undefined
@@ -1273,339 +1151,6 @@ export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<
   RevokeAccessMutation,
   RevokeAccessMutationVariables
 >
-export const AddToCollectionDocument = gql`
-  mutation addToCollection(
-    $id: ID!
-    $elementID: ID!
-    $elementType: CollectionElementType!
-  ) {
-    addToCollection(id: $id, elementID: $elementID, elementType: $elementType)
-  }
-`
-export type AddToCollectionMutationFn = Apollo.MutationFunction<
-  AddToCollectionMutation,
-  AddToCollectionMutationVariables
->
-
-/**
- * __useAddToCollectionMutation__
- *
- * To run a mutation, you first call `useAddToCollectionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddToCollectionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addToCollectionMutation, { data, loading, error }] = useAddToCollectionMutation({
- *   variables: {
- *      id: // value for 'id'
- *      elementID: // value for 'elementID'
- *      elementType: // value for 'elementType'
- *   },
- * });
- */
-export function useAddToCollectionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddToCollectionMutation,
-    AddToCollectionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    AddToCollectionMutation,
-    AddToCollectionMutationVariables
-  >(AddToCollectionDocument, options)
-}
-export type AddToCollectionMutationHookResult = ReturnType<
-  typeof useAddToCollectionMutation
->
-export type AddToCollectionMutationResult =
-  Apollo.MutationResult<AddToCollectionMutation>
-export type AddToCollectionMutationOptions = Apollo.BaseMutationOptions<
-  AddToCollectionMutation,
-  AddToCollectionMutationVariables
->
-export const CollectionDocument = gql`
-  query Collection($id: ID!) {
-    collection(id: $id) {
-      id
-      name
-      description
-      created
-      keywords
-      lastModified
-      owner {
-        group
-      }
-      elements {
-        ... on Dataproduct {
-          __typename
-          id
-          name
-          description
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useCollectionQuery__
- *
- * To run a query within a React component, call `useCollectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useCollectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCollectionQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useCollectionQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    CollectionQuery,
-    CollectionQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<CollectionQuery, CollectionQueryVariables>(
-    CollectionDocument,
-    options
-  )
-}
-export function useCollectionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CollectionQuery,
-    CollectionQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<CollectionQuery, CollectionQueryVariables>(
-    CollectionDocument,
-    options
-  )
-}
-export type CollectionQueryHookResult = ReturnType<typeof useCollectionQuery>
-export type CollectionLazyQueryHookResult = ReturnType<
-  typeof useCollectionLazyQuery
->
-export type CollectionQueryResult = Apollo.QueryResult<
-  CollectionQuery,
-  CollectionQueryVariables
->
-export const CreateCollectionDocument = gql`
-  mutation createCollection($input: NewCollection!) {
-    createCollection(input: $input) {
-      id
-    }
-  }
-`
-export type CreateCollectionMutationFn = Apollo.MutationFunction<
-  CreateCollectionMutation,
-  CreateCollectionMutationVariables
->
-
-/**
- * __useCreateCollectionMutation__
- *
- * To run a mutation, you first call `useCreateCollectionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCollectionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCollectionMutation, { data, loading, error }] = useCreateCollectionMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateCollectionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCollectionMutation,
-    CreateCollectionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateCollectionMutation,
-    CreateCollectionMutationVariables
-  >(CreateCollectionDocument, options)
-}
-export type CreateCollectionMutationHookResult = ReturnType<
-  typeof useCreateCollectionMutation
->
-export type CreateCollectionMutationResult =
-  Apollo.MutationResult<CreateCollectionMutation>
-export type CreateCollectionMutationOptions = Apollo.BaseMutationOptions<
-  CreateCollectionMutation,
-  CreateCollectionMutationVariables
->
-export const DeleteCollectionDocument = gql`
-  mutation deleteCollection($id: ID!) {
-    deleteCollection(id: $id)
-  }
-`
-export type DeleteCollectionMutationFn = Apollo.MutationFunction<
-  DeleteCollectionMutation,
-  DeleteCollectionMutationVariables
->
-
-/**
- * __useDeleteCollectionMutation__
- *
- * To run a mutation, you first call `useDeleteCollectionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCollectionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCollectionMutation, { data, loading, error }] = useDeleteCollectionMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteCollectionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteCollectionMutation,
-    DeleteCollectionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    DeleteCollectionMutation,
-    DeleteCollectionMutationVariables
-  >(DeleteCollectionDocument, options)
-}
-export type DeleteCollectionMutationHookResult = ReturnType<
-  typeof useDeleteCollectionMutation
->
-export type DeleteCollectionMutationResult =
-  Apollo.MutationResult<DeleteCollectionMutation>
-export type DeleteCollectionMutationOptions = Apollo.BaseMutationOptions<
-  DeleteCollectionMutation,
-  DeleteCollectionMutationVariables
->
-export const RemoveFromCollectionDocument = gql`
-  mutation removeFromCollection(
-    $id: ID!
-    $elementID: ID!
-    $elementType: CollectionElementType!
-  ) {
-    removeFromCollection(
-      id: $id
-      elementID: $elementID
-      elementType: $elementType
-    )
-  }
-`
-export type RemoveFromCollectionMutationFn = Apollo.MutationFunction<
-  RemoveFromCollectionMutation,
-  RemoveFromCollectionMutationVariables
->
-
-/**
- * __useRemoveFromCollectionMutation__
- *
- * To run a mutation, you first call `useRemoveFromCollectionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveFromCollectionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeFromCollectionMutation, { data, loading, error }] = useRemoveFromCollectionMutation({
- *   variables: {
- *      id: // value for 'id'
- *      elementID: // value for 'elementID'
- *      elementType: // value for 'elementType'
- *   },
- * });
- */
-export function useRemoveFromCollectionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveFromCollectionMutation,
-    RemoveFromCollectionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveFromCollectionMutation,
-    RemoveFromCollectionMutationVariables
-  >(RemoveFromCollectionDocument, options)
-}
-export type RemoveFromCollectionMutationHookResult = ReturnType<
-  typeof useRemoveFromCollectionMutation
->
-export type RemoveFromCollectionMutationResult =
-  Apollo.MutationResult<RemoveFromCollectionMutation>
-export type RemoveFromCollectionMutationOptions = Apollo.BaseMutationOptions<
-  RemoveFromCollectionMutation,
-  RemoveFromCollectionMutationVariables
->
-export const UpdateCollectionDocument = gql`
-  mutation updateCollection($id: ID!, $input: UpdateCollection!) {
-    updateCollection(id: $id, input: $input) {
-      id
-    }
-  }
-`
-export type UpdateCollectionMutationFn = Apollo.MutationFunction<
-  UpdateCollectionMutation,
-  UpdateCollectionMutationVariables
->
-
-/**
- * __useUpdateCollectionMutation__
- *
- * To run a mutation, you first call `useUpdateCollectionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCollectionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateCollectionMutation, { data, loading, error }] = useUpdateCollectionMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateCollectionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateCollectionMutation,
-    UpdateCollectionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    UpdateCollectionMutation,
-    UpdateCollectionMutationVariables
-  >(UpdateCollectionDocument, options)
-}
-export type UpdateCollectionMutationHookResult = ReturnType<
-  typeof useUpdateCollectionMutation
->
-export type UpdateCollectionMutationResult =
-  Apollo.MutationResult<UpdateCollectionMutation>
-export type UpdateCollectionMutationOptions = Apollo.BaseMutationOptions<
-  UpdateCollectionMutation,
-  UpdateCollectionMutationVariables
->
 export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
     createDataproduct(input: $input) {
@@ -1667,11 +1212,6 @@ export const DataproductDocument = gql`
       repo
       pii
       keywords
-      collections {
-        __typename
-        id
-        name
-      }
       owner {
         group
         teamkatalogenURL
@@ -2034,18 +1574,6 @@ export const SearchContentDocument = gql`
     search(q: $q) {
       excerpt
       result {
-        ... on Collection {
-          __typename
-          id
-          name
-          description
-          created
-          lastModified
-          owner {
-            group
-            teamkatalogenURL
-          }
-        }
         ... on Dataproduct {
           __typename
           id
@@ -2308,84 +1836,4 @@ export type UserInfoAccessableDataproductLazyQueryHookResult = ReturnType<
 export type UserInfoAccessableDataproductQueryResult = Apollo.QueryResult<
   UserInfoAccessableDataproductQuery,
   UserInfoAccessableDataproductQueryVariables
->
-export const UserInfoUserProductsDocument = gql`
-  query userInfoUserProducts {
-    userInfo {
-      dataproducts {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogenURL
-        }
-      }
-      collections {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogenURL
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useUserInfoUserProductsQuery__
- *
- * To run a query within a React component, call `useUserInfoUserProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserInfoUserProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserInfoUserProductsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUserInfoUserProductsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    UserInfoUserProductsQuery,
-    UserInfoUserProductsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    UserInfoUserProductsQuery,
-    UserInfoUserProductsQueryVariables
-  >(UserInfoUserProductsDocument, options)
-}
-export function useUserInfoUserProductsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    UserInfoUserProductsQuery,
-    UserInfoUserProductsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    UserInfoUserProductsQuery,
-    UserInfoUserProductsQueryVariables
-  >(UserInfoUserProductsDocument, options)
-}
-export type UserInfoUserProductsQueryHookResult = ReturnType<
-  typeof useUserInfoUserProductsQuery
->
-export type UserInfoUserProductsLazyQueryHookResult = ReturnType<
-  typeof useUserInfoUserProductsLazyQuery
->
-export type UserInfoUserProductsQueryResult = Apollo.QueryResult<
-  UserInfoUserProductsQuery,
-  UserInfoUserProductsQueryVariables
 >
