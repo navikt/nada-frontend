@@ -36,7 +36,7 @@ export const UserProductLink = () => {
   return (
     <div>
       <Head>
-        <title>nada // Brukerside</title>
+        <title>Brukerside</title>
       </Head>
       <TopBar type={'User'}>
         <Name>{userState.name}</Name>

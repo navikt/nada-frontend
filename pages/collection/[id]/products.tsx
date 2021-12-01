@@ -48,7 +48,7 @@ export const DatacollectionEdit = ({ id }: DatacollectionFetcherProps) => {
   return (
     <Container>
       <Head>
-        <title>nada // rediger produktliste</title>
+        <title>rediger produktliste</title>
       </Head>
       <Collection>
         <TopBar type={'Collection'}>

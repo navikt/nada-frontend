@@ -18,7 +18,7 @@ const NewDataproduct = () => {
   return (
     <>
       <Head>
-        <title>nada // nytt dataprodukt</title>
+        <title>nytt dataprodukt</title>
       </Head>
       <NewDataproductForm />
     </>

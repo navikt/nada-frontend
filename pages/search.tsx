@@ -45,7 +45,7 @@ const ResultsPage = ({ q }: ResultsPageProps) => {
   return (
     <div>
       <Head>
-        <title>nada // Søk</title>
+        <title>Søk</title>
       </Head>
       <ResultCount resultCount={data?.search?.length} />
       <ResultList results={data?.search} />

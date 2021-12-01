@@ -56,7 +56,7 @@ const NewCollection = () => {
   return (
     <PageLayout>
       <Head>
-        <title>nada // ny datasamling</title>
+        <title>ny datasamling</title>
       </Head>
       {backendError && (
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>

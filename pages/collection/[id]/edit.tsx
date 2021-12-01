@@ -31,7 +31,7 @@ export const DatacollectionEdit = ({ id }: DatacollectionFetcherProps) => {
   return (
     <>
       <Head>
-        <title>nada // rediger {data.collection.name}</title>
+        <title>rediger {data.collection.name}</title>
       </Head>
       <EditCollectionForm collection={data.collection} />
     </>

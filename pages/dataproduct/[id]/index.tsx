@@ -37,7 +37,7 @@ const Dataproduct = (props: DataproductProps) => {
   return (
     <>
       <Head>
-        <title>nada // {data.dataproduct.name}</title>
+        <title>{data.dataproduct.name}</title>
       </Head>
       <DataproductDetail product={data.dataproduct} />
     </>

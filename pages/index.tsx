@@ -41,7 +41,7 @@ const LandingPage = () => {
   return (
     <div>
       <Head>
-        <title>nada</title>
+        <title>nav data</title>
       </Head>
       <SearchContainer>
         <FrontPageLogo />

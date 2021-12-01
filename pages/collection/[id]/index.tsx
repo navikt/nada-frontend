@@ -32,7 +32,7 @@ export const Datacollection = ({ id }: DatacollectionFetcherProps) => {
   return (
     <>
       <Head>
-        <title>nada // {data.collection.name}</title>
+        <title>{data.collection.name}</title>
       </Head>
       <CollectionDetail collection={data.collection} />
     </>
