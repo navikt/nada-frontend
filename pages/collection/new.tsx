@@ -54,7 +54,7 @@ const NewCollection = () => {
     )
 
   return (
-    <PageLayout>
+    <>
       <Head>
         <title>ny datasamling</title>
       </Head>
@@ -62,7 +62,7 @@ const NewCollection = () => {
         <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
       )}
       <NewCollectionForm onSubmit={onSubmit} onCancel={onCancel} />
-    </PageLayout>
+    </>
   )
 }
 
