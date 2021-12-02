@@ -61,7 +61,7 @@ const LandingPage = () => {
         </a>
       </Alert>
       <h2>Nyeste ressurser</h2>
-      <ResultList results={data?.search} noExcerpts />
+      <ResultList results={data?.search} />
     </div>
   )
 }

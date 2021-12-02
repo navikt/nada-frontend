@@ -7,8 +7,6 @@ import { Name } from '../components/lib/detailTypography'
 import { Tab, Tabs } from '@mui/material'
 import TabPanel from '../components/lib/tabPanel'
 import { MetadataTable } from '../components/user/metadataTable'
-import UserProductResultLink from '../components/user/userProductResult'
-import UserAccessableProduct from '../components/user/userProductAccess'
 import Head from 'next/head'
 
 const StyledTabPanel = styled(TabPanel)`
@@ -52,12 +50,6 @@ export const UserProductLink = () => {
         <Tab label="Mine produkter og samlinger" value={0} />
         <Tab label="Mine tilganger" value={1} />
       </Tabs>
-      <StyledTabPanel index={0} value={activeTab}>
-        <UserProductResultLink />
-      </StyledTabPanel>
-      <StyledTabPanel index={1} value={activeTab}>
-        <UserAccessableProduct />
-      </StyledTabPanel>
     </div>
   )
 }
