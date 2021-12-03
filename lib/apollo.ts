@@ -18,6 +18,7 @@ export const APOLLO_APP_STATE_PROP_NAME = '__APOLLO_APP_STATE__'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
+
 const getQueryURI = () => {
   if (process.env.NODE_ENV === 'development') {
     return 'http://127.0.0.1:8080/api/query'

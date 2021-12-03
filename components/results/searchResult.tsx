@@ -17,6 +17,7 @@ const StyledCard = styled(Card)`
   width: 345px; 
   height: 230px; 
   margin-bottom: 10px;
+  padding-bottom: 20px;
   cursor: pointer;
   :hover {
     background-color: #fafafa

@@ -42,6 +42,10 @@ export default function User() {
     setAnchorEl(null)
   }
 
+  const backendHost = () => {
+    return (process.env.NODE_ENV === 'development') ? 'http://localhost:8080' : ''
+  }
+
   return (
     <UserBox>
       {userState ? (
@@ -90,26 +94,29 @@ export default function User() {
               Mine produkter
             </MenuItem>
             <MenuLine />
-            <MenuItem
-              sx={{ color: 'red' }}
-              onClick={() => {
-                handleMenuClose()
-                window.location.href = '/api/logout'
-              }}
-            >
-              Logg ut
-            </MenuItem>
+            <a href={`${backendHost()}/api/logout`}>
+              <MenuItem
+                sx={{ color: 'red' }}
+                onClick={() => {
+                  handleMenuClose()
+                }}
+              >
+                Logg ut
+              </MenuItem>
+            </a>
           </Menu>
         </>
       ) : (
-        <Button
-          key='logg-inn'
-          variant='primary'
-          size='small'
-          onClick={() => (window.location.href = '/api/login')}
-        >
-          Logg inn
-        </Button>
+        <a style={{ color: '#ffffff' }}
+           href={`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(router.asPath)}`}>
+          <Button
+            key='logg-inn'
+            variant='primary'
+            size='small'
+          >
+            Logg inn
+          </Button>
+        </a>
       )}
     </UserBox>
   )

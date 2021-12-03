@@ -83,42 +83,11 @@ export enum BigQueryType {
   View = 'view',
 }
 
-/** Collection contains metadata about a collection of elements. */
-export type Collection = {
-  __typename?: 'Collection'
-  /** created contains the timestamp when the collection was created. */
-  created: Scalars['Time']
-  /** description of the collection. */
-  description?: Maybe<Scalars['String']>
-  /** elements of the collection. */
-  elements: Array<CollectionElement>
-  /** id is the identifier for the collection. */
-  id: Scalars['ID']
-  /** keywords for the collection used as tags. */
-  keywords: Array<Scalars['String']>
-  /** lastModified contains the timestamp when the collection was last modified. */
-  lastModified: Scalars['Time']
-  /** name of the collection. */
-  name: Scalars['String']
-  /** owner of the collection. Changes to the collection can only be done by a member of the owner. */
-  owner: Owner
-}
-
-/** CollectionElement defines all types that can be returned as a collection element. */
-export type CollectionElement = Dataproduct
-
-/** CollectionElementType defines all possible types that can be stored as a collection element. */
-export enum CollectionElementType {
-  Dataproduct = 'dataproduct',
-}
-
 /** Dataproduct contains metadata on a datasource. */
 export type Dataproduct = {
   __typename?: 'Dataproduct'
   /** access contains list of users, groups and service accounts which have access to the dataproduct */
   access: Array<Access>
-  /** access collections that dataproduct is part of */
-  collections: Array<Collection>
   /** created is the timestamp for when the dataproduct was created */
   created: Scalars['Time']
   /** datasource contains metadata on the datasource */
@@ -141,12 +110,6 @@ export type Dataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters: Array<Scalars['String']>
-}
-
-/** Dataproduct contains metadata on a datasource. */
-export type DataproductCollectionsArgs = {
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
 }
 
 /** Datasource defines types that can be returned as a dataproduct datasource. */
@@ -179,29 +142,11 @@ export type Mutation = {
    */
   addRequesterToDataproduct: Scalars['Boolean']
   /**
-   *    addToCollection adds a new element to the collection.
-   *
-   * Requires authentication.
-   */
-  addToCollection: Scalars['Boolean']
-  /**
-   *    createCollection creates a new collection.
-   *
-   * Requires authentication.
-   */
-  createCollection: Collection
-  /**
    * createDataproduct creates a new dataproduct
    *
    * Requires authentication.
    */
   createDataproduct: Dataproduct
-  /**
-   *    deleteCollection deletes a collection.
-   *
-   * Requires authentication.
-   */
-  deleteCollection: Scalars['Boolean']
   /**
    * deleteDataproduct deletes a dataproduct.
    *
@@ -217,12 +162,6 @@ export type Mutation = {
    */
   grantAccessToDataproduct: Access
   /**
-   *    removeFromCollection removes a collection.
-   *
-   * Requires authentication.
-   */
-  removeFromCollection: Scalars['Boolean']
-  /**
    * removeRequesterFromDataproduct removes a requester from the dataproduct.
    *
    * Requires authentication.
@@ -234,12 +173,6 @@ export type Mutation = {
    * Requires authentication.
    */
   revokeAccessToDataproduct: Scalars['Boolean']
-  /**
-   *    updateCollection updates the metadata of a collection.
-   *
-   * Requires authentication.
-   */
-  updateCollection: Collection
   /**
    * updateDataproduct updates an existing dataproduct
    *
@@ -253,22 +186,8 @@ export type MutationAddRequesterToDataproductArgs = {
   subject: Scalars['String']
 }
 
-export type MutationAddToCollectionArgs = {
-  elementID: Scalars['ID']
-  elementType: CollectionElementType
-  id: Scalars['ID']
-}
-
-export type MutationCreateCollectionArgs = {
-  input: NewCollection
-}
-
 export type MutationCreateDataproductArgs = {
   input: NewDataproduct
-}
-
-export type MutationDeleteCollectionArgs = {
-  id: Scalars['ID']
 }
 
 export type MutationDeleteDataproductArgs = {
@@ -286,12 +205,6 @@ export type MutationGrantAccessToDataproductArgs = {
   subjectType?: Maybe<SubjectType>
 }
 
-export type MutationRemoveFromCollectionArgs = {
-  elementID: Scalars['ID']
-  elementType: CollectionElementType
-  id: Scalars['ID']
-}
-
 export type MutationRemoveRequesterFromDataproductArgs = {
   dataproductID: Scalars['ID']
   subject: Scalars['String']
@@ -299,11 +212,6 @@ export type MutationRemoveRequesterFromDataproductArgs = {
 
 export type MutationRevokeAccessToDataproductArgs = {
   id: Scalars['ID']
-}
-
-export type MutationUpdateCollectionArgs = {
-  id: Scalars['ID']
-  input: UpdateCollection
 }
 
 export type MutationUpdateDataproductArgs = {
@@ -319,23 +227,6 @@ export type NewBigQuery = {
   projectID: Scalars['String']
   /** table is the name of the table */
   table: Scalars['String']
-}
-
-/**
- * NewCollection contains metadata for creating a new collection.
- * Group must match one of the groups the authenticated user is part of.
- */
-export type NewCollection = {
-  /** description of the colection. */
-  description?: Maybe<Scalars['String']>
-  /** group the collection belongs to. Used for authorization. */
-  group: Scalars['String']
-  /** keywords for the collection used as tags. */
-  keywords?: Maybe<Array<Scalars['String']>>
-  /** name of the collection. */
-  name: Scalars['String']
-  /** owner Teamkatalogen URL for the collection. */
-  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
@@ -371,10 +262,6 @@ export type Owner = {
 
 export type Query = {
   __typename?: 'Query'
-  /** collection returns the given collection. */
-  collection: Collection
-  /** collections returns a list of collections. Pagination done using the arguments. */
-  collections: Array<Collection>
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -399,15 +286,6 @@ export type Query = {
   userInfo: UserInfo
   /** version returns the API version. */
   version: Scalars['String']
-}
-
-export type QueryCollectionArgs = {
-  id: Scalars['ID']
-}
-
-export type QueryCollectionsArgs = {
-  limit?: Maybe<Scalars['Int']>
-  offset?: Maybe<Scalars['Int']>
 }
 
 export type QueryDataproductArgs = {
@@ -493,18 +371,6 @@ export type TeamkatalogenResult = {
   url: Scalars['String']
 }
 
-/** UpdateCollection contains data for updating the metadata of a collection. */
-export type UpdateCollection = {
-  /** description of the collection. */
-  description?: Maybe<Scalars['String']>
-  /** keywords for the collection used as tags. */
-  keywords?: Maybe<Array<Scalars['String']>>
-  /** name of the collection. */
-  name: Scalars['String']
-  /** owner Teamkatalogen URL for the collection. */
-  teamkatalogenURL?: Maybe<Scalars['String']>
-}
-
 /** UpdateDataproduct contains metadata for updating a dataproduct */
 export type UpdateDataproduct = {
   /** description of the dataproduct */
@@ -528,8 +394,6 @@ export type UserInfo = {
   __typename?: 'UserInfo'
   /** accessable is a list of dataproducts which the user has explicit access to */
   accessable: Array<Dataproduct>
-  /** collections is a list of collections with one of the users groups as owner */
-  collections: Array<Collection>
   /** dataproducts is a list of dataproducts with one of the users groups as owner */
   dataproducts: Array<Dataproduct>
   /** email of user. */
