@@ -8,7 +8,7 @@ import { MetadataTable } from '../components/user/metadataTable'
 import Head from 'next/head'
 
 export const UserProductLink = () => {
-  const userState = useContext(UserState)
+  const userState = useUserInfoDetailsQuery().data?.userInfo
   const [activeTab, setActiveTab] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)

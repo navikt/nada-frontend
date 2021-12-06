@@ -2,7 +2,7 @@ import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
 import { useDataproductQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
-import { addApolloState, getApolloClient } from '../../../lib/apollo'
+import { addApolloState, initializeApollo } from '../../../lib/apollo'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
 import { useEffect } from 'react'
@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
   const cookie = context.req.headers.cookie
 
-  const apolloClient = getApolloClient()
+  const apolloClient = initializeApollo()
 
   await apolloClient.query({
     query: GET_DATAPRODUCT,

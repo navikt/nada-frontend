@@ -1,13 +1,12 @@
-import { useContext } from 'react'
-import { UserState } from '../../lib/context'
+import * as React from 'react'
 import { NewDataproductForm } from '../../components/dataproducts/newDataproductForm'
 import Head from 'next/head'
-import * as React from 'react'
+import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 const NewDataproduct = () => {
-  const user = useContext(UserState)
+  const userInfo = useUserInfoDetailsQuery()
 
-  if (!user)
+  if (!userInfo.data?.userInfo)
     return (
       <div>
         <h1>Du må være logget inn!</h1>

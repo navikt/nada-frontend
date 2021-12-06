@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
@@ -13,8 +13,8 @@ import {
   DataproductQuery,
   Group,
   useDeleteDataproductMutation,
+  useUserInfoDetailsQuery,
 } from '../../lib/schema/graphql'
-import { UserState } from '../../lib/context'
 import DeleteModal from '../lib/deleteModal'
 import { AccessControls } from './access/accessControls'
 import { Name } from '../lib/detailTypography'
@@ -51,11 +51,12 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [showDelete, setShowDelete] = useState(false)
   const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
-  const userState = useContext(UserState)
   const router = useRouter()
 
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
+
   const isOwner =
-    userState?.groups.some((g: Group) => {
+    userInfo?.groups.some((g: Group) => {
       return g.email === product?.owner.group
     }) || false
   const [deleteDataproduct] = useDeleteDataproductMutation({
@@ -97,13 +98,13 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         <Tabs
           value={activeTab}
           onChange={handleChange}
-          variant="standard"
-          scrollButtons="auto"
-          aria-label="auto tabs example"
+          variant='standard'
+          scrollButtons='auto'
+          aria-label='auto tabs example'
         >
-          <Tab label="Informasjon" value={0} />
+          <Tab label='Informasjon' value={0} />
           <Tab
-            label="Datakilde"
+            label='Datakilde'
             value={1}
             onClick={() => {
               const { datasource } = product
@@ -114,9 +115,9 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
               amplitudeLog('sidevisning', eventProperties)
             }}
           />
-          {userState && (
+          {userInfo && (
             <Tab
-              label="Tilganger"
+              label='Tilganger'
               value={2}
               onClick={() => {
                 const eventProperties = {
@@ -135,7 +136,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           <DataproductTableSchema datasource={product.datasource} />
         </StyledTabPanel>
         <StyledTabPanel index={2} value={activeTab}>
-          {!userState ? (
+          {!userInfo ? (
             <UserAccessDiv>
               <CardHeader
                 title={'Ikke innlogget'}

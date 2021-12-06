@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
-import React, { MouseEvent, useContext } from 'react'
+import React, { MouseEvent } from 'react'
 import { navGraBakgrunn } from '../../styles/constants'
 import { ExternalLink, People } from '@navikt/ds-icons'
-import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { useRouter } from 'next/router'
+import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 const UserBox = styled.div`
   white-space: nowrap;
@@ -28,7 +28,7 @@ const StyledA = styled.a`
   color: inherit;
 `
 export default function User() {
-  const userState = useContext(UserState)
+  const userState = useUserInfoDetailsQuery().data?.userInfo
 
   const router = useRouter()
   const menuId = 'primary-search-account-menu'

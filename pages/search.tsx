@@ -7,7 +7,7 @@ import {
 import { ResultCount } from '../lib/queries/search/resultCount'
 import { Loader } from '@navikt/ds-react'
 import styled from 'styled-components'
-import { addApolloState, getApolloClient } from '../lib/apollo'
+import { addApolloState, initializeApollo } from '../lib/apollo'
 import Head from 'next/head'
 import * as React from 'react'
 
@@ -56,7 +56,7 @@ const ResultsPage = ({ q }: ResultsPageProps) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { q } = context.query
 
-  const apolloClient = getApolloClient()
+  const apolloClient = initializeApollo()
 
   await apolloClient.query({
     query: SearchContentDocument,

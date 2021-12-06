@@ -38,7 +38,7 @@ interface DataproductAccessProps {
 }
 
 export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
-  const userState = useContext(UserState)
+  const userState = useUserInfoDetailsQuery().data?.userInfo
 
   const { data, loading, error } = useDataproductAccessQuery({
     variables: { id },
