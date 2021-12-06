@@ -15,7 +15,7 @@ type SearchResponse = ArrayElement<SearchContentQuery['search']>
 
 const StyledCard = styled(Card)`
   width: 345px; 
-  height: 230px; 
+  height: 255px; 
   margin-bottom: 10px;
   padding-bottom: 20px;
   cursor: pointer;
@@ -37,6 +37,7 @@ export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
     <Link href={getLink(result)}>
       <StyledCard>
         <CardHeader
+          style={{ paddingBottom: '0px' }}
           avatar={
             <IconBox size={42}>
               <BigQueryLogo />
