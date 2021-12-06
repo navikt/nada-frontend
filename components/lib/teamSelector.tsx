@@ -1,18 +1,15 @@
 import * as React from 'react'
 import { Select } from '@navikt/ds-react'
-import { useContext } from 'react'
-import { UserState } from '../../lib/context'
-import { UserInfoDetailsQuery } from '../../lib/schema/graphql'
+import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 type TeamSelectorProps = {
   register: any
   errors: any
 }
 export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
-  const user = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
-    UserState
-  )
-  const teams = [...new Set(user?.gcpProjects.map((p) => p.group.name))]
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
+
+  const teams = [...new Set(userInfo?.gcpProjects.map((p) => p.group.name))]
 
   return (
     <Select
@@ -26,7 +23,7 @@ export const TeamSelector = ({ register, errors }: TeamSelectorProps) => {
       </option>
       {teams.map((team, i) => (
         <option
-          value={user?.groups.filter((g) => g.name === team)[0].email}
+          value={userInfo?.groups.filter((g) => g.name === team)[0].email}
           key={team}
         >
           {team}

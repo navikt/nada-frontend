@@ -14,20 +14,20 @@ const CreateBox = styled.div`
 `
 
 export default function Create() {
-  const userState = useUserInfoDetailsQuery().data?.userInfo
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
   const router = useRouter()
 
-  if (userState)
+  if (userInfo)
     return (
       <CreateBox>
         <IconButton
-          size='large'
-          edge='end'
-          aria-label='Add new item'
-          aria-controls='primary-search-account-menu'
-          aria-haspopup='true'
+          size="large"
+          edge="end"
+          aria-label="Add new item"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
           onClick={async () => await router.push('/dataproduct/new')}
-          color='inherit'
+          color="inherit"
         >
           <AddCircleFilled />
         </IconButton>

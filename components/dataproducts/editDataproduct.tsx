@@ -60,7 +60,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
     updateDataproduct({
       variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
-      refetchQueries: ['Dataproduct'],
+      refetchQueries: ['Dataproduct', 'searchContent'],
     }).then(() => {
       setBackendError(undefined)
       router.push(`/dataproduct/${product.id}`)

@@ -19,6 +19,7 @@ export const Project = ({
     })
 
   if (!called && activePaths.includes(projectID)) getDatasets()
+  console.log('err', error)
 
   const emptyPlaceholder = (
     <TreeItem

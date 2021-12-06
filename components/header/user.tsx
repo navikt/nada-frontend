@@ -28,7 +28,7 @@ const StyledA = styled.a`
   color: inherit;
 `
 export default function User() {
-  const userState = useUserInfoDetailsQuery().data?.userInfo
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
 
   const router = useRouter()
   const menuId = 'primary-search-account-menu'
@@ -43,21 +43,21 @@ export default function User() {
   }
 
   const backendHost = () => {
-    return (process.env.NODE_ENV === 'development') ? 'http://localhost:8080' : ''
+    return process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
   }
 
   return (
     <UserBox>
-      {userState ? (
+      {userInfo ? (
         <>
           <IconButton
-            size='large'
-            edge='end'
-            aria-label='brukermeny'
+            size="large"
+            edge="end"
+            aria-label="brukermeny"
             aria-controls={menuId}
-            aria-haspopup='true'
+            aria-haspopup="true"
             onClick={handleProfileMenuOpen}
-            color='inherit'
+            color="inherit"
           >
             <People />
           </IconButton>
@@ -77,7 +77,7 @@ export default function User() {
             onClose={handleMenuClose}
           >
             <MenuItem dense disabled>
-              {userState.name}
+              {userInfo.name}
             </MenuItem>
             <MenuLine />
             <MenuItem onClick={handleMenuClose}>
@@ -107,13 +107,13 @@ export default function User() {
           </Menu>
         </>
       ) : (
-        <a style={{ color: '#ffffff' }}
-           href={`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(router.asPath)}`}>
-          <Button
-            key='logg-inn'
-            variant='primary'
-            size='small'
-          >
+        <a
+          style={{ color: '#ffffff' }}
+          href={`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+            router.asPath
+          )}`}
+        >
+          <Button key="logg-inn" variant="primary" size="small">
             Logg inn
           </Button>
         </a>

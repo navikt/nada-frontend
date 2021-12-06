@@ -1,4 +1,7 @@
-import { useDataproductAccessQuery } from '../../../lib/schema/graphql'
+import {
+  useDataproductAccessQuery,
+  useUserInfoDetailsQuery,
+} from '../../../lib/schema/graphql'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import * as React from 'react'
@@ -30,7 +33,7 @@ interface DataproductAccessProps {
 }
 
 export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
-  const userState = useUserInfoDetailsQuery().data?.userInfo
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
 
   const { data, loading, error } = useDataproductAccessQuery({
     variables: { id },
@@ -44,7 +47,7 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
   const requesters = data.dataproduct.requesters
   const name = data.dataproduct.name
 
-  if (!userState)
+  if (!userInfo)
     return (
       <UserAccessDiv>
         <CardHeader
