@@ -24,7 +24,14 @@ function createApolloClient() {
       uri: getQueryURI(),
       credentials: 'include',
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        SearchResultRow: {
+          keyFields: ["result", ["id"]],
+        },
+      }
+    }
+    ),
   })
 }
 
