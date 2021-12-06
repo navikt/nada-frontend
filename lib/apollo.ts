@@ -20,8 +20,8 @@ let apolloClient: ApolloClient<NormalizedCacheObject>
 
 
 const getQueryURI = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return 'http://127.0.0.1:8080/api/query'
+  if (process.env.NEXT_PUBLIC_ENV === 'development') {
+     return 'http://localhost:8080/api/query'
   }
 
   return isServer ? 'http://nada-backend/api/query' : '/api/query'
