@@ -52,7 +52,6 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
   const [backendError, setBackendError] = useState()
   const [activeTab, setActiveTab] = useState(0)
   const router = useRouter()
-
   const userInfo = useUserInfoDetailsQuery().data?.userInfo
 
   const isOwner =

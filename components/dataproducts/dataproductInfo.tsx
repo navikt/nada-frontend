@@ -28,16 +28,18 @@ const DataproductInfo = ({ product }: DataproductDetailProps) => {
             </td>
           </tr>
         )}
-        <tr>
-          <th>
-            <IconBox size={24} justifyRight>
-              <GithubIcon />
-            </IconBox>
-          </th>
-          <td>
-            <UrlLink url={product.repo} />
-          </td>
-        </tr>
+        { product.repo && (
+          <tr>
+            <th>
+              <IconBox size={24} justifyRight>
+                <GithubIcon />
+              </IconBox>
+            </th>
+            <td>
+              <UrlLink url={product.repo} />
+            </td>
+          </tr> )
+        }
         <tr>
           <th>
             <IconBox size={24} justifyRight>
