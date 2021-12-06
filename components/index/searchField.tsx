@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import React, { FormEvent, useState } from 'react'
-import { Search } from '@navikt/ds-icons'
+import SearchIcon from '@mui/icons-material/Search'
 import { navBlaLighten40 } from '../../styles/constants'
 
 const SearchDiv = styled.form`
@@ -30,25 +30,13 @@ const SearchButton = styled.button`
   align-items: center;
 `
 
-const SearchIcon = styled(Search)``
-
-const redirectPath = (query: string) =>
-  query.length
-    ? {
-        pathname: '/search',
-        query: { q: query },
-      }
-    : {
-        pathname: '/',
-      }
-
 export interface FrontPageSearchBoxProps {
   onSearch: (query: string) => void
 }
 
 export default function FrontPageSearchBox({
-  onSearch,
-}: FrontPageSearchBoxProps) {
+                                             onSearch,
+                                           }: FrontPageSearchBoxProps) {
   const [value, setValue] = useState<string>('')
 
   const onSubmit = (e: FormEvent) => {
@@ -57,7 +45,7 @@ export default function FrontPageSearchBox({
   }
 
   return (
-    <div role="navigation">
+    <div role='navigation'>
       <SearchDiv onSubmit={onSubmit}>
         <SearchInput
           aria-label={'Søkefelt'}
@@ -65,8 +53,8 @@ export default function FrontPageSearchBox({
           onChange={(e) => setValue(e.target.value)}
         />
 
-        <SearchButton aria-label={'Søk'} onClick={() => onSearch(value)}>
-          <SearchIcon title="Søk" />
+        <SearchButton id='some-id' aria-label={'Søk'} onClick={() => onSearch(value)}>
+          <SearchIcon fontSize='large' />
         </SearchButton>
       </SearchDiv>
     </div>
