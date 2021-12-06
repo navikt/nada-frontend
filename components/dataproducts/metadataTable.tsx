@@ -6,27 +6,6 @@ import styled from 'styled-components'
 import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
 
-const StyledLinks = styled.span`
-  ul {
-    display: inline;
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-  }
-
-  ul li {
-    display: inline;
-  }
-
-  ul li:after {
-    content: ', ';
-  }
-
-  ul li:last-child:after {
-    content: '';
-  }
-`
-
 export const MetadataTable = ({ product }: DataproductDetailProps) => (
   <StyledMetadataTable type={'Dataproduct'}>
     <tbody>
