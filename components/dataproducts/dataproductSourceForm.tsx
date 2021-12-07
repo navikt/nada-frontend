@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react'
-import { UserState } from '../../lib/context'
+import { useState } from 'react'
 import TreeView from '@mui/lab/TreeView'
 import {
   FieldErrors,
@@ -9,7 +8,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import { Project } from './datasource/project'
-import { UserInfoDetailsQuery } from '../../lib/schema/graphql'
+import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
@@ -20,13 +19,10 @@ interface DataproductSourceFormProps {
 
 export const DataproductSourceForm = ({
   register,
-  errors,
   watch,
   setValue,
 }: DataproductSourceFormProps) => {
-  const user = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
-    UserState
-  )
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
 
   const [activePaths, setActivePaths] = useState<string[]>([])
   register('bigquery.projectID')
@@ -34,7 +30,7 @@ export const DataproductSourceForm = ({
   register('bigquery.table')
   const group = watch('group')
 
-  const teamProjects = user?.gcpProjects
+  const teamProjects = userInfo?.gcpProjects
     .filter((project) => project.group.email == group)
     .map((group) => group.id)
 

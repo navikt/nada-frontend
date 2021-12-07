@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
-import React, { MouseEvent, useContext } from 'react'
+import React, { MouseEvent } from 'react'
 import { navGraBakgrunn } from '../../styles/constants'
 import { ExternalLink, People } from '@navikt/ds-icons'
-import { UserState } from '../../lib/context'
 import { Menu, MenuItem } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { useRouter } from 'next/router'
+import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 
 const UserBox = styled.div`
   white-space: nowrap;
@@ -28,7 +28,7 @@ const StyledA = styled.a`
   color: inherit;
 `
 export default function User() {
-  const userState = useContext(UserState)
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
 
   const router = useRouter()
   const menuId = 'primary-search-account-menu'
@@ -42,18 +42,22 @@ export default function User() {
     setAnchorEl(null)
   }
 
+  const backendHost = () => {
+    return process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
+  }
+
   return (
     <UserBox>
-      {userState ? (
+      {userInfo ? (
         <>
           <IconButton
-            size='large'
-            edge='end'
-            aria-label='brukermeny'
+            size="large"
+            edge="end"
+            aria-label="brukermeny"
             aria-controls={menuId}
-            aria-haspopup='true'
+            aria-haspopup="true"
             onClick={handleProfileMenuOpen}
-            color='inherit'
+            color="inherit"
           >
             <People />
           </IconButton>
@@ -73,7 +77,7 @@ export default function User() {
             onClose={handleMenuClose}
           >
             <MenuItem dense disabled>
-              {userState.name}
+              {userInfo.name}
             </MenuItem>
             <MenuLine />
             <MenuItem onClick={handleMenuClose}>
@@ -90,26 +94,29 @@ export default function User() {
               Mine produkter
             </MenuItem>
             <MenuLine />
-            <MenuItem
-              sx={{ color: 'red' }}
-              onClick={() => {
-                handleMenuClose()
-                window.location.href = '/api/logout'
-              }}
-            >
-              Logg ut
-            </MenuItem>
+            <a href={`${backendHost()}/api/logout`}>
+              <MenuItem
+                sx={{ color: 'red' }}
+                onClick={() => {
+                  handleMenuClose()
+                }}
+              >
+                Logg ut
+              </MenuItem>
+            </a>
           </Menu>
         </>
       ) : (
-        <Button
-          key='logg-inn'
-          variant='primary'
-          size='small'
-          onClick={() => (window.location.href = '/api/login')}
+        <a
+          style={{ color: '#ffffff' }}
+          href={`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+            router.asPath
+          )}`}
         >
-          Logg inn
-        </Button>
+          <Button key="logg-inn" variant="primary" size="small">
+            Logg inn
+          </Button>
+        </a>
       )}
     </UserBox>
   )

@@ -2,11 +2,8 @@ import ResultList from '../components/results/resultList'
 import styled from 'styled-components'
 import FrontPageSearchBox from '../components/index/searchField'
 import { GetServerSideProps } from 'next'
-import { addApolloState, getApolloClient } from '../lib/apollo'
-import {
-  SearchContentDocument,
-  useSearchContentQuery,
-} from '../lib/schema/graphql'
+import { addApolloState, initializeApollo } from '../lib/apollo'
+import { SearchContentDocument, useSearchContentQuery } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { Alert } from '@navikt/ds-react'
@@ -27,7 +24,7 @@ const SearchContainer = styled.div`
 
 const LandingPage = () => {
   const router = useRouter()
-  const { data, error } = useSearchContentQuery({
+  const { data } = useSearchContentQuery({
     variables: { q: { limit: SEARCH_LIMIT } },
   })
 
@@ -50,32 +47,34 @@ const LandingPage = () => {
         />
       </SearchContainer>
 
-      <Alert variant="info">
+      <Alert variant='info'>
         Datapakker er nå tilgjengelige{' '}
         <a
           href={'https://datapakker.intern.nav.no'}
-          target="_blank"
-          rel="noreferrer"
+          target='_blank'
+          rel='noreferrer'
         >
           her
         </a>
       </Alert>
       <h2>Nyeste ressurser</h2>
-      <ResultList results={data?.search} noExcerpts />
+      <ResultList results={data?.search} />
     </div>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const apolloClient = getApolloClient()
+    const apolloClient = initializeApollo()
 
     await apolloClient.query({
       query: SearchContentDocument,
       variables: { q: { limit: SEARCH_LIMIT } },
     })
 
-    return addApolloState(apolloClient)
+    return addApolloState(apolloClient, {
+      props: {},
+    })
   } catch (e) {
     console.log(e)
     return {}

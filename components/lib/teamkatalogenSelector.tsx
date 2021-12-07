@@ -26,6 +26,7 @@ export const TeamkatalogenSelector = ({
 
   return (
     <Select
+      style={{ width: '250px' }}
       label="Team i Teamkatalogen"
       {...register('teamkatalogenURL')}
       error={errors.owner?.group?.message}

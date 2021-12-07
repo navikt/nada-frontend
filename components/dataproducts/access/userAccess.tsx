@@ -1,20 +1,19 @@
-import { Card, CardHeader, CardContent, CardActions } from '@mui/material'
+import { Card, CardActions, CardContent, CardHeader } from '@mui/material'
 import { navGronn, navRod } from '../../../styles/constants'
 import styled from 'styled-components'
 import IconBox from '../../lib/icons/iconBox'
-import { Locked, Unlocked, Close } from '@navikt/ds-icons'
+import { Close, Locked, Unlocked } from '@navikt/ds-icons'
 import {
   Access,
   Dataproduct,
   DataproductAccessQuery,
   useRevokeAccessMutation,
-  UserInfoDetailsQuery,
+  useUserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { removeSubjectType } from './accessControls'
 import AddAccess from './addAccess'
 import * as React from 'react'
-import { useContext, useState } from 'react'
-import { UserState } from '../../../lib/context'
+import { useState } from 'react'
 import { Button } from '@navikt/ds-react'
 import humanizeDate from '../../lib/humanizeDate'
 import amplitudeLog from '../../../lib/amplitude'
@@ -37,11 +36,9 @@ interface UserAccessProps {
 
 const UserAccess = ({ id, requesters, access, name }: UserAccessProps) => {
   const [open, setOpen] = useState(false)
-  const userState = useContext<UserInfoDetailsQuery['userInfo'] | undefined>(
-    UserState
-  )
+  const userInfo = useUserInfoDetailsQuery().data?.userInfo
   const [revokeAccess] = useRevokeAccessMutation()
-  if (!userState) return null
+  if (!userInfo) return null
 
   const onSubmit = async () => {
     amplitudeLog('klikk', {
@@ -59,7 +56,7 @@ const UserAccess = ({ id, requesters, access, name }: UserAccessProps) => {
 
   const hasAccess = access.some(
     (a: Access) =>
-      removeSubjectType(a.subject) === userState.email && a.revoked === null
+      removeSubjectType(a.subject) === userInfo.email && a.revoked === null
   )
   const activeAccess = access.filter((a) => {
     return a.revoked === null || a.revoked === ''
@@ -67,8 +64,8 @@ const UserAccess = ({ id, requesters, access, name }: UserAccessProps) => {
 
   const canRequest = requesters.some((requester) => {
     return (
-      userState.email === requester ||
-      userState.groups.some((group) => group.email === requester)
+      userInfo.email === requester ||
+      userInfo.groups.some((group) => group.email === requester)
     )
   })
 
@@ -178,7 +175,7 @@ const UserAccess = ({ id, requesters, access, name }: UserAccessProps) => {
         setOpen={setOpen}
         dataproductID={id}
         dataproductName={name}
-        subject={userState.email}
+        subject={userInfo.email}
       />
     </>
   )

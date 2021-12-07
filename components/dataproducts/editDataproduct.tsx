@@ -60,7 +60,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
     updateDataproduct({
       variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
-      refetchQueries: ['Dataproduct'],
+      refetchQueries: ['Dataproduct', 'searchContent'],
     }).then(() => {
       setBackendError(undefined)
       router.push(`/dataproduct/${product.id}`)
@@ -71,6 +71,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
+  console.log(errors)
   return (
     <Container>
       <DataproductBox>
@@ -81,6 +82,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
               <TextField
+                style={{ width: '350px', display: 'block' }}
                 id="name"
                 label="Navn"
                 {...register('name')}
@@ -92,6 +94,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 control={control}
               />
               <TextField
+                style={{ width: '450px', display: 'block' }}
                 id="repo"
                 label="Repo"
                 {...register('repo')}
