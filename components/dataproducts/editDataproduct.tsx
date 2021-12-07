@@ -71,6 +71,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
+  console.log(errors)
   return (
     <Container>
       <DataproductBox>
