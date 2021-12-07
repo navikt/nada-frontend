@@ -81,6 +81,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
               <TextField
+                style={{ width: '350px', display: 'block' }}
                 id="name"
                 label="Navn"
                 {...register('name')}
@@ -92,6 +93,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 control={control}
               />
               <TextField
+                style={{ width: '450px', display: 'block' }}
                 id="repo"
                 label="Repo"
                 {...register('repo')}

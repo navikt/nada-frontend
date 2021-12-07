@@ -14,13 +14,13 @@ import styled from 'styled-components'
 type SearchResponse = ArrayElement<SearchContentQuery['search']>
 
 const StyledCard = styled(Card)`
-  width: 345px; 
-  height: 255px; 
-  margin-bottom: 10px;
+  width: 375px;
+  height: 255px;
+  margin-bottom: 20px;
   padding-bottom: 20px;
   cursor: pointer;
   :hover {
-    background-color: #fafafa
+    background-color: #fafafa;
   }
 `
 
@@ -48,7 +48,7 @@ export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
           subheader={result.owner.group}
         />
         <CardContent>
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant="body2" color="text.secondary">
             <DescriptionExcerpt excerpt={excerpt} />
           </Typography>
         </CardContent>

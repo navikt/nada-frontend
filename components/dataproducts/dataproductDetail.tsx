@@ -95,15 +95,16 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
         </TopBar>
         <MetadataTable product={product} />
         <Tabs
+          style={{ paddingLeft: '20px' }}
           value={activeTab}
           onChange={handleChange}
-          variant='standard'
-          scrollButtons='auto'
-          aria-label='auto tabs example'
+          variant="standard"
+          scrollButtons="auto"
+          aria-label="auto tabs example"
         >
-          <Tab label='Informasjon' value={0} />
+          <Tab label="Informasjon" value={0} />
           <Tab
-            label='Datakilde'
+            label="Datakilde"
             value={1}
             onClick={() => {
               const { datasource } = product
@@ -116,7 +117,7 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
           />
           {userInfo && (
             <Tab
-              label='Tilganger'
+              label="Tilganger"
               value={2}
               onClick={() => {
                 const eventProperties = {
