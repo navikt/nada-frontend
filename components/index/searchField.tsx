@@ -10,6 +10,11 @@ const SearchDiv = styled.form`
   border: 2px solid ${navBlaLighten40};
   border-radius: 10px;
   padding: 5px 10px;
+  width: 80%;
+  min-width: 350px;
+  max-width: 500px;
+  margin-top: 80px;
+  margin-bottom: 50px;
 `
 
 const SearchInput = styled.input`
@@ -35,8 +40,8 @@ export interface FrontPageSearchBoxProps {
 }
 
 export default function FrontPageSearchBox({
-                                             onSearch,
-                                           }: FrontPageSearchBoxProps) {
+  onSearch,
+}: FrontPageSearchBoxProps) {
   const [value, setValue] = useState<string>('')
 
   const onSubmit = (e: FormEvent) => {
@@ -45,7 +50,10 @@ export default function FrontPageSearchBox({
   }
 
   return (
-    <div role='navigation'>
+    <div
+      role="navigation"
+      style={{ display: 'flex', justifyContent: 'center' }}
+    >
       <SearchDiv onSubmit={onSubmit}>
         <SearchInput
           aria-label={'Søkefelt'}
@@ -53,8 +61,12 @@ export default function FrontPageSearchBox({
           onChange={(e) => setValue(e.target.value)}
         />
 
-        <SearchButton id='some-id' aria-label={'Søk'} onClick={() => onSearch(value)}>
-          <SearchIcon fontSize='large' />
+        <SearchButton
+          id="some-id"
+          aria-label={'Søk'}
+          onClick={() => onSearch(value)}
+        >
+          <SearchIcon fontSize="large" />
         </SearchButton>
       </SearchDiv>
     </div>

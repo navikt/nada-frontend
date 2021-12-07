@@ -5,12 +5,14 @@ export interface ResultCountProps {
 }
 
 const ResultCountDiv = styled.div`
-  padding: 2em 1em;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-left: 10px;
 `
 
 export const ResultCount = ({ resultCount }: ResultCountProps) => {
   if (typeof resultCount === 'undefined') return <div>Søker...</div>
   if (resultCount)
-    return <ResultCountDiv>Søket gav {resultCount} treff</ResultCountDiv>
-  return <ResultCountDiv>Søket gav ingen resultater!</ResultCountDiv>
+    return <ResultCountDiv>Søket ga {resultCount} treff</ResultCountDiv>
+  return <ResultCountDiv>Søket ga ingen resultater!</ResultCountDiv>
 }

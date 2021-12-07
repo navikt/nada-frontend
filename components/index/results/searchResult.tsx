@@ -11,10 +11,16 @@ import styled from 'styled-components'
 type SearchResponse = ArrayElement<SearchContentQuery['search']>
 
 const StyledCard = styled(Card)`
-  width: 375px;
+  width: 31%;
   margin-bottom: 20px;
   padding-bottom: 20px;
   cursor: pointer;
+  @media only screen and (max-width: 1024px) {
+    width: 48%;
+  }
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
   :hover {
     background-color: #fafafa;
   }

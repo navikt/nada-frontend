@@ -66,6 +66,9 @@ export const DataproductDetail = ({ product }: DataproductDetailProps) => {
 
   const onDelete = async () => {
     try {
+      amplitudeLog('klikk', {
+        sidetittel: 'fjern-produkt',
+      })
       await deleteDataproduct()
       await router.push('/')
     } catch (e: any) {

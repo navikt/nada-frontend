@@ -94,7 +94,7 @@ export const NewDataproductForm = () => {
         />
         <TextField
           id="repo"
-          label="Repo"
+          label="Link til kildekode"
           {...register('repo')}
           error={errors.repo?.message}
         />

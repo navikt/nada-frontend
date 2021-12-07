@@ -96,7 +96,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
               <TextField
                 style={{ width: '450px', display: 'block' }}
                 id="repo"
-                label="Repo"
+                label="Link til kildekode"
                 {...register('repo')}
                 error={errors.repo?.message}
               />

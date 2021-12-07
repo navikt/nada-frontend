@@ -7,6 +7,10 @@ const ResultListDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  gap: 20px;
+  > * {
+    width: 100%;
+  }
 `
 
 interface ResultsProps {
@@ -17,11 +21,7 @@ export function ResultList({ results }: ResultsProps) {
   return (
     <ResultListDiv>
       {results?.map((d, idx) => (
-        <SearchResultLink
-          key={idx}
-          result={d.result}
-          excerpt={d.excerpt}
-        />
+        <SearchResultLink key={idx} result={d.result} excerpt={d.excerpt} />
       ))}
     </ResultListDiv>
   )

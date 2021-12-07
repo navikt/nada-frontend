@@ -1,11 +1,6 @@
 import Link from 'next/link'
 import { SearchContentQuery } from '../../lib/schema/graphql'
 import { ArrayElement } from '../../lib/schema/ArrayElement'
-import { DescriptionExcerpt } from '../../lib/descriptionExcerpt'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
 import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import * as React from 'react'
@@ -13,14 +8,34 @@ import styled from 'styled-components'
 
 type SearchResponse = ArrayElement<SearchContentQuery['search']>
 
-const StyledCard = styled(Card)`
-  width: 375px;
-  height: 255px;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+const SearchResult = styled.div`
+  padding: 10px;
   cursor: pointer;
+  flex-wrap: wrap;
+  flex-direction: row;
+  display: flex;
   :hover {
     background-color: #fafafa;
+  }
+`
+const SearchResultHeader = styled.div`
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  width: 100%;
+`
+const Title = styled.div`
+  margin-left: 10px;
+  h1 {
+    font-size: 20px;
+    margin: 0px;
+    color: #222;
+  }
+  h2 {
+    font-size: 15px;
+    margin: 0px;
+    color: #777;
+    font-weight: normal;
   }
 `
 
@@ -35,24 +50,18 @@ export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
 
   return (
     <Link href={getLink(result)}>
-      <StyledCard>
-        <CardHeader
-          style={{ paddingBottom: '0px' }}
-          avatar={
-            <IconBox size={42}>
-              <BigQueryLogo />
-            </IconBox>
-          }
-          titleTypographyProps={{ variant: 'h6' }}
-          title={result.name}
-          subheader={result.owner.group}
-        />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            <DescriptionExcerpt excerpt={excerpt} />
-          </Typography>
-        </CardContent>
-      </StyledCard>
+      <SearchResult>
+        <SearchResultHeader>
+          <IconBox size={30}>
+            <BigQueryLogo />
+          </IconBox>
+          <Title>
+            <h1>{result.name}</h1>
+            <h2>{result.owner.group}</h2>
+          </Title>
+        </SearchResultHeader>
+        <div>{excerpt}</div>
+      </SearchResult>
     </Link>
   )
 }

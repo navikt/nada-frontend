@@ -16,15 +16,6 @@ import Head from 'next/head'
 
 const SEARCH_LIMIT = 6
 
-const SearchContainer = styled.div`
-  display: flex;
-  margin: 80px auto;
-  gap: 80px;
-  flex-direction: column;
-  min-width: 500px;
-  width: 60%;
-`
-
 const LandingPage = () => {
   const router = useRouter()
   const { data } = useSearchContentQuery({
@@ -43,14 +34,12 @@ const LandingPage = () => {
       <Head>
         <title>nav data</title>
       </Head>
-      <SearchContainer>
-        <FrontPageLogo />
-        <FrontPageSearchBox
-          onSearch={(q) => router.push({ pathname: '/search', query: { q } })}
-        />
-      </SearchContainer>
+      <FrontPageLogo />
+      <FrontPageSearchBox
+        onSearch={(q) => router.push({ pathname: '/search', query: { q } })}
+      />
 
-      <Alert variant="info">
+      <Alert variant="info" style={{ width: '350px', margin: '0 auto' }}>
         Datapakker er nå tilgjengelige{' '}
         <a
           href={'https://datapakker.intern.nav.no'}
