@@ -1,9 +1,12 @@
-import ResultList from '../components/results/resultList'
+import ResultList from '../components/index/results/resultList'
 import styled from 'styled-components'
 import FrontPageSearchBox from '../components/index/searchField'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../lib/apollo'
-import { SearchContentDocument, useSearchContentQuery } from '../lib/schema/graphql'
+import {
+  SearchContentDocument,
+  useSearchContentQuery,
+} from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { Alert } from '@navikt/ds-react'
@@ -47,12 +50,12 @@ const LandingPage = () => {
         />
       </SearchContainer>
 
-      <Alert variant='info'>
+      <Alert variant="info">
         Datapakker er nå tilgjengelige{' '}
         <a
           href={'https://datapakker.intern.nav.no'}
-          target='_blank'
-          rel='noreferrer'
+          target="_blank"
+          rel="noreferrer"
         >
           her
         </a>
