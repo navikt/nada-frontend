@@ -43,7 +43,7 @@ export const SearchResultLink = ({ result, excerpt }: SearchResultProps) => {
               <BigQueryLogo />
             </IconBox>
           }
-          titleTypographyProps={{ variant: 'h4' }}
+          titleTypographyProps={{ variant: 'h6' }}
           title={result.name}
           subheader={result.owner.group}
         />
