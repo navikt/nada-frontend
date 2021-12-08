@@ -6,19 +6,24 @@ import Tab from '@mui/material/Tab'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { useRouter } from 'next/router'
+import Profile from '../../components/user/profile'
+import LoaderSpinner from '../../components/lib/spinner'
+import ErrorMessage from '../../components/lib/error'
+import CardList from '../../components/lib/cardList'
+import AccessList from '../../components/user/accessList'
 
 interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
+  children?: React.ReactNode
+  index: number
+  value: number
 }
 
-function TabPanel(props: TabPanelProps) {
+const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props
 
   return (
     <div
-      role='tabpanel'
+      role="tabpanel"
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
@@ -33,7 +38,7 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-function a11yProps(index: number) {
+const a11yProps = (index: number) => {
   return {
     id: `vertical-tab-${index}`,
     'aria-controls': `vertical-tabpanel-${index}`,
@@ -41,39 +46,63 @@ function a11yProps(index: number) {
 }
 
 export const UserProductLink = () => {
-  const userInfo = useUserInfoDetailsQuery().data?.userInfo
+  const router = useRouter()
+  const { data, error, loading } = useUserInfoDetailsQuery()
+  if (error) return <ErrorMessage error={error} />
+  if (loading || !data) return <LoaderSpinner />
+  if (!data.userInfo)
+    return (
+      <div>
+        <h1>Du må være logget inn!</h1>
+        <p>Bruk login-knappen øverst.</p>
+      </div>
+    )
 
-  const menuItems: Array<{ title: string, slug: string }> = [
+  const menuItems: Array<{
+    title: string
+    slug: string
+    component: any
+  }> = [
     {
       title: 'Min profil',
       slug: 'profile',
+      component: (
+        <Profile username={data.userInfo.name} groups={data.userInfo.groups} />
+      ),
     },
     {
       title: 'Mine produkter',
       slug: 'products',
+      component: (
+        <CardList
+          products={data.userInfo.dataproducts}
+          title={'Mine produkter'}
+        />
+      ),
     },
     {
       title: 'Mine tilganger',
       slug: 'access',
+      component: <AccessList accessable={data.userInfo.accessable} />,
     },
     {
       title: 'Favoritter',
       slug: 'favorites',
+      component: (
+        <CardList
+          products={data.userInfo.dataproducts}
+          title={'Mine favoritter'}
+        />
+      ),
     },
   ]
 
-  const router = useRouter()
-  const currentPage = menuItems.map((e) => e.slug).indexOf(router.query.page?.[0] ?? 'profile')
+  const currentPage = menuItems
+    .map((e) => e.slug)
+    .indexOf(router.query.page?.[0] ?? 'profile')
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     router.push(`/user/${menuItems[newValue].slug}`)
-    if (!userInfo)
-      return (
-        <div>
-          <h1>Du må være logget inn!</h1>
-          <p>Bruk login-knappen øverst.</p>
-        </div>
-      )
   }
 
   return (
@@ -83,23 +112,41 @@ export const UserProductLink = () => {
       </Head>
 
       <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
+        sx={{
+          flexGrow: 1,
+          bgcolor: 'background.paper',
+          display: 'flex',
+          height: '100%',
+        }}
       >
         <Tabs
-          orientation='vertical'
-          variant='fullWidth'
+          orientation="vertical"
+          variant="fullWidth"
           value={currentPage}
           onChange={handleChange}
-          aria-label='User profile menu'
-          sx={{ borderRight: 1, borderColor: 'divider', alignItems: 'right' }}
+          aria-label="User profile menu"
+          sx={{
+            borderRight: 1,
+            borderColor: 'divider',
+            alignItems: 'right',
+            minWidth: '180px',
+          }}
         >
-          {menuItems.map(i => (
-            <Tab key={menuItems.indexOf(i)} label={i.title} {...a11yProps(menuItems.indexOf(i))} />
+          {menuItems.map((i) => (
+            <Tab
+              key={menuItems.indexOf(i)}
+              label={i.title}
+              {...a11yProps(menuItems.indexOf(i))}
+            />
           ))}
         </Tabs>
-        {menuItems.map(i => (
-          <TabPanel key={menuItems.indexOf(i)} value={currentPage} index={menuItems.indexOf(i)}>
-            {i.title}
+        {menuItems.map((i) => (
+          <TabPanel
+            key={menuItems.indexOf(i)}
+            value={currentPage}
+            index={menuItems.indexOf(i)}
+          >
+            {i.component}
           </TabPanel>
         ))}
       </Box>
