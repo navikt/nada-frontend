@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { useRouter } from 'next/router'
 import Profile from '../../components/user/profile'
@@ -23,7 +22,7 @@ const TabPanel = (props: TabPanelProps) => {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
@@ -31,7 +30,7 @@ const TabPanel = (props: TabPanelProps) => {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -120,11 +119,11 @@ export const UserProductLink = () => {
         }}
       >
         <Tabs
-          orientation="vertical"
-          variant="fullWidth"
+          orientation='vertical'
+          variant='fullWidth'
           value={currentPage}
           onChange={handleChange}
-          aria-label="User profile menu"
+          aria-label='User profile menu'
           sx={{
             borderRight: 1,
             borderColor: 'divider',
@@ -132,19 +131,19 @@ export const UserProductLink = () => {
             minWidth: '180px',
           }}
         >
-          {menuItems.map((i) => (
+          {menuItems.map((i, idx) => (
             <Tab
-              key={menuItems.indexOf(i)}
+              key={idx}
               label={i.title}
-              {...a11yProps(menuItems.indexOf(i))}
+              {...a11yProps(idx)}
             />
           ))}
         </Tabs>
-        {menuItems.map((i) => (
+        {menuItems.map((i, idx) => (
           <TabPanel
-            key={menuItems.indexOf(i)}
+            key={idx}
             value={currentPage}
-            index={menuItems.indexOf(i)}
+            index={idx}
           >
             {i.component}
           </TabPanel>

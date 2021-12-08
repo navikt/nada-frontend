@@ -5,7 +5,6 @@ import CardHeader from '@mui/material/CardHeader'
 import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import * as React from 'react'
-import { UserInfoDetailsQueryResult } from '../../lib/schema/graphql'
 
 const ProductList = styled.div`
   flex-wrap: wrap;
@@ -41,16 +40,17 @@ interface ProductProps {
     owner: { group: string }
   }[]
   title: string
-  excerpt?: string
 }
-const CardList = ({ products, title, excerpt }: ProductProps) => {
+
+const CardList = ({ products, title }: ProductProps) => {
+  console.log(products)
   return (
     <div>
       <h1>{title}</h1>
       <hr />
-        <br/>
+      <br />
       <ProductList>
-        {products.map((product, idx) => (
+        {products.map((product) => (
           <Link href={`/dataproduct/${product.id}`} key={product.id}>
             <StyledCard>
               <CardHeader
@@ -64,7 +64,6 @@ const CardList = ({ products, title, excerpt }: ProductProps) => {
                 title={product.name}
                 subheader={`eier: ${product.owner.group}`}
               />
-              {excerpt ? <div>{excerpt}</div> : null}
             </StyledCard>
           </Link>
         ))}
