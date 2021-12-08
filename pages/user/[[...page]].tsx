@@ -1,15 +1,14 @@
 import * as React from 'react'
 import Head from 'next/head'
-import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
+import {useUserInfoDetailsQuery} from '../../lib/schema/graphql'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 import Profile from '../../components/user/profile'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import CardList from '../../components/lib/cardList'
-import AccessList from '../../components/user/accessList'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -82,7 +81,7 @@ export const UserProductLink = () => {
     {
       title: 'Mine tilganger',
       slug: 'access',
-      component: <AccessList accessable={data.userInfo.accessable} />,
+      component: (<CardList products={data.userInfo.accessable}  title={"Mine tilganger"}/>),
     },
   ]
 
