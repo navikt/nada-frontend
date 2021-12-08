@@ -23,6 +23,8 @@ interface EditDatacollectionFormProps {
 }
 
 const Container = styled.div`
+  width: 768px;
+  margin: 0 auto;
   margin-top: 40px;
 `
 

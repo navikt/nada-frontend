@@ -8,6 +8,7 @@ import * as React from 'react'
 
 const ProductList = styled.div`
   flex-wrap: wrap;
+  min-width: 768px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
