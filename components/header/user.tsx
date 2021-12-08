@@ -76,22 +76,35 @@ export default function User() {
             open={isMenuOpen}
             onClose={handleMenuClose}
           >
-            <MenuItem dense disabled>
+            <MenuItem
+              onClick={(q) => {
+              handleMenuClose()
+              router.push({ pathname: '/user/profile' })
+            }}>
               {userInfo.name}
+            </MenuItem>
+            <MenuLine />
+            <MenuItem
+              onClick={(q) => {
+                handleMenuClose()
+                router.push({ pathname: '/user/products' })
+              }}
+            >
+              Mine produkter
+            </MenuItem>
+            <MenuItem
+              onClick={(q) => {
+                handleMenuClose()
+                router.push({ pathname: '/user/access' })
+              }}
+            >
+              Mine tilganger
             </MenuItem>
             <MenuLine />
             <MenuItem onClick={handleMenuClose}>
               <StyledA href={'https://docs.knada.io/'}>
                 Dokumentasjon <ExternalLink />
               </StyledA>
-            </MenuItem>
-            <MenuItem
-              onClick={(q) => {
-                handleMenuClose()
-                router.push({ pathname: '/user' })
-              }}
-            >
-              Mine produkter
             </MenuItem>
             <MenuLine />
             <a href={`${backendHost()}/api/logout`}>

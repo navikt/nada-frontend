@@ -641,6 +641,19 @@ export type UserInfoDetailsQuery = {
     __typename?: 'UserInfo'
     name: string
     email: string
+    loginExpiration: any
+    dataproducts: Array<{
+      __typename?: 'Dataproduct'
+      id: string
+      name: string
+      owner: { __typename?: 'Owner'; group: string }
+    }>
+    accessable: Array<{
+      __typename?: 'Dataproduct'
+      id: string
+      name: string
+      owner: { __typename?: 'Owner'; group: string }
+    }>
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
     gcpProjects: Array<{
       __typename?: 'GCPProject'
@@ -1569,6 +1582,21 @@ export const UserInfoDetailsDocument = gql`
     userInfo {
       name
       email
+      dataproducts {
+        id
+        name
+        owner {
+          group
+        }
+      }
+      accessable {
+        id
+        name
+        owner {
+          group
+        }
+      }
+      loginExpiration
       groups {
         name
         email

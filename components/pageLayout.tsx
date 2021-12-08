@@ -22,6 +22,7 @@ const HeaderBar = styled.header`
   align-items: center;
   padding: 0.25em 1em;
   border-bottom: 1px solid #aaa;
+  margin-bottom: 30px;
 `
 
 const Container = styled.div`

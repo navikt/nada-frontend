@@ -5,6 +5,21 @@ export const USER_INFO = gql`
     userInfo {
       name
       email
+      dataproducts {
+        id
+        name
+        owner {
+          group
+        }
+      }
+      accessable {
+        id
+        name
+        owner {
+          group
+        }
+      }
+      loginExpiration
       groups {
         name
         email
