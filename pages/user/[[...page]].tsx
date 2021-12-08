@@ -84,16 +84,6 @@ export const UserProductLink = () => {
       slug: 'access',
       component: <AccessList accessable={data.userInfo.accessable} />,
     },
-    {
-      title: 'Favoritter',
-      slug: 'favorites',
-      component: (
-        <CardList
-          products={data.userInfo.dataproducts}
-          title={'Mine favoritter'}
-        />
-      ),
-    },
   ]
 
   const currentPage = menuItems
