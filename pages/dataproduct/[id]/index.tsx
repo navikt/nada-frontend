@@ -45,6 +45,7 @@ const Dataproduct = (props: DataproductProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log("HAAAAALLOO")
   const { id } = context.query
   const cookie = context.req.headers.cookie
 

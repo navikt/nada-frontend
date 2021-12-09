@@ -47,48 +47,10 @@ export const AccessControls = ({ id, isOwner }: DataproductAccessProps) => {
   const requesters = data.dataproduct.requesters
   const name = data.dataproduct.name
 
-  if (!userInfo)
-    return (
-      <UserAccessDiv>
-        <CardHeader
-          title={'Ikke innlogget'}
-          avatar={
-            <IconBox size={48}>
-              <Locked style={{ color: navRod }} />
-            </IconBox>
-          }
-        />
-        <CardContent
-          style={{
-            height: '200px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Close style={{ fontSize: '64px', color: navRod, display: 'flex' }} />
-        </CardContent>
-        <CardActions>
-          <i>Logg inn for å se tilganger</i>
-        </CardActions>
-      </UserAccessDiv>
-    )
-
   if (isOwner) {
     return (
+
       <>
-        <SubHeader>
-          Brukere i listen nedenfor kan gi seg selv tilgang til produktet
-        </SubHeader>
-        <Requesters id={id} requesters={requesters} />
-        <div style={{ marginTop: '20px' }}>
-          <SubHeader>Aktive brukere</SubHeader>
-          <CurrentAccess access={access} />
-        </div>
-        <div style={{ marginTop: '20px' }}>
-          <SubHeader>Tidligere brukere</SubHeader>
-          <PreviousAccess access={access} />
-        </div>
       </>
     )
   }
