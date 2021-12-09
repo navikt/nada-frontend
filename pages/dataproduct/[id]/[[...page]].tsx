@@ -157,7 +157,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const apolloClient = initializeApollo()
 
-    console.log("called getServerSideProps, fetched from backend")
     await apolloClient.query({
         query: GET_DATAPRODUCT,
         variables: {id},
@@ -166,7 +165,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 cookie,
             },
         },
-    }).then(console.log)
+    })
     return addApolloState(apolloClient, {
         props: {id},
     })

@@ -3,12 +3,13 @@ interface OwnerProps {
 }
 
 const Owner = ({ product }: OwnerProps) => {
-
-  const access = product.access
-  const requesters = product.requesters
-  const name = product.name
-
-  return (<>access: {requesters}</>)
+  return (
+    <>
+      name: {product.name}
+      requesters: {product.requesters}
+      access: {product.access}
+    </>
+  )
 }
 
 
