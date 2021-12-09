@@ -152,12 +152,12 @@ const Dataproduct = (props: DataproductProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    console.log("called")
     const {id} = context.query
     const cookie = context.req.headers.cookie
 
     const apolloClient = initializeApollo()
 
+    console.log("called getServerSideProps, fetched from backend")
     await apolloClient.query({
         query: GET_DATAPRODUCT,
         variables: {id},
