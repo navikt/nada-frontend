@@ -21,6 +21,7 @@ import TabPanel, {TabPanelType} from "../../../components/lib/tabPanel";
 import DataproductInfo from "../../../components/dataproducts/dataproductInfo";
 import DataproductTableSchema from "../../../components/dataproducts/dataproductTableSchema";
 import Owner from "../../../components/dataproducts/access/owner";
+import {useQuery} from "@apollo/client";
 
 
 const Container = styled.div`
@@ -43,9 +44,9 @@ const Dataproduct = (props: DataproductProps) => {
     const [showDelete, setShowDelete] = useState(false)
 
     const userInfo = useUserInfoDetailsQuery().data?.userInfo
-    const {data, loading, error} = useDataproductQuery({
+    const {data, loading, error} = useQuery(GET_DATAPRODUCT,{
         variables: {id},
-        ssr: true,
+        ssr: true
     })
 
     useEffect(() => {
