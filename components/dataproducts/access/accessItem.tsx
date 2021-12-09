@@ -4,7 +4,6 @@ import { AccessDetails } from './accessDetails'
 import { Access, useRevokeAccessMutation } from '../../../lib/schema/graphql'
 import { StyledButtonDiv } from '../../lib/rightJustifiedGiveAccess'
 import { Button } from '@navikt/ds-react'
-import { removeSubjectType } from './accessControls'
 
 const AccessItemLinkDiv = styled.div`
   background-color: ${navGraBakgrunn};
@@ -45,7 +44,6 @@ export const AccessItem = ({ access }: AccessItemProps) => {
   return (
     <AccessItemLinkDiv>
       <StyledAccessItem>
-        <h3>{removeSubjectType(access.subject)}</h3>
         <AccessDetails access={access} />
         {!access.revoked && (
           <StyledButtonDiv>
