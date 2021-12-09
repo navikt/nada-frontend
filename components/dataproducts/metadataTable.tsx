@@ -1,10 +1,12 @@
-import { DataproductDetailProps } from './dataproductDetail'
-import Link from 'next/link'
 import StyledMetadataTable from '../lib/styledMetadataTable'
 import humanizeDate from '../lib/humanizeDate'
-import styled from 'styled-components'
 import * as React from 'react'
-import { ExternalLink } from '@navikt/ds-icons'
+import {ExternalLink} from '@navikt/ds-icons'
+import {DataproductQuery} from "../../lib/schema/graphql";
+
+interface DataproductDetailProps {
+  product: DataproductQuery['dataproduct']
+}
 
 export const MetadataTable = ({ product }: DataproductDetailProps) => (
   <StyledMetadataTable type={'Dataproduct'}>
@@ -32,10 +34,6 @@ export const MetadataTable = ({ product }: DataproductDetailProps) => (
       <tr>
         <th>Opprettet:</th>
         <td>{humanizeDate(product.created)}</td>
-      </tr>
-      <tr>
-        <th>Oppdatert:</th>
-        <td>{humanizeDate(product.lastModified)}</td>
       </tr>
     </tbody>
   </StyledMetadataTable>
