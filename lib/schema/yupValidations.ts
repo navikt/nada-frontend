@@ -31,25 +31,4 @@ export const owner = yup.object().shape({
   teamkatalogen: yup.string(),
 })
 
-export const updateCollectionValidation = yup.object().shape({
-  name: yup.string().required('Du må fylle inn navn'),
-  description: yup.string(),
-  keywords: yup.array().of(yup.string()),
-})
 
-export const newCollectionValidation = updateCollectionValidation.concat(
-  yup.object().shape({
-    group: yup.string().required('trenger teamnavn'),
-  })
-)
-
-export const addRequesterValidation = yup.object().shape({
-  subject: yup
-    .string()
-    .email('Gyldig epost for gruppe eller bruker')
-    .required('Gruppe- eller person-email'),
-})
-
-export const addAccessValidation = yup.object().shape({
-  expires: yup.string(),
-})
