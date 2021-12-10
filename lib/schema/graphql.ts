@@ -133,6 +133,11 @@ export type Group = {
   name: Scalars['String']
 }
 
+/** MappingService defines all possible service types that a dataproduct can be exposed to. */
+export enum MappingService {
+  Metabase = 'metabase',
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   /**
@@ -161,6 +166,12 @@ export type Mutation = {
    * Requires authentication.
    */
   grantAccessToDataproduct: Access
+  /**
+   * mapDataproduct exposes a dataproduct to third party services, e.g. metabase
+   *
+   * Requires authentication
+   */
+  mapDataproduct: Scalars['Boolean']
   /**
    * removeRequesterFromDataproduct removes a requester from the dataproduct.
    *
@@ -203,6 +214,11 @@ export type MutationGrantAccessToDataproductArgs = {
   expires?: Maybe<Scalars['Time']>
   subject?: Maybe<Scalars['String']>
   subjectType?: Maybe<SubjectType>
+}
+
+export type MutationMapDataproductArgs = {
+  dataproductId: Scalars['ID']
+  services: Array<MappingService>
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -278,6 +294,10 @@ export type Query = {
    * Requires authentication.
    */
   gcpGetTables: Array<BigQueryTable>
+  /** getDataproductByMapping returns the dataproduct exposed to a service. */
+  getDataproductByMapping: Array<Dataproduct>
+  /** getDataproductMappings returns the service a dataproduct is exposed to. */
+  getDataproductMappings: Array<MappingService>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** searches teamkatalogen for teams where team name matches query input */
@@ -304,6 +324,14 @@ export type QueryGcpGetDatasetsArgs = {
 export type QueryGcpGetTablesArgs = {
   datasetID: Scalars['String']
   projectID: Scalars['String']
+}
+
+export type QueryGetDataproductByMappingArgs = {
+  service: MappingService
+}
+
+export type QueryGetDataproductMappingsArgs = {
+  dataproductId: Scalars['ID']
 }
 
 export type QuerySearchArgs = {
