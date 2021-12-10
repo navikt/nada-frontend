@@ -418,6 +418,30 @@ export type AddRequesterMutation = {
   addRequesterToDataproduct: boolean
 }
 
+export type DataproductAccessQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DataproductAccessQuery = {
+  __typename?: 'Query'
+  dataproduct: {
+    __typename?: 'Dataproduct'
+    id: string
+    name: string
+    requesters: Array<string>
+    owner: { __typename?: 'Owner'; group: string }
+    access: Array<{
+      __typename?: 'Access'
+      id: string
+      subject: string
+      granter: string
+      expires?: any | null | undefined
+      created: any
+      revoked?: any | null | undefined
+    }>
+  }
+}
+
 export type GrantAccessMutationVariables = Exact<{
   dataproductID: Scalars['ID']
   subject: Scalars['String']
@@ -474,21 +498,11 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
-    requesters: Array<string>
     owner: {
       __typename?: 'Owner'
       group: string
       teamkatalogenURL?: string | null | undefined
     }
-    access: Array<{
-      __typename?: 'Access'
-      id: string
-      subject: string
-      granter: string
-      expires?: any | null | undefined
-      created: any
-      revoked?: any | null | undefined
-    }>
     datasource: {
       __typename?: 'BigQuery'
       projectID: string
@@ -712,6 +726,77 @@ export type AddRequesterMutationResult =
 export type AddRequesterMutationOptions = Apollo.BaseMutationOptions<
   AddRequesterMutation,
   AddRequesterMutationVariables
+>
+export const DataproductAccessDocument = gql`
+  query DataproductAccess($id: ID!) {
+    dataproduct(id: $id) {
+      id
+      name
+      owner {
+        group
+      }
+      access {
+        id
+        subject
+        granter
+        expires
+        created
+        revoked
+      }
+      requesters
+    }
+  }
+`
+
+/**
+ * __useDataproductAccessQuery__
+ *
+ * To run a query within a React component, call `useDataproductAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDataproductAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDataproductAccessQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDataproductAccessQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >(DataproductAccessDocument, options)
+}
+export function useDataproductAccessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    DataproductAccessQuery,
+    DataproductAccessQueryVariables
+  >(DataproductAccessDocument, options)
+}
+export type DataproductAccessQueryHookResult = ReturnType<
+  typeof useDataproductAccessQuery
+>
+export type DataproductAccessLazyQueryHookResult = ReturnType<
+  typeof useDataproductAccessLazyQuery
+>
+export type DataproductAccessQueryResult = Apollo.QueryResult<
+  DataproductAccessQuery,
+  DataproductAccessQueryVariables
 >
 export const GrantAccessDocument = gql`
   mutation GrantAccess(
@@ -941,15 +1026,6 @@ export const DataproductDocument = gql`
         group
         teamkatalogenURL
       }
-      access {
-        id
-        subject
-        granter
-        expires
-        created
-        revoked
-      }
-      requesters
       datasource {
         type: __typename
         ... on BigQuery {

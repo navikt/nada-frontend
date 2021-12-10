@@ -15,15 +15,6 @@ export const GET_DATAPRODUCT = gql`
         group
         teamkatalogenURL
       }
-      access {
-        id
-        subject
-        granter
-        expires
-        created
-        revoked
-      }
-      requesters
       datasource {
         type: __typename
         ... on BigQuery {

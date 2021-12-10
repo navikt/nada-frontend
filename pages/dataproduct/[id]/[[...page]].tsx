@@ -1,6 +1,11 @@
 import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
-import {Group, useDataproductQuery, useUserInfoDetailsQuery} from '../../../lib/schema/graphql'
+import {
+    Group,
+    useDataproductAccessQuery,
+    useDataproductQuery,
+    useUserInfoDetailsQuery
+} from '../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../../../lib/apollo'
 import {GET_DATAPRODUCT} from '../../../lib/queries/dataproduct/dataproduct'
@@ -21,7 +26,7 @@ import TabPanel, {TabPanelType} from "../../../components/lib/tabPanel";
 import DataproductInfo from "../../../components/dataproducts/dataproductInfo";
 import DataproductTableSchema from "../../../components/dataproducts/dataproductTableSchema";
 import Owner from "../../../components/dataproducts/access/owner";
-import {useQuery} from "@apollo/client";
+import {GET_DATAPRODUCT_ACCESS} from "../../../lib/queries/access/dataproductAccess";
 
 
 const Container = styled.div`
@@ -44,7 +49,12 @@ const Dataproduct = (props: DataproductProps) => {
     const [showDelete, setShowDelete] = useState(false)
 
     const userInfo = useUserInfoDetailsQuery().data?.userInfo
-    const {data, loading, error} = useQuery(GET_DATAPRODUCT,{
+    const productQuery = useDataproductQuery({
+        variables: {id},
+        ssr: true
+    })
+
+    const accessQuery = useDataproductAccessQuery({
         variables: {id},
         ssr: true
     })
@@ -52,15 +62,15 @@ const Dataproduct = (props: DataproductProps) => {
     useEffect(() => {
         const eventProperties = {
             sidetittel: 'produktside',
-            title: data?.dataproduct.name,
+            title: productQuery.data?.dataproduct.name,
         }
         amplitudeLog('sidevisning', eventProperties)
-    }, [])
+    })
 
-    if (error) return <ErrorMessage error={error}/>
-    if (loading || !data?.dataproduct) return <LoaderSpinner/>
+    if (productQuery.error) return <ErrorMessage error={productQuery.error}/>
+    if (productQuery.loading || !productQuery.data?.dataproduct) return <LoaderSpinner/>
 
-    const product = data.dataproduct
+    const product = productQuery.data.dataproduct
 
     const isOwner =
         userInfo?.groups.some((g: Group) => {
@@ -84,13 +94,14 @@ const Dataproduct = (props: DataproductProps) => {
             title: 'Skjema',
             slug: 'schema',
             component: (
-                <DataproductTableSchema datasource={product.datasource} />
+                <DataproductTableSchema datasource={product.datasource}/>
             ),
         },
         {
             title: 'tilganger',
             slug: 'access',
-            component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ? <Owner product={product} /> : <>user panel</>
+            component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
+                <Owner accessQuery={accessQuery}/> : <>user panel</>
         },
     ]
 
@@ -107,21 +118,21 @@ const Dataproduct = (props: DataproductProps) => {
     return (
         <>
             <Head>
-                <title>{data.dataproduct.name}</title>
+                <title>{product.name}</title>
             </Head>
             <Container>
                 <BackButton/>
                 <Product>
                     <TopBar type={'Dataproduct'}>
-                        <Name>{data.dataproduct.name}</Name>
+                        <Name>{product.name}</Name>
                         {isOwner && (
                             <EditMenu
-                                onEdit={() => router.push(`/dataproduct/${data.dataproduct.id}/edit`)}
+                                onEdit={() => router.push(`/dataproduct/${product.id}/edit`)}
                                 onDelete={() => setShowDelete(true)}
                             />
                         )}
                     </TopBar>
-                    <MetadataTable product={data.dataproduct}/>
+                    <MetadataTable product={product}/>
                     <Tabs
                         variant='standard'
                         value={currentPage}
@@ -159,6 +170,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     await apolloClient.query({
         query: GET_DATAPRODUCT,
+        variables: {id},
+        context: {
+            headers: {
+                cookie,
+            },
+        },
+    })
+    await apolloClient.query({
+        query: GET_DATAPRODUCT_ACCESS,
         variables: {id},
         context: {
             headers: {
