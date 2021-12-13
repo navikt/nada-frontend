@@ -158,7 +158,7 @@ const Owner = ({accessQuery}: OwnerProps) => {
                 legg til
             </Button>
             <br/>
-            <AccessList access={dataproduct.access} requesters={dataproduct.requesters}/>
+            <AccessList id={dataproduct.id} access={dataproduct.access} requesters={dataproduct.requesters}/>
             <Modal open={open} onClose={closeAndReset}>
                 <Box sx={style}>
                     <div>
