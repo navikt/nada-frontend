@@ -7,6 +7,7 @@ export const GET_DATAPRODUCT_ACCESS = gql`
       name
       owner {
         group
+        teamkatalogenURL
       }
       access {
         id

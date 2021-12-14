@@ -457,7 +457,11 @@ export type DataproductAccessQuery = {
     id: string
     name: string
     requesters: Array<string>
-    owner: { __typename?: 'Owner'; group: string }
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
     access: Array<{
       __typename?: 'Access'
       id: string
@@ -762,6 +766,7 @@ export const DataproductAccessDocument = gql`
       name
       owner {
         group
+        teamkatalogenURL
       }
       access {
         id

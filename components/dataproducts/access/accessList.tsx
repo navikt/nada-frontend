@@ -20,6 +20,7 @@ const productAccess = (access: access[], requesters: string[]): AccessEntry[] =>
     return { subject: r, canRequest: true }
   })
 
+  // Valid access entries are unrevoked and either eternal or expires in the future
   const valid = (a: access) => !a.revoked && (!a.expires || isAfter(parseISO(a.expires), Date.now()))
   access.filter(valid).forEach(a => {
     // Check if we have a entry in ret with subject === a.subject,
@@ -44,7 +45,6 @@ interface access {
   created: any;
   revoked?: any;
 }
-
 
 interface AccessListProps {
   id: string,

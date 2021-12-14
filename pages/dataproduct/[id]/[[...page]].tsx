@@ -169,15 +169,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const apolloClient = initializeApollo()
 
-  await apolloClient.query({
-    query: GET_DATAPRODUCT,
-    variables: { id },
-    context: {
-      headers: {
-        cookie,
+  try {
+    await apolloClient.query({
+      query: GET_DATAPRODUCT,
+      variables: { id },
+      context: {
+        headers: {
+          cookie,
+        },
       },
-    },
-  })
+    })
+  } catch (e) {
+    console.log(e)
+  }
 
   try {
       await apolloClient.query({
