@@ -21,6 +21,7 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { endOfDay } from 'date-fns'
 import AccessList from './accessList'
+import { AddCircle } from '@navikt/ds-icons'
 
 export const addAccessValidation = yup.object().shape({
   subjectType: yup.string().required(),
@@ -153,8 +154,8 @@ const Owner = ({ accessQuery }: OwnerProps) => {
 
   return (
     <>
-      <Button key='legg til' variant='primary' size='small' onClick={() => setOpen(true)}>
-        legg til
+      <Button key='legg_til' style={{marginLeft: '15px', marginBottom: '10px'}} variant='primary' size='small' onClick={() => setOpen(true)}>
+        <AddCircle /> Legg til
       </Button>
       <br />
       <AccessList id={dataproduct.id} access={dataproduct.access} requesters={dataproduct.requesters} />
