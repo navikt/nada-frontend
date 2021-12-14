@@ -27,6 +27,7 @@ import DataproductInfo from '../../../components/dataproducts/dataproductInfo'
 import DataproductTableSchema from '../../../components/dataproducts/dataproductTableSchema'
 import Owner from '../../../components/dataproducts/access/owner'
 import { GET_DATAPRODUCT_ACCESS } from '../../../lib/queries/access/dataproductAccess'
+import User from "../../../components/dataproducts/access/user";
 
 
 const Container = styled.div`
@@ -101,7 +102,7 @@ const Dataproduct = (props: DataproductProps) => {
       title: 'tilganger',
       slug: 'access',
       component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
-        <Owner accessQuery={accessQuery} /> : <>user panel</>,
+        <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery}/>,
     },
   ]
 
