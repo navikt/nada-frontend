@@ -216,7 +216,7 @@ const Owner = ({accessQuery}: OwnerProps) => {
                             {(subject || subjectType === 'all-users') &&
                             <>
                                 <hr/>
-                                <h3> Hvor lenge? </h3>
+                                <h3> Hva slags tilgang? </h3>
                                 <FormControl component='fieldset'>
                                     <Controller
                                         rules={{required: true}}
@@ -227,17 +227,17 @@ const Owner = ({accessQuery}: OwnerProps) => {
                                                 <FormControlLabel
                                                     value='ondemand'
                                                     control={<Radio/>}
-                                                    label='Så lenge de ber om det'
+                                                    label='Må gi seg selv tilgang ved behov'
                                                 />
                                                 <FormControlLabel
                                                     value='eternal'
                                                     control={<Radio/>}
-                                                    label='Evig'
+                                                    label='Har alltid tilgang'
                                                 />
                                                 <FormControlLabel
                                                     value='until'
                                                     control={<Radio/>}
-                                                    label='Til denne datoen'
+                                                    label='Har tilgang til denne datoen'
                                                 />
                                             </RadioGroup>
                                         )}
