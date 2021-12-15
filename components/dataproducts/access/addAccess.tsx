@@ -1,17 +1,15 @@
-import {
-  GrantAccessMutationVariables,
-  SubjectType,
-  useGrantAccessMutation,
-} from '../../../lib/schema/graphql'
+import { SubjectType, useGrantAccessMutation } from '../../../lib/schema/graphql'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import * as React from 'react'
 import { useState } from 'react'
-import { LocalizationProvider } from '@mui/lab'
+import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TextField from '@mui/material/TextField'
 import { Box, Modal } from '@mui/material'
 import { endOfDay } from 'date-fns'
-import AccessSubmit from './accessSubmit'
 import amplitudeLog from '../../../lib/amplitude'
-import { DesktopDatePicker } from '@mui/lab'
+import RightJustifiedSubmitButton from '../../widgets/formSubmit'
+import { Alert } from '@navikt/ds-react'
+import { useForm } from 'react-hook-form'
 
 interface AddAccessProps {
   dataproductID: string
@@ -22,42 +20,38 @@ interface AddAccessProps {
 }
 
 const AddAccess = ({
-  dataproductID,
-  dataproductName,
-  open,
-  setOpen,
-  subject,
-}: AddAccessProps) => {
+                     dataproductID,
+                     dataproductName,
+                     open,
+                     setOpen,
+                     subject,
+                   }: AddAccessProps) => {
   const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
-  const handleChange = (newValue: Date | null) => {
-    setDate(newValue)
-  }
-
+  const [formError, setFormError] = useState('')
   const [grantAccess] = useGrantAccessMutation()
+  const { handleSubmit } = useForm()
 
-  const onSubmit = (evig: boolean = false) => {
-    let variables: GrantAccessMutationVariables = {
-      dataproductID,
-      subject,
-      subjectType: SubjectType.User,
-    }
-    if (!evig && date) {
-      variables.expires = endOfDay(date)
-    }
-
+  const onSubmit = async () => {
     amplitudeLog('klikk', {
       sidetittel: 'tilgang',
       version: dataproductID,
       title: dataproductName,
-      type: evig ? 'Evig' : 'Dato',
     })
-    grantAccess({
-      variables,
-      refetchQueries: ['DataproductAccess'],
-    })
-      .then()
-      .catch(console.log)
-    setOpen(false)
+
+    try {
+      await grantAccess({
+        variables: {
+          dataproductID,
+          subject,
+          subjectType: SubjectType.User,
+          expires: date,
+        },
+        refetchQueries: ['DataproductAccess', 'userInfoDetails'],
+      })
+      setOpen(false)
+    } catch (e: any) {
+      setFormError(e.message)
+    }
   }
 
   const style = {
@@ -65,7 +59,7 @@ const AddAccess = ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 300,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -75,20 +69,18 @@ const AddAccess = ({
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box sx={style}>
-        <form onSubmit={() => onSubmit()}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
-              label="Gi meg tilgang til"
-              inputFormat="MM/dd/yyyy"
+              label='Til'
+              inputFormat='MM/dd/yyyy'
               value={date}
-              onChange={handleChange}
+              onChange={(newVal => setDate(newVal))}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
-          <AccessSubmit
-            onCancel={() => setOpen(false)}
-            onEvig={() => onSubmit(true)}
-          />
+          {formError && <Alert variant={'error'}>{formError}</Alert>}
+          <RightJustifiedSubmitButton onCancel={() => setOpen(false)} />
         </form>
       </Box>
     </Modal>

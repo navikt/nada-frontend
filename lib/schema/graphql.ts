@@ -133,6 +133,11 @@ export type Group = {
   name: Scalars['String']
 }
 
+/** MappingService defines all possible service types that a dataproduct can be exposed to. */
+export enum MappingService {
+  Metabase = 'metabase',
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   /**
@@ -161,6 +166,12 @@ export type Mutation = {
    * Requires authentication.
    */
   grantAccessToDataproduct: Access
+  /**
+   * mapDataproduct exposes a dataproduct to third party services, e.g. metabase
+   *
+   * Requires authentication
+   */
+  mapDataproduct: Scalars['Boolean']
   /**
    * removeRequesterFromDataproduct removes a requester from the dataproduct.
    *
@@ -203,6 +214,11 @@ export type MutationGrantAccessToDataproductArgs = {
   expires?: Maybe<Scalars['Time']>
   subject?: Maybe<Scalars['String']>
   subjectType?: Maybe<SubjectType>
+}
+
+export type MutationMapDataproductArgs = {
+  dataproductId: Scalars['ID']
+  services: Array<MappingService>
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -278,6 +294,10 @@ export type Query = {
    * Requires authentication.
    */
   gcpGetTables: Array<BigQueryTable>
+  /** getDataproductByMapping returns the dataproduct exposed to a service. */
+  getDataproductByMapping: Array<Dataproduct>
+  /** getDataproductMappings returns the service a dataproduct is exposed to. */
+  getDataproductMappings: Array<MappingService>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** searches teamkatalogen for teams where team name matches query input */
@@ -304,6 +324,14 @@ export type QueryGcpGetDatasetsArgs = {
 export type QueryGcpGetTablesArgs = {
   datasetID: Scalars['String']
   projectID: Scalars['String']
+}
+
+export type QueryGetDataproductByMappingArgs = {
+  service: MappingService
+}
+
+export type QueryGetDataproductMappingsArgs = {
+  dataproductId: Scalars['ID']
 }
 
 export type QuerySearchArgs = {
@@ -429,7 +457,11 @@ export type DataproductAccessQuery = {
     id: string
     name: string
     requesters: Array<string>
-    owner: { __typename?: 'Owner'; group: string }
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
     access: Array<{
       __typename?: 'Access'
       id: string
@@ -440,15 +472,6 @@ export type DataproductAccessQuery = {
       revoked?: any | null | undefined
     }>
   }
-}
-
-export type DataproductRequestersQueryVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type DataproductRequestersQuery = {
-  __typename?: 'Query'
-  dataproduct: { __typename?: 'Dataproduct'; requesters: Array<string> }
 }
 
 export type GrantAccessMutationVariables = Exact<{
@@ -743,6 +766,7 @@ export const DataproductAccessDocument = gql`
       name
       owner {
         group
+        teamkatalogenURL
       }
       access {
         id
@@ -806,64 +830,6 @@ export type DataproductAccessLazyQueryHookResult = ReturnType<
 export type DataproductAccessQueryResult = Apollo.QueryResult<
   DataproductAccessQuery,
   DataproductAccessQueryVariables
->
-export const DataproductRequestersDocument = gql`
-  query DataproductRequesters($id: ID!) {
-    dataproduct(id: $id) {
-      requesters
-    }
-  }
-`
-
-/**
- * __useDataproductRequestersQuery__
- *
- * To run a query within a React component, call `useDataproductRequestersQuery` and pass it any options that fit your needs.
- * When your component renders, `useDataproductRequestersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDataproductRequestersQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDataproductRequestersQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    DataproductRequestersQuery,
-    DataproductRequestersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    DataproductRequestersQuery,
-    DataproductRequestersQueryVariables
-  >(DataproductRequestersDocument, options)
-}
-export function useDataproductRequestersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    DataproductRequestersQuery,
-    DataproductRequestersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    DataproductRequestersQuery,
-    DataproductRequestersQueryVariables
-  >(DataproductRequestersDocument, options)
-}
-export type DataproductRequestersQueryHookResult = ReturnType<
-  typeof useDataproductRequestersQuery
->
-export type DataproductRequestersLazyQueryHookResult = ReturnType<
-  typeof useDataproductRequestersLazyQuery
->
-export type DataproductRequestersQueryResult = Apollo.QueryResult<
-  DataproductRequestersQuery,
-  DataproductRequestersQueryVariables
 >
 export const GrantAccessDocument = gql`
   mutation GrantAccess(

@@ -27,6 +27,7 @@ const MenuLine = styled.div`
 const StyledA = styled.a`
   color: inherit;
 `
+
 export default function User() {
   const userInfo = useUserInfoDetailsQuery().data?.userInfo
 

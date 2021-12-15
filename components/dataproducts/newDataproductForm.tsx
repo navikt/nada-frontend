@@ -33,7 +33,7 @@ export const NewDataproductForm = () => {
   const [createDataproduct, { data, loading, error: backendError }] =
     useMutation(CREATE_DATAPRODUCT, {
       onCompleted: (data) =>
-        router.push(`/dataproduct/${data.createDataproduct.id}`),
+        router.push(`/dataproduct/${data.createDataproduct.id}/access`),
     })
   const keywords = watch('keywords')
   const setKeywords = (value: string[]) => {
