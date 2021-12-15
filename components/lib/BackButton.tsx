@@ -10,8 +10,16 @@ const Container = styled.div`
   cursor: pointer;
 `
 
-export const BackButton = () => (
-  <Container onClick={() => window.history.back()}>
-    <Back /> Tilbake
-  </Container>
-)
+interface BackButtonProps {
+  onClick: () => any
+}
+
+const BackButton = ({ onClick }: BackButtonProps) => {
+  return (
+    <Container onClick={onClick}>
+      <Back /> Tilbake
+    </Container>
+  )
+}
+
+export default BackButton

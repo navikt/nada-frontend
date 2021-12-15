@@ -13,7 +13,6 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
-import { BackButton } from '../../../components/lib/BackButton'
 import TopBar from '../../../components/lib/topBar'
 import { Name } from '../../../components/lib/detailTypography'
 import EditMenu from '../../../components/lib/editMenu'
@@ -28,6 +27,7 @@ import DataproductTableSchema from '../../../components/dataproducts/dataproduct
 import Owner from '../../../components/dataproducts/access/owner'
 import { GET_DATAPRODUCT_ACCESS } from '../../../lib/queries/access/dataproductAccess'
 import User from "../../../components/dataproducts/access/user";
+import BackButton from '../../../components/lib/BackButton'
 
 
 const Container = styled.div`
@@ -122,7 +122,7 @@ const Dataproduct = (props: DataproductProps) => {
         <title>{product.name}</title>
       </Head>
       <Container>
-        <BackButton />
+        <BackButton onClick={() => router.push('/')} />
         <Product>
           <TopBar type={'Dataproduct'}>
             <Name>{product.name}</Name>

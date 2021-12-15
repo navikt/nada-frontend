@@ -24,8 +24,8 @@ const User = ({ accessQuery }: UserProps) => {
   if (error) return <ErrorMessage error={error} />
   if (loading || !dataproduct) return <LoaderSpinner />
   const activeAccess = dataproduct.access.filter(a => (!a.revoked && (!a.expires || isAfter(parseISO(a.expires), Date.now()))))[0]
-  const personalAccess = activeAccess?.subject.startsWith("user:")
-  const group = activeAccess?.subject.split("group:")[1]
+  const personalAccess = activeAccess?.subject.startsWith('user:')
+  const group = activeAccess?.subject.split('group:')[1]
 
   const removeAccess = async (id: string) => {
     try {
@@ -46,7 +46,8 @@ const User = ({ accessQuery }: UserProps) => {
     {activeAccess.expires && `til ${humanizeDate(activeAccess.expires)}`}
     {' '}{group && `via gruppen ${group}`}
     <br />
-    {personalAccess && <Button onClick={() => removeAccess(activeAccess.id)} variant='danger' style={{ marginTop: '10px' }}><Delete />Fjern
+    {personalAccess &&
+    <Button onClick={() => removeAccess(activeAccess.id)} variant='danger' style={{ marginTop: '10px' }}><Delete />Fjern
       tilgang </Button>}
   </>)
 
