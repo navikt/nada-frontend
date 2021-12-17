@@ -30,7 +30,6 @@ const StyledA = styled.a`
 
 export default function User() {
     const userInfo = useContext(UserState)
-    console.log("in user", userInfo)
 
     const router = useRouter()
     const menuId = 'primary-search-account-menu'

@@ -1,14 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import TreeView from '@mui/lab/TreeView'
-import {
-  FieldErrors,
-  FieldValues,
-  SetFieldValue,
-  UseFormRegister,
-  UseFormWatch,
-} from 'react-hook-form'
+import { FieldErrors, FieldValues, SetFieldValue, UseFormRegister, UseFormWatch } from 'react-hook-form'
 import { Project } from './datasource/project'
-import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
+import { UserState } from '../../lib/context'
 
 interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
@@ -18,11 +12,11 @@ interface DataproductSourceFormProps {
 }
 
 export const DataproductSourceForm = ({
-  register,
-  watch,
-  setValue,
-}: DataproductSourceFormProps) => {
-  const userInfo = useUserInfoDetailsQuery().data?.userInfo
+                                        register,
+                                        watch,
+                                        setValue,
+                                      }: DataproductSourceFormProps) => {
+  const userInfo = useContext(UserState)
 
   const [activePaths, setActivePaths] = useState<string[]>([])
   register('bigquery.projectID')

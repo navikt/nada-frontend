@@ -4,13 +4,13 @@ import {
   Group,
   useDataproductAccessQuery,
   useDataproductQuery,
-  useUserInfoDetailsQuery,
+  useDeleteDataproductMutation,
 } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../lib/apollo'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar from '../../../components/lib/topBar'
@@ -26,9 +26,10 @@ import DataproductInfo from '../../../components/dataproducts/dataproductInfo'
 import DataproductTableSchema from '../../../components/dataproducts/dataproductTableSchema'
 import Owner from '../../../components/dataproducts/access/owner'
 import { GET_DATAPRODUCT_ACCESS } from '../../../lib/queries/access/dataproductAccess'
-import User from "../../../components/dataproducts/access/user";
+import User from '../../../components/dataproducts/access/user'
 import BackButton from '../../../components/lib/BackButton'
-
+import { UserState } from '../../../lib/context'
+import DeleteModal from '../../../components/lib/deleteModal'
 
 const Container = styled.div`
   margin-top: 40px;
@@ -48,8 +49,9 @@ const Dataproduct = (props: DataproductProps) => {
   const router = useRouter()
 
   const [showDelete, setShowDelete] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
 
-  const userInfo = useUserInfoDetailsQuery().data?.userInfo
+  const userInfo = useContext(UserState)
   const productQuery = useDataproductQuery({
     variables: { id },
     ssr: true,
@@ -68,6 +70,20 @@ const Dataproduct = (props: DataproductProps) => {
     amplitudeLog('sidevisning', eventProperties)
   })
 
+  const [deleteDataproduct] = useDeleteDataproductMutation({
+    variables: { id: id },
+    awaitRefetchQueries: true,
+    refetchQueries: ['searchContent'],
+  })
+
+  const onDelete = async () => {
+    try {
+      await deleteDataproduct()
+      await router.push('/')
+    } catch (e: any) {
+      setDeleteError(e.toString())
+    }
+  }
   if (productQuery.error) return <ErrorMessage error={productQuery.error} />
   if (productQuery.loading || !productQuery.data?.dataproduct) return <LoaderSpinner />
 
@@ -77,7 +93,6 @@ const Dataproduct = (props: DataproductProps) => {
     userInfo?.groups.some((g: Group) => {
       return g.email === product.owner.group
     }) || false
-
 
   const menuItems: Array<{
     title: string
@@ -102,10 +117,9 @@ const Dataproduct = (props: DataproductProps) => {
       title: 'tilganger',
       slug: 'access',
       component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
-        <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery}/>,
+        <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery} />,
     },
   ]
-
 
   const currentPage = menuItems
     .map((e) => e.slug)
@@ -114,7 +128,6 @@ const Dataproduct = (props: DataproductProps) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
   }
-
 
   return (
     <>
@@ -157,6 +170,13 @@ const Dataproduct = (props: DataproductProps) => {
               {i.component}
             </TabPanel>
           ))}
+          <DeleteModal
+            open={showDelete}
+            onCancel={() => setShowDelete(false)}
+            onConfirm={() => onDelete()}
+            name={product.name}
+            error={deleteError}
+          />
         </Product>
       </Container>
     </>
@@ -184,17 +204,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-      await apolloClient.query({
-          query: GET_DATAPRODUCT_ACCESS,
-          variables: {id},
-          context: {
-              headers: {
-                  cookie,
-              },
-          },
-      })
+    await apolloClient.query({
+      query: GET_DATAPRODUCT_ACCESS,
+      variables: { id },
+      context: {
+        headers: {
+          cookie,
+        },
+      },
+    })
   } catch (e) {
-      // ignore access denied if not logged in
+    // ignore access denied if not logged in
   }
 
   return addApolloState(apolloClient, {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Modal, Button } from '@navikt/ds-react'
+import { Modal, Button, Alert } from '@navikt/ds-react'
 import styled from 'styled-components'
 
 const ButtonStyledDiv = styled.div`
@@ -18,12 +18,14 @@ interface DeleteModalProps {
   onCancel: () => void
   onConfirm: () => void
   name: string
+  error: string
 }
 export const DeleteModal = ({
   open,
   onCancel,
   onConfirm,
   name,
+  error,
 }: DeleteModalProps) => {
   return (
     <Modal open={open} onClose={() => onCancel}>
@@ -37,6 +39,7 @@ export const DeleteModal = ({
             Slett
           </Button>
         </ButtonStyledDiv>
+        {error && <Alert variant={'error'}>{error}</Alert>}
       </Modal.Content>
     </Modal>
   )

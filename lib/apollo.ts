@@ -17,14 +17,15 @@ const getQueryURI = () => {
   return isServer ? 'http://nada-backend/api/query' : '/api/query'
 }
 
-function createApolloClient() {
-  console.log("creating new apollo client")
-
+const createApolloClient = (cookie?: string) => {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: new HttpLink({
       uri: getQueryURI(),
       credentials: 'include',
+      headers: {
+        cookie,
+      }
     }),
     cache: new InMemoryCache({
       typePolicies: {
@@ -37,9 +38,8 @@ function createApolloClient() {
   })
 }
 
-export function initializeApollo(initialState: NormalizedCacheObject | null = null) {
-  const _apolloClient = apolloClient ?? createApolloClient()
-  //  console.log(apolloClient?.cache)
+export const initializeApollo = (initialState: NormalizedCacheObject | null = null, cookie?: string) => {
+  const _apolloClient = apolloClient ?? createApolloClient(cookie)
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here
@@ -67,15 +67,13 @@ export function initializeApollo(initialState: NormalizedCacheObject | null = nu
 
   // Create the Apollo Client once in the client
   if (!apolloClient) {
-    //_apolloClient.cache.evict({fieldName: 'userInfo'})
     apolloClient = _apolloClient
   }
 
-  //_apolloClient.cache.evict({fieldName: 'userInfo'})
   return _apolloClient
 }
 
-export function addApolloState(client: ApolloClient<NormalizedCacheObject>, pageProps: any) {
+export const addApolloState = (client: ApolloClient<NormalizedCacheObject>, pageProps: any) => {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }
@@ -83,9 +81,8 @@ export function addApolloState(client: ApolloClient<NormalizedCacheObject>, page
   return pageProps;
 }
 
-export function useApollo(pageProps: any) {
+export const useApollo = (pageProps: any) => {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
   const store = useMemo(() => initializeApollo(state), [state]);
-  //store.cache.evict({fieldName: 'userInfo'})
   return store;
 }
