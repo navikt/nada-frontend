@@ -69,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {},
     })
   } catch (e) {
-    return {}
+    return {props: {}}
   }
 }
 export default LandingPage
