@@ -692,6 +692,16 @@ export type SearchContentQuery = {
   }>
 }
 
+export type PublishStoryMutationVariables = Exact<{
+  id: Scalars['ID']
+  group: Scalars['String']
+}>
+
+export type PublishStoryMutation = {
+  __typename?: 'Mutation'
+  publishStory: { __typename?: 'Story'; id: string }
+}
+
 export type StoryQueryVariables = Exact<{
   id: Scalars['ID']
   draft?: Maybe<Scalars['Boolean']>
@@ -1550,6 +1560,57 @@ export type SearchContentLazyQueryHookResult = ReturnType<
 export type SearchContentQueryResult = Apollo.QueryResult<
   SearchContentQuery,
   SearchContentQueryVariables
+>
+export const PublishStoryDocument = gql`
+  mutation publishStory($id: ID!, $group: String!) {
+    publishStory(id: $id, group: $group) {
+      id
+    }
+  }
+`
+export type PublishStoryMutationFn = Apollo.MutationFunction<
+  PublishStoryMutation,
+  PublishStoryMutationVariables
+>
+
+/**
+ * __usePublishStoryMutation__
+ *
+ * To run a mutation, you first call `usePublishStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishStoryMutation, { data, loading, error }] = usePublishStoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      group: // value for 'group'
+ *   },
+ * });
+ */
+export function usePublishStoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PublishStoryMutation,
+    PublishStoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    PublishStoryMutation,
+    PublishStoryMutationVariables
+  >(PublishStoryDocument, options)
+}
+export type PublishStoryMutationHookResult = ReturnType<
+  typeof usePublishStoryMutation
+>
+export type PublishStoryMutationResult =
+  Apollo.MutationResult<PublishStoryMutation>
+export type PublishStoryMutationOptions = Apollo.BaseMutationOptions<
+  PublishStoryMutation,
+  PublishStoryMutationVariables
 >
 export const StoryDocument = gql`
   query Story($id: ID!, $draft: Boolean) {

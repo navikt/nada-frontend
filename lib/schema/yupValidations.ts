@@ -32,3 +32,7 @@ export const owner = yup.object().shape({
 })
 
 
+
+export const storyValidation = yup.object().shape({
+  group: yup.string().required('trenger teamnavn'),
+})
