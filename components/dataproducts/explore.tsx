@@ -27,6 +27,7 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     const [updateMapping] = useUpdateMappingMutation()
 
     const addToMetabase = async () => {
+        console.log("clicked to add")
         try{
             await updateMapping({
                 variables: {dataproductID: product.id, services: [MappingService.Metabase]},
@@ -39,6 +40,7 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     }
 
     const removeFromMetabase = async () => {
+        console.log("clicked to remove")
         try{
             await updateMapping({
                 variables: {dataproductID: product.id, services: []},
@@ -54,7 +56,6 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     const services = product.services
     const mappings = product.mappings
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
-    console.log(services)
 
     return (
         <>
@@ -69,11 +70,11 @@ const Explore = ({product, isOwner}: ExploreProps) => {
                 <hr/>
                 <ExploreLinks>
                     {!mappings.includes(MappingService.Metabase) &&
-                    <ExploreLink type={ItemType.addToMetabase} onClick={addToMetabase} title='Legg til i Metabase'/>}
+                    <ExploreLink type={ItemType.addToMetabase} onClick={() => addToMetabase()} title='Legg til i Metabase'/>}
                     {mappings.includes(MappingService.Metabase) && !services.metabase &&
                     <ExploreLink type={ItemType.metabase} loading={true} title='legger til i Metabase' description='Dette kan ta noen minutter'/>}
                     {mappings.includes(MappingService.Metabase) && services.metabase &&
-                    <ExploreLink type={ItemType.removeFromMetabase} onClick={removeFromMetabase}
+                    <ExploreLink type={ItemType.removeFromMetabase} onClick={() => removeFromMetabase()}
                                  title='Fjern fra Metabase'/>}
 
                 </ExploreLinks>
