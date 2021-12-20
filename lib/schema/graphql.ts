@@ -18,6 +18,8 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  /** Maps an arbitrary GraphQL value to a map[string]interface{} Go type. */
+  Map: any
   /** Time is a string in [RFC 3339](https://rfc-editor.org/rfc/rfc3339.html) format, with sub-second precision added if present. */
   Time: any
 }
@@ -100,6 +102,8 @@ export type Dataproduct = {
   keywords: Array<Scalars['String']>
   /** lastModified is the timestamp for when the dataproduct was last modified */
   lastModified: Scalars['Time']
+  /** mappings services a dataproduct is exposed to */
+  mappings: Array<MappingService>
   /** name of the dataproduct */
   name: Scalars['String']
   /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
@@ -110,6 +114,14 @@ export type Dataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters: Array<Scalars['String']>
+  /** services contains links to this dataproduct in other services */
+  services: DataproductServices
+}
+
+export type DataproductServices = {
+  __typename?: 'DataproductServices'
+  /** URL to the dataproduct in metabase */
+  metabase?: Maybe<Scalars['String']>
 }
 
 /** Datasource defines types that can be returned as a dataproduct datasource. */
@@ -172,6 +184,7 @@ export type Mutation = {
    * Requires authentication
    */
   mapDataproduct: Scalars['Boolean']
+  publishStory: Story
   /**
    * removeRequesterFromDataproduct removes a requester from the dataproduct.
    *
@@ -217,8 +230,13 @@ export type MutationGrantAccessToDataproductArgs = {
 }
 
 export type MutationMapDataproductArgs = {
-  dataproductId: Scalars['ID']
+  dataproductID: Scalars['ID']
   services: Array<MappingService>
+}
+
+export type MutationPublishStoryArgs = {
+  group: Scalars['String']
+  id: Scalars['ID']
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -296,10 +314,10 @@ export type Query = {
   gcpGetTables: Array<BigQueryTable>
   /** getDataproductByMapping returns the dataproduct exposed to a service. */
   getDataproductByMapping: Array<Dataproduct>
-  /** getDataproductMappings returns the service a dataproduct is exposed to. */
-  getDataproductMappings: Array<MappingService>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
+  stories: Array<Story>
+  story: Story
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>
   /** userInfo returns information about the logged in user. */
@@ -330,12 +348,17 @@ export type QueryGetDataproductByMappingArgs = {
   service: MappingService
 }
 
-export type QueryGetDataproductMappingsArgs = {
-  dataproductId: Scalars['ID']
-}
-
 export type QuerySearchArgs = {
   q?: Maybe<SearchQuery>
+}
+
+export type QueryStoriesArgs = {
+  draft?: Maybe<Scalars['Boolean']>
+}
+
+export type QueryStoryArgs = {
+  draft?: Maybe<Scalars['Boolean']>
+  id: Scalars['ID']
 }
 
 export type QueryTeamkatalogenArgs = {
@@ -367,6 +390,28 @@ export type SearchResultRow = {
   __typename?: 'SearchResultRow'
   excerpt: Scalars['String']
   result: SearchResult
+}
+
+export type Story = {
+  __typename?: 'Story'
+  created: Scalars['Time']
+  id: Scalars['ID']
+  lastModified?: Maybe<Scalars['Time']>
+  name: Scalars['String']
+  owner?: Maybe<Owner>
+  views: Array<StoryView>
+}
+
+export type StoryView = {
+  __typename?: 'StoryView'
+  spec: Scalars['Map']
+  type: StoryViewType
+}
+
+export enum StoryViewType {
+  Header = 'header',
+  Markdown = 'markdown',
+  Plotly = 'plotly',
 }
 
 /** SubjectType defines all possible types that can request access to a dataproduct. */
@@ -530,6 +575,11 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
+    mappings: Array<MappingService>
+    services: {
+      __typename?: 'DataproductServices'
+      metabase?: string | null | undefined
+    }
     owner: {
       __typename?: 'Owner'
       group: string
@@ -616,6 +666,16 @@ export type UpdateDataproductMutationVariables = Exact<{
 export type UpdateDataproductMutation = {
   __typename?: 'Mutation'
   updateDataproduct: { __typename?: 'Dataproduct'; id: string }
+}
+
+export type UpdateMappingMutationVariables = Exact<{
+  dataproductID: Scalars['ID']
+  services: Array<MappingService> | MappingService
+}>
+
+export type UpdateMappingMutation = {
+  __typename?: 'Mutation'
+  mapDataproduct: boolean
 }
 
 export type SearchContentQueryVariables = Exact<{
@@ -1055,6 +1115,10 @@ export const DataproductDocument = gql`
       repo
       pii
       keywords
+      mappings
+      services {
+        metabase
+      }
       owner {
         group
         teamkatalogenURL
@@ -1411,6 +1475,55 @@ export type UpdateDataproductMutationResult =
 export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
   UpdateDataproductMutation,
   UpdateDataproductMutationVariables
+>
+export const UpdateMappingDocument = gql`
+  mutation updateMapping($dataproductID: ID!, $services: [MappingService!]!) {
+    mapDataproduct(dataproductID: $dataproductID, services: $services)
+  }
+`
+export type UpdateMappingMutationFn = Apollo.MutationFunction<
+  UpdateMappingMutation,
+  UpdateMappingMutationVariables
+>
+
+/**
+ * __useUpdateMappingMutation__
+ *
+ * To run a mutation, you first call `useUpdateMappingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMappingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMappingMutation, { data, loading, error }] = useUpdateMappingMutation({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *      services: // value for 'services'
+ *   },
+ * });
+ */
+export function useUpdateMappingMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateMappingMutation,
+    UpdateMappingMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateMappingMutation,
+    UpdateMappingMutationVariables
+  >(UpdateMappingDocument, options)
+}
+export type UpdateMappingMutationHookResult = ReturnType<
+  typeof useUpdateMappingMutation
+>
+export type UpdateMappingMutationResult =
+  Apollo.MutationResult<UpdateMappingMutation>
+export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<
+  UpdateMappingMutation,
+  UpdateMappingMutationVariables
 >
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {

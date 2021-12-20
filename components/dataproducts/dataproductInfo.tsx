@@ -9,7 +9,7 @@ import { DataproductQuery } from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
 import { Description } from '../lib/detailTypography'
 
-export interface DataproductDetailProps {
+interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
 }
 

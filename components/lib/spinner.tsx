@@ -11,5 +11,10 @@ export const LoaderSpinner = () => (
     <Loader size="2xlarge" transparent />
   </CenteredSpinner>
 )
+export const SizedSpinner = () => (
+    <CenteredSpinner>
+        <Loader  transparent />
+    </CenteredSpinner>
+)
 
 export default LoaderSpinner
