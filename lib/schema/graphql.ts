@@ -18,6 +18,8 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  /** Maps an arbitrary GraphQL value to a map[string]interface{} Go type. */
+  Map: any
   /** Time is a string in [RFC 3339](https://rfc-editor.org/rfc/rfc3339.html) format, with sub-second precision added if present. */
   Time: any
 }
@@ -110,6 +112,14 @@ export type Dataproduct = {
   repo?: Maybe<Scalars['String']>
   /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
   requesters: Array<Scalars['String']>
+  /** services contains links to this dataproduct in other services */
+  services: DataproductServices
+}
+
+export type DataproductServices = {
+  __typename?: 'DataproductServices'
+  /** URL to the dataproduct in metabase */
+  metabase?: Maybe<Scalars['String']>
 }
 
 /** Datasource defines types that can be returned as a dataproduct datasource. */
@@ -172,6 +182,7 @@ export type Mutation = {
    * Requires authentication
    */
   mapDataproduct: Scalars['Boolean']
+  publishStory: Story
   /**
    * removeRequesterFromDataproduct removes a requester from the dataproduct.
    *
@@ -219,6 +230,11 @@ export type MutationGrantAccessToDataproductArgs = {
 export type MutationMapDataproductArgs = {
   dataproductId: Scalars['ID']
   services: Array<MappingService>
+}
+
+export type MutationPublishStoryArgs = {
+  group: Scalars['String']
+  id: Scalars['ID']
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -300,6 +316,8 @@ export type Query = {
   getDataproductMappings: Array<MappingService>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
+  stories: Array<Story>
+  story: Story
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>
   /** userInfo returns information about the logged in user. */
@@ -338,6 +356,15 @@ export type QuerySearchArgs = {
   q?: Maybe<SearchQuery>
 }
 
+export type QueryStoriesArgs = {
+  draft?: Maybe<Scalars['Boolean']>
+}
+
+export type QueryStoryArgs = {
+  draft?: Maybe<Scalars['Boolean']>
+  id: Scalars['ID']
+}
+
 export type QueryTeamkatalogenArgs = {
   q: Scalars['String']
 }
@@ -367,6 +394,28 @@ export type SearchResultRow = {
   __typename?: 'SearchResultRow'
   excerpt: Scalars['String']
   result: SearchResult
+}
+
+export type Story = {
+  __typename?: 'Story'
+  created: Scalars['Time']
+  id: Scalars['ID']
+  lastModified?: Maybe<Scalars['Time']>
+  name: Scalars['String']
+  owner?: Maybe<Owner>
+  views: Array<StoryView>
+}
+
+export type StoryView = {
+  __typename?: 'StoryView'
+  spec: Scalars['Map']
+  type: StoryViewType
+}
+
+export enum StoryViewType {
+  Header = 'header',
+  Markdown = 'markdown',
+  Plotly = 'plotly',
 }
 
 /** SubjectType defines all possible types that can request access to a dataproduct. */
@@ -641,6 +690,24 @@ export type SearchContentQuery = {
       }
     }
   }>
+}
+
+export type StoryQueryVariables = Exact<{
+  id: Scalars['ID']
+  draft?: Maybe<Scalars['Boolean']>
+}>
+
+export type StoryQuery = {
+  __typename?: 'Query'
+  story: {
+    __typename?: 'Story'
+    id: string
+    name: string
+    created: any
+    lastModified?: any | null | undefined
+    owner?: { __typename?: 'Owner'; group: string } | null | undefined
+    views: Array<{ __typename?: 'StoryView'; type: StoryViewType; spec: any }>
+  }
 }
 
 export type TeamkatalogenQueryVariables = Exact<{
@@ -1483,6 +1550,65 @@ export type SearchContentLazyQueryHookResult = ReturnType<
 export type SearchContentQueryResult = Apollo.QueryResult<
   SearchContentQuery,
   SearchContentQueryVariables
+>
+export const StoryDocument = gql`
+  query Story($id: ID!, $draft: Boolean) {
+    story(id: $id, draft: $draft) {
+      id
+      name
+      created
+      lastModified
+      owner {
+        group
+      }
+      views {
+        type
+        spec
+      }
+    }
+  }
+`
+
+/**
+ * __useStoryQuery__
+ *
+ * To run a query within a React component, call `useStoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      draft: // value for 'draft'
+ *   },
+ * });
+ */
+export function useStoryQuery(
+  baseOptions: Apollo.QueryHookOptions<StoryQuery, StoryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<StoryQuery, StoryQueryVariables>(
+    StoryDocument,
+    options
+  )
+}
+export function useStoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<StoryQuery, StoryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<StoryQuery, StoryQueryVariables>(
+    StoryDocument,
+    options
+  )
+}
+export type StoryQueryHookResult = ReturnType<typeof useStoryQuery>
+export type StoryLazyQueryHookResult = ReturnType<typeof useStoryLazyQuery>
+export type StoryQueryResult = Apollo.QueryResult<
+  StoryQuery,
+  StoryQueryVariables
 >
 export const TeamkatalogenDocument = gql`
   query Teamkatalogen($q: String!) {
