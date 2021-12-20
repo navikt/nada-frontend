@@ -8,6 +8,7 @@ const Container = styled.div`
   margin: 1em 0;
   font-size: 20px;
   cursor: pointer;
+  width: 100px;
 `
 
 interface BackButtonProps {
