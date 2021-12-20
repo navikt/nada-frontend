@@ -31,7 +31,7 @@ export function Story({ story }: ResultsProps) {
           case StoryViewType.Header:
             return <Header key={id} text={view.spec.content} size={view.spec.size} />
           case StoryViewType.Markdown:
-            return <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            return <ReactMarkdown key={id} remarkPlugins={[remarkGfm]}>
               {view.spec.content}
             </ReactMarkdown>
           case StoryViewType.Plotly:

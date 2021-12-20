@@ -8,8 +8,7 @@ import { useRouter } from 'next/router'
 
 const StoryDraft = () => {
 	const router = useRouter()
-	const { cid } = router.query
-	const id = cid as string
+	const id = router.query.id as string
 	const story = useStoryQuery({ variables: { id, draft: true } })
 
 	if (!story.data) {
