@@ -50,18 +50,18 @@ const Explore = ({product, isOwner}: ExploreProps) => {
         }
     }
 
-
     const datasource = product.datasource
-    const metabase = product.services
+    const services = product.services
     const mappings = product.mappings
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
+    console.log(services)
 
     return (
         <>
             <ExploreLinks>
                 <ExploreLink url={bigQueryUrl} type={ItemType.bigQuery} title='Åpne i Google Cloud Console'/>
-                {metabase.metabase &&
-                <ExploreLink url={metabase.metabase} type={ItemType.metabase} title='Åpne i Metabase'/>
+                {services.metabase &&
+                <ExploreLink url={services.metabase} type={ItemType.metabase} title='Åpne i Metabase'/>
                 }
             </ExploreLinks>
             {isOwner &&
@@ -70,9 +70,9 @@ const Explore = ({product, isOwner}: ExploreProps) => {
                 <ExploreLinks>
                     {!mappings.includes(MappingService.Metabase) &&
                     <ExploreLink type={ItemType.addToMetabase} onClick={addToMetabase} title='Legg til i Metabase'/>}
-                    {mappings.includes(MappingService.Metabase) && !metabase &&
-                    <ExploreLink type={ItemType.metabase} loading={true} title='legger til i Metabase'/>}
-                    {mappings.includes(MappingService.Metabase) && metabase &&
+                    {mappings.includes(MappingService.Metabase) && !services.metabase &&
+                    <ExploreLink type={ItemType.metabase} loading={true} title='legger til i Metabase' description='Dette kan ta noen minutter'/>}
+                    {mappings.includes(MappingService.Metabase) && services.metabase &&
                     <ExploreLink type={ItemType.removeFromMetabase} onClick={removeFromMetabase}
                                  title='Fjern fra Metabase'/>}
 

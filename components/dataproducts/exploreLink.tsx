@@ -73,7 +73,7 @@ export const ExploreLink = ({url, type, description, onClick, loading, title}: E
                     {loading && <Loader transparent size={'large'} style={{margin: '0 0 0 auto'}}/> }
                 </ExploreItemHeader>
                 {description ?
-                    <div>{description}</div> : <></>
+                    <p style={{fontSize: 'smaller'}}>{description}</p> : <></>
                 }
             </ExploreItem>
 
