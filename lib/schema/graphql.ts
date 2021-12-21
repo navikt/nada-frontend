@@ -145,6 +145,15 @@ export type Group = {
   name: Scalars['String']
 }
 
+/** Keyword represents a keyword used by other dataproducts */
+export type Keyword = {
+  __typename?: 'Keyword'
+  /** Count is the number of dataproducts with this keyword */
+  count: Scalars['Int']
+  /** Keyword name */
+  keyword: Scalars['String']
+}
+
 /** MappingService defines all possible service types that a dataproduct can be exposed to. */
 export enum MappingService {
   Metabase = 'metabase',
@@ -312,8 +321,8 @@ export type Query = {
    * Requires authentication.
    */
   gcpGetTables: Array<BigQueryTable>
-  /** getDataproductByMapping returns the dataproduct exposed to a service. */
-  getDataproductByMapping: Array<Dataproduct>
+  /** Keywords returns all keywords, with an optional filter */
+  keywords: Array<Keyword>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   stories: Array<Story>
@@ -333,6 +342,7 @@ export type QueryDataproductArgs = {
 export type QueryDataproductsArgs = {
   limit?: Maybe<Scalars['Int']>
   offset?: Maybe<Scalars['Int']>
+  service?: Maybe<MappingService>
 }
 
 export type QueryGcpGetDatasetsArgs = {
@@ -344,8 +354,8 @@ export type QueryGcpGetTablesArgs = {
   projectID: Scalars['String']
 }
 
-export type QueryGetDataproductByMappingArgs = {
-  service: MappingService
+export type QueryKeywordsArgs = {
+  prefix?: Maybe<Scalars['String']>
 }
 
 export type QuerySearchArgs = {
@@ -625,6 +635,22 @@ export type DataproductSummaryQuery = {
   }
 }
 
+export type MetabaseProudctsQueryVariables = Exact<{ [key: string]: never }>
+
+export type MetabaseProudctsQuery = {
+  __typename?: 'Query'
+  dataproducts: Array<{
+    __typename?: 'Dataproduct'
+    id: string
+    name: string
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
+  }>
+}
+
 export type DeleteDataproductMutationVariables = Exact<{
   id: Scalars['ID']
 }>
@@ -656,6 +682,13 @@ export type GcpGetTablesQuery = {
     type: BigQueryType
     description: string
   }>
+}
+
+export type KeywordsQueryVariables = Exact<{ [key: string]: never }>
+
+export type KeywordsQuery = {
+  __typename?: 'Query'
+  keywords: Array<{ __typename?: 'Keyword'; keyword: string; count: number }>
 }
 
 export type UpdateDataproductMutationVariables = Exact<{
@@ -1260,6 +1293,68 @@ export type DataproductSummaryQueryResult = Apollo.QueryResult<
   DataproductSummaryQuery,
   DataproductSummaryQueryVariables
 >
+export const MetabaseProudctsDocument = gql`
+  query MetabaseProudcts {
+    dataproducts(service: metabase) {
+      id
+      name
+      owner {
+        group
+        teamkatalogenURL
+      }
+    }
+  }
+`
+
+/**
+ * __useMetabaseProudctsQuery__
+ *
+ * To run a query within a React component, call `useMetabaseProudctsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMetabaseProudctsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMetabaseProudctsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMetabaseProudctsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    MetabaseProudctsQuery,
+    MetabaseProudctsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(
+    MetabaseProudctsDocument,
+    options
+  )
+}
+export function useMetabaseProudctsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MetabaseProudctsQuery,
+    MetabaseProudctsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    MetabaseProudctsQuery,
+    MetabaseProudctsQueryVariables
+  >(MetabaseProudctsDocument, options)
+}
+export type MetabaseProudctsQueryHookResult = ReturnType<
+  typeof useMetabaseProudctsQuery
+>
+export type MetabaseProudctsLazyQueryHookResult = ReturnType<
+  typeof useMetabaseProudctsLazyQuery
+>
+export type MetabaseProudctsQueryResult = Apollo.QueryResult<
+  MetabaseProudctsQuery,
+  MetabaseProudctsQueryVariables
+>
 export const DeleteDataproductDocument = gql`
   mutation deleteDataproduct($id: ID!) {
     deleteDataproduct(id: $id)
@@ -1424,6 +1519,59 @@ export type GcpGetTablesLazyQueryHookResult = ReturnType<
 export type GcpGetTablesQueryResult = Apollo.QueryResult<
   GcpGetTablesQuery,
   GcpGetTablesQueryVariables
+>
+export const KeywordsDocument = gql`
+  query Keywords {
+    keywords {
+      keyword
+      count
+    }
+  }
+`
+
+/**
+ * __useKeywordsQuery__
+ *
+ * To run a query within a React component, call `useKeywordsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useKeywordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useKeywordsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useKeywordsQuery(
+  baseOptions?: Apollo.QueryHookOptions<KeywordsQuery, KeywordsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<KeywordsQuery, KeywordsQueryVariables>(
+    KeywordsDocument,
+    options
+  )
+}
+export function useKeywordsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    KeywordsQuery,
+    KeywordsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<KeywordsQuery, KeywordsQueryVariables>(
+    KeywordsDocument,
+    options
+  )
+}
+export type KeywordsQueryHookResult = ReturnType<typeof useKeywordsQuery>
+export type KeywordsLazyQueryHookResult = ReturnType<
+  typeof useKeywordsLazyQuery
+>
+export type KeywordsQueryResult = Apollo.QueryResult<
+  KeywordsQuery,
+  KeywordsQueryVariables
 >
 export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
