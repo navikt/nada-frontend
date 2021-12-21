@@ -29,7 +29,8 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     const [updateMapping] = useUpdateMappingMutation()
     useDataproductQuery({
         variables: { id: product.id },
-        pollInterval: 10_000,
+        ssr: true,
+        pollInterval: 30_000,
     })
 
     const addToMetabase = async () => {
