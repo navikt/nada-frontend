@@ -5,21 +5,7 @@ import ErrorMessage from "../../lib/error";
 import {QueryResult} from "@apollo/client";
 import styled from "styled-components";
 import Link from 'next/link'
-import {navBlaLighten80} from "../../../styles/constants";
-
-const stringToColor = function (str: string) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let colour = '#';
-    for (let i = 0; i < 3; i++) {
-        const value = (hash >> (i * 8)) & 0xFF;
-        colour += ('00' + value.toString(16)).substr(-2);
-    }
-    return colour;
-}
-
+import StringToColor from "../../../lib/stringToColor";
 
 const KeywordLink = styled.span<{color: string}>`
 display: block;
@@ -84,7 +70,7 @@ export function ResultList({search, metabase, keywords}: ResultsProps) {
                 data.keywords.map((d, idx) =>
                     <Link key={idx} href={'/search?q=' + d.keyword}>
                         <a>
-                            <KeywordLink  color={stringToColor(d.keyword)}>
+                            <KeywordLink  color={StringToColor(d.keyword)}>
                                 {d.keyword} ({d.count})
                             </KeywordLink>
                         </a>
