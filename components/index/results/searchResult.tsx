@@ -7,12 +7,11 @@ import IconBox from '../../lib/icons/iconBox'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import * as React from 'react'
 import styled from 'styled-components'
-
-type SearchResponse = ArrayElement<SearchContentQuery['search']>
+import KeywordLink from "../../lib/keywordList";
 
 const StyledCard = styled(Card)`
   margin: 0 10px 20px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   cursor: pointer;
   box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
   :hover {
@@ -24,9 +23,10 @@ export interface SearchResultProps {
     link: string,
     name: string,
     group: string
+    keywords?: string[]
 }
 
-export const SearchResultLink = ({link, name, group}: SearchResultProps) => {
+export const SearchResultLink = ({link, name, group, keywords}: SearchResultProps) => {
 
     return (
         <Link href={link}>
@@ -43,6 +43,9 @@ export const SearchResultLink = ({link, name, group}: SearchResultProps) => {
                         title={name}
                         subheader={`eier: ${group}`}
                     />
+                    <div style={{float: 'right'}}>
+                        {keywords && keywords.map((k, i) => <KeywordLink key={i} keyword={k} compact={true}/>)}
+                    </div>
                 </StyledCard>
             </a>
         </Link>

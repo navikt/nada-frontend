@@ -1,9 +1,14 @@
 import styled from "styled-components";
+import StringToColor from "../../lib/stringToColor";
 
-const KeywordLink = styled.span<{color: string, horizontal?: boolean}>`
+interface KeywordSpanProps {
+    color: string,
+    horizontal?: boolean,
+    compact?: boolean,
+}
+const KeywordSpan = styled.span<KeywordSpanProps>`
 display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
-margin-bottom: 10px;
-margin-left: 15px;
+margin: ${(props) => props.compact ? '0 10px' : '0 0 10px 15px'};
 color: #222;
 :hover {
   color: var(--navds-color-text-link);
@@ -19,5 +24,20 @@ color: #222;
     content: '';
 }
 `
+interface keywordLinkProps {
+   keyword: string,
+   horizontal?: boolean,
+   compact?: boolean,
+   children?: React.ReactNode
+
+
+}
+const KeywordLink = ({keyword, horizontal, children, compact}: keywordLinkProps) => {
+    return <KeywordSpan color={StringToColor(keyword)} horizontal={horizontal} compact={compact} >
+        {children}
+    </KeywordSpan>
+
+
+}
 
 export default KeywordLink

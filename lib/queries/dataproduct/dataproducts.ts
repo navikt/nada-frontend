@@ -5,6 +5,7 @@ export const GET_METABASE_PRODUCTS = gql`
     dataproducts(service: metabase) {
       id
       name
+      keywords
       owner {
         group
         teamkatalogenURL

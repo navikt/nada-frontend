@@ -4,7 +4,6 @@ import LoaderSpinner from "../../lib/spinner";
 import ErrorMessage from "../../lib/error";
 import {QueryResult} from "@apollo/client";
 import Link from 'next/link'
-import StringToColor from "../../../lib/stringToColor";
 import KeywordLink from "../../lib/keywordList";
 
 interface ResultsProps {
@@ -22,7 +21,7 @@ export function ResultList({search, metabase, keywords}: ResultsProps) {
         return (<>
             {
                 data.dataproducts.map((d, idx) =>
-                    <SearchResultLink key={idx} group={d.owner.group} name={d.name}
+                    <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
                                       link={`/dataproduct/${d.id}`}/>
                 )
             }
@@ -35,7 +34,7 @@ export function ResultList({search, metabase, keywords}: ResultsProps) {
         return (<>
             {
                 data.search.map((d, idx) =>
-                    <SearchResultLink key={idx} group={d.result.owner.group} name={d.result.name}
+                    <SearchResultLink key={idx} group={d.result.owner.group} name={d.result.name} keywords={d.result.keywords}
                                       link={`/dataproduct/${d.result.id}/explore`}/>
                 )
             }
@@ -50,7 +49,7 @@ export function ResultList({search, metabase, keywords}: ResultsProps) {
                 data.keywords.map((d, idx) =>
                     <Link key={idx} href={'/search?q=' + d.keyword}>
                         <a>
-                            <KeywordLink color={StringToColor(d.keyword)} horizontal={true}>
+                            <KeywordLink keyword={d.keyword} horizontal={true}>
                                 {d.keyword} ({d.count})
                             </KeywordLink>
                         </a>

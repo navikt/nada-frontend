@@ -9,7 +9,6 @@ import {DataproductQuery} from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
 import {Description} from '../lib/detailTypography'
 import KeywordLink from "../lib/keywordList";
-import StringToColor from "../../lib/stringToColor";
 import Link from 'next/link'
 
 interface DataproductDetailProps {
@@ -25,7 +24,7 @@ const DataproductInfo = ({product}: DataproductDetailProps) => {
                         {product.keywords.map((k, i) => (
                             <Link key={i} href={`/search?q=${k}`}>
                                 <a>
-                                    <KeywordLink key={k} color={StringToColor(k)}>
+                                    <KeywordLink key={k} keyword={k}>
                                         {k}
                                     </KeywordLink>
                                 </a>

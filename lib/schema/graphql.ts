@@ -643,6 +643,7 @@ export type MetabaseProudctsQuery = {
     __typename?: 'Dataproduct'
     id: string
     name: string
+    keywords: Array<string>
     owner: {
       __typename?: 'Owner'
       group: string
@@ -727,6 +728,7 @@ export type SearchContentQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
+      keywords: Array<string>
       owner: {
         __typename?: 'Owner'
         group: string
@@ -1298,6 +1300,7 @@ export const MetabaseProudctsDocument = gql`
     dataproducts(service: metabase) {
       id
       name
+      keywords
       owner {
         group
         teamkatalogenURL
@@ -1685,6 +1688,7 @@ export const SearchContentDocument = gql`
           description
           created
           lastModified
+          keywords
           owner {
             group
             teamkatalogenURL
