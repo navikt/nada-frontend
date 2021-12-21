@@ -1,4 +1,8 @@
-import {DataproductQuery, MappingService, useUpdateMappingMutation} from "../../lib/schema/graphql";
+import {
+    DataproductQuery,
+    MappingService, useDataproductQuery,
+    useUpdateMappingMutation
+} from "../../lib/schema/graphql";
 import ExploreLink, {ItemType} from "./exploreLink";
 import styled from "styled-components";
 import {useState} from "react";
@@ -22,12 +26,13 @@ interface ExploreProps {
 
 const Explore = ({product, isOwner}: ExploreProps) => {
     const [formError, setFormError] = useState(undefined)
-
     const [updateMapping] = useUpdateMappingMutation()
+    useDataproductQuery({
+        variables: { id: product.id },
+        pollInterval: 10_000,
+    })
 
     const addToMetabase = async () => {
-        console.log("clicked to add")
-/*
         try{
             await updateMapping({
                 variables: {dataproductID: product.id, services: [MappingService.Metabase]},
@@ -37,11 +42,9 @@ const Explore = ({product, isOwner}: ExploreProps) => {
         } catch (e: any) {
             setFormError(e)
         }
-*/
     }
 
     const removeFromMetabase = async () => {
-        console.log("clicked to remove")
         try{
             await updateMapping({
                 variables: {dataproductID: product.id, services: []},
@@ -61,26 +64,9 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     return (
         <>
             <ExploreLinks>
-                <ExploreLink url={bigQueryUrl} type={ItemType.bigQuery} title='Åpne i Google Cloud Console'/>
-                {services.metabase &&
-                <ExploreLink url={services.metabase} type={ItemType.metabase} title='Åpne i Metabase'/>
-                }
+                <ExploreLink isOwner={isOwner} url={bigQueryUrl} type={ItemType.bigQuery}/>
+                <ExploreLink isOwner={isOwner} url={services.metabase} type={ItemType.metabase} add={addToMetabase} remove={removeFromMetabase} mappings={mappings}/>
             </ExploreLinks>
-            {isOwner &&
-            <>
-                <hr/>
-                <ExploreLinks>
-                    {!mappings.includes(MappingService.Metabase) &&
-                    <ExploreLink type={ItemType.addToMetabase} onClick={addToMetabase} title='Legg til i Metabase'/>}
-                    {mappings.includes(MappingService.Metabase) && !services.metabase &&
-                    <ExploreLink type={ItemType.metabase} loading={true} title='legger til i Metabase' description='Dette kan ta noen minutter'/>}
-                    {mappings.includes(MappingService.Metabase) && services.metabase &&
-                    <ExploreLink type={ItemType.removeFromMetabase} onClick={removeFromMetabase}
-                                 title='Fjern fra Metabase'/>}
-
-                </ExploreLinks>
-            </>
-            }
             {formError &&
             <ErrorMessage error={formError}/>
             }

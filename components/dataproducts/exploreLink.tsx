@@ -4,12 +4,12 @@ import * as React from 'react'
 import styled from 'styled-components'
 import MetabaseLogo from "../lib/icons/metabaseLogo";
 import {Loader} from "@navikt/ds-react";
+import {MappingService} from "../../lib/schema/graphql";
+import {Delete, Add} from "@navikt/ds-icons";
+import {navRod} from "../../styles/constants";
 
-interface Props {
-    loading?: boolean;
-}
-const ExploreItem = styled.div<Props>`
-  cursor: ${(props) => props.loading ? 'default': 'pointer'};
+const ExploreItem = styled.div<{ loading?: boolean }>`
+  cursor: ${(props) => props.loading ? 'default' : 'pointer'};
   width: 250px;
   padding: 10px;
   box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
@@ -41,44 +41,51 @@ const Title = styled.div`
     font-weight: normal;
   }
 `
+const DeleteButton = styled.div`
+width: 50px;
+height: 50px;
+border-radius: 50%;
+margin: 0 0 0 auto;
+display: flex;
+
+:hover {
+  background-color: #f5f5f5;
+  }
+
+> svg {
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  height: 25px;
+  width: 25px;
+  color: ${navRod}
+  }
+`
+
 
 export enum ItemType {
     metabase = 1,
     bigQuery,
-    addToMetabase,
-    removeFromMetabase ,
 }
 
 export interface ExploreLinkProps {
-    url?: string,
+    url?: string | null,
     type: ItemType,
-    description?: string,
-    onClick?: () => void
-    loading?: boolean
-    title: string
+    add?: () => void,
+    remove?: () => void,
+    isOwner?: boolean,
+    mappings?: MappingService[]
 }
 
-export const ExploreLink = ({url, type, description, onClick, loading, title}: ExploreLinkProps) => {
-    if (onClick || loading ) {
-        return (
-            <ExploreItem onClick={onClick} loading={loading}>
-                <ExploreItemHeader>
-                    <IconBox size={30}>
-                        <MetabaseLogo/>
-                    </IconBox>
-                    <Title>
-                        <h1>Metabase</h1>
-                        <h2>{title}</h2>
-                    </Title>
-                    {loading && <Loader transparent size={'large'} style={{margin: '0 0 0 auto'}}/> }
-                </ExploreItemHeader>
-                {description ?
-                    <p style={{fontSize: 'smaller'}}>{description}</p> : <></>
-                }
-            </ExploreItem>
+export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: ExploreLinkProps) => {
+    const addToMetabase = !mappings?.includes(MappingService.Metabase)
+    const loading = mappings?.includes(MappingService.Metabase) && !url
+    const handleDelete = (e: any) => {
+        e.preventDefault()
+        if (remove) remove()
+    }
 
-        )
-    } else {
+    if (url) {
         return (
             <a href={url} target="_blank" rel="noreferrer">
                 <ExploreItem>
@@ -90,21 +97,59 @@ export const ExploreLink = ({url, type, description, onClick, loading, title}: E
                         <Title>
                             {type === ItemType.bigQuery && <>
                                 <h1>BigQuery</h1>
-                                <h2>{title}</h2>
+                                <h2>Åpne i Google Console</h2>
                             </>}
                             {type === ItemType.metabase && <>
                                 <h1>Metabase</h1>
-                                <h2>{title}</h2>
+                                <h2>Åpne i Metabase</h2>
                             </>}
                         </Title>
+                        {isOwner && type == ItemType.metabase &&
+                        <DeleteButton onClick={handleDelete}>
+                            <Delete/>
+                        </DeleteButton>
+                        }
                     </ExploreItemHeader>
-                    {description ?
-                        <div>{description}</div> : <></>
-                    }
                 </ExploreItem>
             </a>
         )
     }
+
+    if (isOwner) {
+        if (loading) {
+            return (
+                <ExploreItem onClick={add} loading={true}>
+                    <ExploreItemHeader>
+                        <IconBox size={30}>
+                            <MetabaseLogo/>
+                        </IconBox>
+                        <Title>
+                            <h1>Metabase</h1>
+                            <h2>Legger til i Metabase</h2>
+                        </Title>
+                        {loading && <Loader transparent size={'large'} style={{margin: '0 0 0 auto'}}/>}
+                    </ExploreItemHeader>
+                </ExploreItem>
+            )
+        }
+        if (addToMetabase) {
+            return (
+                <ExploreItem onClick={add}>
+                    <ExploreItemHeader>
+                        <IconBox size={30}>
+                            <MetabaseLogo/>
+                        </IconBox>
+                        <Title>
+                            <h1>Metabase</h1>
+                            <h2>Legg til i Metabase</h2>
+                        </Title>
+                        <Add style={{margin: '0 0 0 auto', width: 25, height: 25}}/>
+                    </ExploreItemHeader>
+                </ExploreItem>
+            )
+        }
+    }
+    return <></>
 }
 
 export default ExploreLink
