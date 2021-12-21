@@ -158,6 +158,7 @@ const Dataproduct = (props: DataproductProps) => {
             value={currentPage}
             onChange={handleChange}
             aria-label='dataprodukt-tabs'
+            style={{marginLeft: '20px'}}
           >
             {menuItems.map((i, idx) => (
               <Tab
