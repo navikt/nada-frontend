@@ -11,6 +11,10 @@ export const GET_DATAPRODUCT = gql`
       repo
       pii
       keywords
+      mappings
+      services {
+        metabase
+      }
       owner {
         group
         teamkatalogenURL
