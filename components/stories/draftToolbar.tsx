@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
 
-
 const ToolbarDiv = styled.div`
   top: 0;
   position: sticky;

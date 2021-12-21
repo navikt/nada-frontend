@@ -102,6 +102,8 @@ export type Dataproduct = {
   keywords: Array<Scalars['String']>
   /** lastModified is the timestamp for when the dataproduct was last modified */
   lastModified: Scalars['Time']
+  /** mappings services a dataproduct is exposed to */
+  mappings: Array<MappingService>
   /** name of the dataproduct */
   name: Scalars['String']
   /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
@@ -228,7 +230,7 @@ export type MutationGrantAccessToDataproductArgs = {
 }
 
 export type MutationMapDataproductArgs = {
-  dataproductId: Scalars['ID']
+  dataproductID: Scalars['ID']
   services: Array<MappingService>
 }
 
@@ -312,8 +314,6 @@ export type Query = {
   gcpGetTables: Array<BigQueryTable>
   /** getDataproductByMapping returns the dataproduct exposed to a service. */
   getDataproductByMapping: Array<Dataproduct>
-  /** getDataproductMappings returns the service a dataproduct is exposed to. */
-  getDataproductMappings: Array<MappingService>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   stories: Array<Story>
@@ -346,10 +346,6 @@ export type QueryGcpGetTablesArgs = {
 
 export type QueryGetDataproductByMappingArgs = {
   service: MappingService
-}
-
-export type QueryGetDataproductMappingsArgs = {
-  dataproductId: Scalars['ID']
 }
 
 export type QuerySearchArgs = {
