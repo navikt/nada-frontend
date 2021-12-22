@@ -764,12 +764,14 @@ export type UserInfoDetailsQuery = {
       __typename?: 'Dataproduct'
       id: string
       name: string
+      keywords: Array<string>
       owner: { __typename?: 'Owner'; group: string }
     }>
     accessable: Array<{
       __typename?: 'Dataproduct'
       id: string
       name: string
+      keywords: Array<string>
       owner: { __typename?: 'Owner'; group: string }
     }>
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
@@ -1816,6 +1818,7 @@ export const UserInfoDetailsDocument = gql`
       dataproducts {
         id
         name
+        keywords
         owner {
           group
         }
@@ -1823,6 +1826,7 @@ export const UserInfoDetailsDocument = gql`
       accessable {
         id
         name
+        keywords
         owner {
           group
         }

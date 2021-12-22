@@ -10,9 +10,10 @@ interface ResultsProps {
     search?: QueryResult<SearchContentQuery, Exact<{ q: SearchQuery }>>
     metabase?: QueryResult<MetabaseProudctsQuery, Exact<{ [p: string]: never }>>
     keywords?: QueryResult<KeywordsQuery, Exact<{ [p: string]: never }>>
+    dataproducts?: {__typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: {__typename?: "Owner" | undefined, group: string}}[]
 }
 
-export function ResultList({search, metabase, keywords}: ResultsProps) {
+export function ResultList({search, metabase, keywords, dataproducts}: ResultsProps) {
     if (metabase) {
         const {data, loading, error} = metabase
         if (error) return <ErrorMessage error={error}/>
@@ -35,7 +36,7 @@ export function ResultList({search, metabase, keywords}: ResultsProps) {
             {
                 data.search.map((d, idx) =>
                     <SearchResultLink key={idx} group={d.result.owner.group} name={d.result.name} keywords={d.result.keywords}
-                                      link={`/dataproduct/${d.result.id}/explore`}/>
+                                      link={`/dataproduct/${d.result.id}`}/>
                 )
             }
         </>)
@@ -57,6 +58,16 @@ export function ResultList({search, metabase, keywords}: ResultsProps) {
                 )
             }
         </div>)
+    }
+    if (dataproducts) {
+        return (<>
+            {
+                dataproducts.map((d, idx) =>
+                    <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
+                                      link={`/dataproduct/${d.id}`}/>
+                )
+            }
+        </>)
     }
     return <></>
 }

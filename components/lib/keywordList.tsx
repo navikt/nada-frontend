@@ -5,14 +5,17 @@ interface KeywordSpanProps {
     color: string,
     horizontal?: boolean,
     compact?: boolean,
+    onClick?: () => void
 }
+
 const KeywordSpan = styled.span<KeywordSpanProps>`
 display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
 margin: ${(props) => props.compact ? '0 10px' : '0 0 10px 15px'};
+cursor: pointer;
 color: #222;
 :hover {
-  color: var(--navds-color-text-link);
-  text-decoration: underline;
+  color: ${(props) =>  props.onClick ?'red' :'var(--navds-color-text-link)' } ;
+  text-decoration: ${(props) =>  props.onClick ?'line-through':'underline'} ;
 }
 &:before {
     background-color: ${(props) => props.color};
@@ -24,16 +27,17 @@ color: #222;
     content: '';
 }
 `
+
 interface keywordLinkProps {
-   keyword: string,
-   horizontal?: boolean,
-   compact?: boolean,
-   children?: React.ReactNode
-
-
+    keyword: string,
+    horizontal?: boolean,
+    compact?: boolean,
+    children?: React.ReactNode
+    onClick?: () => void
 }
-const KeywordLink = ({keyword, horizontal, children, compact}: keywordLinkProps) => {
-    return <KeywordSpan color={StringToColor(keyword)} horizontal={horizontal} compact={compact} >
+
+const KeywordLink = ({keyword, horizontal, children, compact, onClick}: keywordLinkProps) => {
+    return <KeywordSpan color={StringToColor(keyword)} horizontal={horizontal} compact={compact} onClick={onClick}>
         {children}
     </KeywordSpan>
 

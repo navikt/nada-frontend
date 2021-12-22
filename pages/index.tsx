@@ -17,21 +17,10 @@ import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
 import {USER_INFO} from '../lib/queries/userInfo/userInfo'
 import styled from "styled-components";
+import SubjectHeader from "../components/lib/subjectHeader";
 
 const SEARCH_LIMIT = 6
 
-const SubjectHeader = styled.h2`
-    margin-left: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    
-    color: #222;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 1.4;
-    width: 97%;
-    border-bottom: 1px solid #e5e5e5;
-`
 const Content = styled.div`
     align-items: start;
     margin-top: 20px;

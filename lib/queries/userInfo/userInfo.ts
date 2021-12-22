@@ -8,6 +8,7 @@ export const USER_INFO = gql`
       dataproducts {
         id
         name
+        keywords
         owner {
           group
         }
@@ -15,6 +16,7 @@ export const USER_INFO = gql`
       accessable {
         id
         name
+        keywords
         owner {
           group
         }
