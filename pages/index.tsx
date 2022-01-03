@@ -5,7 +5,7 @@ import {addApolloState, initializeApollo} from '../lib/apollo'
 import {
     KeywordsDocument,
     MetabaseProudctsDocument,
-    SearchContentDocument, useKeywordsQuery,
+    SearchContentDocument, useGroupStatsQuery, useKeywordsQuery,
     useMetabaseProudctsQuery,
     useSearchContentQuery
 } from '../lib/schema/graphql'
@@ -30,8 +30,9 @@ const Content = styled.div`
     flex-wrap: wrap;
     
 `
-const ContentColumn = styled.div`
-    width: 400px;
+
+const ContentColumn = styled.div<{ small?: boolean }>`
+    width: ${(props) => props.small ? '200px' : '400px'};
     display: flex;
     flex-direction: column;
 `
@@ -43,6 +44,7 @@ const LandingPage = () => {
     })
     const metabaseProducts = useMetabaseProudctsQuery()
     const keywords = useKeywordsQuery()
+    const groupStats = useGroupStatsQuery()
 
     useEffect(() => {
         const eventProperties = {
@@ -80,9 +82,13 @@ const LandingPage = () => {
                     <SubjectHeader>Nylig lagt til i Metabase </SubjectHeader>
                     <ResultList metabase={metabaseProducts}/>
                 </ContentColumn>
-                <ContentColumn>
+                <ContentColumn small={true}>
                     <SubjectHeader>Nøkkelord</SubjectHeader>
                     <ResultList keywords={keywords}/>
+                </ContentColumn>
+                <ContentColumn small={true}>
+                    <SubjectHeader>Teams</SubjectHeader>
+                    <ResultList groupStats={groupStats}/>
                 </ContentColumn>
             </Content>
         </div>

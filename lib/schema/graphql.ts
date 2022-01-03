@@ -145,6 +145,15 @@ export type Group = {
   name: Scalars['String']
 }
 
+/** GroupStats contains statistics on a group. */
+export type GroupStats = {
+  __typename?: 'GroupStats'
+  /** number of dataproducts owned by the group */
+  dataproducts: Scalars['Int']
+  /** email of the group */
+  email: Scalars['String']
+}
+
 /** Keyword represents a keyword used by other dataproducts */
 export type Keyword = {
   __typename?: 'Keyword'
@@ -321,6 +330,8 @@ export type Query = {
    * Requires authentication.
    */
   gcpGetTables: Array<BigQueryTable>
+  /** groupStats returns statistics for groups that have created dataproducts. */
+  groupStats: Array<GroupStats>
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>
   /** search through existing dataproducts. */
@@ -352,6 +363,11 @@ export type QueryGcpGetDatasetsArgs = {
 export type QueryGcpGetTablesArgs = {
   datasetID: Scalars['String']
   projectID: Scalars['String']
+}
+
+export type QueryGroupStatsArgs = {
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
 }
 
 export type QueryKeywordsArgs = {
@@ -710,6 +726,17 @@ export type UpdateMappingMutationVariables = Exact<{
 export type UpdateMappingMutation = {
   __typename?: 'Mutation'
   mapDataproduct: boolean
+}
+
+export type GroupStatsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GroupStatsQuery = {
+  __typename?: 'Query'
+  groupStats: Array<{
+    __typename?: 'GroupStats'
+    email: string
+    dataproducts: number
+  }>
 }
 
 export type SearchContentQueryVariables = Exact<{
@@ -1677,6 +1704,62 @@ export type UpdateMappingMutationResult =
 export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<
   UpdateMappingMutation,
   UpdateMappingMutationVariables
+>
+export const GroupStatsDocument = gql`
+  query groupStats {
+    groupStats {
+      email
+      dataproducts
+    }
+  }
+`
+
+/**
+ * __useGroupStatsQuery__
+ *
+ * To run a query within a React component, call `useGroupStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGroupStatsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GroupStatsQuery,
+    GroupStatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GroupStatsQuery, GroupStatsQueryVariables>(
+    GroupStatsDocument,
+    options
+  )
+}
+export function useGroupStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupStatsQuery,
+    GroupStatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GroupStatsQuery, GroupStatsQueryVariables>(
+    GroupStatsDocument,
+    options
+  )
+}
+export type GroupStatsQueryHookResult = ReturnType<typeof useGroupStatsQuery>
+export type GroupStatsLazyQueryHookResult = ReturnType<
+  typeof useGroupStatsLazyQuery
+>
+export type GroupStatsQueryResult = Apollo.QueryResult<
+  GroupStatsQuery,
+  GroupStatsQueryVariables
 >
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {

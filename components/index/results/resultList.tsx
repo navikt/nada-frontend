@@ -1,5 +1,12 @@
 import SearchResultLink from './searchResult'
-import {Exact, KeywordsQuery, MetabaseProudctsQuery, SearchContentQuery, SearchQuery} from '../../../lib/schema/graphql'
+import {
+    Exact,
+    GroupStatsQuery,
+    KeywordsQuery,
+    MetabaseProudctsQuery,
+    SearchContentQuery,
+    SearchQuery
+} from '../../../lib/schema/graphql'
 import LoaderSpinner from "../../lib/spinner";
 import ErrorMessage from "../../lib/error";
 import {QueryResult} from "@apollo/client";
@@ -10,10 +17,11 @@ interface ResultsProps {
     search?: QueryResult<SearchContentQuery, Exact<{ q: SearchQuery }>>
     metabase?: QueryResult<MetabaseProudctsQuery, Exact<{ [p: string]: never }>>
     keywords?: QueryResult<KeywordsQuery, Exact<{ [p: string]: never }>>
-    dataproducts?: {__typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: {__typename?: "Owner" | undefined, group: string}}[]
+    groupStats?: QueryResult<GroupStatsQuery, Exact<{ [p: string]: never }>>
+    dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: { __typename?: "Owner" | undefined, group: string } }[]
 }
 
-export function ResultList({search, metabase, keywords, dataproducts}: ResultsProps) {
+export function ResultList({search, metabase, keywords, dataproducts, groupStats}: ResultsProps) {
     if (metabase) {
         const {data, loading, error} = metabase
         if (error) return <ErrorMessage error={error}/>
@@ -35,7 +43,8 @@ export function ResultList({search, metabase, keywords, dataproducts}: ResultsPr
         return (<>
             {
                 data.search.map((d, idx) =>
-                    <SearchResultLink key={idx} group={d.result.owner.group} name={d.result.name} keywords={d.result.keywords}
+                    <SearchResultLink key={idx} group={d.result.owner.group} name={d.result.name}
+                                      keywords={d.result.keywords}
                                       link={`/dataproduct/${d.result.id}`}/>
                 )
             }
@@ -51,10 +60,31 @@ export function ResultList({search, metabase, keywords, dataproducts}: ResultsPr
                     <Link key={idx} href={'/search?q=' + d.keyword}>
                         <a>
                             <KeywordLink keyword={d.keyword} horizontal={true}>
-                                {d.keyword} ({d.count})
+                                {d.keyword}
                             </KeywordLink>
                         </a>
                     </Link>
+                )
+            }
+        </div>)
+    }
+    if (groupStats) {
+        const {data, loading, error} = groupStats
+        if (error) return <ErrorMessage error={error}/>
+        if (loading || !data) return <LoaderSpinner/>
+        return (<div>
+            {
+                data.groupStats.map((d, idx) => {
+                        const team = d.email.split('@')[0]
+                        return <Link key={idx} href={'/search?q=' + team}>
+                            <a>
+                                <KeywordLink keyword={team} horizontal={true}>
+                                    {team}
+                                </KeywordLink>
+                            </a>
+                        </Link>
+
+                    }
                 )
             }
         </div>)
