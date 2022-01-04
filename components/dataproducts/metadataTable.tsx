@@ -1,5 +1,5 @@
 import StyledMetadataTable from '../lib/styledMetadataTable'
-import humanizeDate from '../lib/humanizeDate'
+import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import {ExternalLink} from '@navikt/ds-icons'
 import {DataproductQuery} from "../../lib/schema/graphql";

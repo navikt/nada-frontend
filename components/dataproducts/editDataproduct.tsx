@@ -2,7 +2,7 @@ import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { useState } from 'react'
+import { useState} from 'react'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
@@ -45,7 +45,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       resolver: yupResolver(updateDataproductValidation),
       defaultValues: {
         name: product.name,
-        description: product.description,
+        description: product.description || '',
         repo: product.repo,
         keywords: product.keywords,
         teamkatalogenURL: product.owner.teamkatalogenURL,
@@ -53,8 +53,12 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       },
     })
   const keywords = watch('keywords')
-  const setKeywords = (value: string[]) => {
-    setValue('keywords', value)
+
+  const onDelete = (keyword: string) => {
+    setValue('keywords',keywords.filter((k) => k !== keyword))
+  }
+  const onAdd = (keyword: string) => {
+    setValue('keywords',[...keywords, keyword])
   }
 
   const { errors } = formState
@@ -73,7 +77,6 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
-  console.log(errors)
   return (
     <Container>
       <DataproductBox>
@@ -109,9 +112,9 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 watch={watch}
               />
               <KeywordsInput
+                onAdd={onAdd}
+                onDelete={onDelete}
                 keywords={keywords}
-                setKeywords={setKeywords}
-                {...register('keywords')}
                 error={errors.keywords?.[0].message}
               />
               <PiiCheckboxInput register={register} watch={watch} />

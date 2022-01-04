@@ -30,6 +30,7 @@ import User from '../../../components/dataproducts/access/user'
 import BackButton from '../../../components/lib/BackButton'
 import { UserState } from '../../../lib/context'
 import DeleteModal from '../../../components/lib/deleteModal'
+import Explore from "../../../components/dataproducts/explore";
 
 const Container = styled.div`
   margin-top: 40px;
@@ -119,6 +120,11 @@ const Dataproduct = (props: DataproductProps) => {
       component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
         <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery} />,
     },
+    {
+      title: 'utforsk',
+      slug: 'explore',
+      component: <Explore product={product} isOwner={isOwner}/>,
+    },
   ]
 
   const currentPage = menuItems
@@ -152,6 +158,7 @@ const Dataproduct = (props: DataproductProps) => {
             value={currentPage}
             onChange={handleChange}
             aria-label='dataprodukt-tabs'
+            style={{marginLeft: '20px'}}
           >
             {menuItems.map((i, idx) => (
               <Tab

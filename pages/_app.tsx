@@ -11,7 +11,7 @@ import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 import PageLayout from '../components/pageLayout'
 import { useUserInfoDetailsQuery } from '../lib/schema/graphql'
-import { addDays, isBefore, parseISO } from 'date-fns'
+import { isBefore, parseISO } from 'date-fns'
 
 const MyApp = ({ Component, pageProps }: AppInitialProps & AppContext) => {
   const apolloClient = useApollo(pageProps)

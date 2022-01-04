@@ -8,8 +8,9 @@ import {useRouter} from 'next/router'
 import Profile from '../../components/user/profile'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
-import CardList from '../../components/lib/cardList'
 import TabPanel, {TabPanelType} from "../../components/lib/tabPanel";
+import SubjectHeader from "../../components/lib/subjectHeader";
+import ResultList from "../../components/index/results/resultList";
 
 
 export const UserPages = () => {
@@ -40,17 +41,20 @@ export const UserPages = () => {
     {
       title: 'Mine produkter',
       slug: 'products',
-      component: (
-        <CardList
-          products={data.userInfo.dataproducts}
-          title={'Mine produkter'}
-        />
+      component: (<>
+          <SubjectHeader>Mine produkter</SubjectHeader>
+          <ResultList dataproducts={data.userInfo.dataproducts}/>
+      </>
       ),
     },
     {
       title: 'Mine tilganger',
       slug: 'access',
-      component: (<CardList products={data.userInfo.accessable}  title={"Mine tilganger"}/>),
+        component: (<>
+                <SubjectHeader>Mine tilganger</SubjectHeader>
+                <ResultList dataproducts={data.userInfo.accessable}/>
+            </>
+        ),
     },
   ]
 
@@ -97,14 +101,14 @@ export const UserPages = () => {
           ))}
         </Tabs>
         {menuItems.map((i, idx) => (
-          <TabPanel
-            key={idx}
-            value={currentPage}
-            index={idx}
-            type={TabPanelType.vertical}
-          >
-            {i.component}
-          </TabPanel>
+                <TabPanel
+                    key={idx}
+                    value={currentPage}
+                    index={idx}
+                    type={TabPanelType.vertical}
+                >
+                    {i.component}
+                </TabPanel>
         ))}
       </Box>
     </div>

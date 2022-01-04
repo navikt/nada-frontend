@@ -102,6 +102,8 @@ export type Dataproduct = {
   keywords: Array<Scalars['String']>
   /** lastModified is the timestamp for when the dataproduct was last modified */
   lastModified: Scalars['Time']
+  /** mappings services a dataproduct is exposed to */
+  mappings: Array<MappingService>
   /** name of the dataproduct */
   name: Scalars['String']
   /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
@@ -141,6 +143,24 @@ export type Group = {
   email: Scalars['String']
   /** name of the group */
   name: Scalars['String']
+}
+
+/** GroupStats contains statistics on a group. */
+export type GroupStats = {
+  __typename?: 'GroupStats'
+  /** number of dataproducts owned by the group */
+  dataproducts: Scalars['Int']
+  /** email of the group */
+  email: Scalars['String']
+}
+
+/** Keyword represents a keyword used by other dataproducts */
+export type Keyword = {
+  __typename?: 'Keyword'
+  /** Count is the number of dataproducts with this keyword */
+  count: Scalars['Int']
+  /** Keyword name */
+  keyword: Scalars['String']
 }
 
 /** MappingService defines all possible service types that a dataproduct can be exposed to. */
@@ -228,7 +248,7 @@ export type MutationGrantAccessToDataproductArgs = {
 }
 
 export type MutationMapDataproductArgs = {
-  dataproductId: Scalars['ID']
+  dataproductID: Scalars['ID']
   services: Array<MappingService>
 }
 
@@ -310,10 +330,10 @@ export type Query = {
    * Requires authentication.
    */
   gcpGetTables: Array<BigQueryTable>
-  /** getDataproductByMapping returns the dataproduct exposed to a service. */
-  getDataproductByMapping: Array<Dataproduct>
-  /** getDataproductMappings returns the service a dataproduct is exposed to. */
-  getDataproductMappings: Array<MappingService>
+  /** groupStats returns statistics for groups that have created dataproducts. */
+  groupStats: Array<GroupStats>
+  /** Keywords returns all keywords, with an optional filter */
+  keywords: Array<Keyword>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   stories: Array<Story>
@@ -333,6 +353,7 @@ export type QueryDataproductArgs = {
 export type QueryDataproductsArgs = {
   limit?: Maybe<Scalars['Int']>
   offset?: Maybe<Scalars['Int']>
+  service?: Maybe<MappingService>
 }
 
 export type QueryGcpGetDatasetsArgs = {
@@ -344,12 +365,13 @@ export type QueryGcpGetTablesArgs = {
   projectID: Scalars['String']
 }
 
-export type QueryGetDataproductByMappingArgs = {
-  service: MappingService
+export type QueryGroupStatsArgs = {
+  limit?: Maybe<Scalars['Int']>
+  offset?: Maybe<Scalars['Int']>
 }
 
-export type QueryGetDataproductMappingsArgs = {
-  dataproductId: Scalars['ID']
+export type QueryKeywordsArgs = {
+  prefix?: Maybe<Scalars['String']>
 }
 
 export type QuerySearchArgs = {
@@ -579,6 +601,11 @@ export type DataproductQuery = {
     repo?: string | null | undefined
     pii: boolean
     keywords: Array<string>
+    mappings: Array<MappingService>
+    services: {
+      __typename?: 'DataproductServices'
+      metabase?: string | null | undefined
+    }
     owner: {
       __typename?: 'Owner'
       group: string
@@ -624,6 +651,23 @@ export type DataproductSummaryQuery = {
   }
 }
 
+export type MetabaseProudctsQueryVariables = Exact<{ [key: string]: never }>
+
+export type MetabaseProudctsQuery = {
+  __typename?: 'Query'
+  dataproducts: Array<{
+    __typename?: 'Dataproduct'
+    id: string
+    name: string
+    keywords: Array<string>
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
+  }>
+}
+
 export type DeleteDataproductMutationVariables = Exact<{
   id: Scalars['ID']
 }>
@@ -657,6 +701,13 @@ export type GcpGetTablesQuery = {
   }>
 }
 
+export type KeywordsQueryVariables = Exact<{ [key: string]: never }>
+
+export type KeywordsQuery = {
+  __typename?: 'Query'
+  keywords: Array<{ __typename?: 'Keyword'; keyword: string; count: number }>
+}
+
 export type UpdateDataproductMutationVariables = Exact<{
   id: Scalars['ID']
   input: UpdateDataproduct
@@ -665,6 +716,27 @@ export type UpdateDataproductMutationVariables = Exact<{
 export type UpdateDataproductMutation = {
   __typename?: 'Mutation'
   updateDataproduct: { __typename?: 'Dataproduct'; id: string }
+}
+
+export type UpdateMappingMutationVariables = Exact<{
+  dataproductID: Scalars['ID']
+  services: Array<MappingService> | MappingService
+}>
+
+export type UpdateMappingMutation = {
+  __typename?: 'Mutation'
+  mapDataproduct: boolean
+}
+
+export type GroupStatsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GroupStatsQuery = {
+  __typename?: 'Query'
+  groupStats: Array<{
+    __typename?: 'GroupStats'
+    email: string
+    dataproducts: number
+  }>
 }
 
 export type SearchContentQueryVariables = Exact<{
@@ -683,6 +755,7 @@ export type SearchContentQuery = {
       description?: string | null | undefined
       created: any
       lastModified: any
+      keywords: Array<string>
       owner: {
         __typename?: 'Owner'
         group: string
@@ -736,12 +809,14 @@ export type UserInfoDetailsQuery = {
       __typename?: 'Dataproduct'
       id: string
       name: string
+      keywords: Array<string>
       owner: { __typename?: 'Owner'; group: string }
     }>
     accessable: Array<{
       __typename?: 'Dataproduct'
       id: string
       name: string
+      keywords: Array<string>
       owner: { __typename?: 'Owner'; group: string }
     }>
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
@@ -1122,6 +1197,10 @@ export const DataproductDocument = gql`
       repo
       pii
       keywords
+      mappings
+      services {
+        metabase
+      }
       owner {
         group
         teamkatalogenURL
@@ -1262,6 +1341,69 @@ export type DataproductSummaryLazyQueryHookResult = ReturnType<
 export type DataproductSummaryQueryResult = Apollo.QueryResult<
   DataproductSummaryQuery,
   DataproductSummaryQueryVariables
+>
+export const MetabaseProudctsDocument = gql`
+  query MetabaseProudcts {
+    dataproducts(service: metabase) {
+      id
+      name
+      keywords
+      owner {
+        group
+        teamkatalogenURL
+      }
+    }
+  }
+`
+
+/**
+ * __useMetabaseProudctsQuery__
+ *
+ * To run a query within a React component, call `useMetabaseProudctsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMetabaseProudctsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMetabaseProudctsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMetabaseProudctsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    MetabaseProudctsQuery,
+    MetabaseProudctsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(
+    MetabaseProudctsDocument,
+    options
+  )
+}
+export function useMetabaseProudctsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MetabaseProudctsQuery,
+    MetabaseProudctsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    MetabaseProudctsQuery,
+    MetabaseProudctsQueryVariables
+  >(MetabaseProudctsDocument, options)
+}
+export type MetabaseProudctsQueryHookResult = ReturnType<
+  typeof useMetabaseProudctsQuery
+>
+export type MetabaseProudctsLazyQueryHookResult = ReturnType<
+  typeof useMetabaseProudctsLazyQuery
+>
+export type MetabaseProudctsQueryResult = Apollo.QueryResult<
+  MetabaseProudctsQuery,
+  MetabaseProudctsQueryVariables
 >
 export const DeleteDataproductDocument = gql`
   mutation deleteDataproduct($id: ID!) {
@@ -1428,6 +1570,59 @@ export type GcpGetTablesQueryResult = Apollo.QueryResult<
   GcpGetTablesQuery,
   GcpGetTablesQueryVariables
 >
+export const KeywordsDocument = gql`
+  query Keywords {
+    keywords {
+      keyword
+      count
+    }
+  }
+`
+
+/**
+ * __useKeywordsQuery__
+ *
+ * To run a query within a React component, call `useKeywordsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useKeywordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useKeywordsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useKeywordsQuery(
+  baseOptions?: Apollo.QueryHookOptions<KeywordsQuery, KeywordsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<KeywordsQuery, KeywordsQueryVariables>(
+    KeywordsDocument,
+    options
+  )
+}
+export function useKeywordsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    KeywordsQuery,
+    KeywordsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<KeywordsQuery, KeywordsQueryVariables>(
+    KeywordsDocument,
+    options
+  )
+}
+export type KeywordsQueryHookResult = ReturnType<typeof useKeywordsQuery>
+export type KeywordsLazyQueryHookResult = ReturnType<
+  typeof useKeywordsLazyQuery
+>
+export type KeywordsQueryResult = Apollo.QueryResult<
+  KeywordsQuery,
+  KeywordsQueryVariables
+>
 export const UpdateDataproductDocument = gql`
   mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
     updateDataproduct(id: $id, input: $input) {
@@ -1479,6 +1674,111 @@ export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
   UpdateDataproductMutation,
   UpdateDataproductMutationVariables
 >
+export const UpdateMappingDocument = gql`
+  mutation updateMapping($dataproductID: ID!, $services: [MappingService!]!) {
+    mapDataproduct(dataproductID: $dataproductID, services: $services)
+  }
+`
+export type UpdateMappingMutationFn = Apollo.MutationFunction<
+  UpdateMappingMutation,
+  UpdateMappingMutationVariables
+>
+
+/**
+ * __useUpdateMappingMutation__
+ *
+ * To run a mutation, you first call `useUpdateMappingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMappingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMappingMutation, { data, loading, error }] = useUpdateMappingMutation({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *      services: // value for 'services'
+ *   },
+ * });
+ */
+export function useUpdateMappingMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateMappingMutation,
+    UpdateMappingMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateMappingMutation,
+    UpdateMappingMutationVariables
+  >(UpdateMappingDocument, options)
+}
+export type UpdateMappingMutationHookResult = ReturnType<
+  typeof useUpdateMappingMutation
+>
+export type UpdateMappingMutationResult =
+  Apollo.MutationResult<UpdateMappingMutation>
+export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<
+  UpdateMappingMutation,
+  UpdateMappingMutationVariables
+>
+export const GroupStatsDocument = gql`
+  query groupStats {
+    groupStats {
+      email
+      dataproducts
+    }
+  }
+`
+
+/**
+ * __useGroupStatsQuery__
+ *
+ * To run a query within a React component, call `useGroupStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGroupStatsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GroupStatsQuery,
+    GroupStatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GroupStatsQuery, GroupStatsQueryVariables>(
+    GroupStatsDocument,
+    options
+  )
+}
+export function useGroupStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupStatsQuery,
+    GroupStatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GroupStatsQuery, GroupStatsQueryVariables>(
+    GroupStatsDocument,
+    options
+  )
+}
+export type GroupStatsQueryHookResult = ReturnType<typeof useGroupStatsQuery>
+export type GroupStatsLazyQueryHookResult = ReturnType<
+  typeof useGroupStatsLazyQuery
+>
+export type GroupStatsQueryResult = Apollo.QueryResult<
+  GroupStatsQuery,
+  GroupStatsQueryVariables
+>
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {
     search(q: $q) {
@@ -1491,6 +1791,7 @@ export const SearchContentDocument = gql`
           description
           created
           lastModified
+          keywords
           owner {
             group
             teamkatalogenURL
@@ -1677,6 +1978,7 @@ export const UserInfoDetailsDocument = gql`
       dataproducts {
         id
         name
+        keywords
         owner {
           group
         }
@@ -1684,6 +1986,7 @@ export const UserInfoDetailsDocument = gql`
       accessable {
         id
         name
+        keywords
         owner {
           group
         }

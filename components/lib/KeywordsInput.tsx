@@ -1,13 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
-import ReactTags, { Tag } from 'react-tag-autocomplete'
+import ReactTags from 'react-tag-autocomplete'
 import styled from 'styled-components'
-import { ReactTagKeywordShim } from '../widgets/Keyword'
+import KeywordLink from "./keywordList";
 
-export interface KeywordsInputProps {
-  keywords?: string[]
-  setKeywords: (value: string[]) => void
-  error?: string
-}
 
 const StyledRectTags = styled.div`
   margin-top: 8px;
@@ -52,33 +46,19 @@ const StyledRectTags = styled.div`
     line-height: 20px;
   }
 `
+export interface KeywordsInputProps {
+  error?: string,
+  onAdd: (value: string) => void,
+  onDelete: (value: string) => void,
+  keywords: string[],
+}
 
-// FIXME: Denne komponenten bør kunne ta onChange og value som props
-// for sømløs integrasjon med useForm
 export const KeywordsInput = ({
-  keywords,
-  setKeywords,
   error,
+  onAdd,
+  onDelete,
+  keywords,
 }: KeywordsInputProps) => {
-  const [tags, setTags] = useState<Tag[]>(
-    keywords ? keywords.map((k, i) => ({ id: i, name: k })) : []
-  )
-
-  const onDelete = useCallback(
-    (tagIndex) => {
-      setTags(tags.filter((_, i) => i !== tagIndex))
-    },
-    [tags]
-  )
-
-  const onAddition = useCallback(
-    (newTag) => {
-      setTags([...tags, newTag])
-    },
-    [tags]
-  )
-
-  useEffect(() => setKeywords(tags.map((x) => x.name)), [tags])
 
   const classNames = {
     root: 'react-tags',
@@ -101,14 +81,15 @@ export const KeywordsInput = ({
         <label>Nøkkelord</label>
         <ReactTags
           classNames={{ ...classNames, searchInput: 'navds-text-field__input' }}
-          tags={tags}
-          tagComponent={ReactTagKeywordShim}
-          onDelete={onDelete}
-          onAddition={onAddition}
-          placeholderText={'nøkkelord'}
+          onDelete={() => {}}
+          onAddition={(tag) => onAdd(tag.name)}
+          placeholderText={'nøkkelord (trykk enter for å legge til)'}
           allowNew
         />
       </StyledRectTags>
+      {keywords.map((k, i) => {
+        return <KeywordLink key={i} keyword={k} onClick={() => onDelete(k)}>{k}</KeywordLink>
+      })}
       {error && <p>{error}</p>}
     </>
   )

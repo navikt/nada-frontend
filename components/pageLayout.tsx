@@ -5,10 +5,6 @@ import Logo from './header/logo'
 import HeaderSearchBox from './search/headerSearchBox'
 import { useRouter } from 'next/router'
 
-interface HeaderProps {
-  forceSearch?: boolean
-}
-
 const HeaderBar = styled.header`
   > div {
     display: flex;
@@ -22,7 +18,6 @@ const HeaderBar = styled.header`
   align-items: center;
   padding: 0.25em 1em;
   border-bottom: 1px solid #aaa;
-  margin-bottom: 30px;
 `
 
 const Container = styled.div`

@@ -12,6 +12,7 @@ export const SEARCH_CONTENT = gql`
           description
           created
           lastModified
+          keywords
           owner {
             group
             teamkatalogenURL
