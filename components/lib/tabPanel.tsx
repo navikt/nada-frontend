@@ -5,6 +5,7 @@ export enum TabPanelType {
   vertical = 1,
   simple,
 }
+
 interface TabPanelProps {
   children?: React.ReactNode
   index: number

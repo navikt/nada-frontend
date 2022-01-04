@@ -3,7 +3,7 @@ import { Datasource } from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
 import { UrlLink } from '../widgets/UrlLink'
 import * as React from 'react'
-import humanizeDate from '../lib/humanizeDate'
+import humanizeDate from '../../lib/humanizeDate'
 import SubHeader from '../lib/subHeader'
 import amplitudeLog from '../../lib/amplitude'
 

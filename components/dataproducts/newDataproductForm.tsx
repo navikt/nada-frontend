@@ -24,23 +24,19 @@ export const NewDataproductForm = () => {
     useForm({
       resolver: yupResolver(newDataproductValidation),
     })
-  useEffect(() => {
-    setValue('pii', true)
-  }, [setValue])
-
-  const group = watch('group')
-
-  const [createDataproduct, { data, loading, error: backendError }] =
-    useMutation(CREATE_DATAPRODUCT, {
-      onCompleted: (data) =>
-        router.push(`/dataproduct/${data.createDataproduct.id}/access`),
-    })
-  const keywords = watch('keywords')
-  const setKeywords = (value: string[]) => {
-    setValue('keywords', value)
-  }
 
   const { errors } = formState
+  const keywords = watch('keywords')
+
+  const onDelete = (keyword: string) => {
+    setValue('keywords',keywords.filter((k: string) => k !== keyword))
+  }
+
+  const onAdd = (keyword: string) => {
+    keywords ?
+        setValue('keywords',[...keywords, keyword]) :
+        setValue('keywords',[keyword])
+  }
 
   const onSubmit = async (requestData: NewDataproduct) => {
     try {
@@ -55,6 +51,19 @@ export const NewDataproductForm = () => {
       console.log(e)
     }
   }
+
+  useEffect(() => {
+    setValue('pii', true)
+  }, [setValue])
+
+  const group = watch('group')
+
+  const [createDataproduct, { loading, error: backendError }] =
+    useMutation(CREATE_DATAPRODUCT, {
+      onCompleted: (data) =>
+        router.push(`/dataproduct/${data.createDataproduct.id}/access`),
+    })
+
 
   const onCancel = () => {
     amplitudeLog(
@@ -113,11 +122,12 @@ export const NewDataproductForm = () => {
             watch={watch}
           />
         ) : null}
+
         <KeywordsInput
-          keywords={keywords}
-          setKeywords={setKeywords}
-          {...register('keywords')}
-          error={errors.keywords?.[0].message}
+            onAdd={onAdd}
+            onDelete={onDelete}
+            keywords={keywords || []}
+            error={errors.keywords?.[0].message}
         />
         <PiiCheckboxInput register={register} watch={watch} />
         <RightJustifiedSubmitButton onCancel={onCancel} loading={loading} />
