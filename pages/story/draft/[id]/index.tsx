@@ -4,17 +4,19 @@ import { useStoryQuery } from '../../../../lib/schema/graphql'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { DraftToolbar } from '../../../../components/stories/draftToolbar'
+import ErrorMessage from "../../../../components/lib/error";
+import LoaderSpinner from "../../../../components/lib/spinner";
 
 
 const StoryDraft = () => {
 	const router = useRouter()
 	const id = router.query.id as string
-	const query = useStoryQuery({ variables: { id, draft: true } })
+	const {data, error, loading} = useStoryQuery({ variables: { id, draft: true } })
 
-	if (!query.data) {
-		return <div>Loading...</div>
-	}
-	const story = query.data.story
+	if (error) return <ErrorMessage error={error} />
+	if (loading || !data) return <LoaderSpinner />
+
+	const story = data.story
 
 	return (
 		<>

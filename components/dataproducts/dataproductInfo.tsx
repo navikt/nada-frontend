@@ -1,4 +1,3 @@
-import Keyword from '../widgets/Keyword'
 import IconBox from '../lib/icons/iconBox'
 import GithubIcon from '../lib/icons/github'
 import {UrlLink} from '../widgets/UrlLink'
@@ -18,6 +17,7 @@ interface DataproductDetailProps {
 const DataproductInfo = ({product}: DataproductDetailProps) => {
     return (
         <>
+            <table>
             {!!product.keywords.length && (
                 <tr>
                     <td>
@@ -33,6 +33,7 @@ const DataproductInfo = ({product}: DataproductDetailProps) => {
                     </td>
                 </tr>
             )}
+            </table>
             <StyledTable>
                 <tbody>
                 {product.repo && (

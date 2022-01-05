@@ -1,13 +1,11 @@
 import Link from 'next/link'
-import {SearchContentQuery} from '../../../lib/schema/graphql'
-import {ArrayElement} from '../../../lib/schema/ArrayElement'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconBox from '../../lib/icons/iconBox'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import * as React from 'react'
 import styled from 'styled-components'
-import KeywordLink from "../../lib/keywordList";
+import {KeywordPill} from "../../lib/keywordList";
 
 const StyledCard = styled(Card)`
   margin: 0 10px 20px;
@@ -27,9 +25,8 @@ export interface SearchResultProps {
 }
 
 export const SearchResultLink = ({link, name, group, keywords}: SearchResultProps) => {
-
     return (
-        <Link href={link}>
+        <Link href={link} passHref={true}>
             <a>
                 <StyledCard>
                     <CardHeader
@@ -44,7 +41,12 @@ export const SearchResultLink = ({link, name, group, keywords}: SearchResultProp
                         subheader={`eier: ${group}`}
                     />
                     <div style={{float: 'right'}}>
-                        {keywords && keywords.map((k, i) => <KeywordLink key={i} keyword={k} compact={true}/>)}
+                        {keywords && keywords.map((k, i) =>
+                            <Link key={i} href={`/search?q=${k}`} passHref={true}>
+                                <a>
+                                    <KeywordPill key={i} keyword={k} compact={true}>{k}</KeywordPill>
+                                </a>
+                            </Link>)}
                     </div>
                 </StyledCard>
             </a>

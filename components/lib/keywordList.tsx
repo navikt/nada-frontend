@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import StringToColor from "../../lib/stringToColor";
 
+const {contrastColor} = require('contrast-color');
+
 interface KeywordSpanProps {
     color: string,
+    textColor?: string,
     horizontal?: boolean,
     compact?: boolean,
     onClick?: () => void
@@ -14,8 +17,8 @@ margin: ${(props) => props.compact ? '0 10px' : '0 0 10px 15px'};
 cursor: pointer;
 color: #222;
 :hover {
-  color: ${(props) =>  props.onClick ?'red' :'var(--navds-color-text-link)' } ;
-  text-decoration: ${(props) =>  props.onClick ?'line-through':'underline'} ;
+  color: ${(props) => props.onClick ? 'red' : 'var(--navds-color-text-link)'} ;
+  text-decoration: ${(props) => props.onClick ? 'line-through' : 'underline'} ;
 }
 &:before {
     background-color: ${(props) => props.color};
@@ -27,6 +30,22 @@ color: #222;
     content: '';
 }
 `
+const KeywordPillStyle = styled.span<KeywordSpanProps>`
+display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
+background-color: ${(props) => props.color};
+color: ${(props) => props.textColor};
+border-radius: 999px;
+font-size: 12px;
+padding: 3px 5px 3px 5px;
+border: 0.5px solid transparent;
+
+margin: ${(props) => props.compact ? '0 5px' : '0 0 10px 15px'};
+cursor: pointer;
+:hover {
+  filter: brightness(110%);
+  border: 0.5px solid #f5f5f5;
+}
+`
 
 interface keywordLinkProps {
     keyword: string,
@@ -36,11 +55,19 @@ interface keywordLinkProps {
     onClick?: () => void
 }
 
-const KeywordLink = ({keyword, horizontal, children, compact, onClick}: keywordLinkProps) => {
+export const KeywordLink = ({keyword, horizontal, children, compact, onClick}: keywordLinkProps) => {
     return <KeywordSpan color={StringToColor(keyword)} horizontal={horizontal} compact={compact} onClick={onClick}>
         {children}
     </KeywordSpan>
 
+
+}
+export const KeywordPill = ({keyword, horizontal, children, compact, onClick}: keywordLinkProps) => {
+    const color = StringToColor(keyword)
+    return <KeywordPillStyle color={color} textColor={contrastColor({bgColor: color})} horizontal={horizontal}
+                             compact={compact} onClick={onClick}>
+        {children}
+    </KeywordPillStyle>
 
 }
 
