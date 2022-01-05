@@ -18,21 +18,23 @@ const DataproductInfo = ({product}: DataproductDetailProps) => {
     return (
         <>
             <table>
-            {!!product.keywords.length && (
-                <tr>
-                    <td>
-                        {product.keywords.map((k, i) => (
-                            <Link key={i} href={`/search?q=${k}`}>
-                                <a>
-                                    <KeywordLink key={k} keyword={k}>
-                                        {k}
-                                    </KeywordLink>
-                                </a>
-                            </Link>
-                        ))}
-                    </td>
-                </tr>
-            )}
+                <tbody>
+                {!!product.keywords.length && (
+                    <tr>
+                        <td>
+                            {product.keywords.map((k, i) => (
+                                <Link key={i} href={`/search?q=${k}`}>
+                                    <a>
+                                        <KeywordLink key={k} keyword={k}>
+                                            {k}
+                                        </KeywordLink>
+                                    </a>
+                                </Link>
+                            ))}
+                        </td>
+                    </tr>
+                )}
+                </tbody>
             </table>
             <StyledTable>
                 <tbody>

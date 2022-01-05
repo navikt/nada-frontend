@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const SubHeader = styled.table`
+const SubHeader = styled.h4`
   background-color: #fafafa;
   width: 100%;
   border-top: 1px solid #dde;

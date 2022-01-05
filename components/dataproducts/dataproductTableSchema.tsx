@@ -21,6 +21,7 @@ const DataproductTableSchema = ({
   return (
     <div>
       <StyledTable>
+        <tbody>
         <tr>
           <th>Adresse:</th>
           <td>
@@ -58,6 +59,7 @@ const DataproductTableSchema = ({
             <td>{humanizeDate(datasource.expires)}</td>
           </tr>
         )}
+        </tbody>
       </StyledTable>
       <SubHeader>Skjema</SubHeader>
       <TableContainer component={Paper}>
