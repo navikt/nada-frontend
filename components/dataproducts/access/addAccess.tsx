@@ -73,7 +73,7 @@ const AddAccess = ({
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
               label='Til'
-              inputFormat='MM/dd/yyyy'
+              inputFormat='dd.MM.yyyy'
               value={date}
               onChange={(newVal => setDate(newVal))}
               renderInput={(params) => <TextField {...params} />}
