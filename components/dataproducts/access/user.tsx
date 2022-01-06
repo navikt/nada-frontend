@@ -12,9 +12,10 @@ import AddAccess from './addAccess'
 
 interface UserProps {
   accessQuery: QueryResult<DataproductAccessQuery, Exact<{ id: string }>>
+  currentUser: string
 }
 
-const User = ({ accessQuery }: UserProps) => {
+const User = ({ accessQuery, currentUser }: UserProps) => {
   const [formError, setFormError] = useState('')
   const [open, setOpen] = useState(false)
   const [revokeAccess] = useRevokeAccessMutation()
@@ -62,7 +63,7 @@ const User = ({ accessQuery }: UserProps) => {
         setOpen={setOpen}
         dataproductID={dataproduct.id}
         dataproductName={dataproduct.name}
-        subject={dataproduct.requesters[0]}
+        subject={currentUser}
       />
     </>)
   return (

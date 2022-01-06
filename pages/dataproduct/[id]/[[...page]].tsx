@@ -118,7 +118,7 @@ const Dataproduct = (props: DataproductProps) => {
       title: 'tilganger',
       slug: 'access',
       component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
-        <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery} />,
+        <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery} currentUser={userInfo.email} />,
     },
     {
       title: 'utforsk',
