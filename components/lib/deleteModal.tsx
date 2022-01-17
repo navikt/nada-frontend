@@ -28,7 +28,7 @@ export const DeleteModal = ({
   error,
 }: DeleteModalProps) => {
   return (
-    <Modal open={open} onClose={() => onCancel}>
+    <Modal open={open} onClose={onCancel}>
       <Modal.Content>
         <ContentBox>Er du sikkert på at du vil slette {name}?</ContentBox>
         <ButtonStyledDiv>

@@ -5,9 +5,10 @@ import {addApolloState, initializeApollo} from '../lib/apollo'
 import {
     KeywordsDocument,
     MetabaseProudctsDocument,
+    StoriesDocument,
     SearchContentDocument, useGroupStatsQuery, useKeywordsQuery,
     useMetabaseProudctsQuery,
-    useSearchContentQuery
+    useSearchContentQuery, useStoriesQuery
 } from '../lib/schema/graphql'
 import {useRouter} from 'next/router'
 import {FrontPageLogo} from '../components/index/frontPageLogo'
@@ -44,7 +45,9 @@ const LandingPage = () => {
     })
     const metabaseProducts = useMetabaseProudctsQuery()
     const keywords = useKeywordsQuery()
+    const stories = useStoriesQuery()
     const groupStats = useGroupStatsQuery()
+    const storyCount = stories.data?.stories.length || 0
 
     useEffect(() => {
         const eventProperties = {
@@ -78,6 +81,12 @@ const LandingPage = () => {
                     <SubjectHeader>Siste produkter</SubjectHeader>
                     <ResultList search={search}/>
                 </ContentColumn>
+                {storyCount > 0 ?
+                    <ContentColumn>
+                        <SubjectHeader>Siste datafortellinger </SubjectHeader>
+                        <ResultList stories={stories}/>
+                    </ContentColumn> : <></>
+                }
                 <ContentColumn>
                     <SubjectHeader>Nylig lagt til i Metabase </SubjectHeader>
                     <ResultList metabase={metabaseProducts}/>
@@ -85,8 +94,6 @@ const LandingPage = () => {
                 <ContentColumn small={true}>
                     <SubjectHeader>Nøkkelord</SubjectHeader>
                     <ResultList keywords={keywords}/>
-                </ContentColumn>
-                <ContentColumn small={true}>
                     <SubjectHeader>Teams</SubjectHeader>
                     <ResultList groupStats={groupStats}/>
                 </ContentColumn>
@@ -112,6 +119,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         })
         await apolloClient.query({
             query: KeywordsDocument,
+        })
+        await apolloClient.query({
+            query: StoriesDocument,
         })
 
         return addApolloState(apolloClient, {

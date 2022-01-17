@@ -6,6 +6,7 @@ import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import * as React from 'react'
 import styled from 'styled-components'
 import {KeywordPill} from "../../lib/keywordList";
+import StoryLogo from "../../lib/icons/storyLogo";
 
 const StyledCard = styled(Card)`
   margin: 0 10px 20px;
@@ -20,11 +21,12 @@ const StyledCard = styled(Card)`
 export interface SearchResultProps {
     link: string,
     name: string,
-    group: string
+    group?: string
     keywords?: string[]
+    type?: string
 }
 
-export const SearchResultLink = ({link, name, group, keywords}: SearchResultProps) => {
+export const SearchResultLink = ({link, name, group, keywords, type}: SearchResultProps) => {
     return (
         <Link href={link} passHref={true}>
             <a>
@@ -33,7 +35,7 @@ export const SearchResultLink = ({link, name, group, keywords}: SearchResultProp
                         style={{paddingBottom: '0px'}}
                         avatar={
                             <IconBox size={42}>
-                                <BigQueryLogo/>
+                                {type === "story" ? <StoryLogo/> : <BigQueryLogo/>}
                             </IconBox>
                         }
                         titleTypographyProps={{variant: 'h6'}}

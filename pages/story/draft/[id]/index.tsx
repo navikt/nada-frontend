@@ -24,7 +24,7 @@ const StoryDraft = () => {
 				<title>Kladd - {story.name}</title>
 			</Head>
 			<DraftToolbar onSave={() => router.push(`/story/draft/${story.id}/save`)} />
-			<Story story={story} />
+			<Story story={story} draft={true} />
 		</>
 	)
 }

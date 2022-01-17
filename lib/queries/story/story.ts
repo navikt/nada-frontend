@@ -11,8 +11,15 @@ export const GET_STORY = gql`
         group
       }
       views {
-        type
-        spec
+        id
+        __typename
+        ... on StoryViewHeader {
+          content
+          level
+        }
+        ... on StoryViewMarkdown {
+          content
+        }
       }
     }
   }

@@ -78,7 +78,7 @@ export default function User() {
                             onClose={handleMenuClose}
                         >
                             <MenuItem
-                                onClick={(q) => {
+                                onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/profile'})
                                 }}>
@@ -86,7 +86,7 @@ export default function User() {
                             </MenuItem>
                             <MenuLine/>
                             <MenuItem
-                                onClick={(q) => {
+                                onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/products'})
                                 }}
@@ -94,12 +94,20 @@ export default function User() {
                                 Mine produkter
                             </MenuItem>
                             <MenuItem
-                                onClick={(q) => {
+                                onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/access'})
                                 }}
                             >
                                 Mine tilganger
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    handleMenuClose()
+                                    router.push({pathname: '/user/story'})
+                                }}
+                            >
+                                Mine historier
                             </MenuItem>
                             <MenuLine/>
                             <MenuItem onClick={handleMenuClose}>

@@ -15,7 +15,7 @@ import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar from '../../../components/lib/topBar'
 import { Name } from '../../../components/lib/detailTypography'
-import EditMenu from '../../../components/lib/editMenu'
+import EditMenu, {MenuItem} from '../../../components/lib/editMenu'
 import { MetadataTable } from '../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -134,6 +134,10 @@ const Dataproduct = (props: DataproductProps) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
   }
+  const dotMenuItems: MenuItem[] = [
+    {title: "Edit", func: () => router.push(`/dataproduct/${product.id}/edit`)},
+    {title: "Delete", func:() => setShowDelete(true)}
+  ]
 
   return (
     <>
@@ -146,9 +150,7 @@ const Dataproduct = (props: DataproductProps) => {
           <TopBar type={'Dataproduct'}>
             <Name>{product.name}</Name>
             {isOwner && (
-              <EditMenu
-                onEdit={() => router.push(`/dataproduct/${product.id}/edit`)}
-                onDelete={() => setShowDelete(true)}
+              <EditMenu menuItems={dotMenuItems}
               />
             )}
           </TopBar>

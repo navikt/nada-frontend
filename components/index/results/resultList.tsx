@@ -5,7 +5,7 @@ import {
     KeywordsQuery,
     MetabaseProudctsQuery,
     SearchContentQuery,
-    SearchQuery
+    SearchQuery, StoriesQuery
 } from '../../../lib/schema/graphql'
 import LoaderSpinner from "../../lib/spinner";
 import ErrorMessage from "../../lib/error";
@@ -19,9 +19,25 @@ interface ResultsProps {
     keywords?: QueryResult<KeywordsQuery, Exact<{ [p: string]: never }>>
     groupStats?: QueryResult<GroupStatsQuery, Exact<{ [p: string]: never }>>
     dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: { __typename?: "Owner" | undefined, group: string } }[]
+    stories?:  QueryResult<StoriesQuery, Exact<{[p: string]: never}>>
+    drafts?: any
 }
 
-export function ResultList({search, metabase, keywords, dataproducts, groupStats}: ResultsProps) {
+export function ResultList({search, metabase, keywords, dataproducts, groupStats, stories }: ResultsProps) {
+    if (stories) {
+        const {data, loading, error} = stories
+        if (error) return <ErrorMessage error={error}/>
+        if (loading || !data) return <LoaderSpinner/>
+
+        return (<>
+            {
+                data.stories.map((d, idx) =>
+                    <SearchResultLink key={idx} group={d.owner?.group} name={d.name} keywords={undefined} type={"story"}
+                                      link={`/story/${d.id}`}/>
+                )
+            }
+        </>)
+    }
     if (metabase) {
         const {data, loading, error} = metabase
         if (error) return <ErrorMessage error={error}/>

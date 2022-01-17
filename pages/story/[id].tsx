@@ -3,7 +3,17 @@ import { Story } from '../../components/stories/story'
 import { useStoryQuery } from '../../lib/schema/graphql'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import styled from "styled-components";
+import BackButton from "../../components/lib/BackButton";
 
+const Container = styled.div`
+  margin-top: 40px;
+`
+
+const StoryContainer = styled.div`
+  border-radius: 5px;
+  border: 1px solid black;
+`
 const StoryPage = () => {
 	const router = useRouter()
 	const id = router.query.id as string
@@ -19,7 +29,12 @@ const StoryPage = () => {
 			<Head>
 				<title>{story.name}</title>
 			</Head>
-			<Story story={story} />
+			<Container>
+				<BackButton onClick={() => router.push('/')} />
+				<StoryContainer>
+					<Story story={story} draft={false}/>
+				</StoryContainer>
+			</Container>
 		</>
 	)
 }
