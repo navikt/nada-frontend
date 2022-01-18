@@ -18,6 +18,7 @@ import {UserState} from "../../lib/context";
 import {useRouter} from "next/router";
 import DeleteModal from "../lib/deleteModal";
 import TokenModal from "../lib/tokenModal";
+import {MetadataTable} from "./metadataTable";
 
 const StoryDiv = styled.div`
   padding: 10px;
@@ -75,6 +76,7 @@ export function Story({story, draft}: ResultsProps) {
                     <EditMenu menuItems={menuItems} />
                 )}
             </TopBar>
+            {!draft && <MetadataTable created={story.created} lastModified={story.lastModified} owner={story.owner}/>}
             <StoryDiv>
                 {views.map((view, id) => {
                     if (view.__typename === 'StoryViewHeader') {

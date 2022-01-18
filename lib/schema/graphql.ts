@@ -188,6 +188,7 @@ export type Mutation = {
    * Requires authentication.
    */
   deleteDataproduct: Scalars['Boolean']
+  deleteStory: Scalars['Boolean']
   /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
   /**
@@ -234,6 +235,10 @@ export type MutationCreateDataproductArgs = {
 }
 
 export type MutationDeleteDataproductArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationDeleteStoryArgs = {
   id: Scalars['ID']
 }
 
@@ -862,7 +867,14 @@ export type StoryQuery = {
     name: string
     created: any
     lastModified?: any | null | undefined
-    owner?: { __typename?: 'Owner'; group: string } | null | undefined
+    owner?:
+      | {
+          __typename?: 'Owner'
+          group: string
+          teamkatalogenURL?: string | null | undefined
+        }
+      | null
+      | undefined
     views: Array<
       | {
           __typename: 'StoryViewHeader'
@@ -2127,6 +2139,7 @@ export const StoryDocument = gql`
       lastModified
       owner {
         group
+        teamkatalogenURL
       }
       views {
         id

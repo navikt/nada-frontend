@@ -9,6 +9,7 @@ export const GET_STORY = gql`
       lastModified
       owner {
         group
+        teamkatalogenURL
       }
       views {
         id

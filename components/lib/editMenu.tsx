@@ -10,7 +10,6 @@ export interface MenuItem {
 }
 interface DotMenuProps {
     menuItems: Array<MenuItem>
-
 }
 
 

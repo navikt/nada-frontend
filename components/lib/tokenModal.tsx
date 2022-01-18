@@ -66,6 +66,7 @@ export const TokenModal = ({
 
 
     }
+    const updateLink = `ds.update(token='${token.data?.storyToken.token}')`
 
     return (
         <Modal open={open} onClose={onCancel}>
@@ -73,8 +74,8 @@ export const TokenModal = ({
                 <div style={{paddingTop: "100px", paddingBottom: "20px"}}>
                     {token.error && <ErrorMessage error={token.error}/>}
                     {token.loading || !token.data && <LoaderSpinner/>}
-                    {token.data && <TokenBox>{token.data.storyToken.token}<Wrapper><StyledCopy
-                        onClick={(e) => copyToClipboard(e, token.data?.storyToken.token)}/>
+                    {token.data && <TokenBox>{updateLink}<Wrapper><StyledCopy
+                        onClick={(e) => copyToClipboard(e, updateLink)}/>
                         {copied && <Copied>kopiert</Copied>}
                     </Wrapper>
                     </TokenBox>}
