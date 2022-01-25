@@ -1,14 +1,14 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { Datasource } from '../../lib/schema/graphql'
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
+import {DataproductQuery} from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
-import { UrlLink } from '../widgets/UrlLink'
+import {UrlLink} from '../widgets/UrlLink'
 import * as React from 'react'
 import humanizeDate from '../../lib/humanizeDate'
 import SubHeader from '../lib/subHeader'
 import amplitudeLog from '../../lib/amplitude'
 
 interface DataproductTableSchemaProps {
-  datasource: Datasource
+  datasource: DataproductQuery['dataproduct']['datasource']
 }
 
 const DataproductTableSchema = ({
@@ -73,7 +73,7 @@ const DataproductTableSchema = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {schema.map((row) => (
+            {schema.map((row: any) => (
               <TableRow
                 key={row.name}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

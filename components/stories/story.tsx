@@ -19,6 +19,7 @@ import {useRouter} from "next/router";
 import DeleteModal from "../lib/deleteModal";
 import TokenModal from "../lib/tokenModal";
 import {MetadataTable} from "./metadataTable";
+import Vega from "./vega";
 
 const StoryDiv = styled.div`
   padding: 10px;
@@ -99,9 +100,21 @@ export function Story({story, draft}: ResultsProps) {
                                 }
                             </InView>)
                     }
+                    if (view.__typename === 'StoryViewVega') {
+                        return (
+                            <InView key={id}>
+                                {
+                                    ({inView, ref}) => {
+                                        return inView ?
+                                            <div ref={ref}><Vega id={view.id} draft={draft}/></div> :
+                                            <div ref={ref}><LoaderSpinner/></div>
+                                    }
+                                }
+                            </InView>)
+                    }
 
-                })}
-            </StoryDiv>
+                    })}
+                    </StoryDiv>
             <DeleteModal
                 open={showDelete}
                 onCancel={() => setShowDelete(false)}

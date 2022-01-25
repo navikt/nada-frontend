@@ -12,7 +12,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.16",
+    "@apollo/client": "^3.5.8",
     "@apollo/react-ssr": "^4.0.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -30,12 +30,13 @@
     "@types/marked": "^4.0.1",
     "@uiw/react-md-editor": "^3.6.5",
     "amplitude-js": "^8.9.1",
+    "ansi-regex": "^5.0.1",
     "classnames": "^2.3.1",
     "contrast-color": "^1.0.1",
     "date-fns": "^2.24.0",
     "deepmerge": "^4.2.2",
     "graphql": "^15.6.1",
-    "marked": "^4.0.5",
+    "marked": "^4.0.10",
     "moment": "^2.29.1",
     "nav-frontend-core": "^6.0.1",
     "nav-frontend-ikoner-assets": "^3.0.1",
@@ -53,7 +54,10 @@
     "react-markdown": "^7.0.1",
     "react-plotly.js": "^2.5.1",
     "react-tag-autocomplete": "^6.3.0",
+    "react-vega": "^7.4.4",
     "styled-components": "^5.3.1",
+    "vega": "^5.21.0",
+    "vega-lite": "^5.2.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {

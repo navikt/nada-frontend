@@ -17,7 +17,7 @@ export function Plotly({id, draft}: ResultsProps) {
     if (loading || !data) return <LoaderSpinner/>
     const spec = JSON.parse(JSON.stringify(data.storyView))
     return (
-        <div key={id}><Plot data={spec.data} layout={spec.layout}/></div>
+        <div><Plot data={spec.data} layout={spec.layout}/></div>
     )
 }
 

@@ -48,6 +48,8 @@ export type BigQuery = {
   created: Scalars['Time']
   /** dataset is the dataset that contains the BigQuery table */
   dataset: Scalars['String']
+  /** description is the description of the BigQuery table */
+  description: Scalars['String']
   /** expires, if set, is when the table expires */
   expires?: Maybe<Scalars['Time']>
   /** lastModified is the time when the table was last modified */
@@ -482,6 +484,12 @@ export type StoryViewPlotly = StoryView & {
   layout: Scalars['Map']
 }
 
+export type StoryViewVega = StoryView & {
+  __typename?: 'StoryViewVega'
+  id: Scalars['ID']
+  spec: Scalars['Map']
+}
+
 /** SubjectType defines all possible types that can request access to a dataproduct. */
 export enum SubjectType {
   Group = 'group',
@@ -823,6 +831,7 @@ export type PlotlyViewQuery = {
         data: Array<any>
         layout: any
       }
+    | { __typename?: 'StoryViewVega' }
 }
 
 export type PublishStoryMutationVariables = Exact<{
@@ -884,6 +893,7 @@ export type StoryQuery = {
         }
       | { __typename: 'StoryViewMarkdown'; content: string; id: string }
       | { __typename: 'StoryViewPlotly'; id: string }
+      | { __typename: 'StoryViewVega'; id: string }
     >
   }
 }
@@ -895,6 +905,20 @@ export type StoryTokenQueryVariables = Exact<{
 export type StoryTokenQuery = {
   __typename?: 'Query'
   storyToken: { __typename?: 'StoryToken'; token: string }
+}
+
+export type VegaViewQueryVariables = Exact<{
+  id: Scalars['ID']
+  draft?: Maybe<Scalars['Boolean']>
+}>
+
+export type VegaViewQuery = {
+  __typename?: 'Query'
+  storyView:
+    | { __typename?: 'StoryViewHeader' }
+    | { __typename?: 'StoryViewMarkdown' }
+    | { __typename?: 'StoryViewPlotly' }
+    | { __typename?: 'StoryViewVega'; id: string; spec: any }
 }
 
 export type TeamkatalogenQueryVariables = Exact<{
@@ -2252,6 +2276,63 @@ export type StoryTokenLazyQueryHookResult = ReturnType<
 export type StoryTokenQueryResult = Apollo.QueryResult<
   StoryTokenQuery,
   StoryTokenQueryVariables
+>
+export const VegaViewDocument = gql`
+  query VegaView($id: ID!, $draft: Boolean) {
+    storyView(id: $id, draft: $draft) {
+      ... on StoryViewVega {
+        id
+        spec
+      }
+    }
+  }
+`
+
+/**
+ * __useVegaViewQuery__
+ *
+ * To run a query within a React component, call `useVegaViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVegaViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVegaViewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      draft: // value for 'draft'
+ *   },
+ * });
+ */
+export function useVegaViewQuery(
+  baseOptions: Apollo.QueryHookOptions<VegaViewQuery, VegaViewQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<VegaViewQuery, VegaViewQueryVariables>(
+    VegaViewDocument,
+    options
+  )
+}
+export function useVegaViewLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    VegaViewQuery,
+    VegaViewQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<VegaViewQuery, VegaViewQueryVariables>(
+    VegaViewDocument,
+    options
+  )
+}
+export type VegaViewQueryHookResult = ReturnType<typeof useVegaViewQuery>
+export type VegaViewLazyQueryHookResult = ReturnType<
+  typeof useVegaViewLazyQuery
+>
+export type VegaViewQueryResult = Apollo.QueryResult<
+  VegaViewQuery,
+  VegaViewQueryVariables
 >
 export const TeamkatalogenDocument = gql`
   query Teamkatalogen($q: String!) {
