@@ -14,20 +14,26 @@ import BigQueryLogo from "../components/lib/icons/bigQueryLogo";
 import StoryLogo from "../components/lib/icons/storyLogo";
 import MetabaseLogo from "../components/lib/icons/metabaseLogo";
 import IconBox from "../components/lib/icons/iconBox";
+import Link from 'next/link'
 
 const SEARCH_LIMIT = 6
 
 const Content = styled.div`
-    align-items: start;
-    margin-top: 100px;
     display: flex;
-    flex-direction: row;
     justify-content: center;
+    margin-top: 100px;
+    flex-direction: row;
     gap: 70px;
     flex-wrap: wrap;
+    position: relative;
 `
 const Category = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: 1px solid rgb(240, 240, 240);
+    border-radius: 5px;
+    box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
     width: 150px;
     height: 150px;
     padding: 20px;
@@ -37,7 +43,8 @@ const Category = styled.div`
 `
 const CategoryTitle = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    padding-top: 5px;
 
 `
 
@@ -72,10 +79,15 @@ const LandingPage = () => {
                 </a>
             </Alert>
             <Content>
-                <Category>
-                    <IconBox size={50}><BigQueryLogo/></IconBox>
-                    <CategoryTitle> Produkter </CategoryTitle>
-                </Category>
+                <Link href={'/search?q='}>
+                    <a>
+
+                    <Category>
+                        <IconBox size={50}><BigQueryLogo/></IconBox>
+                        <CategoryTitle> Produkter </CategoryTitle>
+                    </Category>
+                    </a>
+                </Link>
                 <Category>
                     <IconBox size={50}><StoryLogo/></IconBox>
                     <CategoryTitle> Fortellinger </CategoryTitle>
