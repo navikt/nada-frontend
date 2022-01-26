@@ -815,6 +815,15 @@ export type SearchContentQuery = {
   }>
 }
 
+export type DeleteStoryMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DeleteStoryMutation = {
+  __typename?: 'Mutation'
+  deleteStory: boolean
+}
+
 export type PlotlyViewQueryVariables = Exact<{
   id: Scalars['ID']
   draft?: Maybe<Scalars['Boolean']>
@@ -1989,6 +1998,54 @@ export type SearchContentLazyQueryHookResult = ReturnType<
 export type SearchContentQueryResult = Apollo.QueryResult<
   SearchContentQuery,
   SearchContentQueryVariables
+>
+export const DeleteStoryDocument = gql`
+  mutation deleteStory($id: ID!) {
+    deleteStory(id: $id)
+  }
+`
+export type DeleteStoryMutationFn = Apollo.MutationFunction<
+  DeleteStoryMutation,
+  DeleteStoryMutationVariables
+>
+
+/**
+ * __useDeleteStoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteStoryMutation, { data, loading, error }] = useDeleteStoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteStoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteStoryMutation,
+    DeleteStoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<DeleteStoryMutation, DeleteStoryMutationVariables>(
+    DeleteStoryDocument,
+    options
+  )
+}
+export type DeleteStoryMutationHookResult = ReturnType<
+  typeof useDeleteStoryMutation
+>
+export type DeleteStoryMutationResult =
+  Apollo.MutationResult<DeleteStoryMutation>
+export type DeleteStoryMutationOptions = Apollo.BaseMutationOptions<
+  DeleteStoryMutation,
+  DeleteStoryMutationVariables
 >
 export const PlotlyViewDocument = gql`
   query PlotlyView($id: ID!, $draft: Boolean) {

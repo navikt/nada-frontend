@@ -1,6 +1,14 @@
 import styled from 'styled-components'
 import {InView} from 'react-intersection-observer'
-import {Group, Story, StoryQuery, StoryViewHeader, StoryViewMarkdown, StoryViewPlotly} from '../../lib/schema/graphql'
+import {
+    Group,
+    Story,
+    StoryQuery,
+    StoryViewHeader,
+    StoryViewMarkdown,
+    StoryViewPlotly,
+    useDeleteStoryMutation
+} from '../../lib/schema/graphql'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Header from './header'
@@ -32,7 +40,7 @@ const StoryDiv = styled.div`
     width: 100%;
   }
 `
-const deleteStory = () => {console.log("TODO: Venter på backend"); throw new Error("Ikke implementert")}
+
 interface ResultsProps {
     story: Story
     draft: boolean
@@ -42,11 +50,15 @@ export function Story({story, draft}: ResultsProps) {
     const userInfo = useContext(UserState)
     const views = story.views as StoryQuery['story']['views']
 
+    const [deleteStory] = useDeleteStoryMutation({
+        variables: { id: story.id },
+        awaitRefetchQueries: true,
+        refetchQueries: ['searchContent'],
+    })
 
     const [showDelete, setShowDelete] = useState(false)
     const [showToken, setShowToken] = useState(false)
     const [deleteError, setDeleteError] = useState('')
-    console.log(showToken)
 
     const onDelete = async () => {
         try {
