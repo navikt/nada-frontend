@@ -11,6 +11,7 @@ export const StyledIconBox = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: ${(p: IconBoxProps) => (p.justifyRight ? 'auto' : 'default')};
+  margin: 0 auto;
   overflow: hidden;
   height: ${(p: IconBoxProps) => p.size}px;
   width: ${(p: IconBoxProps) => p.size}px;

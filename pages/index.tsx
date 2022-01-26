@@ -1,15 +1,7 @@
-import ResultList from '../components/index/results/resultList'
 import FrontPageSearchBox from '../components/index/searchField'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../lib/apollo'
-import {
-    KeywordsDocument,
-    MetabaseProudctsDocument,
-    StoriesDocument,
-    SearchContentDocument, useGroupStatsQuery, useKeywordsQuery,
-    useMetabaseProudctsQuery,
-    useSearchContentQuery, useStoriesQuery
-} from '../lib/schema/graphql'
+import {KeywordsDocument, MetabaseProudctsDocument, SearchContentDocument, StoriesDocument} from '../lib/schema/graphql'
 import {useRouter} from 'next/router'
 import {FrontPageLogo} from '../components/index/frontPageLogo'
 import {Alert} from '@navikt/ds-react'
@@ -18,36 +10,39 @@ import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
 import {USER_INFO} from '../lib/queries/userInfo/userInfo'
 import styled from "styled-components";
-import SubjectHeader from "../components/lib/subjectHeader";
+import BigQueryLogo from "../components/lib/icons/bigQueryLogo";
+import StoryLogo from "../components/lib/icons/storyLogo";
+import MetabaseLogo from "../components/lib/icons/metabaseLogo";
+import IconBox from "../components/lib/icons/iconBox";
 
 const SEARCH_LIMIT = 6
 
 const Content = styled.div`
     align-items: start;
-    margin-top: 20px;
+    margin-top: 100px;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
+    gap: 70px;
     flex-wrap: wrap;
-    
 `
-
-const ContentColumn = styled.div<{ small?: boolean }>`
-    width: ${(props) => props.small ? '200px' : '400px'};
+const Category = styled.div`
+    border: 1px solid rgb(240, 240, 240);
+    width: 150px;
+    height: 150px;
+    padding: 20px;
+    :hover{
+        box-shadow: rgb(239, 239, 239) 0px 1px 0px 0.5px;
+    }
+`
+const CategoryTitle = styled.div`
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
+
 `
 
 const LandingPage = () => {
     const router = useRouter()
-    const search = useSearchContentQuery({
-        variables: {q: {limit: SEARCH_LIMIT}},
-    })
-    const metabaseProducts = useMetabaseProudctsQuery()
-    const keywords = useKeywordsQuery()
-    const stories = useStoriesQuery()
-    const groupStats = useGroupStatsQuery()
-    const storyCount = stories.data?.stories.length || 0
 
     useEffect(() => {
         const eventProperties = {
@@ -77,26 +72,18 @@ const LandingPage = () => {
                 </a>
             </Alert>
             <Content>
-                <ContentColumn>
-                    <SubjectHeader>Siste produkter</SubjectHeader>
-                    <ResultList search={search}/>
-                </ContentColumn>
-                {storyCount > 0 ?
-                    <ContentColumn>
-                        <SubjectHeader>Siste datafortellinger </SubjectHeader>
-                        <ResultList stories={stories}/>
-                    </ContentColumn> : <></>
-                }
-                <ContentColumn>
-                    <SubjectHeader>Nylig lagt til i Metabase </SubjectHeader>
-                    <ResultList metabase={metabaseProducts}/>
-                </ContentColumn>
-                <ContentColumn small={true}>
-                    <SubjectHeader>Nøkkelord</SubjectHeader>
-                    <ResultList keywords={keywords}/>
-                    <SubjectHeader>Teams</SubjectHeader>
-                    <ResultList groupStats={groupStats}/>
-                </ContentColumn>
+                <Category>
+                    <IconBox size={50}><BigQueryLogo/></IconBox>
+                    <CategoryTitle> Produkter </CategoryTitle>
+                </Category>
+                <Category>
+                    <IconBox size={50}><StoryLogo/></IconBox>
+                    <CategoryTitle> Fortellinger </CategoryTitle>
+                </Category>
+                <Category>
+                    <IconBox size={50}><MetabaseLogo/></IconBox>
+                    <CategoryTitle> Metabase </CategoryTitle>
+                </Category>
             </Content>
         </div>
     )
