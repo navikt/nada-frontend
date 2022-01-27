@@ -1,4 +1,4 @@
-import FrontPageSearchBox from '../components/index/searchField'
+import SearchBox from '../components/index/searchField'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../lib/apollo'
 import {KeywordsDocument, MetabaseProudctsDocument, SearchContentDocument, StoriesDocument} from '../lib/schema/graphql'
@@ -45,7 +45,7 @@ const CategoryTitle = styled.div`
     display: flex;
     justify-content: center;
     padding-top: 5px;
-
+    color: #222;
 `
 
 const LandingPage = () => {
@@ -64,7 +64,7 @@ const LandingPage = () => {
                 <title>nav data</title>
             </Head>
             <FrontPageLogo/>
-            <FrontPageSearchBox
+            <SearchBox big={true}
                 onSearch={(q) => router.push({pathname: '/search', query: {q}})}
             />
 
@@ -79,23 +79,28 @@ const LandingPage = () => {
                 </a>
             </Alert>
             <Content>
-                <Link href={'/search?q='}>
+                <Link href={'/category/dataproduct'}>
                     <a>
-
-                    <Category>
-                        <IconBox size={50}><BigQueryLogo/></IconBox>
-                        <CategoryTitle> Produkter </CategoryTitle>
-                    </Category>
+                        <Category>
+                            <IconBox size={50}><BigQueryLogo/></IconBox>
+                            <CategoryTitle> Produkter </CategoryTitle>
+                        </Category>
                     </a>
                 </Link>
-                <Category>
-                    <IconBox size={50}><StoryLogo/></IconBox>
-                    <CategoryTitle> Fortellinger </CategoryTitle>
-                </Category>
-                <Category>
-                    <IconBox size={50}><MetabaseLogo/></IconBox>
-                    <CategoryTitle> Metabase </CategoryTitle>
-                </Category>
+                <Link href={'/category/story'}>
+                    <a>
+                        <Category>
+                            <IconBox size={50}><StoryLogo/></IconBox>
+                            <CategoryTitle> Fortellinger </CategoryTitle>
+                        </Category>
+                    </a></Link>
+                <Link href={'/category/metabase'}>
+                    <a>
+                        <Category>
+                            <IconBox size={50}><MetabaseLogo/></IconBox>
+                            <CategoryTitle> Metabase </CategoryTitle>
+                        </Category>
+                    </a></Link>
             </Content>
         </div>
     )
