@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { useRouter } from 'next/router'
+import {ChangeEvent, useEffect, useState} from 'react'
+import {useRouter} from 'next/router'
 import Head from "next/head";
 import styled from "styled-components";
-import SearchBox from "../../components/index/searchField";
-import {useEffect, useState} from "react";
-import amplitudeLog from "../../lib/amplitude";
+import {useGroupStatsQuery} from "../../lib/schema/graphql";
 import {Select} from "@navikt/ds-react";
+import SearchBox from "../../components/index/searchField";
 
 interface CategoryProps {
 }
@@ -36,23 +36,38 @@ const translate = (category: string | undefined) => {
 }
 
 const Category = (props: CategoryProps) => {
-  const router = useRouter()
-  const category = router.query.page?.[0]
-
   const [query, setQuery] = useState("")
-  const [teams, setTeams] = useState<string[]>([])
+  const [teams, setTeams] = useState<string[]>(new Array())
   const [keywords, setKeywords] = useState<string[]>([])
 
+  const router = useRouter()
+  const groupStats = useGroupStatsQuery()
+  let unselectedTeams = groupStats.data?.groupStats.map((g: any) => g.email.split("@")[0]).filter((t) => !teams.includes(t)) || []
+  console.log(unselectedTeams)
+
+
+
+  const category = router.query.page?.[0]
+
+
+  const addTeam = (event:  ChangeEvent<HTMLSelectElement>) => {
+    setTeams([...teams].concat(event.currentTarget.value))
+  }
+  const addKeyword = (event:  ChangeEvent<HTMLSelectElement>) => {
+    setKeywords([...keywords].concat(event.currentTarget.value))
+  }
+
   const buildQueryString = () => {
-    let queryString = `/category/${category}?`
-    if (query.length > 0) queryString += `q=${query}`
-    if (teams.length > 0) queryString += `&teams=${teams.concat(",")}`
-    if (keywords.length > 0) queryString += `&keywords=${keywords.concat(",")}`
-    return queryString
+    var q = new URLSearchParams();
+    if (query.length > 0) q.append("baseUrl", query)
+    if (teams.length > 0) q.append("teams", teams.join(","))
+    if (keywords.length > 0) q.append("keywords", teams.join(","))
+    return q
   }
 
   useEffect(() => {
-    router.push(buildQueryString())
+    const baseUrl = router.query.page?.[0]
+    if (baseUrl) router.push(`/category/${baseUrl}?${buildQueryString().toString()}`)
   }, [query, teams, keywords])
 
   return (<>
@@ -62,9 +77,28 @@ const Category = (props: CategoryProps) => {
     <Container>
       <SideMenu>
         Søk i {translate(category)}
-        <SearchBox onSearch={(q) => setQuery(q)}/>
-        <Select />
-        <div>xiy</div>
+        <SearchBox
+                   onSearch={setQuery}
+        />
+
+
+        <Select
+            label={''}
+            onChange={addTeam}
+            style={{fontSize: "0.75em"}}
+        >
+          <option value={''}>Filtrer på team</option>
+          {unselectedTeams.map((t) => <option key={t} value={t}>{t}</option> )}
+
+        </Select>
+        <Select
+            label={''}
+            onChange={addKeyword}
+        >
+          <option value={''}>Filtrer på nøkkelord</option>
+          {unselectedTeams.map((t) => <option key={t} value={t}>{t}</option> )}
+
+        </Select>
       </SideMenu>
       <Main>
         {category === "dataproduct" && <div>Dataprodukter</div>}
