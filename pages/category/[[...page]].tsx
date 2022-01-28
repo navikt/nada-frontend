@@ -3,7 +3,7 @@ import {ChangeEvent, useEffect, useState} from 'react'
 import {useRouter} from 'next/router'
 import Head from "next/head";
 import styled from "styled-components";
-import {useGroupStatsQuery} from "../../lib/schema/graphql";
+import {useGroupStatsQuery, useKeywordsQuery} from "../../lib/schema/graphql";
 import {Select} from "@navikt/ds-react";
 import SearchBox from "../../components/index/searchField";
 
@@ -21,94 +21,89 @@ const SideMenu = styled.div`
 const Main = styled.div`
   flex: 1 0 auto;
 `
-const translate = (category: string | undefined) => {
-  switch(category) {
-    case "dataproduct":
-        return "dataprodukter"
-    case "story":
-      return "datafortellinger"
-    case "metabase":
-      return "metabase"
-    default:
-      return category
-  }
+const translateCategory = (category: string | undefined) => {
+    switch (category) {
+        case "dataproduct":
+            return "dataprodukter"
+        case "story":
+            return "datafortellinger"
+        case "metabase":
+            return "metabase"
+        default:
+            return category
+    }
 
 }
 
-const Category = (props: CategoryProps) => {
-  const [query, setQuery] = useState("")
-  const [teams, setTeams] = useState<string[]>(new Array())
-  const [keywords, setKeywords] = useState<string[]>([])
+const Category = () => {
+    const router = useRouter()
+    const category = router.query.page?.[0]
+    const baseUrl = router.asPath.split('?')[0]
+    const queryString = new URLSearchParams();
+    if (router.query.q) queryString.append('q', router.query.q.toString())
+    if (router.query.team) queryString.append('team', router.query.team.toString())
+    if (router.query.keyword) queryString.append('keyword', router.query.keyword.toString())
 
-  const router = useRouter()
-  const groupStats = useGroupStatsQuery()
-  let unselectedTeams = groupStats.data?.groupStats.map((g: any) => g.email.split("@")[0]).filter((t) => !teams.includes(t)) || []
-  console.log(unselectedTeams)
+    const updateQuery = (key: string, value: string) => {
+        console.log(key, value, queryString.has(key))
+        router.push(buildQueryString(key, value))
+    }
 
+    const buildQueryString = (key: string, value: string) => {
+        if (queryString.has(key)) queryString.set(key, value +','+queryString.get(key)?.toString())
+        else queryString.append(key, value)
+        return baseUrl + '?' + queryString.toString()
+    }
 
+    const teams = queryString.get('team')?.split(',') || []
+    const keywords = queryString.get('keyword')?.split(',') || []
+    const query = queryString.get('q')?.split(',') || []
 
-  const category = router.query.page?.[0]
+    const groupStatsQuery = useGroupStatsQuery()
+    const keywordsQuery = useKeywordsQuery()
+    const unselectedTeams = groupStatsQuery.data?.groupStats.map((g: any) => g.email.split("@")[0]).filter((t) => !teams.includes(t)) || []
+    const unselectedKeywords = keywordsQuery.data?.keywords.map((k) => k.keyword).filter((k) => !keywords?.includes(k)) || []
 
+    return (<>
+        <Head>
+            <title>Kategorier</title>
+        </Head>
+        <Container>
+            <SideMenu>
+                Søk i {translateCategory(category)}
+                <SearchBox
+                    clearOnSubmit
+                    onSearch={(value) => updateQuery("q", value)}
+                />
+                <Select
+                    label={''}
+                    onChange={(e) => updateQuery("team", e.target.value)}
+                    style={{fontSize: "0.75em"}}
+                >
+                    <option value={''}>Filtrér på team</option>
+                    {unselectedTeams.map((t) => <option key={t} value={t}>{t}</option>)}
 
-  const addTeam = (event:  ChangeEvent<HTMLSelectElement>) => {
-    setTeams([...teams].concat(event.currentTarget.value))
-  }
-  const addKeyword = (event:  ChangeEvent<HTMLSelectElement>) => {
-    setKeywords([...keywords].concat(event.currentTarget.value))
-  }
+                </Select>
 
-  const buildQueryString = () => {
-    var q = new URLSearchParams();
-    if (query.length > 0) q.append("baseUrl", query)
-    if (teams.length > 0) q.append("teams", teams.join(","))
-    if (keywords.length > 0) q.append("keywords", teams.join(","))
-    return q
-  }
+                <Select
+                    label={''}
+                    onChange={(e) => updateQuery('keyword', e.target.value)}
+                    style={{fontSize: "0.75em"}}
+                >
+                    <option value={''}>Filtrér på nøkkelord</option>
+                    {unselectedKeywords.map((t) => <option key={t} value={t}>{t}</option>)}
 
-  useEffect(() => {
-    const baseUrl = router.query.page?.[0]
-    if (baseUrl) router.push(`/category/${baseUrl}?${buildQueryString().toString()}`)
-  }, [query, teams, keywords])
+                </Select>
+            </SideMenu>
+            <Main>
+                {category === "dataproduct" && <div>Dataprodukter</div>}
+                {category === "story" && <div>Datafortellinger</div>}
+                {category === "metabase" && <div>Metabase</div>}
+            </Main>
 
-  return (<>
-    <Head>
-      <title>Kategorier</title>
-    </Head>
-    <Container>
-      <SideMenu>
-        Søk i {translate(category)}
-        <SearchBox
-                   onSearch={setQuery}
-        />
+        </Container>
 
-
-        <Select
-            label={''}
-            onChange={addTeam}
-            style={{fontSize: "0.75em"}}
-        >
-          <option value={''}>Filtrer på team</option>
-          {unselectedTeams.map((t) => <option key={t} value={t}>{t}</option> )}
-
-        </Select>
-        <Select
-            label={''}
-            onChange={addKeyword}
-        >
-          <option value={''}>Filtrer på nøkkelord</option>
-          {unselectedTeams.map((t) => <option key={t} value={t}>{t}</option> )}
-
-        </Select>
-      </SideMenu>
-      <Main>
-        {category === "dataproduct" && <div>Dataprodukter</div>}
-        {category === "story" && <div>Datafortellinger</div>}
-        {category === "metabase" && <div>Metabase</div>}
-      </Main>
-
-    </Container>
-
-  </>)
+    </>)
 }
 
 export default Category

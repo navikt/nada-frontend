@@ -6,7 +6,7 @@ import { navBlaLighten40 } from '../../styles/constants'
 interface SearchDivProps {
   big?: boolean
 }
-const SearchDiv = styled.form<SearchDivProps>`
+const SearchForm = styled.form<SearchDivProps>`
   display: flex;
   font-size: ${(props) => props.big ? '1.25em': '1em'};
   align-items: center;
@@ -43,14 +43,17 @@ const SearchButton = styled.button<SearchDivProps>`
 interface SearchBoxProps {
   onSearch: (query: string) => void
   big?: boolean
+  clearOnSubmit?: boolean
 }
 
-const SearchBox = ({ onSearch, big }: SearchBoxProps) =>  {
+const SearchBox = ({ onSearch, big, clearOnSubmit }: SearchBoxProps) =>  {
   const [value, setValue] = useState<string>('')
 
   const onSubmit = (e: FormEvent) => {
+    console.log("triggered")
     e.preventDefault()
     onSearch(value)
+    if (clearOnSubmit) setValue('')
   }
 
   return (
@@ -58,7 +61,7 @@ const SearchBox = ({ onSearch, big }: SearchBoxProps) =>  {
       role="navigation"
       style={{ display: 'flex', justifyContent: 'center' }}
     >
-      <SearchDiv onSubmit={onSubmit} big={big}>
+      <SearchForm onSubmit={onSubmit} big={big}>
         <SearchInput
           aria-label={'Søkefelt'}
           value={value}
@@ -68,11 +71,10 @@ const SearchBox = ({ onSearch, big }: SearchBoxProps) =>  {
         <SearchButton
           id="some-id"
           aria-label={'Søk'}
-          onClick={() => onSearch(value)}
         >
           <SearchIcon fontSize="large" />
         </SearchButton>
-      </SearchDiv>
+      </SearchForm>
     </div>
   )
 }
