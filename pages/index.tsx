@@ -65,7 +65,7 @@ const LandingPage = () => {
             </Head>
             <FrontPageLogo/>
             <SearchBox big={true}
-                onSearch={(q) => router.push({pathname: '/search', query: {q}})}
+                onSearch={(text) => router.push({pathname: '/category', query: {text}})}
             />
 
             <Alert variant='info' style={{width: '350px', margin: '0 auto'}}>
@@ -79,7 +79,7 @@ const LandingPage = () => {
                 </a>
             </Alert>
             <Content>
-                <Link href={'/category/dataproduct'}>
+                <Link href={'/category?type=product'}>
                     <a>
                         <Category>
                             <IconBox size={50}><BigQueryLogo/></IconBox>
@@ -87,14 +87,14 @@ const LandingPage = () => {
                         </Category>
                     </a>
                 </Link>
-                <Link href={'/category/story'}>
+                <Link href={'/category?type=story'}>
                     <a>
                         <Category>
                             <IconBox size={50}><StoryLogo/></IconBox>
                             <CategoryTitle> Fortellinger </CategoryTitle>
                         </Category>
                     </a></Link>
-                <Link href={'/category/metabase'}>
+                <Link href={'/category?type=metabase'}>
                     <a>
                         <Category>
                             <IconBox size={50}><MetabaseLogo/></IconBox>

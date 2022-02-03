@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import React, { FormEvent, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import { navBlaLighten40 } from '../../styles/constants'
+import {useRouter} from "next/router";
+import TextField from "@mui/material/TextField";
 
 interface SearchDivProps {
   big?: boolean
@@ -43,17 +45,16 @@ const SearchButton = styled.button<SearchDivProps>`
 interface SearchBoxProps {
   onSearch: (query: string) => void
   big?: boolean
-  clearOnSubmit?: boolean
+  initialValue: string
 }
 
-const SearchBox = ({ onSearch, big, clearOnSubmit }: SearchBoxProps) =>  {
-  const [value, setValue] = useState<string>('')
+const SearchBox = ({ onSearch, big, initialValue }: SearchBoxProps) =>  {
+  const [value, setValue] = useState<string>(initialValue)
+  console.log(value)
 
   const onSubmit = (e: FormEvent) => {
-    console.log("triggered")
     e.preventDefault()
     onSearch(value)
-    if (clearOnSubmit) setValue('')
   }
 
   return (

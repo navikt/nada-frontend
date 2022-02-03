@@ -17,6 +17,7 @@ const HeaderBar = styled.header`
   justify-content: center;
   align-items: center;
   padding: 0.25em 1em;
+  height: 60px;
   border-bottom: 1px solid #aaa;
 `
 
@@ -43,7 +44,6 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
       <HeaderBar role="banner">
         <div>
           {router.pathname !== '/' && <Logo />}
-          {router.pathname !== '/' && <HeaderSearchBox />}
           <div style={{ display: 'flex', marginLeft: 'auto' }}>
             <Create />
             <User />
