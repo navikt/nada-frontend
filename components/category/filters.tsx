@@ -6,6 +6,7 @@ import {FilterTypes} from '../../pages/category/index';
 
 const FilterRow = styled.div`
   display: flex;
+  margin-bottom: 30px;
 `
 const FilterPill = styled.span<{ all?: boolean }>`
   cursor: pointer;

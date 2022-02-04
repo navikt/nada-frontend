@@ -4,7 +4,8 @@ import Head from "next/head";
 import styled from "styled-components";
 import SideMenu from "../../components/category/sidemenu";
 import Filters from "../../components/category/filters";
-
+import {useSearchContentQuery} from "../../lib/schema/graphql";
+import ResultList from "../../components/index/results/resultList";
 
 const Container = styled.div`
   margin-top: 100px;
@@ -54,7 +55,9 @@ const Category = () => {
             if (values.length > 0 && values.includes(value.toString())) {
                 filters[key] = values.filter(v => v !== value)
             } else {
-                filters[key].push(value.toString())
+                const currentValue = filters[key] as string[]
+                currentValue.push(value.toString())
+                filters[key] = currentValue
             }
 
         }
@@ -69,6 +72,10 @@ const Category = () => {
         return baseUrl + '?' + queryString.toString()
     }
 
+    const { data, loading, error } = useSearchContentQuery({
+        variables: { q: { text: "" || '' } },
+    })
+
     return (
         <>
             <Head>
@@ -80,7 +87,13 @@ const Category = () => {
                 </SideContainer>
                 <Main>
                     <Filters filters={filters} updateQuery={updateQuery}/>
-                    {filters.type.length > 0 ? <div>one</div> : <div>all</div>}
+
+                    {filters.type.includes("story") && <ResultList stories={stories}/>}
+                    {filters.type.includes("product") && <div>product</div>}
+                    {filters.type.includes("metabase") && <div>metabase</div>}
+                    {filters.type.length === 0 && <div>
+                        <ResultList results={data?.search} />
+                    </div>}
                 </Main>
 
             </Container>

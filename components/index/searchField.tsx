@@ -45,11 +45,10 @@ const SearchButton = styled.button<SearchDivProps>`
 interface SearchBoxProps {
   onSearch: (query: string) => void
   big?: boolean
-  initialValue: string
 }
 
-const SearchBox = ({ onSearch, big, initialValue }: SearchBoxProps) =>  {
-  const [value, setValue] = useState<string>(initialValue)
+const SearchBox = ({ onSearch, big }: SearchBoxProps) =>  {
+  const [value, setValue] = useState<string>("")
   console.log(value)
 
   const onSubmit = (e: FormEvent) => {
