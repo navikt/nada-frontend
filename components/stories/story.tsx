@@ -102,7 +102,7 @@ export function Story({story, draft}: ResultsProps) {
                     }
                     if (view.__typename === 'StoryViewPlotly') {
                         return (
-                            <InView key={id}>
+                            <InView key={id} triggerOnce={true}>
                                 {
                                     ({inView, ref }) => {
                                         return inView ?
@@ -114,7 +114,7 @@ export function Story({story, draft}: ResultsProps) {
                     }
                     if (view.__typename === 'StoryViewVega') {
                         return (
-                            <InView key={id}>
+                            <InView key={id} triggerOnce={true}>
                                 {
                                     ({inView, ref}) => {
                                         return inView ?

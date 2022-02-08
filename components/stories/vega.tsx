@@ -21,11 +21,10 @@ export function  Vega({ id, draft }: ResultsProps) {
 
 
     let storyView = JSON.parse(JSON.stringify(storyViews.spec)) as VisualizationSpec.VisualizationSpec
-    //    storyView.autosize = {type: "fit", resize:true}
-
-    return (
-        <VegaLite spec={storyView} width={1140} height={420} padding={10}/>
-    )
+    if (storyView.$schema?.includes("vega-lite")) {
+        return <VegaLite config={{autosize:{type: 'fit', resize: true}, projection: {type: 'mercator'}}} spec={storyView} />
+    }
+    return <Vega id={""} draft={true}/>
 }
 
 export default Vega
