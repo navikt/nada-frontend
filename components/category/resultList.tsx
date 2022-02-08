@@ -10,7 +10,8 @@ import SearchResultLink from "../index/results/searchResult";
 import styled from "styled-components";
 const Results = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 20px;
 `
 
 type ResultListInterface = {
@@ -29,8 +30,9 @@ const ResultList = ({search}: ResultListInterface) => {
                                   excerpt={d.excerpt}
                                   link={`/dataproduct/${d.result.id}`}/> :<SearchResultLink key={idx} group={d.result.group!.group}
                                                                                              name={d.result.name}
+                                                                                            type={"story"}
                                                                                              excerpt={d.excerpt}
-                                                                                             link={`/dataproduct/${d.result.id}`}/>
+                                                                                             link={`/story/${d.result.id}`}/>
             )
         }
     </Results>)

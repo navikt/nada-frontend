@@ -16,11 +16,12 @@ const Container = styled.div`
   display: flex
 `
 const SideContainer = styled.div`
-  width: 230px;
+  width: 300;
   padding-right: 30px;
 `
 const Main = styled.div`
   flex: 1 0 auto;
+  flex-direction: row;
 `
 
 export type FilterTypes = {
@@ -88,7 +89,7 @@ const Category = () => {
             </Head>
             <Container>
                 <SideContainer>
-                    <SideMenu filters={filters} updateQuery={updateQuery}/>
+                    {router.isReady && <SideMenu filters={filters} updateQuery={updateQuery}/>}
                 </SideContainer>
                 <Main>
                     <Filters filters={filters} updateQuery={updateQuery}/>

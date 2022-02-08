@@ -1,7 +1,6 @@
 import * as React from 'react'
 import {FormEvent, useState} from 'react'
 import {MappingService, SearchType, useGroupStatsQuery, useKeywordsQuery} from "../../lib/schema/graphql";
-//import {Checkbox, CheckboxGroup, Select} from "@navikt/ds-react";
 import { Close } from "@navikt/ds-icons";
 import {FilterTypes} from "../../pages/category/index";
 import FormLabel from '@mui/material/FormLabel';
@@ -22,6 +21,7 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
     const unselectedGroups = groupStatsQuery.data?.groupStats.map((g: any) => g.email).filter((t) => !filters.groups.includes(t)) || []
     const unselectedKeywords = keywordsQuery.data?.keywords.map((k) => k.keyword).filter((k) => !filters.keywords.includes(k)) || []
     const [value, setValue] = useState<string>(filters.text)
+    console.log(value, "filters", filters.text)
 
     const onSubmit = (e: FormEvent, clear?: boolean) => {
         e.preventDefault()
@@ -48,7 +48,19 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
     }
 
     return (<div>
-        <FormControl component="fieldset" variant="standard">
+        <form onSubmit={onSubmit}>
+            <TextField
+                InputProps={{
+                    endAdornment: value ? (
+                        <IconButton size="small" onClick={(e) => {onSubmit(e, true  )}}>
+                            <Close />
+                        </IconButton>
+                    ) : undefined
+                }}
+                id="outlined-basic" label="søk" variant="outlined" value={value}
+                onChange={(e) => setValue(e.target.value)} sx={{width: '100%', marginBottom: '10px'}}/>
+        </form>
+        <FormControl component="fieldset" variant="standard" focused={false} sx={{width: '100%'}}>
             <FormLabel component="legend">Type</FormLabel>
             <FormGroup>
                 {Object.values(SearchType).map((key) => (<FormControlLabel
@@ -60,7 +72,7 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
             </FormGroup>
         </FormControl>
         <FormControl component="fieldset" variant="standard">
-            <FormLabel component="legend">Integrasjoner</FormLabel>
+            <FormLabel component="legend" focused={false}>Integrasjoner</FormLabel>
             <FormGroup>
                 {Object.values(MappingService).map((key) => (<FormControlLabel
                     key={key}
@@ -70,18 +82,6 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
                 />))}
             </FormGroup>
         </FormControl>
-        <form onSubmit={onSubmit}>
-            <TextField
-                InputProps={{
-                    endAdornment: value ? (
-                        <IconButton size="small" onClick={(e) => {onSubmit(e, true  )}}>
-                            <Close />
-                        </IconButton>
-                    ) : undefined
-                }}
-                id="outlined-basic" label="søk" variant="outlined" value={value}
-                       onChange={(e) => setValue(e.target.value)} sx={{width: '100%', marginTop: '10px'}}/>
-        </form>
         <Autocomplete
             sx={{marginTop: '10px'}}
             clearIcon={false}

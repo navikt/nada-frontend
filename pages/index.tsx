@@ -79,7 +79,7 @@ const LandingPage = () => {
                 </a>
             </Alert>
             <Content>
-                <Link href={'/category?type=product'}>
+                <Link href={'/category?types=dataproduct'}>
                     <a>
                         <Category>
                             <IconBox size={50}><BigQueryLogo/></IconBox>
@@ -87,14 +87,14 @@ const LandingPage = () => {
                         </Category>
                     </a>
                 </Link>
-                <Link href={'/category?type=story'}>
+                <Link href={'/category?types=story'}>
                     <a>
                         <Category>
                             <IconBox size={50}><StoryLogo/></IconBox>
                             <CategoryTitle> Fortellinger </CategoryTitle>
                         </Category>
                     </a></Link>
-                <Link href={'/category?type=metabase'}>
+                <Link href={'/category?services=metabase'}>
                     <a>
                         <Category>
                             <IconBox size={50}><MetabaseLogo/></IconBox>

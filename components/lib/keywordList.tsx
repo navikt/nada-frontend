@@ -14,12 +14,7 @@ interface KeywordSpanProps {
 const KeywordSpan = styled.span<KeywordSpanProps>`
 display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
 margin: ${(props) => props.compact ? '0 10px' : '0 0 10px 15px'};
-cursor: pointer;
 color: #222;
-:hover {
-  color: ${(props) => props.onClick ? 'red' : 'var(--navds-color-text-link)'} ;
-  text-decoration: ${(props) => props.onClick ? 'line-through' : 'underline'} ;
-}
 &:before {
     background-color: ${(props) => props.color};
     width: 12px;
@@ -40,11 +35,6 @@ padding: 3px 5px 3px 5px;
 border: 0.5px solid transparent;
 
 margin: ${(props) => props.compact ? '0 5px' : '0 0 10px 15px'};
-cursor: pointer;
-:hover {
-  filter: brightness(110%);
-  border: 0.5px solid #f5f5f5;
-}
 `
 
 interface keywordLinkProps {
