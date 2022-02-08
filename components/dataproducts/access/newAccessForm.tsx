@@ -176,7 +176,7 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
                             <FormControlLabel
                                 value='user'
                                 control={<Radio />}
-                                label='Bruker'
+                                label='Bruker (e-post)'
                             />
                             <FormControlLabel
                                 value='serviceAccount'
