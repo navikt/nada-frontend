@@ -176,7 +176,7 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
                             <FormControlLabel
                                 value='user'
                                 control={<Radio />}
-                                label='Bruker'
+                                label='Bruker (e-post)'
                             />
                             <FormControlLabel
                                 value='serviceAccount'
@@ -190,7 +190,7 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
                 {subjectType && subjectType !== 'all-users' &&
                 <div>
                   <hr />
-                  <h3>{`Navn på ${subjectTypeMap.get(subjectType)}`}</h3>
+                  <h3>{`E-postadresse for  ${subjectTypeMap.get(subjectType)}`}</h3>
                   <TextField
                       sx={{ width: '300px' }}
                       id='subject'
