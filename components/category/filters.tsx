@@ -38,11 +38,11 @@ interface filterProps {
 
 const Filters = ({updateQuery, filters}: filterProps) =>  (
         <>
-            {Object.keys(filters).filter((key) => key === "keyword" || key === "team").map((key) => filters[key]).flat().length > 0 &&
+            {Object.keys(filters).filter((key) => key === "keywords" || key === "groups").map((key) => filters[key]).flat().length > 0 &&
             <FilterRow>
                 <FilterPill all={true}>Fjern alle filtre<Close/></FilterPill>
                 {Object.keys(filters)
-                    .filter(key => key === "keyword" || key === "team")
+                    .filter(key => key === "keywords" || key === "groups")
                     .map((key) => {
                         const values = filters[key] as string[]
                         return values.map((value: string) => <FilterPill key={value} onClick={() => updateQuery(key, value)}>{value}<Close/></FilterPill>)

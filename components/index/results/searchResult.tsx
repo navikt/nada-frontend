@@ -45,12 +45,8 @@ export const SearchResultLink = ({link, name, group, keywords, type}: SearchResu
                         subheader={`eier: ${group}`}
                     />
                     <div style={{float: 'right'}}>
-                        {keywords && keywords.map((k, i) =>
-                            <Link key={i} href={`/search?q=${k}`} passHref={true}>
-                                <a>
-                                    <KeywordPill key={i} keyword={k} compact={true}>{k}</KeywordPill>
-                                </a>
-                            </Link>)}
+                        {keywords && keywords.map((k, i) =>(
+                                <KeywordPill key={i} keyword={k} compact={true}>{k}</KeywordPill>))}
                     </div>
                 </StyledCard>
             </a>

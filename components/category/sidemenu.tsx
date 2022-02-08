@@ -20,8 +20,8 @@ interface SideMenuProps {
 const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
     const groupStatsQuery = useGroupStatsQuery()
     const keywordsQuery = useKeywordsQuery()
-    const unselectedTeams = groupStatsQuery.data?.groupStats.map((g: any) => g.email.split("@")[0]).filter((t) => !filters.team.includes(t)) || []
-    const unselectedKeywords = keywordsQuery.data?.keywords.map((k) => k.keyword).filter((k) => !filters.keyword.includes(k)) || []
+    const unselectedGroups = groupStatsQuery.data?.groupStats.map((g: any) => g.email).filter((t) => !filters.groups.includes(t)) || []
+    const unselectedKeywords = keywordsQuery.data?.keywords.map((k) => k.keyword).filter((k) => !filters.keywords.includes(k)) || []
     const [value, setValue] = useState<string>(filters.text)
 
     const onSubmit = (e: FormEvent) => {
@@ -30,7 +30,7 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateQuery("type", event.target.name)
+        updateQuery("types", event.target.name)
     };
 
     return (<div>
@@ -44,7 +44,7 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
                 ].map((type) => (
                     <FormControlLabel
                         key={type.name}
-                        control={ <Checkbox checked={filters.type.includes(type.name)} onChange={handleChange} name={type.name}/>}
+                        control={ <Checkbox checked={filters.types.includes(type.name)} onChange={handleChange} name={type.name}/>}
                         label={type.label}
                     />))}
             </FormGroup>
@@ -56,7 +56,7 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
             sx={{marginTop: '10px'}}
             clearIcon={false}
             value={{label:"", type:""}}
-            options={unselectedKeywords.map((k) => {return {label: k, type: "keyword"}}).concat(unselectedTeams.map((t) => {return {label: t, type: 'team'}}))}
+            options={unselectedKeywords.map((k) => {return {label: k, type: "keywords"}}).concat(unselectedGroups.map((t) => {return {label: t, type: 'groups'}}))}
             renderInput={(params) => <TextField {...params} label="Filter" />}
             onChange={(e, value) => value && updateQuery(value.type, value.label)}
             onSubmit={(e) => {e.preventDefault();console.log(e)}}

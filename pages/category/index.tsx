@@ -5,7 +5,8 @@ import styled from "styled-components";
 import SideMenu from "../../components/category/sidemenu";
 import Filters from "../../components/category/filters";
 import {
-    useSearchContentQuery,
+    SearchType,
+    useSearchContentWithOptionsQuery,
 } from "../../lib/schema/graphql";
 import ResultList from "../../components/category/resultList";
 
@@ -23,9 +24,9 @@ const Main = styled.div`
 
 export type FilterTypes = {
     [key: string]: string[] | string
-    team: string[]
-    keyword: string[]
-    type: string[]
+    groups: string[]
+    keywords: string[]
+    types: SearchType[]
     text: string
 }
 
@@ -40,17 +41,17 @@ const arrayify = (query: string | string[] | undefined) => {
 
 const Category = () => {
     const router = useRouter()
-    const search = useSearchContentQuery({
-        variables: {q: {limit: 5}},
-    })
     const baseUrl = router.asPath.split('?')[0]
-
     const filters: FilterTypes = {
-        team: arrayify(router.query.team),
-        keyword: arrayify(router.query.keyword),
-        type: arrayify(router.query.type),
+        groups: arrayify(router.query.groups),
+        keywords: arrayify(router.query.keywords),
+        types: arrayify(router.query.types) as SearchType[],
         text: router.query.text && router.query.text.toString() || "",
     }
+
+    const search = useSearchContentWithOptionsQuery({
+        variables: {options: {limit: 5, ...filters}},
+    })
 
     const updateQuery = async (key: string, value: string | string[]) => {
         if (key === 'text') {
