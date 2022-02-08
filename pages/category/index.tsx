@@ -5,6 +5,7 @@ import styled from "styled-components";
 import SideMenu from "../../components/category/sidemenu";
 import Filters from "../../components/category/filters";
 import {
+    MappingService,
     SearchType,
     useSearchContentWithOptionsQuery,
 } from "../../lib/schema/graphql";
@@ -27,6 +28,7 @@ export type FilterTypes = {
     groups: string[]
     keywords: string[]
     types: SearchType[]
+    services: MappingService[]
     text: string
 }
 
@@ -46,6 +48,7 @@ const Category = () => {
         groups: arrayify(router.query.groups),
         keywords: arrayify(router.query.keywords),
         types: arrayify(router.query.types) as SearchType[],
+        services: arrayify(router.query.services) as MappingService[],
         text: router.query.text && router.query.text.toString() || "",
     }
 
