@@ -4,8 +4,10 @@ import Head from "next/head";
 import styled from "styled-components";
 import SideMenu from "../../components/category/sidemenu";
 import Filters from "../../components/category/filters";
-import {useSearchContentQuery} from "../../lib/schema/graphql";
-import ResultList from "../../components/index/results/resultList";
+import {
+    useSearchContentQuery,
+} from "../../lib/schema/graphql";
+import ResultList from "../../components/category/resultList";
 
 const Container = styled.div`
   margin-top: 100px;
@@ -38,6 +40,9 @@ const arrayify = (query: string | string[] | undefined) => {
 
 const Category = () => {
     const router = useRouter()
+    const search = useSearchContentQuery({
+        variables: {q: {limit: 5}},
+    })
     const baseUrl = router.asPath.split('?')[0]
 
     const filters: FilterTypes = {
@@ -72,10 +77,6 @@ const Category = () => {
         return baseUrl + '?' + queryString.toString()
     }
 
-    const { data, loading, error } = useSearchContentQuery({
-        variables: { q: { text: "" || '' } },
-    })
-
     return (
         <>
             <Head>
@@ -87,17 +88,9 @@ const Category = () => {
                 </SideContainer>
                 <Main>
                     <Filters filters={filters} updateQuery={updateQuery}/>
-
-                    {filters.type.includes("story") && <ResultList stories={stories}/>}
-                    {filters.type.includes("product") && <div>product</div>}
-                    {filters.type.includes("metabase") && <div>metabase</div>}
-                    {filters.type.length === 0 && <div>
-                        <ResultList results={data?.search} />
-                    </div>}
+                    <ResultList search={search}/>
                 </Main>
-
             </Container>
-
         </>)
 }
 

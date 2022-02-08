@@ -10,6 +10,7 @@ import StoryLogo from "../../lib/icons/storyLogo";
 
 const StyledCard = styled(Card)`
   margin: 0 10px 20px;
+  width: 300px;
   padding-bottom: 10px;
   cursor: pointer;
   box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
@@ -24,6 +25,7 @@ export interface SearchResultProps {
     group?: string
     keywords?: string[]
     type?: string
+    excerpt?: string
 }
 
 export const SearchResultLink = ({link, name, group, keywords, type}: SearchResultProps) => {

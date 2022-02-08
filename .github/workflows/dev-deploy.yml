@@ -1,6 +1,8 @@
 name: build and push
 on:
   push:
+    branches-ignore:
+      - 'omkalfatring'
     branches:
       - '*'
 jobs:
