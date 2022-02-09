@@ -99,14 +99,14 @@ const LandingPage = () => {
                         <CategoryCardTitle> Datapakker </CategoryCardTitle>
                     </CategoryCard>
                 </a>
-                <Link href={'/search?services=metabase'}>
-                    <a>
-                        <CategoryCard>
-                            <IconBox size={50}><MetabaseLogo/></IconBox>
-                            <CategoryCardTitle> Metabase </CategoryCardTitle>
-                        </CategoryCard>
-                    </a>
-                </Link>
+                <a href={'https://metabase.intern.nav.no'}
+                   target='_blank'
+                   rel='noreferrer'>
+                    <CategoryCard>
+                        <IconBox size={50}><MetabaseLogo/></IconBox>
+                        <CategoryCardTitle> Metabase </CategoryCardTitle>
+                    </CategoryCard>
+                </a>
             </Links>
         </FrontPage>
     )
