@@ -4,7 +4,6 @@ interface StyledMetadataTableProps {
   type: ColorSchemeTypes
 }
 const StyledMetadataTable = styled.table<StyledMetadataTableProps>`
-  background-color: ${({ type }) => colorScheme[type].light};
   width: 100%;
   font-size: 16px;
   line-height: 1;

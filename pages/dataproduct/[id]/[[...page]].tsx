@@ -33,7 +33,20 @@ import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
 
 const Container = styled.div`
-  margin-top: 40px;
+  display: flex;
+  flex-direction: row
+  padding-top: 40px;
+  gap: 20px;
+`
+
+const MainPage = styled.div`
+  flex-grow: 1;
+`
+const SideMenu = styled.div`
+  margin-top: 65px;
+  display: flex;
+  width: 200px;
+  border-left: 1px solid #ededed;
 `
 
 const Product = styled.div`
@@ -145,6 +158,7 @@ const Dataproduct = (props: DataproductProps) => {
         <title>{product.name}</title>
       </Head>
       <Container>
+      <MainPage>
         <BackButton onClick={() => router.push('/')} />
         <Product>
           <TopBar type={'Dataproduct'}>
@@ -154,7 +168,6 @@ const Dataproduct = (props: DataproductProps) => {
               />
             )}
           </TopBar>
-          <MetadataTable product={product} />
           <Tabs
             variant='standard'
             value={currentPage}
@@ -187,6 +200,10 @@ const Dataproduct = (props: DataproductProps) => {
             error={deleteError}
           />
         </Product>
+      </MainPage>
+        <SideMenu>
+          <MetadataTable product={product} />
+        </SideMenu>
       </Container>
     </>
   )
