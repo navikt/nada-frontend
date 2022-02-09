@@ -59,6 +59,12 @@ const DataproductTableSchema = ({
             <td>{humanizeDate(datasource.expires)}</td>
           </tr>
         )}
+        {datasource.description && (
+            <tr>
+              <th>Beskrivelse:</th>
+              <td>{datasource.description}</td>
+            </tr>
+        )}
         </tbody>
       </StyledTable>
       <SubHeader>Skjema</SubHeader>

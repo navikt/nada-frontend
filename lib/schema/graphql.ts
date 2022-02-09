@@ -701,6 +701,7 @@ export type DataproductQuery = {
       created: any
       expires?: any | null | undefined
       tableType: BigQueryType
+      description: string
       type: 'BigQuery'
       schema: Array<{
         __typename?: 'TableColumn'
@@ -1437,6 +1438,7 @@ export const DataproductDocument = gql`
           created
           expires
           tableType
+          description
           schema {
             name
             description
