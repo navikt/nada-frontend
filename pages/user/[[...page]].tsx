@@ -10,7 +10,7 @@ import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import TabPanel, {TabPanelType} from "../../components/lib/tabPanel";
 import SubjectHeader from "../../components/lib/subjectHeader";
-import ResultList from "../../components/index/results/resultList";
+import ResultList from "../../components/search/resultList";
 
 
 export const UserPages = () => {
@@ -25,6 +25,7 @@ export const UserPages = () => {
         <p>Bruk login-knappen øverst.</p>
       </div>
     )
+    console.log(data.userInfo)
 
   const menuItems: Array<{
     title: string

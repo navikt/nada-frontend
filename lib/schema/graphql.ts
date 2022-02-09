@@ -390,6 +390,7 @@ export type QueryKeywordsArgs = {
 }
 
 export type QuerySearchArgs = {
+  options?: Maybe<SearchOptions>
   q?: Maybe<SearchQuery>
 }
 
@@ -415,6 +416,31 @@ export type QueryTeamkatalogenArgs = {
   q: Scalars['String']
 }
 
+export type SearchOptions = {
+  /** groups filters results on the group. */
+  groups?: Maybe<Array<Scalars['String']>>
+  /** keywords filters results on the keyword. */
+  keywords?: Maybe<Array<Scalars['String']>>
+  /** limit the number of returned search results. */
+  limit?: Maybe<Scalars['Int']>
+  /** offset the list of returned search results. Used as pagination with PAGE-INDEX * limit. */
+  offset?: Maybe<Scalars['Int']>
+  /** services filters results on the service. */
+  services?: Maybe<Array<MappingService>>
+  /**
+   * text is used as freetext search.
+   *
+   * Use " to identify phrases. Example: "hello world"
+   *
+   * Use - to exclude words. Example "include this -exclude -those"
+   *
+   * Use OR as a keyword for the OR operator. Example "night OR day"
+   */
+  text?: Maybe<Scalars['String']>
+  /** types to search on */
+  types?: Maybe<Array<SearchType>>
+}
+
 export type SearchQuery = {
   /** group filters results on the group. */
   group?: Maybe<Scalars['String']>
@@ -436,12 +462,17 @@ export type SearchQuery = {
   text?: Maybe<Scalars['String']>
 }
 
-export type SearchResult = Dataproduct
+export type SearchResult = Dataproduct | Story
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow'
   excerpt: Scalars['String']
   result: SearchResult
+}
+
+export enum SearchType {
+  Dataproduct = 'dataproduct',
+  Story = 'story',
 }
 
 export type Story = {
@@ -670,6 +701,7 @@ export type DataproductQuery = {
       created: any
       expires?: any | null | undefined
       tableType: BigQueryType
+      description: string
       type: 'BigQuery'
       schema: Array<{
         __typename?: 'TableColumn'
@@ -798,20 +830,64 @@ export type SearchContentQuery = {
   search: Array<{
     __typename?: 'SearchResultRow'
     excerpt: string
-    result: {
-      __typename: 'Dataproduct'
-      id: string
-      name: string
-      description?: string | null | undefined
-      created: any
-      lastModified: any
-      keywords: Array<string>
-      owner: {
-        __typename?: 'Owner'
-        group: string
-        teamkatalogenURL?: string | null | undefined
-      }
-    }
+    result:
+      | {
+          __typename: 'Dataproduct'
+          id: string
+          name: string
+          description?: string | null | undefined
+          created: any
+          lastModified: any
+          keywords: Array<string>
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
+        }
+      | { __typename?: 'Story' }
+  }>
+}
+
+export type SearchContentWithOptionsQueryVariables = Exact<{
+  options: SearchOptions
+}>
+
+export type SearchContentWithOptionsQuery = {
+  __typename?: 'Query'
+  search: Array<{
+    __typename?: 'SearchResultRow'
+    excerpt: string
+    result:
+      | {
+          __typename: 'Dataproduct'
+          id: string
+          name: string
+          description?: string | null | undefined
+          created: any
+          lastModified: any
+          keywords: Array<string>
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
+        }
+      | {
+          __typename: 'Story'
+          id: string
+          name: string
+          created: any
+          modified?: any | null | undefined
+          group?:
+            | {
+                __typename?: 'Owner'
+                group: string
+                teamkatalogenURL?: string | null | undefined
+              }
+            | null
+            | undefined
+        }
   }>
 }
 
@@ -1362,6 +1438,7 @@ export const DataproductDocument = gql`
           created
           expires
           tableType
+          description
           schema {
             name
             description
@@ -1998,6 +2075,90 @@ export type SearchContentLazyQueryHookResult = ReturnType<
 export type SearchContentQueryResult = Apollo.QueryResult<
   SearchContentQuery,
   SearchContentQueryVariables
+>
+export const SearchContentWithOptionsDocument = gql`
+  query searchContentWithOptions($options: SearchOptions!) {
+    search(options: $options) {
+      excerpt
+      result {
+        ... on Dataproduct {
+          __typename
+          id
+          name
+          description
+          created
+          lastModified
+          keywords
+          owner {
+            group
+            teamkatalogenURL
+          }
+        }
+        ... on Story {
+          __typename
+          id
+          name
+          created
+          modified: lastModified
+          group: owner {
+            group
+            teamkatalogenURL
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useSearchContentWithOptionsQuery__
+ *
+ * To run a query within a React component, call `useSearchContentWithOptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchContentWithOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchContentWithOptionsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useSearchContentWithOptionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchContentWithOptionsQuery,
+    SearchContentWithOptionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    SearchContentWithOptionsQuery,
+    SearchContentWithOptionsQueryVariables
+  >(SearchContentWithOptionsDocument, options)
+}
+export function useSearchContentWithOptionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchContentWithOptionsQuery,
+    SearchContentWithOptionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    SearchContentWithOptionsQuery,
+    SearchContentWithOptionsQueryVariables
+  >(SearchContentWithOptionsDocument, options)
+}
+export type SearchContentWithOptionsQueryHookResult = ReturnType<
+  typeof useSearchContentWithOptionsQuery
+>
+export type SearchContentWithOptionsLazyQueryHookResult = ReturnType<
+  typeof useSearchContentWithOptionsLazyQuery
+>
+export type SearchContentWithOptionsQueryResult = Apollo.QueryResult<
+  SearchContentWithOptionsQuery,
+  SearchContentWithOptionsQueryVariables
 >
 export const DeleteStoryDocument = gql`
   mutation deleteStory($id: ID!) {

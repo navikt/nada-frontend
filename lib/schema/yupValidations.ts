@@ -1,6 +1,4 @@
 import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { SubjectType, useGrantAccessMutation } from './graphql'
 
 export const bigQuery = yup.object().shape({
   projectID: yup.string().required(),
@@ -21,7 +19,7 @@ export const updateDataproductValidation = yup.object().shape({
 
 export const newDataproductValidation = updateDataproductValidation.concat(
   yup.object().shape({
-    group: yup.string(),
+    group: yup.string().required("Velg et eierteam for produktet"),
     bigquery: bigQuery,
   })
 )

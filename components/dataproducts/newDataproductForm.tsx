@@ -108,20 +108,20 @@ export const NewDataproductForm = () => {
           error={errors.repo?.message}
         />
         <TeamSelector register={register} errors={errors} />
+        {group ? (
+            <TeamkatalogenSelector
+                group={group}
+                register={register}
+                errors={errors}
+                watch={watch}
+            />
+        ) : null}
         <DataproductSourceForm
           register={register}
           watch={watch}
           errors={errors}
           setValue={setValue}
         />
-        {group ? (
-          <TeamkatalogenSelector
-            group={group}
-            register={register}
-            errors={errors}
-            watch={watch}
-          />
-        ) : null}
 
         <KeywordsInput
             onAdd={onAdd}

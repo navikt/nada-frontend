@@ -3,7 +3,9 @@ import React, { FormEvent, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import { navBlaLighten40 } from '../../styles/constants'
 
-const SearchDiv = styled.form`
+interface SearchDivProps {
+}
+const SearchForm = styled.form<SearchDivProps>`
   display: flex;
   font-size: 1.25em;
   align-items: center;
@@ -11,14 +13,11 @@ const SearchDiv = styled.form`
   border-radius: 10px;
   padding: 5px 10px;
   width: 80%;
-  min-width: 350px;
-  max-width: 500px;
-  margin-top: 80px;
-  margin-bottom: 50px;
+  min-width: 350px; max-width: 500px; 
 `
 
 const SearchInput = styled.input`
-  flex-grow: 1;
+  width: 100%;
   border: none;
   padding: 0;
   :focus-visible {
@@ -26,49 +25,52 @@ const SearchInput = styled.input`
   }
 `
 
-const SearchButton = styled.button`
+const SearchButton = styled.button<SearchDivProps>`
   border: none;
   background: none;
   line-height: 1;
   font-size: 1em;
+  svg { 
+    height: 1em;
+    width: 1em;
+  }
   display: flex;
   align-items: center;
 `
 
-export interface FrontPageSearchBoxProps {
-  onSearch: (query: string) => void
+interface SearchBoxProps {
+    onSearch: (query: string) => void
+    big?: boolean
 }
 
-export default function FrontPageSearchBox({
-  onSearch,
-}: FrontPageSearchBoxProps) {
-  const [value, setValue] = useState<string>('')
+const SearchBox = ({ onSearch, big }: SearchBoxProps) =>  {
+    const [value, setValue] = useState<string>("")
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    onSearch(value)
-  }
+    const onSubmit = (e: FormEvent) => {
+        e.preventDefault()
+        onSearch(value)
+    }
 
-  return (
-    <div
-      role="navigation"
-      style={{ display: 'flex', justifyContent: 'center' }}
-    >
-      <SearchDiv onSubmit={onSubmit}>
-        <SearchInput
-          aria-label={'Søkefelt'}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-
-        <SearchButton
-          id="some-id"
-          aria-label={'Søk'}
-          onClick={() => onSearch(value)}
+    return (
+        <div
+            role="navigation"
+            style={{ display: 'flex', justifyContent: 'center' }}
         >
-          <SearchIcon fontSize="large" />
-        </SearchButton>
-      </SearchDiv>
-    </div>
-  )
+            <SearchForm onSubmit={onSubmit}>
+                <SearchInput
+                    aria-label={'Søkefelt'}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                />
+
+                <SearchButton
+                    id="some-id"
+                    aria-label={'Søk'}
+                >
+                    <SearchIcon fontSize="large" />
+                </SearchButton>
+            </SearchForm>
+        </div>
+    )
 }
+export default SearchBox

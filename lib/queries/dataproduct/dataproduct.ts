@@ -29,6 +29,7 @@ export const GET_DATAPRODUCT = gql`
           created
           expires
           tableType
+          description
           schema {
             name
             description

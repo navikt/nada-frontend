@@ -5,9 +5,8 @@ const LogoImage = styled.img`
   width: 80vw;
   max-width: 400px;
   margin: 0 auto;
-  margin-top: 50px;
 `
 
 export const FrontPageLogo = () => (
-  <LogoImage src="/navdata-logo.svg" alt="nav data logo" />
+    <LogoImage src="/navdata-logo.svg" alt="nav data logo" />
 )

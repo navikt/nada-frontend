@@ -27,7 +27,7 @@ import {useRouter} from "next/router";
 import DeleteModal from "../lib/deleteModal";
 import TokenModal from "../lib/tokenModal";
 import {MetadataTable} from "./metadataTable";
-import Vega from "./vega";
+import Vega from "./vegaView";
 
 const StoryDiv = styled.div`
   padding: 10px;
@@ -102,7 +102,7 @@ export function Story({story, draft}: ResultsProps) {
                     }
                     if (view.__typename === 'StoryViewPlotly') {
                         return (
-                            <InView key={id}>
+                            <InView key={id} triggerOnce={true}>
                                 {
                                     ({inView, ref }) => {
                                         return inView ?
@@ -114,7 +114,7 @@ export function Story({story, draft}: ResultsProps) {
                     }
                     if (view.__typename === 'StoryViewVega') {
                         return (
-                            <InView key={id}>
+                            <InView key={id} triggerOnce={true}>
                                 {
                                     ({inView, ref}) => {
                                         return inView ?
