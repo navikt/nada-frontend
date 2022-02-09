@@ -9,5 +9,5 @@ const LogoImage = styled.img`
 `
 
 export const FrontPageLogo = () => (
-  <LogoImage src="/navdata-logo.svg" alt="nav data logo" />
+    <LogoImage src="/navdata-logo.svg" alt="nav data logo" />
 )

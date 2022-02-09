@@ -2,7 +2,7 @@ import * as React from 'react'
 import {FormEvent, useState} from 'react'
 import {MappingService, SearchType, useGroupStatsQuery, useKeywordsQuery} from "../../lib/schema/graphql";
 import { Close } from "@navikt/ds-icons";
-import {FilterTypes} from "../../pages/category/index";
+import {FilterTypes} from "../../pages/search";
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';

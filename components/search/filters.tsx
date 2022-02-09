@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from "styled-components";
 import {Close} from "@navikt/ds-icons";
-import {FilterTypes} from '../../pages/category/index';
+import {FilterTypes} from '../../pages/search';
 
 
 const FilterRow = styled.div`

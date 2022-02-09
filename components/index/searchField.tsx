@@ -2,11 +2,9 @@ import styled from 'styled-components'
 import React, { FormEvent, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import { navBlaLighten40 } from '../../styles/constants'
-import {useRouter} from "next/router";
-import TextField from "@mui/material/TextField";
 
 interface SearchDivProps {
-  big?: boolean
+    big?: boolean
 }
 const SearchForm = styled.form<SearchDivProps>`
   display: flex;
@@ -43,39 +41,39 @@ const SearchButton = styled.button<SearchDivProps>`
 `
 
 interface SearchBoxProps {
-  onSearch: (query: string) => void
-  big?: boolean
+    onSearch: (query: string) => void
+    big?: boolean
 }
 
 const SearchBox = ({ onSearch, big }: SearchBoxProps) =>  {
-  const [value, setValue] = useState<string>("")
-  console.log(value)
+    const [value, setValue] = useState<string>("")
+    console.log(value)
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    onSearch(value)
-  }
+    const onSubmit = (e: FormEvent) => {
+        e.preventDefault()
+        onSearch(value)
+    }
 
-  return (
-    <div
-      role="navigation"
-      style={{ display: 'flex', justifyContent: 'center' }}
-    >
-      <SearchForm onSubmit={onSubmit} big={big}>
-        <SearchInput
-          aria-label={'Søkefelt'}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-
-        <SearchButton
-          id="some-id"
-          aria-label={'Søk'}
+    return (
+        <div
+            role="navigation"
+            style={{ display: 'flex', justifyContent: 'center' }}
         >
-          <SearchIcon fontSize="large" />
-        </SearchButton>
-      </SearchForm>
-    </div>
-  )
+            <SearchForm onSubmit={onSubmit} big={big}>
+                <SearchInput
+                    aria-label={'Søkefelt'}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                />
+
+                <SearchButton
+                    id="some-id"
+                    aria-label={'Søk'}
+                >
+                    <SearchIcon fontSize="large" />
+                </SearchButton>
+            </SearchForm>
+        </div>
+    )
 }
 export default SearchBox

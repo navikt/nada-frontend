@@ -21,6 +21,7 @@ const TabPanel = (props: TabPanelProps) => {
       hidden={value !== index}
       id={`${props.type}-tabpanel-${index}`}
       aria-labelledby={`${props.type}-tab-${index}`}
+      style={{width: '100%'}}
       {...other}
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}

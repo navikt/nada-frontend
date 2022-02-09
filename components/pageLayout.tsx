@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import User from './header/user'
 import Create from './header/create'
 import Logo from './header/logo'
-import HeaderSearchBox from './search/headerSearchBox'
 import { useRouter } from 'next/router'
 
 const HeaderBar = styled.header`
