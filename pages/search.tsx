@@ -42,6 +42,11 @@ const arrayify = (query: string | string[] | undefined) => {
 
 }
 
+export const emailToValue = (value: string) => {
+    if (value.includes("@")) return `team: ${value.split('@')[0].toString()}`
+    return value
+}
+
 const Category = () => {
     const router = useRouter()
     const baseUrl = router.asPath.split('?')[0]

@@ -21,37 +21,45 @@ type ResultListInterface = {
 }
 const ResultList = ({search, dataproducts}: ResultListInterface) => {
     if (dataproducts) {
-        return (<Results>
-            {
-                dataproducts.map((d, idx) =>
-                    <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
-                                      link={`/dataproduct/${d.id}`}/>
-                )
-            }
-        </Results>)
+        return (
+            <Results>
+                {
+                    dataproducts.map((d, idx) =>
+                        <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
+                                          link={`/dataproduct/${d.id}`}/>
+                    )
+                }
+            </Results>
+        )
     }
 
     if (search) {
         const {data, loading, error} = search
         if (error) return <ErrorMessage error={error}/>
         if (loading || !data) return <LoaderSpinner/>
-        return (<Results>
-            {
-                data.search.map((d, idx) =>
-                    d.result.__typename === 'Dataproduct' ?
-                        <SearchResultLink key={idx} group={d.result.owner.group}
-                                          name={d.result.name}
-                                          keywords={d.result.keywords}
-                                          excerpt={d.excerpt}
-                                          link={`/dataproduct/${d.result.id}`}/> :
-                        <SearchResultLink key={idx} group={d.result.group!.group}
-                                          name={d.result.name}
-                                          type={"story"}
-                                          excerpt={d.excerpt}
-                                          link={`/story/${d.result.id}`}/>
-                )
-            }
-        </Results>)
+        return (
+            <div>
+               <p> {data.search.length > 0 ? `${data.search.length} resultater` : 'ingen resultater' }</p>
+
+                <Results>
+                    {
+                        data.search.map((d, idx) =>
+                            d.result.__typename === 'Dataproduct' ?
+                                <SearchResultLink key={idx} group={d.result.owner.group}
+                                                  name={d.result.name}
+                                                  keywords={d.result.keywords}
+                                                  excerpt={d.excerpt}
+                                                  link={`/dataproduct/${d.result.id}`}/> :
+                                <SearchResultLink key={idx} group={d.result.group!.group}
+                                                  name={d.result.name}
+                                                  type={"story"}
+                                                  excerpt={d.excerpt}
+                                                  link={`/story/${d.result.id}`}/>
+                        )
+                    }
+                </Results>
+            </div>
+        )
     }
     return <></>
 }
