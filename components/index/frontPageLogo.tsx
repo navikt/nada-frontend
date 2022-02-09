@@ -5,7 +5,6 @@ const LogoImage = styled.img`
   width: 80vw;
   max-width: 400px;
   margin: 0 auto;
-  margin-top: 50px;
 `
 
 export const FrontPageLogo = () => (

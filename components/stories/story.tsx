@@ -27,7 +27,7 @@ import {useRouter} from "next/router";
 import DeleteModal from "../lib/deleteModal";
 import TokenModal from "../lib/tokenModal";
 import {MetadataTable} from "./metadataTable";
-import Vega from "./vega";
+import Vega from "./vegaView";
 
 const StoryDiv = styled.div`
   padding: 10px;

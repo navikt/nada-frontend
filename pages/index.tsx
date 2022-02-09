@@ -4,7 +4,6 @@ import {addApolloState, initializeApollo} from '../lib/apollo'
 import {KeywordsDocument, MetabaseProudctsDocument, SearchContentDocument, StoriesDocument} from '../lib/schema/graphql'
 import {useRouter} from 'next/router'
 import {FrontPageLogo} from '../components/index/frontPageLogo'
-import {Alert} from '@navikt/ds-react'
 import {useEffect} from 'react'
 import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
@@ -15,19 +14,26 @@ import StoryLogo from "../components/lib/icons/storyLogo";
 import MetabaseLogo from "../components/lib/icons/metabaseLogo";
 import IconBox from "../components/lib/icons/iconBox";
 import Link from 'next/link'
+import DatapakkerLogo from "../components/lib/icons/datapakkerLogo";
 
 const SEARCH_LIMIT = 6
 
-const Content = styled.div`
+const FrontPage = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 80px;
+    margin-top: 200px;
+`
+const Links = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: 100px;
     flex-direction: row;
     gap: 70px;
     flex-wrap: wrap;
     position: relative;
 `
-const Category = styled.div`
+const CategoryCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -41,7 +47,7 @@ const Category = styled.div`
         box-shadow: rgb(239, 239, 239) 0px 1px 0px 0.5px;
     }
 `
-const CategoryTitle = styled.div`
+const CategoryCardTitle = styled.div`
     display: flex;
     justify-content: center;
     padding-top: 5px;
@@ -59,50 +65,50 @@ const LandingPage = () => {
     }, [])
 
     return (
-        <div>
+        <FrontPage>
             <Head>
                 <title>nav data</title>
             </Head>
             <FrontPageLogo/>
-            <SearchBox big={true}
-                onSearch={(text) => router.push({pathname: '/search', query: {text}})}
+            <SearchBox onSearch={(text) => router.push({pathname: '/search', query: {text}})}
             />
 
-            <Alert variant='info' style={{width: '350px', margin: '0 auto'}}>
-                Datapakker er nå tilgjengelige{' '}
-                <a
-                    href={'https://datapakker.intern.nav.no'}
-                    target='_blank'
-                    rel='noreferrer'
-                >
-                    her
-                </a>
-            </Alert>
-            <Content>
+            <Links>
                 <Link href={'/search?types=dataproduct'}>
                     <a>
-                        <Category>
+                        <CategoryCard>
                             <IconBox size={50}><BigQueryLogo/></IconBox>
-                            <CategoryTitle> Produkter </CategoryTitle>
-                        </Category>
+                            <CategoryCardTitle> Produkter </CategoryCardTitle>
+                        </CategoryCard>
                     </a>
                 </Link>
                 <Link href={'/search?types=story'}>
                     <a>
-                        <Category>
+                        <CategoryCard>
                             <IconBox size={50}><StoryLogo/></IconBox>
-                            <CategoryTitle> Fortellinger </CategoryTitle>
-                        </Category>
-                    </a></Link>
+                            <CategoryCardTitle> Fortellinger </CategoryCardTitle>
+                        </CategoryCard>
+                    </a>
+                </Link>
+                <a href={'https://datapakker.intern.nav.no'}
+                   target='_blank'
+                   rel='noreferrer'
+                >
+                    <CategoryCard>
+                        <IconBox size={100} height={50}><DatapakkerLogo/></IconBox>
+                        <CategoryCardTitle> Datapakker </CategoryCardTitle>
+                    </CategoryCard>
+                </a>
                 <Link href={'/search?services=metabase'}>
                     <a>
-                        <Category>
+                        <CategoryCard>
                             <IconBox size={50}><MetabaseLogo/></IconBox>
-                            <CategoryTitle> Metabase </CategoryTitle>
-                        </Category>
-                    </a></Link>
-            </Content>
-        </div>
+                            <CategoryCardTitle> Metabase </CategoryCardTitle>
+                        </CategoryCard>
+                    </a>
+                </Link>
+            </Links>
+        </FrontPage>
     )
 }
 
