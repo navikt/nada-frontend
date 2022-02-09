@@ -54,7 +54,7 @@ const Category = () => {
     }
 
     const search = useSearchContentWithOptionsQuery({
-        variables: {options: {limit: 5, ...filters}},
+        variables: {options: {limit: 100, ...filters}},
     })
 
     const updateQuery = async (key: string, value: string | string[]) => {
