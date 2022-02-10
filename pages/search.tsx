@@ -13,14 +13,15 @@ import ResultList from "../components/search/resultList";
 
 const Container = styled.div`
   margin-top: 100px;
-  display: flex
+  display: flex;
 `
 const SideContainer = styled.div`
-  width: 300;
+  flex-shrink: 0;
+  width: 300px;
   padding-right: 30px;
 `
 const Main = styled.div`
-  flex-direction: row;
+  flex-grow: 1;
 `
 
 export type FilterTypes = {
