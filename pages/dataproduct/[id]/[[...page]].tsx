@@ -14,7 +14,7 @@ import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar from '../../../components/lib/topBar'
-import { Name } from '../../../components/lib/detailTypography'
+import {Description, Name} from '../../../components/lib/detailTypography'
 import EditMenu, {MenuItem} from '../../../components/lib/editMenu'
 import { MetadataTable } from '../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
@@ -22,15 +22,16 @@ import { useRouter } from 'next/router'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import TabPanel, { TabPanelType } from '../../../components/lib/tabPanel'
-import DataproductInfo from '../../../components/dataproducts/dataproductInfo'
 import DataproductTableSchema from '../../../components/dataproducts/dataproductTableSchema'
 import Owner from '../../../components/dataproducts/access/owner'
 import { GET_DATAPRODUCT_ACCESS } from '../../../lib/queries/access/dataproductAccess'
 import User from '../../../components/dataproducts/access/user'
-import BackButton from '../../../components/lib/BackButton'
 import { UserState } from '../../../lib/context'
 import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
+import IconBox from "../../../components/lib/icons/iconBox";
+import StoryLogo from "../../../components/lib/icons/storyLogo";
+import BigQueryLogo from "../../../components/lib/icons/bigQueryLogo";
 
 const Container = styled.div`
   display: flex;
@@ -43,15 +44,12 @@ const MainPage = styled.div`
   flex-grow: 1;
 `
 const SideMenu = styled.div`
-  margin-top: 65px;
   display: flex;
   width: 200px;
   border-left: 1px solid #ededed;
 `
 
 const Product = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
 `
 
 interface DataproductProps {
@@ -114,10 +112,10 @@ const Dataproduct = (props: DataproductProps) => {
     component: any
   }> = [
     {
-      title: 'Informasjon',
+      title: 'Beskrivelse',
       slug: 'info',
       component: (
-        <DataproductInfo product={product} />
+          <Description markdown={product.description}/>
       ),
     },
     {
@@ -159,10 +157,14 @@ const Dataproduct = (props: DataproductProps) => {
       </Head>
       <Container>
       <MainPage>
-        <BackButton onClick={() => router.push('/')} />
         <Product>
-          <TopBar type={'Dataproduct'}>
+          <TopBar>
+            <span>
+            <IconBox size={42}>
+              <BigQueryLogo/>
+            </IconBox>
             <Name>{product.name}</Name>
+              </span>
             {isOwner && (
               <EditMenu menuItems={dotMenuItems}
               />
@@ -177,6 +179,7 @@ const Dataproduct = (props: DataproductProps) => {
           >
             {menuItems.map((i, idx) => (
               <Tab
+                style={{padding: 0, margin: 0}}
                 key={idx}
                 label={i.title}
               />
