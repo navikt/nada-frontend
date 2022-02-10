@@ -32,7 +32,7 @@ const FilterPill = styled.span<{ all?: boolean }>`
 `
 
 interface filterProps {
-    updateQuery: (key: string, value: string) => void
+    updateQuery: (key: string, value: string, clear?: boolean) => void
     filters: FilterTypes
 }
 
@@ -40,7 +40,7 @@ const Filters = ({updateQuery, filters}: filterProps) =>  (
         <>
             {Object.keys(filters).filter((key) => key === "keywords" || key === "groups").map((key) => filters[key]).flat().length > 0 &&
             <FilterRow>
-                <FilterPill all={true}>Fjern alle filtre<Close/></FilterPill>
+                <FilterPill all={true} onClick={() => updateQuery("", "", true)}>Fjern alle filtre<Close/></FilterPill>
                 {Object.keys(filters)
                     .filter(key => key === "keywords" || key === "groups")
                     .map((key) => {
