@@ -50,31 +50,55 @@ export const emailToValue = (value: string) => {
 const Category = () => {
     const router = useRouter()
     const baseUrl = router.asPath.split('?')[0]
-    const filters: FilterTypes = {
-        groups: arrayify(router.query.groups),
-        keywords: arrayify(router.query.keywords),
-        types: arrayify(router.query.types) as SearchType[],
-        services: arrayify(router.query.services) as MappingService[],
-        text: router.query.text && router.query.text.toString() || "",
+    let emptyFilters: FilterTypes = {
+        groups: [],
+        keywords: [],
+        types: [],
+        services: [],
+        text: "",
+
     }
+    let filters: FilterTypes = {
+       groups: [],
+        keywords: [],
+        types: [],
+        services: [],
+        text: "",
+    }
+    if (router.isReady){
+        filters = {
+            groups: arrayify(router.query.groups),
+            keywords: arrayify(router.query.keywords),
+            types: arrayify(router.query.types) as SearchType[],
+            services: arrayify(router.query.services) as MappingService[],
+            text: router.query.text && router.query.text.toString() || "",
+        }
+
+    }
+
 
     const search = useSearchContentWithOptionsQuery({
         variables: {options: {limit: 100, ...filters}},
     })
 
-    const updateQuery = async (key: string, value: string | string[]) => {
-        if (key === 'text') {
-            filters['text'] = value as string
+    const updateQuery = async (key: string, value: string | string[], clear?: boolean) => {
+        if (clear) {
+            filters = emptyFilters
         } else {
-            const values = filters[key] as string[]
-            if (values.length > 0 && values.includes(value.toString())) {
-                filters[key] = values.filter(v => v !== value)
-            } else {
-                const currentValue = filters[key] as string[]
-                currentValue.push(value.toString())
-                filters[key] = currentValue
-            }
 
+            if (key === 'text') {
+                filters['text'] = value as string
+            } else {
+                const values = filters[key] as string[]
+                if (values.length > 0 && values.includes(value.toString())) {
+                    filters[key] = values.filter(v => v !== value)
+                } else {
+                    const currentValue = filters[key] as string[]
+                    currentValue.push(value.toString())
+                    filters[key] = currentValue
+                }
+
+            }
         }
         await router.push(buildQueryString(key))
     }
