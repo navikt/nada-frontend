@@ -2,7 +2,7 @@ import * as React from 'react'
 import {FormEvent, useState} from 'react'
 import {MappingService, SearchType, useGroupStatsQuery, useKeywordsQuery} from "../../lib/schema/graphql";
 import { Close } from "@navikt/ds-icons";
-import {FilterTypes} from "../../pages/search";
+import {emailToValue, FilterTypes} from "../../pages/search";
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -21,7 +21,6 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
     const unselectedGroups = groupStatsQuery.data?.groupStats.map((g: any) => g.email).filter((t) => !filters.groups.includes(t)) || []
     const unselectedKeywords = keywordsQuery.data?.keywords.map((k) => k.keyword).filter((k) => !filters.keywords.includes(k)) || []
     const [value, setValue] = useState<string>(filters.text)
-    console.log(value, "filters", filters.text)
 
     const onSubmit = (e: FormEvent, clear?: boolean) => {
         e.preventDefault()
@@ -85,17 +84,13 @@ const SideMenu = ({updateQuery, filters}: SideMenuProps) => {
         <Autocomplete
             sx={{marginTop: '10px'}}
             clearIcon={false}
-            value={{label: "", type: ""}}
-            options={unselectedKeywords.map((k) => {
-                return {label: k, type: "keywords"}
-            }).concat(unselectedGroups.map((t) => {
-                return {label: t, type: 'groups'}
-            }))}
+            value={{label: "", type: "", data: ""}}
+            options={unselectedGroups.map((t) => {return {label: emailToValue(t), type: 'groups', data: t}})
+             .concat(unselectedKeywords.map((k) => { return {label: k, type: "keywords", data: k} }))}
             renderInput={(params) => <TextField {...params} label="Filter"/>}
-            onChange={(e, value) => value && updateQuery(value.type, value.label)}
+            onChange={(e, value) => value && updateQuery(value.type, value.data)}
             onSubmit={(e) => {
                 e.preventDefault();
-                console.log(e)
             }}
         />
 

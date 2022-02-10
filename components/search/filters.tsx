@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from "styled-components";
 import {Close} from "@navikt/ds-icons";
-import {FilterTypes} from '../../pages/search';
+import {emailToValue, FilterTypes} from '../../pages/search';
 
 
 const FilterRow = styled.div`
@@ -45,7 +45,7 @@ const Filters = ({updateQuery, filters}: filterProps) =>  (
                     .filter(key => key === "keywords" || key === "groups")
                     .map((key) => {
                         const values = filters[key] as string[]
-                        return values.map((value: string) => <FilterPill key={value} onClick={() => updateQuery(key, value)}>{value}<Close/></FilterPill>)
+                        return values.map((value: string) => <FilterPill key={value} onClick={() => updateQuery(key, value)}>{emailToValue(value)}<Close/></FilterPill>)
                     })}
             </FilterRow>}
 

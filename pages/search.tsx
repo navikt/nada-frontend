@@ -20,7 +20,6 @@ const SideContainer = styled.div`
   padding-right: 30px;
 `
 const Main = styled.div`
-  flex: 1 0 auto;
   flex-direction: row;
 `
 
@@ -42,6 +41,11 @@ const arrayify = (query: string | string[] | undefined) => {
 
 }
 
+export const emailToValue = (value: string) => {
+    if (value.includes("@")) return `team: ${value.split('@')[0].toString()}`
+    return value
+}
+
 const Category = () => {
     const router = useRouter()
     const baseUrl = router.asPath.split('?')[0]
@@ -54,7 +58,7 @@ const Category = () => {
     }
 
     const search = useSearchContentWithOptionsQuery({
-        variables: {options: {limit: 5, ...filters}},
+        variables: {options: {limit: 100, ...filters}},
     })
 
     const updateQuery = async (key: string, value: string | string[]) => {
