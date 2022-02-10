@@ -20,7 +20,6 @@ const SideContainer = styled.div`
   padding-right: 30px;
 `
 const Main = styled.div`
-  flex: 1 0 auto;
   flex-direction: row;
 `
 

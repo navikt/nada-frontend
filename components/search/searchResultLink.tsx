@@ -43,7 +43,8 @@ export const SearchResultLink = ({link, name, group, keywords, type, excerpt}: S
                         title={name}
                         subheader={`eier: ${group}`}
                     />
-                    {excerpt && <div dangerouslySetInnerHTML={{__html: excerpt.replace(/\(\(START\)\)(.*?)\(\(STOP\)\)/g, `<b>$1</b>`)}} style={{margin:'10px 16px 0'}}/>}
+                    {excerpt && <div dangerouslySetInnerHTML={{__html: excerpt.replace(/\(\(START\)\)(.*?)\(\(STOP\)\)/g, `<i><b>$1</b></i>`)}} style={{margin:'10px 16px 0'}}/>}
+
                     <div style={{float: 'right'}}>
                         {keywords && keywords.map((k, i) =>(
                             <KeywordPill key={i} keyword={k} compact={true}>{k}</KeywordPill>))}
