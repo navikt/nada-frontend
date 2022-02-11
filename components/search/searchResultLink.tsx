@@ -45,7 +45,7 @@ export const SearchResultLink = ({link, name, group, keywords, type, excerpt}: S
                     />
                     {excerpt && <div dangerouslySetInnerHTML={{__html: excerpt.replace(/\(\(START\)\)(.*?)\(\(STOP\)\)/g, `<i><b>$1</b></i>`)}} style={{margin:'10px 16px 0'}}/>}
 
-                    <div style={{float: 'right'}}>
+                    <div style={{float: 'right', display: 'flex', gap: '5px', marginRight: '10px'}}>
                         {keywords && keywords.map((k, i) =>(
                             <KeywordPill key={i} keyword={k} compact={true}>{k}</KeywordPill>))}
                     </div>

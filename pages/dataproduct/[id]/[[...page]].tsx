@@ -1,254 +1,247 @@
 import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
 import {
-  Group,
-  useDataproductAccessQuery,
-  useDataproductQuery,
-  useDeleteDataproductMutation,
+    Group,
+    useDataproductAccessQuery,
+    useDataproductQuery,
+    useDeleteDataproductMutation,
 } from '../../../lib/schema/graphql'
-import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
+import {GetServerSideProps} from 'next'
+import {addApolloState, initializeApollo} from '../../../lib/apollo'
+import {GET_DATAPRODUCT} from '../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
-import { useContext, useEffect, useState } from 'react'
+import {useContext, useEffect, useState} from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar from '../../../components/lib/topBar'
 import {Description, Name} from '../../../components/lib/detailTypography'
 import EditMenu, {MenuItem} from '../../../components/lib/editMenu'
-import { MetadataTable } from '../../../components/dataproducts/metadataTable'
+import {MetadataTable} from '../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import TabPanel, { TabPanelType } from '../../../components/lib/tabPanel'
+import TabPanel, {TabPanelType} from '../../../components/lib/tabPanel'
 import DataproductTableSchema from '../../../components/dataproducts/dataproductTableSchema'
 import Owner from '../../../components/dataproducts/access/owner'
-import { GET_DATAPRODUCT_ACCESS } from '../../../lib/queries/access/dataproductAccess'
+import {GET_DATAPRODUCT_ACCESS} from '../../../lib/queries/access/dataproductAccess'
 import User from '../../../components/dataproducts/access/user'
-import { UserState } from '../../../lib/context'
+import {UserState} from '../../../lib/context'
 import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
 import IconBox from "../../../components/lib/icons/iconBox";
-import StoryLogo from "../../../components/lib/icons/storyLogo";
 import BigQueryLogo from "../../../components/lib/icons/bigQueryLogo";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row
-  padding-top: 40px;
+  flex-direction: row;
+  margin-top: 50px;
   gap: 20px;
 `
 
+const LogoBox = styled.span`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+`
 const MainPage = styled.div`
   flex-grow: 1;
 `
-const SideMenu = styled.div`
-  display: flex;
-  width: 200px;
-  border-left: 1px solid #ededed;
-`
-
-const Product = styled.div`
-`
 
 interface DataproductProps {
-  id: string
+    id: string
 }
 
 const Dataproduct = (props: DataproductProps) => {
-  const { id } = props
-  const router = useRouter()
+    const {id} = props
+    const router = useRouter()
 
-  const [showDelete, setShowDelete] = useState(false)
-  const [deleteError, setDeleteError] = useState('')
+    const [showDelete, setShowDelete] = useState(false)
+    const [deleteError, setDeleteError] = useState('')
 
-  const userInfo = useContext(UserState)
-  const productQuery = useDataproductQuery({
-    variables: { id },
-    ssr: true,
-  })
+    const userInfo = useContext(UserState)
+    const productQuery = useDataproductQuery({
+        variables: {id},
+        ssr: true,
+    })
 
-  const accessQuery = useDataproductAccessQuery({
-    variables: { id },
-    ssr: true,
-  })
+    const accessQuery = useDataproductAccessQuery({
+        variables: {id},
+        ssr: true,
+    })
 
-  useEffect(() => {
-    const eventProperties = {
-      sidetittel: 'produktside',
-      title: productQuery.data?.dataproduct.name,
+    useEffect(() => {
+        const eventProperties = {
+            sidetittel: 'produktside',
+            title: productQuery.data?.dataproduct.name,
+        }
+        amplitudeLog('sidevisning', eventProperties)
+    })
+
+    const [deleteDataproduct] = useDeleteDataproductMutation({
+        variables: {id: id},
+        awaitRefetchQueries: true,
+        refetchQueries: ['searchContent'],
+    })
+
+    const onDelete = async () => {
+        try {
+            await deleteDataproduct()
+            await router.push('/')
+        } catch (e: any) {
+            setDeleteError(e.toString())
+        }
     }
-    amplitudeLog('sidevisning', eventProperties)
-  })
+    if (productQuery.error) return <ErrorMessage error={productQuery.error}/>
+    if (productQuery.loading || !productQuery.data?.dataproduct) return <LoaderSpinner/>
 
-  const [deleteDataproduct] = useDeleteDataproductMutation({
-    variables: { id: id },
-    awaitRefetchQueries: true,
-    refetchQueries: ['searchContent'],
-  })
+    const product = productQuery.data.dataproduct
 
-  const onDelete = async () => {
-    try {
-      await deleteDataproduct()
-      await router.push('/')
-    } catch (e: any) {
-      setDeleteError(e.toString())
+    const isOwner =
+        userInfo?.groups.some((g: Group) => {
+            return g.email === product.owner.group
+        }) || false
+
+    const menuItems: Array<{
+        title: string
+        slug: string
+        component: any
+    }> = [
+        {
+            title: 'Beskrivelse',
+            slug: 'info',
+            component: (
+                <Description markdown={product.description}/>
+            ),
+        },
+        {
+            title: 'Skjema',
+            slug: 'schema',
+            component: (
+                <DataproductTableSchema datasource={product.datasource}/>
+            ),
+        },
+        {
+            title: 'tilganger',
+            slug: 'access',
+            component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
+                <Owner accessQuery={accessQuery}/> : <User accessQuery={accessQuery} currentUser={userInfo.email}/>,
+        },
+        {
+            title: 'utforsk',
+            slug: 'explore',
+            component: <Explore product={product} isOwner={isOwner}/>,
+        },
+    ]
+
+    const currentPage = menuItems
+        .map((e) => e.slug)
+        .indexOf(router.query.page?.[0] ?? 'info')
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
     }
-  }
-  if (productQuery.error) return <ErrorMessage error={productQuery.error} />
-  if (productQuery.loading || !productQuery.data?.dataproduct) return <LoaderSpinner />
+    const dotMenuItems: MenuItem[] = [
+        {title: "Edit", func: () => router.push(`/dataproduct/${product.id}/edit`)},
+        {title: "Delete", func: () => setShowDelete(true)}
+    ]
 
-  const product = productQuery.data.dataproduct
+    return (
+        <>
+            <Head>
+                <title>{product.name}</title>
+            </Head>
+            <Container>
+                <MainPage>
+                    <TopBar>
+                        <LogoBox>
+                            <IconBox size={42}>
+                                <BigQueryLogo/>
+                            </IconBox>
+                            <Name>{product.name}</Name>
 
-  const isOwner =
-    userInfo?.groups.some((g: Group) => {
-      return g.email === product.owner.group
-    }) || false
-
-  const menuItems: Array<{
-    title: string
-    slug: string
-    component: any
-  }> = [
-    {
-      title: 'Beskrivelse',
-      slug: 'info',
-      component: (
-          <Description markdown={product.description}/>
-      ),
-    },
-    {
-      title: 'Skjema',
-      slug: 'schema',
-      component: (
-        <DataproductTableSchema datasource={product.datasource} />
-      ),
-    },
-    {
-      title: 'tilganger',
-      slug: 'access',
-      component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
-        <Owner accessQuery={accessQuery} /> : <User accessQuery={accessQuery} currentUser={userInfo.email} />,
-    },
-    {
-      title: 'utforsk',
-      slug: 'explore',
-      component: <Explore product={product} isOwner={isOwner}/>,
-    },
-  ]
-
-  const currentPage = menuItems
-    .map((e) => e.slug)
-    .indexOf(router.query.page?.[0] ?? 'info')
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
-  }
-  const dotMenuItems: MenuItem[] = [
-    {title: "Edit", func: () => router.push(`/dataproduct/${product.id}/edit`)},
-    {title: "Delete", func:() => setShowDelete(true)}
-  ]
-
-  return (
-    <>
-      <Head>
-        <title>{product.name}</title>
-      </Head>
-      <Container>
-      <MainPage>
-        <Product>
-          <TopBar>
-            <span>
-            <IconBox size={42}>
-              <BigQueryLogo/>
-            </IconBox>
-            <Name>{product.name}</Name>
-              </span>
-            {isOwner && (
-              <EditMenu menuItems={dotMenuItems}
-              />
-            )}
-          </TopBar>
-          <Tabs
-            variant='standard'
-            value={currentPage}
-            onChange={handleChange}
-            aria-label='dataprodukt-tabs'
-            style={{marginLeft: '20px'}}
-          >
-            {menuItems.map((i, idx) => (
-              <Tab
-                style={{padding: 0, margin: 0}}
-                key={idx}
-                label={i.title}
-              />
-            ))}
-          </Tabs>
-          {menuItems.map((i, idx) => (
-            <TabPanel
-              key={idx}
-              value={currentPage}
-              index={idx}
-              type={TabPanelType.simple}
-            >
-              {i.component}
-            </TabPanel>
-          ))}
-          <DeleteModal
-            open={showDelete}
-            onCancel={() => setShowDelete(false)}
-            onConfirm={() => onDelete()}
-            name={product.name}
-            error={deleteError}
-          />
-        </Product>
-      </MainPage>
-        <SideMenu>
-          <MetadataTable product={product} />
-        </SideMenu>
-      </Container>
-    </>
-  )
+                        </LogoBox>
+                        {isOwner && (
+                            <EditMenu menuItems={dotMenuItems}
+                            />
+                        )}
+                    </TopBar>
+                    <Tabs
+                        variant='standard'
+                        value={currentPage}
+                        onChange={handleChange}
+                        aria-label='dataprodukt-tabs'
+                        style={{marginLeft: '20px'}}
+                    >
+                        {menuItems.map((i, idx) => (
+                            <Tab
+                                style={{padding: 0, margin: 0}}
+                                key={idx}
+                                label={i.title}
+                            />
+                        ))}
+                    </Tabs>
+                    {menuItems.map((i, idx) => (
+                        <TabPanel
+                            key={idx}
+                            value={currentPage}
+                            index={idx}
+                            type={TabPanelType.simple}
+                        >
+                            {i.component}
+                        </TabPanel>
+                    ))}
+                    <DeleteModal
+                        open={showDelete}
+                        onCancel={() => setShowDelete(false)}
+                        onConfirm={() => onDelete()}
+                        name={product.name}
+                        error={deleteError}
+                    />
+                </MainPage>
+                <MetadataTable product={product}/>
+            </Container>
+        </>
+    )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const cookie = context.req.headers.cookie
+    const {id} = context.query
+    const cookie = context.req.headers.cookie
 
-  const apolloClient = initializeApollo()
+    const apolloClient = initializeApollo()
 
-  try {
-    await apolloClient.query({
-      query: GET_DATAPRODUCT,
-      variables: { id },
-      context: {
-        headers: {
-          cookie,
-        },
-      },
+    try {
+        await apolloClient.query({
+            query: GET_DATAPRODUCT,
+            variables: {id},
+            context: {
+                headers: {
+                    cookie,
+                },
+            },
+        })
+    } catch (e) {
+        console.log(e)
+    }
+
+    try {
+        await apolloClient.query({
+            query: GET_DATAPRODUCT_ACCESS,
+            variables: {id},
+            context: {
+                headers: {
+                    cookie,
+                },
+            },
+        })
+    } catch (e) {
+        // ignore access denied if not logged in
+    }
+
+    return addApolloState(apolloClient, {
+        props: {id},
     })
-  } catch (e) {
-    console.log(e)
-  }
-
-  try {
-    await apolloClient.query({
-      query: GET_DATAPRODUCT_ACCESS,
-      variables: { id },
-      context: {
-        headers: {
-          cookie,
-        },
-      },
-    })
-  } catch (e) {
-    // ignore access denied if not logged in
-  }
-
-  return addApolloState(apolloClient, {
-    props: { id },
-  })
 }
 
 export default Dataproduct
