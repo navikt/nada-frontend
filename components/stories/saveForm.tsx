@@ -1,14 +1,14 @@
-import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
+import {Fieldset} from '@navikt/ds-react'
 import styled from "styled-components"
-import { Story, usePublishStoryMutation } from "../../lib/schema/graphql"
+import {StoryQuery, usePublishStoryMutation} from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
-import { Name } from '../lib/detailTypography'
+import {Name} from '../lib/detailTypography'
 import TeamSelector from '../lib/teamSelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { storyValidation } from '../../lib/schema/yupValidations'
+import {useRouter} from 'next/router'
+import {useForm} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
+import {storyValidation} from '../../lib/schema/yupValidations'
 
 
 const Container = styled.div`
@@ -27,12 +27,12 @@ const DataproductBody = styled.div`
 `
 
 interface SaveFormProps {
-	story: Story
+	story: StoryQuery['story']
 }
 
 function SaveForm({ story }: SaveFormProps) {
 	const router = useRouter()
-	const { register, handleSubmit, watch, formState, setValue, control } =
+	const { register, handleSubmit, formState } =
 		useForm({
 			resolver: yupResolver(storyValidation),
 			defaultValues: {

@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { Story } from '../../../../components/stories/story'
-import { useStoryQuery } from '../../../../lib/schema/graphql'
+import {useStoryQuery} from '../../../../lib/schema/graphql'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { DraftToolbar } from '../../../../components/stories/draftToolbar'
+import {useRouter} from 'next/router'
 import SaveForm from '../../../../components/stories/saveForm'
 
 

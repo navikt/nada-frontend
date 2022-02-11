@@ -32,7 +32,7 @@ const CenterAligned = styled.div`
 
 export const UrlLink = ({ url, text, onClick }: UrlLinkProps) => {
   if (!url) return null
-  if (!text) text = url
+  if (!text) text = 'Github'
   if (!isValidHttpUrl(url)) return <>{url}</>
 
   return (

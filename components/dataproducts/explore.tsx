@@ -13,9 +13,7 @@ const ExploreLinks = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 10px;
-  > * {
-  margin: 0 10px 15px; 
-  }
+  gap: 20px;
 
 `
 

@@ -30,6 +30,7 @@ const FilterPill = styled.span<{ all?: boolean }>`
     margin: 0 2px 0 5px;
   }
 `
+
 interface filterProps {
     updateQuery: (key: string, value: string, clear?: boolean) => void
     filters: FilterTypes

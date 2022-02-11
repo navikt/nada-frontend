@@ -21,16 +21,14 @@ type ResultListInterface = {
 }
 const ResultList = ({search, dataproducts}: ResultListInterface) => {
     if (dataproducts) {
-        return (
-            <Results>
-                {
-                    dataproducts.map((d, idx) =>
-                        <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
-                                          link={`/dataproduct/${d.id}`}/>
-                    )
-                }
-            </Results>
-        )
+        return (<Results>
+            {
+                dataproducts.map((d, idx) =>
+                    <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
+                                      link={`/dataproduct/${d.id}`}/>
+                )
+            }
+        </Results>)
     }
 
     if (search) {

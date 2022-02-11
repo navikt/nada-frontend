@@ -26,15 +26,13 @@ color: #222;
 }
 `
 const KeywordPillStyle = styled.span<KeywordSpanProps>`
-display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
-background-color: ${(props) => props.color};
-color: ${(props) => props.textColor};
-border-radius: 999px;
-font-size: 12px;
-padding: 3px 5px 3px 5px;
-border: 0.5px solid transparent;
-
-margin: ${(props) => props.compact ? '0 5px' : '0 0 10px 15px'};
+  display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
+  background-color: ${(props) => props.color};
+  color: ${(props) => props.textColor};
+  border-radius: 999px;
+  font-size: 12px;
+  padding: 3px 5px 3px 5px;
+  border: 0.5px solid transparent;
 `
 
 interface keywordLinkProps {

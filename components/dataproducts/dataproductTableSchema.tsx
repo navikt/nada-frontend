@@ -23,23 +23,22 @@ const DataproductTableSchema = ({
       <StyledTable>
         <tbody>
         <tr>
-          <th>Adresse:</th>
+          <th>Prosjekt:</th>
           <td>
-            <UrlLink
-              url={bigQueryUrl}
-              text={`${datasource.projectID}.${datasource.dataset}.${datasource.table}`}
-              onClick={() => {
-                const eventProperties = {
-                  til: bigQueryUrl,
-                }
-                amplitudeLog('navigere', eventProperties)
-              }}
-            />
+            {datasource.projectID}
           </td>
         </tr>
         <tr>
-          <th>Type:</th>
-          <td>{datasource.__typename}</td>
+          <th>Dataset:</th>
+          <td>
+            {datasource.dataset}
+          </td>
+        </tr>
+        <tr>
+          <th>Tabell:</th>
+          <td>
+            {datasource.table}
+          </td>
         </tr>
         <tr>
           <th>Tabelltype:</th>

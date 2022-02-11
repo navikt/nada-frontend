@@ -47,7 +47,7 @@ export const emailToValue = (value: string) => {
     return value
 }
 
-const Category = () => {
+const Search = () => {
     const router = useRouter()
     const baseUrl = router.asPath.split('?')[0]
     let emptyFilters: FilterTypes = {
@@ -128,4 +128,4 @@ const Category = () => {
         </>)
 }
 
-export default Category
+export default Search

@@ -1,40 +1,162 @@
-import StyledMetadataTable from '../lib/styledMetadataTable'
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
-import {ExternalLink} from '@navikt/ds-icons'
+import {ExternalLink, Success, Warning, Error} from '@navikt/ds-icons'
 import {DataproductQuery} from "../../lib/schema/graphql";
+import styled from "styled-components";
+import {UrlLink} from "../widgets/UrlLink";
+import amplitudeLog from "../../lib/amplitude";
+import Link from "next/link";
+import {KeywordPill} from "../lib/keywordList";
+import IconBox from "../lib/icons/iconBox";
+import {navGronn, navRod} from "../../styles/constants";
+import GitIcon from "../lib/icons/gitIcon";
 
-interface DataproductDetailProps {
-  product: DataproductQuery['dataproduct']
+interface piiBoxProps {
+    pii: boolean
 }
 
-export const MetadataTable = ({ product }: DataproductDetailProps) => (
-  <StyledMetadataTable type={'Dataproduct'}>
-    <tbody>
-      <tr>
-        <th>Type:</th>
-        <td>{product.datasource.__typename}</td>
-      </tr>
-      <tr>
-        <th>Eier:</th>
-        <td>
-          {product.owner?.teamkatalogenURL ? (
-            <a
-              href={product.owner.teamkatalogenURL}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {product.owner.group.split('@')[0]} <ExternalLink />
-            </a>
-          ) : (
-            product.owner?.group
-          )}
-        </td>
-      </tr>
-      <tr>
-        <th>Opprettet:</th>
-        <td>{humanizeDate(product.created)}</td>
-      </tr>
-    </tbody>
-  </StyledMetadataTable>
-)
+const PiiBox = styled.div<piiBoxProps>`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 5px 0;
+  background: ${(props) => props.pii ? '#F9D2CC' : '#CCF1D6'};
+`
+const KeywordBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+`
+const SubjectContent = styled.div`
+    margin-bottom: 20px;
+    margin-left: 1px;
+    font-size: 14px;
+    color: #222;
+    
+`
+const SubjectHeader = styled.h2`
+    padding-bottom: 0;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    color: #222;
+    font-weight: 500;
+    font-size: 18px;
+    
+`
+
+const StyledMetadataTable = styled.div`
+  height: fit-content;
+  min-width: 250px;
+  max-width: 250px;
+  font-size: 16px;
+  line-height: 1;
+  padding: 1rem;
+  border-left: 1px #ddd solid;
+`
+const AccessRow = styled.span`
+  display: inline-flex;
+  gap: 10px;
+`
+
+interface DataproductDetailProps {
+    product: DataproductQuery['dataproduct']
+    accessType: { type: string, expires?: any }
+}
+
+export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
+    const datasource = product.datasource
+    const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
+    return <StyledMetadataTable>
+        <SubjectHeader>Tilgang</SubjectHeader>
+        <SubjectContent>
+            {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
+            {accessType.type === 'none' && <AccessRow><Error color={navRod}/>Du har ikke tilgang</AccessRow>}
+            {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
+            {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
+                Du har tilgang {accessType.expires && <><br/>til {humanizeDate(accessType.expires)}</>}</AccessRow>}
+
+        </SubjectContent>
+
+
+        <SubjectHeader>Type</SubjectHeader>
+        <SubjectContent>
+            {product.datasource.__typename}
+        </SubjectContent>
+        <SubjectHeader>Eier</SubjectHeader>
+        <SubjectContent>
+            {product.owner?.teamkatalogenURL ? (
+                <a
+                    href={product.owner.teamkatalogenURL}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    {product.owner.group.split('@')[0]} <ExternalLink/>
+                </a>) : (product.owner?.group.split('@')[0])}
+        </SubjectContent>
+        <SubjectHeader>Opprettet</SubjectHeader>
+        <SubjectContent>
+            {humanizeDate(product.created)}
+        </SubjectContent>
+        <SubjectHeader>Sist oppdatert</SubjectHeader>
+        <SubjectContent>
+
+            {humanizeDate(product.lastModified)}
+
+        </SubjectContent>
+        <SubjectHeader>Datakilde</SubjectHeader>
+
+        <SubjectContent>
+            <UrlLink
+                url={bigQueryUrl}
+                text='BigQuery Console'
+                onClick={() => {
+                    const eventProperties = {
+                        til: bigQueryUrl,
+                    }
+                    amplitudeLog('navigere', eventProperties)
+                }}
+            />
+
+        </SubjectContent>
+        <SubjectHeader>Nøkkelord</SubjectHeader>
+        <KeywordBox>
+            {!!product.keywords.length && (<>{product.keywords.map((k, i) => (
+                    <Link key={i} href={`/search?keywords=${k}`}>
+                        <a>
+                            <KeywordPill key={k} keyword={k}>
+                                {k}
+                            </KeywordPill>
+                        </a>
+                    </Link>
+                ))}</>
+            )}
+
+        </KeywordBox>
+        <SubjectHeader>Personidentifiserende info</SubjectHeader>
+        <SubjectContent>
+            <PiiBox pii={product.pii}>
+                <IconBox size={30} justifyRight>
+                    {product.pii ? (
+                        <Warning style={{fontSize: '1.5rem'}} color={navRod}/>
+                    ) : (
+                        <Success style={{fontSize: '1.5rem'}} color={navGronn}/>
+                    )}
+                </IconBox>
+                <p style={{margin: 0}}>Inneholder {!product.pii && <b> IKKE </b>} persondata</p>
+            </PiiBox>
+
+        </SubjectContent>
+        {product.repo && <>
+            <SubjectHeader>Kildekode</SubjectHeader>
+            <span style={{display: 'inline-flex', gap: '10px', alignItems: 'center'}}>
+            <IconBox size={24} justifyRight>
+                <GitIcon/>
+            </IconBox>
+            <UrlLink url={product.repo}/>
+        </span></>
+        }
+    </StyledMetadataTable>
+}
