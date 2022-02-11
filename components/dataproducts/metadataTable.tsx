@@ -132,13 +132,14 @@ export const MetadataTable = ({product}: DataproductDetailProps) => {
             </PiiBox>
 
         </SubjectContent>
+        {product.repo && <>
         <SubjectHeader>Kildekode</SubjectHeader>
-        {product.repo && <span style={{display: 'inline-flex', gap: '10px', alignItems: 'center'}}>
+        <span style={{display: 'inline-flex', gap: '10px', alignItems: 'center'}}>
             <IconBox size={24} justifyRight>
                 <GitIcon/>
             </IconBox>
             <UrlLink url={product.repo}/>
-        </span>
+        </span></>
         }
     </StyledMetadataTable>
 }

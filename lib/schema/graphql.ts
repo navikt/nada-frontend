@@ -190,6 +190,11 @@ export type Mutation = {
    * Requires authentication.
    */
   deleteDataproduct: Scalars['Boolean']
+  /**
+   * deleteStory deletes an existing story.
+   *
+   * Requires authentication.
+   */
   deleteStory: Scalars['Boolean']
   /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
@@ -205,6 +210,11 @@ export type Mutation = {
    * Requires authentication
    */
   mapDataproduct: Scalars['Boolean']
+  /**
+   * publishStory publishes a story draft.
+   *
+   * Requires authentication.
+   */
   publishStory: Story
   /**
    * removeRequesterFromDataproduct removes a requester from the dataproduct.
@@ -224,7 +234,18 @@ export type Mutation = {
    * Requires authentication.
    */
   updateDataproduct: Dataproduct
+  /**
+   * updateStory updates an existing story.
+   *
+   * Requires authentication.
+   */
   updateStory: Story
+  /**
+   * updateStoryMetadata updates metadata on an existing story.
+   *
+   * Requires authentication.
+   */
+  updateStoryMetadata: Story
 }
 
 export type MutationAddRequesterToDataproductArgs = {
@@ -261,8 +282,10 @@ export type MutationMapDataproductArgs = {
 }
 
 export type MutationPublishStoryArgs = {
+  description?: Maybe<Scalars['String']>
   group: Scalars['String']
   id: Scalars['ID']
+  keywords?: Maybe<Array<Scalars['String']>>
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -282,6 +305,13 @@ export type MutationUpdateDataproductArgs = {
 export type MutationUpdateStoryArgs = {
   id: Scalars['ID']
   target: Scalars['ID']
+}
+
+export type MutationUpdateStoryMetadataArgs = {
+  description: Scalars['String']
+  id: Scalars['ID']
+  keywords: Array<Scalars['String']>
+  name: Scalars['String']
 }
 
 /** NewBigQuery contains metadata for creating a new bigquery data source */
@@ -349,9 +379,17 @@ export type Query = {
   keywords: Array<Keyword>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
+  /** stories returns all either draft or published stories depending on the draft boolean. */
   stories: Array<Story>
+  /** story returns the given story. */
   story: Story
+  /**
+   * storyToken returns the update token for the data story.
+   *
+   * Requires authentication.
+   */
   storyToken: StoryToken
+  /** storyView returns the given story view. */
   storyView: StoryView
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>
@@ -475,49 +513,78 @@ export enum SearchType {
   Story = 'story',
 }
 
+/** Story contains the metadata and content of data stories. */
 export type Story = {
   __typename?: 'Story'
+  /** created is the timestamp for when the data story was created. */
   created: Scalars['Time']
+  /** description of the story */
+  description: Scalars['String']
+  /** id of the data story. */
   id: Scalars['ID']
+  /** keywords for the story used as tags. */
+  keywords: Array<Scalars['String']>
+  /** lastModified is the timestamp for when the data story was last modified. */
   lastModified?: Maybe<Scalars['Time']>
+  /** name of the data story. */
   name: Scalars['String']
+  /** owner of the data story. Changes to the data story can only be done by a member of the owner. */
   owner?: Maybe<Owner>
+  /** views contains a list of the different view data in the data story. */
   views: Array<StoryView>
 }
 
+/** StoryToken contains the token used for updating a data story. */
 export type StoryToken = {
   __typename?: 'StoryToken'
+  /** id of the story token. */
   id: Scalars['ID']
+  /** token is the update token for the data story. */
   token: Scalars['String']
 }
 
 export type StoryView = {
+  /** id of the story view. */
   id: Scalars['ID']
 }
 
+/** StoryViewHeader contains the metadata and content of a header story view. */
 export type StoryViewHeader = StoryView & {
   __typename?: 'StoryViewHeader'
+  /** content contains the header text. */
   content: Scalars['String']
+  /** id of the header story view. */
   id: Scalars['ID']
+  /** level is the size of the header text. */
   level: Scalars['Int']
 }
 
+/** StoryViewMarkdown contains the metadata and content of a markdown story view. */
 export type StoryViewMarkdown = StoryView & {
   __typename?: 'StoryViewMarkdown'
+  /** content contains the markdown text. */
   content: Scalars['String']
+  /** id of the markdown story view. */
   id: Scalars['ID']
 }
 
+/** StoryViewPlotly contains the metadata and content of a plotly story view. */
 export type StoryViewPlotly = StoryView & {
   __typename?: 'StoryViewPlotly'
+  /** data view data for the plotly graph. */
   data: Array<Scalars['Map']>
+  /** id of the plotly story view. */
   id: Scalars['ID']
+  /** layout contains metadata on the plotly graph layout. */
   layout: Scalars['Map']
 }
 
+/** StoryViewVega contains the metadata and content of a vega story view. */
 export type StoryViewVega = StoryView & {
   __typename?: 'StoryViewVega'
+  /** id of the vega story view. */
   id: Scalars['ID']
+  /** spec contains data and metadata on the vega graph. */
   spec: Scalars['Map']
 }
 
