@@ -1,10 +1,11 @@
 import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
 import {
+    DataproductAccessQuery,
     Group,
     useDataproductAccessQuery,
     useDataproductQuery,
-    useDeleteDataproductMutation,
+    useDeleteDataproductMutation, UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../../../lib/apollo'
@@ -31,6 +32,7 @@ import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
 import IconBox from "../../../components/lib/icons/iconBox";
 import BigQueryLogo from "../../../components/lib/icons/bigQueryLogo";
+import {isAfter, parseISO} from "date-fns";
 
 const Container = styled.div`
   display: flex;
@@ -47,6 +49,14 @@ const LogoBox = styled.span`
 const MainPage = styled.div`
   flex-grow: 1;
 `
+const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataproduct: DataproductAccessQuery['dataproduct'] | undefined) => {
+    if (!groups || !dataproduct) return {type: "utlogget"}
+    if (!groups && !dataproduct) return {type: "none"}
+    if (groups.some((g: Group) => g.email === dataproduct.owner.group)) return {type: "owner"}
+    const activeAccess = dataproduct.access.filter(a => (!a.revoked && (!a.expires || isAfter(parseISO(a.expires), Date.now()))))[0]
+    if (activeAccess) return {type: "user", expires: activeAccess.expires}
+    return {type: "none"}
+}
 
 interface DataproductProps {
     id: string
@@ -69,6 +79,9 @@ const Dataproduct = (props: DataproductProps) => {
         variables: {id},
         ssr: true,
     })
+
+    const accessType = findAccessType(userInfo?.groups, accessQuery.data?.dataproduct)
+    console.log(accessType)
 
     useEffect(() => {
         const eventProperties = {
@@ -199,7 +212,7 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product}/>
+                <MetadataTable product={product} accessType={accessType}/>
             </Container>
         </>
     )

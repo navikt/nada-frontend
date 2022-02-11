@@ -1,6 +1,6 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
-import {ExternalLink, Success, Warning} from '@navikt/ds-icons'
+import {ExternalLink, Success, Warning, Error} from '@navikt/ds-icons'
 import {DataproductQuery} from "../../lib/schema/graphql";
 import styled from "styled-components";
 import {UrlLink} from "../widgets/UrlLink";
@@ -14,6 +14,7 @@ import GitIcon from "../lib/icons/gitIcon";
 interface piiBoxProps {
     pii: boolean
 }
+
 const PiiBox = styled.div<piiBoxProps>`
   display: flex;
   align-items: center;
@@ -55,16 +56,31 @@ const StyledMetadataTable = styled.div`
   padding: 1rem;
   border-left: 1px #ddd solid;
 `
-
+const AccessRow = styled.span`
+  display: inline-flex;
+  gap: 10px;
+`
 
 interface DataproductDetailProps {
     product: DataproductQuery['dataproduct']
+    accessType: { type: string, expires?: any }
 }
 
-export const MetadataTable = ({product}: DataproductDetailProps) => {
+export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
     const datasource = product.datasource
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
     return <StyledMetadataTable>
+        <SubjectHeader>Tilgang</SubjectHeader>
+        <SubjectContent>
+            {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
+            {accessType.type === 'none' && <AccessRow><Error color={navRod}/>Du har ikke tilgang</AccessRow>}
+            {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
+            {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
+                Du har tilgang {accessType.expires && <><br/>til {humanizeDate(accessType.expires)}</>}</AccessRow>}
+
+        </SubjectContent>
+
+
         <SubjectHeader>Type</SubjectHeader>
         <SubjectContent>
             {product.datasource.__typename}
@@ -107,7 +123,8 @@ export const MetadataTable = ({product}: DataproductDetailProps) => {
         </SubjectContent>
         <SubjectHeader>Nøkkelord</SubjectHeader>
         <KeywordBox>
-            {!!product.keywords.length && (<>{product.keywords.map((k, i) => (<Link key={i} href={`/search?keywords=${k}`}>
+            {!!product.keywords.length && (<>{product.keywords.map((k, i) => (
+                    <Link key={i} href={`/search?keywords=${k}`}>
                         <a>
                             <KeywordPill key={k} keyword={k}>
                                 {k}
@@ -133,8 +150,8 @@ export const MetadataTable = ({product}: DataproductDetailProps) => {
 
         </SubjectContent>
         {product.repo && <>
-        <SubjectHeader>Kildekode</SubjectHeader>
-        <span style={{display: 'inline-flex', gap: '10px', alignItems: 'center'}}>
+            <SubjectHeader>Kildekode</SubjectHeader>
+            <span style={{display: 'inline-flex', gap: '10px', alignItems: 'center'}}>
             <IconBox size={24} justifyRight>
                 <GitIcon/>
             </IconBox>
