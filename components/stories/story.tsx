@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import {InView} from 'react-intersection-observer'
 import {
     Group,
-    Story,
     StoryQuery,
     StoryViewHeader,
     StoryViewMarkdown,
@@ -42,7 +41,7 @@ const StoryDiv = styled.div`
 `
 
 interface ResultsProps {
-    story: Story
+    story: StoryQuery['story']
     draft: boolean
 }
 export function Story({story, draft}: ResultsProps) {
