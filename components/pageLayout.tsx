@@ -2,7 +2,8 @@ import styled from 'styled-components'
 import User from './header/user'
 import Create from './header/create'
 import Logo from './header/logo'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
+import About from "./header/about";
 
 const HeaderBar = styled.header`
   > div {
@@ -35,23 +36,24 @@ const Main = styled.main`
   flex-direction: column;
   flex-grow: 1;
 `
-export const PageLayout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter()
+export const PageLayout = ({children}: { children: React.ReactNode }) => {
+    const router = useRouter()
 
-  return (
-    <Container>
-      <HeaderBar role="banner">
-        <div>
-          {router.pathname !== '/' && <Logo />}
-          <div style={{ display: 'flex', marginLeft: 'auto' }}>
-            <Create />
-            <User />
-          </div>
-        </div>
-      </HeaderBar>
-      <Main>{children}</Main>
-    </Container>
-  )
+    return (
+        <Container>
+            <HeaderBar role="banner">
+                <div>
+                    {router.pathname !== '/' && <Logo/>}
+                    <div style={{display: 'flex', marginLeft: 'auto'}}>
+                        <About/>
+                        <Create/>
+                        <User/>
+                    </div>
+                </div>
+            </HeaderBar>
+            <Main>{children}</Main>
+        </Container>
+    )
 }
 
 export default PageLayout
