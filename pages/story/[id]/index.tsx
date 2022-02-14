@@ -1,16 +1,16 @@
 import * as React from 'react'
-import {Story} from '../../components/stories/story'
-import {Group, StoryQuery, useDeleteStoryMutation, useStoryQuery} from '../../lib/schema/graphql'
+import {Story} from '../../../components/stories/story'
+import {Group, StoryQuery, useDeleteStoryMutation, useStoryQuery} from '../../../lib/schema/graphql'
 import Head from 'next/head'
 import {useRouter} from 'next/router'
 import styled from "styled-components";
-import ErrorMessage from "../../components/lib/error";
-import LoaderSpinner from "../../components/lib/spinner";
-import {MetadataTable} from "../../components/stories/metadataTable";
-import DeleteModal from "../../components/lib/deleteModal";
-import TokenModal from "../../components/lib/tokenModal";
+import ErrorMessage from "../../../components/lib/error";
+import LoaderSpinner from "../../../components/lib/spinner";
+import {MetadataTable} from "../../../components/stories/metadataTable";
+import DeleteModal from "../../../components/lib/deleteModal";
+import TokenModal from "../../../components/lib/tokenModal";
 import {useContext, useState} from "react";
-import {UserState} from "../../lib/context";
+import {UserState} from "../../../lib/context";
 
 const Container = styled.div`
   display: flex;

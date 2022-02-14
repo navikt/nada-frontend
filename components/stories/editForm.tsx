@@ -1,13 +1,10 @@
 import {Fieldset} from '@navikt/ds-react'
 import styled from "styled-components"
-import {StoryQuery, usePublishStoryMutation} from "../../lib/schema/graphql"
+import {StoryQuery, useUpdateStoryMetadataMutation} from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
-import TeamSelector from '../lib/teamSelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import {useRouter} from 'next/router'
 import {useForm} from 'react-hook-form'
-import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
-import {storyValidation} from '../../lib/schema/yupValidations'
 import KeywordsInput from "../lib/KeywordsInput";
 
 
@@ -30,14 +27,12 @@ interface SaveFormProps {
     story: StoryQuery['story']
 }
 
-function SaveForm({story}: SaveFormProps) {
+function EditForm({story}: SaveFormProps) {
     const router = useRouter()
-    const {register, handleSubmit, formState, watch, setValue} =
+    const {handleSubmit, formState, watch, setValue} =
         useForm({
-            resolver: yupResolver(storyValidation),
             defaultValues: {
-                name: story.name,
-                keywords: [] as string[],
+                keywords: story.keywords
             },
         })
 
@@ -54,23 +49,24 @@ function SaveForm({story}: SaveFormProps) {
             setValue('keywords', [keyword])
     }
 
-    const [publishStory] = usePublishStoryMutation()
+    const [updateStoryMetadata] = useUpdateStoryMetadataMutation()
 
     const onSubmit = (requestData: any) => {
-        publishStory({
+        updateStoryMetadata({
+            refetchQueries: ["searchContent", "Story"],
             variables: {
                 id: story.id,
-                group: requestData.group,
+                name: story.name,
                 keywords
             },
-        }).then((published) => {
+        }).then((published: any) => {
             if (published.errors) {
                 console.log(published.errors)
             }
             if (published.data) {
-                router.push(`/story/${published.data?.publishStory.id}`)
+                router.push(`/story/${published.data?.updateStoryMetadata.id}`)
             }
-        }).catch((error) => {
+        }).catch((error: Error) => {
             console.log(error)
         })
 
@@ -83,7 +79,6 @@ function SaveForm({story}: SaveFormProps) {
                 <DataproductBody>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
-                            <TeamSelector register={register} errors={errors}/>
                             <KeywordsInput
                                 onAdd={onAdd}
                                 onDelete={onDelete}
@@ -101,4 +96,4 @@ function SaveForm({story}: SaveFormProps) {
     )
 }
 
-export default SaveForm
+export default EditForm

@@ -1,6 +1,6 @@
 import ReactTags from 'react-tag-autocomplete'
 import styled from 'styled-components'
-import KeywordLink from "./keywordList";
+import KeywordPill from "./keywordList";
 
 
 const StyledRectTags = styled.div`
@@ -88,7 +88,7 @@ export const KeywordsInput = ({
         />
       </StyledRectTags>
       {keywords.map((k, i) => {
-        return <KeywordLink key={i} keyword={k} onClick={() => onDelete(k)}>{k}</KeywordLink>
+        return <KeywordPill key={i} keyword={k} onClick={() => onDelete(k)} remove={true}>{k}</KeywordPill>
       })}
       {error && <p>{error}</p>}
     </>

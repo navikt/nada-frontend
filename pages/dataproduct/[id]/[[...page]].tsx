@@ -5,7 +5,8 @@ import {
     Group,
     useDataproductAccessQuery,
     useDataproductQuery,
-    useDeleteDataproductMutation, UserInfoDetailsQuery,
+    useDeleteDataproductMutation,
+    UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../../../lib/apollo'
@@ -15,8 +16,7 @@ import {useContext, useEffect, useState} from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar from '../../../components/lib/topBar'
-import {Description, Name} from '../../../components/lib/detailTypography'
-import EditMenu, {MenuItem} from '../../../components/lib/editMenu'
+import {Description} from '../../../components/lib/detailTypography'
 import {MetadataTable} from '../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
@@ -147,10 +147,6 @@ const Dataproduct = (props: DataproductProps) => {
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
     }
-    const dotMenuItems: MenuItem[] = [
-        {title: "Edit", func: () => router.push(`/dataproduct/${product.id}/edit`)},
-        {title: "Delete", func: () => setShowDelete(true)}
-    ]
 
     return (
         <>
@@ -193,7 +189,7 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product} accessType={accessType}/>
+                <MetadataTable product={product} accessType={accessType} setShowDelete={setShowDelete}/>
             </Container>
         </>
     )

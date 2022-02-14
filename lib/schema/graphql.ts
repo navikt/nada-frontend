@@ -282,7 +282,6 @@ export type MutationMapDataproductArgs = {
 }
 
 export type MutationPublishStoryArgs = {
-  description?: Maybe<Scalars['String']>
   group: Scalars['String']
   id: Scalars['ID']
   keywords?: Maybe<Array<Scalars['String']>>
@@ -308,7 +307,6 @@ export type MutationUpdateStoryArgs = {
 }
 
 export type MutationUpdateStoryMetadataArgs = {
-  description: Scalars['String']
   id: Scalars['ID']
   keywords: Array<Scalars['String']>
   name: Scalars['String']
@@ -518,8 +516,6 @@ export type Story = {
   __typename?: 'Story'
   /** created is the timestamp for when the data story was created. */
   created: Scalars['Time']
-  /** description of the story */
-  description: Scalars['String']
   /** id of the data story. */
   id: Scalars['ID']
   /** keywords for the story used as tags. */
@@ -571,8 +567,10 @@ export type StoryViewMarkdown = StoryView & {
 /** StoryViewPlotly contains the metadata and content of a plotly story view. */
 export type StoryViewPlotly = StoryView & {
   __typename?: 'StoryViewPlotly'
-  /** data view data for the plotly graph. */
+  /** view data for the plotly graph. */
   data: Array<Scalars['Map']>
+  /** frames contains view data when plotly figures has different views */
+  frames: Array<Scalars['Map']>
   /** id of the plotly story view. */
   id: Scalars['ID']
   /** layout contains metadata on the plotly graph layout. */
@@ -991,7 +989,6 @@ export type PlotlyViewQuery = {
 export type PublishStoryMutationVariables = Exact<{
   id: Scalars['ID']
   group: Scalars['String']
-  description?: Maybe<Scalars['String']>
   keywords?: Maybe<Array<Scalars['String']> | Scalars['String']>
 }>
 
@@ -1032,7 +1029,6 @@ export type StoryQuery = {
     name: string
     created: any
     lastModified?: any | null | undefined
-    description: string
     keywords: Array<string>
     owner?:
       | {
@@ -1063,6 +1059,17 @@ export type StoryTokenQueryVariables = Exact<{
 export type StoryTokenQuery = {
   __typename?: 'Query'
   storyToken: { __typename?: 'StoryToken'; token: string }
+}
+
+export type UpdateStoryMetadataMutationVariables = Exact<{
+  id: Scalars['ID']
+  keywords: Array<Scalars['String']> | Scalars['String']
+  name: Scalars['String']
+}>
+
+export type UpdateStoryMetadataMutation = {
+  __typename?: 'Mutation'
+  updateStoryMetadata: { __typename?: 'Story'; id: string }
 }
 
 export type VegaViewQueryVariables = Exact<{
@@ -2343,18 +2350,8 @@ export type PlotlyViewQueryResult = Apollo.QueryResult<
   PlotlyViewQueryVariables
 >
 export const PublishStoryDocument = gql`
-  mutation publishStory(
-    $id: ID!
-    $group: String!
-    $description: String
-    $keywords: [String!]
-  ) {
-    publishStory(
-      id: $id
-      group: $group
-      description: $description
-      keywords: $keywords
-    ) {
+  mutation publishStory($id: ID!, $group: String!, $keywords: [String!]) {
+    publishStory(id: $id, group: $group, keywords: $keywords) {
       id
     }
   }
@@ -2379,7 +2376,6 @@ export type PublishStoryMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      group: // value for 'group'
- *      description: // value for 'description'
  *      keywords: // value for 'keywords'
  *   },
  * });
@@ -2464,7 +2460,6 @@ export const StoryDocument = gql`
       name
       created
       lastModified
-      description
       keywords
       owner {
         group
@@ -2581,6 +2576,62 @@ export type StoryTokenLazyQueryHookResult = ReturnType<
 export type StoryTokenQueryResult = Apollo.QueryResult<
   StoryTokenQuery,
   StoryTokenQueryVariables
+>
+export const UpdateStoryMetadataDocument = gql`
+  mutation updateStoryMetadata(
+    $id: ID!
+    $keywords: [String!]!
+    $name: String!
+  ) {
+    updateStoryMetadata(id: $id, keywords: $keywords, name: $name) {
+      id
+    }
+  }
+`
+export type UpdateStoryMetadataMutationFn = Apollo.MutationFunction<
+  UpdateStoryMetadataMutation,
+  UpdateStoryMetadataMutationVariables
+>
+
+/**
+ * __useUpdateStoryMetadataMutation__
+ *
+ * To run a mutation, you first call `useUpdateStoryMetadataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStoryMetadataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStoryMetadataMutation, { data, loading, error }] = useUpdateStoryMetadataMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      keywords: // value for 'keywords'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateStoryMetadataMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateStoryMetadataMutation,
+    UpdateStoryMetadataMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateStoryMetadataMutation,
+    UpdateStoryMetadataMutationVariables
+  >(UpdateStoryMetadataDocument, options)
+}
+export type UpdateStoryMetadataMutationHookResult = ReturnType<
+  typeof useUpdateStoryMetadataMutation
+>
+export type UpdateStoryMetadataMutationResult =
+  Apollo.MutationResult<UpdateStoryMetadataMutation>
+export type UpdateStoryMetadataMutationOptions = Apollo.BaseMutationOptions<
+  UpdateStoryMetadataMutation,
+  UpdateStoryMetadataMutationVariables
 >
 export const VegaViewDocument = gql`
   query VegaView($id: ID!, $draft: Boolean) {

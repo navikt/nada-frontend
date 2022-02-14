@@ -10,11 +10,22 @@ import {KeywordPill} from "../lib/keywordList";
 import IconBox from "../lib/icons/iconBox";
 import {navGronn, navRod} from "../../styles/constants";
 import GitIcon from "../lib/icons/gitIcon";
+import {Button} from "@navikt/ds-react";
+import {useRouter} from "next/router"
 
 interface piiBoxProps {
     pii: boolean
 }
 
+const OwnerZone = styled.div`
+  padding: 10px 5px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFECCC;
+  margin-bottom: 20px;
+  margin-top: -10px;
+`
 const PiiBox = styled.div<piiBoxProps>`
   display: flex;
   align-items: center;
@@ -37,14 +48,17 @@ const SubjectContent = styled.div`
     color: #222;
     
 `
-const SubjectHeader = styled.h2`
+type SubjectHeaderProps = {
+    centered?: boolean
+}
+const SubjectHeader = styled.h2<SubjectHeaderProps>`
+    ${(props) => props.centered && 'margin: 0 auto;'}
     padding-bottom: 0;
     margin-top: 0px;
     margin-bottom: 5px;
     color: #222;
     font-weight: 500;
     font-size: 18px;
-    
 `
 
 const StyledMetadataTable = styled.div`
@@ -54,6 +68,7 @@ const StyledMetadataTable = styled.div`
   font-size: 16px;
   line-height: 1;
   padding: 1rem;
+  padding-bottom: 0px;
   border-left: 1px #ddd solid;
 `
 const AccessRow = styled.span`
@@ -64,10 +79,12 @@ const AccessRow = styled.span`
 interface DataproductDetailProps {
     product: DataproductQuery['dataproduct']
     accessType: { type: string, expires?: any }
+    setShowDelete: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
+export const MetadataTable = ({product, accessType, setShowDelete}: DataproductDetailProps) => {
     const datasource = product.datasource
+    const router = useRouter()
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
     return <StyledMetadataTable>
         <SubjectHeader>Tilgang</SubjectHeader>
@@ -80,6 +97,17 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
 
         </SubjectContent>
 
+        {accessType.type === "owner" && <OwnerZone>
+            <SubjectHeader centered={true}>Eiersone</SubjectHeader>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px 20px 0'}}>
+                <Button size="small" variant="primary" onClick={() => router.push(`/dataproduct/${product.id}/edit`)}>
+                    Endre metadata
+                </Button>
+                <Button size="small" variant="danger" onClick={() => setShowDelete(true)}>
+                    Slett produkt
+                </Button>
+            </div>
+        </OwnerZone>}
 
         <SubjectHeader>Type</SubjectHeader>
         <SubjectContent>
@@ -121,20 +149,22 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
             />
 
         </SubjectContent>
-        <SubjectHeader>Nøkkelord</SubjectHeader>
-        <KeywordBox>
-            {!!product.keywords.length && (<>{product.keywords.map((k, i) => (
-                    <Link key={i} href={`/search?keywords=${k}`}>
-                        <a>
-                            <KeywordPill key={k} keyword={k}>
-                                {k}
-                            </KeywordPill>
-                        </a>
-                    </Link>
-                ))}</>
-            )}
-
-        </KeywordBox>
+        {!!product.keywords.length && <>
+            <SubjectHeader>Nøkkelord</SubjectHeader>
+            <KeywordBox>
+                {!!product.keywords.length && (<>{product.keywords.map((k, i) => (
+                        <Link key={i} href={`/search?keywords=${k}`}>
+                            <a>
+                                <KeywordPill key={k} keyword={k}>
+                                    {k}
+                                </KeywordPill>
+                            </a>
+                        </Link>
+                    ))}</>
+                )}
+            </KeywordBox>
+        </>
+        }
         <SubjectHeader>Personidentifiserende info</SubjectHeader>
         <SubjectContent>
             <PiiBox pii={product.pii}>
@@ -151,12 +181,15 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
         </SubjectContent>
         {product.repo && <>
             <SubjectHeader>Kildekode</SubjectHeader>
+            <SubjectContent>
             <span style={{display: 'inline-flex', gap: '10px', alignItems: 'center'}}>
             <IconBox size={24} justifyRight>
                 <GitIcon/>
             </IconBox>
             <UrlLink url={product.repo}/>
-        </span></>
+        </span>
+
+            </SubjectContent></>
         }
     </StyledMetadataTable>
 }
