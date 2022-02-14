@@ -13,8 +13,6 @@ const Container = styled.div`
 `
 
 const StoryContainer = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
 `
 
 const StoryDraft = () => {

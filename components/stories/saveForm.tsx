@@ -9,6 +9,8 @@ import {useRouter} from 'next/router'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
 import {storyValidation} from '../../lib/schema/yupValidations'
+import KeywordsInput from "../lib/KeywordsInput";
+import DescriptionEditor from "../lib/DescriptionEditor";
 
 
 const Container = styled.div`
@@ -32,19 +34,31 @@ interface SaveFormProps {
 
 function SaveForm({ story }: SaveFormProps) {
 	const router = useRouter()
-	const { register, handleSubmit, formState } =
+	const { register, handleSubmit, formState, watch, setValue, control } =
 		useForm({
 			resolver: yupResolver(storyValidation),
 			defaultValues: {
 				name: story.name,
 				keywords: [] as string[],
+				description: "",
 			},
 		})
 
+	const { errors } = formState
+	const keywords = watch('keywords')
+
+	const onDelete = (keyword: string) => {
+		setValue('keywords',keywords.filter((k: string) => k !== keyword))
+	}
+
+	const onAdd = (keyword: string) => {
+		keywords ?
+			setValue('keywords',[...keywords, keyword]) :
+			setValue('keywords',[keyword])
+	}
 
 	const [publishStory] = usePublishStoryMutation()
 
-	const { errors } = formState
 	const onSubmit = (requestData: any) => {
 		publishStory({
 			variables: {
@@ -61,14 +75,6 @@ function SaveForm({ story }: SaveFormProps) {
 		}).catch((error) => {
 			console.log(error)
 		})
-		// updateDataproduct({
-		// 	variables: { id: product.id, input: requestData },
-		// 	awaitRefetchQueries: true,
-		// 	refetchQueries: ['Dataproduct', 'searchContent'],
-		// }).then(() => {
-		// 	setBackendError(undefined)
-		// 	router.push(`/dataproduct/${product.id}`)
-		// })
 	}
 
 	return (
@@ -81,6 +87,17 @@ function SaveForm({ story }: SaveFormProps) {
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<Fieldset legend={''}>
 							<TeamSelector register={register} errors={errors} />
+							<DescriptionEditor
+								label="Beskrivelse"
+								name="description"
+								control={control}
+							/>
+							<KeywordsInput
+								onAdd={onAdd}
+								onDelete={onDelete}
+								keywords={keywords || []}
+								error={errors.keywords?.[0].message}
+							/>
 							<RightJustifiedSubmitButton
 								onCancel={() => router.push(`/story/draft/${story.id}`)}
 							/>

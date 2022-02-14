@@ -30,8 +30,6 @@ import User from '../../../components/dataproducts/access/user'
 import {UserState} from '../../../lib/context'
 import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
-import IconBox from "../../../components/lib/icons/iconBox";
-import BigQueryLogo from "../../../components/lib/icons/bigQueryLogo";
 import {isAfter, parseISO} from "date-fns";
 
 const Container = styled.div`
@@ -41,11 +39,6 @@ const Container = styled.div`
   gap: 20px;
 `
 
-const LogoBox = styled.span`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`
 const MainPage = styled.div`
   flex-grow: 1;
 `
@@ -166,19 +159,7 @@ const Dataproduct = (props: DataproductProps) => {
             </Head>
             <Container>
                 <MainPage>
-                    <TopBar>
-                        <LogoBox>
-                            <IconBox size={42}>
-                                <BigQueryLogo/>
-                            </IconBox>
-                            <Name>{product.name}</Name>
-
-                        </LogoBox>
-                        {isOwner && (
-                            <EditMenu menuItems={dotMenuItems}
-                            />
-                        )}
-                    </TopBar>
+                    <TopBar name={product.name} type={product.__typename}/>
                     <Tabs
                         variant='standard'
                         value={currentPage}

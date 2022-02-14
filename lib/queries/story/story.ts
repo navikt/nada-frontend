@@ -7,6 +7,8 @@ export const GET_STORY = gql`
       name
       created
       lastModified
+      description
+      keywords
       owner {
         group
         teamkatalogenURL

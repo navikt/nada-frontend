@@ -653,6 +653,8 @@ export type UserInfo = {
   loginExpiration: Scalars['Time']
   /** name of user. */
   name: Scalars['String']
+  /** stories is a list of stories with one of the users groups as owner */
+  stories: Array<Story>
 }
 
 export type AddRequesterMutationVariables = Exact<{
@@ -989,6 +991,8 @@ export type PlotlyViewQuery = {
 export type PublishStoryMutationVariables = Exact<{
   id: Scalars['ID']
   group: Scalars['String']
+  description?: Maybe<Scalars['String']>
+  keywords?: Maybe<Array<Scalars['String']> | Scalars['String']>
 }>
 
 export type PublishStoryMutation = {
@@ -1028,6 +1032,8 @@ export type StoryQuery = {
     name: string
     created: any
     lastModified?: any | null | undefined
+    description: string
+    keywords: Array<string>
     owner?:
       | {
           __typename?: 'Owner'
@@ -2337,8 +2343,18 @@ export type PlotlyViewQueryResult = Apollo.QueryResult<
   PlotlyViewQueryVariables
 >
 export const PublishStoryDocument = gql`
-  mutation publishStory($id: ID!, $group: String!) {
-    publishStory(id: $id, group: $group) {
+  mutation publishStory(
+    $id: ID!
+    $group: String!
+    $description: String
+    $keywords: [String!]
+  ) {
+    publishStory(
+      id: $id
+      group: $group
+      description: $description
+      keywords: $keywords
+    ) {
       id
     }
   }
@@ -2363,6 +2379,8 @@ export type PublishStoryMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      group: // value for 'group'
+ *      description: // value for 'description'
+ *      keywords: // value for 'keywords'
  *   },
  * });
  */
@@ -2446,6 +2464,8 @@ export const StoryDocument = gql`
       name
       created
       lastModified
+      description
+      keywords
       owner {
         group
         teamkatalogenURL
