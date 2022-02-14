@@ -86,7 +86,7 @@ function EditForm({story}: SaveFormProps) {
                                 error={errors.keywords?.[0].message}
                             />
                             <RightJustifiedSubmitButton
-                                onCancel={() => router.push(`/story/draft/${story.id}`)}
+                                onCancel={() => router.push(`/story/${story.id}`)}
                             />
                         </Fieldset>
                     </form>
