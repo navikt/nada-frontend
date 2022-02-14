@@ -13,9 +13,10 @@ import AddAccess from './addAccess'
 interface UserProps {
   accessQuery: QueryResult<DataproductAccessQuery, Exact<{ id: string }>>
   currentUser: string
+    groups: string[]
 }
 
-const User = ({ accessQuery, currentUser }: UserProps) => {
+const User = ({ accessQuery, currentUser, groups }: UserProps) => {
   const [formError, setFormError] = useState('')
   const [open, setOpen] = useState(false)
   const [revokeAccess] = useRevokeAccessMutation()
@@ -51,21 +52,23 @@ const User = ({ accessQuery, currentUser }: UserProps) => {
     <Button onClick={() => removeAccess(activeAccess.id)} variant='danger' style={{ marginTop: '10px' }}><Delete />Fjern
       tilgang </Button>}
   </>)
+    // Can request access
+    if (dataproduct.requesters.length > 0) {
+        if (dataproduct.requesters.includes(currentUser) || groups.some(g => dataproduct.requesters.includes(g))){
+            return (
+                <>
+                    Du kan gi deg selv tidsbegrenset tilgang.
+                    <br />
+                    <Button onClick={() => setOpen(true)} variant='primary' style={{ marginTop: '20px' }}>Gi meg tilgang </Button>
+                    <AddAccess
+                        open={open}
+                        setOpen={setOpen}
+                        dataproductID={dataproduct.id}
+                        dataproductName={dataproduct.name}
+                        subject={currentUser}
+                    />
+                </>)}}
 
-  // Can request access
-  if (dataproduct.requesters.length > 0) return (
-    <>
-      Du kan gi deg selv tidsbegrenset tilgang.
-      <br />
-      <Button onClick={() => setOpen(true)} variant='primary' style={{ marginTop: '20px' }}>Gi meg tilgang </Button>
-      <AddAccess
-        open={open}
-        setOpen={setOpen}
-        dataproductID={dataproduct.id}
-        dataproductName={dataproduct.name}
-        subject={currentUser}
-      />
-    </>)
   return (
     <>
       Du har visst ikke tilgang til disse dataene.
