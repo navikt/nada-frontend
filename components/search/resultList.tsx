@@ -13,6 +13,9 @@ const Results = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  a {
+    text-decoration: none;
+  }
 `
 
 type ResultListInterface = {

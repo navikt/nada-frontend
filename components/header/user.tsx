@@ -13,9 +13,12 @@ const UserBox = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
+  a {
+    text-decoration: none;
+  }
 `
 
-const MenuLine = styled.div`
+const MenuSeparator = styled.div`
   position: relative;
   top: 5px;
   border: none;
@@ -84,7 +87,7 @@ export default function User() {
                                 }}>
                                 {userInfo.name}
                             </MenuItem>
-                            <MenuLine/>
+                            <MenuSeparator/>
                             <MenuItem
                                 onClick={() => {
                                     handleMenuClose()
@@ -109,14 +112,14 @@ export default function User() {
                             >
                                 Mine historier
                             </MenuItem>
-                            <MenuLine/>
+                            <MenuSeparator/>
                             <MenuItem onClick={handleMenuClose}>
                                 <StyledA href={'https://docs.knada.io/'}>
                                     Dokumentasjon <ExternalLink/>
                                 </StyledA>
                             </MenuItem>
-                            <MenuLine/>
-                            <a href={`${backendHost()}/api/logout`}>
+                            <MenuSeparator/>
+                            <a href={`${backendHost()}/api/logout`} style={{textDecoration: 'none'}} >
                                 <MenuItem
                                     sx={{color: 'red'}}
                                     onClick={() => {

@@ -15,7 +15,7 @@ import * as React from 'react'
 import {useContext, useEffect, useState} from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
-import TopBar from '../../../components/lib/topBar'
+import TopBar, {TopBarActions} from '../../../components/lib/topBar'
 import {Description} from '../../../components/lib/detailTypography'
 import {MetadataTable} from '../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
@@ -31,6 +31,9 @@ import {UserState} from '../../../lib/context'
 import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
 import {isAfter, parseISO} from "date-fns";
+import Link from "next/link";
+import {navRod} from "../../../styles/constants";
+import story from "../../../components/stories/story";
 
 const Container = styled.div`
   display: flex;
@@ -74,7 +77,6 @@ const Dataproduct = (props: DataproductProps) => {
     })
 
     const accessType = findAccessType(userInfo?.groups, accessQuery.data?.dataproduct)
-    console.log(accessType)
 
     useEffect(() => {
         const eventProperties = {
@@ -103,10 +105,7 @@ const Dataproduct = (props: DataproductProps) => {
 
     const product = productQuery.data.dataproduct
 
-    const isOwner =
-        userInfo?.groups.some((g: Group) => {
-            return g.email === product.owner.group
-        }) || false
+    const isOwner = accessType.type === 'owner';
 
     const menuItems: Array<{
         title: string
@@ -155,7 +154,14 @@ const Dataproduct = (props: DataproductProps) => {
             </Head>
             <Container>
                 <MainPage>
-                    <TopBar name={product.name} type={product.__typename}/>
+                    <TopBar name={product.name} type={product.__typename}>
+                        {isOwner &&
+                            <TopBarActions>
+                                <Link href={`/dataproduct/${product.id}/edit`}><a>Endre</a></Link>
+                                <a onClick={() => setShowDelete(true)} style={{color: navRod}}>Slett</a>
+                            </TopBarActions>
+                        }
+                    </TopBar>
                     <Tabs
                         variant='standard'
                         value={currentPage}
@@ -189,7 +195,7 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product} accessType={accessType} setShowDelete={setShowDelete}/>
+                <MetadataTable product={product} accessType={accessType} />
             </Container>
         </>
     )

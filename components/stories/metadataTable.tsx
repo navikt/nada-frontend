@@ -24,15 +24,6 @@ const SubjectContent = styled.div`
     color: #222;
 `
 
-const OwnerZone = styled.div`
-  padding: 10px 5px;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  background-color: #FFECCC;
-  margin-top: -10px;
-  margin-bottom: 20px;
-`
 type SubjectHeaderProps = {
     centered?: boolean
 }
@@ -57,20 +48,18 @@ const StyledMetadataTable = styled.div`
 `
 
 interface StoryProps {
-    isOwner: boolean
     owner: StoryQuery['story']['owner']
     created: string
     lastModified: string
-    setShowDelete: Dispatch<SetStateAction<boolean>>
-    setShowToken: Dispatch<SetStateAction<boolean>>
     keywords: string[] | undefined
 }
 
-export const MetadataTable = ({owner, created, lastModified, setShowDelete, setShowToken, isOwner, keywords}: StoryProps) => {
+export const MetadataTable = ({owner, created, lastModified, keywords}: StoryProps) => {
     const router = useRouter()
     const id = router.query.id as string
     return (
         <StyledMetadataTable>
+
             <SubjectHeader>
                 Eier
             </SubjectHeader>
@@ -87,21 +76,6 @@ export const MetadataTable = ({owner, created, lastModified, setShowDelete, setS
                     owner?.group.split('@')[0]
                 )}
             </SubjectContent>
-            {isOwner && <OwnerZone>
-                <SubjectHeader centered={true}>Eiersone</SubjectHeader>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px 20px 0'}}>
-                    <Button size="small" variant="primary" onClick={() => setShowToken(true)}>
-                        Vis Token
-                    </Button>
-                    <Button size="small" variant="primary" onClick={() => router.push(`/story/${id}/edit`)}>
-                       Endre metadata
-                    </Button>
-                    <Button size="small" variant="danger" onClick={() => setShowDelete(true)}>
-                        Slett fortelling
-                    </Button>
-                </div>
-
-            </OwnerZone>}
             <SubjectHeader>Opprettet</SubjectHeader>
             <SubjectContent>
                 {humanizeDate(created)}

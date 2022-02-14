@@ -14,7 +14,9 @@ const ExploreLinks = styled.div`
   flex-wrap: wrap;
   margin-top: 10px;
   gap: 20px;
-
+  a {
+    text-decoration: none;
+  }
 `
 
 interface ExploreProps {

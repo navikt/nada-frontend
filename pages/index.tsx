@@ -32,6 +32,9 @@ const Links = styled.div`
     gap: 70px;
     flex-wrap: wrap;
     position: relative;
+    a {
+        text-decoration: none;
+    }
 `
 const CategoryCard = styled.div`
     display: flex;

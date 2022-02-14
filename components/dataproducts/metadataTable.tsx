@@ -17,15 +17,6 @@ interface piiBoxProps {
     pii: boolean
 }
 
-const OwnerZone = styled.div`
-  padding: 10px 5px;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  background-color: #FFECCC;
-  margin-bottom: 20px;
-  margin-top: -10px;
-`
 const PiiBox = styled.div<piiBoxProps>`
   display: flex;
   align-items: center;
@@ -79,12 +70,10 @@ const AccessRow = styled.span`
 interface DataproductDetailProps {
     product: DataproductQuery['dataproduct']
     accessType: { type: string, expires?: any }
-    setShowDelete: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const MetadataTable = ({product, accessType, setShowDelete}: DataproductDetailProps) => {
+export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
     const datasource = product.datasource
-    const router = useRouter()
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
     return <StyledMetadataTable>
         <SubjectHeader>Tilgang</SubjectHeader>
@@ -96,18 +85,6 @@ export const MetadataTable = ({product, accessType, setShowDelete}: DataproductD
                 Du har tilgang {accessType.expires && <><br/>til {humanizeDate(accessType.expires)}</>}</AccessRow>}
 
         </SubjectContent>
-
-        {accessType.type === "owner" && <OwnerZone>
-            <SubjectHeader centered={true}>Eiersone</SubjectHeader>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px 20px 0'}}>
-                <Button size="small" variant="primary" onClick={() => router.push(`/dataproduct/${product.id}/edit`)}>
-                    Endre metadata
-                </Button>
-                <Button size="small" variant="danger" onClick={() => setShowDelete(true)}>
-                    Slett produkt
-                </Button>
-            </div>
-        </OwnerZone>}
 
         <SubjectHeader>Type</SubjectHeader>
         <SubjectContent>

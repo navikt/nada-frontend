@@ -27,12 +27,29 @@ export const Name = styled.h1`
   margin: 0;
   font-weight: 300;
 `
+
+
+export const TopBarActions = styled.div`
+    flex-shrink: 0;
+    a {
+        border-left: 1px solid #aaa;
+        padding-left: 10px;
+        margin-left: 10px;
+        cursor: pointer;
+        
+        &:first-child {
+            border-left: none;
+        }
+    }   
+`
+
 interface TopBarProps {
+    children?: React.ReactNode,
     name: string
     type: string | undefined
 }
 
-const TopBar = ({name, type}: TopBarProps) => {
+const TopBar = ({name, type, children}: TopBarProps) => {
     return <TopBarStyle>
         <LogoBox>
             <IconBox size={42}>
@@ -41,6 +58,7 @@ const TopBar = ({name, type}: TopBarProps) => {
             </IconBox>
             <Name>{name}</Name>
         </LogoBox>
+        {children}
     </TopBarStyle>
 }
 
