@@ -5,7 +5,8 @@ import {
     Group,
     useDataproductAccessQuery,
     useDataproductQuery,
-    useDeleteDataproductMutation, UserInfoDetailsQuery,
+    useDeleteDataproductMutation,
+    UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../../../lib/apollo'
@@ -15,8 +16,7 @@ import {useContext, useEffect, useState} from 'react'
 import amplitudeLog from '../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar from '../../../components/lib/topBar'
-import {Description, Name} from '../../../components/lib/detailTypography'
-import EditMenu, {MenuItem} from '../../../components/lib/editMenu'
+import {Description} from '../../../components/lib/detailTypography'
 import {MetadataTable} from '../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
@@ -30,8 +30,6 @@ import User from '../../../components/dataproducts/access/user'
 import {UserState} from '../../../lib/context'
 import DeleteModal from '../../../components/lib/deleteModal'
 import Explore from "../../../components/dataproducts/explore";
-import IconBox from "../../../components/lib/icons/iconBox";
-import BigQueryLogo from "../../../components/lib/icons/bigQueryLogo";
 import {isAfter, parseISO} from "date-fns";
 
 const Container = styled.div`
@@ -41,11 +39,6 @@ const Container = styled.div`
   gap: 20px;
 `
 
-const LogoBox = styled.span`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`
 const MainPage = styled.div`
   flex-grow: 1;
 `
@@ -154,10 +147,6 @@ const Dataproduct = (props: DataproductProps) => {
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
     }
-    const dotMenuItems: MenuItem[] = [
-        {title: "Edit", func: () => router.push(`/dataproduct/${product.id}/edit`)},
-        {title: "Delete", func: () => setShowDelete(true)}
-    ]
 
     return (
         <>
@@ -166,19 +155,7 @@ const Dataproduct = (props: DataproductProps) => {
             </Head>
             <Container>
                 <MainPage>
-                    <TopBar>
-                        <LogoBox>
-                            <IconBox size={42}>
-                                <BigQueryLogo/>
-                            </IconBox>
-                            <Name>{product.name}</Name>
-
-                        </LogoBox>
-                        {isOwner && (
-                            <EditMenu menuItems={dotMenuItems}
-                            />
-                        )}
-                    </TopBar>
+                    <TopBar name={product.name} type={product.__typename}/>
                     <Tabs
                         variant='standard'
                         value={currentPage}
@@ -212,7 +189,7 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product} accessType={accessType}/>
+                <MetadataTable product={product} accessType={accessType} setShowDelete={setShowDelete}/>
             </Container>
         </>
     )

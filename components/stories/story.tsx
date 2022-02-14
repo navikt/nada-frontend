@@ -1,12 +1,10 @@
 import styled from 'styled-components'
 import {InView} from 'react-intersection-observer'
 import {
-    Group,
     StoryQuery,
     StoryViewHeader,
     StoryViewMarkdown,
     StoryViewPlotly,
-    useDeleteStoryMutation
 } from '../../lib/schema/graphql'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -17,19 +15,10 @@ import Plot from 'react-plotly.js';
 import Plotly from "./plotly";
 import LoaderSpinner from "../lib/spinner";
 import TopBar from "../lib/topBar";
-import {Name} from "../lib/detailTypography";
-import EditMenu, {MenuItem} from "../lib/editMenu";
 import * as React from "react";
-import {useContext, useState} from "react";
-import {UserState} from "../../lib/context";
-import {useRouter} from "next/router";
-import DeleteModal from "../lib/deleteModal";
-import TokenModal from "../lib/tokenModal";
-import {MetadataTable} from "./metadataTable";
 import Vega from "./vegaView";
 
 const StoryDiv = styled.div`
-  padding: 10px;
   flex-wrap: wrap;
   display: flex;
   flex-direction: row;
@@ -42,102 +31,52 @@ const StoryDiv = styled.div`
 
 interface ResultsProps {
     story: StoryQuery['story']
-    draft: boolean
+    draft?: boolean
 }
+
 export function Story({story, draft}: ResultsProps) {
-    const router = useRouter()
-    const userInfo = useContext(UserState)
     const views = story.views as StoryQuery['story']['views']
-
-    const [deleteStory] = useDeleteStoryMutation({
-        variables: { id: story.id },
-        awaitRefetchQueries: true,
-        refetchQueries: ['searchContent'],
-    })
-
-    const [showDelete, setShowDelete] = useState(false)
-    const [showToken, setShowToken] = useState(false)
-    const [deleteError, setDeleteError] = useState('')
-
-    const onDelete = async () => {
-        try {
-            await deleteStory()
-            await router.push('/')
-        } catch (e: any) {
-            setDeleteError(e.toString())
-        }
-    }
-
-
-    const isOwner =
-        userInfo?.groups.some((g: Group) => {
-            return g.email === story?.owner?.group
-        }) || false
-
-    const menuItems: MenuItem[] = [
-        {title:"Slett", func: () => setShowDelete(true) },
-        {title:"Vis token", func: () => setShowToken(true) }
-    ]
 
     return (
         <>
-            <TopBar type={'Story'}>
-
-                <Name>{story.name}</Name>
-                {isOwner && (
-                    <EditMenu menuItems={menuItems} />
-                )}
-            </TopBar>
-            {!draft && <MetadataTable created={story.created} lastModified={story.lastModified} owner={story.owner}/>}
-            <StoryDiv>
-                {views.map((view, id) => {
-                    if (view.__typename === 'StoryViewHeader') {
-                        return <Header key={id} text={view.content} size={view.level}/>
-                    }
-                    if (view.__typename === 'StoryViewMarkdown') {
-                        return <ReactMarkdown key={id} remarkPlugins={[remarkGfm]}>
-                            {view.content}
-                        </ReactMarkdown>
-                    }
-                    if (view.__typename === 'StoryViewPlotly') {
-                        return (
-                            <InView key={id} triggerOnce={true}>
-                                {
-                                    ({inView, ref }) => {
-                                        return inView ?
-                                            <div ref={ref}><Plotly id={view.id} draft={draft}/></div> :
-                                            <div ref={ref}><LoaderSpinner/></div>
+                <TopBar type={'Story'} name={story.name}/>
+                <StoryDiv>
+                    {views.map((view, id) => {
+                        if (view.__typename === 'StoryViewHeader') {
+                            return <Header key={id} text={view.content} size={view.level}/>
+                        }
+                        if (view.__typename === 'StoryViewMarkdown') {
+                            return <ReactMarkdown key={id} remarkPlugins={[remarkGfm]}>
+                                {view.content}
+                            </ReactMarkdown>
+                        }
+                        if (view.__typename === 'StoryViewPlotly') {
+                            return (
+                                <InView key={id} triggerOnce={true}>
+                                    {
+                                        ({inView, ref}) => {
+                                            return inView ?
+                                                <div ref={ref}><Plotly id={view.id} draft={draft}/></div> :
+                                                <div ref={ref}><LoaderSpinner/></div>
+                                        }
                                     }
-                                }
-                            </InView>)
-                    }
-                    if (view.__typename === 'StoryViewVega') {
-                        return (
-                            <InView key={id} triggerOnce={true}>
-                                {
-                                    ({inView, ref}) => {
-                                        return inView ?
-                                            <div ref={ref}><Vega id={view.id} draft={draft}/></div> :
-                                            <div ref={ref}><LoaderSpinner/></div>
+                                </InView>)
+                        }
+                        if (view.__typename === 'StoryViewVega') {
+                            return (
+                                <InView key={id} triggerOnce={true}>
+                                    {
+                                        ({inView, ref}) => {
+                                            return inView ?
+                                                <div ref={ref}><Vega id={view.id} draft={draft!!}/></div> :
+                                                <div ref={ref}><LoaderSpinner/></div>
+                                        }
                                     }
-                                }
-                            </InView>)
-                    }
+                                </InView>)
+                        }
 
                     })}
-                    </StoryDiv>
-            <DeleteModal
-                open={showDelete}
-                onCancel={() => setShowDelete(false)}
-                onConfirm={() => onDelete()}
-                name={story.name}
-                error={deleteError}
-            />
-            <TokenModal
-                open={showToken}
-                onCancel={() => setShowToken(false)}
-                id={story.id}
-            />
+                </StoryDiv>
         </>
     )
 }

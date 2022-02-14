@@ -8,7 +8,7 @@ import ErrorMessage from "../lib/error";
 
 interface ResultsProps {
     id: string
-    draft: boolean
+    draft?: boolean
 }
 
 export function Plotly({id, draft}: ResultsProps) {

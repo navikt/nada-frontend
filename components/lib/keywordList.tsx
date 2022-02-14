@@ -9,23 +9,11 @@ interface KeywordSpanProps {
     horizontal?: boolean,
     compact?: boolean,
     onClick?: () => void
+    remove?: boolean
 }
 
-const KeywordSpan = styled.span<KeywordSpanProps>`
-display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
-margin: ${(props) => props.compact ? '0 10px' : '0 0 10px 15px'};
-color: #222;
-&:before {
-    background-color: ${(props) => props.color};
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 10px;
-    content: '';
-}
-`
 const KeywordPillStyle = styled.span<KeywordSpanProps>`
+  cursor: pointer;
   display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
   background-color: ${(props) => props.color};
   color: ${(props) => props.textColor};
@@ -33,30 +21,29 @@ const KeywordPillStyle = styled.span<KeywordSpanProps>`
   font-size: 12px;
   padding: 3px 5px 3px 5px;
   border: 0.5px solid transparent;
+  :hover {
+    ${(props) => props.remove && 'text-decoration: line-through;'}
+    ${(props) => props.remove && 'text-decoration-thickness: 3px;'}
+  
+  }
 `
 
-interface keywordLinkProps {
+interface keywordPillProps {
     keyword: string,
     horizontal?: boolean,
     compact?: boolean,
     children?: React.ReactNode
     onClick?: () => void
+    remove?: boolean
 }
 
-export const KeywordLink = ({keyword, horizontal, children, compact, onClick}: keywordLinkProps) => {
-    return <KeywordSpan color={StringToColor(keyword)} horizontal={horizontal} compact={compact} onClick={onClick}>
-        {children}
-    </KeywordSpan>
-
-
-}
-export const KeywordPill = ({keyword, horizontal, children, compact, onClick}: keywordLinkProps) => {
+export const KeywordPill = ({keyword, horizontal, children, compact, onClick, remove}: keywordPillProps) => {
     const color = StringToColor(keyword)
     return <KeywordPillStyle color={color} textColor={contrastColor({bgColor: color})} horizontal={horizontal}
-                             compact={compact} onClick={onClick}>
+                             compact={compact} onClick={onClick} remove={remove}>
         {children}
     </KeywordPillStyle>
 
 }
 
-export default KeywordLink
+export default KeywordPill

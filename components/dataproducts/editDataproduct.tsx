@@ -80,9 +80,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   return (
     <Container>
       <DataproductBox>
-        <TopBar type={'Dataproduct'}>
-          <Name>Rediger dataprodukt</Name>
-        </TopBar>
+        <TopBar type={product.__typename} name={'Rediger dataprodukt'} />
         <DataproductBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
