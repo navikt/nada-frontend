@@ -34,11 +34,11 @@ const StoryDiv = styled.div`
 `
 
 interface StoryProps {
-    isOwner: boolean;
+    isOwner?: boolean;
     story: StoryQuery['story']
     draft?: boolean,
-    setShowDelete: Dispatch<SetStateAction<boolean>>
-    setShowToken: Dispatch<SetStateAction<boolean>>
+    setShowDelete?: Dispatch<SetStateAction<boolean>>
+    setShowToken?: Dispatch<SetStateAction<boolean>>
 }
 
 export function Story({story, draft, isOwner, setShowDelete, setShowToken,}: StoryProps) {
@@ -50,8 +50,8 @@ export function Story({story, draft, isOwner, setShowDelete, setShowToken,}: Sto
                 {!draft && isOwner &&
                     <TopBarActions>
                         <Link href={`/story/${story.id}/edit`}><a>Endre</a></Link>
-                        <a onClick={() => setShowToken(true)}>Vis token</a>
-                        <a onClick={() => setShowDelete(true)} style={{color: navRod}}>Slett</a>
+                        <a onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
+                        <a onClick={() => setShowDelete && setShowDelete(true)} style={{color: navRod}}>Slett</a>
                     </TopBarActions>
                 }
             </TopBar>
