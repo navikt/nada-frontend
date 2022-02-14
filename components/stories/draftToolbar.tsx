@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Button } from '@navikt/ds-react'
 
 const ToolbarDiv = styled.div`
+  margin-top: 40px;
   top: 0;
   position: sticky;
   background: #fff;
@@ -10,10 +11,12 @@ const ToolbarDiv = styled.div`
   display: flex;
   flex-direction: row;
   z-index: 10000;
+  background-color: #E6F0FF;
+
 
   h3 {
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     > span {
       color: red;
     }

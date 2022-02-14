@@ -48,42 +48,45 @@ const StyledMetadataTable = styled.div`
 `
 
 interface StoryProps {
+    children?: React.ReactNode,
     owner: StoryQuery['story']['owner']
     created: string
     lastModified: string
     keywords: string[] | undefined
 }
 
-export const MetadataTable = ({owner, created, lastModified, keywords}: StoryProps) => {
-    const router = useRouter()
-    const id = router.query.id as string
+export const MetadataTable = ({owner, created, lastModified, keywords, children}: StoryProps) => {
     return (
         <StyledMetadataTable>
-
-            <SubjectHeader>
-                Eier
-            </SubjectHeader>
-            <SubjectContent>
-                {owner?.teamkatalogenURL ? (
-                    <a
-                        href={owner.teamkatalogenURL}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        {owner.group.split('@')[0]} <ExternalLink/>
-                    </a>
-                ) : (
-                    owner?.group.split('@')[0]
-                )}
-            </SubjectContent>
+            {children}
+            {owner?.group && <>
+                <SubjectHeader>
+                    Eier
+                </SubjectHeader>
+                <SubjectContent>
+                    {owner?.teamkatalogenURL ? (
+                        <a
+                            href={owner.teamkatalogenURL}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {owner.group.split('@')[0]} <ExternalLink/>
+                        </a>
+                    ) : (
+                        owner?.group.split('@')[0]
+                    )}
+                </SubjectContent>
+            </>}
             <SubjectHeader>Opprettet</SubjectHeader>
             <SubjectContent>
                 {humanizeDate(created)}
             </SubjectContent>
-            <SubjectHeader>Oppdatert</SubjectHeader>
-            <SubjectContent>
-                {humanizeDate(lastModified)}
-            </SubjectContent>
+            {lastModified && <>
+                <SubjectHeader>Oppdatert</SubjectHeader>
+                <SubjectContent>
+                    {humanizeDate(lastModified)}
+                </SubjectContent>
+            </>}
             {!!keywords && keywords.length > 0 && <>
                 <SubjectHeader>Nøkkelord</SubjectHeader>
                 <KeywordBox>

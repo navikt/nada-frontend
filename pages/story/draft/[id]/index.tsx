@@ -7,12 +7,17 @@ import {DraftToolbar} from '../../../../components/stories/draftToolbar'
 import ErrorMessage from "../../../../components/lib/error";
 import LoaderSpinner from "../../../../components/lib/spinner";
 import styled from "styled-components";
+import {MetadataTable} from "../../../../components/stories/metadataTable";
 
 const Container = styled.div`
-  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 50px;
+  gap: 20px;
 `
 
 const StoryContainer = styled.div`
+  flex-grow: 1;
 `
 
 const StoryDraft = () => {
@@ -30,11 +35,14 @@ const StoryDraft = () => {
             <Head>
                 <title>Kladd - {story.name}</title>
             </Head>
+            <DraftToolbar onSave={() => router.push(`/story/draft/${story.id}/save`)}/>
             <Container>
-                <DraftToolbar onSave={() => router.push(`/story/draft/${story.id}/save`)}/>
                 <StoryContainer>
                     <Story story={story} draft={true}/>
                 </StoryContainer>
+                <MetadataTable created={story.created} lastModified={story.lastModified} owner={story.owner}
+                               keywords={story.keywords}>
+                </MetadataTable>
             </Container>
         </>
     )
