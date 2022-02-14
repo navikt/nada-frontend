@@ -12,10 +12,10 @@ const LogoBox = styled.div`
 `
 
 export const Logo = () => (
-    <LogoBox aria-label="nav data">
+    <LogoBox>
         <Link href="/">
             <a>
-                <img src="/navdata-logo.svg" width={"200"}/>
+                <img src="/navdata-logo.svg" width={"200"} alt={"nav data"}/>
             </a>
         </Link>
     </LogoBox>
