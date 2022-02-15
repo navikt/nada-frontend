@@ -1,11 +1,10 @@
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
 import {DataproductQuery} from '../../lib/schema/graphql'
 import StyledTable from '../lib/styledTable'
-import {UrlLink} from '../widgets/UrlLink'
 import * as React from 'react'
 import humanizeDate from '../../lib/humanizeDate'
 import SubHeader from '../lib/subHeader'
-import amplitudeLog from '../../lib/amplitude'
+import Copy from "../lib/copy";
 
 interface DataproductTableSchemaProps {
   datasource: DataproductQuery['dataproduct']['datasource']
@@ -17,7 +16,6 @@ const DataproductTableSchema = ({
   const schema = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
-  const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
   return (
     <div>
       <StyledTable>
@@ -25,19 +23,19 @@ const DataproductTableSchema = ({
         <tr>
           <th>Prosjekt:</th>
           <td>
-            {datasource.projectID}
+            {datasource.projectID} <Copy text={datasource.projectID}/>
           </td>
         </tr>
         <tr>
           <th>Dataset:</th>
           <td>
-            {datasource.dataset}
+            {datasource.dataset}<Copy text={datasource.dataset}/>
           </td>
         </tr>
         <tr>
           <th>Tabell:</th>
           <td>
-            {datasource.table}
+            {datasource.table}<Copy text={datasource.table}/>
           </td>
         </tr>
         <tr>

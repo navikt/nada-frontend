@@ -10,6 +10,7 @@ import {KeywordPill} from "../lib/keywordList";
 import IconBox from "../lib/icons/iconBox";
 import {navGronn, navRod} from "../../styles/constants";
 import GitIcon from "../lib/icons/gitIcon";
+import Copy from "../lib/copy";
 
 interface piiBoxProps {
     pii: boolean
@@ -73,6 +74,7 @@ interface DataproductDetailProps {
 export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
     const datasource = product.datasource
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
+
     return <StyledMetadataTable>
         <SubjectHeader>Tilgang</SubjectHeader>
         <SubjectContent>
@@ -110,6 +112,9 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
         <SubjectHeader>Datakilde</SubjectHeader>
 
         <SubjectContent>
+            <div style={{marginBottom: '5px'}}>Kopiér adresse
+                <Copy text={`${datasource.projectID}.${datasource.dataset}.${datasource.table}`}/>
+            </div>
             <UrlLink
                 url={bigQueryUrl}
                 text='BigQuery Console'
