@@ -1,20 +1,15 @@
-import { ErrorSummary, Fieldset, TextField } from '@navikt/ds-react'
-import { useForm } from 'react-hook-form'
-import { updateDataproductValidation } from '../../lib/schema/yupValidations'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { useState} from 'react'
+import {ErrorSummary, Fieldset, TextField} from '@navikt/ds-react'
+import {useForm} from 'react-hook-form'
+import {updateDataproductValidation} from '../../lib/schema/yupValidations'
+import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
+import {useState} from 'react'
 import PiiCheckboxInput from './piiCheckboxInput'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
-import { Name } from '../lib/detailTypography'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
-import {
-  Dataproduct,
-  DataproductQuery,
-  useUpdateDataproductMutation,
-} from '../../lib/schema/graphql'
+import {Dataproduct, DataproductQuery, useUpdateDataproductMutation,} from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 import styled from 'styled-components'
 import TopBar from '../lib/topBar'
 
@@ -97,6 +92,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 control={control}
               />
               <TextField
+                  type={'url'}
                 style={{ width: '450px', display: 'block' }}
                 id="repo"
                 label="Link til kildekode"

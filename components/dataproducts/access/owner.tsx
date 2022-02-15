@@ -1,19 +1,12 @@
-import { QueryResult } from '@apollo/client'
-import {
-  DataproductAccessQuery,
-  Exact,
-  GrantAccessMutationVariables,
-  SubjectType,
-  useAddRequesterMutation,
-  useGrantAccessMutation,
-} from '../../../lib/schema/graphql'
+import {QueryResult} from '@apollo/client'
+import {DataproductAccessQuery, Exact,} from '../../../lib/schema/graphql'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import * as React from 'react'
-import { useState } from 'react'
-import { Alert, Button } from '@navikt/ds-react'
+import {useState} from 'react'
+import {Button} from '@navikt/ds-react'
 import AccessList from './accessList'
-import { AddCircle } from '@navikt/ds-icons'
+import {AddCircle} from '@navikt/ds-icons'
 import NewAccessForm from "./newAccessForm";
 
 

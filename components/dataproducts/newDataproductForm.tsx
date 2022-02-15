@@ -102,6 +102,7 @@ export const NewDataproductForm = () => {
           control={control}
         />
         <TextField
+            type={'url'}
           id="repo"
           label="Link til kildekode"
           {...register('repo')}

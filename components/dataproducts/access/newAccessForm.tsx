@@ -192,6 +192,7 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
                   <hr />
                   <h3>{`E-postadresse for  ${subjectTypeMap.get(subjectType)}`}</h3>
                   <TextField
+                      type={'email'}
                       sx={{ width: '300px' }}
                       id='subject'
                       error={typeof errors?.subject !== 'undefined'}
