@@ -983,6 +983,7 @@ export type PlotlyViewQuery = {
         id: string
         data: Array<any>
         layout: any
+        frames: Array<any>
       }
     | { __typename?: 'StoryViewVega' }
 }
@@ -2297,6 +2298,7 @@ export const PlotlyViewDocument = gql`
         id
         data
         layout
+        frames
       }
     }
   }
