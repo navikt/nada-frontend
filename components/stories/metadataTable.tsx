@@ -81,7 +81,7 @@ export const MetadataTable = ({owner, created, lastModified, keywords, children}
             {lastModified && <>
                 <SubjectHeader>Oppdatert</SubjectHeader>
                 <SubjectContent>
-                    {humanizeDate(lastModified, "PP HH:MM")}
+                    {humanizeDate(lastModified, "PP HH:mm")}
                 </SubjectContent>
             </>}
             {!!keywords && keywords.length > 0 && <>
