@@ -3,11 +3,8 @@ import * as React from 'react'
 import {ExternalLink} from '@navikt/ds-icons'
 import {StoryQuery} from "../../lib/schema/graphql";
 import styled from "styled-components";
-import {Dispatch, SetStateAction} from "react";
-import {Button} from "@navikt/ds-react";
 import Link from "next/link";
 import {KeywordPill} from "../lib/keywordList";
-import {useRouter} from "next/router"
 
 
 const KeywordBox = styled.div`
@@ -84,7 +81,7 @@ export const MetadataTable = ({owner, created, lastModified, keywords, children}
             {lastModified && <>
                 <SubjectHeader>Oppdatert</SubjectHeader>
                 <SubjectContent>
-                    {humanizeDate(lastModified)}
+                    {humanizeDate(lastModified, "PP HH:MM")}
                 </SubjectContent>
             </>}
             {!!keywords && keywords.length > 0 && <>

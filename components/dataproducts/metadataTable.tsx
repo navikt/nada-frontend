@@ -105,9 +105,7 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
         </SubjectContent>
         <SubjectHeader>Sist oppdatert</SubjectHeader>
         <SubjectContent>
-
             {humanizeDate(product.lastModified)}
-
         </SubjectContent>
         <SubjectHeader>Datakilde</SubjectHeader>
 
