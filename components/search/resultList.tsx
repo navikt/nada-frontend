@@ -40,23 +40,30 @@ const ResultList = ({search, dataproducts}: ResultListInterface) => {
         if (loading || !data) return <LoaderSpinner/>
         return (
             <div>
-               <p> {data.search.length > 0 ? `${data.search.length} resultater` : 'ingen resultater' }</p>
+                <p> {data.search.length > 0 ? `${data.search.length} resultater` : 'ingen resultater'}</p>
 
                 <Results>
                     {
-                        data.search.map((d, idx) =>
-                            d.result.__typename === 'Dataproduct' ?
-                                <SearchResultLink key={idx} group={d.result.owner.group}
-                                                  name={d.result.name}
-                                                  keywords={d.result.keywords}
-                                                  excerpt={d.excerpt}
-                                                  link={`/dataproduct/${d.result.id}`}/> :
-                                <SearchResultLink key={idx} group={d.result.group!.group}
-                                                  name={d.result.name}
-                                                  type={"story"}
-                                                  excerpt={d.excerpt}
-                                                  link={`/story/${d.result.id}`}/>
-                        )
+                        data.search.map((d, idx) => {
+
+                            if (d.result.__typename === 'Dataproduct') {
+                                return <SearchResultLink key={idx} group={d.result.owner.group}
+                                                         name={d.result.name}
+                                                         keywords={d.result.keywords}
+                                                         excerpt={d.excerpt}
+                                                         link={`/dataproduct/${d.result.id}`}/>
+                            }
+
+                            if (d.result.__typename === 'Story') {
+                                console.log(d.result.keywords)
+                                return <SearchResultLink key={idx} group={d.result.group!.group}
+                                                         name={d.result.name}
+                                                         type={"story"}
+                                                         keywords={d.result.keywords}
+                                                         excerpt={d.excerpt}
+                                                         link={`/story/${d.result.id}`}/>
+                            }
+                        })
                     }
                 </Results>
             </div>

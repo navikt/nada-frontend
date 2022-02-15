@@ -945,6 +945,7 @@ export type SearchContentWithOptionsQuery = {
           id: string
           name: string
           created: any
+          keywords: Array<string>
           modified?: any | null | undefined
           group?:
             | {
@@ -2179,6 +2180,7 @@ export const SearchContentWithOptionsDocument = gql`
           id
           name
           created
+          keywords
           modified: lastModified
           group: owner {
             group

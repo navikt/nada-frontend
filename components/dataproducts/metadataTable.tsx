@@ -1,6 +1,6 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
-import {ExternalLink, Success, Warning, Error} from '@navikt/ds-icons'
+import {Error, ExternalLink, Success, Warning} from '@navikt/ds-icons'
 import {DataproductQuery} from "../../lib/schema/graphql";
 import styled from "styled-components";
 import {UrlLink} from "../widgets/UrlLink";
@@ -10,8 +10,6 @@ import {KeywordPill} from "../lib/keywordList";
 import IconBox from "../lib/icons/iconBox";
 import {navGronn, navRod} from "../../styles/constants";
 import GitIcon from "../lib/icons/gitIcon";
-import {Button} from "@navikt/ds-react";
-import {useRouter} from "next/router"
 
 interface piiBoxProps {
     pii: boolean

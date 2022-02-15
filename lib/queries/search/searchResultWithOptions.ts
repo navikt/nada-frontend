@@ -23,6 +23,7 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
           id
           name
           created
+          keywords
           modified: lastModified
           group: owner {
             group
