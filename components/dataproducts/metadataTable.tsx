@@ -82,7 +82,7 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
             {accessType.type === 'none' && <AccessRow><Error color={navRod}/>Du har ikke tilgang</AccessRow>}
             {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
             {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
-                Du har tilgang {accessType.expires && <>til {humanizeDate(accessType.expires)}</>}</AccessRow>}
+            {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
 
         </SubjectContent>
 
