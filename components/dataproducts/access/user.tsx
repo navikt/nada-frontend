@@ -45,7 +45,7 @@ const User = ({ accessQuery, currentUser, groups }: UserProps) => {
   if (activeAccess) return (<>
     {formError && <Alert variant='error'>{formError}</Alert>}
     Du har tilgang til dette produktet{' '}
-    {activeAccess.expires && `til ${humanizeDate(activeAccess.expires)}`}
+    {activeAccess.expires && <>til {humanizeDate(activeAccess.expires)}</>}
     {' '}{group && `via gruppen ${group}`}
     <br />
     {personalAccess &&
