@@ -21,8 +21,9 @@ const Results = styled.div`
 type ResultListInterface = {
     search?: QueryResult<SearchContentWithOptionsQuery, Exact<{ options: SearchOptions }>>
     dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: { __typename?: "Owner" | undefined, group: string } }[]
+    stories?: { __typename?: 'Story', id: string, name: string, owner?: { __typename?: 'Owner'; group: string } | null | undefined }[] 
 }
-const ResultList = ({search, dataproducts}: ResultListInterface) => {
+const ResultList = ({search, dataproducts, stories}: ResultListInterface) => {
     if (dataproducts) {
         return (<Results>
             {
@@ -68,6 +69,16 @@ const ResultList = ({search, dataproducts}: ResultListInterface) => {
                 </Results>
             </div>
         )
+    }
+    if (stories) {
+        return (<Results>
+            {
+                stories.map((s, idx) =>
+                    <SearchResultLink key={idx} group={s.owner?.group} name={s.name}
+                        link={`/story/${s.id}`} />
+                )
+            }
+        </Results>)
     }
     return <></>
 }

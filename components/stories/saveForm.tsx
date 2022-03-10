@@ -1,13 +1,14 @@
-import {Fieldset} from '@navikt/ds-react'
+import { Fieldset } from '@navikt/ds-react'
 import styled from "styled-components"
-import {StoryQuery, usePublishStoryMutation} from "../../lib/schema/graphql"
+import { StoryQuery, usePublishStoryMutation, useUpdateStoryMutation } from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
 import TeamSelector from '../lib/teamSelector'
+import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import {useRouter} from 'next/router'
-import {useForm} from 'react-hook-form'
-import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
-import {storyValidation} from '../../lib/schema/yupValidations'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from "../lib/KeywordsInput";
 
 
@@ -30,9 +31,9 @@ interface SaveFormProps {
     story: StoryQuery['story']
 }
 
-function SaveForm({story}: SaveFormProps) {
+function SaveForm({ story }: SaveFormProps) {
     const router = useRouter()
-    const {register, handleSubmit, formState, watch, setValue} =
+    const { register, handleSubmit, formState, watch, setValue } =
         useForm({
             resolver: yupResolver(storyValidation),
             defaultValues: {
@@ -41,7 +42,7 @@ function SaveForm({story}: SaveFormProps) {
             },
         })
 
-    const {errors} = formState
+    const { errors } = formState
     const keywords = watch('keywords')
 
     const onDelete = (keyword: string) => {
@@ -55,41 +56,60 @@ function SaveForm({story}: SaveFormProps) {
     }
 
     const [publishStory] = usePublishStoryMutation()
+    const [updateStory] = useUpdateStoryMutation()
 
     const onSubmit = (requestData: any) => {
-        publishStory({
-            variables: {
-                id: story.id,
-                group: requestData.group,
-                keywords
-            },
-        }).then((published) => {
-            if (published.errors) {
-                console.log(published.errors)
-            }
-            if (published.data) {
-                router.push(`/story/${published.data?.publishStory.id}`)
-            }
-        }).catch((error) => {
-            console.log(error)
-        })
-
+        if (requestData.story) {
+            updateStory({
+                variables: {
+                    id: story.id,
+                    target: requestData.story
+                }
+            }).then((published) => {
+                if (published.errors) {
+                    console.log(published.errors)
+                }
+                if (published.data) {
+                    router.push(`/story/${published.data?.updateStory.id}`)
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        } else {
+            publishStory({
+                variables: {
+                    id: story.id,
+                    group: requestData.group,
+                    keywords
+                },
+            }).then((published) => {
+                if (published.errors) {
+                    console.log(published.errors)
+                }
+                if (published.data) {
+                    router.push(`/story/${published.data?.publishStory.id}`)
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
     }
 
     return (
         <Container>
             <DataproductBox>
-                <TopBar name={`Lagre ${story.name}`} type={story.__typename}/>
+                <TopBar name={`Lagre ${story.name}`} type={story.__typename} />
                 <DataproductBody>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
-                            <TeamSelector register={register} errors={errors}/>
+                            <TeamSelector register={register} errors={errors} />
                             <KeywordsInput
                                 onAdd={onAdd}
                                 onDelete={onDelete}
                                 keywords={keywords || []}
                                 error={errors.keywords?.[0].message}
                             />
+                            <StorySelector register={register} />
                             <RightJustifiedSubmitButton
                                 onCancel={() => router.push(`/story/draft/${story.id}`)}
                             />

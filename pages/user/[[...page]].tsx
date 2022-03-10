@@ -57,15 +57,15 @@ export const UserPages = () => {
             </>
         ),
     },
-      {
-          title: 'Mine historier',
-          slug: 'stories',
-          component: (<>
-                  <SubjectHeader>Mine historier</SubjectHeader>
-                  <ResultList dataproducts={data.userInfo.accessable}/>
-              </>
-          ),
-      },
+    {
+      title: 'Mine historier',
+      slug: 'stories',
+        component: (<>
+               <SubjectHeader>Mine historier</SubjectHeader>
+               <ResultList stories={data.userInfo.stories} />
+            </>
+        ),
+    },
   ]
 
   const currentPage = menuItems

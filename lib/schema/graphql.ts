@@ -1074,6 +1074,16 @@ export type UpdateStoryMetadataMutation = {
   updateStoryMetadata: { __typename?: 'Story'; id: string }
 }
 
+export type UpdateStoryMutationVariables = Exact<{
+  id: Scalars['ID']
+  target: Scalars['ID']
+}>
+
+export type UpdateStoryMutation = {
+  __typename?: 'Mutation'
+  updateStory: { __typename?: 'Story'; id: string }
+}
+
 export type VegaViewQueryVariables = Exact<{
   id: Scalars['ID']
   draft?: Maybe<Scalars['Boolean']>
@@ -1129,6 +1139,12 @@ export type UserInfoDetailsQuery = {
       __typename?: 'GCPProject'
       id: string
       group: { __typename?: 'Group'; name: string; email: string }
+    }>
+    stories: Array<{
+      __typename?: 'Story'
+      id: string
+      name: string
+      owner?: { __typename?: 'Owner'; group: string } | null | undefined
     }>
   }
 }
@@ -2637,6 +2653,57 @@ export type UpdateStoryMetadataMutationOptions = Apollo.BaseMutationOptions<
   UpdateStoryMetadataMutation,
   UpdateStoryMetadataMutationVariables
 >
+export const UpdateStoryDocument = gql`
+  mutation updateStory($id: ID!, $target: ID!) {
+    updateStory(id: $id, target: $target) {
+      id
+    }
+  }
+`
+export type UpdateStoryMutationFn = Apollo.MutationFunction<
+  UpdateStoryMutation,
+  UpdateStoryMutationVariables
+>
+
+/**
+ * __useUpdateStoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStoryMutation, { data, loading, error }] = useUpdateStoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      target: // value for 'target'
+ *   },
+ * });
+ */
+export function useUpdateStoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateStoryMutation,
+    UpdateStoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(
+    UpdateStoryDocument,
+    options
+  )
+}
+export type UpdateStoryMutationHookResult = ReturnType<
+  typeof useUpdateStoryMutation
+>
+export type UpdateStoryMutationResult =
+  Apollo.MutationResult<UpdateStoryMutation>
+export type UpdateStoryMutationOptions = Apollo.BaseMutationOptions<
+  UpdateStoryMutation,
+  UpdateStoryMutationVariables
+>
 export const VegaViewDocument = gql`
   query VegaView($id: ID!, $draft: Boolean) {
     storyView(id: $id, draft: $draft) {
@@ -2784,6 +2851,13 @@ export const UserInfoDetailsDocument = gql`
         group {
           name
           email
+        }
+      }
+      stories {
+        id
+        name
+        owner {
+          group
         }
       }
     }

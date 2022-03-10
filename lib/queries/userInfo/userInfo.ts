@@ -33,6 +33,13 @@ export const USER_INFO = gql`
           email
         }
       }
+      stories {
+        id
+        name
+        owner {
+          group
+        }
+      }
     }
   }
 `
