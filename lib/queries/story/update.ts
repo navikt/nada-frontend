@@ -11,11 +11,3 @@ export const UPDATE_STORY_METADATA = gql`
     }
   }
 `
-
-export const UPDATE_STORY = gql`
-  mutation updateStory($id: ID!, $target: ID!) {
-    updateStory(id: $id, target: $target) {
-      id
-    }
-  }
-`

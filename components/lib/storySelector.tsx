@@ -5,11 +5,12 @@ import { UserState } from '../../lib/context'
 
 type StorySelectorProps = {
   register: any
+  group: string
 }
-export const StorySelector = ({ register }: StorySelectorProps) => {
+export const StorySelector = ({ register, group }: StorySelectorProps) => {
   const userInfo = useContext(UserState)
 
-  const stories = [...new Set(userInfo?.stories.map((s) => s.name))]
+  const stories = [...new Set(userInfo?.stories.filter((s) => s.owner?.group == group).map((s) => { return { id: s.id, name: s.name } }))]
 
   return (
     <Select
@@ -19,10 +20,10 @@ export const StorySelector = ({ register }: StorySelectorProps) => {
       <option value=''>Ny historie</option>
       {stories.map((story) => (
         <option
-          value={userInfo?.stories.filter((s) => s.name === story)[0].id}
-          key={story}
+          value={story.id}
+          key={story.id}
         >
-          Overskriv {story}
+          Overskriv {story.name}
         </option>
       ))}
     </Select>

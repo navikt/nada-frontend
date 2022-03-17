@@ -235,12 +235,6 @@ export type Mutation = {
    */
   updateDataproduct: Dataproduct
   /**
-   * updateStory updates an existing story.
-   *
-   * Requires authentication.
-   */
-  updateStory: Story
-  /**
    * updateStoryMetadata updates metadata on an existing story.
    *
    * Requires authentication.
@@ -285,6 +279,7 @@ export type MutationPublishStoryArgs = {
   group: Scalars['String']
   id: Scalars['ID']
   keywords?: Maybe<Array<Scalars['String']>>
+  target?: Maybe<Scalars['ID']>
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -299,11 +294,6 @@ export type MutationRevokeAccessToDataproductArgs = {
 export type MutationUpdateDataproductArgs = {
   id: Scalars['ID']
   input: UpdateDataproduct
-}
-
-export type MutationUpdateStoryArgs = {
-  id: Scalars['ID']
-  target: Scalars['ID']
 }
 
 export type MutationUpdateStoryMetadataArgs = {
@@ -990,6 +980,7 @@ export type PlotlyViewQuery = {
 
 export type PublishStoryMutationVariables = Exact<{
   id: Scalars['ID']
+  target?: Maybe<Scalars['ID']>
   group: Scalars['String']
   keywords?: Maybe<Array<Scalars['String']> | Scalars['String']>
 }>
@@ -1074,16 +1065,6 @@ export type UpdateStoryMetadataMutation = {
   updateStoryMetadata: { __typename?: 'Story'; id: string }
 }
 
-export type UpdateStoryMutationVariables = Exact<{
-  id: Scalars['ID']
-  target: Scalars['ID']
-}>
-
-export type UpdateStoryMutation = {
-  __typename?: 'Mutation'
-  updateStory: { __typename?: 'Story'; id: string }
-}
-
 export type VegaViewQueryVariables = Exact<{
   id: Scalars['ID']
   draft?: Maybe<Scalars['Boolean']>
@@ -1144,6 +1125,7 @@ export type UserInfoDetailsQuery = {
       __typename?: 'Story'
       id: string
       name: string
+      keywords: Array<string>
       owner?: { __typename?: 'Owner'; group: string } | null | undefined
     }>
   }
@@ -2370,8 +2352,13 @@ export type PlotlyViewQueryResult = Apollo.QueryResult<
   PlotlyViewQueryVariables
 >
 export const PublishStoryDocument = gql`
-  mutation publishStory($id: ID!, $group: String!, $keywords: [String!]) {
-    publishStory(id: $id, group: $group, keywords: $keywords) {
+  mutation publishStory(
+    $id: ID!
+    $target: ID
+    $group: String!
+    $keywords: [String!]
+  ) {
+    publishStory(id: $id, target: $target, group: $group, keywords: $keywords) {
       id
     }
   }
@@ -2395,6 +2382,7 @@ export type PublishStoryMutationFn = Apollo.MutationFunction<
  * const [publishStoryMutation, { data, loading, error }] = usePublishStoryMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      target: // value for 'target'
  *      group: // value for 'group'
  *      keywords: // value for 'keywords'
  *   },
@@ -2653,57 +2641,6 @@ export type UpdateStoryMetadataMutationOptions = Apollo.BaseMutationOptions<
   UpdateStoryMetadataMutation,
   UpdateStoryMetadataMutationVariables
 >
-export const UpdateStoryDocument = gql`
-  mutation updateStory($id: ID!, $target: ID!) {
-    updateStory(id: $id, target: $target) {
-      id
-    }
-  }
-`
-export type UpdateStoryMutationFn = Apollo.MutationFunction<
-  UpdateStoryMutation,
-  UpdateStoryMutationVariables
->
-
-/**
- * __useUpdateStoryMutation__
- *
- * To run a mutation, you first call `useUpdateStoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateStoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateStoryMutation, { data, loading, error }] = useUpdateStoryMutation({
- *   variables: {
- *      id: // value for 'id'
- *      target: // value for 'target'
- *   },
- * });
- */
-export function useUpdateStoryMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateStoryMutation,
-    UpdateStoryMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateStoryMutation, UpdateStoryMutationVariables>(
-    UpdateStoryDocument,
-    options
-  )
-}
-export type UpdateStoryMutationHookResult = ReturnType<
-  typeof useUpdateStoryMutation
->
-export type UpdateStoryMutationResult =
-  Apollo.MutationResult<UpdateStoryMutation>
-export type UpdateStoryMutationOptions = Apollo.BaseMutationOptions<
-  UpdateStoryMutation,
-  UpdateStoryMutationVariables
->
 export const VegaViewDocument = gql`
   query VegaView($id: ID!, $draft: Boolean) {
     storyView(id: $id, draft: $draft) {
@@ -2856,6 +2793,7 @@ export const UserInfoDetailsDocument = gql`
       stories {
         id
         name
+        keywords
         owner {
           group
         }

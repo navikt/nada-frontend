@@ -1,15 +1,17 @@
 import { Fieldset } from '@navikt/ds-react'
 import styled from "styled-components"
-import { StoryQuery, usePublishStoryMutation, useUpdateStoryMutation } from "../../lib/schema/graphql"
+import { StoryQuery, usePublishStoryMutation } from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
 import TeamSelector from '../lib/teamSelector'
 import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from "../lib/KeywordsInput";
+import { useContext, useEffect } from 'react'
+import { UserState } from '../../lib/context'
 
 
 const Container = styled.div`
@@ -31,19 +33,39 @@ interface SaveFormProps {
     story: StoryQuery['story']
 }
 
+interface FromProps {
+    name: string
+    keywords: string[]
+    story: string | null
+    group: string
+}
+
 function SaveForm({ story }: SaveFormProps) {
+    const userInfo = useContext(UserState)
     const router = useRouter()
-    const { register, handleSubmit, formState, watch, setValue } =
+    const { register, handleSubmit, formState, watch, control, setValue } =
         useForm({
             resolver: yupResolver(storyValidation),
             defaultValues: {
                 name: story.name,
-                keywords: [] as string[],
-            },
+                keywords: [],
+                story: null,
+                group: "",
+            } as FromProps,
         })
 
     const { errors } = formState
     const keywords = watch('keywords')
+    const group = watch('group')
+    const overwriteStory = useWatch({
+        control,
+        name: 'story'
+    });
+
+    useEffect(() => {
+        const story = userInfo?.stories.find(s => s.id == overwriteStory)
+        setValue('keywords', story?.keywords || [])
+    }, [overwriteStory])
 
     const onDelete = (keyword: string) => {
         setValue('keywords', keywords.filter((k: string) => k !== keyword))
@@ -56,43 +78,28 @@ function SaveForm({ story }: SaveFormProps) {
     }
 
     const [publishStory] = usePublishStoryMutation()
-    const [updateStory] = useUpdateStoryMutation()
 
     const onSubmit = (requestData: any) => {
-        if (requestData.story) {
-            updateStory({
-                variables: {
-                    id: story.id,
-                    target: requestData.story
-                }
-            }).then((published) => {
-                if (published.errors) {
-                    console.log(published.errors)
-                }
-                if (published.data) {
-                    router.push(`/story/${published.data?.updateStory.id}`)
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
-        } else {
-            publishStory({
-                variables: {
-                    id: story.id,
-                    group: requestData.group,
-                    keywords
-                },
-            }).then((published) => {
-                if (published.errors) {
-                    console.log(published.errors)
-                }
-                if (published.data) {
-                    router.push(`/story/${published.data?.publishStory.id}`)
-                }
-            }).catch((error) => {
-                console.log(error)
-            })
+        if (requestData.story && !confirm("This will overwrite existing story. Are you sure?")) {
+            return
         }
+        publishStory({
+            variables: {
+                id: story.id,
+                target: requestData.story ? requestData.story : null,
+                group: requestData.group,
+                keywords
+            },
+        }).then((published) => {
+            if (published.errors) {
+                console.log(published.errors)
+            }
+            if (published.data) {
+                router.push(`/story/${published.data?.publishStory.id}`)
+            }
+        }).catch((error) => {
+            console.log(error)
+        })
     }
 
     return (
@@ -103,13 +110,13 @@ function SaveForm({ story }: SaveFormProps) {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
                             <TeamSelector register={register} errors={errors} />
+                            <StorySelector register={register} group={group} />
                             <KeywordsInput
                                 onAdd={onAdd}
                                 onDelete={onDelete}
                                 keywords={keywords || []}
                                 error={errors.keywords?.[0].message}
                             />
-                            <StorySelector register={register} />
                             <RightJustifiedSubmitButton
                                 onCancel={() => router.push(`/story/draft/${story.id}`)}
                             />

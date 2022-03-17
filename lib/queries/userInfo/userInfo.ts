@@ -36,6 +36,7 @@ export const USER_INFO = gql`
       stories {
         id
         name
+        keywords
         owner {
           group
         }
