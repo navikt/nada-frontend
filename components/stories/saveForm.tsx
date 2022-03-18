@@ -84,6 +84,7 @@ function SaveForm({ story }: SaveFormProps) {
             return
         }
         publishStory({
+            refetchQueries: ["searchContent", "Story"],
             variables: {
                 id: story.id,
                 target: requestData.story ? requestData.story : null,
