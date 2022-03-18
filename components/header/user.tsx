@@ -107,7 +107,7 @@ export default function User() {
                             <MenuItem
                                 onClick={() => {
                                     handleMenuClose()
-                                    router.push({pathname: '/user/story'})
+                                    router.push({pathname: '/user/stories'})
                                 }}
                             >
                                 Mine historier

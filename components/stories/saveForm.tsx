@@ -1,14 +1,17 @@
-import {Fieldset} from '@navikt/ds-react'
+import { Fieldset } from '@navikt/ds-react'
 import styled from "styled-components"
-import {StoryQuery, usePublishStoryMutation} from "../../lib/schema/graphql"
+import { StoryQuery, usePublishStoryMutation } from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
 import TeamSelector from '../lib/teamSelector'
+import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import {useRouter} from 'next/router'
-import {useForm} from 'react-hook-form'
-import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
-import {storyValidation} from '../../lib/schema/yupValidations'
+import { useRouter } from 'next/router'
+import { useForm, useWatch } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from "../lib/KeywordsInput";
+import { useContext, useEffect } from 'react'
+import { UserState } from '../../lib/context'
 
 
 const Container = styled.div`
@@ -30,19 +33,39 @@ interface SaveFormProps {
     story: StoryQuery['story']
 }
 
-function SaveForm({story}: SaveFormProps) {
+interface FromProps {
+    name: string
+    keywords: string[]
+    story: string | null
+    group: string
+}
+
+function SaveForm({ story }: SaveFormProps) {
+    const userInfo = useContext(UserState)
     const router = useRouter()
-    const {register, handleSubmit, formState, watch, setValue} =
+    const { register, handleSubmit, formState, watch, control, setValue } =
         useForm({
             resolver: yupResolver(storyValidation),
             defaultValues: {
                 name: story.name,
-                keywords: [] as string[],
-            },
+                keywords: [],
+                story: null,
+                group: "",
+            } as FromProps,
         })
 
-    const {errors} = formState
+    const { errors } = formState
     const keywords = watch('keywords')
+    const group = watch('group')
+    const overwriteStory = useWatch({
+        control,
+        name: 'story'
+    });
+
+    useEffect(() => {
+        const story = userInfo?.stories.find(s => s.id == overwriteStory)
+        setValue('keywords', story?.keywords || [])
+    }, [overwriteStory])
 
     const onDelete = (keyword: string) => {
         setValue('keywords', keywords.filter((k: string) => k !== keyword))
@@ -57,9 +80,14 @@ function SaveForm({story}: SaveFormProps) {
     const [publishStory] = usePublishStoryMutation()
 
     const onSubmit = (requestData: any) => {
+        if (requestData.story && !confirm("This will overwrite existing story. Are you sure?")) {
+            return
+        }
         publishStory({
+            refetchQueries: ["searchContent", "Story"],
             variables: {
                 id: story.id,
+                target: requestData.story ? requestData.story : null,
                 group: requestData.group,
                 keywords
             },
@@ -73,17 +101,17 @@ function SaveForm({story}: SaveFormProps) {
         }).catch((error) => {
             console.log(error)
         })
-
     }
 
     return (
         <Container>
             <DataproductBox>
-                <TopBar name={`Lagre ${story.name}`} type={story.__typename}/>
+                <TopBar name={`Lagre ${story.name}`} type={story.__typename} />
                 <DataproductBody>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
-                            <TeamSelector register={register} errors={errors}/>
+                            <TeamSelector register={register} errors={errors} />
+                            <StorySelector register={register} group={group} />
                             <KeywordsInput
                                 onAdd={onAdd}
                                 onDelete={onDelete}

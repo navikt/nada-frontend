@@ -235,12 +235,6 @@ export type Mutation = {
    */
   updateDataproduct: Dataproduct
   /**
-   * updateStory updates an existing story.
-   *
-   * Requires authentication.
-   */
-  updateStory: Story
-  /**
    * updateStoryMetadata updates metadata on an existing story.
    *
    * Requires authentication.
@@ -285,6 +279,7 @@ export type MutationPublishStoryArgs = {
   group: Scalars['String']
   id: Scalars['ID']
   keywords?: Maybe<Array<Scalars['String']>>
+  target?: Maybe<Scalars['ID']>
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -299,11 +294,6 @@ export type MutationRevokeAccessToDataproductArgs = {
 export type MutationUpdateDataproductArgs = {
   id: Scalars['ID']
   input: UpdateDataproduct
-}
-
-export type MutationUpdateStoryArgs = {
-  id: Scalars['ID']
-  target: Scalars['ID']
 }
 
 export type MutationUpdateStoryMetadataArgs = {
@@ -990,6 +980,7 @@ export type PlotlyViewQuery = {
 
 export type PublishStoryMutationVariables = Exact<{
   id: Scalars['ID']
+  target?: Maybe<Scalars['ID']>
   group: Scalars['String']
   keywords?: Maybe<Array<Scalars['String']> | Scalars['String']>
 }>
@@ -1129,6 +1120,13 @@ export type UserInfoDetailsQuery = {
       __typename?: 'GCPProject'
       id: string
       group: { __typename?: 'Group'; name: string; email: string }
+    }>
+    stories: Array<{
+      __typename?: 'Story'
+      id: string
+      name: string
+      keywords: Array<string>
+      owner?: { __typename?: 'Owner'; group: string } | null | undefined
     }>
   }
 }
@@ -2354,8 +2352,13 @@ export type PlotlyViewQueryResult = Apollo.QueryResult<
   PlotlyViewQueryVariables
 >
 export const PublishStoryDocument = gql`
-  mutation publishStory($id: ID!, $group: String!, $keywords: [String!]) {
-    publishStory(id: $id, group: $group, keywords: $keywords) {
+  mutation publishStory(
+    $id: ID!
+    $target: ID
+    $group: String!
+    $keywords: [String!]
+  ) {
+    publishStory(id: $id, target: $target, group: $group, keywords: $keywords) {
       id
     }
   }
@@ -2379,6 +2382,7 @@ export type PublishStoryMutationFn = Apollo.MutationFunction<
  * const [publishStoryMutation, { data, loading, error }] = usePublishStoryMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      target: // value for 'target'
  *      group: // value for 'group'
  *      keywords: // value for 'keywords'
  *   },
@@ -2784,6 +2788,14 @@ export const UserInfoDetailsDocument = gql`
         group {
           name
           email
+        }
+      }
+      stories {
+        id
+        name
+        keywords
+        owner {
+          group
         }
       }
     }
