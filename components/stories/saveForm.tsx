@@ -80,7 +80,7 @@ function SaveForm({ story }: SaveFormProps) {
     const [publishStory] = usePublishStoryMutation()
 
     const onSubmit = (requestData: any) => {
-        if (requestData.story && !confirm("This will overwrite existing story. Are you sure?")) {
+        if (requestData.story && !confirm("Dette vil overskrive den eksisterende datafortellingen. Er du sikker?")) {
             return
         }
         publishStory({
