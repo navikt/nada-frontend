@@ -1,11 +1,13 @@
-import {Fieldset} from '@navikt/ds-react'
+import { Fieldset } from '@navikt/ds-react'
 import styled from "styled-components"
-import {StoryQuery, useUpdateStoryMetadataMutation} from "../../lib/schema/graphql"
+import { StoryQuery, useUpdateStoryMetadataMutation } from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import {useRouter} from 'next/router'
-import {useForm} from 'react-hook-form'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
 import KeywordsInput from "../lib/KeywordsInput";
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
+import { StoryDocument } from '../../lib/schema/graphql'
 
 
 const Container = styled.div`
@@ -27,16 +29,17 @@ interface SaveFormProps {
     story: StoryQuery['story']
 }
 
-function EditForm({story}: SaveFormProps) {
+function EditForm({ story }: SaveFormProps) {
     const router = useRouter()
-    const {handleSubmit, formState, watch, setValue} =
+    const { register, handleSubmit, formState, watch, setValue } =
         useForm({
             defaultValues: {
-                keywords: story.keywords
+                keywords: story.keywords,
+                teamkatalogenURL: story.owner.teamkatalogenURL
             },
         })
 
-    const {errors} = formState
+    const { errors } = formState
     const keywords = watch('keywords')
 
     const onDelete = (keyword: string) => {
@@ -53,11 +56,17 @@ function EditForm({story}: SaveFormProps) {
 
     const onSubmit = (requestData: any) => {
         updateStoryMetadata({
-            refetchQueries: ["searchContent", "Story"],
+            refetchQueries: ["searchContent",
+                {
+                    query: StoryDocument,
+                    variables: { id: story.id }
+                }
+            ],
             variables: {
                 id: story.id,
                 name: story.name,
-                keywords
+                keywords,
+                teamkatalogenURL: requestData.teamkatalogenURL
             },
         }).then((published: any) => {
             if (published.errors) {
@@ -75,10 +84,16 @@ function EditForm({story}: SaveFormProps) {
     return (
         <Container>
             <DataproductBox>
-                <TopBar name={`Lagre ${story.name}`} type={story.__typename}/>
+                <TopBar name={`Lagre ${story.name}`} type={story.__typename} />
                 <DataproductBody>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
+                            <TeamkatalogenSelector
+                                group={story.owner.group}
+                                register={register}
+                                errors={errors}
+                                watch={watch}
+                            />
                             <KeywordsInput
                                 onAdd={onAdd}
                                 onDelete={onDelete}

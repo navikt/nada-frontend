@@ -15,15 +15,15 @@ export const StorySelector = ({ register, group }: StorySelectorProps) => {
   return (
     <Select
       label='Story'
-      {...register('story')}
+      {...register('target')}
     >
-      <option value=''>Ny historie</option>
-      {stories.map((story) => (
+      <option>Ny historie</option>
+      {stories.map((target) => (
         <option
-          value={story.id}
-          key={story.id}
+          value={target.id}
+          key={target.id}
         >
-          Overskriv {story.name}
+          Overskriv {target.name}
         </option>
       ))}
     </Select>

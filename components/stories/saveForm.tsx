@@ -1,8 +1,9 @@
 import { Fieldset } from '@navikt/ds-react'
 import styled from "styled-components"
-import { StoryQuery, usePublishStoryMutation } from "../../lib/schema/graphql"
+import { NewStory, StoryQuery, usePublishStoryMutation } from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
 import TeamSelector from '../lib/teamSelector'
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { useRouter } from 'next/router'
@@ -12,6 +13,7 @@ import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from "../lib/KeywordsInput";
 import { useContext, useEffect } from 'react'
 import { UserState } from '../../lib/context'
+import { StoryDocument } from '../../lib/schema/graphql'
 
 
 const Container = styled.div`
@@ -34,10 +36,11 @@ interface SaveFormProps {
 }
 
 interface FromProps {
-    name: string
+    id: string
     keywords: string[]
-    story: string | null
+    target: string | null
     group: string
+    teamkatalogenURL: string | null
 }
 
 function SaveForm({ story }: SaveFormProps) {
@@ -47,10 +50,11 @@ function SaveForm({ story }: SaveFormProps) {
         useForm({
             resolver: yupResolver(storyValidation),
             defaultValues: {
-                name: story.name,
+                id: story.id,
                 keywords: [],
-                story: null,
+                target: null,
                 group: "",
+                teamkatalogenURL: null,
             } as FromProps,
         })
 
@@ -59,7 +63,7 @@ function SaveForm({ story }: SaveFormProps) {
     const group = watch('group')
     const overwriteStory = useWatch({
         control,
-        name: 'story'
+        name: 'target'
     });
 
     useEffect(() => {
@@ -79,17 +83,20 @@ function SaveForm({ story }: SaveFormProps) {
 
     const [publishStory] = usePublishStoryMutation()
 
-    const onSubmit = (requestData: any) => {
-        if (requestData.story && !confirm("Dette vil overskrive den eksisterende datafortellingen. Er du sikker?")) {
+    const onSubmit = (requestData: NewStory) => {
+        if (requestData.target && !confirm("Dette vil overskrive den eksisterende datafortellingen. Er du sikker?")) {
             return
         }
         publishStory({
-            refetchQueries: ["searchContent", "Story"],
+            refetchQueries: [
+                "searchContent",
+                {
+                    query: StoryDocument,
+                    variables: { id: story.id }
+                }
+            ],
             variables: {
-                id: story.id,
-                target: requestData.story ? requestData.story : null,
-                group: requestData.group,
-                keywords
+                input: requestData
             },
         }).then((published) => {
             if (published.errors) {
@@ -111,6 +118,14 @@ function SaveForm({ story }: SaveFormProps) {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
                             <TeamSelector register={register} errors={errors} />
+                            {group ? (
+                                <TeamkatalogenSelector
+                                    group={group}
+                                    register={register}
+                                    errors={errors}
+                                    watch={watch}
+                                />
+                            ) : null}
                             <StorySelector register={register} group={group} />
                             <KeywordsInput
                                 onAdd={onAdd}
