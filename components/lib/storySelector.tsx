@@ -17,7 +17,7 @@ export const StorySelector = ({ register, group }: StorySelectorProps) => {
       label='Story'
       {...register('target')}
     >
-      <option>Ny historie</option>
+      <option value=''>Ny historie</option>
       {stories.map((target) => (
         <option
           value={target.id}

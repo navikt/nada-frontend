@@ -84,16 +84,16 @@ function SaveForm({ story }: SaveFormProps) {
     const [publishStory] = usePublishStoryMutation()
 
     const onSubmit = (requestData: NewStory) => {
+        console.log(requestData)
+        if (requestData.target == '') {
+            requestData.target = undefined
+        }
         if (requestData.target && !confirm("Dette vil overskrive den eksisterende datafortellingen. Er du sikker?")) {
             return
         }
         publishStory({
             refetchQueries: [
-                "searchContent",
-                {
-                    query: StoryDocument,
-                    variables: { id: story.id }
-                }
+                "searchContent"
             ],
             variables: {
                 input: requestData
@@ -118,14 +118,14 @@ function SaveForm({ story }: SaveFormProps) {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
                             <TeamSelector register={register} errors={errors} />
-                            {group ? (
+                            {group && (
                                 <TeamkatalogenSelector
                                     group={group}
                                     register={register}
                                     errors={errors}
                                     watch={watch}
                                 />
-                            ) : null}
+                            )}
                             <StorySelector register={register} group={group} />
                             <KeywordsInput
                                 onAdd={onAdd}
