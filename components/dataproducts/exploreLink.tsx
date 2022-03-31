@@ -5,8 +5,9 @@ import styled from 'styled-components'
 import MetabaseLogo from "../lib/icons/metabaseLogo";
 import {Loader} from "@navikt/ds-react";
 import {MappingService} from "../../lib/schema/graphql";
-import {Delete, Add} from "@navikt/ds-icons";
+import {Delete, Add, FileContent} from "@navikt/ds-icons";
 import {navRod} from "../../styles/constants";
+import DatapakkerLogo from '../lib/icons/datapakkerLogo';
 
 const ExploreItem = styled.div<{ loading?: boolean }>`
   cursor: ${(props) => props.loading ? 'default' : 'pointer'};
@@ -66,6 +67,7 @@ display: flex;
 export enum ItemType {
     metabase = 1,
     bigQuery,
+    export,
 }
 
 export interface ExploreLinkProps {
@@ -93,6 +95,7 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                         <IconBox size={30}>
                             {type === ItemType.bigQuery && <BigQueryLogo/>}
                             {type === ItemType.metabase && <MetabaseLogo/>}
+                            {type === ItemType.export && <FileContent width="100%" height="100%"/>}
                         </IconBox>
                         <Title>
                             {type === ItemType.bigQuery && <>
@@ -102,6 +105,10 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                             {type === ItemType.metabase && <>
                                 <h1>Metabase</h1>
                                 <h2>Åpne i Metabase</h2>
+                            </>}
+                            {type === ItemType.export && <>
+                                <h1>CSV</h1>
+                                <h2>Eksporter i CSV-format</h2>
                             </>}
                         </Title>
                         {isOwner && type == ItemType.metabase &&

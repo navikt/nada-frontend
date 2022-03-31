@@ -106,6 +106,10 @@ const Dataproduct = (props: DataproductProps) => {
     const product = productQuery.data.dataproduct
 
     const isOwner = accessType.type === 'owner';
+    const isPublic = accessQuery.data 
+        ? accessQuery.data.dataproduct.access.some(a => a.subject.includes("all-users@nav.no") && a.expires === null)
+        : false;
+    console.log(accessQuery.data?.dataproduct.access)
 
     const menuItems: Array<{
         title: string
@@ -135,7 +139,7 @@ const Dataproduct = (props: DataproductProps) => {
         {
             title: 'utforsk',
             slug: 'explore',
-            component: <Explore product={product} isOwner={isOwner}/>,
+            component: <Explore product={product} isOwner={isOwner} isPublic={isPublic}/>,
         },
     ]
 

@@ -22,9 +22,11 @@ const ExploreLinks = styled.div`
 interface ExploreProps {
     product: DataproductQuery['dataproduct']
     isOwner: boolean
+    isPublic: boolean
 }
 
-const Explore = ({product, isOwner}: ExploreProps) => {
+const Explore = ({product, isOwner, isPublic}: ExploreProps) => {
+    console.log(isPublic);
     const [formError, setFormError] = useState(undefined)
     const [updateMapping] = useUpdateMappingMutation()
     useDataproductQuery({
@@ -61,12 +63,15 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     const services = product.services
     const mappings = product.mappings
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
+    const exportUrl = `https://backend-url-for-csv-export.com/`; // TODO: Replace with real URL
 
     return (
         <>
             <ExploreLinks>
                 <ExploreLink isOwner={isOwner} url={bigQueryUrl} type={ItemType.bigQuery}/>
                 <ExploreLink isOwner={isOwner} url={services.metabase} type={ItemType.metabase} add={addToMetabase} remove={removeFromMetabase} mappings={mappings}/>
+                { isPublic &&
+                <ExploreLink isOwner={isOwner} url={exportUrl} type={ItemType.export}/>}
             </ExploreLinks>
             {formError &&
             <ErrorMessage error={formError}/>
