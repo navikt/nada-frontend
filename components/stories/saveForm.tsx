@@ -1,19 +1,18 @@
-import { Fieldset } from '@navikt/ds-react'
+import {Fieldset} from '@navikt/ds-react'
 import styled from "styled-components"
-import { NewStory, StoryQuery, usePublishStoryMutation } from "../../lib/schema/graphql"
+import {NewStory, StoryQuery, usePublishStoryMutation} from "../../lib/schema/graphql"
 import TopBar from '../lib/topBar'
 import TeamSelector from '../lib/teamSelector'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
-import { useRouter } from 'next/router'
-import { useForm, useWatch } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { storyValidation } from '../../lib/schema/yupValidations'
+import {useRouter} from 'next/router'
+import {useForm, useWatch} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
+import {storyValidation} from '../../lib/schema/yupValidations'
 import KeywordsInput from "../lib/KeywordsInput";
-import { useContext, useEffect } from 'react'
-import { UserState } from '../../lib/context'
-import { StoryDocument } from '../../lib/schema/graphql'
+import {useContext, useEffect} from 'react'
+import {UserState} from '../../lib/context'
 
 
 const Container = styled.div`
@@ -84,7 +83,6 @@ function SaveForm({ story }: SaveFormProps) {
     const [publishStory] = usePublishStoryMutation()
 
     const onSubmit = (requestData: NewStory) => {
-        console.log(requestData)
         if (requestData.target == '') {
             requestData.target = undefined
         }
