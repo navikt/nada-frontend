@@ -1,7 +1,7 @@
 import {
     DataproductQuery,
     MappingService, useDataproductQuery,
-    useUpdateMappingMutation
+    useUpdateMappingMutation, useExtractDataproductMutation, UserInfoDetailsQuery,
 } from "../../lib/schema/graphql";
 import ExploreLink, {ItemType} from "./exploreLink";
 import styled from "styled-components";
@@ -23,12 +23,14 @@ interface ExploreProps {
     product: DataproductQuery['dataproduct']
     isOwner: boolean
     isPublic: boolean
+    userInfo?: UserInfoDetailsQuery['userInfo']
 }
 
-const Explore = ({product, isOwner, isPublic}: ExploreProps) => {
-    console.log(isPublic);
+const Explore = ({userInfo, product, isOwner, isPublic}: ExploreProps) => {
     const [formError, setFormError] = useState(undefined)
     const [updateMapping] = useUpdateMappingMutation()
+    const [extractDataproduct] = useExtractDataproductMutation()
+    const extract = userInfo?.dataproductExtracts.find(d => d.dataproductID === product.id && new Date(d.expired) >= new Date())
     useDataproductQuery({
         variables: { id: product.id },
         ssr: true,
@@ -59,19 +61,35 @@ const Explore = ({product, isOwner, isPublic}: ExploreProps) => {
         }
     }
 
+    const requestCsv = async () => {
+        try{
+            await extractDataproduct({
+                variables: {id: product.id},
+                refetchQueries: ['UserInfo'],
+            })
+    
+        } catch (e: any) {
+            setFormError(e)
+        }
+    }
+
     const datasource = product.datasource
     const services = product.services
     const mappings = product.mappings
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
-    const exportUrl = `https://backend-url-for-csv-export.com/`; // TODO: Replace with real URL
-
+    
     return (
         <>
             <ExploreLinks>
                 <ExploreLink isOwner={isOwner} url={bigQueryUrl} type={ItemType.bigQuery}/>
                 <ExploreLink isOwner={isOwner} url={services.metabase} type={ItemType.metabase} add={addToMetabase} remove={removeFromMetabase} mappings={mappings}/>
-                { isPublic &&
-                <ExploreLink isOwner={isOwner} url={exportUrl} type={ItemType.export}/>}
+                { isPublic && extract
+                ? extract.ready
+                    ? <ExploreLink isOwner={isOwner} isPublic={isPublic} url={extract.signedURL} type={ItemType.export}/>
+                    : <ExploreLink isOwner={isOwner} isPublic={isPublic} type={ItemType.export} disabled={true}/>
+                : <ExploreLink isOwner={isOwner} isPublic={isPublic} type={ItemType.export} add={requestCsv} />
+                }
+
             </ExploreLinks>
             {formError &&
             <ErrorMessage error={formError}/>

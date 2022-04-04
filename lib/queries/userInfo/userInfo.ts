@@ -41,6 +41,14 @@ export const USER_INFO = gql`
           group
         }
       }
+      dataproductExtracts {
+        id
+        dataproductID
+        ready
+        expired
+        created
+        signedURL
+      }
     }
   }
 `

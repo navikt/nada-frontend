@@ -112,6 +112,14 @@ export default function User() {
                             >
                                 Mine historier
                             </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    handleMenuClose()
+                                    router.push({pathname: '/user/exports'})
+                                }}
+                            >
+                                Mine eksporteringer
+                            </MenuItem>
                             <MenuSeparator/>
                             <MenuItem onClick={handleMenuClose}>
                                 <StyledA href={'https://docs.knada.io/'}>

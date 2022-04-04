@@ -66,6 +66,14 @@ export const UserPages = () => {
             </>
         ),
     },
+    {
+      title: 'Mine eksporteringer',
+      slug: 'exports',
+        component: (<>
+          <SubjectHeader>Mine eksporteringer</SubjectHeader>
+          <ResultList extracts={data.userInfo.dataproductExtracts} dataproducts={data.userInfo.accessable} />
+        </>)
+    }
   ]
 
   const currentPage = menuItems

@@ -22,6 +22,12 @@ const ExploreItem = styled.div<{ loading?: boolean }>`
   }
 `
 
+const DisabledExploreItem = styled(ExploreItem)`
+  cursor: disabled;
+  div {
+      color: #aaa;
+  }`
+
 const ExploreItemHeader = styled.div`
   flex-direction: row;
   display: flex;
@@ -63,6 +69,11 @@ display: flex;
   }
 `
 
+const CsvIcon = styled(FileContent)`
+  height: 100%;
+  width: 100%;
+`
+
 
 export enum ItemType {
     metabase = 1,
@@ -76,10 +87,12 @@ export interface ExploreLinkProps {
     add?: () => void,
     remove?: () => void,
     isOwner?: boolean,
+    isPublic?: boolean,
     mappings?: MappingService[]
+    disabled?: boolean
 }
 
-export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: ExploreLinkProps) => {
+export const ExploreLink = ({url, type, add, remove, isOwner, isPublic, mappings, disabled}: ExploreLinkProps) => {
     const addToMetabase = !mappings?.includes(MappingService.Metabase)
     const loading = mappings?.includes(MappingService.Metabase) && !url
     const handleDelete = (e: any) => {
@@ -95,7 +108,7 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                         <IconBox size={30}>
                             {type === ItemType.bigQuery && <BigQueryLogo/>}
                             {type === ItemType.metabase && <MetabaseLogo/>}
-                            {type === ItemType.export && <FileContent width="100%" height="100%"/>}
+                            {type === ItemType.export && <CsvIcon/>}
                         </IconBox>
                         <Title>
                             {type === ItemType.bigQuery && <>
@@ -108,7 +121,7 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                             </>}
                             {type === ItemType.export && <>
                                 <h1>CSV</h1>
-                                <h2>Eksporter i CSV-format</h2>
+                                <h2>Last ned CSV-fil</h2>
                             </>}
                         </Title>
                         {isOwner && type == ItemType.metabase &&
@@ -119,6 +132,37 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                     </ExploreItemHeader>
                 </ExploreItem>
             </a>
+        )
+    }
+
+    if (type==ItemType.export && isPublic) {
+        if (disabled) {
+            return (
+                <DisabledExploreItem>
+                    <ExploreItemHeader>
+                        <IconBox size={30}>
+                            <CsvIcon/>
+                        </IconBox>
+                        <Title>
+                            <h1>CSV</h1>
+                            <h2>Eksporterer CSV-fil</h2>
+                        </Title>
+                    </ExploreItemHeader>
+                </DisabledExploreItem>
+            )
+        }
+        return (
+            <ExploreItem onClick={add}>
+                <ExploreItemHeader>
+                    <IconBox size={30}>
+                        <CsvIcon/>
+                    </IconBox>
+                    <Title>
+                        <h1>CSV</h1>
+                        <h2>Eksporter til CSV-format</h2>
+                    </Title>
+                </ExploreItemHeader>
+            </ExploreItem>
         )
     }
 

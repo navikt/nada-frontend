@@ -120,6 +120,27 @@ export type Dataproduct = {
   services: DataproductServices
 }
 
+/** DataproductExtractInfo contains information on the dataproduct extract to csv. */
+export type DataproductExtractInfo = {
+  __typename?: 'DataproductExtractInfo'
+  /** bucketPath is the bucket path in the gcs storage bucket */
+  bucketPath: Scalars['String']
+  /** created is the timestamp when the extract request was created */
+  created: Scalars['Time']
+  /** dataproductID id is the id of the dataproductd extracted to csv */
+  dataproductID: Scalars['ID']
+  /** email of the user requesting export */
+  email: Scalars['String']
+  /** expired is a boolean indicating whether the table export has expired */
+  expired?: Maybe<Scalars['Time']>
+  /** id is det id of the extract request */
+  id: Scalars['ID']
+  /** ready is a boolean indicating whether the table extraction has finished */
+  ready?: Maybe<Scalars['Time']>
+  /** signedURL is the download url created */
+  signedURL: Scalars['String']
+}
+
 export type DataproductServices = {
   __typename?: 'DataproductServices'
   /** URL to the dataproduct in metabase */
@@ -199,6 +220,12 @@ export type Mutation = {
   /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
   /**
+   * extractDataproduct extracts a bigquery table to a storage bucket as csv.
+   *
+   * Requires authentication
+   */
+  extractDataproduct: DataproductExtractInfo
+  /**
    * grantAccessToDataproduct grants access for a subject to the dataproduct.
    *
    * Requires authentication.
@@ -261,6 +288,10 @@ export type MutationDeleteStoryArgs = {
 
 export type MutationDummyArgs = {
   no?: Maybe<Scalars['String']>
+}
+
+export type MutationExtractDataproductArgs = {
+  dataproductID: Scalars['ID']
 }
 
 export type MutationGrantAccessToDataproductArgs = {
@@ -347,6 +378,8 @@ export type Query = {
   __typename?: 'Query'
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
+  /** dataproductExtract returns a dataproduct extract. */
+  dataproductExtract: DataproductExtractInfo
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
   dataproducts: Array<Dataproduct>
   /**
@@ -388,6 +421,10 @@ export type Query = {
 }
 
 export type QueryDataproductArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryDataproductExtractArgs = {
   id: Scalars['ID']
 }
 
@@ -629,6 +666,8 @@ export type UserInfo = {
   __typename?: 'UserInfo'
   /** accessable is a list of dataproducts which the user has explicit access to */
   accessable: Array<Dataproduct>
+  /** dataproductExtracts returns information on the users dataproduct extracts. */
+  dataproductExtracts: Array<DataproductExtractInfo>
   /** dataproducts is a list of dataproducts with one of the users groups as owner */
   dataproducts: Array<Dataproduct>
   /** email of user. */
@@ -814,6 +853,15 @@ export type DeleteDataproductMutationVariables = Exact<{
 export type DeleteDataproductMutation = {
   __typename?: 'Mutation'
   deleteDataproduct: boolean
+}
+
+export type ExtractDataproductMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type ExtractDataproductMutation = {
+  __typename?: 'Mutation'
+  extractDataproduct: { __typename?: 'DataproductExtractInfo'; id: string }
 }
 
 export type GcpGetDatasetsQueryVariables = Exact<{
@@ -1127,6 +1175,15 @@ export type UserInfoDetailsQuery = {
       name: string
       keywords: Array<string>
       owner?: { __typename?: 'Owner'; group: string } | null | undefined
+    }>
+    dataproductExtracts: Array<{
+      __typename?: 'DataproductExtractInfo'
+      id: string
+      dataproductID: string
+      ready?: any | null | undefined
+      expired?: any | null | undefined
+      created: any
+      signedURL: string
     }>
   }
 }
@@ -1756,6 +1813,56 @@ export type DeleteDataproductMutationResult =
 export type DeleteDataproductMutationOptions = Apollo.BaseMutationOptions<
   DeleteDataproductMutation,
   DeleteDataproductMutationVariables
+>
+export const ExtractDataproductDocument = gql`
+  mutation extractDataproduct($id: ID!) {
+    extractDataproduct(dataproductID: $id) {
+      id
+    }
+  }
+`
+export type ExtractDataproductMutationFn = Apollo.MutationFunction<
+  ExtractDataproductMutation,
+  ExtractDataproductMutationVariables
+>
+
+/**
+ * __useExtractDataproductMutation__
+ *
+ * To run a mutation, you first call `useExtractDataproductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useExtractDataproductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [extractDataproductMutation, { data, loading, error }] = useExtractDataproductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useExtractDataproductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ExtractDataproductMutation,
+    ExtractDataproductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ExtractDataproductMutation,
+    ExtractDataproductMutationVariables
+  >(ExtractDataproductDocument, options)
+}
+export type ExtractDataproductMutationHookResult = ReturnType<
+  typeof useExtractDataproductMutation
+>
+export type ExtractDataproductMutationResult =
+  Apollo.MutationResult<ExtractDataproductMutation>
+export type ExtractDataproductMutationOptions = Apollo.BaseMutationOptions<
+  ExtractDataproductMutation,
+  ExtractDataproductMutationVariables
 >
 export const GcpGetDatasetsDocument = gql`
   query gcpGetDatasets($projectID: String!) {
@@ -2797,6 +2904,14 @@ export const UserInfoDetailsDocument = gql`
         owner {
           group
         }
+      }
+      dataproductExtracts {
+        id
+        dataproductID
+        ready
+        expired
+        created
+        signedURL
       }
     }
   }

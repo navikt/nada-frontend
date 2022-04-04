@@ -41,7 +41,7 @@ export const SearchResultLink = ({link, name, group, keywords, type, excerpt}: S
                         }
                         titleTypographyProps={{variant: 'h6'}}
                         title={name}
-                        subheader={`eier: ${group}`}
+                        subheader={group && `eier: ${group}`}
                     />
                     {excerpt && <div dangerouslySetInnerHTML={{__html: excerpt.replace(/\(\(START\)\)(.*?)\(\(STOP\)\)/g, `<i><b>$1</b></i>`)}} style={{margin:'10px 16px 0'}}/>}
 

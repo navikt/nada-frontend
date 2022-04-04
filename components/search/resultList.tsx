@@ -1,6 +1,8 @@
 import {QueryResult} from "@apollo/client";
 import {
+    DataproductExtractInfo,
     Exact,
+    Scalars,
     SearchContentWithOptionsQuery,
     SearchOptions,
 } from "../../lib/schema/graphql";
@@ -8,6 +10,8 @@ import ErrorMessage from "../lib/error";
 import LoaderSpinner from "../lib/spinner";
 import SearchResultLink from "./searchResultLink";
 import styled from "styled-components";
+import { format, parseISO } from "date-fns";
+import { nb } from "date-fns/locale";
 
 const Results = styled.div`
   display: flex;
@@ -18,12 +22,32 @@ const Results = styled.div`
   }
 `
 
+const ExpiredSearchResultLink = styled(SearchResultLink)`
+    color: #999;
+    cursor: disabled;
+`
+
 type ResultListInterface = {
     search?: QueryResult<SearchContentWithOptionsQuery, Exact<{ options: SearchOptions }>>
     dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: { __typename?: "Owner" | undefined, group: string } }[]
     stories?: { __typename?: 'Story', id: string, name: string, owner?: { __typename?: 'Owner'; group: string } | null | undefined }[] 
+    extracts?: Array<{__typename?: 'DataproductExtractInfo', id: string, dataproductID: string, ready?: any | null | undefined, expired?: any | null | undefined, created: any, signedURL: string}>
 }
-const ResultList = ({search, dataproducts, stories}: ResultListInterface) => {
+
+const parseDate = (date: string) => format(parseISO(date), "dd. MMMM yyyy HH:mm:ii", { locale: nb })
+
+const ResultList = ({search, dataproducts, stories, extracts}: ResultListInterface) => {
+    if (extracts) {
+        return (<Results>
+            {extracts.map(extract => (extract.ready && new Date(extract.expired) > new Date()) ? <SearchResultLink 
+                key={extract.id}
+                name="Extract"
+                excerpt={`Forespurt ${parseDate(extract.created)}, utløper ${parseDate(extract.expired)}`}
+                link={extract.signedURL} />
+                : <ExpiredSearchResultLink key={extract.id} name={`${dataproducts?.find(d => d.id === extract.dataproductID)?.name ?? ""} ${extract.ready ? "" : "(eksport ikke ferdig)"} ${new Date(extract.expired) <= new Date() ? "(eksport utgått på dato)" : ""}`} link="#" />
+                )}
+        </Results>)
+    }
     if (dataproducts) {
         return (<Results>
             {
