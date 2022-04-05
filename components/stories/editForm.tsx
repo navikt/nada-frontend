@@ -6,6 +6,8 @@ import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import {useRouter} from 'next/router'
 import {useForm} from 'react-hook-form'
 import KeywordsInput from "../lib/KeywordsInput";
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
+import {StoryDocument} from '../../lib/schema/graphql'
 
 
 const Container = styled.div`
@@ -29,10 +31,11 @@ interface SaveFormProps {
 
 function EditForm({story}: SaveFormProps) {
     const router = useRouter()
-    const {handleSubmit, formState, watch, setValue} =
+    const {register, handleSubmit, formState, watch, setValue} =
         useForm({
             defaultValues: {
-                keywords: story.keywords
+                keywords: story.keywords,
+                teamkatalogenURL: story.owner.teamkatalogenURL
             },
         })
 
@@ -53,11 +56,17 @@ function EditForm({story}: SaveFormProps) {
 
     const onSubmit = (requestData: any) => {
         updateStoryMetadata({
-            refetchQueries: ["searchContent", "Story"],
+            refetchQueries: ["searchContent",
+                {
+                    query: StoryDocument,
+                    variables: { id: story.id }
+                }
+            ],
             variables: {
                 id: story.id,
                 name: story.name,
-                keywords
+                keywords,
+                teamkatalogenURL: requestData.teamkatalogenURL
             },
         }).then((published: any) => {
             if (published.errors) {
@@ -79,6 +88,12 @@ function EditForm({story}: SaveFormProps) {
                 <DataproductBody>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Fieldset legend={''}>
+                            <TeamkatalogenSelector
+                                group={story.owner.group}
+                                register={register}
+                                errors={errors}
+                                watch={watch}
+                            />
                             <KeywordsInput
                                 onAdd={onAdd}
                                 onDelete={onDelete}

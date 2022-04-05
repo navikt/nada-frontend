@@ -276,10 +276,7 @@ export type MutationMapDataproductArgs = {
 }
 
 export type MutationPublishStoryArgs = {
-  group: Scalars['String']
-  id: Scalars['ID']
-  keywords?: Maybe<Array<Scalars['String']>>
-  target?: Maybe<Scalars['ID']>
+  input: NewStory
 }
 
 export type MutationRemoveRequesterFromDataproductArgs = {
@@ -300,6 +297,7 @@ export type MutationUpdateStoryMetadataArgs = {
   id: Scalars['ID']
   keywords: Array<Scalars['String']>
   name: Scalars['String']
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
 /** NewBigQuery contains metadata for creating a new bigquery data source */
@@ -334,7 +332,20 @@ export type NewDataproduct = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
-/** Owner contains metadata on the owner of the dataproduct. */
+export type NewStory = {
+  /** group is the owner group for the story. */
+  group: Scalars['String']
+  /** id is the id for the draft story. */
+  id: Scalars['ID']
+  /** keywords for the datastory used as tags. */
+  keywords?: Maybe<Array<Scalars['String']>>
+  /** target is the id of the published story to overwrite. Keep empty to create new story. */
+  target?: Maybe<Scalars['ID']>
+  /** owner Teamkatalogen URL for the dataproduct. */
+  teamkatalogenURL?: Maybe<Scalars['String']>
+}
+
+/** Owner contains metadata on the owner of the dataproduct/datastory. */
 export type Owner = {
   __typename?: 'Owner'
   /** owner group is the email for the group. */
@@ -515,7 +526,7 @@ export type Story = {
   /** name of the data story. */
   name: Scalars['String']
   /** owner of the data story. Changes to the data story can only be done by a member of the owner. */
-  owner?: Maybe<Owner>
+  owner: Owner
   /** views contains a list of the different view data in the data story. */
   views: Array<StoryView>
 }
@@ -937,14 +948,11 @@ export type SearchContentWithOptionsQuery = {
           created: any
           keywords: Array<string>
           modified?: any | null | undefined
-          group?:
-            | {
-                __typename?: 'Owner'
-                group: string
-                teamkatalogenURL?: string | null | undefined
-              }
-            | null
-            | undefined
+          group: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
         }
   }>
 }
@@ -979,10 +987,7 @@ export type PlotlyViewQuery = {
 }
 
 export type PublishStoryMutationVariables = Exact<{
-  id: Scalars['ID']
-  target?: Maybe<Scalars['ID']>
-  group: Scalars['String']
-  keywords?: Maybe<Array<Scalars['String']> | Scalars['String']>
+  input: NewStory
 }>
 
 export type PublishStoryMutation = {
@@ -998,14 +1003,11 @@ export type StoriesQuery = {
     __typename?: 'Story'
     id: string
     name: string
-    owner?:
-      | {
-          __typename?: 'Owner'
-          group: string
-          teamkatalogenURL?: string | null | undefined
-        }
-      | null
-      | undefined
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
   }>
 }
 
@@ -1023,14 +1025,11 @@ export type StoryQuery = {
     created: any
     lastModified?: any | null | undefined
     keywords: Array<string>
-    owner?:
-      | {
-          __typename?: 'Owner'
-          group: string
-          teamkatalogenURL?: string | null | undefined
-        }
-      | null
-      | undefined
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
     views: Array<
       | {
           __typename: 'StoryViewHeader'
@@ -1058,6 +1057,7 @@ export type UpdateStoryMetadataMutationVariables = Exact<{
   id: Scalars['ID']
   keywords: Array<Scalars['String']> | Scalars['String']
   name: Scalars['String']
+  teamkatalogenURL?: Maybe<Scalars['String']>
 }>
 
 export type UpdateStoryMetadataMutation = {
@@ -1126,7 +1126,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
-      owner?: { __typename?: 'Owner'; group: string } | null | undefined
+      owner: { __typename?: 'Owner'; group: string }
     }>
   }
 }
@@ -2352,13 +2352,8 @@ export type PlotlyViewQueryResult = Apollo.QueryResult<
   PlotlyViewQueryVariables
 >
 export const PublishStoryDocument = gql`
-  mutation publishStory(
-    $id: ID!
-    $target: ID
-    $group: String!
-    $keywords: [String!]
-  ) {
-    publishStory(id: $id, target: $target, group: $group, keywords: $keywords) {
+  mutation publishStory($input: NewStory!) {
+    publishStory(input: $input) {
       id
     }
   }
@@ -2381,10 +2376,7 @@ export type PublishStoryMutationFn = Apollo.MutationFunction<
  * @example
  * const [publishStoryMutation, { data, loading, error }] = usePublishStoryMutation({
  *   variables: {
- *      id: // value for 'id'
- *      target: // value for 'target'
- *      group: // value for 'group'
- *      keywords: // value for 'keywords'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -2590,8 +2582,14 @@ export const UpdateStoryMetadataDocument = gql`
     $id: ID!
     $keywords: [String!]!
     $name: String!
+    $teamkatalogenURL: String
   ) {
-    updateStoryMetadata(id: $id, keywords: $keywords, name: $name) {
+    updateStoryMetadata(
+      id: $id
+      keywords: $keywords
+      name: $name
+      teamkatalogenURL: $teamkatalogenURL
+    ) {
       id
     }
   }
@@ -2617,6 +2615,7 @@ export type UpdateStoryMetadataMutationFn = Apollo.MutationFunction<
  *      id: // value for 'id'
  *      keywords: // value for 'keywords'
  *      name: // value for 'name'
+ *      teamkatalogenURL: // value for 'teamkatalogenURL'
  *   },
  * });
  */
