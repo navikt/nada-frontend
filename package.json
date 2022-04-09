@@ -37,7 +37,7 @@
     "deepmerge": "^4.2.2",
     "graphql": "^15.6.1",
     "marked": "^4.0.10",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "nav-frontend-core": "^6.0.1",
     "nav-frontend-ikoner-assets": "^3.0.1",
     "nav-frontend-spinner": "^3.0.1",
