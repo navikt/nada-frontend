@@ -676,6 +676,7 @@ export type DataproductAccessQuery = {
     __typename?: 'Dataproduct'
     id: string
     name: string
+    pii: boolean
     requesters: Array<string>
     owner: {
       __typename?: 'Owner'
@@ -1209,6 +1210,7 @@ export const DataproductAccessDocument = gql`
     dataproduct(id: $id) {
       id
       name
+      pii
       owner {
         group
         teamkatalogenURL

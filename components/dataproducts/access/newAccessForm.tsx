@@ -33,9 +33,10 @@ interface NewAccessFormProps {
   open: boolean,
   setOpen: Dispatch<SetStateAction<boolean>>,
   id: string
+  pii: boolean
 }
 
-const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
+const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
   const [formError, setFormError] = useState('')
 
   const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
@@ -163,11 +164,11 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
                       name='subjectType'
                       render={({ field }) => (
                           <RadioGroup {...field}>
-                            <FormControlLabel
+                            {!pii && <FormControlLabel
                                 value='all-users'
                                 control={<Radio />}
                                 label='Alle i NAV'
-                            />
+                            />}
                             <FormControlLabel
                                 value='group'
                                 control={<Radio />}

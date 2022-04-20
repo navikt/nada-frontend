@@ -36,7 +36,7 @@ const Owner = ({ accessQuery }: OwnerProps) => {
       <AccessList id={dataproduct.id} access={dataproduct.access} requesters={dataproduct.requesters} />
       <SubHeader onClick={() => setShowExpired(!showExpired)}>Utløpte tilganger {showExpired ? <Collapse /> : <Expand />}</SubHeader>
       {showExpired && <ExpiredAccessList access={dataproduct.access} />}
-      <NewAccessForm open={open} setOpen={setOpen} id={dataproduct.id} />
+      <NewAccessForm open={open} setOpen={setOpen} id={dataproduct.id} pii={dataproduct.pii} />
     </>
   )
 }

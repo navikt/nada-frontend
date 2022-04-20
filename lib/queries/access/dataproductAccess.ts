@@ -5,6 +5,7 @@ export const GET_DATAPRODUCT_ACCESS = gql`
     dataproduct(id: $id) {
       id
       name
+      pii
       owner {
         group
         teamkatalogenURL
