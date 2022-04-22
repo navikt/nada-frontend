@@ -3,6 +3,8 @@ import {
   SubjectType,
   useAddRequesterMutation,
   useGrantAccessMutation,
+  NewGrant,
+  PollyInput,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import {Dispatch, SetStateAction, useState} from 'react'
@@ -50,6 +52,7 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
     subject: '',
     accessType: '',
     expires: '',
+    polly: null,
   }
   const { formState, handleSubmit, control, watch, register, reset } =
       useForm({
@@ -66,7 +69,7 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
   const [addRequester] = useAddRequesterMutation()
   const [grantAccess] = useGrantAccessMutation()
 
-  const onSubmit = async (requestData: { subjectType: string, subject: string, accessType: string, expires: any }) => {
+  const onSubmit = async (requestData: { subjectType: string, subject: string, accessType: string, expires: any, polly: PollyInput }) => {
     requestData.expires = date
     const accessSubject = requestData.subjectType === 'all-users' ? 'all-users@nav.no' : subject
 
@@ -100,14 +103,19 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
     }
 
     try {
-      const variables: GrantAccessMutationVariables = {
+      const newGrant: NewGrant = {
         subjectType: toSubjectType(requestData.subjectType),
         subject: accessSubject,
         dataproductID: id,
+        polly: null,
+      }
+
+      const variables: GrantAccessMutationVariables = {
+        input: newGrant,
       }
 
       if (requestData.accessType === 'until') {
-        variables.expires = date
+        variables.input.expires = date
       }
 
       await grantAccess({

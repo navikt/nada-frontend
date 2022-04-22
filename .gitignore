@@ -40,3 +40,6 @@ yarn-error.log*
 # Schema from backend
 spec-v1.0.yaml
 data.sql
+
+# asdf
+.tool-versions

@@ -35,6 +35,8 @@ export type Access = {
   granter: Scalars['String']
   /** id for the access entry */
   id: Scalars['ID']
+  /** polly is the documentation for the access grant */
+  polly?: Maybe<PollyResult>
   /** revoked is timestamp for when access was revoked */
   revoked?: Maybe<Scalars['Time']>
   /** subject to grant access */
@@ -264,10 +266,7 @@ export type MutationDummyArgs = {
 }
 
 export type MutationGrantAccessToDataproductArgs = {
-  dataproductID: Scalars['ID']
-  expires?: Maybe<Scalars['Time']>
-  subject?: Maybe<Scalars['String']>
-  subjectType?: Maybe<SubjectType>
+  input: NewGrant
 }
 
 export type MutationMapDataproductArgs = {
@@ -332,6 +331,20 @@ export type NewDataproduct = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
+/** NewGrant contains metadata on a dataproduct grant */
+export type NewGrant = {
+  /** id of dataproduct. */
+  dataproductID: Scalars['ID']
+  /** expires is a timestamp for when the access expires. */
+  expires?: Maybe<Scalars['Time']>
+  /** polly is the process policy attached to this grant */
+  polly?: Maybe<PollyInput>
+  /** subject to be granted access. */
+  subject?: Maybe<Scalars['String']>
+  /** subjectType is the type of entity which should be granted access (user, group or service account). */
+  subjectType?: Maybe<SubjectType>
+}
+
 export type NewStory = {
   /** group is the owner group for the story. */
   group: Scalars['String']
@@ -352,6 +365,25 @@ export type Owner = {
   group: Scalars['String']
   /** teamkatalogenURL is url for the team in the NAV team catalog. */
   teamkatalogenURL?: Maybe<Scalars['String']>
+}
+
+export type PollyInput = {
+  /** id from polly */
+  id: Scalars['String']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
+}
+
+export type PollyResult = {
+  __typename?: 'PollyResult'
+  /** id from polly */
+  id: Scalars['String']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
 }
 
 export type Query = {
@@ -376,6 +408,8 @@ export type Query = {
   groupStats: Array<GroupStats>
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>
+  /** searches polly for process purposes matching query input */
+  polly: Array<PollyResult>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** stories returns all either draft or published stories depending on the draft boolean. */
@@ -424,6 +458,10 @@ export type QueryGroupStatsArgs = {
 
 export type QueryKeywordsArgs = {
   prefix?: Maybe<Scalars['String']>
+}
+
+export type QueryPollyArgs = {
+  q: Scalars['String']
 }
 
 export type QuerySearchArgs = {
@@ -696,10 +734,7 @@ export type DataproductAccessQuery = {
 }
 
 export type GrantAccessMutationVariables = Exact<{
-  dataproductID: Scalars['ID']
-  subject: Scalars['String']
-  subjectType: SubjectType
-  expires?: Maybe<Scalars['Time']>
+  input: NewGrant
 }>
 
 export type GrantAccessMutation = {
@@ -1279,18 +1314,8 @@ export type DataproductAccessQueryResult = Apollo.QueryResult<
   DataproductAccessQueryVariables
 >
 export const GrantAccessDocument = gql`
-  mutation GrantAccess(
-    $dataproductID: ID!
-    $subject: String!
-    $subjectType: SubjectType!
-    $expires: Time
-  ) {
-    grantAccessToDataproduct(
-      dataproductID: $dataproductID
-      subject: $subject
-      subjectType: $subjectType
-      expires: $expires
-    ) {
+  mutation GrantAccess($input: NewGrant!) {
+    grantAccessToDataproduct(input: $input) {
       id
     }
   }
@@ -1313,10 +1338,7 @@ export type GrantAccessMutationFn = Apollo.MutationFunction<
  * @example
  * const [grantAccessMutation, { data, loading, error }] = useGrantAccessMutation({
  *   variables: {
- *      dataproductID: // value for 'dataproductID'
- *      subject: // value for 'subject'
- *      subjectType: // value for 'subjectType'
- *      expires: // value for 'expires'
+ *      input: // value for 'input'
  *   },
  * });
  */
