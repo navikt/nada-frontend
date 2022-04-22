@@ -110,12 +110,12 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
         polly: null,
       }
 
-      const variables: GrantAccessMutationVariables = {
-        input: newGrant,
+      if (requestData.accessType === 'until') {
+        newGrant.expires = date
       }
 
-      if (requestData.accessType === 'until') {
-        variables.input.expires = date
+      const variables: GrantAccessMutationVariables = {
+        input: newGrant,
       }
 
       await grantAccess({
