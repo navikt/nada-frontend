@@ -132,12 +132,13 @@ const Dataproduct = (props: DataproductProps) => {
             component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
                 <Owner accessQuery={accessQuery}/> : <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
         },
-        {
-            title: 'utforsk',
-            slug: 'explore',
-            component: <Explore product={product} isOwner={isOwner}/>,
-        },
-    ]
+    ];
+
+    (userInfo && accessType.type != "none") && menuItems.push({
+        title: 'utforsk',
+        slug: 'explore',
+        component: <Explore product={product} isOwner={isOwner}/>,
+    })
 
     const currentPage = menuItems
         .map((e) => e.slug)
