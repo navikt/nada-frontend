@@ -125,19 +125,36 @@ const Dataproduct = (props: DataproductProps) => {
             component: (
                 <DataproductTableSchema datasource={product.datasource}/>
             ),
-        },
-        {
+        }
+    ];
+
+    if (userInfo && accessType.type == "owner") {
+        menuItems.push({
             title: 'tilganger',
             slug: 'access',
-            component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
-                <Owner accessQuery={accessQuery}/> : <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
-        },
-        {
+            component: <Owner accessQuery={accessQuery}/>,
+        })
+    }
+
+    if (userInfo && accessType.type == "user") {
+        menuItems.push({
+            title: 'dine tilganger',
+            slug: 'your-accesses',
+            component: <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
+        })
+    }
+
+    if (userInfo && ["user", "owner"].includes(accessType.type)) {
+        menuItems.push({
             title: 'utforsk',
             slug: 'explore',
             component: <Explore product={product} isOwner={isOwner}/>,
-        },
-    ]
+        })
+    }
+
+    if (userInfo && accessType.type != "none") {
+
+    }
 
     const currentPage = menuItems
         .map((e) => e.slug)
@@ -195,7 +212,7 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product} accessType={accessType} />
+                <MetadataTable product={product} accessType={accessType}/>
             </Container>
         </>
     )

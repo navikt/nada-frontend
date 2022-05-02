@@ -41,5 +41,9 @@ yarn-error.log*
 spec-v1.0.yaml
 data.sql
 
+# local graphql
+.graphqlconfig
+schema.graphql
+
 # asdf
 .tool-versions

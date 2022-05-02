@@ -5,7 +5,7 @@ import LoaderSpinner from '../../lib/spinner'
 import * as React from 'react'
 import { useState } from 'react'
 import { Button } from '@navikt/ds-react'
-import AccessList from './accessList'
+import OwnerAccessList from './ownerAccessList'
 import ExpiredAccessList from './expiredAccessList'
 import { AddCircle } from '@navikt/ds-icons'
 import NewAccessForm from "./newAccessForm";
@@ -33,7 +33,7 @@ const Owner = ({ accessQuery }: OwnerProps) => {
       </Button>
       <br />
       <SubHeader>Aktive tilganger</SubHeader>
-      <AccessList id={dataproduct.id} access={dataproduct.access} requesters={dataproduct.requesters} />
+      <OwnerAccessList id={dataproduct.id} access={dataproduct.access} requesters={dataproduct.requesters} />
       <SubHeader onClick={() => setShowExpired(!showExpired)}>Utløpte tilganger {showExpired ? <Collapse /> : <Expand />}</SubHeader>
       {showExpired && <ExpiredAccessList access={dataproduct.access} />}
       <NewAccessForm open={open} setOpen={setOpen} id={dataproduct.id} pii={dataproduct.pii} />

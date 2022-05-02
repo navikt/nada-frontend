@@ -35,12 +35,27 @@ export type Access = {
   granter: Scalars['String']
   /** id for the access entry */
   id: Scalars['ID']
-  /** polly is the documentation for the access grant */
-  polly?: Maybe<PollyResult>
   /** revoked is timestamp for when access was revoked */
   revoked?: Maybe<Scalars['Time']>
   /** subject to grant access */
   subject: Scalars['String']
+}
+
+/** AccessRequest contains metadata on a request to access a dataproduct */
+export type AccessRequest = {
+  __typename?: 'AccessRequest'
+  /** id of dataproduct. */
+  dataproductID: Scalars['ID']
+  /** id of access request. */
+  id: Scalars['ID']
+  /** owner of the access request */
+  owner?: Maybe<Scalars['String']>
+  /** polly is the process policy attached to this grant */
+  polly?: Maybe<Polly>
+  /** subject to be granted access. */
+  subject?: Maybe<Scalars['String']>
+  /** subjectType is the type of entity which should be granted access (user, group or service account). */
+  subjectType?: Maybe<SubjectType>
 }
 
 /** BigQuery contains metadata on a BigQuery table. */
@@ -181,11 +196,23 @@ export type Mutation = {
    */
   addRequesterToDataproduct: Scalars['Boolean']
   /**
+   * createAccessRequest creates a new access request for a dataproduct
+   *
+   * Requires authentication
+   */
+  createAccessRequest: AccessRequest
+  /**
    * createDataproduct creates a new dataproduct
    *
    * Requires authentication.
    */
   createDataproduct: Dataproduct
+  /**
+   * deleteAccessRequest deletes a dataproduct access request.
+   *
+   * Requires authentication
+   */
+  deleteAccessRequest: Scalars['Boolean']
   /**
    * deleteDataproduct deletes a dataproduct.
    *
@@ -231,6 +258,12 @@ export type Mutation = {
    */
   revokeAccessToDataproduct: Scalars['Boolean']
   /**
+   * createAccessRequest creates a new access request for a dataproduct
+   *
+   * Requires authentication
+   */
+  updateAccessRequest: AccessRequest
+  /**
    * updateDataproduct updates an existing dataproduct
    *
    * Requires authentication.
@@ -249,8 +282,16 @@ export type MutationAddRequesterToDataproductArgs = {
   subject: Scalars['String']
 }
 
+export type MutationCreateAccessRequestArgs = {
+  input: NewAccessRequest
+}
+
 export type MutationCreateDataproductArgs = {
   input: NewDataproduct
+}
+
+export type MutationDeleteAccessRequestArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationDeleteDataproductArgs = {
@@ -287,6 +328,10 @@ export type MutationRevokeAccessToDataproductArgs = {
   id: Scalars['ID']
 }
 
+export type MutationUpdateAccessRequestArgs = {
+  input: UpdateAccessRequest
+}
+
 export type MutationUpdateDataproductArgs = {
   id: Scalars['ID']
   input: UpdateDataproduct
@@ -297,6 +342,20 @@ export type MutationUpdateStoryMetadataArgs = {
   keywords: Array<Scalars['String']>
   name: Scalars['String']
   teamkatalogenURL?: Maybe<Scalars['String']>
+}
+
+/** NewAccessRequest contains metadata on a request to access a dataproduct */
+export type NewAccessRequest = {
+  /** id of dataproduct. */
+  dataproductID: Scalars['ID']
+  /** owner is the owner of the access request */
+  owner?: Maybe<Scalars['String']>
+  /** polly is the process policy attached to this grant */
+  polly?: Maybe<NewPolly>
+  /** subject to be granted access. */
+  subject?: Maybe<Scalars['String']>
+  /** subjectType is the type of entity which should be granted access (user, group or service account). */
+  subjectType?: Maybe<SubjectType>
 }
 
 /** NewBigQuery contains metadata for creating a new bigquery data source */
@@ -331,18 +390,25 @@ export type NewDataproduct = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
-/** NewGrant contains metadata on a dataproduct grant */
+/** NewGrant contains metadata on a request to access a dataproduct */
 export type NewGrant = {
   /** id of dataproduct. */
   dataproductID: Scalars['ID']
   /** expires is a timestamp for when the access expires. */
   expires?: Maybe<Scalars['Time']>
-  /** polly is the process policy attached to this grant */
-  polly?: Maybe<PollyInput>
   /** subject to be granted access. */
   subject?: Maybe<Scalars['String']>
   /** subjectType is the type of entity which should be granted access (user, group or service account). */
   subjectType?: Maybe<SubjectType>
+}
+
+export type NewPolly = {
+  /** id from polly */
+  externalID: Scalars['String']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
 }
 
 export type NewStory = {
@@ -367,19 +433,12 @@ export type Owner = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
-export type PollyInput = {
+export type Polly = {
+  __typename?: 'Polly'
   /** id from polly */
-  id: Scalars['String']
-  /** name from polly */
-  name: Scalars['String']
-  /** url from polly */
-  url: Scalars['String']
-}
-
-export type PollyResult = {
-  __typename?: 'PollyResult'
-  /** id from polly */
-  id: Scalars['String']
+  externalID: Scalars['String']
+  /** database id */
+  id: Scalars['ID']
   /** name from polly */
   name: Scalars['String']
   /** url from polly */
@@ -388,6 +447,12 @@ export type PollyResult = {
 
 export type Query = {
   __typename?: 'Query'
+  /** accessRequest returns one specific access request */
+  accessRequest: AccessRequest
+  /** accessRequests returns all access requests for a dataproduct */
+  accessRequestsForDataproduct: Array<AccessRequest>
+  /** accessRequests returns all access requests for an owner */
+  accessRequestsForOwner: Array<AccessRequest>
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -409,7 +474,8 @@ export type Query = {
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>
   /** searches polly for process purposes matching query input */
-  polly: Array<PollyResult>
+
+  polly: Array<QueryPolly>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** stories returns all either draft or published stories depending on the draft boolean. */
@@ -430,6 +496,14 @@ export type Query = {
   userInfo: UserInfo
   /** version returns the API version. */
   version: Scalars['String']
+}
+
+export type QueryAccessRequestArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryAccessRequestsForDataproductArgs = {
+  dataproductID: Scalars['ID']
 }
 
 export type QueryDataproductArgs = {
@@ -489,6 +563,16 @@ export type QueryStoryViewArgs = {
 
 export type QueryTeamkatalogenArgs = {
   q: Scalars['String']
+}
+
+export type QueryPolly = {
+  __typename?: 'QueryPolly'
+  /** id from polly */
+  externalID: Scalars['String']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
 }
 
 export type SearchOptions = {
@@ -653,6 +737,18 @@ export type TeamkatalogenResult = {
   name: Scalars['String']
   /** url to team in teamkatalogen. */
   url: Scalars['String']
+}
+
+/** UpdateAccessRequest contains metadata on a request to access a dataproduct */
+export type UpdateAccessRequest = {
+  /** id of access request. */
+  id: Scalars['ID']
+  /** newPolly is the new polly documentation for this access request. */
+  newPolly?: Maybe<NewPolly>
+  /** owner is the owner of the access request. */
+  owner: Scalars['String']
+  /** pollyID is the id of the existing polly documentation. */
+  pollyID?: Maybe<Scalars['ID']>
 }
 
 /** UpdateDataproduct contains metadata for updating a dataproduct */
