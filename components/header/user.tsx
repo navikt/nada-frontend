@@ -110,7 +110,7 @@ export default function User() {
                                     router.push({pathname: '/user/stories'})
                                 }}
                             >
-                                Mine historier
+                                Mine fortellinger
                             </MenuItem>
                             <MenuSeparator/>
                             <MenuItem onClick={handleMenuClose}>

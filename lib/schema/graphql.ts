@@ -44,6 +44,8 @@ export type Access = {
 /** AccessRequest contains metadata on a request to access a dataproduct */
 export type AccessRequest = {
   __typename?: 'AccessRequest'
+  /** created is a timestamp for when the access request was created */
+  created?: Maybe<Scalars['Time']>
   /** id of dataproduct. */
   dataproductID: Scalars['ID']
   /** id of access request. */
@@ -196,6 +198,12 @@ export type Mutation = {
    */
   addRequesterToDataproduct: Scalars['Boolean']
   /**
+   * approveAccessRequest approves an access request.
+   *
+   * Requires authentication
+   */
+  approveAccessRequest: Scalars['Boolean']
+  /**
    * createAccessRequest creates a new access request for a dataproduct
    *
    * Requires authentication
@@ -225,6 +233,12 @@ export type Mutation = {
    * Requires authentication.
    */
   deleteStory: Scalars['Boolean']
+  /**
+   * denyAccessRequest denies an access request.
+   *
+   * Requires authentication
+   */
+  denyAccessRequest: Scalars['Boolean']
   /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
   /**
@@ -282,6 +296,10 @@ export type MutationAddRequesterToDataproductArgs = {
   subject: Scalars['String']
 }
 
+export type MutationApproveAccessRequestArgs = {
+  id: Scalars['ID']
+}
+
 export type MutationCreateAccessRequestArgs = {
   input: NewAccessRequest
 }
@@ -299,6 +317,10 @@ export type MutationDeleteDataproductArgs = {
 }
 
 export type MutationDeleteStoryArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationDenyAccessRequestArgs = {
   id: Scalars['ID']
 }
 
@@ -451,8 +473,6 @@ export type Query = {
   accessRequest: AccessRequest
   /** accessRequests returns all access requests for a dataproduct */
   accessRequestsForDataproduct: Array<AccessRequest>
-  /** accessRequests returns all access requests for an owner */
-  accessRequestsForOwner: Array<AccessRequest>
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -771,9 +791,11 @@ export type UpdateDataproduct = {
 /** UserInfo contains metadata on a logged in user */
 export type UserInfo = {
   __typename?: 'UserInfo'
-  /** accessable is a list of dataproducts which the user has explicit access to */
+  /** accessRequests is a list of access requests where either the user or one of the users groups is owner. */
+  accessRequests: Array<AccessRequest>
+  /** accessable is a list of dataproducts which the user has explicit access to. */
   accessable: Array<Dataproduct>
-  /** dataproducts is a list of dataproducts with one of the users groups as owner */
+  /** dataproducts is a list of dataproducts with one of the users groups as owner. */
   dataproducts: Array<Dataproduct>
   /** email of user. */
   email: Scalars['String']
@@ -781,11 +803,11 @@ export type UserInfo = {
   gcpProjects: Array<GcpProject>
   /** groups the user is a member of. */
   groups: Array<Group>
-  /** loginExpiration is when the token expires */
+  /** loginExpiration is when the token expires. */
   loginExpiration: Scalars['Time']
   /** name of user. */
   name: Scalars['String']
-  /** stories is a list of stories with one of the users groups as owner */
+  /** stories is a list of stories with one of the users groups as owner. */
   stories: Array<Story>
 }
 
@@ -870,31 +892,6 @@ export type AccessRequestsForDataproductQuery = {
     owner?: string | null | undefined
     polly?:
       | { __typename?: 'Polly'; name: string; externalID: string; url: string }
-      | null
-      | undefined
-  }>
-}
-
-export type AccessRequestsForOwnerQueryVariables = Exact<{
-  [key: string]: never
-}>
-
-export type AccessRequestsForOwnerQuery = {
-  __typename?: 'Query'
-  accessRequestsForOwner: Array<{
-    __typename?: 'AccessRequest'
-    id: string
-    dataproductID: string
-    subject?: string | null | undefined
-    subjectType?: SubjectType | null | undefined
-    polly?:
-      | {
-          __typename?: 'Polly'
-          id: string
-          externalID: string
-          name: string
-          url: string
-        }
       | null
       | undefined
   }>
@@ -1303,6 +1300,23 @@ export type UserInfoDetailsQuery = {
       keywords: Array<string>
       owner: { __typename?: 'Owner'; group: string }
     }>
+    accessRequests: Array<{
+      __typename?: 'AccessRequest'
+      subject?: string | null | undefined
+      subjectType?: SubjectType | null | undefined
+      owner?: string | null | undefined
+      created?: any | null | undefined
+      dataproductID: string
+      polly?:
+        | {
+            __typename?: 'Polly'
+            externalID: string
+            name: string
+            url: string
+          }
+        | null
+        | undefined
+    }>
   }
 }
 
@@ -1667,72 +1681,6 @@ export type AccessRequestsForDataproductLazyQueryHookResult = ReturnType<
 export type AccessRequestsForDataproductQueryResult = Apollo.QueryResult<
   AccessRequestsForDataproductQuery,
   AccessRequestsForDataproductQueryVariables
->
-export const AccessRequestsForOwnerDocument = gql`
-  query AccessRequestsForOwner {
-    accessRequestsForOwner {
-      id
-      dataproductID
-      subject
-      subjectType
-      polly {
-        id
-        externalID
-        name
-        url
-      }
-    }
-  }
-`
-
-/**
- * __useAccessRequestsForOwnerQuery__
- *
- * To run a query within a React component, call `useAccessRequestsForOwnerQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessRequestsForOwnerQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAccessRequestsForOwnerQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAccessRequestsForOwnerQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    AccessRequestsForOwnerQuery,
-    AccessRequestsForOwnerQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    AccessRequestsForOwnerQuery,
-    AccessRequestsForOwnerQueryVariables
-  >(AccessRequestsForOwnerDocument, options)
-}
-export function useAccessRequestsForOwnerLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AccessRequestsForOwnerQuery,
-    AccessRequestsForOwnerQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    AccessRequestsForOwnerQuery,
-    AccessRequestsForOwnerQueryVariables
-  >(AccessRequestsForOwnerDocument, options)
-}
-export type AccessRequestsForOwnerQueryHookResult = ReturnType<
-  typeof useAccessRequestsForOwnerQuery
->
-export type AccessRequestsForOwnerLazyQueryHookResult = ReturnType<
-  typeof useAccessRequestsForOwnerLazyQuery
->
-export type AccessRequestsForOwnerQueryResult = Apollo.QueryResult<
-  AccessRequestsForOwnerQuery,
-  AccessRequestsForOwnerQueryVariables
 >
 export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
@@ -3090,6 +3038,18 @@ export const UserInfoDetailsDocument = gql`
         keywords
         owner {
           group
+        }
+      }
+      accessRequests {
+        subject
+        subjectType
+        owner
+        created
+        dataproductID
+        polly {
+          externalID
+          name
+          url
         }
       }
     }

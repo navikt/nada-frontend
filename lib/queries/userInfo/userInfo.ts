@@ -41,6 +41,18 @@ export const USER_INFO = gql`
           group
         }
       }
+      accessRequests {
+        subject
+        subjectType
+        owner
+        created
+        dataproductID
+        polly {
+          externalID
+          name
+          url
+        }
+      }
     }
   }
 `
