@@ -3,6 +3,8 @@ import ErrorMessage from '../../../components/lib/error'
 import {
     DataproductAccessQuery,
     Group,
+    useAccessRequestsForDataproductLazyQuery,
+    useAccessRequestsForDataproductQuery,
     useDataproductAccessQuery,
     useDataproductQuery,
     useDeleteDataproductMutation,
@@ -132,7 +134,7 @@ const Dataproduct = (props: DataproductProps) => {
         menuItems.push({
             title: 'tilganger',
             slug: 'access',
-            component: <Owner accessQuery={accessQuery}/>,
+            component: <Owner accessQuery={accessQuery} dataproductID={product.id}/>,
         })
     }
 

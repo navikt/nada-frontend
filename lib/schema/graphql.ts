@@ -474,7 +474,6 @@ export type Query = {
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>
   /** searches polly for process purposes matching query input */
-
   polly: Array<QueryPolly>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
@@ -855,6 +854,50 @@ export type RevokeAccessMutationVariables = Exact<{
 export type RevokeAccessMutation = {
   __typename?: 'Mutation'
   revokeAccessToDataproduct: boolean
+}
+
+export type AccessRequestsForDataproductQueryVariables = Exact<{
+  dataproductID: Scalars['ID']
+}>
+
+export type AccessRequestsForDataproductQuery = {
+  __typename?: 'Query'
+  accessRequestsForDataproduct: Array<{
+    __typename?: 'AccessRequest'
+    id: string
+    subject?: string | null | undefined
+    subjectType?: SubjectType | null | undefined
+    owner?: string | null | undefined
+    polly?:
+      | { __typename?: 'Polly'; name: string; externalID: string; url: string }
+      | null
+      | undefined
+  }>
+}
+
+export type AccessRequestsForOwnerQueryVariables = Exact<{
+  [key: string]: never
+}>
+
+export type AccessRequestsForOwnerQuery = {
+  __typename?: 'Query'
+  accessRequestsForOwner: Array<{
+    __typename?: 'AccessRequest'
+    id: string
+    dataproductID: string
+    subject?: string | null | undefined
+    subjectType?: SubjectType | null | undefined
+    polly?:
+      | {
+          __typename?: 'Polly'
+          id: string
+          externalID: string
+          name: string
+          url: string
+        }
+      | null
+      | undefined
+  }>
 }
 
 export type CreateDataproductMutationVariables = Exact<{
@@ -1558,6 +1601,138 @@ export type RevokeAccessMutationResult =
 export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<
   RevokeAccessMutation,
   RevokeAccessMutationVariables
+>
+export const AccessRequestsForDataproductDocument = gql`
+  query accessRequestsForDataproduct($dataproductID: ID!) {
+    accessRequestsForDataproduct(dataproductID: $dataproductID) {
+      id
+      subject
+      subjectType
+      owner
+      polly {
+        name
+        externalID
+        url
+      }
+    }
+  }
+`
+
+/**
+ * __useAccessRequestsForDataproductQuery__
+ *
+ * To run a query within a React component, call `useAccessRequestsForDataproductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessRequestsForDataproductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessRequestsForDataproductQuery({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *   },
+ * });
+ */
+export function useAccessRequestsForDataproductQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >(AccessRequestsForDataproductDocument, options)
+}
+export function useAccessRequestsForDataproductLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >(AccessRequestsForDataproductDocument, options)
+}
+export type AccessRequestsForDataproductQueryHookResult = ReturnType<
+  typeof useAccessRequestsForDataproductQuery
+>
+export type AccessRequestsForDataproductLazyQueryHookResult = ReturnType<
+  typeof useAccessRequestsForDataproductLazyQuery
+>
+export type AccessRequestsForDataproductQueryResult = Apollo.QueryResult<
+  AccessRequestsForDataproductQuery,
+  AccessRequestsForDataproductQueryVariables
+>
+export const AccessRequestsForOwnerDocument = gql`
+  query AccessRequestsForOwner {
+    accessRequestsForOwner {
+      id
+      dataproductID
+      subject
+      subjectType
+      polly {
+        id
+        externalID
+        name
+        url
+      }
+    }
+  }
+`
+
+/**
+ * __useAccessRequestsForOwnerQuery__
+ *
+ * To run a query within a React component, call `useAccessRequestsForOwnerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessRequestsForOwnerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessRequestsForOwnerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAccessRequestsForOwnerQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AccessRequestsForOwnerQuery,
+    AccessRequestsForOwnerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    AccessRequestsForOwnerQuery,
+    AccessRequestsForOwnerQueryVariables
+  >(AccessRequestsForOwnerDocument, options)
+}
+export function useAccessRequestsForOwnerLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AccessRequestsForOwnerQuery,
+    AccessRequestsForOwnerQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    AccessRequestsForOwnerQuery,
+    AccessRequestsForOwnerQueryVariables
+  >(AccessRequestsForOwnerDocument, options)
+}
+export type AccessRequestsForOwnerQueryHookResult = ReturnType<
+  typeof useAccessRequestsForOwnerQuery
+>
+export type AccessRequestsForOwnerLazyQueryHookResult = ReturnType<
+  typeof useAccessRequestsForOwnerLazyQuery
+>
+export type AccessRequestsForOwnerQueryResult = Apollo.QueryResult<
+  AccessRequestsForOwnerQuery,
+  AccessRequestsForOwnerQueryVariables
 >
 export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
