@@ -50,6 +50,8 @@ export type AccessRequest = {
   created: Scalars['Time']
   /** id of dataproduct. */
   dataproductID: Scalars['ID']
+  /** expires is a timestamp for when the access expires */
+  expires?: Maybe<Scalars['Time']>
   /** granter is the email of the person who granted/denied the access request. */
   granter?: Maybe<Scalars['String']>
   /** id of access request. */
@@ -1359,6 +1361,8 @@ export type UserInfoDetailsQuery = {
       subjectType: SubjectType
       owner: string
       created: any
+      expires?: any | null | undefined
+      status: AccessRequestStatus
       dataproductID: string
       polly?:
         | {
@@ -3218,6 +3222,8 @@ export const UserInfoDetailsDocument = gql`
         subjectType
         owner
         created
+        expires
+        status
         dataproductID
         polly {
           externalID

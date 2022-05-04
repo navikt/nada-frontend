@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { SubjectType } from '../../../lib/schema/graphql'
 import { Box } from '@mui/material'
 import humanizeDate from '../../../lib/humanizeDate'
-import NewAccessRequestForm from "./newAccessRequestForm";
+import AccessRequestForm from "./accessRequestForm";
 import {useState} from "react";
 
 const ButtonStyledDiv = styled.div`
@@ -68,7 +68,7 @@ export const AccessRequestModal = ({
                 {/*    </Button>*/}
                 {/*</ButtonStyledDiv>*/}
                 {/*{error && <Alert variant={'error'}>{error}</Alert>}*/}
-                <NewAccessRequestForm open={openState} setOpen={setOpen} id={request.dataproductID} pii={false} />
+                <AccessRequestForm open={openState} setOpen={setOpen} id={request.dataproductID} pii={false} />
             </Modal.Content>
         </Modal>
     )

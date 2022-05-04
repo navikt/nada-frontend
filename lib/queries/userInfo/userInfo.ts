@@ -47,6 +47,8 @@ export const USER_INFO = gql`
         subjectType
         owner
         created
+        expires
+        status
         dataproductID
         polly {
           externalID

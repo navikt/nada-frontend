@@ -1,24 +1,27 @@
 import {
   GrantAccessMutationVariables,
   SubjectType,
-  useAddRequesterMutation,
-  useGrantAccessMutation,
-  useAccessRequestQuery,
-  NewAccessRequest, NewPolly, AccessRequest,
+  AccessRequest,
+  NewAccessRequest,
+  NewPolly,
+  useDataproductQuery,
+  usePollyQuery,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import {Dispatch, SetStateAction, useState} from 'react'
-import { Alert } from '@navikt/ds-react'
+import { Alert, Search } from '@navikt/ds-react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Box, FormControl, FormControlLabel, Modal, Radio, RadioGroup, TextField } from '@mui/material'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 import * as yup from 'yup'
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { endOfDay } from 'date-fns'
+import ErrorMessage from "../../lib/error";
+import LoaderSpinner from "../../lib/spinner";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import {DesktopDatePicker, LocalizationProvider} from "@mui/lab";
 
-export const addAccessValidation = yup.object().shape({
+export const addAccessRequestValidation = yup.object().shape({
   subjectType: yup.string().required(),
   subject: yup
       .string()
@@ -31,15 +34,17 @@ export const addAccessValidation = yup.object().shape({
 })
 
 
-interface NewAccessFormProps {
+interface AccessRequestFormProps {
   open: boolean,
   setOpen: Dispatch<SetStateAction<boolean>>,
-  id: string,
+  accessRequest: AccessRequest,
+  edit: boolean
 }
 
-const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
+const AccessRequestForm = ({ open, setOpen, accessRequest, edit }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
-  //const [newAccessRequest] = useAccessRequestQuery(id)
+  const [searchText, setSearchText] = useState('')
+  //const [pollyRes, setPollyRes]
 
   const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
 
@@ -47,16 +52,29 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
     setDate(newValue)
   }
 
+  const {data, error, loading} = useDataproductQuery({
+    variables: {id: accessRequest.dataproductID}
+  })
+
+  const {data:searchData, error:searchError, loading:searchLoading} = usePollyQuery({
+    variables: {q: searchText},
+    skip:searchText.length < 3
+  })
+
   const defaultValues = {
-    subjectType: '',
-    subject: '',
-    accessType: '',
-    expires: '',
-    polly: null,
+    subjectType: accessRequest.subjectType,
+    subject: accessRequest.subject,
+    dataproductID: accessRequest.dataproductID,
+    granter: accessRequest.granter,
+    created: accessRequest.created,
+    owner: accessRequest.owner,
+    status: accessRequest.status,
+    expires: accessRequest.expires,
+    polly: accessRequest.polly,
   }
   const { formState, handleSubmit, control, watch, register, reset } =
       useForm({
-        resolver: yupResolver(addAccessValidation),
+        resolver: yupResolver(addAccessRequestValidation),
         defaultValues,
       })
 
@@ -64,31 +82,13 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
 
   const subjectType = watch('subjectType')
   const subject = watch('subject')
-  const accessType = watch('accessType')
 
-  const [addRequester] = useAddRequesterMutation()
-  const [grantAccess] = useGrantAccessMutation()
+  if (error) return <ErrorMessage error={error}/>
+  if (loading || !data) return <LoaderSpinner/>
 
   const onSubmit = async (requestData: { subjectType: string, subject: string, accessType: string, expires: any, polly: NewPolly }) => {
     requestData.expires = date
     const accessSubject = requestData.subjectType === 'all-users' ? 'all-users@nav.no' : subject
-
-    if (requestData.accessType === 'ondemand') {
-      try {
-        await addRequester({
-          variables: {
-            dataproductID: id,
-            subject: accessSubject,
-          },
-          refetchQueries: ['DataproductAccess'],
-        })
-        closeAndReset()
-        return
-      } catch (e: any) {
-        setFormError(e.message)
-        return
-      }
-    }
 
     const toSubjectType = (s: string): SubjectType => {
       switch (s) {
@@ -118,10 +118,6 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
         input: newAccessRequest,
       }
 
-      await grantAccess({
-        variables,
-        refetchQueries: ['DataproductAccess'],
-      })
       closeAndReset()
       return
     } catch (e: any) {
@@ -142,6 +138,10 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
     p: 4,
   }
 
+  const handlePollySearch = (q: string) => {
+    console.log(q)
+  }
+
   const closeAndReset = () => {
     reset(defaultValues)
     setFormError('')
@@ -160,29 +160,37 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
           <Box sx={style}>
             <div>
               <h1>
-                Legg til tilgang
+                Søk om tilgang
               </h1>
               <form onSubmit={handleSubmit(onSubmit)}>
-
-                <h3> Hvem skal ha tilgang? </h3>
+                <h3> Tilgang gjelder for </h3>
+                <TextField
+                    defaultValue={accessRequest.subject}
+                    size="medium"
+                    disabled={edit}
+                />
+                <br/>
                 <FormControl component='fieldset'>
                   <Controller
                       rules={{ required: true }}
                       control={control}
                       name='subjectType'
                       render={({ field }) => (
-                          <RadioGroup {...field}>
+                          <RadioGroup  {...field}>
                             <FormControlLabel
+                                disabled={edit}
                                 value='group'
                                 control={<Radio />}
                                 label='Gruppe'
                             />
                             <FormControlLabel
+                                disabled={edit}
                                 value='user'
                                 control={<Radio />}
                                 label='Bruker (e-post)'
                             />
                             <FormControlLabel
+                                disabled={edit}
                                 value='serviceAccount'
                                 control={<Radio />}
                                 label='Servicebruker'
@@ -191,67 +199,48 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
                       )}
                   />
                 </FormControl>
-                {subjectType && subjectType !== 'all-users' &&
-                <div>
-                  <hr />
-                  <h3>{`E-postadresse for  ${subjectTypeMap.get(subjectType)}`}</h3>
-                  <TextField
-                      type={'email'}
-                      sx={{ width: '300px' }}
-                      id='subject'
-                      error={typeof errors?.subject !== 'undefined'}
-                      helperText={errors?.subject?.message}
-                      {...register('subject')}
+                <br />
+                <h3> Dataproduct </h3>
+                <TextField
+                    defaultValue={data.dataproduct.name}
+                    disabled={edit}
+                />
+                <br />
+                <h3> Utløper </h3>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DesktopDatePicker
+                      label='Dato'
+                      inputFormat='dd.MM.yyyy'
+                      value={date}
+                      onChange={(newVal => setDate(newVal))}
+                      renderInput={(params) => <TextField {...params} />}
                   />
-                  <br />
+                </LocalizationProvider>
+                <br />
+                <h3> Behandlingsgrunnlag </h3>
+                <div>
+                  <Search
+                      label="Behandlingsgrunnlag"
+                      defaultValue={accessRequest.polly?.name}
+                      onChange={(e) => {
+                        setSearchText(e)
+                      }}
+                  />
+                  {searchText.length >= 3 && <div>
+                    {searchError && <ErrorMessage error={searchError}/>}
+                    {searchLoading && <LoaderSpinner/>}
+                    {searchData && searchData.polly.length === 0 ?
+                        <div> Ingen treff </div>:
+                        <div>
+                          {searchData && searchData.polly.map((searchRes) => {
+                            return (<div key={searchRes.externalID}><a target="_blank" rel="noreferrer" href={searchRes.url}> {searchRes.name} </a></div>)
+                          })}
+                        </div>
+                    }
+                  </div>}
                 </div>
-                }
-                {(subject || subjectType === 'all-users') &&
-                <>
-                  <hr />
-                  <h3> Hva slags tilgang? </h3>
-                  <FormControl component='fieldset'>
-                    <Controller
-                        rules={{ required: true }}
-                        control={control}
-                        name='accessType'
-                        render={({ field }) => (
-                            <RadioGroup {...field}>
-                              <FormControlLabel
-                                  value='ondemand'
-                                  control={<Radio />}
-                                  label='Må gi seg selv tilgang ved behov'
-                              />
-                              <FormControlLabel
-                                  value='eternal'
-                                  control={<Radio />}
-                                  label='Har alltid tilgang'
-                              />
-                              <FormControlLabel
-                                  value='until'
-                                  control={<Radio />}
-                                  label='Har tilgang til denne datoen'
-                              />
-                            </RadioGroup>
-                        )}
-                    />
-                  </FormControl>
-                </>
-                }
-                {accessType && accessType === 'until' &&
-                <>
-                  <br />
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DesktopDatePicker
-                        inputFormat='MM/dd/yyyy'
-                        value={date}
-                        onChange={dateChange}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>
-                </>
-                }
-
+                <br />
+                <a href={accessRequest.polly?.url}> Se i behandlingskatalogen </a>
                 {formError && <Alert variant={'error'}>{formError}</Alert>}
                 <RightJustifiedSubmitButton onCancel={closeAndReset} />
               </form>
@@ -263,5 +252,5 @@ const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
 }
 
 
-export default NewAccessForm
+export default AccessRequestForm
 

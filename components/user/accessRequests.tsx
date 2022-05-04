@@ -3,10 +3,10 @@ import { FileContent } from "@navikt/ds-icons";
 import { useState } from "react";
 import styled from "styled-components";
 import humanizeDate from "../../lib/humanizeDate";
-import { SubjectType, useDataproductQuery } from "../../lib/schema/graphql";
+import {AccessRequestStatus, Maybe, Polly, Scalars, SubjectType, useDataproductQuery} from "../../lib/schema/graphql";
 import AccessRequestModal from "../dataproducts/accessRequest/accessRequestModal";
 import IconBox from "../lib/icons/iconBox";
-import NewAccessRequestForm from "../dataproducts/accessRequest/newAccessRequestForm";
+import AccessRequestForm from "../dataproducts/accessRequest/accessRequestForm";
 
 const Results = styled.div`
   display: flex;
@@ -30,13 +30,18 @@ const StyledCard = styled(Card)`
 interface AccessRequest {
     __typename?: 'AccessRequest'
     id: string, 
-    subject?: string | null | undefined,
-    subjectType?: SubjectType | null | undefined,
-    owner?: string | null | undefined,
+    subject: string,
+    subjectType: SubjectType,
+    owner: string,
     dataproductID: string,
     created: string,
+    closed?: string | null | undefined,
+    expires: string,
+    granter?: string | null | undefined,
+    status: AccessRequestStatus,
     polly?: {
         __typename?: 'Polly';
+        id: string,
         name: string;
         externalID: string;
         url: string
@@ -105,7 +110,7 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
         {/*    request={accessRequest}*/}
         {/*    error={requestError}*/}
         {/*/>*/}
-        {accessRequest && <NewAccessRequestForm open={showModal} setOpen={setShowModal} id={accessRequest.id}></NewAccessRequestForm>}
+        {accessRequest && <AccessRequestForm open={showModal} setOpen={setShowModal} accessRequest={accessRequest} edit={true}></AccessRequestForm>}
     </Results>)
 }
 
