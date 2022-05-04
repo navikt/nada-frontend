@@ -24,7 +24,7 @@ interface accessRequestEntry {
       | undefined
 }
 
-const AccessRequestsList = ({ accessQuery }: AccessListProps) => {
+const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
     const access = accessQuery.data?.accessRequestsForDataproduct
 
     const [formError, setFormError] = useState('')
@@ -75,4 +75,4 @@ const AccessRequestsList = ({ accessQuery }: AccessListProps) => {
         </div>
     )
 }
-export default AccessRequestsList
+export default AccessRequestsListForOwner

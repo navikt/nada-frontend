@@ -7,6 +7,8 @@ import {Menu, MenuItem} from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import {useRouter} from 'next/router'
 import {UserState} from "../../lib/context";
+import SubjectHeader from "../lib/subjectHeader";
+import AccessRequestsListForUser from "../user/accessRequests";
 
 const UserBox = styled.div`
   white-space: nowrap;
@@ -85,7 +87,7 @@ export default function User() {
                                     handleMenuClose()
                                     router.push({pathname: '/user/profile'})
                                 }}>
-                                {userInfo.name}
+                                Min profil
                             </MenuItem>
                             <MenuSeparator/>
                             <MenuItem
@@ -95,6 +97,14 @@ export default function User() {
                                 }}
                             >
                                 Mine produkter
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                  handleMenuClose()
+                                  router.push({pathname: '/user/requests'})
+                              }}
+                            >
+                                Mine tilgantilgangssøknader
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {

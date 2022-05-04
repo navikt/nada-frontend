@@ -4,8 +4,9 @@ import { useState } from "react";
 import styled from "styled-components";
 import humanizeDate from "../../lib/humanizeDate";
 import { SubjectType, useDataproductQuery } from "../../lib/schema/graphql";
-import AccessRequestModal from "../dataproducts/access/accessRequestModal";
+import AccessRequestModal from "../dataproducts/accessRequest/accessRequestModal";
 import IconBox from "../lib/icons/iconBox";
+import NewAccessRequestForm from "../dataproducts/accessRequest/newAccessRequestForm";
 
 const Results = styled.div`
   display: flex;
@@ -77,7 +78,7 @@ const ViewRequestButton = ({ request, onClick }: RequestInterface) => {
     </StyledCard>)
 }
 
-const RequestsList = ({ accessRequests }: AccessRequests) => {
+const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
     const [showModal, setShowModal] = useState(false)
     const [accessRequest, setAccessRequest] = useState<AccessRequest | null>(null)
     const [requestError, setRequestError] = useState("")
@@ -97,15 +98,16 @@ const RequestsList = ({ accessRequests }: AccessRequests) => {
                 <ViewRequestButton key={idx} request={req} onClick={() => onRequestClick(req)}/>
             )
         }
-        <AccessRequestModal
-            open={showModal}
-            onCancel={() => setShowModal(false)}
-            onConfirm={() => onEdit(accessRequest)}
-            request={accessRequest}
-            error={requestError}
-        />
+        {/*<AccessRequestModal*/}
+        {/*    open={showModal}*/}
+        {/*    onConfirm={() => setShowModal(false)}*/}
+        {/*    onEdit={() => onEdit(accessRequest)}*/}
+        {/*    request={accessRequest}*/}
+        {/*    error={requestError}*/}
+        {/*/>*/}
+        <NewAccessRequestForm open={showModal} setOpen={setShowModal} id={accessRequest?.id}></NewAccessRequestForm>
     </Results>)
 
 }
 
-export default RequestsList
+export default AccessRequestsListForUser

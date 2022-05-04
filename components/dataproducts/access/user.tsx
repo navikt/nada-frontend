@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { isAfter, parseISO } from 'date-fns'
 import humanizeDate from '../../../lib/humanizeDate'
 import { Alert, Button } from '@navikt/ds-react'
-import {AddCircle, Delete} from '@navikt/ds-icons'
+import { AddCircle, Delete } from '@navikt/ds-icons'
 import AddAccess from './addAccess'
 import SubHeader from "../../lib/subHeader";
 import UserAccessList from "./userAccessList";
@@ -15,7 +15,7 @@ import UserAccessList from "./userAccessList";
 interface UserProps {
   accessQuery: QueryResult<DataproductAccessQuery, Exact<{ id: string }>>
   currentUser: string
-    groups: string[]
+  groups: string[]
 }
 
 const User = ({ accessQuery, currentUser, groups }: UserProps) => {
@@ -25,8 +25,8 @@ const User = ({ accessQuery, currentUser, groups }: UserProps) => {
 
   const { error, loading, data: { dataproduct } = {} } = accessQuery
 
-  if (error) return <ErrorMessage error={error} />
-  if (loading || !dataproduct) return <LoaderSpinner />
+  if (error) return <ErrorMessage error={error}/>
+  if (loading || !dataproduct) return <LoaderSpinner/>
   const activeAccess = dataproduct.access.filter(a => (!a.revoked && (!a.expires || isAfter(parseISO(a.expires), Date.now()))))[0]
   const personalAccess = activeAccess?.subject.startsWith('user:')
   const group = activeAccess?.subject.split('group:')[1]
@@ -45,22 +45,23 @@ const User = ({ accessQuery, currentUser, groups }: UserProps) => {
 
   // Has access
   return (
-      <>
-         <Button key='ny_tilgang' style={{ marginLeft: '15px', marginBottom: '10px' }} variant='primary' size='small' onClick={() => setOpen(true)}>
-          <AddCircle /> Søk om ny tilgang
-        </Button>
-        <br />
-        {false && <>
-        <SubHeader>Søknader</SubHeader>
-        <UserAccessList id={dataproduct.id} access={[]} requests={[]} />
-        </>
-        }
-        {dataproduct.access.length != 0 && <>
-            <SubHeader>Aktive tilganger</SubHeader>
-            <UserAccessList id={dataproduct.id} access={dataproduct.access} requests={[]}/>
+    <>
+      <Button key='ny_tilgang' style={{ marginLeft: '15px', marginBottom: '10px' }} variant='primary' size='small'
+              onClick={() => setOpen(true)}>
+        <AddCircle/> Søk om ny tilgang
+      </Button>
+      <br/>
+      {false && <>
+          <SubHeader>Søknader</SubHeader>
+          <UserAccessList id={dataproduct.id} access={[]} requests={[]}/>
       </>
-}
-  </>
+      }
+      {dataproduct.access.length != 0 && <>
+          <SubHeader>Aktive tilganger</SubHeader>
+          <UserAccessList id={dataproduct.id} access={dataproduct.access} requests={[]}/>
+      </>
+      }
+    </>
   )
 }
 export default User

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { SubjectType } from '../../../lib/schema/graphql'
 import { Box } from '@mui/material'
 import humanizeDate from '../../../lib/humanizeDate'
+import NewAccessRequestForm from "./newAccessRequestForm";
+import {useState} from "react";
 
 const ButtonStyledDiv = styled.div`
   display: flex;
@@ -34,37 +36,39 @@ interface AccessRequest {
 
 interface AccessRequestModalProps {
     open: boolean
-    onCancel: () => void
+    onEdit: () => void
     onConfirm: () => void
     request: AccessRequest | null
     error: string
 }
 export const AccessRequestModal = ({
     open,
-    onCancel,
+    onEdit,
     onConfirm,
     request,
     error,
 }: AccessRequestModalProps) => {
+    const [openState, setOpen] = useState(false)
     if (request === null) {
         return (<></>)
     }
     return (
-        <Modal open={open} onClose={onCancel}>
+        <Modal open={open} onClose={onConfirm}>
             <Modal.Content>
-                <Heading spacing size="medium">Tilgangssøknad</Heading>
-                <Ingress>Opprettet {humanizeDate(request.created)} på vegne av {request.subject}</Ingress>
-                <BodyShort spacing><Link href={`/dataproduct/${request.dataproductID}`}><a>Link til dataproduktet</a></Link></BodyShort>
+                {/*<Heading spacing size="medium">Tilgangssøknad</Heading>*/}
+                {/*<Ingress>Opprettet {humanizeDate(request.created)} på vegne av {request.subject}</Ingress>*/}
+                {/*<BodyShort spacing><Link href={`/dataproduct/${request.dataproductID}`}><a>Link til dataproduktet</a></Link></BodyShort>*/}
 
-                <ButtonStyledDiv>
-                    <Button variant="secondary" onClick={onCancel} style={{ marginRight: '10px' }}>
-                        Avbryt
-                    </Button>
-                    <Button variant="primary" onClick={onConfirm}>
-                        Lagre
-                    </Button>
-                </ButtonStyledDiv>
-                {error && <Alert variant={'error'}>{error}</Alert>}
+                {/*<ButtonStyledDiv>*/}
+                {/*    <Button variant="secondary" onClick={onEdit} style={{ marginRight: '10px' }}>*/}
+                {/*        Endre*/}
+                {/*    </Button>*/}
+                {/*    <Button variant="primary" onClick={onConfirm}>*/}
+                {/*        OK*/}
+                {/*    </Button>*/}
+                {/*</ButtonStyledDiv>*/}
+                {/*{error && <Alert variant={'error'}>{error}</Alert>}*/}
+                <NewAccessRequestForm open={openState} setOpen={setOpen} id={request.dataproductID} pii={false} />
             </Modal.Content>
         </Modal>
     )

@@ -42,6 +42,7 @@ export const USER_INFO = gql`
         }
       }
       accessRequests {
+        id
         subject
         subjectType
         owner

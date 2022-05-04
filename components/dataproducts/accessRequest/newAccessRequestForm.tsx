@@ -3,7 +3,7 @@ import {
   SubjectType,
   useAddRequesterMutation,
   useGrantAccessMutation,
-  NewGrant,
+  NewAccessRequest, NewPolly, AccessRequest,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import {Dispatch, SetStateAction, useState} from 'react'
@@ -33,11 +33,10 @@ export const addAccessValidation = yup.object().shape({
 interface NewAccessFormProps {
   open: boolean,
   setOpen: Dispatch<SetStateAction<boolean>>,
-  id: string
-  pii: boolean
+  id: string,
 }
 
-const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
+const NewAccessForm = ({ open, setOpen, accessRequest}: NewAccessFormProps) => {
   const [formError, setFormError] = useState('')
 
   const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
@@ -51,6 +50,7 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
     subject: '',
     accessType: '',
     expires: '',
+    polly: null,
   }
   const { formState, handleSubmit, control, watch, register, reset } =
       useForm({
@@ -67,7 +67,7 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
   const [addRequester] = useAddRequesterMutation()
   const [grantAccess] = useGrantAccessMutation()
 
-  const onSubmit = async (requestData: { subjectType: string, subject: string, accessType: string, expires: any }) => {
+  const onSubmit = async (requestData: { subjectType: string, subject: string, accessType: string, expires: any, polly: NewPolly }) => {
     requestData.expires = date
     const accessSubject = requestData.subjectType === 'all-users' ? 'all-users@nav.no' : subject
 
@@ -101,18 +101,19 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
     }
 
     try {
-      const newGrant: NewGrant = {
+      const newAccessRequest: NewAccessRequest = {
         subjectType: toSubjectType(requestData.subjectType),
         subject: accessSubject,
         dataproductID: id,
+        polly: requestData.polly,
       }
 
       if (requestData.accessType === 'until') {
-        newGrant.expires = date
+        newAccessRequest.expires = date
       }
 
       const variables: GrantAccessMutationVariables = {
-        input: newGrant,
+        input: newAccessRequest,
       }
 
       await grantAccess({

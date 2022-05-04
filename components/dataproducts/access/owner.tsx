@@ -11,7 +11,7 @@ import { AddCircle } from '@navikt/ds-icons'
 import NewAccessForm from "./newAccessForm";
 import SubHeader from '../../lib/subHeader'
 import { Expand, Collapse } from "@navikt/ds-icons";
-import AccessRequestsList from './accessRequestsList'
+import AccessRequestsListForOwner from '../accessRequest/accessRequestsListForOwner'
 
 
 interface OwnerProps {
@@ -39,7 +39,7 @@ const Owner = ({ accessQuery, dataproductID }: OwnerProps) => {
       </Button>
       <br />
       <SubHeader>Tilgangssøknader</SubHeader>
-      <AccessRequestsList accessQuery={accessRequests} />
+      <AccessRequestsListForOwner accessQuery={accessRequests} />
       <SubHeader>Aktive tilganger</SubHeader>
       <OwnerAccessList id={dataproduct.id} access={dataproduct.access} requesters={dataproduct.requesters} />
       <SubHeader onClick={() => setShowExpired(!showExpired)}>Utløpte tilganger {showExpired ? <Collapse /> : <Expand />}</SubHeader>

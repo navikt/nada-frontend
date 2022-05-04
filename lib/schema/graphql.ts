@@ -44,20 +44,32 @@ export type Access = {
 /** AccessRequest contains metadata on a request to access a dataproduct */
 export type AccessRequest = {
   __typename?: 'AccessRequest'
-  /** created is a timestamp for when the access request was created */
-  created?: Maybe<Scalars['Time']>
+  /** closed is a timestamp for when the access request was closed. */
+  closed?: Maybe<Scalars['Time']>
+  /** created is a timestamp for when the access request was created. */
+  created: Scalars['Time']
   /** id of dataproduct. */
   dataproductID: Scalars['ID']
+  /** granter is the email of the person who granted/denied the access request. */
+  granter?: Maybe<Scalars['String']>
   /** id of access request. */
   id: Scalars['ID']
-  /** owner of the access request */
-  owner?: Maybe<Scalars['String']>
-  /** polly is the process policy attached to this grant */
+  /** owner of the access request. */
+  owner: Scalars['String']
+  /** polly is the process policy attached to this grant. */
   polly?: Maybe<Polly>
+  /** status is the status of the access request (can be pending, approved or denied). */
+  status: AccessRequestStatus
   /** subject to be granted access. */
-  subject?: Maybe<Scalars['String']>
+  subject: Scalars['String']
   /** subjectType is the type of entity which should be granted access (user, group or service account). */
-  subjectType?: Maybe<SubjectType>
+  subjectType: SubjectType
+}
+
+export enum AccessRequestStatus {
+  Approved = 'approved',
+  Denied = 'denied',
+  Pending = 'pending',
 }
 
 /** BigQuery contains metadata on a BigQuery table. */
@@ -370,6 +382,8 @@ export type MutationUpdateStoryMetadataArgs = {
 export type NewAccessRequest = {
   /** id of dataproduct. */
   dataproductID: Scalars['ID']
+  /** expires is a timestamp for when the access expires. */
+  expires?: Maybe<Scalars['Time']>
   /** owner is the owner of the access request */
   owner?: Maybe<Scalars['String']>
   /** polly is the process policy attached to this grant */
@@ -760,6 +774,8 @@ export type TeamkatalogenResult = {
 
 /** UpdateAccessRequest contains metadata on a request to access a dataproduct */
 export type UpdateAccessRequest = {
+  /** expires is a timestamp for when the access expires. */
+  expires?: Maybe<Scalars['Time']>
   /** id of access request. */
   id: Scalars['ID']
   /** newPolly is the new polly documentation for this access request. */
@@ -887,9 +903,9 @@ export type AccessRequestsForDataproductQuery = {
   accessRequestsForDataproduct: Array<{
     __typename?: 'AccessRequest'
     id: string
-    subject?: string | null | undefined
-    subjectType?: SubjectType | null | undefined
-    owner?: string | null | undefined
+    subject: string
+    subjectType: SubjectType
+    owner: string
     polly?:
       | { __typename?: 'Polly'; name: string; externalID: string; url: string }
       | null
@@ -1302,10 +1318,11 @@ export type UserInfoDetailsQuery = {
     }>
     accessRequests: Array<{
       __typename?: 'AccessRequest'
-      subject?: string | null | undefined
-      subjectType?: SubjectType | null | undefined
-      owner?: string | null | undefined
-      created?: any | null | undefined
+      id: string
+      subject: string
+      subjectType: SubjectType
+      owner: string
+      created: any
       dataproductID: string
       polly?:
         | {
@@ -3041,6 +3058,7 @@ export const UserInfoDetailsDocument = gql`
         }
       }
       accessRequests {
+        id
         subject
         subjectType
         owner
