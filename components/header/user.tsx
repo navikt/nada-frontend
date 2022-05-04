@@ -104,7 +104,7 @@ export default function User() {
                                   router.push({pathname: '/user/requests'})
                               }}
                             >
-                                Mine tilgantilgangssøknader
+                                Mine tilgangssøknader
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {

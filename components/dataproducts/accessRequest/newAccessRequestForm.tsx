@@ -3,6 +3,7 @@ import {
   SubjectType,
   useAddRequesterMutation,
   useGrantAccessMutation,
+  useAccessRequestQuery,
   NewAccessRequest, NewPolly, AccessRequest,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
@@ -36,8 +37,9 @@ interface NewAccessFormProps {
   id: string,
 }
 
-const NewAccessForm = ({ open, setOpen, accessRequest}: NewAccessFormProps) => {
+const NewAccessForm = ({ open, setOpen, id }: NewAccessFormProps) => {
   const [formError, setFormError] = useState('')
+  //const [newAccessRequest] = useAccessRequestQuery(id)
 
   const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
 
@@ -170,11 +172,6 @@ const NewAccessForm = ({ open, setOpen, accessRequest}: NewAccessFormProps) => {
                       name='subjectType'
                       render={({ field }) => (
                           <RadioGroup {...field}>
-                            {!pii && <FormControlLabel
-                                value='all-users'
-                                control={<Radio />}
-                                label='Alle i NAV'
-                            />}
                             <FormControlLabel
                                 value='group'
                                 control={<Radio />}

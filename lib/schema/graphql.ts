@@ -894,6 +894,28 @@ export type RevokeAccessMutation = {
   revokeAccessToDataproduct: boolean
 }
 
+export type AccessRequestQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type AccessRequestQuery = {
+  __typename?: 'Query'
+  accessRequest: {
+    __typename?: 'AccessRequest'
+    id: string
+    dataproductID: string
+    subject: string
+    subjectType: SubjectType
+    granter?: string | null | undefined
+    status: AccessRequestStatus
+    owner: string
+    polly?:
+      | { __typename?: 'Polly'; name: string; externalID: string; url: string }
+      | null
+      | undefined
+  }
+}
+
 export type AccessRequestsForDataproductQueryVariables = Exact<{
   dataproductID: Scalars['ID']
 }>
@@ -1074,6 +1096,20 @@ export type GroupStatsQuery = {
     __typename?: 'GroupStats'
     email: string
     dataproducts: number
+  }>
+}
+
+export type PollyQueryVariables = Exact<{
+  q: Scalars['String']
+}>
+
+export type PollyQuery = {
+  __typename?: 'Query'
+  polly: Array<{
+    __typename?: 'QueryPolly'
+    externalID: string
+    name: string
+    url: string
   }>
 }
 
@@ -1632,6 +1668,75 @@ export type RevokeAccessMutationResult =
 export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<
   RevokeAccessMutation,
   RevokeAccessMutationVariables
+>
+export const AccessRequestDocument = gql`
+  query accessRequest($id: ID!) {
+    accessRequest(id: $id) {
+      id
+      dataproductID
+      subject
+      subjectType
+      granter
+      status
+      owner
+      polly {
+        name
+        externalID
+        url
+      }
+    }
+  }
+`
+
+/**
+ * __useAccessRequestQuery__
+ *
+ * To run a query within a React component, call `useAccessRequestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessRequestQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAccessRequestQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AccessRequestQuery,
+    AccessRequestQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<AccessRequestQuery, AccessRequestQueryVariables>(
+    AccessRequestDocument,
+    options
+  )
+}
+export function useAccessRequestLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AccessRequestQuery,
+    AccessRequestQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<AccessRequestQuery, AccessRequestQueryVariables>(
+    AccessRequestDocument,
+    options
+  )
+}
+export type AccessRequestQueryHookResult = ReturnType<
+  typeof useAccessRequestQuery
+>
+export type AccessRequestLazyQueryHookResult = ReturnType<
+  typeof useAccessRequestLazyQuery
+>
+export type AccessRequestQueryResult = Apollo.QueryResult<
+  AccessRequestQuery,
+  AccessRequestQueryVariables
 >
 export const AccessRequestsForDataproductDocument = gql`
   query accessRequestsForDataproduct($dataproductID: ID!) {
@@ -2342,6 +2447,56 @@ export type GroupStatsLazyQueryHookResult = ReturnType<
 export type GroupStatsQueryResult = Apollo.QueryResult<
   GroupStatsQuery,
   GroupStatsQueryVariables
+>
+export const PollyDocument = gql`
+  query Polly($q: String!) {
+    polly(q: $q) {
+      externalID
+      name
+      url
+    }
+  }
+`
+
+/**
+ * __usePollyQuery__
+ *
+ * To run a query within a React component, call `usePollyQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePollyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePollyQuery({
+ *   variables: {
+ *      q: // value for 'q'
+ *   },
+ * });
+ */
+export function usePollyQuery(
+  baseOptions: Apollo.QueryHookOptions<PollyQuery, PollyQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<PollyQuery, PollyQueryVariables>(
+    PollyDocument,
+    options
+  )
+}
+export function usePollyLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PollyQuery, PollyQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<PollyQuery, PollyQueryVariables>(
+    PollyDocument,
+    options
+  )
+}
+export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>
+export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>
+export type PollyQueryResult = Apollo.QueryResult<
+  PollyQuery,
+  PollyQueryVariables
 >
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {

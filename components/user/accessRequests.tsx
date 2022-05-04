@@ -105,9 +105,8 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
         {/*    request={accessRequest}*/}
         {/*    error={requestError}*/}
         {/*/>*/}
-        <NewAccessRequestForm open={showModal} setOpen={setShowModal} id={accessRequest?.id}></NewAccessRequestForm>
+        {accessRequest && <NewAccessRequestForm open={showModal} setOpen={setShowModal} id={accessRequest.id}></NewAccessRequestForm>}
     </Results>)
-
 }
 
 export default AccessRequestsListForUser
