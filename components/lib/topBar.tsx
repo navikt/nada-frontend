@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { FileContent } from '@navikt/ds-icons'
 import {ColorSchemeTypes} from './colorScheme'
 import IconBox from "./icons/iconBox";
 import BigQueryLogo from "./icons/bigQueryLogo";
@@ -55,6 +56,7 @@ const TopBar = ({name, type, children}: TopBarProps) => {
             <IconBox size={42}>
                 {type === 'Story' && <StoryLogo/>}
                 {type === 'Dataproduct' && <BigQueryLogo/>}
+                {type === 'AccessRequest' && <FileContent />}
             </IconBox>
             <Name>{name}</Name>
         </LogoBox>

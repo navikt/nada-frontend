@@ -92,7 +92,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
                 control={control}
               />
               <TextField
-                  type={'url'}
+                type={'url'}
                 style={{ width: '450px', display: 'block' }}
                 id="repo"
                 label="Link til kildekode"

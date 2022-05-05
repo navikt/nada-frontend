@@ -36,7 +36,7 @@ const DataproductEdit = (props: DataproductProps) => {
   return (
     <>
       <Head>
-        <title>rediger {data.dataproduct.name}</title>
+        <title>Rediger {data.dataproduct.name}</title>
       </Head>
       <EditDataproduct product={data.dataproduct} />
     </>
