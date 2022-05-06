@@ -910,9 +910,17 @@ export type AccessRequestQuery = {
     subjectType: SubjectType
     granter?: string | null | undefined
     status: AccessRequestStatus
+    created: any
+    expires?: any | null | undefined
     owner: string
     polly?:
-      | { __typename?: 'Polly'; name: string; externalID: string; url: string }
+      | {
+          __typename?: 'Polly'
+          id: string
+          name: string
+          externalID: string
+          url: string
+        }
       | null
       | undefined
   }
@@ -1727,8 +1735,11 @@ export const AccessRequestDocument = gql`
       subjectType
       granter
       status
+      created
+      expires
       owner
       polly {
+        id
         name
         externalID
         url

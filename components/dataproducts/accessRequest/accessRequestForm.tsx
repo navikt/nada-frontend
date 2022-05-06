@@ -1,26 +1,21 @@
 import {
+  AccessRequest, AccessRequestStatus,
   GrantAccessMutationVariables,
-  SubjectType,
-  AccessRequest,
   NewAccessRequest,
-  NewPolly,
+  NewPolly, Polly,
+  SubjectType, UpdateAccessRequest, UpdateAccessRequestDocument,
   useDataproductQuery,
   usePollyQuery,
+  useUpdateAccessRequestMutation, useUpdateDataproductMutation,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { ExternalLink, Delete } from '@navikt/ds-icons'
-import { Alert, Heading, TextField, Link } from '@navikt/ds-react'
+import { useState } from 'react'
+import { Delete, ExternalLink } from '@navikt/ds-icons'
+import { Alert, Heading, Link, TextField } from '@navikt/ds-react'
 import styled from 'styled-components'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import {
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField as MuiTextField,
-} from '@mui/material'
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField as MuiTextField, } from '@mui/material'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 import * as yup from 'yup'
 import { endOfDay } from 'date-fns'
@@ -29,18 +24,19 @@ import LoaderSpinner from '../../lib/spinner'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TopBar from '../../lib/topBar'
+import humanizeDate from "../../../lib/humanizeDate";
+import { useRouter } from "next/router";
 
-export const addAccessRequestValidation = yup.object().shape({
+export const updateAccessRequestValidation = yup.object().shape({
   subjectType: yup.string().required(),
-  subject: yup
-    .string()
-    .email('Gyldig epost for gruppe eller bruker')
-    .when('subjectType', {
-      is: (subjectType: string) => subjectType !== 'all-users',
-      then: yup.string().required('Legg inn gyldig epost'),
-    }),
-  accessType: yup.string().required(),
-  expires: yup.string(),
+  // subject: yup
+  //   .string()
+  //   .email('Gyldig epost for gruppe eller bruker')
+  //   .when('subjectType', {
+  //     is: (subjectType: string) => subjectType !== 'all-users',
+  //     then: yup.string().required('Legg inn gyldig epost'),
+  //   }),
+  // expires: yup.string(),
 })
 
 const SpacedFormControl = styled(FormControl)`
@@ -118,18 +114,16 @@ interface AccessRequestFormProps {
 }
 
 const AccessRequestForm = ({
-  accessRequest,
-  isEdit: isEdit,
-}: AccessRequestFormProps) => {
+                             accessRequest,
+                             isEdit: isEdit,
+                           }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [polly, setPolly] = useState<NewPolly | null>(null)
-
-  const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
-
-  const dateChange = (newValue: Date | null) => {
-    setDate(newValue)
-  }
+  const [polly, setPolly] = useState<Polly | undefined | null>(accessRequest.polly)
+  const [newPolly, setNewPolly] = useState<NewPolly | null>(null)
+  const [updateAccessRequest] = useUpdateAccessRequestMutation()
+  const router = useRouter()
+  const [expireDate, setExpireDate] = useState<Date | null>(null)
 
   const { data, error, loading } = useDataproductQuery({
     variables: { id: accessRequest.dataproductID },
@@ -144,79 +138,45 @@ const AccessRequestForm = ({
     skip: searchText.length < 3,
   })
 
-  const defaultValues = {
-    subjectType: accessRequest.subjectType,
-    subject: accessRequest.subject,
-    dataproductID: accessRequest.dataproductID,
-    granter: accessRequest.granter,
-    created: accessRequest.created,
-    owner: accessRequest.owner,
-    status: accessRequest.status,
-    expires: accessRequest.expires,
-    polly: accessRequest.polly,
-  }
   const { formState, handleSubmit, control, watch, register, reset } = useForm({
-    resolver: yupResolver(addAccessRequestValidation),
-    defaultValues,
+    resolver: yupResolver(updateAccessRequestValidation),
+    defaultValues: {
+      subjectType: accessRequest.subjectType,
+      subject: accessRequest.subject,
+      dataproductID: accessRequest.dataproductID,
+      granter: accessRequest.granter,
+      created: accessRequest.created,
+      owner: accessRequest.owner,
+      status: accessRequest.status,
+      expires: accessRequest.expires,
+      polly: accessRequest.polly,
+    }
   })
 
-  const errors = formState.errors
+  if (error) return <ErrorMessage error={error}/>
+  if (loading || !data) return <LoaderSpinner/>
 
-  const subjectType = watch('subjectType')
-  const subject = watch('subject')
-
-  if (error) return <ErrorMessage error={error} />
-  if (loading || !data) return <LoaderSpinner />
-
-  const onSubmit = async (requestData: {
-    subjectType: string
-    subject: string
-    accessType: string
-    expires: any
-    polly: NewPolly
-  }) => {
-    requestData.expires = date
-    const accessSubject =
-      requestData.subjectType === 'all-users' ? 'all-users@nav.no' : subject
-
-    const toSubjectType = (s: string): SubjectType => {
-      switch (s) {
-        case 'all-users':
-        case 'group':
-          return SubjectType.Group
-        case 'serviceAccount':
-          return SubjectType.ServiceAccount
-      }
-      return SubjectType.User
+  const onSubmit = async (requestData: UpdateAccessRequest) => {
+    requestData.expires = expireDate
+    requestData.newPolly = newPolly
+    if (accessRequest.polly != null) {
+      requestData.pollyID = accessRequest.polly.id
     }
 
-    try {
-      const newAccessRequest: NewAccessRequest = {
-        subjectType: toSubjectType(requestData.subjectType),
-        subject: accessSubject,
-        dataproductID: id,
-        polly: requestData.polly,
+    console.log(requestData)
+    updateAccessRequest({
+      variables: {
+        input: {
+          id: accessRequest.id,
+          expires: expireDate,
+          owner: accessRequest.owner,
+          pollyID: accessRequest.polly?.id,
+          newPolly: newPolly
+        }
       }
-
-      if (requestData.accessType === 'until') {
-        newAccessRequest.expires = date
-      }
-
-      const variables: GrantAccessMutationVariables = {
-        input: newAccessRequest,
-      }
-
-      closeAndReset()
-      return
-    } catch (e: any) {
-      setFormError(e.message)
-      return
-    }
-  }
-
-  const closeAndReset = () => {
-    reset(defaultValues)
-    setFormError('')
+    }).then(() => {
+      router.push(`/user/requests`)
+    })
   }
 
   const onSearch = (
@@ -227,22 +187,19 @@ const AccessRequestForm = ({
 
   const onSelect = (search: NewPolly) => {
     setSearchText("")
-    setPolly(search)
-  }
-
-  // const subjectTypeMap = new Map<string, string>([
-  //   ['group', 'gruppe'],
-  //   ['user', 'bruker'],
-  //   ['serviceAccount', 'servicebruker'],
-  // ])
-  const datePickerProps = {
-    zIndex: 2100,
+    setPolly({
+      id: "",
+      name: search.name,
+      url: search.url,
+      externalID: search.externalID,
+    })
+    setNewPolly(search)
   }
 
   return (
     <Container>
       <AccessRequestBox>
-        <TopBar type={accessRequest.__typename} name="Rediger tilgangssøknad" />
+        <TopBar type={accessRequest.__typename} name="Rediger tilgangssøknad"/>
         <AccessRequestBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
@@ -260,20 +217,23 @@ const AccessRequestForm = ({
                   <RadioGroup {...field}>
                     <FormControlLabel
                       disabled={isEdit}
+                      checked={accessRequest.subjectType == SubjectType.Group}
                       value="group"
-                      control={<Radio />}
+                      control={<Radio/>}
                       label="Gruppe"
                     />
                     <FormControlLabel
                       disabled={isEdit}
+                      checked={accessRequest.subjectType == SubjectType.User}
                       value="user"
-                      control={<Radio />}
+                      control={<Radio/>}
                       label="Bruker (e-post)"
                     />
                     <FormControlLabel
                       disabled={isEdit}
+                      checked={accessRequest.subjectType == SubjectType.ServiceAccount}
                       value="serviceAccount"
-                      control={<Radio />}
+                      control={<Radio/>}
                       label="Servicebruker"
                     />
                   </RadioGroup>
@@ -291,8 +251,9 @@ const AccessRequestForm = ({
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DesktopDatePicker
                 inputFormat="dd.MM.yyyy"
-                value={date}
-                onChange={(newVal) => setDate(newVal)}
+                mask="__.__.____"
+                value={expireDate}
+                onChange={(newVal) => setExpireDate(newVal)}
                 renderInput={(params) => <SpacedDatePicker {...params} />}
               />
             </LocalizationProvider>
@@ -300,15 +261,14 @@ const AccessRequestForm = ({
               <>
                 <SpacedTextField
                   label="Behandlingsgrunnlag"
-                  defaultValue={accessRequest.polly?.name}
                   onChange={(e) => {
                     onSearch(e)
                   }}
                 />
                 {searchText.length >= 3 && (
                   <>
-                    {searchError && <ErrorMessage error={searchError} />}
-                    {searchLoading && <LoaderSpinner />}
+                    {searchError && <ErrorMessage error={searchError}/>}
+                    {searchLoading && <LoaderSpinner/>}
                     {searchData && searchData.polly.length === 0 ? (
                       <>Ingen treff</>
                     ) : (
@@ -329,19 +289,24 @@ const AccessRequestForm = ({
                 )}
               </>
             )}
-            <br />
+            <br/>
             {polly && (<>
-              <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
-              <Selection>
-                <Link href={polly?.url} target="_blank" rel="noreferrer">
-                  {polly.name}<ExternalLink />
-                </Link>
-                <IconBox><RedDelete onClick={() => setPolly(null)}>Fjern behandlingsgrunnlag</RedDelete></IconBox>
-              </Selection>
+                <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
+                <Selection>
+                  <Link href={polly.url} target="_blank" rel="noreferrer">
+                    {polly.name}<ExternalLink/>
+                  </Link>
+                  <IconBox><RedDelete onClick={() => {
+                    setNewPolly(null);
+                    setPolly(null);
+                  }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>
+                </Selection>
               </>
             )}
             {formError && <Alert variant={'error'}>{formError}</Alert>}
-            <RightJustifiedSubmitButton onCancel={closeAndReset} />
+            <RightJustifiedSubmitButton onCancel={() => {
+              router.push(`/user/requests`)
+            }}/>
           </form>
         </AccessRequestBody>
       </AccessRequestBox>

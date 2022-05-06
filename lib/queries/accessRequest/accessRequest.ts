@@ -9,8 +9,11 @@ export const GET_ACCESS_REQUEST = gql`
       subjectType
       granter
       status
+      created
+      expires
       owner
       polly {
+        id
         name
         externalID
         url
