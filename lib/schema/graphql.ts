@@ -389,7 +389,7 @@ export type NewAccessRequest = {
   /** owner is the owner of the access request */
   owner?: Maybe<Scalars['String']>
   /** polly is the process policy attached to this grant */
-  polly?: Maybe<NewPolly>
+  polly?: Maybe<PollyInput>
   /** subject to be granted access. */
   subject?: Maybe<Scalars['String']>
   /** subjectType is the type of entity which should be granted access (user, group or service account). */
@@ -440,15 +440,6 @@ export type NewGrant = {
   subjectType?: Maybe<SubjectType>
 }
 
-export type NewPolly = {
-  /** id from polly */
-  externalID: Scalars['String']
-  /** name from polly */
-  name: Scalars['String']
-  /** url from polly */
-  url: Scalars['String']
-}
-
 export type NewStory = {
   /** group is the owner group for the story. */
   group: Scalars['String']
@@ -477,6 +468,17 @@ export type Polly = {
   externalID: Scalars['String']
   /** database id */
   id: Scalars['ID']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
+}
+
+export type PollyInput = {
+  /** id from polly */
+  externalID: Scalars['String']
+  /** database id */
+  id?: Maybe<Scalars['ID']>
   /** name from polly */
   name: Scalars['String']
   /** url from polly */
@@ -780,12 +782,10 @@ export type UpdateAccessRequest = {
   expires?: Maybe<Scalars['Time']>
   /** id of access request. */
   id: Scalars['ID']
-  /** newPolly is the new polly documentation for this access request. */
-  newPolly?: Maybe<NewPolly>
   /** owner is the owner of the access request. */
   owner: Scalars['String']
-  /** pollyID is the id of the existing polly documentation. */
-  pollyID?: Maybe<Scalars['ID']>
+  /** polly is the new polly documentation for this access request. */
+  polly?: Maybe<PollyInput>
 }
 
 /** UpdateDataproduct contains metadata for updating a dataproduct */

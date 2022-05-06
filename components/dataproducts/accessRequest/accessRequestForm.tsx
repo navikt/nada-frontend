@@ -1,12 +1,10 @@
 import {
-  AccessRequest, AccessRequestStatus,
-  GrantAccessMutationVariables,
-  NewAccessRequest,
-  NewPolly, Polly,
-  SubjectType, UpdateAccessRequest, UpdateAccessRequestDocument,
+  AccessRequest,
+  QueryPolly, Polly,
+  SubjectType, UpdateAccessRequest,
   useDataproductQuery,
   usePollyQuery,
-  useUpdateAccessRequestMutation, useUpdateDataproductMutation,
+  useUpdateAccessRequestMutation, PollyInput,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { useState } from 'react'
@@ -18,13 +16,11 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField as MuiTextField, } from '@mui/material'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 import * as yup from 'yup'
-import { endOfDay } from 'date-fns'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TopBar from '../../lib/topBar'
-import humanizeDate from "../../../lib/humanizeDate";
 import { useRouter } from "next/router";
 
 export const updateAccessRequestValidation = yup.object().shape({
@@ -119,12 +115,10 @@ const AccessRequestForm = ({
                            }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [polly, setPolly] = useState<Polly | undefined | null>(accessRequest.polly)
-  const [newPolly, setNewPolly] = useState<NewPolly | null>(null)
+  const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
   const [updateAccessRequest] = useUpdateAccessRequestMutation()
   const router = useRouter()
-  const [expireDate, setExpireDate] = useState<Date | null>(null)
-
+  const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires)
   const { data, error, loading } = useDataproductQuery({
     variables: { id: accessRequest.dataproductID },
   })
@@ -158,20 +152,15 @@ const AccessRequestForm = ({
 
   const onSubmit = async (requestData: UpdateAccessRequest) => {
     requestData.expires = expireDate
-    requestData.newPolly = newPolly
-    if (accessRequest.polly != null) {
-      requestData.pollyID = accessRequest.polly.id
-    }
+    requestData.polly = polly
 
-    console.log(requestData)
     updateAccessRequest({
       variables: {
         input: {
           id: accessRequest.id,
           expires: expireDate,
           owner: accessRequest.owner,
-          pollyID: accessRequest.polly?.id,
-          newPolly: newPolly
+          polly: polly,
         }
       }
     }).then(() => {
@@ -185,15 +174,14 @@ const AccessRequestForm = ({
     setSearchText(e.target.value)
   }
 
-  const onSelect = (search: NewPolly) => {
+  const onSelect = (search: QueryPolly) => {
     setSearchText("")
     setPolly({
-      id: "",
+      id: null,
       name: search.name,
       url: search.url,
       externalID: search.externalID,
     })
-    setNewPolly(search)
   }
 
   return (
@@ -297,7 +285,6 @@ const AccessRequestForm = ({
                     {polly.name}<ExternalLink/>
                   </Link>
                   <IconBox><RedDelete onClick={() => {
-                    setNewPolly(null);
                     setPolly(null);
                   }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>
                 </Selection>
