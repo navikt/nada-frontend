@@ -245,7 +245,8 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
                   <br />
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DesktopDatePicker
-                        inputFormat='MM/dd/yyyy'
+                        inputFormat='dd.MM.yyyy'
+                        mask="__.__.____"
                         value={date}
                         onChange={dateChange}
                         renderInput={(params) => <TextField {...params} />}
