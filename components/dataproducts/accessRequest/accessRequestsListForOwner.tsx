@@ -2,12 +2,11 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { QueryResult } from '@apollo/client'
 import * as React from 'react'
 import { useState } from 'react'
-import { Close, Delete, Error, Success } from '@navikt/ds-icons'
+import { Close, Success } from '@navikt/ds-icons'
 import { navGronn, navRod } from '../../../styles/constants'
 import {
     AccessRequestsForDataproductQuery,
     Exact,
-    SubjectType,
     useApproveAccessRequestMutation,
     useDenyAccessRequestMutation,
 } from '../../../lib/schema/graphql'
@@ -16,18 +15,6 @@ import Link from 'next/link'
 
 interface AccessListProps {
     accessQuery: QueryResult<AccessRequestsForDataproductQuery, Exact<{ dataproductID: string }>>,
-}
-
-interface accessRequestEntry {
-    __typename?: 'AccessRequest'
-    id: string
-    subject?: string | null | undefined
-    subjectType?: SubjectType | null | undefined
-    owner?: string | null | undefined
-    polly?:
-      | { __typename?: 'Polly'; name: string; externalID: string; url: string }
-      | null
-      | undefined
 }
 
 const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {

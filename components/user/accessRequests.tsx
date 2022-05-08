@@ -4,9 +4,8 @@ import { Link } from '@navikt/ds-react'
 import styled from 'styled-components'
 import humanizeDate from '../../lib/humanizeDate'
 import {
-  AccessRequestStatus,
-  SubjectType,
-  useDataproductQuery,
+    AccessRequest,
+    useDataproductQuery,
 } from '../../lib/schema/graphql'
 import IconBox from '../lib/icons/iconBox'
 
@@ -29,32 +28,8 @@ const StyledCard = styled(Card)`
   }
 `
 
-interface AccessRequest {
-  __typename?: 'AccessRequest'
-  id: string
-  subject: string
-  subjectType: SubjectType
-  owner: string
-  dataproductID: string
-  created: string
-  closed?: string | null | undefined
-  expires: string
-  granter?: string | null | undefined
-  status: AccessRequestStatus
-  polly?:
-    | {
-        __typename?: 'Polly'
-        id: string
-        name: string
-        externalID: string
-        url: string
-      }
-    | null
-    | undefined
-}
-
 interface AccessRequests {
-  accessRequests?: Array<AccessRequest>
+  accessRequests: Array<AccessRequest>
 }
 
 interface RequestInterface {

@@ -41,10 +41,12 @@ const AddAccess = ({
     try {
       await grantAccess({
         variables: {
-          dataproductID,
-          subject,
-          subjectType: SubjectType.User,
-          expires: date,
+          input: {
+            dataproductID,
+            subject,
+            subjectType: SubjectType.User,
+            expires: date,
+          }
         },
         refetchQueries: ['DataproductAccess', 'userInfoDetails'],
       })

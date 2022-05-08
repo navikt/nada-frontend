@@ -43,16 +43,18 @@ export const USER_INFO = gql`
       }
       accessRequests {
         id
+        dataproductID
         subject
         subjectType
-        owner
+        granter
+        status
         created
         expires
-        status
-        dataproductID
+        owner
         polly {
-          externalID
+          id
           name
+          externalID
           url
         }
       }

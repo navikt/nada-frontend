@@ -51,11 +51,6 @@ const User = ({ accessQuery, currentUser, groups }: UserProps) => {
         <AddCircle/> Søk om ny tilgang
       </Button>
       <br/>
-      {false && <>
-          <SubHeader>Søknader</SubHeader>
-          <UserAccessList id={dataproduct.id} access={[]} requests={[]}/>
-      </>
-      }
       {dataproduct.access.length != 0 && <>
           <SubHeader>Aktive tilganger</SubHeader>
           <UserAccessList id={dataproduct.id} access={dataproduct.access} requests={[]}/>

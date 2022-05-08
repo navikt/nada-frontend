@@ -11,7 +11,6 @@ import ErrorMessage from '../../components/lib/error'
 import TabPanel, {TabPanelType} from "../../components/lib/tabPanel";
 import SubjectHeader from "../../components/lib/subjectHeader";
 import ResultList from "../../components/search/resultList";
-import AccessRequestsListForOwner from '../../components/dataproducts/accessRequest/accessRequestsListForOwner'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
 
 

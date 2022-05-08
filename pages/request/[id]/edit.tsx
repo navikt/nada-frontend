@@ -4,8 +4,7 @@ import { useAccessRequestQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../lib/apollo'
 import * as React from 'react'
-// import amplitudeLog from '../../../lib/amplitude'
-import AccessRequestForm from '../../../components/dataproducts/accessRequest/accessRequestForm'
+import UpdateAccessRequest from '../../../components/dataproducts/accessRequest/updateAccessRequest'
 import Head from 'next/head'
 import { GET_ACCESS_REQUEST } from '../../../lib/queries/accessRequest/accessRequest'
 
@@ -20,13 +19,6 @@ const AccessRequestEdit = (props: RequestProps) => {
     variables: { id },
     ssr: true,
   })
-//   useEffect(() => {
-//     const eventProperties = {
-//       sidetittel: 'productEdit',
-//       title: data?.dataproduct.name,
-//     }
-//     amplitudeLog('sidevisning', eventProperties)
-//   }, [])
 
   if (error) return <ErrorMessage error={error} />
 
@@ -37,7 +29,7 @@ const AccessRequestEdit = (props: RequestProps) => {
       <Head>
         <title>rediger tilgangssøknad</title>
       </Head>
-      <AccessRequestForm accessRequest={data.accessRequest} isEdit />
+      <UpdateAccessRequest updateAccessRequestData={data.accessRequest} />
     </>
   )
 }

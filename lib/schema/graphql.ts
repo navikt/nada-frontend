@@ -1410,18 +1410,20 @@ export type UserInfoDetailsQuery = {
     accessRequests: Array<{
       __typename?: 'AccessRequest'
       id: string
+      dataproductID: string
       subject: string
       subjectType: SubjectType
-      owner: string
+      granter?: string | null | undefined
+      status: AccessRequestStatus
       created: any
       expires?: any | null | undefined
-      status: AccessRequestStatus
-      dataproductID: string
+      owner: string
       polly?:
         | {
             __typename?: 'Polly'
-            externalID: string
+            id: string
             name: string
+            externalID: string
             url: string
           }
         | null
@@ -3518,16 +3520,18 @@ export const UserInfoDetailsDocument = gql`
       }
       accessRequests {
         id
+        dataproductID
         subject
         subjectType
-        owner
+        granter
+        status
         created
         expires
-        status
-        dataproductID
+        owner
         polly {
-          externalID
+          id
           name
+          externalID
           url
         }
       }

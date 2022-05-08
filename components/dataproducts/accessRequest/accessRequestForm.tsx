@@ -1,13 +1,12 @@
 import {
-  AccessRequest,
-  QueryPolly, Polly,
-  SubjectType, UpdateAccessRequest,
+  QueryPolly,
+  SubjectType,
   useDataproductQuery,
   usePollyQuery,
-  useUpdateAccessRequestMutation, PollyInput,
+  PollyInput, Maybe, Scalars
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { useState } from 'react'
+import {ChangeEvent, useState} from 'react'
 import { Delete, ExternalLink } from '@navikt/ds-icons'
 import { Alert, Heading, Link, TextField } from '@navikt/ds-react'
 import styled from 'styled-components'
@@ -23,7 +22,7 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import TopBar from '../../lib/topBar'
 import { useRouter } from "next/router";
 
-export const updateAccessRequestValidation = yup.object().shape({
+export const accessRequestValidation = yup.object().shape({
   subjectType: yup.string().required(),
   // subject: yup
   //   .string()
@@ -105,43 +104,45 @@ const RedDelete = styled(Delete)`
 `
 
 interface AccessRequestFormProps {
-  accessRequest: AccessRequest
+  accessRequest: AccessRequestFormInput
   isEdit: boolean
+  onSubmit: (requestData: AccessRequestFormInput) => void
 }
 
-const AccessRequestForm = ({
-                             accessRequest,
-                             isEdit: isEdit,
-                           }: AccessRequestFormProps) => {
+export type AccessRequestFormInput = {
+  dataproductID: Scalars['ID']
+  expires?: Maybe<Scalars['Time']>
+  polly?: Maybe<PollyInput>
+  subject?: Maybe<Scalars['String']>
+  subjectType?: Maybe<SubjectType>
+}
+
+const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
-  const [updateAccessRequest] = useUpdateAccessRequestMutation()
-  const router = useRouter()
   const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires)
+  const [subjectData, setSubjectData] = useState({
+    subject: accessRequest.subject,
+    subjectType: accessRequest.subjectType,
+  })
+  const router = useRouter()
+
   const { data, error, loading } = useDataproductQuery({
     variables: { id: accessRequest.dataproductID },
   })
 
-  const {
-    data: searchData,
-    error: searchError,
-    loading: searchLoading,
-  } = usePollyQuery({
+  const {data: searchData, error: searchError, loading: searchLoading} = usePollyQuery({
     variables: { q: searchText },
     skip: searchText.length < 3,
   })
 
   const { formState, handleSubmit, control, watch, register, reset } = useForm({
-    resolver: yupResolver(updateAccessRequestValidation),
+    resolver: yupResolver(accessRequestValidation),
     defaultValues: {
       subjectType: accessRequest.subjectType,
       subject: accessRequest.subject,
       dataproductID: accessRequest.dataproductID,
-      granter: accessRequest.granter,
-      created: accessRequest.created,
-      owner: accessRequest.owner,
-      status: accessRequest.status,
       expires: accessRequest.expires,
       polly: accessRequest.polly,
     }
@@ -150,27 +151,18 @@ const AccessRequestForm = ({
   if (error) return <ErrorMessage error={error}/>
   if (loading || !data) return <LoaderSpinner/>
 
-  const onSubmit = async (requestData: UpdateAccessRequest) => {
-    requestData.expires = expireDate
-    requestData.polly = polly
-
-    updateAccessRequest({
-      variables: {
-        input: {
-          id: accessRequest.id,
-          expires: expireDate,
-          owner: accessRequest.owner,
-          polly: polly,
-        }
-      }
-    }).then(() => {
-      router.push(`/user/requests`)
-    })
+  const toSubjectType = (s: string): SubjectType => {
+    switch (s) {
+      case 'all-users' :
+      case 'group' :
+        return SubjectType.Group
+      case 'serviceAccount' :
+        return SubjectType.ServiceAccount
+    }
+    return SubjectType.User
   }
 
-  const onSearch = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
+  const onSearch = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setSearchText(e.target.value)
   }
 
@@ -184,42 +176,71 @@ const AccessRequestForm = ({
     })
   }
 
+  const setSubject = (event: ChangeEvent<HTMLInputElement>) => {
+    setSubjectData((prevState) =>{
+      return {...prevState, subject: event.target.value}
+    })
+  }
+
+  const setSubjectType = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value)
+    setSubjectData((prevState) =>{
+      return {...prevState, subjectType: toSubjectType(event.target.value)}
+    })
+  }
+
+  const onSubmitForm = (requestData: AccessRequestFormInput) => {
+    const accessRequest: AccessRequestFormInput = {
+      ...requestData,
+      polly: polly,
+      expires: expireDate,
+      subject: subjectData.subject,
+      subjectType: subjectData.subjectType,
+    }
+    onSubmit(accessRequest)
+  }
+
   return (
     <Container>
       <AccessRequestBox>
-        <TopBar type={accessRequest.__typename} name="Rediger tilgangssøknad"/>
+        <TopBar type="AccessRequest" name="Tilgangssøknad for dataprodukt"/>
         <AccessRequestBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField
+          <form onSubmit={handleSubmit(onSubmitForm)}>
+            <SpacedTextField
+                label="Dataprodukt"
+                defaultValue={data.dataproduct.name}
+                disabled={true}
+            />
+            <TextField onChange={setSubject}
               label="Tilgang gjelder for"
-              defaultValue={accessRequest.subject}
+              defaultValue={accessRequest.subject ? accessRequest.subject : ""}
               size="medium"
               disabled={isEdit}
             />
-            <SpacedFormControl component="fieldset">
+            <SpacedFormControl>
               <Controller
                 rules={{ required: true }}
                 control={control}
                 name="subjectType"
                 render={({ field }) => (
-                  <RadioGroup {...field}>
+                  <RadioGroup {...field} onChange={setSubjectType}>
                     <FormControlLabel
                       disabled={isEdit}
-                      checked={accessRequest.subjectType == SubjectType.Group}
+                      checked={subjectData.subjectType == SubjectType.Group}
                       value="group"
                       control={<Radio/>}
                       label="Gruppe"
                     />
                     <FormControlLabel
                       disabled={isEdit}
-                      checked={accessRequest.subjectType == SubjectType.User}
+                      checked={subjectData.subjectType == SubjectType.User}
                       value="user"
                       control={<Radio/>}
                       label="Bruker (e-post)"
                     />
                     <FormControlLabel
                       disabled={isEdit}
-                      checked={accessRequest.subjectType == SubjectType.ServiceAccount}
+                      checked={subjectData.subjectType == SubjectType.ServiceAccount}
                       value="serviceAccount"
                       control={<Radio/>}
                       label="Servicebruker"
@@ -228,11 +249,6 @@ const AccessRequestForm = ({
                 )}
               />
             </SpacedFormControl>
-            <SpacedTextField
-              label="Dataprodukt"
-              defaultValue={data.dataproduct.name}
-              disabled={isEdit}
-            />
             <Heading size="xsmall" spacing>
               Utløper
             </Heading>

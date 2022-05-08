@@ -1,7 +1,6 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import {Error, ExternalLink, Success, Warning} from '@navikt/ds-icons'
-import { Button } from '@navikt/ds-react'
 import {DataproductQuery} from "../../lib/schema/graphql";
 import styled from "styled-components";
 import {UrlLink} from "../widgets/UrlLink";
@@ -75,13 +74,12 @@ interface DataproductDetailProps {
 export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
     const datasource = product.datasource
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
-    const onApply = () => any
 
     return <StyledMetadataTable>
         <SubjectHeader>Tilgang</SubjectHeader>
         <SubjectContent>
             {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
-            {accessType.type === 'none' && <Button type={'button'} variant={'primary'} onClick={onApply}>Søk om tilgang</Button>}
+            {accessType.type === 'none' && <Link key={product.id} href={`/request/new?dataproductID=${product.id}`}>Søk om tilgang</Link>}
             {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
             {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
             {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
