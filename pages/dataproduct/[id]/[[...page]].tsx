@@ -35,7 +35,7 @@ import Explore from "../../../components/dataproducts/explore";
 import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
 import {navRod} from "../../../styles/constants";
-import story from "../../../components/stories/story";
+import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../lib/queries/accessRequest/accessRequestsForDataproduct";
 
 const Container = styled.div`
   display: flex;
@@ -244,6 +244,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         await apolloClient.query({
             query: GET_DATAPRODUCT_ACCESS,
             variables: {id},
+            context: {
+                headers: {
+                    cookie,
+                },
+            },
+        })
+    } catch (e) {
+        // ignore access denied if not logged in
+    }
+
+    try {
+        await apolloClient.query({
+            query: GET_ACCESS_REQUESTS_FOR_DATAPRODUCT,
+            variables: {dataproductID: id},
             context: {
                 headers: {
                     cookie,

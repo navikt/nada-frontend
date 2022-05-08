@@ -4,7 +4,13 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Close, Delete, Error, Success } from '@navikt/ds-icons'
 import { navGronn, navRod } from '../../../styles/constants'
-import { AccessRequestsForDataproductQuery, Exact, SubjectType } from '../../../lib/schema/graphql'
+import {
+    AccessRequestsForDataproductQuery,
+    Exact,
+    SubjectType,
+    useApproveAccessRequestMutation,
+    useDenyAccessRequestMutation,
+} from '../../../lib/schema/graphql'
 import { Alert } from '@navikt/ds-react'
 import Link from 'next/link'
 
@@ -26,18 +32,32 @@ interface accessRequestEntry {
 
 const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
     const access = accessQuery.data?.accessRequestsForDataproduct
+    const [approveAccessRequest] = useApproveAccessRequestMutation()
+    const [denyAccessRequest] = useDenyAccessRequestMutation()
 
     const [formError, setFormError] = useState('')
     if (access?.length === 0) {
         return <>Ingen har forespurt tilgang til produktet</>
     }
 
-    const removeAccess = async (id: string, a: accessRequestEntry) => {
+    const onApproveRequest = async (id: string) => {
         try {
-            await removeRequester({
-                variables: { dataproductID: id, subject: a.subject },
-                refetchQueries: ['DataproductAccess'],
+            await approveAccessRequest({
+                variables: { id },
+                refetchQueries: ['DataproductAccess', 'accessRequestsForDataproduct'],
               },
+            )
+        } catch (e: any) {
+            setFormError(e.message)
+        }
+    }
+
+    const onDenyAccessRequest = async (id: string) => {
+        try {
+            await denyAccessRequest({
+                    variables: { id },
+                    refetchQueries: ['accessRequestsForDataproduct'],
+                },
             )
         } catch (e: any) {
             setFormError(e.message)
@@ -65,11 +85,10 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                         }
                         </TableCell>
                         <TableCell align='center'><Success style={{ cursor: 'pointer', color: navGronn }}
-                            onClick={() => removeAccess(id, a)} /></TableCell>
+                            onClick={() => onApproveRequest(a.id)} /></TableCell>
                         <TableCell align='center'><Close style={{ cursor: 'pointer', color: navRod }}
-                            onClick={() => removeAccess(id, a)} /></TableCell>
+                            onClick={() => onDenyAccessRequest(a.id)} /></TableCell>
                     </TableRow>)}
-
                 </TableBody>
             </Table>
         </div>
