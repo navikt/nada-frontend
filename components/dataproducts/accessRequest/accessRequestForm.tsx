@@ -107,6 +107,7 @@ const RedDelete = styled(Delete)`
 interface AccessRequestFormProps {
   accessRequest: AccessRequestFormInput
   isEdit: boolean
+  isView: boolean
   onSubmit: (requestData: AccessRequestFormInput) => void
 }
 
@@ -118,12 +119,12 @@ export type AccessRequestFormInput = {
   subjectType?: Maybe<SubjectType>
 }
 
-const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFormProps) => {
+const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
   const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires)
-  const [accessType, setAccessType] = useState("eternal")
+  const [accessType, setAccessType] = useState(accessRequest.expires === undefined ? 'eternal' : 'until')
   const [subjectData, setSubjectData] = useState({
     subject: accessRequest.subject,
     subjectType: accessRequest.subjectType,
@@ -217,7 +218,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFor
               label="Tilgang gjelder for"
               defaultValue={accessRequest.subject ? accessRequest.subject : ""}
               size="medium"
-              disabled={isEdit}
+              disabled={isEdit || isView}
             />
             <SpacedFormControl>
               <Controller
@@ -227,21 +228,21 @@ const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFor
                 render={({ field }) => (
                   <RadioGroup {...field} onChange={setSubjectType}>
                     <FormControlLabel
-                      disabled={isEdit}
+                      disabled={isEdit || isView}
                       checked={subjectData.subjectType == SubjectType.Group}
                       value="group"
                       control={<Radio />}
                       label="Gruppe"
                     />
                     <FormControlLabel
-                      disabled={isEdit}
+                      disabled={isEdit || isView}
                       checked={subjectData.subjectType == SubjectType.User}
                       value="user"
                       control={<Radio />}
                       label="Bruker (e-post)"
                     />
                     <FormControlLabel
-                      disabled={isEdit}
+                      disabled={isEdit || isView}
                       checked={subjectData.subjectType == SubjectType.ServiceAccount}
                       value="serviceAccount"
                       control={<Radio />}
@@ -261,12 +262,14 @@ const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFor
               <FormControlLabel
                 value='eternal'
                 control={<Radio />}
+                disabled={isView}
                 label='Har alltid tilgang'
                 checked={accessType === 'eternal'}
               />
               <FormControlLabel
                 value='until'
                 control={<Radio />}
+                disabled={isView}
                 label='Har tilgang til denne datoen'
                 checked={accessType === 'until'}
               />
@@ -277,6 +280,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFor
                 mask="__.__.____"
                 value={expireDate}
                 onChange={(newVal) => setExpireDate(newVal)}
+                disabled={isView}
                 renderInput={(params) => <SpacedDatePicker {...params} />}
               />
             </LocalizationProvider>}
@@ -287,6 +291,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFor
                   onChange={(e) => {
                     onSearch(e)
                   }}
+                  disabled={isView}
                 />
                 {searchText.length >= 3 && (
                   <>
@@ -319,16 +324,16 @@ const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFor
                 <Link href={polly.url} target="_blank" rel="noreferrer">
                   {polly.name}<ExternalLink />
                 </Link>
-                <IconBox><RedDelete onClick={() => {
+                {!isView && <IconBox><RedDelete onClick={() => {
                   setPolly(null);
-                }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>
+                }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>}
               </Selection>
             </>
             )}
             {formError && <Alert variant={'error'}>{formError}</Alert>}
-            <RightJustifiedSubmitButton onCancel={() => {
+            {!isView && <RightJustifiedSubmitButton onCancel={() => {
               router.push(`/user/requests`)
-            }} />
+            }} />}
           </form>
         </AccessRequestBody>
       </AccessRequestBox>

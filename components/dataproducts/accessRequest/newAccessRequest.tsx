@@ -33,7 +33,7 @@ const NewAccessRequestForm = ({newAccessRequest}: NewAccessRequestFormProps) => 
   }
 
   return (
-      <AccessRequestForm accessRequest={accessRequest} isEdit={false} onSubmit={onSubmit}/>
+      <AccessRequestForm accessRequest={accessRequest} isEdit={false} isView={false} onSubmit={onSubmit}/>
   )
 }
 

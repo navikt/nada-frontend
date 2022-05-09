@@ -33,7 +33,7 @@ const UpdateAccessRequest = ({updateAccessRequestData}: UpdateAccessRequestFormP
   }
 
   return (
-      <AccessRequestForm accessRequest={accessRequest} isEdit={true} onSubmit={onSubmit}/>
+      <AccessRequestForm accessRequest={accessRequest} isEdit={true} isView={false} onSubmit={onSubmit}/>
   )
 }
 

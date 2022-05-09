@@ -2,8 +2,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { QueryResult } from '@apollo/client'
 import * as React from 'react'
 import { useState } from 'react'
-import { Close, Success } from '@navikt/ds-icons'
-import { navGronn, navRod } from '../../../styles/constants'
+import { Close, Success, Search } from '@navikt/ds-icons'
+import { navGronn, navRod, navBla } from '../../../styles/constants'
 import {
     AccessRequestsForDataproductQuery,
     Exact,
@@ -12,12 +12,14 @@ import {
 } from '../../../lib/schema/graphql'
 import { Alert } from '@navikt/ds-react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface AccessListProps {
     accessQuery: QueryResult<AccessRequestsForDataproductQuery, Exact<{ dataproductID: string }>>,
 }
 
 const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
+    const router = useRouter()
     const access = accessQuery.data?.accessRequestsForDataproduct
     const [approveAccessRequest] = useApproveAccessRequestMutation()
     const [denyAccessRequest] = useDenyAccessRequestMutation()
@@ -51,6 +53,10 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
         }
     }
 
+    const onViewRequest = async (id: string) => {
+        router.push(`/request/${id}/view`)
+    }
+
     return (
         <div>
             {formError && <Alert variant={'error'}>{formError}</Alert>}
@@ -59,6 +65,7 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                     <TableRow>
                         <TableCell align='left'>Bruker / gruppe</TableCell>
                         <TableCell align='left'>Behandlingsgrunnlag</TableCell>
+                        <TableCell align='center'>Se søknad</TableCell>
                         <TableCell align='center'>Godta</TableCell>
                         <TableCell align='center'>Avslå</TableCell>
                     </TableRow>
@@ -71,6 +78,8 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                             : "Ingen registrert behandling"
                         }
                         </TableCell>
+                        <TableCell align='center'><Search style={{ cursor: 'pointer', color: navBla }}
+                            onClick={() => onViewRequest(a.id)} /></TableCell>
                         <TableCell align='center'><Success style={{ cursor: 'pointer', color: navGronn }}
                             onClick={() => onApproveRequest(a.id)} /></TableCell>
                         <TableCell align='center'><Close style={{ cursor: 'pointer', color: navRod }}
