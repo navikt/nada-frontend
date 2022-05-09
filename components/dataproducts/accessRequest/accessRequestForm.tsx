@@ -3,7 +3,7 @@ import {
   SubjectType,
   useDataproductQuery,
   usePollyQuery,
-  PollyInput, Maybe, Scalars, useUserInfoDetailsQuery
+  PollyInput, Maybe, Scalars, useUserInfoDetailsQuery, useApproveAccessRequestMutation, useDenyAccessRequestMutation
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
@@ -113,6 +113,7 @@ interface AccessRequestFormProps {
 }
 
 export type AccessRequestFormInput = {
+  id?: Maybe<Scalars['ID']>
   dataproductID: Scalars['ID']
   expires?: Maybe<Scalars['Time']>
   polly?: Maybe<PollyInput>
@@ -130,6 +131,8 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     subject: accessRequest.subject,
     subjectType: accessRequest.subjectType,
   })
+  const [approveAccessRequest] = useApproveAccessRequestMutation()
+  const [denyAccessRequest] = useDenyAccessRequestMutation()
   const router = useRouter()
 
   const { data, error, loading } = useDataproductQuery({
@@ -190,7 +193,6 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
   }
 
   const setSubjectType = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
     setSubjectData((prevState) => {
       return { ...prevState, subjectType: toSubjectType(event.target.value) }
     })
@@ -212,14 +214,31 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     return emails.includes(data.dataproduct.owner.group)
   }
 
-  const onApprove = () => {
-    // todo, samme som i accessRequestsListForOwner
+  const onApprove = async () => {
+    try {
+      await approveAccessRequest({
+            variables: { id: accessRequest.id as string },
+            refetchQueries: ['DataproductAccess', 'accessRequestsForDataproduct'],
+          },
+      )
+    } catch (e: any) {
+      setFormError(e.message)
+    }
+    await router.push(`/dataproduct/${accessRequest.dataproductID}/access`)
   }
 
-  const onDeny = () => {
-    // todo, samme som i accessRequestsListForOwner
+  const onDeny = async () => {
+    try {
+      await denyAccessRequest({
+            variables: { id: accessRequest.id as string },
+            refetchQueries: ['accessRequestsForDataproduct'],
+          },
+      )
+    } catch (e: any) {
+      setFormError(e.message)
+    }
+    await router.push(`/dataproduct/${accessRequest.dataproductID}/access`)
   }
-
 
   return (
     <Container>
