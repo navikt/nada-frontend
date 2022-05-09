@@ -6,7 +6,7 @@ import {
   PollyInput, Maybe, Scalars
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import {ChangeEvent, useState} from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Delete, ExternalLink } from '@navikt/ds-icons'
 import { Alert, Heading, Link, TextField } from '@navikt/ds-react'
 import styled from 'styled-components'
@@ -36,6 +36,7 @@ export const accessRequestValidation = yup.object().shape({
 
 const SpacedFormControl = styled(FormControl)`
   margin-bottom: var(--navds-spacing-3);
+  display: block;
 `
 
 const SpacedDatePicker = styled(MuiTextField)`
@@ -117,11 +118,12 @@ export type AccessRequestFormInput = {
   subjectType?: Maybe<SubjectType>
 }
 
-const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormProps) => {
+const AccessRequestForm = ({ accessRequest, isEdit, onSubmit }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
   const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires)
+  const [accessType, setAccessType] = useState("eternal")
   const [subjectData, setSubjectData] = useState({
     subject: accessRequest.subject,
     subjectType: accessRequest.subjectType,
@@ -132,7 +134,7 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
     variables: { id: accessRequest.dataproductID },
   })
 
-  const {data: searchData, error: searchError, loading: searchLoading} = usePollyQuery({
+  const { data: searchData, error: searchError, loading: searchLoading } = usePollyQuery({
     variables: { q: searchText },
     skip: searchText.length < 3,
   })
@@ -148,15 +150,15 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
     }
   })
 
-  if (error) return <ErrorMessage error={error}/>
-  if (loading || !data) return <LoaderSpinner/>
+  if (error) return <ErrorMessage error={error} />
+  if (loading || !data) return <LoaderSpinner />
 
   const toSubjectType = (s: string): SubjectType => {
     switch (s) {
-      case 'all-users' :
-      case 'group' :
+      case 'all-users':
+      case 'group':
         return SubjectType.Group
-      case 'serviceAccount' :
+      case 'serviceAccount':
         return SubjectType.ServiceAccount
     }
     return SubjectType.User
@@ -177,15 +179,15 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
   }
 
   const setSubject = (event: ChangeEvent<HTMLInputElement>) => {
-    setSubjectData((prevState) =>{
-      return {...prevState, subject: event.target.value}
+    setSubjectData((prevState) => {
+      return { ...prevState, subject: event.target.value }
     })
   }
 
   const setSubjectType = (event: ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value)
-    setSubjectData((prevState) =>{
-      return {...prevState, subjectType: toSubjectType(event.target.value)}
+    setSubjectData((prevState) => {
+      return { ...prevState, subjectType: toSubjectType(event.target.value) }
     })
   }
 
@@ -203,13 +205,13 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
   return (
     <Container>
       <AccessRequestBox>
-        <TopBar type="AccessRequest" name="Tilgangssøknad for dataprodukt"/>
+        <TopBar type="AccessRequest" name="Tilgangssøknad for dataprodukt" />
         <AccessRequestBody>
           <form onSubmit={handleSubmit(onSubmitForm)}>
             <SpacedTextField
-                label="Dataprodukt"
-                defaultValue={data.dataproduct.name}
-                disabled={true}
+              label="Dataprodukt"
+              defaultValue={data.dataproduct.name}
+              disabled={true}
             />
             <TextField onChange={setSubject}
               label="Tilgang gjelder for"
@@ -228,31 +230,48 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
                       disabled={isEdit}
                       checked={subjectData.subjectType == SubjectType.Group}
                       value="group"
-                      control={<Radio/>}
+                      control={<Radio />}
                       label="Gruppe"
                     />
                     <FormControlLabel
                       disabled={isEdit}
                       checked={subjectData.subjectType == SubjectType.User}
                       value="user"
-                      control={<Radio/>}
+                      control={<Radio />}
                       label="Bruker (e-post)"
                     />
                     <FormControlLabel
                       disabled={isEdit}
                       checked={subjectData.subjectType == SubjectType.ServiceAccount}
                       value="serviceAccount"
-                      control={<Radio/>}
+                      control={<Radio />}
                       label="Servicebruker"
                     />
                   </RadioGroup>
                 )}
               />
             </SpacedFormControl>
-            <Heading size="xsmall" spacing>
+            <Heading size="xsmall">
               Utløper
             </Heading>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <RadioGroup onClick={(e: any) => {
+              e.target.value !== undefined && setAccessType(e.target.value)
+              e.target.value === 'eternal' && setExpireDate(null)
+            }}>
+              <FormControlLabel
+                value='eternal'
+                control={<Radio />}
+                label='Har alltid tilgang'
+                checked={accessType === 'eternal'}
+              />
+              <FormControlLabel
+                value='until'
+                control={<Radio />}
+                label='Har tilgang til denne datoen'
+                checked={accessType === 'until'}
+              />
+            </RadioGroup>
+            {accessType === 'until' && <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DesktopDatePicker
                 inputFormat="dd.MM.yyyy"
                 mask="__.__.____"
@@ -260,7 +279,7 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
                 onChange={(newVal) => setExpireDate(newVal)}
                 renderInput={(params) => <SpacedDatePicker {...params} />}
               />
-            </LocalizationProvider>
+            </LocalizationProvider>}
             {!polly && (
               <>
                 <SpacedTextField
@@ -271,8 +290,8 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
                 />
                 {searchText.length >= 3 && (
                   <>
-                    {searchError && <ErrorMessage error={searchError}/>}
-                    {searchLoading && <LoaderSpinner/>}
+                    {searchError && <ErrorMessage error={searchError} />}
+                    {searchLoading && <LoaderSpinner />}
                     {searchData && searchData.polly.length === 0 ? (
                       <>Ingen treff</>
                     ) : (
@@ -293,23 +312,23 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
                 )}
               </>
             )}
-            <br/>
+            <br />
             {polly && (<>
-                <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
-                <Selection>
-                  <Link href={polly.url} target="_blank" rel="noreferrer">
-                    {polly.name}<ExternalLink/>
-                  </Link>
-                  <IconBox><RedDelete onClick={() => {
-                    setPolly(null);
-                  }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>
-                </Selection>
-              </>
+              <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
+              <Selection>
+                <Link href={polly.url} target="_blank" rel="noreferrer">
+                  {polly.name}<ExternalLink />
+                </Link>
+                <IconBox><RedDelete onClick={() => {
+                  setPolly(null);
+                }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>
+              </Selection>
+            </>
             )}
             {formError && <Alert variant={'error'}>{formError}</Alert>}
             <RightJustifiedSubmitButton onCancel={() => {
               router.push(`/user/requests`)
-            }}/>
+            }} />
           </form>
         </AccessRequestBody>
       </AccessRequestBox>
@@ -318,3 +337,5 @@ const AccessRequestForm = ({accessRequest, isEdit, onSubmit}: AccessRequestFormP
 }
 
 export default AccessRequestForm
+
+

@@ -76,16 +76,6 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
 
     return <StyledMetadataTable>
-        <SubjectHeader>Tilgang</SubjectHeader>
-        <SubjectContent>
-            {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
-            {accessType.type === 'none' && <Link key={product.id} href={`/request/new?dataproductID=${product.id}`}>Søk om tilgang</Link>}
-            {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
-            {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
-            {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
-
-        </SubjectContent>
-
         <SubjectHeader>Type</SubjectHeader>
         <SubjectContent>
             {product.datasource.__typename}
@@ -155,8 +145,17 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
                 </IconBox>
                 <p style={{margin: 0}}>Inneholder {!product.pii && <b> IKKE </b>} persondata</p>
             </PiiBox>
+        </SubjectContent>
+        <SubjectHeader>Tilgang</SubjectHeader>
+        <SubjectContent>
+            {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
+            {accessType.type === 'none' && <Link key={product.id} href={`/request/new?dataproductID=${product.id}`}>Søk om tilgang</Link>}
+            {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
+            {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
+            {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
 
         </SubjectContent>
+
         {product.repo && <>
             <SubjectHeader>Kildekode</SubjectHeader>
             <SubjectContent>

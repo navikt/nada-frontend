@@ -28,7 +28,7 @@ const NewAccessRequestForm = ({newAccessRequest}: NewAccessRequestFormProps) => 
         },
         refetchQueries: ['userInfoDetails'],
       }).then(() => {
-          router.push(`/user/requests`)
+          router.push(`/dataproduct/${accessRequest.dataproductID}`)
         })
   }
 
