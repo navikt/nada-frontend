@@ -3,7 +3,7 @@ import {
   SubjectType,
   useDataproductQuery,
   usePollyQuery,
-  PollyInput, Maybe, Scalars
+  PollyInput, Maybe, Scalars, useUserInfoDetailsQuery
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
@@ -14,6 +14,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { FormControl, FormControlLabel, Radio, RadioGroup, TextField as MuiTextField, } from '@mui/material'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
+import { RightJustifiedGrantButton } from '../../widgets/formSubmit'
 import * as yup from 'yup'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
@@ -135,6 +136,8 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     variables: { id: accessRequest.dataproductID },
   })
 
+  const { data: userInfo, error: userError, loading: userLoading } = useUserInfoDetailsQuery()
+
   const { data: searchData, error: searchError, loading: searchLoading } = usePollyQuery({
     variables: { q: searchText },
     skip: searchText.length < 3,
@@ -152,7 +155,8 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
   })
 
   if (error) return <ErrorMessage error={error} />
-  if (loading || !data) return <LoaderSpinner />
+  if (userError) return <ErrorMessage error={userError} />
+  if (loading || userLoading || !data || !userInfo) return <LoaderSpinner />
 
   const toSubjectType = (s: string): SubjectType => {
     switch (s) {
@@ -202,6 +206,20 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     }
     onSubmit(accessRequest)
   }
+
+  const isOwner = () => {
+    const emails = userInfo.userInfo.groups.map(g => g.email).concat([userInfo.userInfo.email])
+    return emails.includes(data.dataproduct.owner.group)
+  }
+
+  const onApprove = () => {
+    // todo, samme som i accessRequestsListForOwner
+  }
+
+  const onDeny = () => {
+    // todo, samme som i accessRequestsListForOwner
+  }
+
 
   return (
     <Container>
@@ -334,6 +352,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
             {!isView && <RightJustifiedSubmitButton onCancel={() => {
               router.push(`/user/requests`)
             }} />}
+            {isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} />}
           </form>
         </AccessRequestBody>
       </AccessRequestBox>
