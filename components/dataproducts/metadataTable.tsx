@@ -36,8 +36,11 @@ const SubjectContent = styled.div`
     margin-left: 1px;
     font-size: 14px;
     color: #222;
-    
 `
+const AccessBlock = styled.div`
+    display: block;
+`
+
 type SubjectHeaderProps = {
     centered?: boolean
 }
@@ -149,12 +152,19 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
         <SubjectHeader>Tilgang</SubjectHeader>
         <SubjectContent>
             {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
-            {accessType.type === 'none' && <Link key={product.id} href={`/request/new?dataproductID=${product.id}`}>Søk om tilgang</Link>}
             {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
             {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
             {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
-
+            {['none', 'user'].includes(accessType.type) && 
+                <AccessBlock>
+                    <Link key={product.id} href={`/request/new?dataproductID=${product.id}`}>
+                        {accessType.type === "user" ? "Søk om ny tilgang" : "Søk om tilgang"}
+                    </Link>
+                </AccessBlock>
+            }
         </SubjectContent>
+        
+        
 
         {product.repo && <>
             <SubjectHeader>Kildekode</SubjectHeader>
