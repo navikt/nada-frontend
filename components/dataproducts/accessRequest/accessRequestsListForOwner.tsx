@@ -64,7 +64,7 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                 <TableHead>
                     <TableRow>
                         <TableCell align='left'>Bruker / gruppe</TableCell>
-                        <TableCell align='left'>Behandlingsgrunnlag</TableCell>
+                        <TableCell align='left'>Behandling</TableCell>
                         <TableCell align='center'>Se søknad</TableCell>
                         <TableCell align='center'>Godta</TableCell>
                         <TableCell align='center'>Avslå</TableCell>

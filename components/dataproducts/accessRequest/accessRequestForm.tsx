@@ -324,7 +324,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
             {!polly && (
               <>
                 <SpacedTextField
-                  label="Behandlingsgrunnlag"
+                  label="Behandling"
                   onChange={(e) => {
                     onSearch(e)
                   }}
@@ -363,7 +363,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
                 </Link>
                 {!isView && <IconBox><RedDelete onClick={() => {
                   setPolly(null);
-                }}>Fjern behandlingsgrunnlag</RedDelete></IconBox>}
+                }}>Fjern behandling</RedDelete></IconBox>}
               </Selection>
             </>
             )}
