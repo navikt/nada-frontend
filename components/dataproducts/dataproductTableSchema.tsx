@@ -46,10 +46,6 @@ const DataproductTableSchema = ({
           <th>Opprettet:</th>
           <td>{humanizeDate(datasource.created)}</td>
         </tr>
-        <tr>
-          <th>Oppdatert:</th>
-          <td>{humanizeDate(datasource.lastModified)}</td>
-        </tr>
         {datasource.expires && (
           <tr>
             <th>Utgår:</th>
