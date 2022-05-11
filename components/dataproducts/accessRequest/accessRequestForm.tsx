@@ -218,6 +218,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     try {
       await approveAccessRequest({
             variables: { id: accessRequest.id as string },
+            awaitRefetchQueries: true,
             refetchQueries: ['DataproductAccess', 'accessRequestsForDataproduct'],
           },
       )
@@ -231,6 +232,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     try {
       await denyAccessRequest({
             variables: { id: accessRequest.id as string },
+            awaitRefetchQueries: true,
             refetchQueries: ['accessRequestsForDataproduct'],
           },
       )
