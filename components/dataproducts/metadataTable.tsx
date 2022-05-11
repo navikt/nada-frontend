@@ -36,8 +36,11 @@ const SubjectContent = styled.div`
     margin-left: 1px;
     font-size: 14px;
     color: #222;
-    
 `
+const AccessBlock = styled.div`
+    display: block;
+`
+
 type SubjectHeaderProps = {
     centered?: boolean
 }
@@ -76,16 +79,6 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
 
     return <StyledMetadataTable>
-        <SubjectHeader>Tilgang</SubjectHeader>
-        <SubjectContent>
-            {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
-            {accessType.type === 'none' && <AccessRow><Error color={navRod}/>Du har ikke tilgang</AccessRow>}
-            {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
-            {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
-            {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
-
-        </SubjectContent>
-
         <SubjectHeader>Type</SubjectHeader>
         <SubjectContent>
             {product.datasource.__typename}
@@ -155,8 +148,24 @@ export const MetadataTable = ({product, accessType}: DataproductDetailProps) => 
                 </IconBox>
                 <p style={{margin: 0}}>Inneholder {!product.pii && <b> IKKE </b>} persondata</p>
             </PiiBox>
-
         </SubjectContent>
+        <SubjectHeader>Tilgang</SubjectHeader>
+        <SubjectContent>
+            {accessType.type === 'utlogget' && <AccessRow><Error color={navRod}/>Ikke innlogget</AccessRow>}
+            {accessType.type === 'owner' && <AccessRow><Success color={navGronn}/>Du eier dette produktet</AccessRow>}
+            {accessType.type === 'user' && <AccessRow><Success color={navGronn}/>
+            {accessType.expires ? <>til:{humanizeDate(accessType.expires)}</> : <>Du har tilgang</>}</AccessRow>}
+            {['none', 'user'].includes(accessType.type) && 
+                <AccessBlock>
+                    <Link key={product.id} href={`/request/new?dataproductID=${product.id}`}>
+                        {accessType.type === "user" ? "Søk om ny tilgang" : "Søk om tilgang"}
+                    </Link>
+                </AccessBlock>
+            }
+        </SubjectContent>
+        
+        
+
         {product.repo && <>
             <SubjectHeader>Kildekode</SubjectHeader>
             <SubjectContent>

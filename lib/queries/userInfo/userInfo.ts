@@ -41,6 +41,23 @@ export const USER_INFO = gql`
           group
         }
       }
+      accessRequests {
+        id
+        dataproductID
+        subject
+        subjectType
+        granter
+        status
+        created
+        expires
+        owner
+        polly {
+          id
+          name
+          externalID
+          url
+        }
+      }
     }
   }
 `

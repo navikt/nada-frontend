@@ -1,44 +1,35 @@
 import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
-import { useDataproductQuery } from '../../../lib/schema/graphql'
+import { useAccessRequestQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
-import { useEffect } from 'react'
-import amplitudeLog from '../../../lib/amplitude'
-import EditDataproduct from '../../../components/dataproducts/editDataproduct'
+import UpdateAccessRequest from '../../../components/dataproducts/accessRequest/updateAccessRequest'
 import Head from 'next/head'
+import { GET_ACCESS_REQUEST } from '../../../lib/queries/accessRequest/accessRequest'
 
-interface DataproductProps {
+interface RequestProps {
   id: string
 }
 
-const DataproductEdit = (props: DataproductProps) => {
+const AccessRequestEdit = (props: RequestProps) => {
   const { id } = props
 
-  const { data, loading, error } = useDataproductQuery({
+  const { data, loading, error } = useAccessRequestQuery({
     variables: { id },
     ssr: true,
   })
-  useEffect(() => {
-    const eventProperties = {
-      sidetittel: 'productEdit',
-      title: data?.dataproduct.name,
-    }
-    amplitudeLog('sidevisning', eventProperties)
-  }, [])
 
   if (error) return <ErrorMessage error={error} />
 
-  if (loading || !data?.dataproduct) return <LoaderSpinner />
+  if (loading || !data?.accessRequest) return <LoaderSpinner />
 
   return (
     <>
       <Head>
-        <title>Rediger {data.dataproduct.name}</title>
+        <title>rediger tilgangssøknad</title>
       </Head>
-      <EditDataproduct product={data.dataproduct} />
+      <UpdateAccessRequest updateAccessRequestData={data.accessRequest} />
     </>
   )
 }
@@ -50,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const apolloClient = initializeApollo()
 
   await apolloClient.query({
-    query: GET_DATAPRODUCT,
+    query: GET_ACCESS_REQUEST,
     variables: { id },
     context: {
       headers: {
@@ -64,4 +55,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
 }
 
-export default DataproductEdit
+export default AccessRequestEdit

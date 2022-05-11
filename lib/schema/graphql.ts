@@ -41,6 +41,39 @@ export type Access = {
   subject: Scalars['String']
 }
 
+/** AccessRequest contains metadata on a request to access a dataproduct */
+export type AccessRequest = {
+  __typename?: 'AccessRequest'
+  /** closed is a timestamp for when the access request was closed. */
+  closed?: Maybe<Scalars['Time']>
+  /** created is a timestamp for when the access request was created. */
+  created: Scalars['Time']
+  /** id of dataproduct. */
+  dataproductID: Scalars['ID']
+  /** expires is a timestamp for when the access expires */
+  expires?: Maybe<Scalars['Time']>
+  /** granter is the email of the person who granted/denied the access request. */
+  granter?: Maybe<Scalars['String']>
+  /** id of access request. */
+  id: Scalars['ID']
+  /** owner of the access request. */
+  owner: Scalars['String']
+  /** polly is the process policy attached to this grant. */
+  polly?: Maybe<Polly>
+  /** status is the status of the access request (can be pending, approved or denied). */
+  status: AccessRequestStatus
+  /** subject to be granted access. */
+  subject: Scalars['String']
+  /** subjectType is the type of entity which should be granted access (user, group or service account). */
+  subjectType: SubjectType
+}
+
+export enum AccessRequestStatus {
+  Approved = 'approved',
+  Denied = 'denied',
+  Pending = 'pending',
+}
+
 /** BigQuery contains metadata on a BigQuery table. */
 export type BigQuery = {
   __typename?: 'BigQuery'
@@ -179,11 +212,29 @@ export type Mutation = {
    */
   addRequesterToDataproduct: Scalars['Boolean']
   /**
+   * approveAccessRequest approves an access request.
+   *
+   * Requires authentication
+   */
+  approveAccessRequest: Scalars['Boolean']
+  /**
+   * createAccessRequest creates a new access request for a dataproduct
+   *
+   * Requires authentication
+   */
+  createAccessRequest: AccessRequest
+  /**
    * createDataproduct creates a new dataproduct
    *
    * Requires authentication.
    */
   createDataproduct: Dataproduct
+  /**
+   * deleteAccessRequest deletes a dataproduct access request.
+   *
+   * Requires authentication
+   */
+  deleteAccessRequest: Scalars['Boolean']
   /**
    * deleteDataproduct deletes a dataproduct.
    *
@@ -196,6 +247,12 @@ export type Mutation = {
    * Requires authentication.
    */
   deleteStory: Scalars['Boolean']
+  /**
+   * denyAccessRequest denies an access request.
+   *
+   * Requires authentication
+   */
+  denyAccessRequest: Scalars['Boolean']
   /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
   /**
@@ -229,6 +286,12 @@ export type Mutation = {
    */
   revokeAccessToDataproduct: Scalars['Boolean']
   /**
+   * createAccessRequest creates a new access request for a dataproduct
+   *
+   * Requires authentication
+   */
+  updateAccessRequest: AccessRequest
+  /**
    * updateDataproduct updates an existing dataproduct
    *
    * Requires authentication.
@@ -247,8 +310,20 @@ export type MutationAddRequesterToDataproductArgs = {
   subject: Scalars['String']
 }
 
+export type MutationApproveAccessRequestArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationCreateAccessRequestArgs = {
+  input: NewAccessRequest
+}
+
 export type MutationCreateDataproductArgs = {
   input: NewDataproduct
+}
+
+export type MutationDeleteAccessRequestArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationDeleteDataproductArgs = {
@@ -259,15 +334,16 @@ export type MutationDeleteStoryArgs = {
   id: Scalars['ID']
 }
 
+export type MutationDenyAccessRequestArgs = {
+  id: Scalars['ID']
+}
+
 export type MutationDummyArgs = {
   no?: Maybe<Scalars['String']>
 }
 
 export type MutationGrantAccessToDataproductArgs = {
-  dataproductID: Scalars['ID']
-  expires?: Maybe<Scalars['Time']>
-  subject?: Maybe<Scalars['String']>
-  subjectType?: Maybe<SubjectType>
+  input: NewGrant
 }
 
 export type MutationMapDataproductArgs = {
@@ -288,6 +364,10 @@ export type MutationRevokeAccessToDataproductArgs = {
   id: Scalars['ID']
 }
 
+export type MutationUpdateAccessRequestArgs = {
+  input: UpdateAccessRequest
+}
+
 export type MutationUpdateDataproductArgs = {
   id: Scalars['ID']
   input: UpdateDataproduct
@@ -298,6 +378,22 @@ export type MutationUpdateStoryMetadataArgs = {
   keywords: Array<Scalars['String']>
   name: Scalars['String']
   teamkatalogenURL?: Maybe<Scalars['String']>
+}
+
+/** NewAccessRequest contains metadata on a request to access a dataproduct */
+export type NewAccessRequest = {
+  /** id of dataproduct. */
+  dataproductID: Scalars['ID']
+  /** expires is a timestamp for when the access expires. */
+  expires?: Maybe<Scalars['Time']>
+  /** owner is the owner of the access request */
+  owner?: Maybe<Scalars['String']>
+  /** polly is the process policy attached to this grant */
+  polly?: Maybe<PollyInput>
+  /** subject to be granted access. */
+  subject?: Maybe<Scalars['String']>
+  /** subjectType is the type of entity which should be granted access (user, group or service account). */
+  subjectType?: Maybe<SubjectType>
 }
 
 /** NewBigQuery contains metadata for creating a new bigquery data source */
@@ -332,6 +428,18 @@ export type NewDataproduct = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
+/** NewGrant contains metadata on a request to access a dataproduct */
+export type NewGrant = {
+  /** id of dataproduct. */
+  dataproductID: Scalars['ID']
+  /** expires is a timestamp for when the access expires. */
+  expires?: Maybe<Scalars['Time']>
+  /** subject to be granted access. */
+  subject?: Maybe<Scalars['String']>
+  /** subjectType is the type of entity which should be granted access (user, group or service account). */
+  subjectType?: Maybe<SubjectType>
+}
+
 export type NewStory = {
   /** group is the owner group for the story. */
   group: Scalars['String']
@@ -354,8 +462,35 @@ export type Owner = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
+export type Polly = {
+  __typename?: 'Polly'
+  /** id from polly */
+  externalID: Scalars['String']
+  /** database id */
+  id: Scalars['ID']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
+}
+
+export type PollyInput = {
+  /** id from polly */
+  externalID: Scalars['String']
+  /** database id */
+  id?: Maybe<Scalars['ID']>
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
+}
+
 export type Query = {
   __typename?: 'Query'
+  /** accessRequest returns one specific access request */
+  accessRequest: AccessRequest
+  /** accessRequests returns all access requests for a dataproduct */
+  accessRequestsForDataproduct: Array<AccessRequest>
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -376,6 +511,8 @@ export type Query = {
   groupStats: Array<GroupStats>
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>
+  /** searches polly for process purposes matching query input */
+  polly: Array<QueryPolly>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** stories returns all either draft or published stories depending on the draft boolean. */
@@ -396,6 +533,14 @@ export type Query = {
   userInfo: UserInfo
   /** version returns the API version. */
   version: Scalars['String']
+}
+
+export type QueryAccessRequestArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryAccessRequestsForDataproductArgs = {
+  dataproductID: Scalars['ID']
 }
 
 export type QueryDataproductArgs = {
@@ -426,6 +571,10 @@ export type QueryKeywordsArgs = {
   prefix?: Maybe<Scalars['String']>
 }
 
+export type QueryPollyArgs = {
+  q: Scalars['String']
+}
+
 export type QuerySearchArgs = {
   options?: Maybe<SearchOptions>
   q?: Maybe<SearchQuery>
@@ -451,6 +600,16 @@ export type QueryStoryViewArgs = {
 
 export type QueryTeamkatalogenArgs = {
   q: Scalars['String']
+}
+
+export type QueryPolly = {
+  __typename?: 'QueryPolly'
+  /** id from polly */
+  externalID: Scalars['String']
+  /** name from polly */
+  name: Scalars['String']
+  /** url from polly */
+  url: Scalars['String']
 }
 
 export type SearchOptions = {
@@ -617,6 +776,18 @@ export type TeamkatalogenResult = {
   url: Scalars['String']
 }
 
+/** UpdateAccessRequest contains metadata on a request to access a dataproduct */
+export type UpdateAccessRequest = {
+  /** expires is a timestamp for when the access expires. */
+  expires?: Maybe<Scalars['Time']>
+  /** id of access request. */
+  id: Scalars['ID']
+  /** owner is the owner of the access request. */
+  owner: Scalars['String']
+  /** polly is the new polly documentation for this access request. */
+  polly?: Maybe<PollyInput>
+}
+
 /** UpdateDataproduct contains metadata for updating a dataproduct */
 export type UpdateDataproduct = {
   /** description of the dataproduct */
@@ -638,9 +809,11 @@ export type UpdateDataproduct = {
 /** UserInfo contains metadata on a logged in user */
 export type UserInfo = {
   __typename?: 'UserInfo'
-  /** accessable is a list of dataproducts which the user has explicit access to */
+  /** accessRequests is a list of access requests where either the user or one of the users groups is owner. */
+  accessRequests: Array<AccessRequest>
+  /** accessable is a list of dataproducts which the user has explicit access to. */
   accessable: Array<Dataproduct>
-  /** dataproducts is a list of dataproducts with one of the users groups as owner */
+  /** dataproducts is a list of dataproducts with one of the users groups as owner. */
   dataproducts: Array<Dataproduct>
   /** email of user. */
   email: Scalars['String']
@@ -648,11 +821,11 @@ export type UserInfo = {
   gcpProjects: Array<GcpProject>
   /** groups the user is a member of. */
   groups: Array<Group>
-  /** loginExpiration is when the token expires */
+  /** loginExpiration is when the token expires. */
   loginExpiration: Scalars['Time']
   /** name of user. */
   name: Scalars['String']
-  /** stories is a list of stories with one of the users groups as owner */
+  /** stories is a list of stories with one of the users groups as owner. */
   stories: Array<Story>
 }
 
@@ -696,10 +869,7 @@ export type DataproductAccessQuery = {
 }
 
 export type GrantAccessMutationVariables = Exact<{
-  dataproductID: Scalars['ID']
-  subject: Scalars['String']
-  subjectType: SubjectType
-  expires?: Maybe<Scalars['Time']>
+  input: NewGrant
 }>
 
 export type GrantAccessMutation = {
@@ -724,6 +894,100 @@ export type RevokeAccessMutationVariables = Exact<{
 export type RevokeAccessMutation = {
   __typename?: 'Mutation'
   revokeAccessToDataproduct: boolean
+}
+
+export type AccessRequestQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type AccessRequestQuery = {
+  __typename?: 'Query'
+  accessRequest: {
+    __typename?: 'AccessRequest'
+    id: string
+    dataproductID: string
+    subject: string
+    subjectType: SubjectType
+    granter?: string | null | undefined
+    status: AccessRequestStatus
+    created: any
+    expires?: any | null | undefined
+    owner: string
+    polly?:
+      | {
+          __typename?: 'Polly'
+          id: string
+          name: string
+          externalID: string
+          url: string
+        }
+      | null
+      | undefined
+  }
+}
+
+export type AccessRequestsForDataproductQueryVariables = Exact<{
+  dataproductID: Scalars['ID']
+}>
+
+export type AccessRequestsForDataproductQuery = {
+  __typename?: 'Query'
+  accessRequestsForDataproduct: Array<{
+    __typename?: 'AccessRequest'
+    id: string
+    subject: string
+    subjectType: SubjectType
+    owner: string
+    polly?:
+      | { __typename?: 'Polly'; name: string; externalID: string; url: string }
+      | null
+      | undefined
+  }>
+}
+
+export type ApproveAccessRequestMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type ApproveAccessRequestMutation = {
+  __typename?: 'Mutation'
+  approveAccessRequest: boolean
+}
+
+export type CreateAccessRequestMutationVariables = Exact<{
+  input: NewAccessRequest
+}>
+
+export type CreateAccessRequestMutation = {
+  __typename?: 'Mutation'
+  createAccessRequest: { __typename?: 'AccessRequest'; id: string }
+}
+
+export type DeleteAccessRequestMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DeleteAccessRequestMutation = {
+  __typename?: 'Mutation'
+  deleteAccessRequest: boolean
+}
+
+export type DenyAccessRequestMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DenyAccessRequestMutation = {
+  __typename?: 'Mutation'
+  denyAccessRequest: boolean
+}
+
+export type UpdateAccessRequestMutationVariables = Exact<{
+  input: UpdateAccessRequest
+}>
+
+export type UpdateAccessRequestMutation = {
+  __typename?: 'Mutation'
+  updateAccessRequest: { __typename?: 'AccessRequest'; id: string }
 }
 
 export type CreateDataproductMutationVariables = Exact<{
@@ -887,6 +1151,20 @@ export type GroupStatsQuery = {
     __typename?: 'GroupStats'
     email: string
     dataproducts: number
+  }>
+}
+
+export type PollyQueryVariables = Exact<{
+  q: Scalars['String']
+}>
+
+export type PollyQuery = {
+  __typename?: 'Query'
+  polly: Array<{
+    __typename?: 'QueryPolly'
+    externalID: string
+    name: string
+    url: string
   }>
 }
 
@@ -1129,6 +1407,28 @@ export type UserInfoDetailsQuery = {
       keywords: Array<string>
       owner: { __typename?: 'Owner'; group: string }
     }>
+    accessRequests: Array<{
+      __typename?: 'AccessRequest'
+      id: string
+      dataproductID: string
+      subject: string
+      subjectType: SubjectType
+      granter?: string | null | undefined
+      status: AccessRequestStatus
+      created: any
+      expires?: any | null | undefined
+      owner: string
+      polly?:
+        | {
+            __typename?: 'Polly'
+            id: string
+            name: string
+            externalID: string
+            url: string
+          }
+        | null
+        | undefined
+    }>
   }
 }
 
@@ -1279,18 +1579,8 @@ export type DataproductAccessQueryResult = Apollo.QueryResult<
   DataproductAccessQueryVariables
 >
 export const GrantAccessDocument = gql`
-  mutation GrantAccess(
-    $dataproductID: ID!
-    $subject: String!
-    $subjectType: SubjectType!
-    $expires: Time
-  ) {
-    grantAccessToDataproduct(
-      dataproductID: $dataproductID
-      subject: $subject
-      subjectType: $subjectType
-      expires: $expires
-    ) {
+  mutation GrantAccess($input: NewGrant!) {
+    grantAccessToDataproduct(input: $input) {
       id
     }
   }
@@ -1313,10 +1603,7 @@ export type GrantAccessMutationFn = Apollo.MutationFunction<
  * @example
  * const [grantAccessMutation, { data, loading, error }] = useGrantAccessMutation({
  *   variables: {
- *      dataproductID: // value for 'dataproductID'
- *      subject: // value for 'subject'
- *      subjectType: // value for 'subjectType'
- *      expires: // value for 'expires'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1440,6 +1727,388 @@ export type RevokeAccessMutationResult =
 export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<
   RevokeAccessMutation,
   RevokeAccessMutationVariables
+>
+export const AccessRequestDocument = gql`
+  query accessRequest($id: ID!) {
+    accessRequest(id: $id) {
+      id
+      dataproductID
+      subject
+      subjectType
+      granter
+      status
+      created
+      expires
+      owner
+      polly {
+        id
+        name
+        externalID
+        url
+      }
+    }
+  }
+`
+
+/**
+ * __useAccessRequestQuery__
+ *
+ * To run a query within a React component, call `useAccessRequestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessRequestQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAccessRequestQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AccessRequestQuery,
+    AccessRequestQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<AccessRequestQuery, AccessRequestQueryVariables>(
+    AccessRequestDocument,
+    options
+  )
+}
+export function useAccessRequestLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AccessRequestQuery,
+    AccessRequestQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<AccessRequestQuery, AccessRequestQueryVariables>(
+    AccessRequestDocument,
+    options
+  )
+}
+export type AccessRequestQueryHookResult = ReturnType<
+  typeof useAccessRequestQuery
+>
+export type AccessRequestLazyQueryHookResult = ReturnType<
+  typeof useAccessRequestLazyQuery
+>
+export type AccessRequestQueryResult = Apollo.QueryResult<
+  AccessRequestQuery,
+  AccessRequestQueryVariables
+>
+export const AccessRequestsForDataproductDocument = gql`
+  query accessRequestsForDataproduct($dataproductID: ID!) {
+    accessRequestsForDataproduct(dataproductID: $dataproductID) {
+      id
+      subject
+      subjectType
+      owner
+      polly {
+        name
+        externalID
+        url
+      }
+    }
+  }
+`
+
+/**
+ * __useAccessRequestsForDataproductQuery__
+ *
+ * To run a query within a React component, call `useAccessRequestsForDataproductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessRequestsForDataproductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessRequestsForDataproductQuery({
+ *   variables: {
+ *      dataproductID: // value for 'dataproductID'
+ *   },
+ * });
+ */
+export function useAccessRequestsForDataproductQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >(AccessRequestsForDataproductDocument, options)
+}
+export function useAccessRequestsForDataproductLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    AccessRequestsForDataproductQuery,
+    AccessRequestsForDataproductQueryVariables
+  >(AccessRequestsForDataproductDocument, options)
+}
+export type AccessRequestsForDataproductQueryHookResult = ReturnType<
+  typeof useAccessRequestsForDataproductQuery
+>
+export type AccessRequestsForDataproductLazyQueryHookResult = ReturnType<
+  typeof useAccessRequestsForDataproductLazyQuery
+>
+export type AccessRequestsForDataproductQueryResult = Apollo.QueryResult<
+  AccessRequestsForDataproductQuery,
+  AccessRequestsForDataproductQueryVariables
+>
+export const ApproveAccessRequestDocument = gql`
+  mutation approveAccessRequest($id: ID!) {
+    approveAccessRequest(id: $id)
+  }
+`
+export type ApproveAccessRequestMutationFn = Apollo.MutationFunction<
+  ApproveAccessRequestMutation,
+  ApproveAccessRequestMutationVariables
+>
+
+/**
+ * __useApproveAccessRequestMutation__
+ *
+ * To run a mutation, you first call `useApproveAccessRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveAccessRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveAccessRequestMutation, { data, loading, error }] = useApproveAccessRequestMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useApproveAccessRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ApproveAccessRequestMutation,
+    ApproveAccessRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ApproveAccessRequestMutation,
+    ApproveAccessRequestMutationVariables
+  >(ApproveAccessRequestDocument, options)
+}
+export type ApproveAccessRequestMutationHookResult = ReturnType<
+  typeof useApproveAccessRequestMutation
+>
+export type ApproveAccessRequestMutationResult =
+  Apollo.MutationResult<ApproveAccessRequestMutation>
+export type ApproveAccessRequestMutationOptions = Apollo.BaseMutationOptions<
+  ApproveAccessRequestMutation,
+  ApproveAccessRequestMutationVariables
+>
+export const CreateAccessRequestDocument = gql`
+  mutation createAccessRequest($input: NewAccessRequest!) {
+    createAccessRequest(input: $input) {
+      id
+    }
+  }
+`
+export type CreateAccessRequestMutationFn = Apollo.MutationFunction<
+  CreateAccessRequestMutation,
+  CreateAccessRequestMutationVariables
+>
+
+/**
+ * __useCreateAccessRequestMutation__
+ *
+ * To run a mutation, you first call `useCreateAccessRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccessRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAccessRequestMutation, { data, loading, error }] = useCreateAccessRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAccessRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAccessRequestMutation,
+    CreateAccessRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateAccessRequestMutation,
+    CreateAccessRequestMutationVariables
+  >(CreateAccessRequestDocument, options)
+}
+export type CreateAccessRequestMutationHookResult = ReturnType<
+  typeof useCreateAccessRequestMutation
+>
+export type CreateAccessRequestMutationResult =
+  Apollo.MutationResult<CreateAccessRequestMutation>
+export type CreateAccessRequestMutationOptions = Apollo.BaseMutationOptions<
+  CreateAccessRequestMutation,
+  CreateAccessRequestMutationVariables
+>
+export const DeleteAccessRequestDocument = gql`
+  mutation deleteAccessRequest($id: ID!) {
+    deleteAccessRequest(id: $id)
+  }
+`
+export type DeleteAccessRequestMutationFn = Apollo.MutationFunction<
+  DeleteAccessRequestMutation,
+  DeleteAccessRequestMutationVariables
+>
+
+/**
+ * __useDeleteAccessRequestMutation__
+ *
+ * To run a mutation, you first call `useDeleteAccessRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccessRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAccessRequestMutation, { data, loading, error }] = useDeleteAccessRequestMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteAccessRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteAccessRequestMutation,
+    DeleteAccessRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DeleteAccessRequestMutation,
+    DeleteAccessRequestMutationVariables
+  >(DeleteAccessRequestDocument, options)
+}
+export type DeleteAccessRequestMutationHookResult = ReturnType<
+  typeof useDeleteAccessRequestMutation
+>
+export type DeleteAccessRequestMutationResult =
+  Apollo.MutationResult<DeleteAccessRequestMutation>
+export type DeleteAccessRequestMutationOptions = Apollo.BaseMutationOptions<
+  DeleteAccessRequestMutation,
+  DeleteAccessRequestMutationVariables
+>
+export const DenyAccessRequestDocument = gql`
+  mutation denyAccessRequest($id: ID!) {
+    denyAccessRequest(id: $id)
+  }
+`
+export type DenyAccessRequestMutationFn = Apollo.MutationFunction<
+  DenyAccessRequestMutation,
+  DenyAccessRequestMutationVariables
+>
+
+/**
+ * __useDenyAccessRequestMutation__
+ *
+ * To run a mutation, you first call `useDenyAccessRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDenyAccessRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [denyAccessRequestMutation, { data, loading, error }] = useDenyAccessRequestMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDenyAccessRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DenyAccessRequestMutation,
+    DenyAccessRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DenyAccessRequestMutation,
+    DenyAccessRequestMutationVariables
+  >(DenyAccessRequestDocument, options)
+}
+export type DenyAccessRequestMutationHookResult = ReturnType<
+  typeof useDenyAccessRequestMutation
+>
+export type DenyAccessRequestMutationResult =
+  Apollo.MutationResult<DenyAccessRequestMutation>
+export type DenyAccessRequestMutationOptions = Apollo.BaseMutationOptions<
+  DenyAccessRequestMutation,
+  DenyAccessRequestMutationVariables
+>
+export const UpdateAccessRequestDocument = gql`
+  mutation updateAccessRequest($input: UpdateAccessRequest!) {
+    updateAccessRequest(input: $input) {
+      id
+    }
+  }
+`
+export type UpdateAccessRequestMutationFn = Apollo.MutationFunction<
+  UpdateAccessRequestMutation,
+  UpdateAccessRequestMutationVariables
+>
+
+/**
+ * __useUpdateAccessRequestMutation__
+ *
+ * To run a mutation, you first call `useUpdateAccessRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAccessRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAccessRequestMutation, { data, loading, error }] = useUpdateAccessRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateAccessRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateAccessRequestMutation,
+    UpdateAccessRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateAccessRequestMutation,
+    UpdateAccessRequestMutationVariables
+  >(UpdateAccessRequestDocument, options)
+}
+export type UpdateAccessRequestMutationHookResult = ReturnType<
+  typeof useUpdateAccessRequestMutation
+>
+export type UpdateAccessRequestMutationResult =
+  Apollo.MutationResult<UpdateAccessRequestMutation>
+export type UpdateAccessRequestMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAccessRequestMutation,
+  UpdateAccessRequestMutationVariables
 >
 export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
@@ -2084,6 +2753,56 @@ export type GroupStatsLazyQueryHookResult = ReturnType<
 export type GroupStatsQueryResult = Apollo.QueryResult<
   GroupStatsQuery,
   GroupStatsQueryVariables
+>
+export const PollyDocument = gql`
+  query Polly($q: String!) {
+    polly(q: $q) {
+      externalID
+      name
+      url
+    }
+  }
+`
+
+/**
+ * __usePollyQuery__
+ *
+ * To run a query within a React component, call `usePollyQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePollyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePollyQuery({
+ *   variables: {
+ *      q: // value for 'q'
+ *   },
+ * });
+ */
+export function usePollyQuery(
+  baseOptions: Apollo.QueryHookOptions<PollyQuery, PollyQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<PollyQuery, PollyQueryVariables>(
+    PollyDocument,
+    options
+  )
+}
+export function usePollyLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PollyQuery, PollyQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<PollyQuery, PollyQueryVariables>(
+    PollyDocument,
+    options
+  )
+}
+export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>
+export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>
+export type PollyQueryResult = Apollo.QueryResult<
+  PollyQuery,
+  PollyQueryVariables
 >
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {
@@ -2797,6 +3516,23 @@ export const UserInfoDetailsDocument = gql`
         keywords
         owner {
           group
+        }
+      }
+      accessRequests {
+        id
+        dataproductID
+        subject
+        subjectType
+        granter
+        status
+        created
+        expires
+        owner
+        polly {
+          id
+          name
+          externalID
+          url
         }
       }
     }

@@ -52,7 +52,7 @@ interface AccessListProps {
   requesters: string[],
 }
 
-const AccessList = ({ id, access, requesters }: AccessListProps) => {
+const OwnerAccessList = ({ id, access, requesters }: AccessListProps) => {
   const [revokeAccess] = useRevokeAccessMutation()
   const [removeRequester] = useRemoveRequesterMutation()
   const removeAccess = async (id: string, a: AccessEntry) => {
@@ -95,7 +95,7 @@ const AccessList = ({ id, access, requesters }: AccessListProps) => {
         <TableHead>
           <TableRow>
             <TableCell align='left'>Bruker / gruppe</TableCell>
-            <TableCell align='center'>Kan be om tilgang</TableCell>
+            <TableCell align='center'>Kan gi seg selv tilgang</TableCell>
             <TableCell align='center'>Har tilgang</TableCell>
             <TableCell align='center'>Fjern tilgang</TableCell>
           </TableRow>
@@ -118,4 +118,4 @@ const AccessList = ({ id, access, requesters }: AccessListProps) => {
     </div>
   )
 }
-export default AccessList
+export default OwnerAccessList

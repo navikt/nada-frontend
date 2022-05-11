@@ -3,6 +3,7 @@ import {
     Exact,
     SearchContentWithOptionsQuery,
     SearchOptions,
+    SubjectType,
 } from "../../lib/schema/graphql";
 import ErrorMessage from "../lib/error";
 import LoaderSpinner from "../lib/spinner";
@@ -23,7 +24,8 @@ type ResultListInterface = {
     dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: { __typename?: "Owner" | undefined, group: string } }[]
     stories?: { __typename?: 'Story', id: string, name: string, owner?: { __typename?: 'Owner'; group: string } | null | undefined }[] 
 }
-const ResultList = ({search, dataproducts, stories}: ResultListInterface) => {
+
+const ResultList = ({search, dataproducts, stories }: ResultListInterface) => {
     if (dataproducts) {
         return (<Results>
             {

@@ -3,6 +3,8 @@ import ErrorMessage from '../../../components/lib/error'
 import {
     DataproductAccessQuery,
     Group,
+    useAccessRequestsForDataproductLazyQuery,
+    useAccessRequestsForDataproductQuery,
     useDataproductAccessQuery,
     useDataproductQuery,
     useDeleteDataproductMutation,
@@ -33,7 +35,7 @@ import Explore from "../../../components/dataproducts/explore";
 import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
 import {navRod} from "../../../styles/constants";
-import story from "../../../components/stories/story";
+import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../lib/queries/accessRequest/accessRequestsForDataproduct";
 
 const Container = styled.div`
   display: flex;
@@ -125,20 +127,32 @@ const Dataproduct = (props: DataproductProps) => {
             component: (
                 <DataproductTableSchema datasource={product.datasource}/>
             ),
-        },
-        {
-            title: 'tilganger',
-            slug: 'access',
-            component: !userInfo ? <>Du må logge inn for å gjøre noe her</> : userInfo && isOwner ?
-                <Owner accessQuery={accessQuery}/> : <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
-        },
+        }
     ];
 
-    (userInfo && accessType.type != "none") && menuItems.push({
-        title: 'utforsk',
-        slug: 'explore',
-        component: <Explore product={product} isOwner={isOwner}/>,
-    })
+    if (userInfo && accessType.type == "owner") {
+        menuItems.push({
+            title: 'tilganger',
+            slug: 'access',
+            component: <Owner accessQuery={accessQuery} dataproductID={product.id}/>,
+        })
+    }
+
+    if (userInfo && accessType.type == "user") {
+        menuItems.push({
+            title: 'dine tilganger',
+            slug: 'your-accesses',
+            component: <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
+        })
+    }
+
+    if (userInfo && ["user", "owner"].includes(accessType.type)) {
+        menuItems.push({
+            title: 'utforsk',
+            slug: 'explore',
+            component: <Explore product={product} isOwner={isOwner}/>,
+        })
+    }
 
     const currentPage = menuItems
         .map((e) => e.slug)
@@ -196,7 +210,7 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product} accessType={accessType} />
+                <MetadataTable product={product} accessType={accessType}/>
             </Container>
         </>
     )
@@ -226,6 +240,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         await apolloClient.query({
             query: GET_DATAPRODUCT_ACCESS,
             variables: {id},
+            context: {
+                headers: {
+                    cookie,
+                },
+            },
+        })
+    } catch (e) {
+        // ignore access denied if not logged in
+    }
+
+    try {
+        await apolloClient.query({
+            query: GET_ACCESS_REQUESTS_FOR_DATAPRODUCT,
+            variables: {dataproductID: id},
             context: {
                 headers: {
                     cookie,

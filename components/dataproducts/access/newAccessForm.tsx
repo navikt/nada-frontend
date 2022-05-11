@@ -3,6 +3,7 @@ import {
   SubjectType,
   useAddRequesterMutation,
   useGrantAccessMutation,
+  NewGrant,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import {Dispatch, SetStateAction, useState} from 'react'
@@ -100,14 +101,18 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
     }
 
     try {
-      const variables: GrantAccessMutationVariables = {
+      const newGrant: NewGrant = {
         subjectType: toSubjectType(requestData.subjectType),
         subject: accessSubject,
         dataproductID: id,
       }
 
       if (requestData.accessType === 'until') {
-        variables.expires = date
+        newGrant.expires = date
+      }
+
+      const variables: GrantAccessMutationVariables = {
+        input: newGrant,
       }
 
       await grantAccess({
@@ -240,7 +245,8 @@ const NewAccessForm = ({ open, setOpen, id, pii }: NewAccessFormProps) => {
                   <br />
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DesktopDatePicker
-                        inputFormat='MM/dd/yyyy'
+                        inputFormat='dd.MM.yyyy'
+                        mask="__.__.____"
                         value={date}
                         onChange={dateChange}
                         renderInput={(params) => <TextField {...params} />}

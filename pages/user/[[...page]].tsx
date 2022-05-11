@@ -11,6 +11,7 @@ import ErrorMessage from '../../components/lib/error'
 import TabPanel, {TabPanelType} from "../../components/lib/tabPanel";
 import SubjectHeader from "../../components/lib/subjectHeader";
 import ResultList from "../../components/search/resultList";
+import AccessRequestsListForUser from '../../components/user/accessRequests'
 
 
 export const UserPages = () => {
@@ -49,6 +50,14 @@ export const UserPages = () => {
       ),
     },
     {
+      title: 'Mine tilgangssøknader',
+      slug: 'requests',
+      component: (<>
+          <SubjectHeader>Mine tilgangssøknader</SubjectHeader>
+          <AccessRequestsListForUser accessRequests={data.userInfo.accessRequests}/>
+      </>)
+    },
+    {
       title: 'Mine tilganger',
       slug: 'access',
         component: (<>
@@ -58,10 +67,10 @@ export const UserPages = () => {
         ),
     },
     {
-      title: 'Mine historier',
+      title: 'Mine fortellinger',
       slug: 'stories',
         component: (<>
-               <SubjectHeader>Mine historier</SubjectHeader>
+               <SubjectHeader>Mine fortellinger</SubjectHeader>
                <ResultList stories={data.userInfo.stories} />
             </>
         ),

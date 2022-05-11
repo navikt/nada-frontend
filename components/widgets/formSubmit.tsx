@@ -16,6 +16,11 @@ interface RightJustifiedSubmitButtonProps {
   loading?: boolean
 }
 
+interface RightJustifiedGrantButtonProps {
+  onDeny: () => void
+  onApprove: () => void
+}
+
 export const RightJustifiedSubmitButton = ({
   onCancel,
   loading,
@@ -34,6 +39,20 @@ export const RightJustifiedSubmitButton = ({
       ) : (
         'Lagre'
       )}
+    </Button>
+  </SubmitButton>
+)
+
+export const RightJustifiedGrantButton = ({
+  onDeny,
+  onApprove
+}: RightJustifiedGrantButtonProps) => (
+  <SubmitButton>
+    <Button type={'button'} variant={'danger'} onClick={onDeny}>
+      Avslå
+    </Button>
+    <Button type={'submit'} onClick={onApprove}>
+      Godkjenn
     </Button>
   </SubmitButton>
 )
