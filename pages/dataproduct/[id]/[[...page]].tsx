@@ -154,10 +154,6 @@ const Dataproduct = (props: DataproductProps) => {
         })
     }
 
-    if (userInfo && accessType.type != "none") {
-
-    }
-
     const currentPage = menuItems
         .map((e) => e.slug)
         .indexOf(router.query.page?.[0] ?? 'info')
