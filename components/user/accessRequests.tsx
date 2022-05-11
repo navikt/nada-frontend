@@ -113,8 +113,8 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
       {error && <Alert variant={'error'}>{error}</Alert>}
       <Results>
         {accessRequests?.map((req, idx) => (
-          <RequestRow>
-            <ViewRequestButton key={idx} request={req} />
+          <RequestRow key={idx}>
+            <ViewRequestButton key={`${idx}_show`} request={req} />
             <DeleteRequestButton key={`${idx}_delete`} request={req} setError={setError} />
           </RequestRow>
         ))}
