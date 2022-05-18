@@ -1,11 +1,13 @@
 import { Card, CardHeader } from '@mui/material'
 import { FileContent } from '@navikt/ds-icons'
-import { Link } from '@navikt/ds-react'
+import { Alert, Button, Link } from '@navikt/ds-react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import humanizeDate from '../../lib/humanizeDate'
 import {
     AccessRequest,
     useDataproductQuery,
+    useDeleteAccessRequestMutation,
 } from '../../lib/schema/graphql'
 import IconBox from '../lib/icons/iconBox'
 
@@ -18,6 +20,10 @@ const Results = styled.div`
   }
 `
 
+const WideLink = styled(Link)`
+  width: 100%;
+`
+
 const StyledCard = styled(Card)`
   width: 100%;
   padding-bottom: 10px;
@@ -28,12 +34,23 @@ const StyledCard = styled(Card)`
   }
 `
 
+const RequestRow = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+`
+
 interface AccessRequests {
   accessRequests: Array<AccessRequest>
 }
 
 interface RequestInterface {
   request: AccessRequest
+}
+
+interface DeleteRequestInterface {
+  request: AccessRequest,
+  setError: (message: string | null) => void
 }
 
 const ViewRequestButton = ({ request }: RequestInterface) => {
@@ -43,7 +60,7 @@ const ViewRequestButton = ({ request }: RequestInterface) => {
   })
 
   return (
-    <Link href={`/request/${request.id}/edit`}>
+    <WideLink href={`/request/${request.id}/edit`}>
       <StyledCard>
         <CardHeader
           style={{ paddingBottom: '0px' }}
@@ -62,17 +79,47 @@ const ViewRequestButton = ({ request }: RequestInterface) => {
           }
         />
       </StyledCard>
-    </Link>
+    </WideLink>
+  )
+}
+
+const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
+  const [deleteRequest] = useDeleteAccessRequestMutation()
+
+  const onClick = async () => {
+    try {
+      await deleteRequest({
+        variables: {
+          id: request.id
+        },
+        awaitRefetchQueries: true,
+        refetchQueries: ['userInfoDetails'],
+      })
+    } catch (e: any) {
+      setError(e.message)
+    }
+  }
+
+  return (
+    <Button variant={'danger'} onClick={onClick}>
+      Slett søknad
+    </Button>
   )
 }
 
 const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
-  return (
-    <Results>
-      {accessRequests?.map((req, idx) => (
-        <ViewRequestButton key={idx} request={req} />
-      ))}
-    </Results>
+  const [error, setError] = useState<string | null>(null)
+  return (<>
+      {error && <Alert variant={'error'}>{error}</Alert>}
+      <Results>
+        {accessRequests?.map((req, idx) => (
+          <RequestRow key={idx}>
+            <ViewRequestButton key={`${idx}_show`} request={req} />
+            <DeleteRequestButton key={`${idx}_delete`} request={req} setError={setError} />
+          </RequestRow>
+        ))}
+      </Results>
+    </>
   )
 }
 
