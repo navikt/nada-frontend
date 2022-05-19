@@ -5,10 +5,16 @@ import * as React from 'react'
 import humanizeDate from '../../lib/humanizeDate'
 import SubHeader from '../lib/subHeader'
 import Copy from "../lib/copy";
+import styled from 'styled-components'
+import { Heading } from '@navikt/ds-react'
 
 interface DataproductTableSchemaProps {
   datasource: DataproductQuery['dataproduct']['datasource']
 }
+
+const SpacedDiv = styled.div`
+margin-bottom: 0.75rem;
+`
 
 const DataproductTableSchema = ({
                                   datasource,
@@ -17,7 +23,7 @@ const DataproductTableSchema = ({
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
   return (
-    <div>
+    <SpacedDiv>
       <StyledTable>
         <tbody>
         <tr>
@@ -60,7 +66,7 @@ const DataproductTableSchema = ({
         )}
         </tbody>
       </StyledTable>
-      <SubHeader>Skjema</SubHeader>
+      <Heading spacing level="3" size="small">Skjema</Heading>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead>
@@ -88,7 +94,7 @@ const DataproductTableSchema = ({
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </SpacedDiv>
   )
 }
 export default DataproductTableSchema

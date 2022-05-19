@@ -36,6 +36,7 @@ import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
 import {navRod} from "../../../styles/constants";
 import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../lib/queries/accessRequest/accessRequestsForDataproduct";
+import Innhold from '../../../components/dataproducts/innhold/innhold'
 
 const Container = styled.div`
   display: flex;
@@ -108,6 +109,7 @@ const Dataproduct = (props: DataproductProps) => {
     const product = productQuery.data.dataproduct
 
     const isOwner = accessType.type === 'owner';
+    const products = [{product: product, access: accessQuery}];
 
     const menuItems: Array<{
         title: string
@@ -122,37 +124,13 @@ const Dataproduct = (props: DataproductProps) => {
             ),
         },
         {
-            title: 'Skjema',
-            slug: 'schema',
+            title: 'Innhold',
+            slug: 'innhold',
             component: (
-                <DataproductTableSchema datasource={product.datasource}/>
+                <Innhold products={products} userInfo={userInfo} />
             ),
         }
     ];
-
-    if (userInfo && accessType.type == "owner") {
-        menuItems.push({
-            title: 'tilganger',
-            slug: 'access',
-            component: <Owner accessQuery={accessQuery} dataproductID={product.id}/>,
-        })
-    }
-
-    if (userInfo && accessType.type == "user") {
-        menuItems.push({
-            title: 'dine tilganger',
-            slug: 'your-accesses',
-            component: <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
-        })
-    }
-
-    if (userInfo && ["user", "owner"].includes(accessType.type)) {
-        menuItems.push({
-            title: 'utforsk',
-            slug: 'explore',
-            component: <Explore product={product} isOwner={isOwner}/>,
-        })
-    }
 
     const currentPage = menuItems
         .map((e) => e.slug)
