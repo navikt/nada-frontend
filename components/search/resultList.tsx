@@ -21,7 +21,7 @@ const Results = styled.div`
 
 type ResultListInterface = {
     search?: QueryResult<SearchContentWithOptionsQuery, Exact<{ options: SearchOptions }>>
-    dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], owner: { __typename?: "Owner" | undefined, group: string } }[]
+    dataproducts?: { __typename?: "Dataproduct" | undefined, id: string, name: string, keywords: string[], slug: string, owner: { __typename?: "Owner" | undefined, group: string } }[]
     stories?: { __typename?: 'Story', id: string, name: string, owner?: { __typename?: 'Owner'; group: string } | null | undefined }[] 
 }
 
@@ -31,7 +31,7 @@ const ResultList = ({search, dataproducts, stories }: ResultListInterface) => {
             {
                 dataproducts.map((d, idx) =>
                     <SearchResultLink key={idx} group={d.owner.group} name={d.name} keywords={d.keywords}
-                                      link={`/dataproduct/${d.id}`}/>
+                                      link={`/dataproduct/${d.id}/${d.slug}`}/>
                 )
             }
         </Results>)
@@ -54,7 +54,7 @@ const ResultList = ({search, dataproducts, stories }: ResultListInterface) => {
                                                          name={d.result.name}
                                                          keywords={d.result.keywords}
                                                          excerpt={d.excerpt}
-                                                         link={`/dataproduct/${d.result.id}`}/>
+                                                         link={`/dataproduct/${d.result.id}/${d.result.slug}`}/>
                             }
 
                             if (d.result.__typename === 'Story') {

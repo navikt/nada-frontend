@@ -1,5 +1,5 @@
-import LoaderSpinner from '../../../components/lib/spinner'
-import ErrorMessage from '../../../components/lib/error'
+import LoaderSpinner from '../../../../components/lib/spinner'
+import ErrorMessage from '../../../../components/lib/error'
 import {
     DataproductAccessQuery,
     Group,
@@ -9,33 +9,33 @@ import {
     useDataproductQuery,
     useDeleteDataproductMutation,
     UserInfoDetailsQuery,
-} from '../../../lib/schema/graphql'
+} from '../../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
-import {addApolloState, initializeApollo} from '../../../lib/apollo'
-import {GET_DATAPRODUCT} from '../../../lib/queries/dataproduct/dataproduct'
+import {addApolloState, initializeApollo} from '../../../../lib/apollo'
+import {GET_DATAPRODUCT} from '../../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
 import {useContext, useEffect, useState} from 'react'
-import amplitudeLog from '../../../lib/amplitude'
+import amplitudeLog from '../../../../lib/amplitude'
 import Head from 'next/head'
-import TopBar, {TopBarActions} from '../../../components/lib/topBar'
-import {Description} from '../../../components/lib/detailTypography'
-import {MetadataTable} from '../../../components/dataproducts/metadataTable'
+import TopBar, {TopBarActions} from '../../../../components/lib/topBar'
+import {Description} from '../../../../components/lib/detailTypography'
+import {MetadataTable} from '../../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import TabPanel, {TabPanelType} from '../../../components/lib/tabPanel'
-import DataproductTableSchema from '../../../components/dataproducts/dataproductTableSchema'
-import Owner from '../../../components/dataproducts/access/owner'
-import {GET_DATAPRODUCT_ACCESS} from '../../../lib/queries/access/dataproductAccess'
-import User from '../../../components/dataproducts/access/user'
-import {UserState} from '../../../lib/context'
-import DeleteModal from '../../../components/lib/deleteModal'
-import Explore from "../../../components/dataproducts/explore";
+import TabPanel, {TabPanelType} from '../../../../components/lib/tabPanel'
+import DataproductTableSchema from '../../../../components/dataproducts/dataproductTableSchema'
+import Owner from '../../../../components/dataproducts/access/owner'
+import {GET_DATAPRODUCT_ACCESS} from '../../../../lib/queries/access/dataproductAccess'
+import User from '../../../../components/dataproducts/access/user'
+import {UserState} from '../../../../lib/context'
+import DeleteModal from '../../../../components/lib/deleteModal'
+import Explore from "../../../../components/dataproducts/explore";
 import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
-import {navRod} from "../../../styles/constants";
-import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../lib/queries/accessRequest/accessRequestsForDataproduct";
+import {navRod} from "../../../../styles/constants";
+import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../../lib/queries/accessRequest/accessRequestsForDataproduct";
 
 const Container = styled.div`
   display: flex;
@@ -58,10 +58,11 @@ const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | und
 
 interface DataproductProps {
     id: string
+    slug: string
 }
 
 const Dataproduct = (props: DataproductProps) => {
-    const {id} = props
+    const {id, slug} = props
     const router = useRouter()
 
     const [showDelete, setShowDelete] = useState(false)
@@ -159,7 +160,7 @@ const Dataproduct = (props: DataproductProps) => {
         .indexOf(router.query.page?.[0] ?? 'info')
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        router.push(`/dataproduct/${id}/${menuItems[newValue].slug}`)
+        router.push(`/dataproduct/${id}/${product.slug}/${menuItems[newValue].slug}`)
     }
 
     return (
@@ -172,7 +173,7 @@ const Dataproduct = (props: DataproductProps) => {
                     <TopBar name={product.name} type={product.__typename}>
                         {isOwner &&
                             <TopBarActions>
-                                <Link href={`/dataproduct/${product.id}/edit`}><a>Endre</a></Link>
+                                <Link href={`/dataproduct/${product.id}/${product.slug}/edit`}><a>Endre</a></Link>
                                 <a onClick={() => setShowDelete(true)} style={{color: navRod}}>Slett</a>
                             </TopBarActions>
                         }

@@ -9,8 +9,8 @@ export const GET_DATAPRODUCT_SUMMARY = gql`
       description
       created
       pii
+      slug
       keywords
-
       datasource {
         type: __typename
       }

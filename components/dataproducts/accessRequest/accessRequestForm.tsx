@@ -225,7 +225,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     } catch (e: any) {
       setFormError(e.message)
     }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/access`)
+    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
   }
 
   const onDeny = async () => {
@@ -239,7 +239,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     } catch (e: any) {
       setFormError(e.message)
     }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/access`)
+    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
   }
 
   return (
