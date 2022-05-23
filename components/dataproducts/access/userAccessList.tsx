@@ -40,11 +40,13 @@ interface request {
 
 interface AccessListProps {
   id: string,
+  currentUser: string,
+  groups: string[],
   access: access[],
-  requests: request[]
+  requests: request[],
 }
 
-const UserAccessList = ({ id, access, requests}: AccessListProps) => {
+const UserAccessList = ({ id, groups, currentUser, access, requests}: AccessListProps) => {
   const [revokeAccess] = useRevokeAccessMutation()
   const removeAccess = async (id: string, a: AccessEntry) => {
     if (a.access) {
@@ -61,6 +63,10 @@ const UserAccessList = ({ id, access, requests}: AccessListProps) => {
 
   }
 
+  const isDeleteable = (a: AccessEntry): boolean => (
+    a.subject === currentUser || groups.indexOf(a.subject) >= 0
+  )
+  
   const [formError, setFormError] = useState('')
   const accesses = productAccess(access)
 
@@ -83,8 +89,8 @@ const UserAccessList = ({ id, access, requests}: AccessListProps) => {
               <Error style={{ color: navRod }}/>}
             </TableCell>}
             <TableCell align='center'>show</TableCell>
-            <TableCell align='center'><Delete style={{ cursor: 'pointer', color: navRod }}
-                                              onClick={() => removeAccess(id, a)}/></TableCell>
+            <TableCell align='center'>{isDeleteable(a) && <Delete style={{ cursor: 'pointer', color: navRod }}
+                                              onClick={() => removeAccess(id, a)}/>}</TableCell>
           </TableRow>)}
 
         </TableBody>
