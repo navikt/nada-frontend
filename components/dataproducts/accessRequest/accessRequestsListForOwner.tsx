@@ -19,6 +19,11 @@ const SpacedTextField = styled(TextField)`
   margin-bottom: var(--navds-spacing-3);
 `
 
+const IndentedRow = styled.div`
+    padding-left: 1rem;
+    border-left: 1px solid rgba(224, 224, 224, 1);
+`
+
 interface AccessListProps {
     accessQuery: QueryResult<AccessRequestsForDataproductQuery, Exact<{ dataproductID: string }>>,
 }
@@ -78,7 +83,7 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
     }
 
     return (
-        <div>
+        <>
             {formError && <Alert variant={'error'}>{formError}</Alert>}
             <Table sx={{ minWidth: 650 }} aria-label='simple table'>
                 <TableHead>
@@ -91,7 +96,8 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {access?.map((a, i) => <><TableRow key={i}>
+                    {access?.map((a, i) => <>
+                    <TableRow key={i}>
                         <TableCell>{a.subject}</TableCell>
                         <TableCell>{a.polly?.__typename !== undefined
                             ? <Link key={i} href={a.polly?.url !== undefined ? a.polly?.url : "#"}><a>{a.polly?.name}</a></Link>
@@ -105,17 +111,17 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                         <TableCell align='center'><Close style={{ cursor: 'pointer', color: navRod }}
                             onClick={() => onDeny(a.id)} /></TableCell>
                     </TableRow>
-                    { isDenying.indexOf(a.id) >= 0 && <>
+                    { isDenying.indexOf(a.id) >= 0 && <IndentedRow>
                             <SpacedTextField
                                 label="Begrunnelse for avslag"
                                 onChange={(e) => setDenyReason(e.target.value)}
                             />
                             <Button type={'button'} variant={'danger'} onClick={() => onDenyAccessRequest(a.id)} >Avslå</Button>
-                        </>}
+                        </IndentedRow>}
                     </>)}
                 </TableBody>
             </Table>
-        </div>
+        </>
     )
 }
 export default AccessRequestsListForOwner
