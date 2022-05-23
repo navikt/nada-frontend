@@ -1392,6 +1392,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
+      slug: string
       owner: { __typename?: 'Owner'; group: string }
     }>
     accessable: Array<{
@@ -1399,6 +1400,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
+      slug: string
       owner: { __typename?: 'Owner'; group: string }
     }>
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
@@ -3499,6 +3501,7 @@ export const UserInfoDetailsDocument = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }
@@ -3507,6 +3510,7 @@ export const UserInfoDetailsDocument = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }

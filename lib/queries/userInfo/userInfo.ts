@@ -9,6 +9,7 @@ export const USER_INFO = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }
@@ -17,6 +18,7 @@ export const USER_INFO = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }
