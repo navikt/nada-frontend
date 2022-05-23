@@ -63,9 +63,12 @@ const UserAccessList = ({ id, groups, currentUser, access, requests}: AccessList
 
   }
 
-  const isDeleteable = (a: AccessEntry): boolean => (
-    !a.subject.startsWith("all-users") && (a.subject === currentUser || groups.indexOf(a.subject) >= 0)
-  )
+  const isDeleteable = (a: AccessEntry): boolean => {
+    if (a.subject.startsWith("all-users")) {
+      return false
+    }
+    return a.subject === currentUser || groups.indexOf(a.subject) >= 0
+  }
   
   const [formError, setFormError] = useState('')
   const accesses = productAccess(access)
