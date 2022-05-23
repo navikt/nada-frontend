@@ -35,6 +35,7 @@ const NicePanel = styled(Panel)`
     background-color: #F1F1F1;
     border: 1px solid #ddd;
     border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
 `
 
 const Section = styled.section`
@@ -71,7 +72,7 @@ const DatasettEntry = ({product, access, userInfo}: EntryProps) => {
                         {accessType.type === "user" ? "Søk om ny tilgang" : "Søk om tilgang"}
                     </Link></BodyShort>}
             </Section>}
-            {userInfo && <Section>
+            {userInfo && accessType.type !== "none" && <Section>
                 <Heading spacing level="3" size="small">
                     Utforsk
                 </Heading>

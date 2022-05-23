@@ -109,7 +109,11 @@ const Dataproduct = (props: DataproductProps) => {
     const product = productQuery.data.dataproduct
 
     const isOwner = accessType.type === 'owner';
-    const products = [{product: product, access: accessQuery}];
+    const products = [
+        {product: product, access: accessQuery}, 
+        {product: product, access: accessQuery}, 
+        {product: product, access: accessQuery}
+    ];
 
     const menuItems: Array<{
         title: string

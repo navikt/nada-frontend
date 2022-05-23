@@ -12,12 +12,23 @@ const ExploreItem = styled.div<{ loading?: boolean }>`
   cursor: ${(props) => props.loading ? 'default' : 'pointer'};
   width: 250px;
   padding: 10px;
-  box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
-  :hover {
-    box-shadow: rgb(239, 239, 239) 0px 1px 0px 0.5px;
-  }
+  background: #fff;
+  border: #8F8F8F 1px solid;
+  border-radius: 0.25rem;
   div {
-  color: #222;
+    color: #0067C5;
+    :hover {
+        color: #0056B4;
+        h1 {
+            text-decoration: underline;
+        }
+    }
+    :selected {
+        color: #005B82;
+        h1 {
+            text-decoration: underline;
+        }
+    }
   }
 `
 
@@ -32,12 +43,11 @@ const Title = styled.div`
   h1 {
     font-size: 20px;
     margin: 0px;
-    color: #222;
   }
   h2 {
     font-size: 15px;
+    color: #707070;
     margin: 0px;
-    color: #777;
     font-weight: normal;
   }
 `
