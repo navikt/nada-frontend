@@ -151,6 +151,8 @@ export type Dataproduct = {
   requesters: Array<Scalars['String']>
   /** services contains links to this dataproduct in other services */
   services: DataproductServices
+  /** slug is the dataproduct slug */
+  slug: Scalars['String']
 }
 
 export type DataproductServices = {
@@ -998,7 +1000,7 @@ export type CreateDataproductMutationVariables = Exact<{
 
 export type CreateDataproductMutation = {
   __typename?: 'Mutation'
-  createDataproduct: { __typename?: 'Dataproduct'; id: string }
+  createDataproduct: { __typename?: 'Dataproduct'; id: string; slug: string }
 }
 
 export type DataproductQueryVariables = Exact<{
@@ -1015,6 +1017,7 @@ export type DataproductQuery = {
     description?: string | null | undefined
     created: any
     repo?: string | null | undefined
+    slug: string
     pii: boolean
     keywords: Array<string>
     mappings: Array<MappingService>
@@ -1063,6 +1066,7 @@ export type DataproductSummaryQuery = {
     description?: string | null | undefined
     created: any
     pii: boolean
+    slug: string
     keywords: Array<string>
     datasource: { __typename?: 'BigQuery'; type: 'BigQuery' }
   }
@@ -1077,6 +1081,7 @@ export type MetabaseProudctsQuery = {
     id: string
     name: string
     keywords: Array<string>
+    slug: string
     owner: {
       __typename?: 'Owner'
       group: string
@@ -1188,6 +1193,7 @@ export type SearchContentQuery = {
           created: any
           lastModified: any
           keywords: Array<string>
+          slug: string
           owner: {
             __typename?: 'Owner'
             group: string
@@ -1216,6 +1222,7 @@ export type SearchContentWithOptionsQuery = {
           created: any
           lastModified: any
           keywords: Array<string>
+          slug: string
           owner: {
             __typename?: 'Owner'
             group: string
@@ -1387,6 +1394,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
+      slug: string
       owner: { __typename?: 'Owner'; group: string }
     }>
     accessable: Array<{
@@ -1394,6 +1402,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
+      slug: string
       owner: { __typename?: 'Owner'; group: string }
     }>
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
@@ -2117,6 +2126,7 @@ export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
     createDataproduct(input: $input) {
       id
+      slug
     }
   }
 `
@@ -2172,6 +2182,7 @@ export const DataproductDocument = gql`
       description
       created
       repo
+      slug
       pii
       keywords
       mappings
@@ -2262,6 +2273,7 @@ export const DataproductSummaryDocument = gql`
       description
       created
       pii
+      slug
       keywords
       datasource {
         type: __typename
@@ -2326,6 +2338,7 @@ export const MetabaseProudctsDocument = gql`
       id
       name
       keywords
+      slug
       owner {
         group
         teamkatalogenURL
@@ -2820,6 +2833,7 @@ export const SearchContentDocument = gql`
           created
           lastModified
           keywords
+          slug
           owner {
             group
             teamkatalogenURL
@@ -2893,6 +2907,7 @@ export const SearchContentWithOptionsDocument = gql`
           created
           lastModified
           keywords
+          slug
           owner {
             group
             teamkatalogenURL
@@ -3489,6 +3504,7 @@ export const UserInfoDetailsDocument = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }
@@ -3497,6 +3513,7 @@ export const UserInfoDetailsDocument = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }

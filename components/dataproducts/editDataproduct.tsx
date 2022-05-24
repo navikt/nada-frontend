@@ -64,7 +64,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       refetchQueries: ['Dataproduct', 'searchContent'],
     }).then(() => {
       setBackendError(undefined)
-      router.push(`/dataproduct/${product.id}`)
+      router.push(`/dataproduct/${product.id}/${product.slug}`)
     })
   }
   {
@@ -113,7 +113,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
               />
               <PiiCheckboxInput register={register} watch={watch} />
               <RightJustifiedSubmitButton
-                onCancel={() => router.push(`/dataproduct/${product.id}`)}
+                onCancel={() => router.push(`/dataproduct/${product.id}/${product.slug}`)}
               />
             </Fieldset>
           </form>
