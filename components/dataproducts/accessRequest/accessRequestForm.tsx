@@ -119,6 +119,8 @@ export type AccessRequestFormInput = {
   polly?: Maybe<PollyInput>
   subject?: Maybe<Scalars['String']>
   subjectType?: Maybe<SubjectType>
+  status: Scalars['String']
+  reason?: Maybe<Scalars['String']>
 }
 
 const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRequestFormProps) => {
@@ -374,7 +376,8 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
             {!isView && <RightJustifiedSubmitButton onCancel={() => {
               router.push(`/user/requests`)
             }} />}
-            {isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
+            {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
+            {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "uten gitt grunn"}</Alert>}
           </form>
         </AccessRequestBody>
       </AccessRequestBox>
