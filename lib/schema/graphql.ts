@@ -336,6 +336,7 @@ export type MutationDeleteStoryArgs = {
 
 export type MutationDenyAccessRequestArgs = {
   id: Scalars['ID']
+  reason?: Maybe<Scalars['String']>
 }
 
 export type MutationDummyArgs = {
@@ -974,6 +975,7 @@ export type DeleteAccessRequestMutation = {
 
 export type DenyAccessRequestMutationVariables = Exact<{
   id: Scalars['ID']
+  reason?: Maybe<Scalars['String']>
 }>
 
 export type DenyAccessRequestMutation = {
@@ -2013,8 +2015,8 @@ export type DeleteAccessRequestMutationOptions = Apollo.BaseMutationOptions<
   DeleteAccessRequestMutationVariables
 >
 export const DenyAccessRequestDocument = gql`
-  mutation denyAccessRequest($id: ID!) {
-    denyAccessRequest(id: $id)
+  mutation denyAccessRequest($id: ID!, $reason: String) {
+    denyAccessRequest(id: $id, reason: $reason)
   }
 `
 export type DenyAccessRequestMutationFn = Apollo.MutationFunction<
@@ -2036,6 +2038,7 @@ export type DenyAccessRequestMutationFn = Apollo.MutationFunction<
  * const [denyAccessRequestMutation, { data, loading, error }] = useDenyAccessRequestMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      reason: // value for 'reason'
  *   },
  * });
  */

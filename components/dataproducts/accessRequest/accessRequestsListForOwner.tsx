@@ -62,7 +62,7 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
         }
         try {
             await denyAccessRequest({
-                variables: { id },
+                variables: { id, reason: denyReason },
                 refetchQueries: ['accessRequestsForDataproduct'],
             },
             )

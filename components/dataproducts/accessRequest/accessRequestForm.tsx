@@ -232,7 +232,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
   const onDeny = async () => {
     try {
       await denyAccessRequest({
-            variables: { id: accessRequest.id as string },
+            variables: { id: accessRequest.id as string, reason: denyReason },
             awaitRefetchQueries: true,
             refetchQueries: ['accessRequestsForDataproduct'],
           },
