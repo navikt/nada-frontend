@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { QueryResult } from '@apollo/client'
 import * as React from 'react'
 import { useState } from 'react'
-import { Close, Success, Search } from '@navikt/ds-icons'
+import { Close, Success, Search, ExternalLink } from '@navikt/ds-icons'
 import { navGronn, navRod, navBla } from '../../../styles/constants'
 import {
     AccessRequestsForDataproductQuery,
@@ -10,8 +10,7 @@ import {
     useApproveAccessRequestMutation,
     useDenyAccessRequestMutation,
 } from '../../../lib/schema/graphql'
-import { Alert, Button, TextField } from '@navikt/ds-react'
-import Link from 'next/link'
+import { Alert, Button, Link, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
@@ -100,7 +99,9 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
                     <TableRow key={i}>
                         <TableCell>{a.subject}</TableCell>
                         <TableCell>{a.polly?.__typename !== undefined
-                            ? <Link key={i} href={a.polly?.url !== undefined ? a.polly?.url : "#"}><a>{a.polly?.name}</a></Link>
+                            ? <Link key={i} href={a.polly?.url !== undefined ? a.polly?.url : "#"} target="_blank" rel="noreferrer">
+                                {a.polly?.name}<ExternalLink/>
+                        </Link>
                             : "Ingen registrert behandling"
                         }
                         </TableCell>
