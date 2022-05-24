@@ -119,7 +119,7 @@ export type AccessRequestFormInput = {
   polly?: Maybe<PollyInput>
   subject?: Maybe<Scalars['String']>
   subjectType?: Maybe<SubjectType>
-  status: Scalars['String']
+  status?: Maybe<Scalars['String']>
   reason?: Maybe<Scalars['String']>
 }
 
