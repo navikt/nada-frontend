@@ -106,16 +106,16 @@ const OwnerAccessList = ({ id, access, requesters }: AccessListProps) => {
         </TableHead>
         <TableBody>
           {accesses.map((a, i) => <TableRow key={i}>
-            <TableCell >{a.subject}</TableCell>
-            <TableCell align='center'>{a.canRequest ? <Success style={{ color: navGronn }} /> :
+            <TableCell key={'subject'+i}>{a.subject}</TableCell>
+            <TableCell key={'can-request'+i} align='center'>{a.canRequest ? <Success style={{ color: navGronn }} /> :
               <Error style={{ color: navRod }} />}
             </TableCell>
-            <TableCell align='center'>{a.access ? <>{a.access.expires ? humanizeDate(a.access.expires) : 'evig'}</> :
+            <TableCell key={'has-access'+i} align='center'>{a.access ? <>{a.access.expires ? humanizeDate(a.access.expires) : 'evig'}</> :
               <Error style={{ color: navRod }} />}
             </TableCell>
-            <TableCell align='center'><Delete style={{ cursor: 'pointer', color: navRod }}
+            <TableCell key={'remove-access'+i} align='center'><Delete style={{ cursor: 'pointer', color: navRod }}
                                               onClick={() => removeAccess(id, a)} /></TableCell>
-            <TableCell key='view-request' align='center'>{a.access?.accessRequestID ? <Search style={{ cursor: 'pointer', color: navBla }}
+            <TableCell key={'view-request'+i} align='center'>{a.access?.accessRequestID ? <Search style={{ cursor: 'pointer', color: navBla }}
                                                                            onClick={() => router.push(`/request/${a.access?.accessRequestID}/view`) }/> : 'Ingen søknad'}</TableCell>
           </TableRow>)}
         </TableBody>
