@@ -1,12 +1,13 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import * as React from 'react'
 import { useState } from 'react'
-import { Delete, Error, Success } from '@navikt/ds-icons'
-import { navGronn, navRod } from '../../../styles/constants'
+import {Delete, Error, Search, Success} from '@navikt/ds-icons'
+import {navBla, navGronn, navRod} from '../../../styles/constants'
 import humanizeDate from '../../../lib/humanizeDate'
 import { isAfter, parseISO } from 'date-fns'
 import { useRemoveRequesterMutation, useRevokeAccessMutation } from '../../../lib/schema/graphql'
 import { Alert } from '@navikt/ds-react'
+import {useRouter} from "next/router";
 
 interface AccessEntry {
   subject: string,
@@ -44,6 +45,7 @@ interface access {
   expires?: any;
   created: any;
   revoked?: any;
+  accessRequestID?: any;
 }
 
 interface AccessListProps {
@@ -55,6 +57,7 @@ interface AccessListProps {
 const OwnerAccessList = ({ id, access, requesters }: AccessListProps) => {
   const [revokeAccess] = useRevokeAccessMutation()
   const [removeRequester] = useRemoveRequesterMutation()
+  const router = useRouter()
   const removeAccess = async (id: string, a: AccessEntry) => {
     if (a.canRequest) {
       try {
@@ -94,25 +97,27 @@ const OwnerAccessList = ({ id, access, requesters }: AccessListProps) => {
       <Table sx={{ minWidth: 650 }} aria-label='simple table'>
         <TableHead>
           <TableRow>
-            <TableCell align='left'>Bruker / gruppe</TableCell>
-            <TableCell align='center'>Kan gi seg selv tilgang</TableCell>
-            <TableCell align='center'>Har tilgang</TableCell>
-            <TableCell align='center'>Fjern tilgang</TableCell>
+            <TableCell key='user' align='left'>Bruker / gruppe</TableCell>
+            <TableCell key='canRequest' align='center'>Kan gi seg selv tilgang</TableCell>
+            <TableCell key='hasAccess' align='center'>Har tilgang</TableCell>
+            <TableCell key='removeAccess' align='center'>Fjern tilgang</TableCell>
+            <TableCell key='viewRequest' align='center'>Se søknad</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {accesses.map((a, i) => <TableRow key={i}>
-            <TableCell>{a.subject}</TableCell>
-            <TableCell align='center'>{a.canRequest ? <Success style={{ color: navGronn }} /> :
+            <TableCell key={'subject'+i}>{a.subject}</TableCell>
+            <TableCell key={'can-request'+i} align='center'>{a.canRequest ? <Success style={{ color: navGronn }} /> :
               <Error style={{ color: navRod }} />}
             </TableCell>
-            <TableCell align='center'>{a.access ? <>{a.access.expires ? humanizeDate(a.access.expires) : 'evig'}</> :
+            <TableCell key={'has-access'+i} align='center'>{a.access ? <>{a.access.expires ? humanizeDate(a.access.expires) : 'evig'}</> :
               <Error style={{ color: navRod }} />}
             </TableCell>
-            <TableCell align='center'><Delete style={{ cursor: 'pointer', color: navRod }}
+            <TableCell key={'remove-access'+i} align='center'><Delete style={{ cursor: 'pointer', color: navRod }}
                                               onClick={() => removeAccess(id, a)} /></TableCell>
+            <TableCell key={'view-request'+i} align='center'>{a.access?.accessRequestID ? <Search style={{ cursor: 'pointer', color: navBla }}
+                                                                           onClick={() => router.push(`/request/${a.access?.accessRequestID}/view`) }/> : 'Ingen søknad'}</TableCell>
           </TableRow>)}
-
         </TableBody>
       </Table>
     </div>

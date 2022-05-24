@@ -17,6 +17,7 @@ export const GET_DATAPRODUCT_ACCESS = gql`
         expires
         created
         revoked
+        accessRequestID
       }
       requesters
     }
