@@ -83,7 +83,7 @@ const ViewRequestButton = ({ request, type }: RequestInterface) => {
             <>
               <p>Søknad for {request?.subject}</p>
               <p>Opprettet {humanizeDate(request?.created)}</p>
-              {type === RequestStatusType.Denied && <p>Avslått: {request.reason ? request.reason : "uten gitt grunn"}</p>}
+              {type === RequestStatusType.Denied && <p>Avslått: {request.reason ? request.reason : "uten begrunnelse"}</p>}
             </>
           }
         />
