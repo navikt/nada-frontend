@@ -18,6 +18,7 @@ export const GET_ACCESS_REQUEST = gql`
         externalID
         url
       }
+      reason
     }
   }
 `

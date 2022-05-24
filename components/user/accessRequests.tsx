@@ -109,10 +109,11 @@ const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
 
 const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   const [error, setError] = useState<string | null>(null)
+  const pendingAccessRequests = accessRequests?.filter(a => a.status === 'pending')
   return (<>
       {error && <Alert variant={'error'}>{error}</Alert>}
       <Results>
-        {accessRequests?.map((req, idx) => (
+        {pendingAccessRequests.map((req, idx) => (
           <RequestRow key={idx}>
             <ViewRequestButton key={`${idx}_show`} request={req} />
             <DeleteRequestButton key={`${idx}_delete`} request={req} setError={setError} />

@@ -59,6 +59,7 @@ export const USER_INFO = gql`
           externalID
           url
         }
+        reason
       }
     }
   }

@@ -60,6 +60,8 @@ export type AccessRequest = {
   owner: Scalars['String']
   /** polly is the process policy attached to this grant. */
   polly?: Maybe<Polly>
+  /** reason is the eventual reason for denying this request. */
+  reason?: Maybe<Scalars['String']>
   /** status is the status of the access request (can be pending, approved or denied). */
   status: AccessRequestStatus
   /** subject to be granted access. */
@@ -916,6 +918,7 @@ export type AccessRequestQuery = {
     created: any
     expires?: any | null | undefined
     owner: string
+    reason?: string | null | undefined
     polly?:
       | {
           __typename?: 'Polly'
@@ -1429,6 +1432,7 @@ export type UserInfoDetailsQuery = {
       created: any
       expires?: any | null | undefined
       owner: string
+      reason?: string | null | undefined
       polly?:
         | {
             __typename?: 'Polly'
@@ -1757,6 +1761,7 @@ export const AccessRequestDocument = gql`
         externalID
         url
       }
+      reason
     }
   }
 `
@@ -3554,6 +3559,7 @@ export const UserInfoDetailsDocument = gql`
           externalID
           url
         }
+        reason
       }
     }
   }
