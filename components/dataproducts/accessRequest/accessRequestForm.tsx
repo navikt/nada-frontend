@@ -377,7 +377,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
               router.push(`/user/requests`)
             }} />}
             {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
-            {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "uten begrunnelse"}</Alert>}
+            {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "ingen begrunnelse oppgitt"}</Alert>}
           </form>
         </AccessRequestBody>
       </AccessRequestBox>
