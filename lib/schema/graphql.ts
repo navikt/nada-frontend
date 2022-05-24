@@ -27,6 +27,8 @@ export type Scalars = {
 /** Access contains metadata on an access entry. */
 export type Access = {
   __typename?: 'Access'
+  /** accessRequestID is the id of the access request for this grant. */
+  accessRequestID?: Maybe<Scalars['ID']>
   /** created is timestamp for when access was created */
   created: Scalars['Time']
   /** expires is timestamp for when access expires */
@@ -869,6 +871,7 @@ export type DataproductAccessQuery = {
       expires?: any | null | undefined
       created: any
       revoked?: any | null | undefined
+      accessRequestID?: string | null | undefined
     }>
   }
 }
@@ -1537,6 +1540,7 @@ export const DataproductAccessDocument = gql`
         expires
         created
         revoked
+        accessRequestID
       }
       requesters
     }
