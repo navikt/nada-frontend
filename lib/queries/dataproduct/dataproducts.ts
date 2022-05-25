@@ -6,6 +6,7 @@ export const GET_METABASE_PRODUCTS = gql`
       id
       name
       keywords
+      slug
       owner {
         group
         teamkatalogenURL

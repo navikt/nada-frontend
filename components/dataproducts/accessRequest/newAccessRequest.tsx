@@ -1,10 +1,12 @@
 import {
   NewAccessRequest,
-  useCreateAccessRequestMutation
+  useCreateAccessRequestMutation, useDataproductQuery
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import AccessRequestForm, {AccessRequestFormInput} from "./accessRequestForm";
 import {useRouter} from "next/router";
+import ErrorMessage from "../../lib/error";
+import LoaderSpinner from "../../lib/spinner";
 
 
 interface NewAccessRequestFormProps {
@@ -18,6 +20,13 @@ const NewAccessRequestForm = ({newAccessRequest}: NewAccessRequestFormProps) => 
     ...newAccessRequest
   }
 
+  const { data, error, loading } = useDataproductQuery({
+    variables: { id: accessRequest.dataproductID },
+  })
+
+  if (error) return <ErrorMessage error={error} />
+  if (loading || !data) return <LoaderSpinner />
+
   const onSubmit = async (requestData: AccessRequestFormInput) => {
     const accessRequest: NewAccessRequest = {
       ...requestData
@@ -28,7 +37,7 @@ const NewAccessRequestForm = ({newAccessRequest}: NewAccessRequestFormProps) => 
         },
         refetchQueries: ['userInfoDetails'],
       }).then(() => {
-          router.push(`/dataproduct/${accessRequest.dataproductID}`)
+          router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}`)
         })
   }
 

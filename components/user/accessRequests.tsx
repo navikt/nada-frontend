@@ -1,6 +1,6 @@
 import { Card, CardHeader } from '@mui/material'
 import { FileContent } from '@navikt/ds-icons'
-import { Alert, Button, Link } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link } from '@navikt/ds-react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import humanizeDate from '../../lib/humanizeDate'
@@ -18,6 +18,7 @@ const Results = styled.div`
   a {
     text-decoration: none;
   }
+  margin-bottom: 1rem;
 `
 
 const WideLink = styled(Link)`
@@ -44,8 +45,15 @@ interface AccessRequests {
   accessRequests: Array<AccessRequest>
 }
 
+export enum RequestStatusType {
+  Approved, 
+  Denied,
+  Pending
+}
+
 interface RequestInterface {
   request: AccessRequest
+  type: RequestStatusType
 }
 
 interface DeleteRequestInterface {
@@ -53,14 +61,14 @@ interface DeleteRequestInterface {
   setError: (message: string | null) => void
 }
 
-const ViewRequestButton = ({ request }: RequestInterface) => {
+const ViewRequestButton = ({ request, type }: RequestInterface) => {
   const dataproduct = useDataproductQuery({
     variables: { id: request.dataproductID },
     ssr: true,
   })
 
   return (
-    <WideLink href={`/request/${request.id}/edit`}>
+    <WideLink href={ type === RequestStatusType.Pending ? `/request/${request.id}/edit` : `/request/${request.id}/view`}>
       <StyledCard>
         <CardHeader
           style={{ paddingBottom: '0px' }}
@@ -75,6 +83,7 @@ const ViewRequestButton = ({ request }: RequestInterface) => {
             <>
               <p>Søknad for {request?.subject}</p>
               <p>Opprettet {humanizeDate(request?.created)}</p>
+              {type === RequestStatusType.Denied && <p>Avslått: {request.reason ? request.reason : "ingen begrunnelse oppgitt"}</p>}
             </>
           }
         />
@@ -109,14 +118,25 @@ const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
 
 const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   const [error, setError] = useState<string | null>(null)
+  const pendingAccessRequests = accessRequests?.filter(a => a.status === 'pending')
+  const deniedAccessRequests = accessRequests?.filter(a => a.status === 'denied')
   return (<>
       {error && <Alert variant={'error'}>{error}</Alert>}
       <Results>
-        {accessRequests?.map((req, idx) => (
+        <Heading size="small" level="2">Ubehandlede tilgangssøknader</Heading>
+        {pendingAccessRequests.map((req, idx) => (
           <RequestRow key={idx}>
-            <ViewRequestButton key={`${idx}_show`} request={req} />
+            <ViewRequestButton key={`${idx}_show`} request={req} type={RequestStatusType.Pending} />
             <DeleteRequestButton key={`${idx}_delete`} request={req} setError={setError} />
           </RequestRow>
+        ))}
+      </Results>
+      <Results>
+        <Heading size="small" level="2">Avslåtte tilgangssøknader</Heading>
+        {deniedAccessRequests.map((req, idx) => (
+          <RequestRow key={idx}>
+          <ViewRequestButton key={`${idx}_show`} request={req} type={RequestStatusType.Denied} />
+        </RequestRow>
         ))}
       </Results>
     </>

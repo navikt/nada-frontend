@@ -4,6 +4,7 @@ export const CREATE_DATAPRODUCT = gql`
   mutation createDataproduct($input: NewDataproduct!) {
     createDataproduct(input: $input) {
       id
+      slug
     }
   }
 `

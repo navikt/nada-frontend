@@ -1,5 +1,5 @@
-import LoaderSpinner from '../../../components/lib/spinner'
-import ErrorMessage from '../../../components/lib/error'
+import LoaderSpinner from '../../../../components/lib/spinner'
+import ErrorMessage from '../../../../components/lib/error'
 import {
     DataproductAccessQuery,
     Group,
@@ -9,34 +9,33 @@ import {
     useDataproductQuery,
     useDeleteDataproductMutation,
     UserInfoDetailsQuery,
-} from '../../../lib/schema/graphql'
+} from '../../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
-import {addApolloState, initializeApollo} from '../../../lib/apollo'
-import {GET_DATAPRODUCT} from '../../../lib/queries/dataproduct/dataproduct'
+import {addApolloState, initializeApollo} from '../../../../lib/apollo'
+import {GET_DATAPRODUCT} from '../../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
 import {useContext, useEffect, useState} from 'react'
-import amplitudeLog from '../../../lib/amplitude'
+import amplitudeLog from '../../../../lib/amplitude'
 import Head from 'next/head'
-import TopBar, {TopBarActions} from '../../../components/lib/topBar'
-import {Description} from '../../../components/lib/detailTypography'
-import {MetadataTable} from '../../../components/dataproducts/metadataTable'
+import TopBar, {TopBarActions} from '../../../../components/lib/topBar'
+import {Description} from '../../../../components/lib/detailTypography'
+import {MetadataTable} from '../../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import TabPanel, {TabPanelType} from '../../../components/lib/tabPanel'
-import DataproductTableSchema from '../../../components/dataproducts/dataproductTableSchema'
-import Owner from '../../../components/dataproducts/access/owner'
-import {GET_DATAPRODUCT_ACCESS} from '../../../lib/queries/access/dataproductAccess'
-import User from '../../../components/dataproducts/access/user'
-import {UserState} from '../../../lib/context'
-import DeleteModal from '../../../components/lib/deleteModal'
-import Explore from "../../../components/dataproducts/explore";
+import TabPanel, {TabPanelType} from '../../../../components/lib/tabPanel'
+import DataproductTableSchema from '../../../../components/dataproducts/dataproductTableSchema'
+import Owner from '../../../../components/dataproducts/access/owner'
+import {GET_DATAPRODUCT_ACCESS} from '../../../../lib/queries/access/dataproductAccess'
+import User from '../../../../components/dataproducts/access/user'
+import {UserState} from '../../../../lib/context'
+import DeleteModal from '../../../../components/lib/deleteModal'
+import Explore from "../../../../components/dataproducts/explore";
 import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
-import {navRod} from "../../../styles/constants";
-import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../lib/queries/accessRequest/accessRequestsForDataproduct";
-import Innhold from '../../../components/dataproducts/innhold/innhold'
+import {navRod} from "../../../../styles/constants";
+import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../../lib/queries/accessRequest/accessRequestsForDataproduct";
 
 const Container = styled.div`
   display: flex;
@@ -110,11 +109,6 @@ const Dataproduct = (props: DataproductProps) => {
     const product = productQuery.data.dataproduct
 
     const isOwner = accessType.type === 'owner';
-    const products = [
-        {product: product, access: accessQuery}, 
-        {product: product, access: accessQuery}, 
-        {product: product, access: accessQuery}
-    ];
 
     const menuItems: Array<{
         title: string
@@ -129,13 +123,37 @@ const Dataproduct = (props: DataproductProps) => {
             ),
         },
         {
-            title: 'Innhold',
-            slug: 'innhold',
+            title: 'Skjema',
+            slug: 'schema',
             component: (
-                <Innhold products={products} userInfo={userInfo} />
+                <DataproductTableSchema datasource={product.datasource}/>
             ),
         }
     ];
+
+    if (userInfo && accessType.type == "owner") {
+        menuItems.push({
+            title: 'tilganger',
+            slug: 'access',
+            component: <Owner accessQuery={accessQuery} dataproductID={product.id}/>,
+        })
+    }
+
+    if (userInfo && accessType.type == "user") {
+        menuItems.push({
+            title: 'dine tilganger',
+            slug: 'your-accesses',
+            component: <User accessQuery={accessQuery} currentUser={userInfo.email} groups={userInfo.groups.map((g) => g.email)}/>,
+        })
+    }
+
+    if (userInfo && ["user", "owner"].includes(accessType.type)) {
+        menuItems.push({
+            title: 'utforsk',
+            slug: 'explore',
+            component: <Explore product={product} isOwner={isOwner}/>,
+        })
+    }
 
     const currentPage = menuItems
         .map((e) => e.slug)

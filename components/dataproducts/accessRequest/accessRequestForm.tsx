@@ -119,11 +119,14 @@ export type AccessRequestFormInput = {
   polly?: Maybe<PollyInput>
   subject?: Maybe<Scalars['String']>
   subjectType?: Maybe<SubjectType>
+  status?: Maybe<Scalars['String']>
+  reason?: Maybe<Scalars['String']>
 }
 
 const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [denyReason, setDenyReason] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
   const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires)
   const [accessType, setAccessType] = useState(accessRequest.expires === undefined ? 'eternal' : 'until')
@@ -225,13 +228,13 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     } catch (e: any) {
       setFormError(e.message)
     }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/access`)
+    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
   }
 
   const onDeny = async () => {
     try {
       await denyAccessRequest({
-            variables: { id: accessRequest.id as string },
+            variables: { id: accessRequest.id as string, reason: denyReason },
             awaitRefetchQueries: true,
             refetchQueries: ['accessRequestsForDataproduct'],
           },
@@ -239,7 +242,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     } catch (e: any) {
       setFormError(e.message)
     }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/access`)
+    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
   }
 
   return (
@@ -373,7 +376,8 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
             {!isView && <RightJustifiedSubmitButton onCancel={() => {
               router.push(`/user/requests`)
             }} />}
-            {isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} />}
+            {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
+            {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "ingen begrunnelse oppgitt"}</Alert>}
           </form>
         </AccessRequestBody>
       </AccessRequestBox>

@@ -53,7 +53,7 @@ const User = ({ accessQuery, currentUser, groups }: UserProps) => {
       <br/>
       {dataproduct.access.length != 0 && <>
           <SubHeader>Aktive tilganger</SubHeader>
-          <UserAccessList id={dataproduct.id} access={dataproduct.access} requests={[]}/>
+          <UserAccessList groups={groups} currentUser={currentUser} id={dataproduct.id} access={dataproduct.access} requests={[]}/>
       </>
       }
     </>

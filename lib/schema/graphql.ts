@@ -27,6 +27,8 @@ export type Scalars = {
 /** Access contains metadata on an access entry. */
 export type Access = {
   __typename?: 'Access'
+  /** accessRequestID is the id of the access request for this grant. */
+  accessRequestID?: Maybe<Scalars['ID']>
   /** created is timestamp for when access was created */
   created: Scalars['Time']
   /** expires is timestamp for when access expires */
@@ -60,6 +62,8 @@ export type AccessRequest = {
   owner: Scalars['String']
   /** polly is the process policy attached to this grant. */
   polly?: Maybe<Polly>
+  /** reason is the eventual reason for denying this request. */
+  reason?: Maybe<Scalars['String']>
   /** status is the status of the access request (can be pending, approved or denied). */
   status: AccessRequestStatus
   /** subject to be granted access. */
@@ -151,6 +155,8 @@ export type Dataproduct = {
   requesters: Array<Scalars['String']>
   /** services contains links to this dataproduct in other services */
   services: DataproductServices
+  /** slug is the dataproduct slug */
+  slug: Scalars['String']
 }
 
 export type DataproductServices = {
@@ -336,6 +342,7 @@ export type MutationDeleteStoryArgs = {
 
 export type MutationDenyAccessRequestArgs = {
   id: Scalars['ID']
+  reason?: Maybe<Scalars['String']>
 }
 
 export type MutationDummyArgs = {
@@ -864,6 +871,7 @@ export type DataproductAccessQuery = {
       expires?: any | null | undefined
       created: any
       revoked?: any | null | undefined
+      accessRequestID?: string | null | undefined
     }>
   }
 }
@@ -913,6 +921,7 @@ export type AccessRequestQuery = {
     created: any
     expires?: any | null | undefined
     owner: string
+    reason?: string | null | undefined
     polly?:
       | {
           __typename?: 'Polly'
@@ -974,6 +983,7 @@ export type DeleteAccessRequestMutation = {
 
 export type DenyAccessRequestMutationVariables = Exact<{
   id: Scalars['ID']
+  reason?: Maybe<Scalars['String']>
 }>
 
 export type DenyAccessRequestMutation = {
@@ -996,7 +1006,7 @@ export type CreateDataproductMutationVariables = Exact<{
 
 export type CreateDataproductMutation = {
   __typename?: 'Mutation'
-  createDataproduct: { __typename?: 'Dataproduct'; id: string }
+  createDataproduct: { __typename?: 'Dataproduct'; id: string; slug: string }
 }
 
 export type DataproductQueryVariables = Exact<{
@@ -1013,6 +1023,7 @@ export type DataproductQuery = {
     description?: string | null | undefined
     created: any
     repo?: string | null | undefined
+    slug: string
     pii: boolean
     keywords: Array<string>
     mappings: Array<MappingService>
@@ -1061,6 +1072,7 @@ export type DataproductSummaryQuery = {
     description?: string | null | undefined
     created: any
     pii: boolean
+    slug: string
     keywords: Array<string>
     datasource: { __typename?: 'BigQuery'; type: 'BigQuery' }
   }
@@ -1075,6 +1087,7 @@ export type MetabaseProudctsQuery = {
     id: string
     name: string
     keywords: Array<string>
+    slug: string
     owner: {
       __typename?: 'Owner'
       group: string
@@ -1186,6 +1199,7 @@ export type SearchContentQuery = {
           created: any
           lastModified: any
           keywords: Array<string>
+          slug: string
           owner: {
             __typename?: 'Owner'
             group: string
@@ -1214,6 +1228,7 @@ export type SearchContentWithOptionsQuery = {
           created: any
           lastModified: any
           keywords: Array<string>
+          slug: string
           owner: {
             __typename?: 'Owner'
             group: string
@@ -1385,6 +1400,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
+      slug: string
       owner: { __typename?: 'Owner'; group: string }
     }>
     accessable: Array<{
@@ -1392,6 +1408,7 @@ export type UserInfoDetailsQuery = {
       id: string
       name: string
       keywords: Array<string>
+      slug: string
       owner: { __typename?: 'Owner'; group: string }
     }>
     groups: Array<{ __typename?: 'Group'; name: string; email: string }>
@@ -1418,6 +1435,7 @@ export type UserInfoDetailsQuery = {
       created: any
       expires?: any | null | undefined
       owner: string
+      reason?: string | null | undefined
       polly?:
         | {
             __typename?: 'Polly'
@@ -1522,6 +1540,7 @@ export const DataproductAccessDocument = gql`
         expires
         created
         revoked
+        accessRequestID
       }
       requesters
     }
@@ -1746,6 +1765,7 @@ export const AccessRequestDocument = gql`
         externalID
         url
       }
+      reason
     }
   }
 `
@@ -2013,8 +2033,8 @@ export type DeleteAccessRequestMutationOptions = Apollo.BaseMutationOptions<
   DeleteAccessRequestMutationVariables
 >
 export const DenyAccessRequestDocument = gql`
-  mutation denyAccessRequest($id: ID!) {
-    denyAccessRequest(id: $id)
+  mutation denyAccessRequest($id: ID!, $reason: String) {
+    denyAccessRequest(id: $id, reason: $reason)
   }
 `
 export type DenyAccessRequestMutationFn = Apollo.MutationFunction<
@@ -2036,6 +2056,7 @@ export type DenyAccessRequestMutationFn = Apollo.MutationFunction<
  * const [denyAccessRequestMutation, { data, loading, error }] = useDenyAccessRequestMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      reason: // value for 'reason'
  *   },
  * });
  */
@@ -2114,6 +2135,7 @@ export const CreateDataproductDocument = gql`
   mutation createDataproduct($input: NewDataproduct!) {
     createDataproduct(input: $input) {
       id
+      slug
     }
   }
 `
@@ -2169,6 +2191,7 @@ export const DataproductDocument = gql`
       description
       created
       repo
+      slug
       pii
       keywords
       mappings
@@ -2259,6 +2282,7 @@ export const DataproductSummaryDocument = gql`
       description
       created
       pii
+      slug
       keywords
       datasource {
         type: __typename
@@ -2323,6 +2347,7 @@ export const MetabaseProudctsDocument = gql`
       id
       name
       keywords
+      slug
       owner {
         group
         teamkatalogenURL
@@ -2817,6 +2842,7 @@ export const SearchContentDocument = gql`
           created
           lastModified
           keywords
+          slug
           owner {
             group
             teamkatalogenURL
@@ -2890,6 +2916,7 @@ export const SearchContentWithOptionsDocument = gql`
           created
           lastModified
           keywords
+          slug
           owner {
             group
             teamkatalogenURL
@@ -3486,6 +3513,7 @@ export const UserInfoDetailsDocument = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }
@@ -3494,6 +3522,7 @@ export const UserInfoDetailsDocument = gql`
         id
         name
         keywords
+        slug
         owner {
           group
         }
@@ -3534,6 +3563,7 @@ export const UserInfoDetailsDocument = gql`
           externalID
           url
         }
+        reason
       }
     }
   }

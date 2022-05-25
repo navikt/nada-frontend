@@ -61,7 +61,7 @@ export const NewDataproductForm = () => {
   const [createDataproduct, { loading, error: backendError }] =
     useMutation(CREATE_DATAPRODUCT, {
       onCompleted: (data) =>
-        router.push(`/dataproduct/${data.createDataproduct.id}/access`),
+        router.push(`/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}/access`),
     })
 
 
