@@ -75,6 +75,7 @@ interface DataproductDetailProps {
 }
 
 export const MetadataTable = ({product, accessType}: DataproductDetailProps) => {
+    console.log(JSON.stringify(accessType))
     const datasource = product.datasource
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
 

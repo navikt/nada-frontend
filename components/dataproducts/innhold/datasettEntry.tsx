@@ -39,6 +39,10 @@ const NicePanel = styled(Panel)`
 `
 
 const Section = styled.section`
+    margin-bottom: 0.75rem;
+`
+
+const Article = styled.article`
     border-bottom: 1px solid #ddd;
     margin-bottom: 0.75rem;
     &:last-child {
@@ -52,14 +56,14 @@ const DatasettEntry = ({product, access, userInfo}: EntryProps) => {
         <Heading spacing level="2" size="large">
             {product.name}
         </Heading>
-        <BodyLong>
-            <Section>
+        <Section>
+            <Article>
                 <Heading spacing level="3" size="small">
                     Metadata
                 </Heading>
                 <DataproductTableSchema datasource={product.datasource} />
-            </Section>
-            {userInfo && <Section>
+            </Article>
+            {userInfo && <Article>
                 <Heading spacing level="3" size="small">
                     Tilganger
                 </Heading>
@@ -71,14 +75,14 @@ const DatasettEntry = ({product, access, userInfo}: EntryProps) => {
                 {["user", "none"].includes(accessType.type) && <BodyShort><Link href={`/request/new?dataproductID=${product.id}`}>
                         {accessType.type === "user" ? "Søk om ny tilgang" : "Søk om tilgang"}
                     </Link></BodyShort>}
-            </Section>}
-            {userInfo && accessType.type !== "none" && <Section>
+            </Article>}
+            {userInfo && accessType.type !== "none" && <Article>
                 <Heading spacing level="3" size="small">
                     Utforsk
                 </Heading>
                 <Explore product={product} isOwner={accessType.type === "owner"}/>
-            </Section>}
-        </BodyLong>
+            </Article>}
+        </Section>
     </NicePanel>
 }
 
