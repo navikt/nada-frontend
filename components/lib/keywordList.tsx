@@ -1,4 +1,3 @@
-import { Close } from "@navikt/ds-icons";
 import styled from "styled-components";
 import StringToColor from "../../lib/stringToColor";
 
@@ -15,19 +14,17 @@ interface KeywordSpanProps {
 
 const KeywordPillStyle = styled.span<KeywordSpanProps>`
   cursor: pointer;
-  display: ${(props) => props.horizontal ? 'flex' : 'inline-flex'};
-  align-items: center;
-  column-gap: 0.25rem;
+  display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
   background-color: ${(props) => props.color};
   color: ${(props) => props.textColor};
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 12px;
   padding: 3px 5px 3px 5px;
-  margin-right: 0.25rem;
   border: 0.5px solid transparent;
   :hover {
     ${(props) => props.remove && 'text-decoration: line-through;'}
     ${(props) => props.remove && 'text-decoration-thickness: 3px;'}
+  
   }
 `
 
@@ -44,7 +41,7 @@ export const KeywordPill = ({keyword, horizontal, children, compact, onClick, re
     const color = StringToColor(keyword)
     return <KeywordPillStyle color={color} textColor={contrastColor({bgColor: color})} horizontal={horizontal}
                              compact={compact} onClick={onClick} remove={remove}>
-        {children}{remove && <Close />}
+        {children}
     </KeywordPillStyle>
 
 }
