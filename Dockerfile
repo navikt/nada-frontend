@@ -2,7 +2,7 @@ FROM node:16-alpine AS node-with-deps
 
 WORKDIR /usr/app
 
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install --quiet
 
