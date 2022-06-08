@@ -1,5 +1,4 @@
 import {
-    DataproductQuery,
     MappingService, useDataproductQuery,
     useUpdateMappingMutation
 } from "../../lib/schema/graphql";
@@ -7,6 +6,7 @@ import ExploreLink, {ItemType} from "./exploreLink";
 import styled from "styled-components";
 import {useState} from "react";
 import ErrorMessage from "../lib/error";
+import { DatasetQuery } from "./innhold/datasettEntry";
 
 const ExploreLinks = styled.div`
   display: flex;
@@ -20,15 +20,16 @@ const ExploreLinks = styled.div`
 `
 
 interface ExploreProps {
-    product: DataproductQuery['dataproduct']
+    dataproductId: string
+    dataset: DatasetQuery
     isOwner: boolean
 }
 
-const Explore = ({product, isOwner}: ExploreProps) => {
+const Explore = ({dataproductId, dataset, isOwner}: ExploreProps) => {
     const [formError, setFormError] = useState(undefined)
     const [updateMapping] = useUpdateMappingMutation()
     useDataproductQuery({
-        variables: { id: product.id },
+        variables: { id: dataproductId },
         ssr: true,
         pollInterval: 30_000,
     })
@@ -36,7 +37,7 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     const addToMetabase = async () => {
         try{
             await updateMapping({
-                variables: {dataproductID: product.id, services: [MappingService.Metabase]},
+                variables: {datasetID: dataset.id, services: [MappingService.Metabase]},
                 refetchQueries: ['Dataproduct'],
             })
 
@@ -48,7 +49,7 @@ const Explore = ({product, isOwner}: ExploreProps) => {
     const removeFromMetabase = async () => {
         try{
             await updateMapping({
-                variables: {dataproductID: product.id, services: []},
+                variables: {datasetID: dataset.id, services: []},
                 refetchQueries: ['Dataproduct'],
             })
 
@@ -57,9 +58,9 @@ const Explore = ({product, isOwner}: ExploreProps) => {
         }
     }
 
-    const datasource = product.datasource
-    const services = product.services
-    const mappings = product.mappings
+    const datasource = dataset.datasource
+    const services = dataset.services
+    const mappings = dataset.mappings
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
 
     return (

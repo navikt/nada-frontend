@@ -11,6 +11,15 @@ export const GET_DATAPRODUCT = gql`
       slug
       datasets {
         id
+        access {
+          id
+          subject
+          granter
+          expires
+          created
+          revoked
+          accessRequestID
+        }
         description
         created
         name

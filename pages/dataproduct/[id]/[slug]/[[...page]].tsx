@@ -1,11 +1,11 @@
 import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
 import {
-    DataproductAccessQuery,
+    DatasetAccessQuery,
     Group,
-    useAccessRequestsForDataproductLazyQuery,
-    useAccessRequestsForDataproductQuery,
-    useDataproductAccessQuery,
+    useAccessRequestsForDatasetLazyQuery,
+    useAccessRequestsForDatasetQuery,
+    useDatasetAccessQuery,
     useDataproductQuery,
     useDeleteDataproductMutation,
     UserInfoDetailsQuery,
@@ -27,7 +27,7 @@ import Tab from '@mui/material/Tab'
 import TabPanel, {TabPanelType} from '../../../../components/lib/tabPanel'
 import DataproductTableSchema from '../../../../components/dataproducts/dataproductTableSchema'
 import Owner from '../../../../components/dataproducts/access/owner'
-import {GET_DATAPRODUCT_ACCESS} from '../../../../lib/queries/access/dataproductAccess'
+import {GET_DATASET_ACCESS} from '../../../../lib/queries/access/datasetAccess'
 import User from '../../../../components/dataproducts/access/user'
 import {UserState} from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
@@ -35,7 +35,7 @@ import Explore from "../../../../components/dataproducts/explore";
 import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
 import {navRod} from "../../../../styles/constants";
-import {GET_ACCESS_REQUESTS_FOR_DATAPRODUCT} from "../../../../lib/queries/accessRequest/accessRequestsForDataproduct";
+import {GET_ACCESS_REQUESTS_FOR_DATASET} from "../../../../lib/queries/accessRequest/accessRequestsForDataset";
 import Innhold from '../../../../components/dataproducts/innhold/innhold'
 
 const Container = styled.div`
@@ -48,14 +48,8 @@ const Container = styled.div`
 const MainPage = styled.div`
   flex-grow: 1;
 `
-const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataproduct: DataproductAccessQuery['dataproduct'] | undefined) => {
-    if (!groups || !dataproduct) return {type: "utlogget"}
-    if (!groups && !dataproduct) return {type: "none"}
-    if (groups.some((g: Group) => g.email === dataproduct.owner.group)) return {type: "owner"}
-    const activeAccess = dataproduct.access.filter(a => (!a.revoked && (!a.expires || isAfter(parseISO(a.expires), Date.now()))))[0]
-    if (activeAccess) return {type: "user", expires: activeAccess.expires}
-    return {type: "none"}
-}
+const userIsOwner = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataproductOwnerGroup: string | undefined) => groups === undefined ? false : groups.some((g: Group) => g.email === dataproductOwnerGroup)
+
 
 interface DataproductProps {
     id: string
@@ -75,12 +69,9 @@ const Dataproduct = (props: DataproductProps) => {
         ssr: true,
     })
 
-    const accessQuery = useDataproductAccessQuery({
-        variables: {id},
-        ssr: true,
-    })
     
-    const accessType = findAccessType(userInfo?.groups, accessQuery.data?.dataproduct)
+    
+    const isOwner = userIsOwner(userInfo?.groups, productQuery?.data?.dataproduct?.owner.group)
 
     useEffect(() => {
         const eventProperties = {
@@ -109,13 +100,6 @@ const Dataproduct = (props: DataproductProps) => {
 
     const product = productQuery.data.dataproduct
 
-    const isOwner = accessType.type === 'owner';
-    const products = [
-        {product: product, access: accessQuery}, 
-        {product: product, access: accessQuery}, 
-        {product: product, access: accessQuery}
-    ];
-
     const menuItems: Array<{
         title: string
         slug: string
@@ -132,7 +116,7 @@ const Dataproduct = (props: DataproductProps) => {
             title: 'Innhold',
             slug: 'innhold',
             component: (
-                <Innhold products={products} userInfo={userInfo} />
+                <Innhold dataproduct={product} userInfo={userInfo} />
             ),
         }
     ];
@@ -193,7 +177,8 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                <MetadataTable product={product} accessType={accessType}/>
+                {// fixme: <MetadataTable product={product} accessType={isOwner}/>
+                }
             </Container>
         </>
     )
@@ -221,7 +206,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     try {
         await apolloClient.query({
-            query: GET_DATAPRODUCT_ACCESS,
+            query: GET_DATASET_ACCESS,
             variables: {id},
             context: {
                 headers: {
@@ -235,8 +220,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     try {
         await apolloClient.query({
-            query: GET_ACCESS_REQUESTS_FOR_DATAPRODUCT,
-            variables: {dataproductID: id},
+            query: GET_ACCESS_REQUESTS_FOR_DATASET,
+            variables: {datasetId: id},
             context: {
                 headers: {
                     cookie,

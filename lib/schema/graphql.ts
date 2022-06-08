@@ -1090,6 +1090,16 @@ export type DataproductQuery = {
       pii: boolean
       repo?: string | null | undefined
       slug: string
+      access: Array<{
+        __typename?: 'Access'
+        id: string
+        subject: string
+        granter: string
+        expires?: any | null | undefined
+        created: any
+        revoked?: any | null | undefined
+        accessRequestID?: string | null | undefined
+      }>
       services: {
         __typename?: 'DatasetServices'
         metabase?: string | null | undefined
@@ -2157,6 +2167,15 @@ export const DataproductDocument = gql`
       slug
       datasets {
         id
+        access {
+          id
+          subject
+          granter
+          expires
+          created
+          revoked
+          accessRequestID
+        }
         description
         created
         name
