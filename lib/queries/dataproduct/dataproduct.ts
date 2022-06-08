@@ -8,36 +8,43 @@ export const GET_DATAPRODUCT = gql`
       name
       description
       created
-      repo
       slug
-      pii
-      keywords
-      mappings
-      services {
-        metabase
+      datasets {
+        id
+        description
+        created
+        name
+        keywords
+        mappings
+        pii
+        repo
+        slug
+        services {
+          metabase
+        }
+        datasource {
+          type: __typename
+          ... on BigQuery {
+            projectID
+            dataset
+            table
+            lastModified
+            created
+            expires
+            tableType
+            description
+            schema {
+              name
+              description
+              mode
+              type
+            }
+          }
+        }
       }
       owner {
         group
         teamkatalogenURL
-      }
-      datasource {
-        type: __typename
-        ... on BigQuery {
-          projectID
-          dataset
-          table
-          lastModified
-          created
-          expires
-          tableType
-          description
-          schema {
-            name
-            description
-            mode
-            type
-          }
-        }
       }
     }
   }

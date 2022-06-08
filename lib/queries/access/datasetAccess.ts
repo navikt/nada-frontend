@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag'
 
-export const GET_DATAPRODUCT_ACCESS = gql`
-  query DataproductAccess($id: ID!) {
-    dataproduct(id: $id) {
+export const GET_DATASET_ACCESS = gql`
+  query DatasetAccess($id: ID!) {
+    dataset(id: $id) {
       id
       name
       pii
@@ -19,7 +19,6 @@ export const GET_DATAPRODUCT_ACCESS = gql`
         revoked
         accessRequestID
       }
-      requesters
     }
   }
 `

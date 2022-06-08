@@ -4,7 +4,7 @@ export const GET_ACCESS_REQUEST = gql`
   query accessRequest($id: ID!) {
     accessRequest(id: $id) {
       id
-      dataproductID
+      datasetID
       subject
       subjectType
       granter

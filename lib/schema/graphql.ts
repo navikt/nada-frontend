@@ -43,15 +43,15 @@ export type Access = {
   subject: Scalars['String']
 }
 
-/** AccessRequest contains metadata on a request to access a dataproduct */
+/** AccessRequest contains metadata on a request to access a dataset */
 export type AccessRequest = {
   __typename?: 'AccessRequest'
   /** closed is a timestamp for when the access request was closed. */
   closed?: Maybe<Scalars['Time']>
   /** created is a timestamp for when the access request was created. */
   created: Scalars['Time']
-  /** id of dataproduct. */
-  dataproductID: Scalars['ID']
+  /** id of dataset. */
+  datasetID: Scalars['ID']
   /** expires is a timestamp for when the access expires */
   expires?: Maybe<Scalars['Time']>
   /** granter is the email of the person who granted/denied the access request. */
@@ -127,45 +127,70 @@ export enum BigQueryType {
 /** Dataproduct contains metadata on a datasource. */
 export type Dataproduct = {
   __typename?: 'Dataproduct'
-  /** access contains list of users, groups and service accounts which have access to the dataproduct */
-  access: Array<Access>
   /** created is the timestamp for when the dataproduct was created */
   created: Scalars['Time']
-  /** datasource contains metadata on the datasource */
-  datasource: Datasource
+  /** datasets is the list of associated datasets. */
+  datasets: Array<Dataset>
   /** description of the dataproduct */
   description?: Maybe<Scalars['String']>
   /** id is the identifier for the dataproduct */
   id: Scalars['ID']
-  /** keywords for the dataproduct used as tags. */
+  /** keywords is the keyword tags for the datasets in the dataproduct. */
   keywords: Array<Scalars['String']>
   /** lastModified is the timestamp for when the dataproduct was last modified */
   lastModified: Scalars['Time']
-  /** mappings services a dataproduct is exposed to */
-  mappings: Array<MappingService>
   /** name of the dataproduct */
   name: Scalars['String']
   /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
   owner: Owner
-  /** pii indicates whether it is personal identifiable information in the dataproduct */
-  pii: Scalars['Boolean']
-  /** repo is the url of the repository containing the code to create the dataproduct */
-  repo?: Maybe<Scalars['String']>
-  /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
-  requesters: Array<Scalars['String']>
-  /** services contains links to this dataproduct in other services */
-  services: DataproductServices
   /** slug is the dataproduct slug */
   slug: Scalars['String']
 }
 
-export type DataproductServices = {
-  __typename?: 'DataproductServices'
-  /** URL to the dataproduct in metabase */
+/** Dataset contains metadata on a dataset. */
+export type Dataset = {
+  __typename?: 'Dataset'
+  /** access contains list of users, groups and service accounts which have access to the dataset */
+  access: Array<Access>
+  /** created is the timestamp for when the dataset was created */
+  created: Scalars['Time']
+  /** dataproductID is the id of the dataproduct containing the dataset */
+  dataproductID: Scalars['ID']
+  /** datasource contains metadata on the datasource */
+  datasource: Datasource
+  /** description of the dataset */
+  description?: Maybe<Scalars['String']>
+  /** id is the identifier for the dataset */
+  id: Scalars['ID']
+  /** keywords for the dataset used as tags. */
+  keywords: Array<Scalars['String']>
+  /** lastModified is the timestamp for when the dataset was last modified */
+  lastModified: Scalars['Time']
+  /** mappings services a dataset is exposed to */
+  mappings: Array<MappingService>
+  /** name of the dataset */
+  name: Scalars['String']
+  /** owner is the owner of the dataproduct containing this dataset */
+  owner: Owner
+  /** pii indicates whether it is personal identifiable information in the dataset */
+  pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataset */
+  repo?: Maybe<Scalars['String']>
+  /** requesters contains a list of users, groups and service accounts which can request access to the dataset */
+  requesters: Array<Scalars['String']>
+  /** services contains links to this dataset in other services */
+  services: DatasetServices
+  /** slug is the dataset slug */
+  slug: Scalars['String']
+}
+
+export type DatasetServices = {
+  __typename?: 'DatasetServices'
+  /** URL to the dataset in metabase */
   metabase?: Maybe<Scalars['String']>
 }
 
-/** Datasource defines types that can be returned as a dataproduct datasource. */
+/** Datasource defines types that can be returned as a dataset datasource. */
 export type Datasource = BigQuery
 
 /** GCPProject contains metadata on a GCP project. */
@@ -204,7 +229,7 @@ export type Keyword = {
   keyword: Scalars['String']
 }
 
-/** MappingService defines all possible service types that a dataproduct can be exposed to. */
+/** MappingService defines all possible service types that a dataset can be exposed to. */
 export enum MappingService {
   Metabase = 'metabase',
 }
@@ -212,19 +237,13 @@ export enum MappingService {
 export type Mutation = {
   __typename?: 'Mutation'
   /**
-   * addRequesterToDataproduct adds a requester to the dataproduct.
-   *
-   * Requires authentication.
-   */
-  addRequesterToDataproduct: Scalars['Boolean']
-  /**
    * approveAccessRequest approves an access request.
    *
    * Requires authentication
    */
   approveAccessRequest: Scalars['Boolean']
   /**
-   * createAccessRequest creates a new access request for a dataproduct
+   * createAccessRequest creates a new access request for a dataset
    *
    * Requires authentication
    */
@@ -236,7 +255,13 @@ export type Mutation = {
    */
   createDataproduct: Dataproduct
   /**
-   * deleteAccessRequest deletes a dataproduct access request.
+   * createDataset creates a new dataset
+   *
+   * Requires authentication.
+   */
+  createDataset: Dataset
+  /**
+   * deleteAccessRequest deletes a dataset access request.
    *
    * Requires authentication
    */
@@ -247,6 +272,12 @@ export type Mutation = {
    * Requires authentication.
    */
   deleteDataproduct: Scalars['Boolean']
+  /**
+   * deleteDataset deletes a dataset.
+   *
+   * Requires authentication.
+   */
+  deleteDataset: Scalars['Boolean']
   /**
    * deleteStory deletes an existing story.
    *
@@ -262,17 +293,17 @@ export type Mutation = {
   /** This mutation doesn't do anything. */
   dummy?: Maybe<Scalars['String']>
   /**
-   * grantAccessToDataproduct grants access for a subject to the dataproduct.
+   * grantAccessToDataset grants access for a subject to the dataset.
    *
    * Requires authentication.
    */
-  grantAccessToDataproduct: Access
+  grantAccessToDataset: Access
   /**
-   * mapDataproduct exposes a dataproduct to third party services, e.g. metabase
+   * mapDataset exposes a dataset to third party services, e.g. metabase
    *
    * Requires authentication
    */
-  mapDataproduct: Scalars['Boolean']
+  mapDataset: Scalars['Boolean']
   /**
    * publishStory publishes a story draft.
    *
@@ -280,19 +311,13 @@ export type Mutation = {
    */
   publishStory: Story
   /**
-   * removeRequesterFromDataproduct removes a requester from the dataproduct.
+   * revokeAccessToDataset revokes access for a subject to the dataset.
    *
    * Requires authentication.
    */
-  removeRequesterFromDataproduct: Scalars['Boolean']
+  revokeAccessToDataset: Scalars['Boolean']
   /**
-   * revokeAccessToDataproduct revokes access for a subject to the dataproduct.
-   *
-   * Requires authentication.
-   */
-  revokeAccessToDataproduct: Scalars['Boolean']
-  /**
-   * createAccessRequest creates a new access request for a dataproduct
+   * createAccessRequest creates a new access request for a dataset
    *
    * Requires authentication
    */
@@ -304,16 +329,17 @@ export type Mutation = {
    */
   updateDataproduct: Dataproduct
   /**
+   * updateDataset updates an existing dataset
+   *
+   * Requires authentication.
+   */
+  updateDataset: Dataset
+  /**
    * updateStoryMetadata updates metadata on an existing story.
    *
    * Requires authentication.
    */
   updateStoryMetadata: Story
-}
-
-export type MutationAddRequesterToDataproductArgs = {
-  dataproductID: Scalars['ID']
-  subject: Scalars['String']
 }
 
 export type MutationApproveAccessRequestArgs = {
@@ -328,11 +354,19 @@ export type MutationCreateDataproductArgs = {
   input: NewDataproduct
 }
 
+export type MutationCreateDatasetArgs = {
+  input: NewDataset
+}
+
 export type MutationDeleteAccessRequestArgs = {
   id: Scalars['ID']
 }
 
 export type MutationDeleteDataproductArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationDeleteDatasetArgs = {
   id: Scalars['ID']
 }
 
@@ -349,12 +383,12 @@ export type MutationDummyArgs = {
   no?: Maybe<Scalars['String']>
 }
 
-export type MutationGrantAccessToDataproductArgs = {
+export type MutationGrantAccessToDatasetArgs = {
   input: NewGrant
 }
 
-export type MutationMapDataproductArgs = {
-  dataproductID: Scalars['ID']
+export type MutationMapDatasetArgs = {
+  datasetID: Scalars['ID']
   services: Array<MappingService>
 }
 
@@ -362,12 +396,7 @@ export type MutationPublishStoryArgs = {
   input: NewStory
 }
 
-export type MutationRemoveRequesterFromDataproductArgs = {
-  dataproductID: Scalars['ID']
-  subject: Scalars['String']
-}
-
-export type MutationRevokeAccessToDataproductArgs = {
+export type MutationRevokeAccessToDatasetArgs = {
   id: Scalars['ID']
 }
 
@@ -380,6 +409,11 @@ export type MutationUpdateDataproductArgs = {
   input: UpdateDataproduct
 }
 
+export type MutationUpdateDatasetArgs = {
+  id: Scalars['ID']
+  input: UpdateDataset
+}
+
 export type MutationUpdateStoryMetadataArgs = {
   id: Scalars['ID']
   keywords: Array<Scalars['String']>
@@ -387,10 +421,10 @@ export type MutationUpdateStoryMetadataArgs = {
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
-/** NewAccessRequest contains metadata on a request to access a dataproduct */
+/** NewAccessRequest contains metadata on a request to access a dataset */
 export type NewAccessRequest = {
-  /** id of dataproduct. */
-  dataproductID: Scalars['ID']
+  /** id of dataset. */
+  datasetID: Scalars['ID']
   /** expires is a timestamp for when the access expires. */
   expires?: Maybe<Scalars['Time']>
   /** owner is the owner of the access request */
@@ -415,30 +449,60 @@ export type NewBigQuery = {
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
 export type NewDataproduct = {
-  /** bigquery contains metadata for the bigquery datasource added to the dataproduct. */
-  bigquery: NewBigQuery
+  /** datasets to associate with the dataproduct. */
+  datasets: Array<NewDatasetForNewDataproduct>
   /** description of the dataproduct */
   description?: Maybe<Scalars['String']>
   /** owner group email for the dataproduct. */
   group: Scalars['String']
-  /** keywords for the dataproduct used as tags. */
-  keywords?: Maybe<Array<Scalars['String']>>
   /** name of dataproduct */
   name: Scalars['String']
-  /** pii indicates whether it is personal identifiable information in the dataproduct */
-  pii: Scalars['Boolean']
-  /** repo is the url of the repository containing the code to create the dataproduct */
-  repo?: Maybe<Scalars['String']>
-  /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
-  requesters?: Maybe<Array<Scalars['String']>>
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>
 }
 
-/** NewGrant contains metadata on a request to access a dataproduct */
-export type NewGrant = {
-  /** id of dataproduct. */
+/** NewDataset contains metadata for creating a new dataset */
+export type NewDataset = {
+  /** bigquery contains metadata for the bigquery datasource added to the dataset. */
+  bigquery: NewBigQuery
+  /** dataproductID is the id of the dataproduct containing the dataset */
   dataproductID: Scalars['ID']
+  /** description of the dataset */
+  description?: Maybe<Scalars['String']>
+  /** keywords for the dataset used as tags. */
+  keywords?: Maybe<Array<Scalars['String']>>
+  /** name of dataset */
+  name: Scalars['String']
+  /** pii indicates whether it is personal identifiable information in the dataset */
+  pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataset */
+  repo?: Maybe<Scalars['String']>
+  /** requesters contains list of users, groups and service accounts which can request access to the dataset */
+  requesters?: Maybe<Array<Scalars['String']>>
+}
+
+/** NewDatasetForNewDataproduct contains metadata for creating a new dataset for a new dataproduct */
+export type NewDatasetForNewDataproduct = {
+  /** bigquery contains metadata for the bigquery datasource added to the dataset. */
+  bigquery: NewBigQuery
+  /** description of the dataset */
+  description?: Maybe<Scalars['String']>
+  /** keywords for the dataset used as tags. */
+  keywords?: Maybe<Array<Scalars['String']>>
+  /** name of dataset */
+  name: Scalars['String']
+  /** pii indicates whether it is personal identifiable information in the dataset */
+  pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataset */
+  repo?: Maybe<Scalars['String']>
+  /** requesters contains list of users, groups and service accounts which can request access to the dataset */
+  requesters?: Maybe<Array<Scalars['String']>>
+}
+
+/** NewGrant contains metadata on a request to access a dataset */
+export type NewGrant = {
+  /** id of dataset. */
+  datasetID: Scalars['ID']
   /** expires is a timestamp for when the access expires. */
   expires?: Maybe<Scalars['Time']>
   /** subject to be granted access. */
@@ -496,12 +560,14 @@ export type Query = {
   __typename?: 'Query'
   /** accessRequest returns one specific access request */
   accessRequest: AccessRequest
-  /** accessRequests returns all access requests for a dataproduct */
-  accessRequestsForDataproduct: Array<AccessRequest>
+  /** accessRequests returns all access requests for a dataset */
+  accessRequestsForDataset: Array<AccessRequest>
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
   dataproducts: Array<Dataproduct>
+  /** dataset returns the given dataset. */
+  dataset: Dataset
   /**
    * gcpGetDatasets returns all datasets for a given project.
    *
@@ -546,8 +612,8 @@ export type QueryAccessRequestArgs = {
   id: Scalars['ID']
 }
 
-export type QueryAccessRequestsForDataproductArgs = {
-  dataproductID: Scalars['ID']
+export type QueryAccessRequestsForDatasetArgs = {
+  datasetID: Scalars['ID']
 }
 
 export type QueryDataproductArgs = {
@@ -558,6 +624,10 @@ export type QueryDataproductsArgs = {
   limit?: Maybe<Scalars['Int']>
   offset?: Maybe<Scalars['Int']>
   service?: Maybe<MappingService>
+}
+
+export type QueryDatasetArgs = {
+  id: Scalars['ID']
 }
 
 export type QueryGcpGetDatasetsArgs = {
@@ -675,6 +745,7 @@ export type SearchResultRow = {
 
 export enum SearchType {
   Dataproduct = 'dataproduct',
+  Dataset = 'dataset',
   Story = 'story',
 }
 
@@ -753,7 +824,7 @@ export type StoryViewVega = StoryView & {
   spec: Scalars['Map']
 }
 
-/** SubjectType defines all possible types that can request access to a dataproduct. */
+/** SubjectType defines all possible types that can request access to a dataset. */
 export enum SubjectType {
   Group = 'group',
   ServiceAccount = 'serviceAccount',
@@ -783,7 +854,7 @@ export type TeamkatalogenResult = {
   url: Scalars['String']
 }
 
-/** UpdateAccessRequest contains metadata on a request to access a dataproduct */
+/** UpdateAccessRequest contains metadata on a request to access a dataset */
 export type UpdateAccessRequest = {
   /** expires is a timestamp for when the access expires. */
   expires?: Maybe<Scalars['Time']>
@@ -799,18 +870,24 @@ export type UpdateAccessRequest = {
 export type UpdateDataproduct = {
   /** description of the dataproduct */
   description?: Maybe<Scalars['String']>
-  /** keywords for the dataproduct used as tags. */
-  keywords?: Maybe<Array<Scalars['String']>>
   /** name of dataproduct */
   name: Scalars['String']
-  /** pii indicates whether it is personal identifiable information in the dataproduct */
-  pii: Scalars['Boolean']
-  /** repo is the url of the repository containing the code to create the dataproduct */
-  repo?: Maybe<Scalars['String']>
-  /** requesters contains list of users, groups and service accounts which can request access to the dataproduct */
-  requesters?: Maybe<Array<Scalars['String']>>
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>
+}
+
+/** UpdateDataset contains metadata for updating a dataset */
+export type UpdateDataset = {
+  /** description of the dataset */
+  description?: Maybe<Scalars['String']>
+  /** keywords for the dataset used as tags. */
+  keywords?: Maybe<Array<Scalars['String']>>
+  /** name of dataset */
+  name: Scalars['String']
+  /** pii indicates whether it is personal identifiable information in the dataset */
+  pii: Scalars['Boolean']
+  /** repo is the url of the repository containing the code to create the dataset */
+  repo?: Maybe<Scalars['String']>
 }
 
 /** UserInfo contains metadata on a logged in user */
@@ -836,28 +913,17 @@ export type UserInfo = {
   stories: Array<Story>
 }
 
-export type AddRequesterMutationVariables = Exact<{
-  dataproductID: Scalars['ID']
-  subject: Scalars['String']
-}>
-
-export type AddRequesterMutation = {
-  __typename?: 'Mutation'
-  addRequesterToDataproduct: boolean
-}
-
-export type DataproductAccessQueryVariables = Exact<{
+export type DatasetAccessQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type DataproductAccessQuery = {
+export type DatasetAccessQuery = {
   __typename?: 'Query'
-  dataproduct: {
-    __typename?: 'Dataproduct'
+  dataset: {
+    __typename?: 'Dataset'
     id: string
     name: string
     pii: boolean
-    requesters: Array<string>
     owner: {
       __typename?: 'Owner'
       group: string
@@ -882,17 +948,7 @@ export type GrantAccessMutationVariables = Exact<{
 
 export type GrantAccessMutation = {
   __typename?: 'Mutation'
-  grantAccessToDataproduct: { __typename?: 'Access'; id: string }
-}
-
-export type RemoveRequesterMutationVariables = Exact<{
-  dataproductID: Scalars['ID']
-  subject: Scalars['String']
-}>
-
-export type RemoveRequesterMutation = {
-  __typename?: 'Mutation'
-  removeRequesterFromDataproduct: boolean
+  grantAccessToDataset: { __typename?: 'Access'; id: string }
 }
 
 export type RevokeAccessMutationVariables = Exact<{
@@ -901,7 +957,7 @@ export type RevokeAccessMutationVariables = Exact<{
 
 export type RevokeAccessMutation = {
   __typename?: 'Mutation'
-  revokeAccessToDataproduct: boolean
+  revokeAccessToDataset: boolean
 }
 
 export type AccessRequestQueryVariables = Exact<{
@@ -913,7 +969,7 @@ export type AccessRequestQuery = {
   accessRequest: {
     __typename?: 'AccessRequest'
     id: string
-    dataproductID: string
+    datasetID: string
     subject: string
     subjectType: SubjectType
     granter?: string | null | undefined
@@ -935,13 +991,13 @@ export type AccessRequestQuery = {
   }
 }
 
-export type AccessRequestsForDataproductQueryVariables = Exact<{
-  dataproductID: Scalars['ID']
+export type AccessRequestsForDatasetQueryVariables = Exact<{
+  datasetID: Scalars['ID']
 }>
 
-export type AccessRequestsForDataproductQuery = {
+export type AccessRequestsForDatasetQuery = {
   __typename?: 'Query'
-  accessRequestsForDataproduct: Array<{
+  accessRequestsForDataset: Array<{
     __typename?: 'AccessRequest'
     id: string
     subject: string
@@ -1022,38 +1078,46 @@ export type DataproductQuery = {
     name: string
     description?: string | null | undefined
     created: any
-    repo?: string | null | undefined
     slug: string
-    pii: boolean
-    keywords: Array<string>
-    mappings: Array<MappingService>
-    services: {
-      __typename?: 'DataproductServices'
-      metabase?: string | null | undefined
-    }
+    datasets: Array<{
+      __typename?: 'Dataset'
+      id: string
+      description?: string | null | undefined
+      created: any
+      name: string
+      keywords: Array<string>
+      mappings: Array<MappingService>
+      pii: boolean
+      repo?: string | null | undefined
+      slug: string
+      services: {
+        __typename?: 'DatasetServices'
+        metabase?: string | null | undefined
+      }
+      datasource: {
+        __typename?: 'BigQuery'
+        projectID: string
+        dataset: string
+        table: string
+        lastModified: any
+        created: any
+        expires?: any | null | undefined
+        tableType: BigQueryType
+        description: string
+        type: 'BigQuery'
+        schema: Array<{
+          __typename?: 'TableColumn'
+          name: string
+          description: string
+          mode: string
+          type: string
+        }>
+      }
+    }>
     owner: {
       __typename?: 'Owner'
       group: string
       teamkatalogenURL?: string | null | undefined
-    }
-    datasource: {
-      __typename?: 'BigQuery'
-      projectID: string
-      dataset: string
-      table: string
-      lastModified: any
-      created: any
-      expires?: any | null | undefined
-      tableType: BigQueryType
-      description: string
-      type: 'BigQuery'
-      schema: Array<{
-        __typename?: 'TableColumn'
-        name: string
-        description: string
-        mode: string
-        type: string
-      }>
     }
   }
 }
@@ -1071,10 +1135,12 @@ export type DataproductSummaryQuery = {
     name: string
     description?: string | null | undefined
     created: any
-    pii: boolean
     slug: string
     keywords: Array<string>
-    datasource: { __typename?: 'BigQuery'; type: 'BigQuery' }
+    datasets: Array<{
+      __typename?: 'Dataset'
+      datasource: { __typename?: 'BigQuery'; type: 'BigQuery' }
+    }>
   }
 }
 
@@ -1147,13 +1213,13 @@ export type UpdateDataproductMutation = {
 }
 
 export type UpdateMappingMutationVariables = Exact<{
-  dataproductID: Scalars['ID']
+  datasetID: Scalars['ID']
   services: Array<MappingService> | MappingService
 }>
 
 export type UpdateMappingMutation = {
   __typename?: 'Mutation'
-  mapDataproduct: boolean
+  mapDataset: boolean
 }
 
 export type GroupStatsQueryVariables = Exact<{ [key: string]: never }>
@@ -1427,7 +1493,7 @@ export type UserInfoDetailsQuery = {
     accessRequests: Array<{
       __typename?: 'AccessRequest'
       id: string
-      dataproductID: string
+      datasetID: string
       subject: string
       subjectType: SubjectType
       granter?: string | null | undefined
@@ -1474,58 +1540,9 @@ export type UserInfoAccessableDataproductQuery = {
   }
 }
 
-export const AddRequesterDocument = gql`
-  mutation AddRequester($dataproductID: ID!, $subject: String!) {
-    addRequesterToDataproduct(dataproductID: $dataproductID, subject: $subject)
-  }
-`
-export type AddRequesterMutationFn = Apollo.MutationFunction<
-  AddRequesterMutation,
-  AddRequesterMutationVariables
->
-
-/**
- * __useAddRequesterMutation__
- *
- * To run a mutation, you first call `useAddRequesterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddRequesterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addRequesterMutation, { data, loading, error }] = useAddRequesterMutation({
- *   variables: {
- *      dataproductID: // value for 'dataproductID'
- *      subject: // value for 'subject'
- *   },
- * });
- */
-export function useAddRequesterMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddRequesterMutation,
-    AddRequesterMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    AddRequesterMutation,
-    AddRequesterMutationVariables
-  >(AddRequesterDocument, options)
-}
-export type AddRequesterMutationHookResult = ReturnType<
-  typeof useAddRequesterMutation
->
-export type AddRequesterMutationResult =
-  Apollo.MutationResult<AddRequesterMutation>
-export type AddRequesterMutationOptions = Apollo.BaseMutationOptions<
-  AddRequesterMutation,
-  AddRequesterMutationVariables
->
-export const DataproductAccessDocument = gql`
-  query DataproductAccess($id: ID!) {
-    dataproduct(id: $id) {
+export const DatasetAccessDocument = gql`
+  query DatasetAccess($id: ID!) {
+    dataset(id: $id) {
       id
       name
       pii
@@ -1542,64 +1559,63 @@ export const DataproductAccessDocument = gql`
         revoked
         accessRequestID
       }
-      requesters
     }
   }
 `
 
 /**
- * __useDataproductAccessQuery__
+ * __useDatasetAccessQuery__
  *
- * To run a query within a React component, call `useDataproductAccessQuery` and pass it any options that fit your needs.
- * When your component renders, `useDataproductAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDatasetAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDatasetAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useDataproductAccessQuery({
+ * const { data, loading, error } = useDatasetAccessQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDataproductAccessQuery(
+export function useDatasetAccessQuery(
   baseOptions: Apollo.QueryHookOptions<
-    DataproductAccessQuery,
-    DataproductAccessQueryVariables
+    DatasetAccessQuery,
+    DatasetAccessQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    DataproductAccessQuery,
-    DataproductAccessQueryVariables
-  >(DataproductAccessDocument, options)
+  return Apollo.useQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(
+    DatasetAccessDocument,
+    options
+  )
 }
-export function useDataproductAccessLazyQuery(
+export function useDatasetAccessLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    DataproductAccessQuery,
-    DataproductAccessQueryVariables
+    DatasetAccessQuery,
+    DatasetAccessQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    DataproductAccessQuery,
-    DataproductAccessQueryVariables
-  >(DataproductAccessDocument, options)
+  return Apollo.useLazyQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(
+    DatasetAccessDocument,
+    options
+  )
 }
-export type DataproductAccessQueryHookResult = ReturnType<
-  typeof useDataproductAccessQuery
+export type DatasetAccessQueryHookResult = ReturnType<
+  typeof useDatasetAccessQuery
 >
-export type DataproductAccessLazyQueryHookResult = ReturnType<
-  typeof useDataproductAccessLazyQuery
+export type DatasetAccessLazyQueryHookResult = ReturnType<
+  typeof useDatasetAccessLazyQuery
 >
-export type DataproductAccessQueryResult = Apollo.QueryResult<
-  DataproductAccessQuery,
-  DataproductAccessQueryVariables
+export type DatasetAccessQueryResult = Apollo.QueryResult<
+  DatasetAccessQuery,
+  DatasetAccessQueryVariables
 >
 export const GrantAccessDocument = gql`
   mutation GrantAccess($input: NewGrant!) {
-    grantAccessToDataproduct(input: $input) {
+    grantAccessToDataset(input: $input) {
       id
     }
   }
@@ -1647,61 +1663,9 @@ export type GrantAccessMutationOptions = Apollo.BaseMutationOptions<
   GrantAccessMutation,
   GrantAccessMutationVariables
 >
-export const RemoveRequesterDocument = gql`
-  mutation RemoveRequester($dataproductID: ID!, $subject: String!) {
-    removeRequesterFromDataproduct(
-      dataproductID: $dataproductID
-      subject: $subject
-    )
-  }
-`
-export type RemoveRequesterMutationFn = Apollo.MutationFunction<
-  RemoveRequesterMutation,
-  RemoveRequesterMutationVariables
->
-
-/**
- * __useRemoveRequesterMutation__
- *
- * To run a mutation, you first call `useRemoveRequesterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveRequesterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeRequesterMutation, { data, loading, error }] = useRemoveRequesterMutation({
- *   variables: {
- *      dataproductID: // value for 'dataproductID'
- *      subject: // value for 'subject'
- *   },
- * });
- */
-export function useRemoveRequesterMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveRequesterMutation,
-    RemoveRequesterMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveRequesterMutation,
-    RemoveRequesterMutationVariables
-  >(RemoveRequesterDocument, options)
-}
-export type RemoveRequesterMutationHookResult = ReturnType<
-  typeof useRemoveRequesterMutation
->
-export type RemoveRequesterMutationResult =
-  Apollo.MutationResult<RemoveRequesterMutation>
-export type RemoveRequesterMutationOptions = Apollo.BaseMutationOptions<
-  RemoveRequesterMutation,
-  RemoveRequesterMutationVariables
->
 export const RevokeAccessDocument = gql`
   mutation RevokeAccess($id: ID!) {
-    revokeAccessToDataproduct(id: $id)
+    revokeAccessToDataset(id: $id)
   }
 `
 export type RevokeAccessMutationFn = Apollo.MutationFunction<
@@ -1751,7 +1715,7 @@ export const AccessRequestDocument = gql`
   query accessRequest($id: ID!) {
     accessRequest(id: $id) {
       id
-      dataproductID
+      datasetID
       subject
       subjectType
       granter
@@ -1820,9 +1784,9 @@ export type AccessRequestQueryResult = Apollo.QueryResult<
   AccessRequestQuery,
   AccessRequestQueryVariables
 >
-export const AccessRequestsForDataproductDocument = gql`
-  query accessRequestsForDataproduct($dataproductID: ID!) {
-    accessRequestsForDataproduct(dataproductID: $dataproductID) {
+export const AccessRequestsForDatasetDocument = gql`
+  query accessRequestsForDataset($datasetID: ID!) {
+    accessRequestsForDataset(datasetID: $datasetID) {
       id
       subject
       subjectType
@@ -1837,54 +1801,54 @@ export const AccessRequestsForDataproductDocument = gql`
 `
 
 /**
- * __useAccessRequestsForDataproductQuery__
+ * __useAccessRequestsForDatasetQuery__
  *
- * To run a query within a React component, call `useAccessRequestsForDataproductQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessRequestsForDataproductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccessRequestsForDatasetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessRequestsForDatasetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAccessRequestsForDataproductQuery({
+ * const { data, loading, error } = useAccessRequestsForDatasetQuery({
  *   variables: {
- *      dataproductID: // value for 'dataproductID'
+ *      datasetID: // value for 'datasetID'
  *   },
  * });
  */
-export function useAccessRequestsForDataproductQuery(
+export function useAccessRequestsForDatasetQuery(
   baseOptions: Apollo.QueryHookOptions<
-    AccessRequestsForDataproductQuery,
-    AccessRequestsForDataproductQueryVariables
+    AccessRequestsForDatasetQuery,
+    AccessRequestsForDatasetQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<
-    AccessRequestsForDataproductQuery,
-    AccessRequestsForDataproductQueryVariables
-  >(AccessRequestsForDataproductDocument, options)
+    AccessRequestsForDatasetQuery,
+    AccessRequestsForDatasetQueryVariables
+  >(AccessRequestsForDatasetDocument, options)
 }
-export function useAccessRequestsForDataproductLazyQuery(
+export function useAccessRequestsForDatasetLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    AccessRequestsForDataproductQuery,
-    AccessRequestsForDataproductQueryVariables
+    AccessRequestsForDatasetQuery,
+    AccessRequestsForDatasetQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
-    AccessRequestsForDataproductQuery,
-    AccessRequestsForDataproductQueryVariables
-  >(AccessRequestsForDataproductDocument, options)
+    AccessRequestsForDatasetQuery,
+    AccessRequestsForDatasetQueryVariables
+  >(AccessRequestsForDatasetDocument, options)
 }
-export type AccessRequestsForDataproductQueryHookResult = ReturnType<
-  typeof useAccessRequestsForDataproductQuery
+export type AccessRequestsForDatasetQueryHookResult = ReturnType<
+  typeof useAccessRequestsForDatasetQuery
 >
-export type AccessRequestsForDataproductLazyQueryHookResult = ReturnType<
-  typeof useAccessRequestsForDataproductLazyQuery
+export type AccessRequestsForDatasetLazyQueryHookResult = ReturnType<
+  typeof useAccessRequestsForDatasetLazyQuery
 >
-export type AccessRequestsForDataproductQueryResult = Apollo.QueryResult<
-  AccessRequestsForDataproductQuery,
-  AccessRequestsForDataproductQueryVariables
+export type AccessRequestsForDatasetQueryResult = Apollo.QueryResult<
+  AccessRequestsForDatasetQuery,
+  AccessRequestsForDatasetQueryVariables
 >
 export const ApproveAccessRequestDocument = gql`
   mutation approveAccessRequest($id: ID!) {
@@ -2190,36 +2154,43 @@ export const DataproductDocument = gql`
       name
       description
       created
-      repo
       slug
-      pii
-      keywords
-      mappings
-      services {
-        metabase
+      datasets {
+        id
+        description
+        created
+        name
+        keywords
+        mappings
+        pii
+        repo
+        slug
+        services {
+          metabase
+        }
+        datasource {
+          type: __typename
+          ... on BigQuery {
+            projectID
+            dataset
+            table
+            lastModified
+            created
+            expires
+            tableType
+            description
+            schema {
+              name
+              description
+              mode
+              type
+            }
+          }
+        }
       }
       owner {
         group
         teamkatalogenURL
-      }
-      datasource {
-        type: __typename
-        ... on BigQuery {
-          projectID
-          dataset
-          table
-          lastModified
-          created
-          expires
-          tableType
-          description
-          schema {
-            name
-            description
-            mode
-            type
-          }
-        }
       }
     }
   }
@@ -2281,11 +2252,12 @@ export const DataproductSummaryDocument = gql`
       name
       description
       created
-      pii
       slug
       keywords
-      datasource {
-        type: __typename
+      datasets {
+        datasource {
+          type: __typename
+        }
       }
     }
   }
@@ -2675,8 +2647,8 @@ export type UpdateDataproductMutationOptions = Apollo.BaseMutationOptions<
   UpdateDataproductMutationVariables
 >
 export const UpdateMappingDocument = gql`
-  mutation updateMapping($dataproductID: ID!, $services: [MappingService!]!) {
-    mapDataproduct(dataproductID: $dataproductID, services: $services)
+  mutation updateMapping($datasetID: ID!, $services: [MappingService!]!) {
+    mapDataset(datasetID: $datasetID, services: $services)
   }
 `
 export type UpdateMappingMutationFn = Apollo.MutationFunction<
@@ -2697,7 +2669,7 @@ export type UpdateMappingMutationFn = Apollo.MutationFunction<
  * @example
  * const [updateMappingMutation, { data, loading, error }] = useUpdateMappingMutation({
  *   variables: {
- *      dataproductID: // value for 'dataproductID'
+ *      datasetID: // value for 'datasetID'
  *      services: // value for 'services'
  *   },
  * });
@@ -3549,7 +3521,7 @@ export const UserInfoDetailsDocument = gql`
       }
       accessRequests {
         id
-        dataproductID
+        datasetID
         subject
         subjectType
         granter

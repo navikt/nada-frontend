@@ -8,11 +8,12 @@ export const GET_DATAPRODUCT_SUMMARY = gql`
       name
       description
       created
-      pii
       slug
       keywords
-      datasource {
-        type: __typename
+      datasets {
+        datasource {
+          type: __typename
+        }
       }
     }
   }
