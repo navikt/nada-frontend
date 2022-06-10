@@ -568,6 +568,7 @@ export type Query = {
   dataproducts: Array<Dataproduct>
   /** dataset returns the given dataset. */
   dataset: Dataset
+  datasetsInDataproduct: Array<Dataset>
   /**
    * gcpGetDatasets returns all datasets for a given project.
    *
@@ -628,6 +629,10 @@ export type QueryDataproductsArgs = {
 
 export type QueryDatasetArgs = {
   id: Scalars['ID']
+}
+
+export type QueryDatasetsInDataproductArgs = {
+  dataproductID: Scalars['ID']
 }
 
 export type QueryGcpGetDatasetsArgs = {
@@ -1079,6 +1084,7 @@ export type DataproductQuery = {
     description?: string | null | undefined
     created: any
     slug: string
+    keywords: Array<string>
     datasets: Array<{
       __typename?: 'Dataset'
       id: string
@@ -1230,6 +1236,65 @@ export type UpdateMappingMutationVariables = Exact<{
 export type UpdateMappingMutation = {
   __typename?: 'Mutation'
   mapDataset: boolean
+}
+
+export type DatasetQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DatasetQuery = {
+  __typename?: 'Query'
+  dataset: {
+    __typename?: 'Dataset'
+    id: string
+    lastModified: any
+    name: string
+    description?: string | null | undefined
+    created: any
+    repo?: string | null | undefined
+    slug: string
+    pii: boolean
+    keywords: Array<string>
+    mappings: Array<MappingService>
+    services: {
+      __typename?: 'DatasetServices'
+      metabase?: string | null | undefined
+    }
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
+    access: Array<{
+      __typename?: 'Access'
+      id: string
+      subject: string
+      granter: string
+      expires?: any | null | undefined
+      created: any
+      revoked?: any | null | undefined
+      accessRequestID?: string | null | undefined
+    }>
+    datasource: {
+      __typename?: 'BigQuery'
+      projectID: string
+      dataset: string
+      table: string
+      lastModified: any
+      created: any
+      expires?: any | null | undefined
+      tableType: BigQueryType
+      description: string
+      type: 'BigQuery'
+      schema: Array<{
+        __typename?: 'TableColumn'
+        name: string
+        description: string
+        mode: string
+        type: string
+      }>
+    }
+  }
 }
 
 export type GroupStatsQueryVariables = Exact<{ [key: string]: never }>
@@ -2165,6 +2230,7 @@ export const DataproductDocument = gql`
       description
       created
       slug
+      keywords
       datasets {
         id
         access {
@@ -2713,6 +2779,98 @@ export type UpdateMappingMutationResult =
 export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<
   UpdateMappingMutation,
   UpdateMappingMutationVariables
+>
+export const DatasetDocument = gql`
+  query Dataset($id: ID!) {
+    dataset(id: $id) {
+      id
+      lastModified
+      name
+      description
+      created
+      repo
+      slug
+      pii
+      keywords
+      mappings
+      services {
+        metabase
+      }
+      owner {
+        group
+        teamkatalogenURL
+      }
+      access {
+        id
+        subject
+        granter
+        expires
+        created
+        revoked
+        accessRequestID
+      }
+      datasource {
+        type: __typename
+        ... on BigQuery {
+          projectID
+          dataset
+          table
+          lastModified
+          created
+          expires
+          tableType
+          description
+          schema {
+            name
+            description
+            mode
+            type
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useDatasetQuery__
+ *
+ * To run a query within a React component, call `useDatasetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDatasetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDatasetQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDatasetQuery(
+  baseOptions: Apollo.QueryHookOptions<DatasetQuery, DatasetQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<DatasetQuery, DatasetQueryVariables>(
+    DatasetDocument,
+    options
+  )
+}
+export function useDatasetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<DatasetQuery, DatasetQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<DatasetQuery, DatasetQueryVariables>(
+    DatasetDocument,
+    options
+  )
+}
+export type DatasetQueryHookResult = ReturnType<typeof useDatasetQuery>
+export type DatasetLazyQueryHookResult = ReturnType<typeof useDatasetLazyQuery>
+export type DatasetQueryResult = Apollo.QueryResult<
+  DatasetQuery,
+  DatasetQueryVariables
 >
 export const GroupStatsDocument = gql`
   query groupStats {

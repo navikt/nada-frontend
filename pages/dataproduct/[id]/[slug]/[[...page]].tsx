@@ -5,7 +5,6 @@ import {
     Group,
     useAccessRequestsForDatasetLazyQuery,
     useAccessRequestsForDatasetQuery,
-    useDatasetAccessQuery,
     useDataproductQuery,
     useDeleteDataproductMutation,
     UserInfoDetailsQuery,
@@ -19,7 +18,7 @@ import amplitudeLog from '../../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar, {TopBarActions} from '../../../../components/lib/topBar'
 import {Description} from '../../../../components/lib/detailTypography'
-import {MetadataTable} from '../../../../components/dataproducts/metadataTable'
+import {DataproductSidebar} from '../../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
 import Tabs from '@mui/material/Tabs'
@@ -43,6 +42,8 @@ const Container = styled.div`
   flex-direction: row;
   margin-top: 50px;
   gap: 20px;
+  height: 100%;
+  flex-grow: 1;
 `
 
 const MainPage = styled.div`
@@ -69,8 +70,6 @@ const Dataproduct = (props: DataproductProps) => {
         ssr: true,
     })
 
-    
-    
     const isOwner = userIsOwner(userInfo?.groups, productQuery?.data?.dataproduct?.owner.group)
 
     useEffect(() => {
@@ -111,54 +110,39 @@ const Dataproduct = (props: DataproductProps) => {
             component: (
                 <Description markdown={product.description}/>
             ),
-        },
-        {
-            title: 'Innhold',
-            slug: 'innhold',
-            component: (
-                <Innhold dataproduct={product} userInfo={userInfo} />
-            ),
         }
     ];
+
+    product.datasets.forEach((dataset) => {
+        menuItems.push({
+            title: `${dataset.name} (${dataset.datasource.type})`,
+            slug: dataset.id,
+            component: (
+                <div>{dataset.name}</div>
+            )
+        })
+    });
 
     const currentPage = menuItems
         .map((e) => e.slug)
         .indexOf(router.query.page?.[0] ?? 'info')
-
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        router.push(`/dataproduct/${id}/${product.slug}/${menuItems[newValue].slug}`)
-    }
 
     return (
         <>
             <Head>
                 <title>{product.name}</title>
             </Head>
+            <TopBar name={product.name} type={product.__typename}>
+                {isOwner &&
+                    <TopBarActions>
+                        <Link href={`/dataproduct/${product.id}/${product.slug}/edit`}>Endre dataprodukt</Link>
+                        <a onClick={() => setShowDelete(true)}>Slette dataprodukt</a>
+                    </TopBarActions>
+                }
+            </TopBar>
             <Container>
+                <DataproductSidebar product={product} isOwner={isOwner} menuItems={menuItems} currentPage={currentPage}/>
                 <MainPage>
-                    <TopBar name={product.name} type={product.__typename}>
-                        {isOwner &&
-                            <TopBarActions>
-                                <Link href={`/dataproduct/${product.id}/${product.slug}/edit`}><a>Endre</a></Link>
-                                <a onClick={() => setShowDelete(true)} style={{color: navRod}}>Slett</a>
-                            </TopBarActions>
-                        }
-                    </TopBar>
-                    <Tabs
-                        variant='standard'
-                        value={currentPage}
-                        onChange={handleChange}
-                        aria-label='dataprodukt-tabs'
-                        style={{marginLeft: '20px'}}
-                    >
-                        {menuItems.map((i, idx) => (
-                            <Tab
-                                style={{padding: 0, margin: 0}}
-                                key={idx}
-                                label={i.title}
-                            />
-                        ))}
-                    </Tabs>
                     {menuItems.map((i, idx) => (
                         <TabPanel
                             key={idx}
@@ -177,8 +161,6 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                     />
                 </MainPage>
-                {// fixme: <MetadataTable product={product} accessType={isOwner}/>
-                }
             </Container>
         </>
     )

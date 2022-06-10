@@ -9,6 +9,7 @@ export const GET_DATAPRODUCT = gql`
       description
       created
       slug
+      keywords
       datasets {
         id
         access {

@@ -5,6 +5,7 @@ import IconBox from "./icons/iconBox";
 import BigQueryLogo from "./icons/bigQueryLogo";
 import * as React from "react";
 import StoryLogo from "./icons/storyLogo";
+import { Heading } from '@navikt/ds-react';
 
 interface TopBarStyleProps {
     type?: ColorSchemeTypes
@@ -14,8 +15,9 @@ const TopBarStyle = styled.div<TopBarStyleProps>`
   color: #222;
   display: flex;
   padding: 1em;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  place-items: start;
+  border-bottom: 1px solid #e5e5e5;
 `
 
 const LogoBox = styled.span`
@@ -24,23 +26,13 @@ const LogoBox = styled.span`
   align-items: center;
 `
 
-export const Name = styled.h1`
-  margin: 0;
-  font-weight: 300;
-`
-
 
 export const TopBarActions = styled.div`
-    flex-shrink: 0;
+    margin-left: 62px;
+    display: flex;
+    gap: 2rem;
     a {
-        border-left: 1px solid #aaa;
-        padding-left: 10px;
-        margin-left: 10px;
-        cursor: pointer;
-        
-        &:first-child {
-            border-left: none;
-        }
+        cursor: pointer;    
     }   
 `
 
@@ -58,7 +50,7 @@ const TopBar = ({name, type, children}: TopBarProps) => {
                 {type === 'Dataproduct' && <BigQueryLogo/>}
                 {type === 'AccessRequest' && <FileContent />}
             </IconBox>
-            <Name>{name}</Name>
+            <Heading size="xlarge">{name}</Heading>
         </LogoBox>
         {children}
     </TopBarStyle>
