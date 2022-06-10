@@ -6,7 +6,7 @@ import ExploreLink, {ItemType} from "./exploreLink";
 import styled from "styled-components";
 import {useState} from "react";
 import ErrorMessage from "../lib/error";
-import { DatasetQuery } from "./innhold/datasettEntry";
+import { DatasetQuery } from "./dataset/dataset";
 
 const ExploreLinks = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
 import {
   NewAccessRequest,
-  useCreateAccessRequestMutation, useDataproductQuery
+  useCreateAccessRequestMutation, useDatasetQuery
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import AccessRequestForm, {AccessRequestFormInput} from "./accessRequestForm";
@@ -20,8 +20,8 @@ const NewAccessRequestForm = ({newAccessRequest}: NewAccessRequestFormProps) => 
     ...newAccessRequest
   }
 
-  const { data, error, loading } = useDataproductQuery({
-    variables: { id: accessRequest.dataproductID },
+  const { data, error, loading } = useDatasetQuery({
+    variables: { id: accessRequest.datasetID },
   })
 
   if (error) return <ErrorMessage error={error} />
@@ -37,12 +37,12 @@ const NewAccessRequestForm = ({newAccessRequest}: NewAccessRequestFormProps) => 
         },
         refetchQueries: ['userInfoDetails'],
       }).then(() => {
-          router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}`)
+          router.push(`/dataproduct/${data.dataset.dataproductID}/${data.dataset.id}`)
         })
   }
 
   return (
-      <AccessRequestForm accessRequest={accessRequest} isEdit={false} isView={false} onSubmit={onSubmit}/>
+      <AccessRequestForm accessRequest={accessRequest} isEdit={false} isView={false} onSubmit={onSubmit} dataset={data.dataset}/>
   )
 }
 

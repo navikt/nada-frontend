@@ -5,10 +5,11 @@ export interface IconBoxProps {
   height?: number
   children?: React.ReactNode
   justifyRight?: boolean
+  inline?: boolean
 }
 
 export const StyledIconBox = styled.div`
-  display: flex;
+  display: ${(p: IconBoxProps) => (p.inline ? 'inline-flex' : 'flex')};
   align-items: center;
   justify-content: center;
   margin-left: ${(p: IconBoxProps) => (p.justifyRight ? 'auto' : 'default')};
@@ -18,8 +19,8 @@ export const StyledIconBox = styled.div`
   width: ${(p: IconBoxProps) => p.size}px;
 `
 
-export const IconBox = ({ size, height, children, justifyRight }: IconBoxProps) => (
-  <StyledIconBox size={size} height={height} justifyRight={justifyRight}>
+export const IconBox = ({ size, height, children, justifyRight, inline }: IconBoxProps) => (
+  <StyledIconBox size={size} height={height} justifyRight={justifyRight} inline={inline}>
     {children}
   </StyledIconBox>
 )

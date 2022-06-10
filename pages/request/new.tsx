@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 
 const AccessRequestNew = () => {
     const { query } = useRouter()
-    const dataproductID = query.dataproductID as string
+    const datasetID = query.datasetID as string
     const userInfo = useUserInfoDetailsQuery()
 
     if (!userInfo.data?.userInfo)
@@ -19,7 +19,7 @@ const AccessRequestNew = () => {
 
     const defaultValues: NewAccessRequest = {
         owner: userInfo.data.userInfo.email,
-        dataproductID: dataproductID,
+        datasetID: datasetID,
         expires: "",
         polly: null,
         subject: userInfo.data.userInfo.email,

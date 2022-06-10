@@ -4,6 +4,7 @@ export const GET_DATASET = gql`
   query Dataset($id: ID!) {
     dataset(id: $id) {
       id
+      dataproductID
       lastModified
       name
       description

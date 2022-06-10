@@ -1,10 +1,7 @@
 import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
 import {
-    DatasetAccessQuery,
     Group,
-    useAccessRequestsForDatasetLazyQuery,
-    useAccessRequestsForDatasetQuery,
     useDataproductQuery,
     useDeleteDataproductMutation,
     UserInfoDetailsQuery,
@@ -21,26 +18,17 @@ import {Description} from '../../../../components/lib/detailTypography'
 import {DataproductSidebar} from '../../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
 import TabPanel, {TabPanelType} from '../../../../components/lib/tabPanel'
-import DataproductTableSchema from '../../../../components/dataproducts/dataproductTableSchema'
-import Owner from '../../../../components/dataproducts/access/owner'
 import {GET_DATASET_ACCESS} from '../../../../lib/queries/access/datasetAccess'
-import User from '../../../../components/dataproducts/access/user'
 import {UserState} from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
-import Explore from "../../../../components/dataproducts/explore";
-import {isAfter, parseISO} from "date-fns";
 import Link from "next/link";
-import {navRod} from "../../../../styles/constants";
 import {GET_ACCESS_REQUESTS_FOR_DATASET} from "../../../../lib/queries/accessRequest/accessRequestsForDataset";
-import Innhold from '../../../../components/dataproducts/innhold/innhold'
+import Dataset from '../../../../components/dataproducts/dataset/dataset'
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 50px;
   gap: 20px;
   height: 100%;
   flex-grow: 1;
@@ -48,6 +36,7 @@ const Container = styled.div`
 
 const MainPage = styled.div`
   flex-grow: 1;
+  padding-top: 2rem;
 `
 const userIsOwner = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataproductOwnerGroup: string | undefined) => groups === undefined ? false : groups.some((g: Group) => g.email === dataproductOwnerGroup)
 
@@ -118,7 +107,7 @@ const Dataproduct = (props: DataproductProps) => {
             title: `${dataset.name} (${dataset.datasource.type})`,
             slug: dataset.id,
             component: (
-                <div>{dataset.name}</div>
+                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner}/>
             )
         })
     });

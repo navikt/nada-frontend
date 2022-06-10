@@ -18,7 +18,7 @@ const KeywordPillStyle = styled.span<KeywordSpanProps>`
   background-color: ${(props) => props.color};
   color: ${(props) => props.textColor};
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 1rem;
   padding: 3px 5px 3px 5px;
   border: 0.5px solid transparent;
   :hover {

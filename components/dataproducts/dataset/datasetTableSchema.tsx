@@ -1,22 +1,15 @@
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
-import {DataproductQuery} from '../../lib/schema/graphql'
-import StyledTable from '../lib/styledTable'
+import {DatasetQuery} from '../../../lib/schema/graphql'
 import * as React from 'react'
-import humanizeDate from '../../lib/humanizeDate'
-import SubHeader from '../lib/subHeader'
-import Copy from "../lib/copy";
 import styled from 'styled-components'
 import { Heading } from '@navikt/ds-react'
+import SpacedDiv from "../../lib/spacedDiv";
 
 interface DataproductTableSchemaProps {
-  datasource: DataproductQuery['dataproduct']['datasource']
+  datasource: DatasetQuery['dataset']['datasource']
 }
 
-const SpacedDiv = styled.div`
-margin-bottom: 0.75rem;
-`
-
-const DataproductTableSchema = ({
+const DatasetTableSchema = ({
                                   datasource,
                                 }: DataproductTableSchemaProps) => {
   const schema = datasource.schema
@@ -24,48 +17,6 @@ const DataproductTableSchema = ({
 
   return (
     <SpacedDiv>
-      <StyledTable>
-        <tbody>
-        <tr>
-          <th>Prosjekt:</th>
-          <td>
-            {datasource.projectID} <Copy text={datasource.projectID}/>
-          </td>
-        </tr>
-        <tr>
-          <th>Dataset:</th>
-          <td>
-            {datasource.dataset}<Copy text={datasource.dataset}/>
-          </td>
-        </tr>
-        <tr>
-          <th>Tabell:</th>
-          <td>
-            {datasource.table}<Copy text={datasource.table}/>
-          </td>
-        </tr>
-        <tr>
-          <th>Tabelltype:</th>
-          <td>{datasource.tableType.toUpperCase()}</td>
-        </tr>
-        <tr>
-          <th>Opprettet:</th>
-          <td>{humanizeDate(datasource.created)}</td>
-        </tr>
-        {datasource.expires && (
-          <tr>
-            <th>Utgår:</th>
-            <td>{humanizeDate(datasource.expires)}</td>
-          </tr>
-        )}
-        {datasource.description && (
-            <tr>
-              <th>Beskrivelse:</th>
-              <td>{datasource.description}</td>
-            </tr>
-        )}
-        </tbody>
-      </StyledTable>
       <Heading spacing level="3" size="small">Skjema</Heading>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
@@ -97,4 +48,4 @@ const DataproductTableSchema = ({
     </SpacedDiv>
   )
 }
-export default DataproductTableSchema
+export default DatasetTableSchema

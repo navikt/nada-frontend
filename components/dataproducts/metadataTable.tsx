@@ -79,6 +79,7 @@ const SidebarContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     border-right: 1px #E5E5E5 solid;
+    padding-top: 2rem;
 `
 const NavLinks = styled.div`
     display: flex;

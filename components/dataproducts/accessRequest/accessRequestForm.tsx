@@ -1,9 +1,15 @@
 import {
   QueryPolly,
+  DatasetQuery,
   SubjectType,
-  useDataproductQuery,
   usePollyQuery,
-  PollyInput, Maybe, Scalars, useUserInfoDetailsQuery, useApproveAccessRequestMutation, useDenyAccessRequestMutation
+  PollyInput,
+  Maybe,
+  Scalars,
+  useUserInfoDetailsQuery,
+  useApproveAccessRequestMutation,
+  useDenyAccessRequestMutation,
+  useDataproductQuery, useDatasetQuery
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
@@ -114,7 +120,7 @@ interface AccessRequestFormProps {
 
 export type AccessRequestFormInput = {
   id?: Maybe<Scalars['ID']>
-  dataproductID: Scalars['ID']
+  datasetID: Scalars['ID']
   expires?: Maybe<Scalars['Time']>
   polly?: Maybe<PollyInput>
   subject?: Maybe<Scalars['String']>
@@ -138,8 +144,13 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
   const [denyAccessRequest] = useDenyAccessRequestMutation()
   const router = useRouter()
 
-  const { data, error, loading } = useDataproductQuery({
-    variables: { id: accessRequest.dataproductID },
+  const data = useDatasetQuery({
+    variables: {id: accessRequest.datasetID},
+    ssr: true,
+  })
+
+  const {data: dataproduct, error: dataproductError, loading: dataproductLoading} = useDataproductQuery({
+    variables: { id: data.data?.dataset?.dataproductID}
   })
 
   const { data: userInfo, error: userError, loading: userLoading } = useUserInfoDetailsQuery()
@@ -154,15 +165,15 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     defaultValues: {
       subjectType: accessRequest.subjectType,
       subject: accessRequest.subject,
-      dataproductID: accessRequest.dataproductID,
+      datasetID: accessRequest.datasetID,
       expires: accessRequest.expires,
       polly: accessRequest.polly,
     }
   })
 
-  if (error) return <ErrorMessage error={error} />
   if (userError) return <ErrorMessage error={userError} />
-  if (loading || userLoading || !data || !userInfo) return <LoaderSpinner />
+  if (dataproductError) return <ErrorMessage error={dataproductError} />
+  if (userLoading || !userInfo || dataproductLoading || !dataproduct) return <LoaderSpinner />
 
   const toSubjectType = (s: string): SubjectType => {
     switch (s) {
@@ -214,7 +225,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
 
   const isOwner = () => {
     const emails = userInfo.userInfo.groups.map(g => g.email).concat([userInfo.userInfo.email])
-    return emails.includes(data.dataproduct.owner.group)
+    return emails.includes(data.dataset.owner.group)
   }
 
   const onApprove = async () => {
@@ -228,7 +239,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     } catch (e: any) {
       setFormError(e.message)
     }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
+    await router.push(`/dataproduct/${dataset.dataproductID}/${productQuery.data?.dataproduct.slug}/${dataset.id}/access`)
   }
 
   const onDeny = async () => {
@@ -242,7 +253,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
     } catch (e: any) {
       setFormError(e.message)
     }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
+    await router.push(`/dataproduct/${dataset.dataproductID}/${productQuery.data?.dataproduct.slug}/${dataset.id}/access`)
   }
 
   return (
@@ -252,8 +263,8 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRe
         <AccessRequestBody>
           <form onSubmit={handleSubmit(onSubmitForm)}>
             <SpacedTextField
-              label="Dataprodukt"
-              defaultValue={data.dataproduct.name}
+              label="Datasett"
+              defaultValue={dataset.name}
               disabled={true}
             />
             <TextField onChange={setSubject}

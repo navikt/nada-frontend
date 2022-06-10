@@ -1247,6 +1247,7 @@ export type DatasetQuery = {
   dataset: {
     __typename?: 'Dataset'
     id: string
+    dataproductID: string
     lastModified: any
     name: string
     description?: string | null | undefined
@@ -2784,6 +2785,7 @@ export const DatasetDocument = gql`
   query Dataset($id: ID!) {
     dataset(id: $id) {
       id
+      dataproductID
       lastModified
       name
       description
