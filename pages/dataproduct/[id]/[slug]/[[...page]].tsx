@@ -29,7 +29,6 @@ import Dataset from '../../../../components/dataproducts/dataset/dataset'
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
   height: 100%;
   flex-grow: 1;
 `
@@ -37,9 +36,9 @@ const Container = styled.div`
 const MainPage = styled.div`
   flex-grow: 1;
   padding-top: 2rem;
+  border-left: 1px #E5E5E5 solid;
+  padding-left: 2rem;
 `
-const userIsOwner = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataproductOwnerGroup: string | undefined) => groups === undefined ? false : groups.some((g: Group) => g.email === dataproductOwnerGroup)
-
 
 interface DataproductProps {
     id: string
@@ -59,7 +58,9 @@ const Dataproduct = (props: DataproductProps) => {
         ssr: true,
     })
 
-    const isOwner = userIsOwner(userInfo?.groups, productQuery?.data?.dataproduct?.owner.group)
+    const isOwner = userInfo?.groups === undefined 
+        ? false 
+        : userInfo.groups.some((g: Group) => g.email === productQuery?.data?.dataproduct?.owner.group)
 
     useEffect(() => {
         const eventProperties = {
@@ -173,34 +174,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         })
     } catch (e) {
         console.log(e)
-    }
-
-    try {
-        await apolloClient.query({
-            query: GET_DATASET_ACCESS,
-            variables: {id},
-            context: {
-                headers: {
-                    cookie,
-                },
-            },
-        })
-    } catch (e) {
-        // ignore access denied if not logged in
-    }
-
-    try {
-        await apolloClient.query({
-            query: GET_ACCESS_REQUESTS_FOR_DATASET,
-            variables: {datasetId: id},
-            context: {
-                headers: {
-                    cookie,
-                },
-            },
-        })
-    } catch (e) {
-        // ignore access denied if not logged in
     }
 
     return addApolloState(apolloClient, {

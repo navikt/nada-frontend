@@ -1,18 +1,14 @@
-import { Panel, Heading, Link, BodyShort, Tag, Alert } from "@navikt/ds-react";
-import {Error, FileContent, Success} from "@navikt/ds-icons";
+import { Heading, Link, Tag, Alert } from "@navikt/ds-react";
 import { isAfter, parseISO } from "date-fns";
 import humanizeDate from "../../../lib/humanizeDate";
-import { Group, UserInfoDetailsQuery, DataproductQuery, MappingService, BigQueryType } from "../../../lib/schema/graphql";
+import { UserInfoDetailsQuery, MappingService, BigQueryType } from "../../../lib/schema/graphql";
 import DatasetTableSchema from "./datasetTableSchema";
-import { navGronn, navRod } from "../../../styles/constants";
 import styled from "styled-components";
 import Explore from "../../../components/dataproducts/explore";
-import StoryLogo from "../../lib/icons/storyLogo";
 import BigQueryLogo from "../../lib/icons/bigQueryLogo";
 import IconBox from "../../lib/icons/iconBox";
 import * as React from "react";
 import DatasetMetadata from "./datasetMetadata";
-import KeywordList, {KeywordPill} from "../../lib/keywordList";
 import StringToColor from "../../../lib/stringToColor";
 import SpacedDiv from "../../lib/spacedDiv";
 
@@ -78,18 +74,21 @@ const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | und
     return {type: "none"}
 }
 
-const AccessBlock = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 0.75rem;
-`
-
 const Section = styled.section`
     margin-bottom: 0.75rem;
     display: flex;
     flex-direction: column;
-    flex-shrink: 1;
+`
+
+const NarrowAlert = styled(Alert)`
+    width: fit-content;
+    margin-bottom: 0.75rem;
+`
+
+const RowSection = styled.section`
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.75rem;
 `
 
 const Article = styled.article`
@@ -121,11 +120,11 @@ const DatasetTag = styled(Tag)<DatasetTagProps>`
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
     return <>
-        <Section>
-            {accessType.type === 'utlogget' && <Alert size="small" variant="info">Du er ikke innlogget</Alert>}
-            {accessType.type === 'user' && <Alert size="small" variant="success">Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link></Alert>}
-            {accessType.type === 'none' && <Alert size="small" variant="info">Du har ikke tilgang til datasettet. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link></Alert>}
-        </Section>
+        <RowSection>
+            {accessType.type === 'utlogget' && <NarrowAlert size="small" variant="info">Du er ikke innlogget</NarrowAlert>}
+            {accessType.type === 'user' && <NarrowAlert size="small" variant="success">Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link></NarrowAlert>}
+            {accessType.type === 'none' && <NarrowAlert size="small" variant="info">Du har ikke tilgang til datasettet. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link></NarrowAlert>}
+        </RowSection>
         <DatasetHeading spacing level="2" size="large">
             <IconBox size={42} inline={true}>
                 <BigQueryLogo/>
@@ -133,6 +132,10 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
             {dataset.name}
         </DatasetHeading>
         <Section>
+                {dataset.pii 
+                    ? <NarrowAlert size="small" variant="warning">Inneholder persondata</NarrowAlert>    
+                    : <NarrowAlert size="small" variant="success" >Inneholder <b>ikke</b> persondata</NarrowAlert>
+                }
             <Article>
                 <DatasetMetadata datasource={dataset.datasource}/>
                 <SpacedDiv>
