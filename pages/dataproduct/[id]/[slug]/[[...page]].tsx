@@ -125,7 +125,7 @@ const Dataproduct = (props: DataproductProps) => {
                 {isOwner &&
                     <TopBarActions>
                         <Link href={`/dataproduct/${product.id}/${product.slug}/edit`}>Endre dataprodukt</Link>
-                        <a onClick={() => setShowDelete(true)}>Slette dataprodukt</a>
+                        <a href="#" onClick={() => setShowDelete(true)}>Slette dataprodukt</a>
                     </TopBarActions>
                 }
             </TopBar>

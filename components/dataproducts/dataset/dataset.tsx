@@ -87,6 +87,9 @@ const AccessBlock = styled.div`
 
 const Section = styled.section`
     margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
 `
 
 const Article = styled.article`
@@ -118,11 +121,11 @@ const DatasetTag = styled(Tag)<DatasetTagProps>`
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
     return <>
-        <Article>
+        <Section>
             {accessType.type === 'utlogget' && <Alert size="small" variant="info">Du er ikke innlogget</Alert>}
             {accessType.type === 'user' && <Alert size="small" variant="success">Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link></Alert>}
             {accessType.type === 'none' && <Alert size="small" variant="info">Du har ikke tilgang til datasettet. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link></Alert>}
-        </Article>
+        </Section>
         <DatasetHeading spacing level="2" size="large">
             <IconBox size={42} inline={true}>
                 <BigQueryLogo/>

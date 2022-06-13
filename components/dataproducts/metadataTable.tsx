@@ -95,6 +95,7 @@ const NavLink = styled.a`
 
     :hover {
         text-decoration: underline;
+        cursor: pointer;
     }
 `
 
@@ -125,7 +126,7 @@ export const DataproductSidebar = ({product, isOwner, menuItems, currentPage}: D
         <NavLinks>
                 {menuItems.map(({title, slug}, idx) => currentPage == idx
                     ? <NavText key={idx}>{title}</NavText>
-                    : <NavLink key={idx} onClick={e => handleChange(e, slug)}>{title}</NavLink>
+                    : <NavLink href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</NavLink>
                 )}
         </NavLinks>
     <StyledMetadataTable>

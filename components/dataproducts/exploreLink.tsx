@@ -8,7 +8,7 @@ import {MappingService} from "../../lib/schema/graphql";
 import {Delete, Add} from "@navikt/ds-icons";
 import {navRod} from "../../styles/constants";
 
-const ExploreItem = styled.div<{ loading?: boolean }>`
+const ExploreItem = styled.a<{ loading?: boolean }>`
   cursor: ${(props) => props.loading ? 'default' : 'pointer'};
   width: 250px;
   padding: 10px;
@@ -22,12 +22,14 @@ const ExploreItem = styled.div<{ loading?: boolean }>`
         h1 {
             text-decoration: underline;
         }
+        border-color: #0056B4;
     }
     :selected {
         color: #005B82;
         h1 {
             text-decoration: underline;
         }
+        border-color: #005B82;
     }
   }
 `
@@ -97,8 +99,7 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
 
     if (url) {
         return (
-            <a href={url} target="_blank" rel="noreferrer">
-                <ExploreItem>
+                <ExploreItem href={url} target="_blank" rel="noreferrer">
                     <ExploreItemHeader>
                         <IconBox size={30}>
                             {type === ItemType.bigQuery && <BigQueryLogo/>}
@@ -121,14 +122,13 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                         }
                     </ExploreItemHeader>
                 </ExploreItem>
-            </a>
         )
     }
 
     if (isOwner) {
         if (loading) {
             return (
-                <ExploreItem onClick={add} loading={true}>
+                <ExploreItem href="#" onClick={add} loading={true}>
                     <ExploreItemHeader>
                         <IconBox size={30}>
                             <MetabaseLogo/>
@@ -144,7 +144,7 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
         }
         if (addToMetabase) {
             return (
-                <ExploreItem onClick={add}>
+                <ExploreItem href="#" onClick={add}>
                     <ExploreItemHeader>
                         <IconBox size={30}>
                             <MetabaseLogo/>
