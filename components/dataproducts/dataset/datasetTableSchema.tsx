@@ -1,7 +1,6 @@
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
-import {DatasetQuery} from '../../../lib/schema/graphql'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import styled from 'styled-components'
 import { Heading } from '@navikt/ds-react'
 import SpacedDiv from "../../lib/spacedDiv";
 
@@ -10,8 +9,8 @@ interface DataproductTableSchemaProps {
 }
 
 const DatasetTableSchema = ({
-                                  datasource,
-                                }: DataproductTableSchemaProps) => {
+  datasource
+}: DataproductTableSchemaProps) => {
   const schema = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 

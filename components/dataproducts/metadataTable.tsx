@@ -45,13 +45,6 @@ const StyledMetadataTable = styled.div`
     padding-bottom: 0px;
 `
 
-const SmallAlert = styled(Alert)`
-    padding: 0.125rem 0.5rem;
-    .navds-body-long {
-        font-size: 1rem;
-    }
-`
-
 const SidebarContainer = styled.div`
     display: flex;
     flex: 0 1 auto;
@@ -110,7 +103,7 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
         </NavLinks>
         <StyledMetadataTable>
             <SubjectContent>
-                {isOwner && <SmallAlert variant='success'>Du eier dette produktet</SmallAlert>}
+                {isOwner && <Alert variant='success' size="small">Du eier dette produktet</Alert>}
             </SubjectContent>
             <SubjectHeader>Eier</SubjectHeader>
             <SubjectContent>

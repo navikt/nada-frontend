@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const SpacedDiv = styled.div`
-margin-bottom: 0.75rem;
+interface SpacedDivProps {
+    spacing?: string
+}
+
+const SpacedDiv = styled.div<SpacedDivProps>`
+margin-bottom: ${(props) => props.spacing ? props.spacing : "0.75rem"};
 `
 export default SpacedDiv

@@ -11,6 +11,7 @@ export const Name = styled.h1`
 export const StyledDescription = styled.div`
   border-radius: 10px;
   text-align: justify;
+  margin-top: 2rem;
 `
 
 export const Description = ({ markdown }: { markdown?: string | null }) => (

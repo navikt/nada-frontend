@@ -1,72 +1,61 @@
-import {DatasetQuery} from '../../../lib/schema/graphql'
-import StyledTable from '../../lib/styledTable'
+import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import humanizeDate from '../../../lib/humanizeDate'
 import Copy from "../../lib/copy";
 import styled from 'styled-components'
-import { Heading } from '@navikt/ds-react'
+import { BodyShort, Heading } from '@navikt/ds-react'
+import SpacedDiv from '../../lib/spacedDiv';
 
 interface DataproductTableSchemaProps {
     datasource: DatasetQuery['dataset']['datasource']
 }
 
-const SpacedDiv = styled.div`
-margin-bottom: 0.75rem;
+
+const MetadataEntry = styled.div`
+    padding-bottom: 0.25rem;
+    align-items: center;
+    display: flex;
+    gap: 0.25rem;
 `
 
+const Label = styled.span`
+    font-weight: bold;
+    font-size: 16px;
+`
+
+
 const DatasetMetadata = ({
-                                datasource,
-                            }: DataproductTableSchemaProps) => {
+    datasource,
+}: DataproductTableSchemaProps) => {
     const schema = datasource.schema
     if (!schema) return <div>Ingen skjemainformasjon</div>
+
+    const entries: Array<{
+        k: string,
+        v: string | JSX.Element,
+        copy?: boolean | undefined
+    }> = [
+        {k: "Prosjekt", v: datasource.projectID},
+        {k: "Dataset", v: datasource.dataset},
+        {k: "Tabell", v: datasource.table},
+        {k: "Tabelltype", v: datasource.tableType.toUpperCase()},
+        {k: "Opprettet", v: humanizeDate(datasource.created)},
+    ];
+
+    datasource.expires && entries.push({k: "Utløper", v: humanizeDate(datasource.expires)})
+    datasource.description && entries.push({k: "Beskrivelse", v: datasource.description})
+    entries.push({k: "URI", v: `${datasource.projectID}.${datasource.dataset}.${datasource.table}`, copy: true})
 
     return (
         <SpacedDiv>
             <Heading spacing level="3" size="small">
                 Metadata
             </Heading>
-            <StyledTable>
-                <tbody>
-                <tr>
-                    <th>Prosjekt:</th>
-                    <td>
-                        {datasource.projectID} <Copy text={datasource.projectID}/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Dataset:</th>
-                    <td>
-                        {datasource.dataset}<Copy text={datasource.dataset}/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Tabell:</th>
-                    <td>
-                        {datasource.table}<Copy text={datasource.table}/>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Tabelltype:</th>
-                    <td>{datasource.tableType.toUpperCase()}</td>
-                </tr>
-                <tr>
-                    <th>Opprettet:</th>
-                    <td>{humanizeDate(datasource.created)}</td>
-                </tr>
-                {datasource.expires && (
-                    <tr>
-                        <th>Utgår:</th>
-                        <td>{humanizeDate(datasource.expires)}</td>
-                    </tr>
-                )}
-                {datasource.description && (
-                    <tr>
-                        <th>Beskrivelse:</th>
-                        <td>{datasource.description}</td>
-                    </tr>
-                )}
-                </tbody>
-            </StyledTable>
+            <>
+                {entries.map(({k, v, copy}, idx) => <MetadataEntry key={idx}>
+                    <Label>{k}:</Label> {v} {copy && <Copy text={v.toString()}/>}
+                </MetadataEntry>)}
+            </>
         </SpacedDiv>
     )
 }

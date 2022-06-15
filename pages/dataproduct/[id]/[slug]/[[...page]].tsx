@@ -35,7 +35,6 @@ const Container = styled.div`
 
 const MainPage = styled.div`
   flex-grow: 1;
-  padding-top: 2rem;
   border-left: 1px #E5E5E5 solid;
   padding-left: 2rem;
 `
