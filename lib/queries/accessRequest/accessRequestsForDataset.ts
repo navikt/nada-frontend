@@ -7,6 +7,9 @@ export const GET_ACCESS_REQUESTS_FOR_DATASET = gql`
       subject
       subjectType
       owner
+      created
+      expires
+      owner
       polly {
         name
         externalID

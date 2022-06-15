@@ -1008,6 +1008,8 @@ export type AccessRequestsForDatasetQuery = {
     subject: string
     subjectType: SubjectType
     owner: string
+    created: any
+    expires?: any | null | undefined
     polly?:
       | { __typename?: 'Polly'; name: string; externalID: string; url: string }
       | null
@@ -1866,6 +1868,9 @@ export const AccessRequestsForDatasetDocument = gql`
       id
       subject
       subjectType
+      owner
+      created
+      expires
       owner
       polly {
         name

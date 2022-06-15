@@ -1,4 +1,4 @@
-import { Heading, Link, Tag, Alert } from "@navikt/ds-react";
+import { Heading, Link, Tag, Alert, Popover, Button } from "@navikt/ds-react";
 import { isAfter, parseISO } from "date-fns";
 import humanizeDate from "../../../lib/humanizeDate";
 import { useAccessRequestsForDatasetQuery, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
@@ -14,9 +14,11 @@ import SpacedDiv from "../../lib/spacedDiv";
 import { motion } from "framer-motion";
 import DatasetAccessForOwner from "./access/datasetAccessForOwner";
 import { DatasetQuery } from "../../../lib/schema/datasetQuery";
-import { Edit } from "@navikt/ds-icons";
+import { Edit, EllipsisCircleH } from "@navikt/ds-icons";
 import DatasetAccessForUser from "./access/datasetAccessForUser";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { ArrowDropDown } from "@mui/icons-material";
+import { Dropdown } from "@navikt/ds-react-internal";
 
 const {contrastColor} = require('contrast-color');
 
@@ -45,13 +47,6 @@ const NarrowAlert = styled(Alert)`
     margin-bottom: 0.75rem;
 `
 
-const RowSection = styled.section`
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 0.75rem;
-    place-content: space-between;
-`
-
 const Article = styled.article`
     border-bottom: 1px solid #ddd;
     margin-bottom: 0.75rem;
@@ -63,7 +58,7 @@ const Article = styled.article`
 const DatasetHeading = styled(Heading)`
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
 `
 
 interface DatasetTagProps {
@@ -84,14 +79,6 @@ const MainView = styled.div`
     padding-right: 2rem;
 `
 
-const AccessView = styled(motion.div)`
-    border-left: 1px #E5E5E5 solid;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding-top: 2rem;
-    padding-left: 2rem;
-`
 
 const DatasetContainer = styled.div`
     display: flex;
@@ -104,15 +91,17 @@ const HeadingContainer = styled.div`
     margin-bottom: 0.5rem;
 `
 
-const EditLink = styled(Link)`
-    font-size: 1.25rem;
+
+const DatasetMenu = styled(Popover)`
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
 `
 
 
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
-
-    const { data: access, loading, error } = useAccessRequestsForDatasetQuery({ variables: { datasetID: dataset.id } })
 
     return <DatasetContainer>
         <MainView>
@@ -126,20 +115,31 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                     </IconBox>
                     {dataset.name}
                 </DatasetHeading>
-                {isOwner && <EditLink href="#fixme"><Edit /></EditLink>}
+                {isOwner && <Dropdown>
+                    <Button as={Dropdown.Toggle}><EllipsisCircleH /></Button>
+                    <Dropdown.Menu>
+                        <Dropdown.Menu.GroupedList>
+                            <Dropdown.Menu.GroupedList.Heading>
+                                <a href="#fixme">Tilganger</a>
+                            </Dropdown.Menu.GroupedList.Heading>
+                        </Dropdown.Menu.GroupedList>                            
+                        <Dropdown.Menu.GroupedList>
+                            <Dropdown.Menu.GroupedList.Heading>
+                                <a href="#fixme">Endre datasett</a>
+                            </Dropdown.Menu.GroupedList.Heading>
+                            <Dropdown.Menu.GroupedList.Heading>
+                                <a href="#fixme">Slett datasett</a>
+                            </Dropdown.Menu.GroupedList.Heading>
+                        </Dropdown.Menu.GroupedList>
+                    </Dropdown.Menu>
+                </Dropdown>
+                }
             </HeadingContainer>
             {dataset.pii 
                 ? <NarrowAlert size="small" variant="warning">Inneholder persondata</NarrowAlert>    
                 : <NarrowAlert size="small" variant="success" >Inneholder <b>ikke</b> persondata</NarrowAlert>
             }
             <Section>
-                <Article>
-                {((access?.accessRequestsForDataset?.length || 0) > 0 || dataset.access.length > 0) && 
-                    (isOwner 
-                        ? <DatasetAccessForOwner dataset={dataset} access={access} error={error} loading={loading} /> 
-                        : <DatasetAccessForUser dataset={dataset} access={access} error={error} loading={loading} />)
-                }
-                </Article>
                 <Article>
                     <DatasetMetadata datasource={dataset.datasource}/>
                     <SpacedDiv>

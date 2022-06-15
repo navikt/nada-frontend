@@ -1,13 +1,11 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Close, Success, Search, ExternalLink } from '@navikt/ds-icons'
-import { navGronn, navRod, navBla } from '../../../styles/constants'
 import {
     AccessRequestsForDatasetQuery,
     useApproveAccessRequestMutation,
     useDenyAccessRequestMutation,
 } from '../../../lib/schema/graphql'
-import { Alert, Button, Link, Table, TextField } from '@navikt/ds-react'
+import { Alert, Button, Table, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
@@ -81,42 +79,31 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
     return (
         <>
             {formError && <Alert variant={'error'}>{formError}</Alert>}
-            <Table size="small">
+            <Table size="small" zebraStripes>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell align='left'>Bruker / gruppe</Table.HeaderCell>
-                        <Table.HeaderCell align='left'>Behandling</Table.HeaderCell>
-                        <Table.HeaderCell align='center'>Se søknad</Table.HeaderCell>
-                        <Table.HeaderCell align='center'>Godta</Table.HeaderCell>
-                        <Table.HeaderCell align='center'>Avslå</Table.HeaderCell>
+                        <Table.HeaderCell align="right">Bruker / gruppe</Table.HeaderCell>
+                        <Table.HeaderCell>Tilgang til</Table.HeaderCell>
+                        <Table.HeaderCell>Behandling</Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {access?.map((a, i) => <>
-                    <Table.Row key={i}>
-                        <Table.DataCell>{a.subject}</Table.DataCell>
-                        <Table.DataCell>{a.polly?.__typename !== undefined
-                            ? <Link key={i} href={a.polly?.url !== undefined ? a.polly?.url : "#"} target="_blank" rel="noreferrer">
-                                {a.polly?.name}<ExternalLink/>
-                        </Link>
-                            : "Ingen registrert behandling"
-                        }
+                    {access?.map((a, i) => <Table.Row key={i}>
+                        <Table.DataCell align="right">
+                            {a.subject}
                         </Table.DataCell>
-                        <Table.DataCell align='center'><Search style={{ cursor: 'pointer', color: navBla }}
-                            onClick={() => onViewRequest(a.id)} /></Table.DataCell>
-                        <Table.DataCell align='center'><Success style={{ cursor: 'pointer', color: navGronn }}
-                            onClick={() => onApproveRequest(a.id)} /></Table.DataCell>
-                        <Table.DataCell align='center'><Close style={{ cursor: 'pointer', color: navRod }}
-                            onClick={() => onDeny(a.id)} /></Table.DataCell>
-                    </Table.Row>
-                    { isDenying.indexOf(a.id) >= 0 && <IndentedRow>
-                            <SpacedTextField
-                                label="Begrunnelse for avslag"
-                                onChange={(e) => setDenyReason(e.target.value)}
-                            />
-                            <Button type={'button'} variant={'danger'} onClick={() => onDenyAccessRequest(a.id)} >Avslå</Button>
-                        </IndentedRow>}
-                    </>)}
+                        <Table.DataCell>
+                            {a.expires }
+                        </Table.DataCell>
+                        <Table.DataCell align="center">
+                            <Button variant="secondary" onClick={() => onApproveRequest(a.id)}>Godkjenn</Button>
+                        </Table.DataCell>
+                        <Table.DataCell align="center">
+                            <Button variant="secondary" onClick={() => onDeny(a.id)} >Avslå</Button>
+                        </Table.DataCell>
+                    </Table.Row>)}
                 </Table.Body>
             </Table>
         </>
