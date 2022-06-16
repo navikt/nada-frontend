@@ -19,6 +19,7 @@ import DatasetAccessForUser from "./access/datasetAccessForUser";
 import { useState, useRef } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
 import {Divider, Dropdown, DropdownContext} from "@navikt/ds-react-internal";
+import {KeywordBox, KeywordPill} from "../../lib/keywordList";
 
 const {contrastColor} = require('contrast-color');
 
@@ -142,10 +143,12 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                 <Article>
                     <DatasetMetadata datasource={dataset.datasource}/>
                     <SpacedDiv>
-                        {dataset.keywords.map((keyword, idx) => {
-                            const color = StringToColor(keyword)
-                            return <DatasetTag key={idx} size="small" variant="info" color={color} textColor={contrastColor({bgColor: color})}>{keyword}</DatasetTag>
-                        })}
+                        <KeywordBox>
+                            {dataset.keywords.map((keyword, idx) => {
+                                const color = StringToColor(keyword)
+                                return <KeywordPill key={idx} keyword={keyword}>{keyword}</KeywordPill>
+                            })}
+                        </KeywordBox>
                     </SpacedDiv>
                     <DatasetTableSchema datasource={dataset.datasource} />
                 </Article>

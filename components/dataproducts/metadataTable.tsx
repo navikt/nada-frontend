@@ -4,17 +4,10 @@ import { ExternalLink } from '@navikt/ds-icons'
 import { DataproductQuery } from "../../lib/schema/graphql";
 import styled from "styled-components";
 import Link from "next/link";
-import { KeywordPill } from "../lib/keywordList";
+import { KeywordPill, KeywordBox } from "../lib/keywordList";
 import { Alert } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 
-const KeywordBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-`
 const SubjectContent = styled.div`
     margin-bottom: 20px;
     margin-left: 1px;
