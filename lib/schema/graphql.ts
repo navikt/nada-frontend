@@ -1090,6 +1090,7 @@ export type DataproductQuery = {
     datasets: Array<{
       __typename?: 'Dataset'
       id: string
+      dataproductID: string
       description?: string | null | undefined
       created: any
       name: string
@@ -2239,6 +2240,7 @@ export const DataproductDocument = gql`
       keywords
       datasets {
         id
+        dataproductID
         access {
           id
           subject

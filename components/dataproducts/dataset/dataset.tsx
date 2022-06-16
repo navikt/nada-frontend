@@ -18,7 +18,7 @@ import { Edit, EllipsisCircleH } from "@navikt/ds-icons";
 import DatasetAccessForUser from "./access/datasetAccessForUser";
 import { useState, useRef } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
-import { Dropdown } from "@navikt/ds-react-internal";
+import {Divider, Dropdown, DropdownContext} from "@navikt/ds-react-internal";
 
 const {contrastColor} = require('contrast-color');
 
@@ -91,17 +91,21 @@ const HeadingContainer = styled.div`
     margin-bottom: 0.5rem;
 `
 
-
-const DatasetMenu = styled(Popover)`
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.5rem;
+const MenuButton = styled(Button)`
+    min-width: unset;
+    padding: 0;
+    border-radius: 50%;
 `
-
 
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
+    const [isOpen, setIsOpen] = useState(false)
+    const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+
+    const handleMenuButtonClick = (e: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(e.currentTarget)
+        setIsOpen(!isOpen)
+    }
 
     return <DatasetContainer>
         <MainView>
@@ -115,24 +119,19 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                     </IconBox>
                     {dataset.name}
                 </DatasetHeading>
-                {isOwner && <Dropdown>
-                    <Button as={Dropdown.Toggle}><EllipsisCircleH /></Button>
+                {isOwner && <DropdownContext.Provider value={{isOpen, setIsOpen, anchorEl, setAnchorEl}}>
+                    <MenuButton variant='tertiary' onClick={handleMenuButtonClick}><EllipsisCircleH /></MenuButton>
                     <Dropdown.Menu>
                         <Dropdown.Menu.GroupedList>
-                            <Dropdown.Menu.GroupedList.Heading>
-                                <a href="#fixme">Tilganger</a>
-                            </Dropdown.Menu.GroupedList.Heading>
-                        </Dropdown.Menu.GroupedList>                            
+                            <Dropdown.Menu.GroupedList.Item>Tilganger</Dropdown.Menu.GroupedList.Item>
+                        </Dropdown.Menu.GroupedList>
+                        <Divider/>
                         <Dropdown.Menu.GroupedList>
-                            <Dropdown.Menu.GroupedList.Heading>
-                                <a href="#fixme">Endre datasett</a>
-                            </Dropdown.Menu.GroupedList.Heading>
-                            <Dropdown.Menu.GroupedList.Heading>
-                                <a href="#fixme">Slett datasett</a>
-                            </Dropdown.Menu.GroupedList.Heading>
+                            <Dropdown.Menu.GroupedList.Item>Endre datasett</Dropdown.Menu.GroupedList.Item>
+                            <Dropdown.Menu.GroupedList.Item>Slett datasett</Dropdown.Menu.GroupedList.Item>
                         </Dropdown.Menu.GroupedList>
                     </Dropdown.Menu>
-                </Dropdown>
+                </DropdownContext.Provider>
                 }
             </HeadingContainer>
             {dataset.pii 

@@ -12,6 +12,7 @@ export const GET_DATAPRODUCT = gql`
       keywords
       datasets {
         id
+        dataproductID
         access {
           id
           subject

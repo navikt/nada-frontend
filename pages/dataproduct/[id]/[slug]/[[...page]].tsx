@@ -3,8 +3,7 @@ import ErrorMessage from '../../../../components/lib/error'
 import {
     Group,
     useDataproductQuery,
-    useDeleteDataproductMutation,
-    UserInfoDetailsQuery,
+    useDeleteDataproductMutation
 } from '../../../../lib/schema/graphql'
 import {GetServerSideProps} from 'next'
 import {addApolloState, initializeApollo} from '../../../../lib/apollo'
@@ -19,11 +18,9 @@ import {DataproductSidebar} from '../../../../components/dataproducts/metadataTa
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
 import TabPanel, {TabPanelType} from '../../../../components/lib/tabPanel'
-import {GET_DATASET_ACCESS} from '../../../../lib/queries/access/datasetAccess'
 import {UserState} from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
 import Link from "next/link";
-import {GET_ACCESS_REQUESTS_FOR_DATASET} from "../../../../lib/queries/accessRequest/accessRequestsForDataset";
 import Dataset from '../../../../components/dataproducts/dataset/dataset'
 
 const Container = styled.div`
