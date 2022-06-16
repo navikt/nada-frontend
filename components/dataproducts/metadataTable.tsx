@@ -30,12 +30,13 @@ const SubjectHeader = styled.h2<SubjectHeaderProps>`
 
 const StyledMetadataTable = styled.div`
     height: fit-content;
-    min-width: 250px;
-    max-width: 250px;
+    width: 250px;
     font-size: 16px;
     line-height: 1;
     padding-right: 1rem;
     padding-bottom: 0px;
+    position: fixed;
+    bottom: 0;
 `
 
 const SidebarContainer = styled.div`
@@ -45,11 +46,13 @@ const SidebarContainer = styled.div`
     height: 80vh;
     justify-content: space-between;
     padding-top: 2rem;
+    width: 250px;
 `
 const NavLinks = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+
 `
 
 const NavLink = styled.a`

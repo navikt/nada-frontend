@@ -20,6 +20,7 @@ import { useState, useRef } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
 import {Divider, Dropdown, DropdownContext} from "@navikt/ds-react-internal";
 import {KeywordBox, KeywordPill} from "../../lib/keywordList";
+import DatasetOwnerMenu from "./datasetOwnerMenu";
 
 const {contrastColor} = require('contrast-color');
 
@@ -83,27 +84,22 @@ const HeadingContainer = styled.div`
     margin-bottom: 0.5rem;
 `
 
-const MenuButton = styled(Button)`
-    min-width: unset;
-    padding: 0;
-    border-radius: 50%;
-`
-
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
-    const [isOpen, setIsOpen] = useState(false)
-    const [anchorEl, setAnchorEl] = useState<Element | null>(null)
 
-    const handleMenuButtonClick = (e: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(e.currentTarget)
-        setIsOpen(!isOpen)
-    }
-
-    return <DatasetContainer>
+return <DatasetContainer>
         <MainView>
-            {accessType.type === 'utlogget' && <DatasetAlert size="small" variant="info">Du er ikke innlogget</DatasetAlert>}
-            {accessType.type === 'user' && <DatasetAlert size="small" variant="success">Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link></DatasetAlert>}
-            {accessType.type === 'none' && <DatasetAlert size="small" variant="info">Du har ikke tilgang til datasettet. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link></DatasetAlert>}
+            {accessType.type === 'utlogget' && <DatasetAlert size="small" variant="info">
+                Du er ikke innlogget
+            </DatasetAlert>}
+            {accessType.type === 'user' && <DatasetAlert size="small" variant="success">
+                Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}.
+                <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link>
+            </DatasetAlert>}
+            {accessType.type === 'none' && <DatasetAlert size="small" variant="info">
+                Du har ikke tilgang til datasettet.
+                <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link>
+            </DatasetAlert>}
             <HeadingContainer>
                 <DatasetHeading level="2" size="large">
                     <IconBox size={42} inline={true}>
@@ -111,20 +107,7 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                     </IconBox>
                     {dataset.name}
                 </DatasetHeading>
-                {isOwner && <DropdownContext.Provider value={{isOpen, setIsOpen, anchorEl, setAnchorEl}}>
-                    <MenuButton variant='tertiary' onClick={handleMenuButtonClick}><EllipsisCircleH /></MenuButton>
-                    <Dropdown.Menu>
-                        <Dropdown.Menu.GroupedList>
-                            <Dropdown.Menu.GroupedList.Item>Tilganger</Dropdown.Menu.GroupedList.Item>
-                        </Dropdown.Menu.GroupedList>
-                        <Divider/>
-                        <Dropdown.Menu.GroupedList>
-                            <Dropdown.Menu.GroupedList.Item>Endre datasett</Dropdown.Menu.GroupedList.Item>
-                            <Dropdown.Menu.GroupedList.Item>Slett datasett</Dropdown.Menu.GroupedList.Item>
-                        </Dropdown.Menu.GroupedList>
-                    </Dropdown.Menu>
-                </DropdownContext.Provider>
-                }
+                {isOwner && <DatasetOwnerMenu />}
             </HeadingContainer>
             {dataset.pii 
                 ? <DatasetAlert size="small" variant="warning" narrow={true}>Inneholder persondata</DatasetAlert>
@@ -135,10 +118,7 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                     <DatasetMetadata datasource={dataset.datasource}/>
                     <SpacedDiv>
                         <KeywordBox>
-                            {dataset.keywords.map((keyword, idx) => {
-                                const color = StringToColor(keyword)
-                                return <KeywordPill key={idx} keyword={keyword}>{keyword}</KeywordPill>
-                            })}
+                            {dataset.keywords.map((keyword, idx) => <KeywordPill key={idx} keyword={keyword}>{keyword}</KeywordPill>)}
                         </KeywordBox>
                     </SpacedDiv>
                     <DatasetTableSchema datasource={dataset.datasource} />
