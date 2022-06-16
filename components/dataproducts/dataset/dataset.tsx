@@ -1,7 +1,7 @@
-import { Heading, Link, Tag, Alert, Popover, Button } from "@navikt/ds-react";
+import { Heading, Link, Alert, Modal } from "@navikt/ds-react";
 import { isAfter, parseISO } from "date-fns";
 import humanizeDate from "../../../lib/humanizeDate";
-import { useAccessRequestsForDatasetQuery, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
+import { NewAccessRequest, SubjectType, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
 import DatasetTableSchema from "./datasetTableSchema";
 import styled from "styled-components";
 import Explore from "../../../components/dataproducts/explore";
@@ -9,20 +9,13 @@ import BigQueryLogo from "../../lib/icons/bigQueryLogo";
 import IconBox from "../../lib/icons/iconBox";
 import * as React from "react";
 import DatasetMetadata from "./datasetMetadata";
-import StringToColor from "../../../lib/stringToColor";
 import SpacedDiv from "../../lib/spacedDiv";
-import { motion } from "framer-motion";
-import DatasetAccessForOwner from "./access/datasetAccessForOwner";
 import { DatasetQuery } from "../../../lib/schema/datasetQuery";
-import { Edit, EllipsisCircleH } from "@navikt/ds-icons";
-import DatasetAccessForUser from "./access/datasetAccessForUser";
-import { useState, useRef } from "react";
-import { ArrowDropDown } from "@mui/icons-material";
-import {Divider, Dropdown, DropdownContext} from "@navikt/ds-react-internal";
+import { useState } from "react";
 import {KeywordBox, KeywordPill} from "../../lib/keywordList";
 import DatasetOwnerMenu from "./datasetOwnerMenu";
+import NewAccessRequestForm from "../accessRequest/newAccessRequest";
 
-const {contrastColor} = require('contrast-color');
 
 interface EntryProps {
     dataset: DatasetQuery
@@ -84,21 +77,42 @@ const HeadingContainer = styled.div`
     margin-bottom: 0.5rem;
 `
 
+const ModalLink = styled.a`
+    cursor: pointer;
+`
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
+    const [accessRequested, setAccessRequested] = useState(false);
 
-return <DatasetContainer>
+    const defaultAccessRequestValues: NewAccessRequest = {
+        owner: userInfo?.email,
+        datasetID: dataset.id,
+        expires: "",
+        polly: null,
+        subject: userInfo?.email,
+        subjectType: SubjectType.User,
+    }
+
+
+    return <DatasetContainer>
+        <Modal 
+            open={accessRequested}
+            aria-label='Søk om tilgang til datasettet'
+            onClose={() => setAccessRequested(false)}
+        >
+            <Modal.Content>
+                <NewAccessRequestForm dataset={dataset} newAccessRequest={defaultAccessRequestValues}/>
+            </Modal.Content>
+        </Modal>
         <MainView>
             {accessType.type === 'utlogget' && <DatasetAlert size="small" variant="info">
                 Du er ikke innlogget
             </DatasetAlert>}
             {accessType.type === 'user' && <DatasetAlert size="small" variant="success">
-                Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}.
-                <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link>
+                Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <ModalLink onClick={() => setAccessRequested(true)}>Søk om tilgang</ModalLink>
             </DatasetAlert>}
             {accessType.type === 'none' && <DatasetAlert size="small" variant="info">
-                Du har ikke tilgang til datasettet.
-                <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link>
+                Du har ikke tilgang til datasettet. <ModalLink onClick={() => setAccessRequested(true)}>Søk om tilgang</ModalLink>
             </DatasetAlert>}
             <HeadingContainer>
                 <DatasetHeading level="2" size="large">
