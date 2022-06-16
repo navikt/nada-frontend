@@ -43,8 +43,12 @@ const Section = styled.section`
     flex-direction: column;
 `
 
-const NarrowAlert = styled(Alert)`
-    width: fit-content;
+interface DatasetAlertProps {
+    narrow?: boolean
+}
+
+const DatasetAlert = styled(Alert)<DatasetAlertProps>`
+    width: ${(props) => props.narrow ? 'fit-content' : 'unset'};
     margin-bottom: 0.75rem;
 `
 
@@ -62,24 +66,11 @@ const DatasetHeading = styled(Heading)`
     gap: 0.75rem;
 `
 
-interface DatasetTagProps {
-    color: string,
-    textColor?: string,
-}
-
-const DatasetTag = styled(Tag)<DatasetTagProps>`
-    background-color: ${(props) => props.color};
-    color: ${(props) => props.textColor};
-    margin-right: 0.25rem;
-    border-color: #707070;
-`
-
 const MainView = styled.div`
     display: block;
     padding-top: 2rem;
     padding-right: 2rem;
 `
-
 
 const DatasetContainer = styled.div`
     display: flex;
@@ -110,9 +101,9 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
 
     return <DatasetContainer>
         <MainView>
-            {accessType.type === 'utlogget' && <NarrowAlert size="small" variant="info">Du er ikke innlogget</NarrowAlert>}
-            {accessType.type === 'user' && <NarrowAlert size="small" variant="success">Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link></NarrowAlert>}
-            {accessType.type === 'none' && <NarrowAlert size="small" variant="info">Du har ikke tilgang til datasettet. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link></NarrowAlert>}
+            {accessType.type === 'utlogget' && <DatasetAlert size="small" variant="info">Du er ikke innlogget</DatasetAlert>}
+            {accessType.type === 'user' && <DatasetAlert size="small" variant="success">Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om ny tilgang</Link></DatasetAlert>}
+            {accessType.type === 'none' && <DatasetAlert size="small" variant="info">Du har ikke tilgang til datasettet. <Link href={`/request/new?datasetID=${dataset.id}`}>Søk om tilgang</Link></DatasetAlert>}
             <HeadingContainer>
                 <DatasetHeading level="2" size="large">
                     <IconBox size={42} inline={true}>
@@ -136,8 +127,8 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                 }
             </HeadingContainer>
             {dataset.pii 
-                ? <NarrowAlert size="small" variant="warning">Inneholder persondata</NarrowAlert>    
-                : <NarrowAlert size="small" variant="success" >Inneholder <b>ikke</b> persondata</NarrowAlert>
+                ? <DatasetAlert size="small" variant="warning" narrow={true}>Inneholder persondata</DatasetAlert>
+                : <DatasetAlert size="small" variant="success" narrow={true}>Inneholder <b>ikke</b> persondata</DatasetAlert>
             }
             <Section>
                 <Article>
