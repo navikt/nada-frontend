@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import type { AppContext, AppInitialProps } from 'next/app'
 import '@navikt/ds-css'
+import '@navikt/ds-css-internal'
 import Head from 'next/head'
 import '@fontsource/source-sans-pro'
 import { ApolloProvider } from '@apollo/client'

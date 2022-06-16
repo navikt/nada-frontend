@@ -45,7 +45,7 @@ export const USER_INFO = gql`
       }
       accessRequests {
         id
-        dataproductID
+        datasetID
         subject
         subjectType
         granter

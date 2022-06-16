@@ -3,7 +3,7 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
-import {KeywordPill} from "../lib/keywordList"
+import {KeywordPill, KeywordBox} from "../lib/keywordList"
 import StoryLogo from "../lib/icons/storyLogo"
 import * as React from 'react'
 import styled from 'styled-components'
@@ -45,10 +45,10 @@ export const SearchResultLink = ({link, name, group, keywords, type, excerpt}: S
                     />
                     {excerpt && <div dangerouslySetInnerHTML={{__html: excerpt.replace(/\(\(START\)\)(.*?)\(\(STOP\)\)/g, `<i><b>$1</b></i>`)}} style={{margin:'10px 16px 0'}}/>}
 
-                    <div style={{float: 'right', display: 'flex', gap: '5px', marginRight: '10px'}}>
+                    <KeywordBox style={{float: 'right', marginRight: '10px'}}>
                         {keywords && keywords.map((k, i) =>(
                             <KeywordPill key={i} keyword={k} compact={true}>{k}</KeywordPill>))}
-                    </div>
+                    </KeywordBox>
                 </StyledCard>
             </a>
         </Link>

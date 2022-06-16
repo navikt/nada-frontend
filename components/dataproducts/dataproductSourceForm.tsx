@@ -1,8 +1,8 @@
-import {useContext, useState} from 'react'
+import { useContext, useState } from 'react'
 import TreeView from '@mui/lab/TreeView'
-import {FieldErrors, FieldValues, SetFieldValue, UseFormRegister, UseFormWatch} from 'react-hook-form'
-import {Project} from './datasource/project'
-import {UserState} from '../../lib/context'
+import { FieldErrors, FieldValues, SetFieldValue, UseFormRegister, UseFormWatch } from 'react-hook-form'
+import { Project } from './datasource/project'
+import { UserState } from '../../lib/context'
 import styled from "styled-components";
 
 const ErrorMessage = styled.div`
@@ -23,10 +23,10 @@ interface DataproductSourceFormProps {
 
 export const DataproductSourceForm = ({
     errors,
-                                          register,
-                                          watch,
-                                          setValue,
-                                      }: DataproductSourceFormProps) => {
+    register,
+    watch,
+    setValue,
+}: DataproductSourceFormProps) => {
     const userInfo = useContext(UserState)
 
     const [activePaths, setActivePaths] = useState<string[]>([])

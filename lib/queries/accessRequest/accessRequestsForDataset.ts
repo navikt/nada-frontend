@@ -1,24 +1,20 @@
 import { gql } from 'graphql-tag'
 
-export const GET_ACCESS_REQUEST = gql`
-  query accessRequest($id: ID!) {
-    accessRequest(id: $id) {
+export const GET_ACCESS_REQUESTS_FOR_DATASET = gql`
+  query accessRequestsForDataset($datasetID: ID!) {
+    accessRequestsForDataset(datasetID: $datasetID) {
       id
-      datasetID
       subject
       subjectType
-      granter
-      status
+      owner
       created
       expires
       owner
       polly {
-        id
         name
         externalID
         url
       }
-      reason
     }
   }
 `
