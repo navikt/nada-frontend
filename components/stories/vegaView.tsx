@@ -13,18 +13,18 @@ interface ResultsProps {
 }
 
 
-export function  VegaView({ id, draft }: ResultsProps) {
+export function VegaView({ id, draft }: ResultsProps) {
     const { data, loading, error } = useVegaViewQuery({ variables: { id, draft } })
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
     const storyViews = data.storyView as StoryViewVega
 
-
-    let storyView = JSON.parse(JSON.stringify(storyViews.spec)) as VisualizationSpec.VisualizationSpec
+    let storyView = JSON.parse(JSON.stringify(storyViews.spec))
+    storyView.width = "container"
     if (storyView.$schema?.includes("vega-lite")) {
-        return <VegaLite config={{autosize:{type: 'fit', resize: true}, projection: {type: 'mercator'}}} spec={storyView} />
+        return <VegaLite style={{width: "100%", height: "100%"}} config={{autosize:{type: 'fit', contains: "padding", resize: true}, projection: {type: 'mercator'}}} spec={storyView} />
     }
-    return <Vega spec={storyView} config={{autosize:{type: 'fit', resize: true}}}/>
+    return <Vega style={{width: "100%", height: "100%"}} spec={storyView} config={{autosize:{type: 'fit', contains: "padding", resize: true}}}/>
 }
 
 export default VegaView

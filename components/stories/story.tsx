@@ -20,6 +20,7 @@ import Vega from "./vegaView";
 import Link from 'next/link'
 import {Dispatch, SetStateAction} from "react";
 import {navRod} from "../../styles/constants";
+import VegaView from "./vegaView";
 
 const StoryDiv = styled.div`
   flex-wrap: wrap;
@@ -83,7 +84,7 @@ export function Story({story, draft, isOwner, setShowDelete, setShowToken,}: Sto
                                     {
                                         ({inView, ref}) => {
                                             return inView ?
-                                                <div ref={ref}><Vega id={view.id} draft={draft!!}/></div> :
+                                                <div ref={ref}><VegaView id={view.id} draft={draft!!}/></div> :
                                                 <div ref={ref}><LoaderSpinner/></div>
                                         }
                                     }
