@@ -62,7 +62,7 @@ const StyledMetadataTable = styled.div`
   line-height: 1;
   padding: 1rem;
   padding-bottom: 0px;
-  border-left: 1px #ddd solid;
+  border-top: 1px #ddd solid;
 `
 const AccessRow = styled.span`
   display: inline-flex;

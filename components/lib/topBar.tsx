@@ -16,6 +16,7 @@ const TopBarStyle = styled.div<TopBarStyleProps>`
   padding: 1em;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 `
 
 const LogoBox = styled.span`
@@ -27,6 +28,7 @@ const LogoBox = styled.span`
 export const Name = styled.h1`
   margin: 0;
   font-weight: 300;
+  padding-right: 10px;
 `
 
 
@@ -34,12 +36,17 @@ export const TopBarActions = styled.div`
     flex-shrink: 0;
     a {
         border-left: 1px solid #aaa;
+        padding-right: 10px;
         padding-left: 10px;
-        margin-left: 10px;
+        //margin-right: 10px;
         cursor: pointer;
         
         &:first-child {
             border-left: none;
+            padding-left: 0px;
+        }
+        &:last-child {
+          padding-right: 0px;
         }
     }   
 `

@@ -58,8 +58,6 @@ const StoryPage = () => {
                 <MainPage>
                     <Story story={story} setShowDelete={setShowDelete} setShowToken={setShowToken} isOwner={isOwner }/>
                 </MainPage>
-                <MetadataTable created={story.created} lastModified={story.lastModified} owner={story.owner}
-                               keywords={story.keywords}/>
             </Container>
             <DeleteModal
                 open={showDelete}

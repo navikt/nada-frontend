@@ -12,11 +12,8 @@ const KeywordBox = styled.div`
   flex-direction: row;
   gap: 5px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
 `
 const SubjectContent = styled.div`
-    margin-bottom: 20px;
-    margin-left: 1px;
     font-size: 14px;
     color: #222;
 `
@@ -26,9 +23,6 @@ type SubjectHeaderProps = {
 }
 const SubjectHeader = styled.h2<SubjectHeaderProps>`
     ${(props) => props.centered && 'margin: 0 auto;'}
-    padding-bottom: 0;
-    margin-top: 0px;
-    margin-bottom: 5px;
     color: #222;
     font-weight: 500;
     font-size: 18px;
@@ -36,12 +30,11 @@ const SubjectHeader = styled.h2<SubjectHeaderProps>`
 const StyledMetadataTable = styled.div`
   height: fit-content;
   min-width: 250px;
-  max-width: 250px;
   font-size: 16px;
   line-height: 1;
-  padding: 1rem;
-  padding-bottom: 0px;
-  border-left: 1px #ddd solid;
+  border-top: 1px #ddd solid;
+  margin-left: 18px;
+  margin-right: 18px;
 `
 
 interface StoryProps {
@@ -51,12 +44,23 @@ interface StoryProps {
     lastModified: string
     keywords: string[] | undefined
 }
+const StyledUl = styled.ul`
+  padding-left: 0;
+  margin-top: 0px;
+`
+
+const StyledLi = styled.li`
+  display: inline-block;
+  padding-right: 20px;
+`
 
 export const MetadataTable = ({owner, created, lastModified, keywords, children}: StoryProps) => {
     return (
         <StyledMetadataTable>
+          <StyledUl >
             {children}
             {owner?.group && <>
+                <StyledLi>
                 <SubjectHeader>
                     Eier
                 </SubjectHeader>
@@ -73,18 +77,24 @@ export const MetadataTable = ({owner, created, lastModified, keywords, children}
                         owner?.group.split('@')[0]
                     )}
                 </SubjectContent>
+                </StyledLi>
             </>}
+                <StyledLi>
             <SubjectHeader>Opprettet</SubjectHeader>
             <SubjectContent>
                 {humanizeDate(created)}
             </SubjectContent>
+                </StyledLi>
             {lastModified && <>
+                <StyledLi>
                 <SubjectHeader>Oppdatert</SubjectHeader>
                 <SubjectContent>
                     {humanizeDate(lastModified, "PP HH:mm")}
                 </SubjectContent>
+                </StyledLi>
             </>}
             {!!keywords && keywords.length > 0 && <>
+                <StyledLi>
                 <SubjectHeader>Nøkkelord</SubjectHeader>
                 <KeywordBox>
                     {!!keywords && (<>{keywords.map((k, i) => (
@@ -98,6 +108,8 @@ export const MetadataTable = ({owner, created, lastModified, keywords, children}
                         ))}</>
                     )}
                 </KeywordBox>
+                </StyledLi>
             </>}
+          </StyledUl>
         </StyledMetadataTable>)
 }

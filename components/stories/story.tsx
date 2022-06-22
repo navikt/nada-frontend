@@ -21,6 +21,7 @@ import Link from 'next/link'
 import {Dispatch, SetStateAction} from "react";
 import {navRod} from "../../styles/constants";
 import VegaView from "./vegaView";
+import { MetadataTable } from "./metadataTable";
 
 const StoryDiv = styled.div`
   flex-wrap: wrap;
@@ -56,11 +57,15 @@ export function Story({story, draft, isOwner, setShowDelete, setShowToken,}: Sto
                     </TopBarActions>
                 }
             </TopBar>
+
+          <MetadataTable created={story.created} lastModified={story.lastModified} owner={story.owner}
+                         keywords={story.keywords}/>
                 <StoryDiv>
                     {views.map((view, id) => {
                         if (view.__typename === 'StoryViewHeader') {
                             return <Header key={id} text={view.content} size={view.level}/>
                         }
+
                         if (view.__typename === 'StoryViewMarkdown') {
                             return <ReactMarkdown key={id} remarkPlugins={[remarkGfm]}>
                                 {view.content}
