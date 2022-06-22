@@ -27,7 +27,7 @@ export const TokenModal = ({
                            }: tokenModalProps) => {
 
     const token = useStoryTokenQuery({variables: {id}})
-    const updateLink = `ds.update(token='${token.data?.storyToken.token}')`
+    const updateLink = `${token.data?.storyToken.token}`
 
     return (
         <Modal open={open} onClose={onCancel}>
