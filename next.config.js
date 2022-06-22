@@ -9,8 +9,4 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer(removeImports({
     reactStrictMode: true,
-    experimental: {
-        // Enables the styled-components SWC transform
-        styledComponents: true
-    }
 }))
