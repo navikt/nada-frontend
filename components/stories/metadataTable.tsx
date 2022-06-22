@@ -1,10 +1,10 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
-import {ExternalLink} from '@navikt/ds-icons'
-import {StoryQuery} from "../../lib/schema/graphql";
+import { ExternalLink } from '@navikt/ds-icons'
+import { StoryQuery } from "../../lib/schema/graphql";
 import styled from "styled-components";
 import Link from "next/link";
-import {KeywordPill} from "../lib/keywordList";
+import { KeywordPill } from "../lib/keywordList";
 
 
 const KeywordBox = styled.div`
@@ -19,7 +19,7 @@ const SubjectContent = styled.div`
 `
 
 type SubjectHeaderProps = {
-    centered?: boolean
+  centered?: boolean
 }
 const SubjectHeader = styled.h2<SubjectHeaderProps>`
     ${(props) => props.centered && 'margin: 0 auto;'}
@@ -38,12 +38,13 @@ const StyledMetadataTable = styled.div`
 `
 
 interface StoryProps {
-    children?: React.ReactNode,
-    owner: StoryQuery['story']['owner']
-    created: string
-    lastModified: string
-    keywords: string[] | undefined
+  children?: React.ReactNode,
+  owner: StoryQuery['story']['owner']
+  created: string
+  lastModified: string
+  keywords: string[] | undefined
 }
+
 const StyledUl = styled.ul`
   padding-left: 0;
   margin-top: 0px;
@@ -54,62 +55,62 @@ const StyledLi = styled.li`
   padding-right: 20px;
 `
 
-export const MetadataTable = ({owner, created, lastModified, keywords, children}: StoryProps) => {
-    return (
-        <StyledMetadataTable>
-          <StyledUl >
-            {children}
-            {owner?.group && <>
-                <StyledLi>
+export const MetadataTable = ({ owner, created, lastModified, keywords, children }: StoryProps) => {
+  return (
+    <StyledMetadataTable>
+      <StyledUl>
+        {children}
+        {owner?.group && <>
+            <StyledLi>
                 <SubjectHeader>
                     Eier
                 </SubjectHeader>
                 <SubjectContent>
-                    {owner?.teamkatalogenURL ? (
-                        <a
-                            href={owner.teamkatalogenURL}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            {owner.group.split('@')[0]} <ExternalLink/>
-                        </a>
-                    ) : (
-                        owner?.group.split('@')[0]
-                    )}
+                  {owner?.teamkatalogenURL ? (
+                    <a
+                      href={owner.teamkatalogenURL}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {owner.group.split('@')[0]} <ExternalLink/>
+                    </a>
+                  ) : (
+                    owner?.group.split('@')[0]
+                  )}
                 </SubjectContent>
-                </StyledLi>
-            </>}
-                <StyledLi>
-            <SubjectHeader>Opprettet</SubjectHeader>
-            <SubjectContent>
-                {humanizeDate(created)}
-            </SubjectContent>
-                </StyledLi>
-            {lastModified && <>
-                <StyledLi>
+            </StyledLi>
+        </>}
+        <StyledLi>
+          <SubjectHeader>Opprettet</SubjectHeader>
+          <SubjectContent>
+            {humanizeDate(created)}
+          </SubjectContent>
+        </StyledLi>
+        {lastModified && <>
+            <StyledLi>
                 <SubjectHeader>Oppdatert</SubjectHeader>
                 <SubjectContent>
-                    {humanizeDate(lastModified, "PP HH:mm")}
+                  {humanizeDate(lastModified, "PP HH:mm")}
                 </SubjectContent>
-                </StyledLi>
-            </>}
-            {!!keywords && keywords.length > 0 && <>
-                <StyledLi>
+            </StyledLi>
+        </>}
+        {!!keywords && keywords.length > 0 && <>
+            <StyledLi>
                 <SubjectHeader>Nøkkelord</SubjectHeader>
                 <KeywordBox>
-                    {!!keywords && (<>{keywords.map((k, i) => (
-                            <Link key={i} href={`/search?keywords=${k}`}>
-                                <a>
-                                    <KeywordPill key={k} keyword={k}>
-                                        {k}
-                                    </KeywordPill>
-                                </a>
-                            </Link>
-                        ))}</>
-                    )}
+                  {!!keywords && (<>{keywords.map((k, i) => (
+                      <Link key={i} href={`/search?keywords=${k}`}>
+                        <a>
+                          <KeywordPill key={k} keyword={k}>
+                            {k}
+                          </KeywordPill>
+                        </a>
+                      </Link>
+                    ))}</>
+                  )}
                 </KeywordBox>
-                </StyledLi>
-            </>}
-          </StyledUl>
-        </StyledMetadataTable>)
+            </StyledLi>
+        </>}
+      </StyledUl>
+    </StyledMetadataTable>)
 }
