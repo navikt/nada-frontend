@@ -11,6 +11,7 @@ import DeleteModal from "../../../components/lib/deleteModal";
 import TokenModal from "../../../components/lib/tokenModal";
 import { useContext, useState } from "react";
 import { UserState } from "../../../lib/context";
+import amplitudeLog from '../../../lib/amplitude'
 
 const Container = styled.div`
   margin-top: 50px;
@@ -34,6 +35,14 @@ const StoryPage = () => {
   const [showDelete, setShowDelete] = useState(false)
   const [showToken, setShowToken] = useState(false)
   const [deleteError, setDeleteError] = useState('')
+
+  React.useEffect(() =>{
+    const eventProperties = {
+      sidetittel: 'datafortelling',
+      title: query.data?.story.name,
+    }
+    amplitudeLog('sidevisning', eventProperties)
+  })
 
   if (query.error) return <ErrorMessage error={query.error}/>
   if (query.loading || !query.data) return <LoaderSpinner/>
