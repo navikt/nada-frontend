@@ -93,15 +93,6 @@ const LandingPage = () => {
                         </CategoryCard>
                     </a>
                 </Link>
-                <a href={'https://datapakker.intern.nav.no'}
-                   target='_blank'
-                   rel='noreferrer'
-                >
-                    <CategoryCard>
-                        <IconBox size={100} height={50}><DatapakkerLogo/></IconBox>
-                        <CategoryCardTitle> Datapakker </CategoryCardTitle>
-                    </CategoryCard>
-                </a>
                 <a href={'https://metabase.intern.nav.no'}
                    target='_blank'
                    rel='noreferrer'>

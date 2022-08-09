@@ -1,10 +1,10 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
-import {ExternalLink} from '@navikt/ds-icons'
-import {StoryQuery} from "../../lib/schema/graphql";
+import { ExternalLink } from '@navikt/ds-icons'
+import { StoryQuery } from "../../lib/schema/graphql";
 import styled from "styled-components";
 import Link from "next/link";
-import {KeywordPill} from "../lib/keywordList";
+import { KeywordPill } from "../lib/keywordList";
 
 
 const KeywordBox = styled.div`
@@ -12,23 +12,17 @@ const KeywordBox = styled.div`
   flex-direction: row;
   gap: 5px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
 `
 const SubjectContent = styled.div`
-    margin-bottom: 20px;
-    margin-left: 1px;
     font-size: 14px;
     color: #222;
 `
 
 type SubjectHeaderProps = {
-    centered?: boolean
+  centered?: boolean
 }
 const SubjectHeader = styled.h2<SubjectHeaderProps>`
     ${(props) => props.centered && 'margin: 0 auto;'}
-    padding-bottom: 0;
-    margin-top: 0px;
-    margin-bottom: 5px;
     color: #222;
     font-weight: 500;
     font-size: 18px;
@@ -36,68 +30,87 @@ const SubjectHeader = styled.h2<SubjectHeaderProps>`
 const StyledMetadataTable = styled.div`
   height: fit-content;
   min-width: 250px;
-  max-width: 250px;
   font-size: 16px;
   line-height: 1;
-  padding: 1rem;
-  padding-bottom: 0px;
-  border-left: 1px #ddd solid;
+  border-top: 1px #ddd solid;
+  margin-left: 18px;
+  margin-right: 18px;
 `
 
 interface StoryProps {
-    children?: React.ReactNode,
-    owner: StoryQuery['story']['owner']
-    created: string
-    lastModified: string
-    keywords: string[] | undefined
+  children?: React.ReactNode,
+  owner: StoryQuery['story']['owner']
+  created: string
+  lastModified: string
+  keywords: string[] | undefined
 }
 
-export const MetadataTable = ({owner, created, lastModified, keywords, children}: StoryProps) => {
-    return (
-        <StyledMetadataTable>
-            {children}
-            {owner?.group && <>
+const StyledUl = styled.ul`
+  padding-left: 0;
+  margin-top: 0px;
+`
+
+const StyledLi = styled.li`
+  display: inline-block;
+  padding-right: 20px;
+`
+
+export const MetadataTable = ({ owner, created, lastModified, keywords, children }: StoryProps) => {
+  return (
+    <StyledMetadataTable>
+      <StyledUl>
+        {children}
+        {owner?.group && <>
+            <StyledLi>
                 <SubjectHeader>
                     Eier
                 </SubjectHeader>
                 <SubjectContent>
-                    {owner?.teamkatalogenURL ? (
-                        <a
-                            href={owner.teamkatalogenURL}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            {owner.group.split('@')[0]} <ExternalLink/>
-                        </a>
-                    ) : (
-                        owner?.group.split('@')[0]
-                    )}
+                  {owner?.teamkatalogenURL ? (
+                    <a
+                      href={owner.teamkatalogenURL}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {owner.group.split('@')[0]} <ExternalLink/>
+                    </a>
+                  ) : (
+                    owner?.group.split('@')[0]
+                  )}
                 </SubjectContent>
-            </>}
-            <SubjectHeader>Opprettet</SubjectHeader>
-            <SubjectContent>
-                {humanizeDate(created)}
-            </SubjectContent>
-            {lastModified && <>
+            </StyledLi>
+        </>}
+        <StyledLi>
+          <SubjectHeader>Opprettet</SubjectHeader>
+          <SubjectContent>
+            {humanizeDate(created)}
+          </SubjectContent>
+        </StyledLi>
+        {lastModified && <>
+            <StyledLi>
                 <SubjectHeader>Oppdatert</SubjectHeader>
                 <SubjectContent>
-                    {humanizeDate(lastModified, "PP HH:mm")}
+                  {humanizeDate(lastModified, "PP HH:mm")}
                 </SubjectContent>
-            </>}
-            {!!keywords && keywords.length > 0 && <>
+            </StyledLi>
+        </>}
+        {!!keywords && keywords.length > 0 && <>
+            <StyledLi>
                 <SubjectHeader>Nøkkelord</SubjectHeader>
                 <KeywordBox>
-                    {!!keywords && (<>{keywords.map((k, i) => (
-                            <Link key={i} href={`/search?keywords=${k}`}>
-                                <a>
-                                    <KeywordPill key={k} keyword={k}>
-                                        {k}
-                                    </KeywordPill>
-                                </a>
-                            </Link>
-                        ))}</>
-                    )}
+                  {!!keywords && (<>{keywords.map((k, i) => (
+                      <Link key={i} href={`/search?keywords=${k}`}>
+                        <a>
+                          <KeywordPill key={k} keyword={k}>
+                            {k}
+                          </KeywordPill>
+                        </a>
+                      </Link>
+                    ))}</>
+                  )}
                 </KeywordBox>
-            </>}
-        </StyledMetadataTable>)
+            </StyledLi>
+        </>}
+      </StyledUl>
+    </StyledMetadataTable>)
 }

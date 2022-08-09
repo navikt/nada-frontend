@@ -3,10 +3,9 @@ import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
 import { DataproductQuery } from "../../lib/schema/graphql";
 import styled from "styled-components";
-import Link from "next/link";
-import { KeywordPill, KeywordBox } from "../lib/keywordList";
-import { Alert } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
+import { Alert, Link } from '@navikt/ds-react';
+import { KeywordBox, KeywordPill } from '../lib/keywordList';
 
 const SubjectContent = styled.div`
     margin-bottom: 20px;
@@ -16,7 +15,7 @@ const SubjectContent = styled.div`
 `
 
 type SubjectHeaderProps = {
-    centered?: boolean
+  centered?: boolean
 }
 const SubjectHeader = styled.h2<SubjectHeaderProps>`
     ${(props) => props.centered && 'margin: 0 auto;'}
