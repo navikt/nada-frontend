@@ -4,7 +4,7 @@ export const GET_QUARTO = gql`
   query Quarto($id: ID!) {
     quarto(id: $id) {
       id
-      team {
+      owner {
         group
         teamkatalogenURL
       }

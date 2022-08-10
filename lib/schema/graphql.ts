@@ -506,10 +506,8 @@ export type Quarto = {
   keywords: Array<Scalars['String']>
   /** lastModified is the timestamp for when the data story was last modified. */
   lastModified?: Maybe<Scalars['Time']>
-  /** owner of the data story. Changes to the data story can only be done by a member of the owner. */
-  owner: Owner
   /** name of the data story. */
-  team: Owner
+  owner: Owner
 }
 
 export type Query = {
@@ -1226,7 +1224,7 @@ export type QuartoQuery = {
     __typename?: 'Quarto'
     id: string
     content: string
-    team: {
+    owner: {
       __typename?: 'Owner'
       group: string
       teamkatalogenURL?: string | null | undefined
@@ -2886,7 +2884,7 @@ export const QuartoDocument = gql`
   query Quarto($id: ID!) {
     quarto(id: $id) {
       id
-      team {
+      owner {
         group
         teamkatalogenURL
       }
