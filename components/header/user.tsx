@@ -9,6 +9,7 @@ import {useRouter} from 'next/router'
 import {UserState} from "../../lib/context";
 import SubjectHeader from "../lib/subjectHeader";
 import AccessRequestsListForUser from "../user/accessRequests";
+import {Header} from "@navikt/ds-react-internal";
 
 const UserBox = styled.div`
   white-space: nowrap;
@@ -31,6 +32,14 @@ const MenuSeparator = styled.div`
 
 const StyledA = styled.a`
   color: inherit;
+`
+
+const NadaUserButton = styled(Header.UserButton)`
+    height: 100%;
+`
+
+const NadaButton = styled(Header.Button)`
+    height: 100%;
 `
 
 export default function User() {
@@ -56,17 +65,7 @@ export default function User() {
             <UserBox>
                 {userInfo ? (
                     <>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="brukermeny"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <People/>
-                        </IconButton>
+                        <NadaUserButton onClick={handleProfileMenuOpen} name={userInfo.name}/>
                         <Menu
                             anchorEl={anchorEl}
                             anchorOrigin={{
@@ -99,10 +98,10 @@ export default function User() {
                                 Mine produkter
                             </MenuItem>
                             <MenuItem
-                              onClick={() => {
-                                  handleMenuClose()
-                                  router.push({pathname: '/user/requests'})
-                              }}
+                                onClick={() => {
+                                    handleMenuClose()
+                                    router.push({pathname: '/user/requests'})
+                                }}
                             >
                                 Mine tilgangssøknader
                             </MenuItem>
@@ -142,16 +141,11 @@ export default function User() {
                         </Menu>
                     </>
                 ) : (
-                    <a
-                        style={{color: '#ffffff'}}
-                        href={`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+                        <NadaButton onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
                             router.asPath
-                        )}`}
-                    >
-                        <Button key="logg-inn" variant="primary" size="small">
+                        )}`)} key="logg-inn">
                             Logg inn
-                        </Button>
-                    </a>
+                        </NadaButton>
                 )}
             </UserBox>
             )

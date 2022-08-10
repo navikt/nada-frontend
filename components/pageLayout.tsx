@@ -1,25 +1,11 @@
 import styled from 'styled-components'
 import User from './header/user'
-import Create from './header/create'
 import Logo from './header/logo'
 import {useRouter} from 'next/router'
-import About from "./header/about";
-
-const HeaderBar = styled.header`
-  > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 95vw;
-    max-width: 1500px;
-  }
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.25em 1em;
-  height: 60px;
-  border-bottom: 1px solid #aaa;
-`
+import {Header} from "@navikt/ds-react-internal";
+import {AddCircle, Information} from "@navikt/ds-icons";
+import React, {useContext} from "react";
+import {UserState} from "../lib/context";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -36,21 +22,34 @@ const Main = styled.main`
   flex-direction: column;
   flex-grow: 1;
 `
+
+const NadaHeader = styled(Header)`
+    display: flex
+    flex-direction: row
+    justify-content: space-between;
+`
+
+const NadaHeaderRight = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: 1rem;
+`
+
 export const PageLayout = ({children}: { children: React.ReactNode }) => {
     const router = useRouter()
+    const userInfo = useContext(UserState)
 
     return (
         <Container>
-            <HeaderBar role="banner">
-                <div>
-                    {router.pathname !== '/' && <Logo/>}
-                    <div style={{display: 'flex', marginLeft: 'auto'}}>
-                        <About/>
-                        <Create/>
-                        <User/>
-                    </div>
-                </div>
-            </HeaderBar>
+            <NadaHeader>
+                {router.pathname !== '/' && <Header.Title><Logo/></Header.Title>}
+                <NadaHeaderRight>
+                    {userInfo && <Header.Button onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
+                    <Header.Button onClick={async () => await router.push('/about')}><Information/></Header.Button>
+                    <User/>
+                </NadaHeaderRight>
+            </NadaHeader>
             <Main>{children}</Main>
         </Container>
     )
