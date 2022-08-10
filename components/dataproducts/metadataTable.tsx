@@ -2,74 +2,10 @@ import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
 import { DataproductQuery } from "../../lib/schema/graphql";
-import styled from "styled-components";
 import { useRouter } from 'next/router';
 import { Alert, Link } from '@navikt/ds-react';
 import { KeywordBox, KeywordPill } from '../lib/keywordList';
-
-const SubjectContent = styled.div`
-    margin-bottom: 20px;
-    margin-left: 1px;
-    font-size: 1rem;
-    color: #222;
-`
-
-type SubjectHeaderProps = {
-  centered?: boolean
-}
-const SubjectHeader = styled.h2<SubjectHeaderProps>`
-    ${(props) => props.centered && 'margin: 0 auto;'}
-    padding-bottom: 0;
-    margin-top: 0px;
-    margin-bottom: 5px;
-    color: #222;
-    font-weight: 500;
-    font-size: 0.75rem;
-`
-
-const StyledMetadataTable = styled.div`
-    height: fit-content;
-    width: 250px;
-    font-size: 16px;
-    line-height: 1;
-    padding-right: 1rem;
-    padding-bottom: 0px;
-    position: fixed;
-    bottom: 0;
-`
-
-const SidebarContainer = styled.div`
-    display: flex;
-    flex: 0 1 auto;
-    flex-direction: column;
-    height: 80vh;
-    justify-content: space-between;
-    padding-top: 2rem;
-    width: 250px;
-`
-const NavLinks = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-`
-
-const NavLink = styled.a`
-    font-weight: 600;
-    text-decoration: none;
-
-    margin: 0.25rem 0;
-
-    :hover {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-`
-
-const NavText = styled.p`
-    font-weight: 600;
-    margin: 0.25rem 0;
-`
+import { Subject, SubjectHeader } from '../subject';
 
 interface DataproductDetailProps {
     product: DataproductQuery['dataproduct']
@@ -89,19 +25,19 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
         router.push(`/dataproduct/${product.id}/${product.slug}/${newSlug}`)
     }
 
-    return <SidebarContainer>
-        <NavLinks>
+    return <div className="flex flex-initial flex-col h-[80vh] justify-between pt-8 w-64">
+        <div className="flex flex-col gap-3">
             {menuItems.map(({ title, slug }, idx) => currentPage == idx
-                ? <NavText key={idx}>{title}</NavText>
-                : <NavLink href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</NavLink>
+                ? <p className="font-semibold mx-1" key={idx}>{title}</p>
+                : <a className="font-semibold no-underline mx-1 hover:underline hover:cursor-pointer" href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</a>
             )}
-        </NavLinks>
-        <StyledMetadataTable>
-            <SubjectContent>
+        </div>
+        <div className="h-fit w-64 text-base leading-4 pr-4 pb-0 fixed bottom-0">
+            <Subject>
                 {isOwner && <Alert variant='success' size="small">Du eier dette produktet</Alert>}
-            </SubjectContent>
+            </Subject>
             <SubjectHeader>Eier</SubjectHeader>
-            <SubjectContent>
+            <Subject>
                 {product.owner?.teamkatalogenURL ? (
                     <a
                         href={product.owner.teamkatalogenURL}
@@ -110,15 +46,15 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
                     >
                         {product.owner.group.split('@')[0]} <ExternalLink />
                     </a>) : (product.owner?.group.split('@')[0])}
-            </SubjectContent>
+            </Subject>
             <SubjectHeader>Opprettet</SubjectHeader>
-            <SubjectContent>
+            <Subject>
                 {humanizeDate(product.created)}
-            </SubjectContent>
+            </Subject>
             <SubjectHeader>Oppdatert</SubjectHeader>
-            <SubjectContent>
+            <Subject>
                 {humanizeDate(product.lastModified)}
-            </SubjectContent>
+            </Subject>
             {!!product.keywords.length && <>
                 <SubjectHeader>Nøkkelord</SubjectHeader>
                 <KeywordBox>
@@ -135,6 +71,6 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
                 </KeywordBox>
             </>
             }
-        </StyledMetadataTable>
-    </SidebarContainer>
+        </div>
+    </div>
 }

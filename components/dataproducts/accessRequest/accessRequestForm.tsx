@@ -26,7 +26,6 @@ import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
-import TopBar from '../../lib/topBar'
 import { useRouter } from "next/router";
 import SpacedDiv from '../../lib/spacedDiv'
 
@@ -75,12 +74,6 @@ const LinkButton = styled.button`
     -webkit-box-shadow: var(--navds-text-shadow);
     box-shadow: var(--navds-text-shadow);
   }
-`
-
-const Container = styled.div`
-  width: 768px;
-  margin: 0 auto;
-  margin-top: 40px;
 `
 
 const AccessRequestBox = styled.div`
@@ -241,57 +234,55 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
   }
 
   return (
-    <Container>
-      <AccessRequestBox>
-        <TopBar type="AccessRequest" name="Tilgangssøknad for datasett" />
-        <AccessRequestBody>
-          <form onSubmit={handleSubmit(onSubmitForm)}>
-            <Heading spacing size="medium" level="2">
-              {dataset.name}
+    <div>
+        <Heading level="1" size="large" className="pb-8 w-11/12">Tilgangssøknad for {dataset.name}</Heading>
+        <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-12">
+          <div>
+            <Heading size="xsmall" level="3">
+              Tilgang gjelder for
             </Heading>
-            <SpacedDiv spacing="2rem">
-              <Heading size="xsmall" level="3">
-                Tilgang gjelder for
-              </Heading>
-              <FormControl>
-                <Controller
-                  rules={{ required: true }}
-                  control={control}
-                  name="subjectType"
-                  render={({ field }) => (
-                    <RadioGroup {...field} onChange={setSubjectType}>
-                      <FormControlLabel
-                        disabled={isEdit || isView}
-                        checked={subjectData.subjectType == SubjectType.User}
-                        value="user"
-                        control={<Radio />}
-                        label="Bruker"
-                      />
-                      <FormControlLabel
-                        disabled={isEdit || isView}
-                        checked={subjectData.subjectType == SubjectType.Group}
-                        value="group"
-                        control={<Radio />}
-                        label="Gruppe"
-                      />
-                      <FormControlLabel
-                        disabled={isEdit || isView}
-                        checked={subjectData.subjectType == SubjectType.ServiceAccount}
-                        value="serviceAccount"
-                        control={<Radio />}
-                        label="Servicebruker"
-                      />
-                    </RadioGroup>
-                  )}
-                />
-              </FormControl>
-              <TextField onChange={setSubject}
-                label="E-post"
-                defaultValue={accessRequest.subject ? accessRequest.subject : ""}
-                size="medium"
-                disabled={isEdit || isView}
+            <FormControl>
+              <Controller
+                rules={{ required: true }}
+                control={control}
+                name="subjectType"
+                render={({ field }) => (
+                  <RadioGroup {...field} onChange={setSubjectType}>
+                    <FormControlLabel
+                      disabled={isEdit || isView}
+                      checked={subjectData.subjectType == SubjectType.User}
+                      value="user"
+                      control={<Radio />}
+                      label="Bruker"
+                    />
+                    <FormControlLabel
+                      disabled={isEdit || isView}
+                      checked={subjectData.subjectType == SubjectType.Group}
+                      value="group"
+                      control={<Radio />}
+                      label="Gruppe"
+                    />
+                    <FormControlLabel
+                      disabled={isEdit || isView}
+                      checked={subjectData.subjectType == SubjectType.ServiceAccount}
+                      value="serviceAccount"
+                      control={<Radio />}
+                      label="Servicebruker"
+                    />
+                  </RadioGroup>
+                )}
               />
-            </SpacedDiv>
+            </FormControl>
+            <TextField onChange={setSubject}
+              className="hidden-label"
+              label="E-post-adresse"
+              placeholder="Skriv inn e-post-adresse"
+              defaultValue={accessRequest.subject ? accessRequest.subject : ""}
+              size="medium"
+              disabled={isEdit || isView}
+            />
+          </div>
+          <div>
             <Heading size="xsmall">
               Utløper
             </Heading>
@@ -314,19 +305,18 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                 checked={accessType === 'until'}
               />
             </RadioGroup>
-            {accessType === 'until' && 
-            <SpacedDiv spacing="2rem">
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DesktopDatePicker
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DesktopDatePicker
                 inputFormat="dd.MM.yyyy"
                 mask="__.__.____"
                 value={expireDate}
                 onChange={(newVal) => setExpireDate(newVal)}
-                disabled={isView}
-                renderInput={(params) => <MuiTextField {...params} />}
-              />
-              </LocalizationProvider>
-            </SpacedDiv>}
+                disabled={isView && accessType !== 'until'}
+                renderInput={(params) => <MuiTextField disabled={accessType !== 'until'} className="mx-7" {...params} />}
+            />
+            </LocalizationProvider>
+          </div>
+          <div>
             {!polly && (
               <SpacedDiv>
                 <TextField
@@ -373,16 +363,15 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
               </Selection>
             </SpacedDiv>
             )}
-            {formError && <Alert variant={'error'}>{formError}</Alert>}
-            {!isView && <RightJustifiedSubmitButton onCancel={() => {
-              router.push(`/user/requests`)
-            }} />}
-            {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
-            {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "ingen begrunnelse oppgitt"}</Alert>}
-          </form>
-        </AccessRequestBody>
-      </AccessRequestBox>
-    </Container>
+          </div>
+          {formError && <Alert variant={'error'}>{formError}</Alert>}
+          {!isView && <RightJustifiedSubmitButton onCancel={() => {
+            router.push(`/user/requests`)
+          }} />}
+          {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
+          {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "ingen begrunnelse oppgitt"}</Alert>}
+        </form>
+    </div>
   )
 }
 

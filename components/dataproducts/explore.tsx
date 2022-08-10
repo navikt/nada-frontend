@@ -3,21 +3,10 @@ import {
     useUpdateMappingMutation
 } from "../../lib/schema/graphql";
 import ExploreLink, {ItemType} from "./exploreLink";
-import styled from "styled-components";
 import {useState} from "react";
 import ErrorMessage from "../lib/error";
-import { DatasetQuery } from "./dataset/dataset";
+import { DatasetQuery } from '../../lib/schema/datasetQuery'
 
-const ExploreLinks = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  gap: 20px;
-  a {
-    text-decoration: none;
-  }
-`
 
 interface ExploreProps {
     dataproductId: string
@@ -65,10 +54,10 @@ const Explore = ({dataproductId, dataset, isOwner}: ExploreProps) => {
 
     return (
         <>
-            <ExploreLinks>
+            <div className="flex flex-row flex-wrap mt-3 gap-5">
                 <ExploreLink isOwner={isOwner} url={bigQueryUrl} type={ItemType.bigQuery}/>
                 <ExploreLink isOwner={isOwner} url={services.metabase} type={ItemType.metabase} add={addToMetabase} remove={removeFromMetabase} mappings={mappings}/>
-            </ExploreLinks>
+            </div>
             {formError &&
             <ErrorMessage error={formError}/>
             }

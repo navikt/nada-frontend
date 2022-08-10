@@ -3,7 +3,6 @@ import { isAfter, parseISO } from "date-fns";
 import humanizeDate from "../../../lib/humanizeDate";
 import { NewAccessRequest, SubjectType, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
 import DatasetTableSchema from "./datasetTableSchema";
-import styled from "styled-components";
 import Explore from "../../../components/dataproducts/explore";
 import BigQueryLogo from "../../lib/icons/bigQueryLogo";
 import IconBox from "../../lib/icons/iconBox";
@@ -17,11 +16,6 @@ import DatasetOwnerMenu from "./datasetOwnerMenu";
 import NewAccessRequestForm from "../accessRequest/newAccessRequest";
 
 
-interface EntryProps {
-    dataset: DatasetQuery
-    userInfo: UserInfoDetailsQuery['userInfo'] | undefined
-    isOwner: boolean
-}
 
 const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataset: DatasetQuery, isOwner: boolean) => {
     if (!groups) return {type: "utlogget"}
@@ -31,55 +25,19 @@ const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | und
     return {type: "none"}
 }
 
-const Section = styled.section`
-    margin-bottom: 0.75rem;
-    display: flex;
-    flex-direction: column;
-`
 
-interface DatasetAlertProps {
-    narrow?: boolean
+const DatasetAlert = ({narrow, variant, children}: {narrow?: boolean, children: React.ReactNode, variant: "info" | "success" | "warning"}) => {
+    return <Alert variant={variant} size="small" className={`${narrow && "w-fit"} mb-3`}>{children}</Alert>
 }
 
-const DatasetAlert = styled(Alert)<DatasetAlertProps>`
-    width: ${(props) => props.narrow ? 'fit-content' : 'unset'};
-    margin-bottom: 0.75rem;
-`
+interface EntryProps {
+    dataset: DatasetQuery
+    userInfo: UserInfoDetailsQuery['userInfo'] | undefined
+    isOwner: boolean
+}
 
-const Article = styled.article`
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 0.75rem;
-    &:last-child {
-        border-bottom: 0px;
-    }
-`
 
-const DatasetHeading = styled(Heading)`
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-`
 
-const MainView = styled.div`
-    display: block;
-    padding-top: 2rem;
-    padding-right: 2rem;
-`
-
-const DatasetContainer = styled.div`
-    display: flex;
-`
-
-const HeadingContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-`
-
-const ModalLink = styled.a`
-    cursor: pointer;
-`
 const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
     const [accessRequested, setAccessRequested] = useState(false);
@@ -94,41 +52,42 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     }
 
 
-    return <DatasetContainer>
+    return <div className="flex">
         <Modal 
             open={accessRequested}
             aria-label='Søk om tilgang til datasettet'
             onClose={() => setAccessRequested(false)}
+            className="w-1/3"
         >
             <Modal.Content>
                 <NewAccessRequestForm dataset={dataset} newAccessRequest={defaultAccessRequestValues}/>
             </Modal.Content>
         </Modal>
-        <MainView>
-            {accessType.type === 'utlogget' && <DatasetAlert size="small" variant="info">
+        <div className="block pt-8 pr-8">
+            {accessType.type === 'utlogget' && <DatasetAlert variant="info">
                 Du er ikke innlogget
             </DatasetAlert>}
-            {accessType.type === 'user' && <DatasetAlert size="small" variant="success">
-                Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <ModalLink onClick={() => setAccessRequested(true)}>Søk om tilgang</ModalLink>
+            {accessType.type === 'user' && <DatasetAlert variant="success">
+                Du har tilgang{accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}. <a href="#" onClick={() => setAccessRequested(true)}>Søk om tilgang</a>
             </DatasetAlert>}
-            {accessType.type === 'none' && <DatasetAlert size="small" variant="info">
-                Du har ikke tilgang til datasettet. <ModalLink onClick={() => setAccessRequested(true)}>Søk om tilgang</ModalLink>
+            {accessType.type === 'none' && <DatasetAlert variant="info">
+                Du har ikke tilgang til datasettet. <a href="#" onClick={() => setAccessRequested(true)}>Søk om tilgang</a>
             </DatasetAlert>}
-            <HeadingContainer>
-                <DatasetHeading level="2" size="large">
+            <div className="flex items-center gap-4 mb-2">
+                <Heading className="inline-flex items-center gap-3" level="2" size="large">
                     <IconBox size={42} inline={true}>
                         <BigQueryLogo/>
                     </IconBox>
                     {dataset.name}
-                </DatasetHeading>
+                </Heading>
                 {isOwner && <DatasetOwnerMenu />}
-            </HeadingContainer>
+            </div>
             {dataset.pii 
-                ? <DatasetAlert size="small" variant="warning" narrow={true}>Inneholder persondata</DatasetAlert>
-                : <DatasetAlert size="small" variant="success" narrow={true}>Inneholder <b>ikke</b> persondata</DatasetAlert>
+                ? <DatasetAlert variant="warning" narrow={true}>Inneholder persondata</DatasetAlert>
+                : <DatasetAlert variant="success" narrow={true}>Inneholder <b>ikke</b> persondata</DatasetAlert>
             }
-            <Section>
-                <Article>
+            <section className="mb-3 flex flex-col">
+                <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
                     <DatasetMetadata datasource={dataset.datasource}/>
                     <SpacedDiv>
                         <KeywordBox>
@@ -136,16 +95,16 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                         </KeywordBox>
                     </SpacedDiv>
                     <DatasetTableSchema datasource={dataset.datasource} />
-                </Article>
-                {userInfo && accessType.type !== "none" && <Article>
+                </article>
+                {userInfo && accessType.type !== "none" && <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
                     <Heading spacing level="3" size="small">
                         Utforsk
                     </Heading>
                     <Explore dataproductId={dataset.id} dataset={dataset} isOwner={accessType.type === "owner"}/>
-                </Article>}
-            </Section>
-        </MainView>
-    </DatasetContainer>
+                </article>}
+            </section>
+        </div>
+    </div>
 }
 
 

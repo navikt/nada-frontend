@@ -1,29 +1,10 @@
 import styled from 'styled-components'
 import { FileContent } from '@navikt/ds-icons'
-import { ColorSchemeTypes } from './colorScheme'
 import IconBox from "./icons/iconBox";
 import BigQueryLogo from "./icons/bigQueryLogo";
 import * as React from "react";
 import StoryLogo from "./icons/storyLogo";
 
-interface TopBarStyleProps {
-  type?: ColorSchemeTypes
-}
-
-const TopBarStyle = styled.div<TopBarStyleProps>`
-  color: #222;
-  display: flex;
-  padding: 1em;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-`
-
-const LogoBox = styled.span`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-`
 
 export const Name = styled.h1`
   margin: 0;
@@ -60,17 +41,17 @@ interface TopBarProps {
 }
 
 const TopBar = ({ name, type, children }: TopBarProps) => {
-  return <TopBarStyle>
-    <LogoBox>
+  return <div className="flex items-center flex-wrap text-text p-4">
+    <span className="flex gap-5 items-center">
       <IconBox size={42}>
         {type === 'Story' && <StoryLogo/>}
         {type === 'Dataproduct' && <BigQueryLogo/>}
         {type === 'AccessRequest' && <FileContent/>}
       </IconBox>
-      <Name>{name}</Name>
-    </LogoBox>
+      <h1 className="m-0 font-light pr-3">{name}</h1>
+    </span>
     {children}
-  </TopBarStyle>
+  </div>
 }
 
 export default TopBar

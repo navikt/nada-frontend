@@ -9,12 +9,6 @@ import {Delete, Add} from "@navikt/ds-icons";
 import {navRod} from "../../styles/constants";
 
 const ExploreItem = styled.a<{ loading?: boolean }>`
-  cursor: ${(props) => props.loading ? 'default' : 'pointer'};
-  width: 250px;
-  padding: 10px;
-  background: #fff;
-  border: #8F8F8F 1px solid;
-  border-radius: 0.25rem;
   div {
     color: #0067C5;
     :hover {
@@ -40,6 +34,17 @@ const ExploreItemHeader = styled.div`
   align-items: center;
   width: 100%;
 `
+
+const Header = ({children}: {children: React.ReactNode}) => {
+    return <div className="explore-header 
+            flex flex-row items-center
+            text-link
+            selection:border-interaction-primary-selected selection:text-interaction-primary-selected 
+            hover:text-interaction-primary-hover hover:border-interaction-primary-hover">
+            {children}
+        </div>
+}
+
 const Title = styled.div`
   margin-left: 10px;
   h1 {
@@ -99,8 +104,8 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
 
     if (url) {
         return (
-                <ExploreItem href={url} target="_blank" rel="noreferrer">
-                    <ExploreItemHeader>
+                <a className="w-64 p-3 bg-white, border-[1px] border-border rounded-md no-underline" href={url} target="_blank" rel="noreferrer">
+                    <Header>
                         <IconBox size={30}>
                             {type === ItemType.bigQuery && <BigQueryLogo/>}
                             {type === ItemType.metabase && <MetabaseLogo/>}
@@ -120,16 +125,16 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                             <Delete/>
                         </DeleteButton>
                         }
-                    </ExploreItemHeader>
-                </ExploreItem>
+                    </Header>
+                </a>
         )
     }
 
     if (isOwner) {
         if (loading) {
             return (
-                <ExploreItem href="#" onClick={add} loading={true}>
-                    <ExploreItemHeader>
+                <a className="w-64 p-3 bg-white, border-[1px] border-border rounded-md no-underline cursor-default" href="#" onClick={add} loading={true}>
+                    <Header>
                         <IconBox size={30}>
                             <MetabaseLogo/>
                         </IconBox>
@@ -138,14 +143,14 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                             <h2>Legger til i Metabase</h2>
                         </Title>
                         {loading && <Loader transparent size={'large'} style={{margin: '0 0 0 auto'}}/>}
-                    </ExploreItemHeader>
-                </ExploreItem>
+                    </Header>
+                </a>
             )
         }
         if (addToMetabase) {
             return (
-                <ExploreItem href="#" onClick={add}>
-                    <ExploreItemHeader>
+                <a className="w-64 p-3 bg-white, border-[1px] border-border rounded-md no-underline" href="#" onClick={add}>
+                    <Header>
                         <IconBox size={30}>
                             <MetabaseLogo/>
                         </IconBox>
@@ -154,8 +159,8 @@ export const ExploreLink = ({url, type, add, remove, isOwner, mappings}: Explore
                             <h2>Legg til i Metabase</h2>
                         </Title>
                         <Add style={{margin: '0 0 0 auto', width: 25, height: 25}}/>
-                    </ExploreItemHeader>
-                </ExploreItem>
+                    </Header>
+                </a>
             )
         }
     }

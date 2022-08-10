@@ -1,3 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.explore-header > h1 {
+  @apply hover:underline selection:underline;
+}
+
+.hidden-label > .navds-label {
+  @apply hidden;
+}
+
 html,
 body {
   padding: 0;
