@@ -11,6 +11,10 @@
   @apply hidden;
 }
 
+.ds-datepicker__kalenderknapp:disabled {
+  @apply border-gray-300 cursor-not-allowed;
+}
+
 html,
 body {
   padding: 0;
