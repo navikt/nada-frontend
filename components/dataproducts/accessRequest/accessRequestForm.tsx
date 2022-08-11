@@ -7,27 +7,23 @@ import {
   Scalars,
   useUserInfoDetailsQuery,
   useApproveAccessRequestMutation,
-  useDenyAccessRequestMutation,
-  useDatasetQuery
+  useDenyAccessRequestMutation
 } from '../../../lib/schema/graphql'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
 import { Delete, ExternalLink } from '@navikt/ds-icons'
-import { Alert, Heading, Link, TextField } from '@navikt/ds-react'
+import { Alert, Heading, Link, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import styled from 'styled-components'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField as MuiTextField, } from '@mui/material'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
 import { RightJustifiedGrantButton } from '../../widgets/formSubmit'
 import * as yup from 'yup'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
 import { useRouter } from "next/router";
-import SpacedDiv from '../../lib/spacedDiv'
+import { Datepicker } from '@navikt/ds-datepicker';
 
 export const accessRequestValidation = yup.object().shape({
   subjectType: yup.string().required(),
@@ -41,13 +37,7 @@ export const accessRequestValidation = yup.object().shape({
   // expires: yup.string(),
 })
 
-const SpacedDatePicker = styled(MuiTextField)`
-  margin-bottom: var(--navds-spacing-3);
-`
 
-const SpacedTextField = styled(TextField)`
-  margin-bottom: var(--navds-spacing-3);
-`
 
 const LinkButton = styled.button`
   background: none !important;
@@ -74,15 +64,6 @@ const LinkButton = styled.button`
     -webkit-box-shadow: var(--navds-text-shadow);
     box-shadow: var(--navds-text-shadow);
   }
-`
-
-const AccessRequestBox = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
-`
-
-const AccessRequestBody = styled.div`
-  padding: 1em 1em 2em 1em;
 `
 
 const Selection = styled.div`
@@ -126,7 +107,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
   const [searchText, setSearchText] = useState('')
   const [denyReason, setDenyReason] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
-  const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires ? new Date(accessRequest.expires) : null)
+  const [expireDate, setExpireDate] = useState<string>(accessRequest.expires ? accessRequest.expires : "")
   const [accessType, setAccessType] = useState(accessRequest.expires ? 'until' : 'eternal')
   const [subjectData, setSubjectData] = useState({
     subject: accessRequest.subject,
@@ -188,9 +169,9 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
     })
   }
 
-  const setSubjectType = (event: ChangeEvent<HTMLInputElement>) => {
+  const setSubjectType = (value: String) => {
     setSubjectData((prevState) => {
-      return { ...prevState, subjectType: toSubjectType(event.target.value) }
+      return { ...prevState, subjectType: toSubjectType(value) }
     })
   }
 
@@ -238,41 +219,20 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
         <Heading level="1" size="large" className="pb-8 w-11/12">Tilgangssøknad for {dataset.name}</Heading>
         <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-12">
           <div>
-            <Heading size="xsmall" level="3">
-              Tilgang gjelder for
-            </Heading>
-            <FormControl>
               <Controller
                 rules={{ required: true }}
                 control={control}
                 name="subjectType"
                 render={({ field }) => (
-                  <RadioGroup {...field} onChange={setSubjectType}>
-                    <FormControlLabel
-                      disabled={isEdit || isView}
-                      checked={subjectData.subjectType == SubjectType.User}
-                      value="user"
-                      control={<Radio />}
-                      label="Bruker"
-                    />
-                    <FormControlLabel
-                      disabled={isEdit || isView}
-                      checked={subjectData.subjectType == SubjectType.Group}
-                      value="group"
-                      control={<Radio />}
-                      label="Gruppe"
-                    />
-                    <FormControlLabel
-                      disabled={isEdit || isView}
-                      checked={subjectData.subjectType == SubjectType.ServiceAccount}
-                      value="serviceAccount"
-                      control={<Radio />}
-                      label="Servicebruker"
-                    />
+                  <RadioGroup
+                    legend="Tilgang gjelder for"
+                    onChange={(val: string) => setSubjectType(val)}>
+                    <Radio disabled={isEdit || isView} checked={subjectData.subjectType == SubjectType.User} value="user">Bruker</Radio>
+                    <Radio disabled={isEdit || isView} checked={subjectData.subjectType == SubjectType.Group} value="group">Gruppe</Radio>
+                    <Radio disabled={isEdit || isView} checked={subjectData.subjectType == SubjectType.ServiceAccount} value="serviceAccount">Servicebruker</Radio>
                   </RadioGroup>
                 )}
               />
-            </FormControl>
             <TextField onChange={setSubject}
               className="hidden-label"
               label="E-post-adresse"
@@ -283,42 +243,27 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
             />
           </div>
           <div>
-            <Heading size="xsmall">
-              Utløper
-            </Heading>
-            <RadioGroup onClick={(e: any) => {
-              e.target.value !== undefined && setAccessType(e.target.value)
-              e.target.value === 'eternal' && setExpireDate(null)
+            <RadioGroup legend="Utløper" onChange={(value: string) => {
+              setAccessType(value)
+              value === 'eternal' && setExpireDate("")
             }}>
-              <FormControlLabel
-                value='eternal'
-                control={<Radio />}
-                disabled={isView}
-                label='Har alltid tilgang'
-                checked={accessType === 'eternal'}
-              />
-              <FormControlLabel
-                value='until'
-                control={<Radio />}
-                disabled={isView}
-                label='Har tilgang til denne datoen'
-                checked={accessType === 'until'}
-              />
+              <Radio value='eternal' disabled={isView} checked={accessType === 'eternal'}>Har alltid tilgang</Radio>
+              <Radio value='until' disabled={isView} checked={accessType === 'until'}>Har tilgang til denne datoen</Radio>
             </RadioGroup>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DesktopDatePicker
-                inputFormat="dd.MM.yyyy"
-                mask="__.__.____"
+            <div className="ml-8 -mt-7">
+              <Datepicker
+                locale="nb"
+                onChange={setExpireDate}
+                disabled={isView || accessType === 'eternal'}
+                inputName="expiryDate"
                 value={expireDate}
-                onChange={(newVal) => setExpireDate(newVal)}
-                disabled={isView && accessType !== 'until'}
-                renderInput={(params) => <MuiTextField disabled={accessType !== 'until'} className="mx-7" {...params} />}
-            />
-            </LocalizationProvider>
+                label=""
+              />
+            </div>
           </div>
           <div>
             {!polly && (
-              <SpacedDiv>
+              <div>
                 <TextField
                   label="Behandling"
                   onChange={(e) => {
@@ -348,10 +293,9 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                     )}
                   </>
                 )}
-              </SpacedDiv>
+                </div>
             )}
-            <br />
-            {polly && (<SpacedDiv>
+            {polly && (<div>
               <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
               <Selection>
                 <Link href={polly.url} target="_blank" rel="noreferrer">
@@ -361,7 +305,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                   setPolly(null);
                 }}>Fjern behandling</RedDelete></IconBox>}
               </Selection>
-            </SpacedDiv>
+            </div>
             )}
           </div>
           {formError && <Alert variant={'error'}>{formError}</Alert>}

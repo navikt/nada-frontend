@@ -1,3 +1,4 @@
+import '@navikt/ds-datepicker/lib/index.css';
 import '../styles/globals.css'
 import type { AppContext, AppInitialProps } from 'next/app'
 import '@navikt/ds-css'
