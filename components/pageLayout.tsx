@@ -27,6 +27,7 @@ const NadaHeader = styled(Header)`
     display: flex
     flex-direction: row
     justify-content: space-between;
+    background-color: #3E3832;
 `
 
 const NadaHeaderRight = styled.div`

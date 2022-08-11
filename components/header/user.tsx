@@ -1,14 +1,10 @@
 import styled from 'styled-components'
-import {Button} from '@navikt/ds-react'
 import React, {MouseEvent, useContext} from 'react'
 import {navGraBakgrunn} from '../../styles/constants'
-import {ExternalLink, People} from '@navikt/ds-icons'
-import {Menu, MenuItem} from '@mui/material'
-import IconButton from '@mui/material/IconButton'
+import {ExternalLink} from '@navikt/ds-icons'
+import {Menu} from '@mui/material'
 import {useRouter} from 'next/router'
 import {UserState} from "../../lib/context";
-import SubjectHeader from "../lib/subjectHeader";
-import AccessRequestsListForUser from "../user/accessRequests";
 import {Header} from "@navikt/ds-react-internal";
 
 const UserBox = styled.div`
@@ -27,11 +23,8 @@ const MenuSeparator = styled.div`
   border: none;
   height: 1px;
   background: ${navGraBakgrunn};
-  margin-bottom: 5px;
-`
-
-const StyledA = styled.a`
-  color: inherit;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 `
 
 const NadaUserButton = styled(Header.UserButton)`
@@ -40,6 +33,18 @@ const NadaUserButton = styled(Header.UserButton)`
 
 const NadaButton = styled(Header.Button)`
     height: 100%;
+`
+
+const StyledMenu = styled(Menu)`
+    width: 300px;
+`
+
+const StyledMenuItem = styled.div`
+    cursor: pointer;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
 `
 
 export default function User() {
@@ -66,7 +71,7 @@ export default function User() {
                 {userInfo ? (
                     <>
                         <NadaUserButton onClick={handleProfileMenuOpen} name={userInfo.name}/>
-                        <Menu
+                        <StyledMenu
                             anchorEl={anchorEl}
                             anchorOrigin={{
                                 vertical: 'top',
@@ -81,64 +86,60 @@ export default function User() {
                             open={isMenuOpen}
                             onClose={handleMenuClose}
                         >
-                            <MenuItem
-                                onClick={() => {
+                            <StyledMenuItem>
+                                <a onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/profile'})
                                 }}>
-                                Min profil
-                            </MenuItem>
+                                    Min profil
+                                </a>
+                            </StyledMenuItem>
                             <MenuSeparator/>
-                            <MenuItem
-                                onClick={() => {
+                            <StyledMenuItem>
+                                <a onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/products'})
-                                }}
-                            >
-                                Mine produkter
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => {
+                                }}>
+                                    Mine produkter
+                                </a>
+                            </StyledMenuItem>
+                            <StyledMenuItem>
+                                <a onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/requests'})
-                                }}
-                            >
-                                Mine tilgangssøknader
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => {
+                                }}>
+                                    Mine tilgangssøknader
+                                </a>
+                            </StyledMenuItem>
+                            <StyledMenuItem>
+                                <a onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/access'})
-                                }}
-                            >
-                                Mine tilganger
-                            </MenuItem>
-                            <MenuItem
-                                onClick={() => {
+                                }}>
+                                    Mine tilganger
+                                </a>
+                            </StyledMenuItem>
+                            <StyledMenuItem>
+                                <a onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/stories'})
-                                }}
-                            >
-                                Mine fortellinger
-                            </MenuItem>
+                                }}>
+                                    Mine fortellinger
+                                </a>
+                            </StyledMenuItem>
                             <MenuSeparator/>
-                            <MenuItem onClick={handleMenuClose}>
-                                <StyledA href={'https://docs.knada.io/'}>
+                            <StyledMenuItem onClick={handleMenuClose}>
+                                <a href={'https://docs.knada.io/'}>
                                     Dokumentasjon <ExternalLink/>
-                                </StyledA>
-                            </MenuItem>
+                                </a>
+                            </StyledMenuItem>
                             <MenuSeparator/>
-                            <a href={`${backendHost()}/api/logout`} style={{textDecoration: 'none'}} >
-                                <MenuItem
-                                    sx={{color: 'red'}}
-                                    onClick={() => {
-                                        handleMenuClose()
-                                    }}
-                                >
+                            <StyledMenuItem>
+                                <a href={`${backendHost()}/api/logout`} >
                                     Logg ut
-                                </MenuItem>
-                            </a>
-                        </Menu>
+                                </a>
+                            </StyledMenuItem>
+                        </StyledMenu>
                     </>
                 ) : (
                         <NadaButton onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
