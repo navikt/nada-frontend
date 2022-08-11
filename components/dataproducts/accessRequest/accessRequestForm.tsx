@@ -169,7 +169,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
     })
   }
 
-  const setSubjectType = (value: String) => {
+  const setSubjectType = (value: string) => {
     setSubjectData((prevState) => {
       return { ...prevState, subjectType: toSubjectType(value) }
     })
