@@ -14,7 +14,6 @@ import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
 import { Delete, ExternalLink } from '@navikt/ds-icons'
 import { Alert, Heading, Link, Radio, RadioGroup, TextField } from '@navikt/ds-react'
-import styled from 'styled-components'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
@@ -26,60 +25,18 @@ import { useRouter } from "next/router";
 import { Datepicker } from '@navikt/ds-datepicker';
 
 export const accessRequestValidation = yup.object().shape({
-  subjectType: yup.string().required(),
-  // subject: yup
-  //   .string()
-  //   .email('Gyldig epost for gruppe eller bruker')
-  //   .when('subjectType', {
-  //     is: (subjectType: string) => subjectType !== 'all-users',
-  //     then: yup.string().required('Legg inn gyldig epost'),
-  //   }),
+  subjectType: yup.string().required(), 
+  subject: yup
+    .string()
+    .email('Gyldig epost for gruppe eller bruker')
+    .when('subjectType', {
+      is: (subjectType: string) => subjectType !== 'all-users',
+      then: yup.string().required('Legg inn gyldig epost'),
+    }),
   // expires: yup.string(),
 })
 
 
-
-const LinkButton = styled.button`
-  background: none !important;
-  border: none;
-  padding: 0 !important;
-  cursor: pointer;
-  color: var(--navds-link-color-text);
-  text-decoration: underline;
-  display: inline-flex;
-  align-items: center;
-  grid-gap: var(--navds-spacing-1);
-  gap: var(--navds-spacing-1);
-
-  &:hover {
-    text-decoration: none;
-  }
-
-  &:active,
-  &:focus {
-    outline: none;
-    color: var(--navds-link-color-text-active);
-    text-decoration: none;
-    background: var(--navds-link-color-background-active) !important;
-    -webkit-box-shadow: var(--navds-text-shadow);
-    box-shadow: var(--navds-text-shadow);
-  }
-`
-
-const Selection = styled.div`
-  display: flex;
-  column-gap: 0.5em;
-`
-
-const IconBox = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const RedDelete = styled(Delete)`
-  color: #BA3A26;
-  cursor: pointer;
-`
 
 interface AccessRequestFormProps {
   accessRequest: AccessRequestFormInput
@@ -285,9 +242,9 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                           searchData.polly.map((searchRes) => {
                             return (
                               <div key={searchRes.externalID}>
-                                <LinkButton onClick={() => onSelect(searchRes)}>
+                                <a href="#" onClick={() => onSelect(searchRes)}>
                                   {searchRes.name}
-                                </LinkButton>
+                                </a>
                               </div>
                             )
                           })}
@@ -299,14 +256,16 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
             )}
             {polly && (<div>
               <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
-              <Selection>
+              <div className="flex flex-row gap-2">
                 <Link href={polly.url} target="_blank" rel="noreferrer">
                   {polly.name}<ExternalLink />
                 </Link>
-                {!isView && <IconBox><RedDelete onClick={() => {
-                  setPolly(null);
-                }}>Fjern behandling</RedDelete></IconBox>}
-              </Selection>
+                {!isView && <div className="flex items-center">
+                  <Delete className="text-interaction-danger cursor-pointer" onClick={() => {setPolly(null);}}>
+                    Fjern behandling
+                  </Delete>
+                </div>}
+              </div>
             </div>
             )}
           </div>
