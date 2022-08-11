@@ -250,14 +250,13 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
               <Radio value='eternal' disabled={isView} checked={accessType === 'eternal'}>Har alltid tilgang</Radio>
               <Radio value='until' disabled={isView} checked={accessType === 'until'}>Har tilgang til denne datoen</Radio>
             </RadioGroup>
-            <div className="ml-8 -mt-7">
+            <div className="ml-8">
               <Datepicker
                 locale="nb"
                 onChange={setExpireDate}
                 disabled={isView || accessType === 'eternal'}
-                inputName="expiryDate"
                 value={expireDate}
-                label=""
+                inputLabel=""
               />
             </div>
           </div>
