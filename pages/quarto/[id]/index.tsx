@@ -3,6 +3,7 @@ import {useQuartoQuery} from "../../../lib/schema/graphql";
 import ErrorMessage from "../../../components/lib/error";
 import LoaderSpinner from "../../../components/lib/spinner";
 import * as React from "react";
+import InnerHTML from 'dangerously-set-html-content'
 
 const QuartoPage = () => {
     const router = useRouter()
@@ -15,7 +16,7 @@ const QuartoPage = () => {
 
     const quarto = query.data.quarto.content
 
-    return <div dangerouslySetInnerHTML={{__html: quarto}}/>
+    return <InnerHTML html={quarto} />
 }
 
 export default QuartoPage
