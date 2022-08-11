@@ -179,7 +179,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
     const accessRequest: AccessRequestFormInput = {
       ...requestData,
       polly: polly,
-      expires: expireDate,
+      expires: new Date(expireDate),
       subject: subjectData.subject,
       subjectType: subjectData.subjectType,
     }
@@ -257,6 +257,9 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                 disabled={isView || accessType === 'eternal'}
                 value={expireDate}
                 inputLabel=""
+                limitations={{
+                  minDate: new Date().toISOString()
+                }}
               />
             </div>
           </div>
