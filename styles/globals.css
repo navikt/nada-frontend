@@ -23,6 +23,10 @@
   @apply hover:bg-focus hover:text-text-inverted
 }
 
+.select__option--is-focused {
+  @apply bg-focus text-text-inverted
+}
+
 .select__control--is-focused {
   @apply border-focus border-2 hover:border-focus
 }

@@ -207,6 +207,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                   loadOptions={loadOptions}
                   isLoading={searchLoading}
                   onChange={onInputChange}
+                  menuIsOpen={true}
                />
           </div>
           {formError && <Alert variant={'error'}>{formError}</Alert>}
