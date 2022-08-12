@@ -54,8 +54,8 @@ export const PageLayout = ({children}: { children: React.ReactNode }) => {
                     {router.pathname !== '/' && <Header.Title><Logo/></Header.Title>}
                 </NadaHeaderLeft>
                 <NadaHeaderRight>
-                    {userInfo && <Header.Button onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
-                    <Header.Button onClick={async () => await router.push('/about')}><Information/></Header.Button>
+                    {userInfo && <Header.Button style={{borderLeft: "transparent"}} onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
+                    <Header.Button style={userInfo !== undefined ? {borderLeft: "1px solid var(--navdsi-header-color-border)"}: {borderLeft: "transparent"}} onClick={async () => await router.push('/about')}><Information/></Header.Button>
                     <User/>
                 </NadaHeaderRight>
             </NadaHeader>

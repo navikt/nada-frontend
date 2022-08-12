@@ -18,16 +18,11 @@ const UserBox = styled.div`
 
 const MenuSeparator = styled.div`
   position: relative;
-  top: 5px;
   border: none;
   height: 1px;
   background: ${navGraBakgrunn};
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   margin-bottom: 0.5rem;
-`
-
-const NadaUserButton = styled(Header.UserButton)`
-    height: 100%;
 `
 
 const StyledMenuItem = styled.div`
@@ -36,6 +31,10 @@ const StyledMenuItem = styled.div`
     padding-right: 1rem;
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
+`
+
+const StyledA = styled.a`
+  font-size: 1rem;
 `
 
 export default function User() {
@@ -61,7 +60,7 @@ export default function User() {
             <UserBox>
                 {userInfo ? (
                     <>
-                        <NadaUserButton onClick={handleProfileMenuOpen} name={userInfo.name}/>
+                        <Header.UserButton style={{height: "100%"}} onClick={handleProfileMenuOpen} name={userInfo.name}/>
                         <Menu
                             anchorEl={anchorEl}
                             anchorOrigin={{
@@ -78,56 +77,47 @@ export default function User() {
                             onClose={handleMenuClose}
                         >
                             <StyledMenuItem>
-                                <a onClick={() => {
-                                    handleMenuClose()
-                                    router.push({pathname: '/user/profile'})
-                                }}>
-                                    Min profil
-                                </a>
-                            </StyledMenuItem>
-                            <MenuSeparator/>
-                            <StyledMenuItem>
-                                <a onClick={() => {
+                                <StyledA onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/products'})
                                 }}>
                                     Mine produkter
-                                </a>
+                                </StyledA>
                             </StyledMenuItem>
                             <StyledMenuItem>
-                                <a onClick={() => {
+                                <StyledA onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/requests'})
                                 }}>
                                     Mine tilgangssøknader
-                                </a>
+                                </StyledA>
                             </StyledMenuItem>
                             <StyledMenuItem>
-                                <a onClick={() => {
+                                <StyledA onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/access'})
                                 }}>
                                     Mine tilganger
-                                </a>
+                                </StyledA>
                             </StyledMenuItem>
                             <StyledMenuItem>
-                                <a onClick={() => {
+                                <StyledA onClick={() => {
                                     handleMenuClose()
                                     router.push({pathname: '/user/stories'})
                                 }}>
                                     Mine fortellinger
-                                </a>
+                                </StyledA>
                             </StyledMenuItem>
                             <MenuSeparator/>
                             <StyledMenuItem>
-                                <a href={`${backendHost()}/api/logout`} >
+                                <StyledA href={`${backendHost()}/api/logout`} >
                                     Logg ut
-                                </a>
+                                </StyledA>
                             </StyledMenuItem>
                         </Menu>
                     </>
                 ) : (
-                        <Header.Button onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+                        <Header.Button style={{height: "100%"}} onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
                             router.asPath
                         )}`)} key="logg-inn">
                             Logg inn
