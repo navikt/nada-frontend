@@ -25,9 +25,15 @@ const Main = styled.main`
 
 const NadaHeader = styled(Header)`
     display: flex
-    flex-direction: row
-    justify-content: space-between;
+    flex-direction: row;
     background-color: #3E3832;
+`
+
+const NadaHeaderLeft = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-left: 0;
+    margin-right: auto;
 `
 
 const NadaHeaderRight = styled.div`
@@ -44,7 +50,9 @@ export const PageLayout = ({children}: { children: React.ReactNode }) => {
     return (
         <Container>
             <NadaHeader>
-                {router.pathname !== '/' && <Header.Title><Logo/></Header.Title>}
+                <NadaHeaderLeft>
+                    {router.pathname !== '/' && <Header.Title><Logo/></Header.Title>}
+                </NadaHeaderLeft>
                 <NadaHeaderRight>
                     {userInfo && <Header.Button onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
                     <Header.Button onClick={async () => await router.push('/about')}><Information/></Header.Button>

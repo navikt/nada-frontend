@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import React, {MouseEvent, useContext} from 'react'
 import {navGraBakgrunn} from '../../styles/constants'
-import {ExternalLink} from '@navikt/ds-icons'
 import {Menu} from '@mui/material'
 import {useRouter} from 'next/router'
 import {UserState} from "../../lib/context";
@@ -29,14 +28,6 @@ const MenuSeparator = styled.div`
 
 const NadaUserButton = styled(Header.UserButton)`
     height: 100%;
-`
-
-const NadaButton = styled(Header.Button)`
-    height: 100%;
-`
-
-const StyledMenu = styled(Menu)`
-    width: 300px;
 `
 
 const StyledMenuItem = styled.div`
@@ -71,10 +62,10 @@ export default function User() {
                 {userInfo ? (
                     <>
                         <NadaUserButton onClick={handleProfileMenuOpen} name={userInfo.name}/>
-                        <StyledMenu
+                        <Menu
                             anchorEl={anchorEl}
                             anchorOrigin={{
-                                vertical: 'top',
+                                vertical: 'bottom',
                                 horizontal: 'right',
                             }}
                             id={menuId}
@@ -128,25 +119,19 @@ export default function User() {
                                 </a>
                             </StyledMenuItem>
                             <MenuSeparator/>
-                            <StyledMenuItem onClick={handleMenuClose}>
-                                <a href={'https://docs.knada.io/'}>
-                                    Dokumentasjon <ExternalLink/>
-                                </a>
-                            </StyledMenuItem>
-                            <MenuSeparator/>
                             <StyledMenuItem>
                                 <a href={`${backendHost()}/api/logout`} >
                                     Logg ut
                                 </a>
                             </StyledMenuItem>
-                        </StyledMenu>
+                        </Menu>
                     </>
                 ) : (
-                        <NadaButton onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+                        <Header.Button onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
                             router.asPath
                         )}`)} key="logg-inn">
                             Logg inn
-                        </NadaButton>
+                        </Header.Button>
                 )}
             </UserBox>
             )
