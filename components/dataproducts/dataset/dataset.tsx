@@ -57,9 +57,9 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
             open={accessRequested}
             aria-label='Søk om tilgang til datasettet'
             onClose={() => setAccessRequested(false)}
-            className="w-full md:w-1/3"
+            className="w-full md:w-1/3 px-8 h-[52rem]"
         >
-            <Modal.Content>
+            <Modal.Content className="h-full">
                 <NewAccessRequestForm dataset={dataset} newAccessRequest={defaultAccessRequestValues}/>
             </Modal.Content>
         </Modal>

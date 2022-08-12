@@ -15,6 +15,26 @@
   @apply border-gray-300 cursor-not-allowed;
 }
 
+.select__control {
+  @apply border-border hover:border-focus min-h-[48px] 
+}
+
+.select__option {
+  @apply hover:bg-focus hover:text-text-inverted
+}
+
+.select__control--is-focused {
+  @apply border-focus border-2 hover:border-focus
+}
+
+.select__menu-list {
+  @apply max-h-44
+}
+
+.select__dropdown-indicator, .select__indicator-separator {
+  @apply hidden;
+}
+
 html,
 body {
   padding: 0;

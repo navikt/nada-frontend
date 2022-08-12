@@ -13,7 +13,7 @@ import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
 import { Delete, ExternalLink } from '@navikt/ds-icons'
-import { Alert, Heading, Link, Radio, RadioGroup, TextField } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import RightJustifiedSubmitButton from '../../widgets/formSubmit'
@@ -23,6 +23,8 @@ import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import { useRouter } from "next/router";
 import { Datepicker } from '@navikt/ds-datepicker';
+import AsyncSelect from 'react-select/async';
+
 
 export const accessRequestValidation = yup.object().shape({
   subjectType: yup.string().required(), 
@@ -62,7 +64,6 @@ export type AccessRequestFormInput = {
 const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproductSlug, dataset, isOwner }: AccessRequestFormProps) => {
   const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [denyReason, setDenyReason] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
   const [expireDate, setExpireDate] = useState<string>(accessRequest.expires ? accessRequest.expires : "")
   const [accessType, setAccessType] = useState(accessRequest.expires ? 'until' : 'eternal')
@@ -70,8 +71,6 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
     subject: accessRequest.subject,
     subjectType: accessRequest.subjectType,
   })
-  const [approveAccessRequest] = useApproveAccessRequestMutation()
-  const [denyAccessRequest] = useDenyAccessRequestMutation()
   const router = useRouter()
 
   const { data: userInfo, error: userError, loading: userLoading } = useUserInfoDetailsQuery()
@@ -106,20 +105,6 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
     return SubjectType.User
   }
 
-  const onSearch = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setSearchText(e.target.value)
-  }
-
-  const onSelect = (search: QueryPolly) => {
-    setSearchText("")
-    setPolly({
-      id: null,
-      name: search.name,
-      url: search.url,
-      externalID: search.externalID,
-    })
-  }
-
   const setSubject = (event: ChangeEvent<HTMLInputElement>) => {
     setSubjectData((prevState) => {
       return { ...prevState, subject: event.target.value }
@@ -143,38 +128,28 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
     onSubmit(accessRequest)
   }
 
-  const onApprove = async () => {
-    try {
-      await approveAccessRequest({
-            variables: { id: accessRequest.id as string },
-            awaitRefetchQueries: true,
-            refetchQueries: ['DataproductAccess', 'accessRequestsForDataproduct'],
-          },
-      )
-    } catch (e: any) {
-      setFormError(e.message)
-    }
-    await router.push(`/dataproduct/${dataset.dataproductID}/${dataproductSlug}/${dataset.id}/access`)
+  interface Option {
+    value: string
+    label: string
   }
 
-  const onDeny = async () => {
-    try {
-      await denyAccessRequest({
-            variables: { id: accessRequest.id as string, reason: denyReason },
-            awaitRefetchQueries: true,
-            refetchQueries: ['accessRequestsForDataproduct'],
-          },
-      )
-    } catch (e: any) {
-      setFormError(e.message)
-    }
-    await router.push(`/dataproduct/${dataset.dataproductID}/${dataproductSlug}/${dataset.id}/access`)
+  const loadOptions = (input: string, callback: (options: Option[]) => void) => {
+    setSearchText(input)
+    setTimeout(() => {
+      callback(searchData ? searchData.polly.map((el) => {return {value: el.externalID, label: el.name}}) : [])
+    }, 250)
+  }
+
+  const onInputChange = (newOption: Option | null) => {
+    newOption != null 
+      ? searchData && setPolly(searchData.polly.find(e => e.externalID == newOption.value))
+      : setPolly(null)
   }
 
   return (
-    <div>
-        <Heading level="1" size="large" className="pb-8 w-11/12">Tilgangssøknad for {dataset.name}</Heading>
-        <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-12">
+    <div className="h-full">
+        <Heading level="1" size="large" className="pb-8">Tilgangssøknad for {dataset.name}</Heading>
+        <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-10 h-[90%]">
           <div>
               <Controller
                 rules={{ required: true }}
@@ -182,11 +157,11 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                 name="subjectType"
                 render={({ field }) => (
                   <RadioGroup
-                    legend="Tilgang gjelder for"
+                    legend="Hvem gjelder tilgangen for?"
                     onChange={(val: string) => setSubjectType(val)}>
-                    <Radio disabled={isEdit || isView} checked={subjectData.subjectType == SubjectType.User} value="user">Bruker</Radio>
-                    <Radio disabled={isEdit || isView} checked={subjectData.subjectType == SubjectType.Group} value="group">Gruppe</Radio>
-                    <Radio disabled={isEdit || isView} checked={subjectData.subjectType == SubjectType.ServiceAccount} value="serviceAccount">Servicebruker</Radio>
+                    <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.User} value="user">Bruker</Radio>
+                    <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.Group} value="group">Gruppe</Radio>
+                    <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.ServiceAccount} value="serviceAccount">Servicebruker</Radio>
                   </RadioGroup>
                 )}
               />
@@ -196,22 +171,19 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
               placeholder="Skriv inn e-post-adresse"
               defaultValue={accessRequest.subject ? accessRequest.subject : ""}
               size="medium"
-              disabled={isEdit || isView}
             />
           </div>
           <div>
-            <RadioGroup legend="Utløper" onChange={(value: string) => {
+            <RadioGroup legend="Hvor lenge ønsker du tilgang?" onChange={(value: string) => {
               setAccessType(value)
               value === 'eternal' && setExpireDate("")
             }}>
-              <Radio value='eternal' disabled={isView} checked={accessType === 'eternal'}>Har alltid tilgang</Radio>
-              <Radio value='until' disabled={isView} checked={accessType === 'until'}>Har tilgang til denne datoen</Radio>
-            </RadioGroup>
-            <div className="ml-8">
+              <Radio value='until' checked={accessType === 'until'}>Til dato</Radio>
+              <div className="ml-8">
               <Datepicker
                 locale="nb"
                 onChange={setExpireDate}
-                disabled={isView || accessType === 'eternal'}
+                disabled={accessType === 'eternal'}
                 value={expireDate}
                 inputLabel=""
                 limitations={{
@@ -219,62 +191,29 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
                 }}
               />
             </div>
+              <Radio value='eternal'checked={accessType === 'eternal'}>For alltid</Radio>
+            </RadioGroup>
           </div>
           <div>
-            {!polly && (
-              <div>
-                <TextField
-                  label="Behandling"
-                  onChange={(e) => {
-                    onSearch(e)
-                  }}
-                  disabled={isView}
-                />
-                {searchText.length >= 3 && (
-                  <>
-                    {searchError && <ErrorMessage error={searchError} />}
-                    {searchLoading && <LoaderSpinner />}
-                    {searchData && searchData.polly.length === 0 ? (
-                      <>Ingen treff</>
-                    ) : (
-                      <>
-                        {searchData &&
-                          searchData.polly.map((searchRes) => {
-                            return (
-                              <div key={searchRes.externalID}>
-                                <a href="#" onClick={() => onSelect(searchRes)}>
-                                  {searchRes.name}
-                                </a>
-                              </div>
-                            )
-                          })}
-                      </>
-                    )}
-                  </>
-                )}
-                </div>
-            )}
-            {polly && (<div>
-              <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
-              <div className="flex flex-row gap-2">
-                <Link href={polly.url} target="_blank" rel="noreferrer">
-                  {polly.name}<ExternalLink />
-                </Link>
-                {!isView && <div className="flex items-center">
-                  <Delete className="text-interaction-danger cursor-pointer" onClick={() => {setPolly(null);}}>
-                    Fjern behandling
-                  </Delete>
-                </div>}
-              </div>
-            </div>
-            )}
+              <label className="navds-label">Velg behandling fra behandlingskatalogen</label>
+              <AsyncSelect
+                  className="pt-2"
+                  classNamePrefix="select"
+                  cacheOptions
+                  isClearable
+                  placeholder="Skriv inn navnet på behandlingen"
+                  noOptionsMessage={({inputValue}) => inputValue ? "Finner ikke behandling" : null}
+                  loadingMessage={() => "Søker etter behandling..."}
+                  loadOptions={loadOptions}
+                  isLoading={searchLoading}
+                  onChange={onInputChange}
+               />
           </div>
           {formError && <Alert variant={'error'}>{formError}</Alert>}
-          {!isView && <RightJustifiedSubmitButton onCancel={() => {
-            router.push(`/user/requests`)
-          }} />}
-          {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
-          {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "ingen begrunnelse oppgitt"}</Alert>}
+          <div className="flex flex-row gap-4 grow items-end">
+            <Button type='button' variant='secondary' onClick={() => {router.push(`/user/requests`)}}>Avbryt</Button>
+            <Button type='submit'>Lagre</Button>
+          </div>
         </form>
     </div>
   )
