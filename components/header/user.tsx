@@ -1,128 +1,68 @@
-import styled from 'styled-components'
 import React, {MouseEvent, useContext} from 'react'
-import {navGraBakgrunn} from '../../styles/constants'
-import {Menu} from '@mui/material'
 import {useRouter} from 'next/router'
 import {UserState} from "../../lib/context";
-import {Header} from "@navikt/ds-react-internal";
-
-const UserBox = styled.div`
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  a {
-    text-decoration: none;
-  }
-`
-
-const MenuSeparator = styled.div`
-  position: relative;
-  border: none;
-  height: 1px;
-  background: ${navGraBakgrunn};
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-`
-
-const StyledMenuItem = styled.div`
-    cursor: pointer;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-`
-
-const StyledA = styled.a`
-  font-size: 1rem;
-`
+import {Divider, Dropdown, Header} from "@navikt/ds-react-internal";
 
 export default function User() {
     const userInfo = useContext(UserState)
 
     const router = useRouter()
-    const menuId = 'primary-search-account-menu'
-    const [anchorEl, setAnchorEl] = React.useState<Element | null>(null)
-    const isMenuOpen = Boolean(anchorEl)
-    const handleProfileMenuOpen = (event: MouseEvent) => {
-        setAnchorEl(event.currentTarget)
-    }
-
-    const handleMenuClose = () => {
-        setAnchorEl(null)
-    }
 
     const backendHost = () => {
         return process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
     }
 
     return (
-            <UserBox>
-                {userInfo ? (
-                    <>
-                        <Header.UserButton style={{height: "100%"}} onClick={handleProfileMenuOpen} name={userInfo.name}/>
-                        <Menu
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                            }}
-                            id={menuId}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={isMenuOpen}
-                            onClose={handleMenuClose}
-                        >
-                            <StyledMenuItem>
-                                <StyledA onClick={() => {
-                                    handleMenuClose()
+            userInfo ? (
+                <Dropdown>
+                    <Header.Button className="whitespace-nowrap" as={Dropdown.Toggle}>{userInfo.name}</Header.Button>
+                    <Dropdown.Menu className="w-fit">
+                        <Dropdown.Menu.GroupedList>
+                            <Dropdown.Menu.GroupedList.Item>
+                                <a className={"text-base"} onClick={() => {
                                     router.push({pathname: '/user/products'})
                                 }}>
                                     Mine produkter
-                                </StyledA>
-                            </StyledMenuItem>
-                            <StyledMenuItem>
-                                <StyledA onClick={() => {
-                                    handleMenuClose()
-                                    router.push({pathname: '/user/requests'})
-                                }}>
-                                    Mine tilgangssøknader
-                                </StyledA>
-                            </StyledMenuItem>
-                            <StyledMenuItem>
-                                <StyledA onClick={() => {
-                                    handleMenuClose()
-                                    router.push({pathname: '/user/access'})
-                                }}>
-                                    Mine tilganger
-                                </StyledA>
-                            </StyledMenuItem>
-                            <StyledMenuItem>
-                                <StyledA onClick={() => {
-                                    handleMenuClose()
+                                </a>
+                            </Dropdown.Menu.GroupedList.Item>
+                            <Dropdown.Menu.GroupedList.Item>
+                                <a className={"text-base"} onClick={() => {
                                     router.push({pathname: '/user/stories'})
                                 }}>
                                     Mine fortellinger
-                                </StyledA>
-                            </StyledMenuItem>
-                            <MenuSeparator/>
-                            <StyledMenuItem>
-                                <StyledA href={`${backendHost()}/api/logout`} >
-                                    Logg ut
-                                </StyledA>
-                            </StyledMenuItem>
-                        </Menu>
-                    </>
-                ) : (
-                        <Header.Button style={{height: "100%"}} onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
-                            router.asPath
-                        )}`)} key="logg-inn">
-                            Logg inn
-                        </Header.Button>
-                )}
-            </UserBox>
+                                </a>
+                            </Dropdown.Menu.GroupedList.Item>
+                            <Dropdown.Menu.GroupedList.Item>
+                                    <a className={"text-base"} onClick={() => {
+                                        router.push({pathname: '/user/requests'})
+                                    }}>
+                                        Mine tilgangssøknader
+                                    </a>
+                            </Dropdown.Menu.GroupedList.Item>
+                            <Dropdown.Menu.GroupedList.Item>
+                                    <a className={"text-base"} onClick={() => {
+                                        router.push({pathname: '/user/access'})
+                                    }}>
+                                        Mine tilganger
+                                    </a>
+                            </Dropdown.Menu.GroupedList.Item>
+                        </Dropdown.Menu.GroupedList>
+                        <Divider />
+                        <Dropdown.Menu.GroupedList>
+                            <Dropdown.Menu.GroupedList.Item>
+                                    <a className={"text-base"} href={`${backendHost()}/api/logout`} >
+                                        Logg ut
+                                    </a>
+                            </Dropdown.Menu.GroupedList.Item>
+                        </Dropdown.Menu.GroupedList>
+                    </Dropdown.Menu>
+                </Dropdown>
+            ) : (
+                    <Header.Button className={"h-full"} onClick={async () => await router.push(`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+                        router.asPath
+                    )}`)} key="logg-inn">
+                        Logg inn
+                    </Header.Button>
             )
+        )
 }

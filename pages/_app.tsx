@@ -1,8 +1,8 @@
 import '@navikt/ds-datepicker/lib/index.css';
-import '../styles/globals.css'
-import type { AppContext, AppInitialProps } from 'next/app'
 import '@navikt/ds-css'
 import '@navikt/ds-css-internal'
+import '../styles/globals.css'
+import type { AppContext, AppInitialProps } from 'next/app'
 import Head from 'next/head'
 import '@fontsource/source-sans-pro'
 import { ApolloProvider } from '@apollo/client'

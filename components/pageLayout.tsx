@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import User from './header/user'
 import Logo from './header/logo'
 import {useRouter} from 'next/router'
@@ -7,60 +6,23 @@ import {AddCircle, Information} from "@navikt/ds-icons";
 import React, {useContext} from "react";
 import {UserState} from "../lib/context";
 
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-`
-const Main = styled.main`
-  width: 80vw;
-  @media only screen and (max-width: 768px) {
-    width: 95vw;
-  }
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`
-
-const NadaHeader = styled(Header)`
-    display: flex
-    flex-direction: row;
-    background-color: #3E3832;
-`
-
-const NadaHeaderLeft = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-left: 0;
-    margin-right: auto;
-`
-
-const NadaHeaderRight = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-left: auto;
-    margin-right: 1rem;
-`
 
 export const PageLayout = ({children}: { children: React.ReactNode }) => {
     const router = useRouter()
     const userInfo = useContext(UserState)
 
     return (
-        <Container>
-            <NadaHeader>
-                <NadaHeaderLeft>
-                    {router.pathname !== '/' && <Header.Title><Logo/></Header.Title>}
-                </NadaHeaderLeft>
-                <NadaHeaderRight>
-                    {userInfo && <Header.Button style={{borderLeft: "transparent"}} onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
-                    <Header.Button style={userInfo !== undefined ? {borderLeft: "1px solid var(--navdsi-header-color-border)"}: {borderLeft: "transparent"}} onClick={async () => await router.push('/about')}><Information/></Header.Button>
+        <div className="min-h-screen flex flex-col">
+            <Header className="flex flex-row justify-between">
+                <Header.Title><Logo/></Header.Title>
+                <div className="flex flex-row ">
+                    {userInfo && <Header.Button className="border-transparent" onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
+                    <Header.Button className={userInfo ? "" : "border-transparent"} onClick={async () => await router.push('/about')}><Information/></Header.Button>
                     <User/>
-                </NadaHeaderRight>
-            </NadaHeader>
-            <Main>{children}</Main>
-        </Container>
+                </div>
+            </Header>
+            <main className="w-[95vw] md:w-[80vw] flex flex-col grow self-center">{children}</main>
+        </div>
     )
 }
 
