@@ -29,7 +29,7 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
         <div className="flex flex-col gap-3">
             {menuItems.map(({ title, slug }, idx) => currentPage == idx
                 ? <p className="font-semibold mx-1" key={idx}>{title}</p>
-                : <a className="font-semibold no-underline mx-1 hover:underline hover:cursor-pointer" href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</a>
+                : <Link className="font-semibold no-underline mx-1 hover:underline hover:cursor-pointer" href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</Link>
             )}
         </div>
         <div className="h-fit w-64 text-base leading-4 pr-4 pb-0 fixed bottom-0">

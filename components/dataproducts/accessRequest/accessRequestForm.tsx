@@ -1,23 +1,17 @@
 import {
-  QueryPolly,
   SubjectType,
   usePollyQuery,
   PollyInput,
   Maybe,
   Scalars,
   useUserInfoDetailsQuery,
-  useApproveAccessRequestMutation,
-  useDenyAccessRequestMutation
 } from '../../../lib/schema/graphql'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import * as React from 'react'
 import { ChangeEvent, useState } from 'react'
-import { Delete, ExternalLink } from '@navikt/ds-icons'
 import { Alert, Button, Heading, Link, Radio, RadioGroup, TextField } from '@navikt/ds-react'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import RightJustifiedSubmitButton from '../../widgets/formSubmit'
-import { RightJustifiedGrantButton } from '../../widgets/formSubmit'
 import * as yup from 'yup'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
@@ -27,17 +21,13 @@ import AsyncSelect from 'react-select/async';
 
 
 export const accessRequestValidation = yup.object().shape({
-  subjectType: yup.string().required(), 
+  subjectType: yup.string().required().oneOf(["group", "user", "serviceAccount"], "Du må velge hvem tilgangen gjelder for"),
   subject: yup
-    .string()
-    .email('Gyldig epost for gruppe eller bruker')
-    .when('subjectType', {
-      is: (subjectType: string) => subjectType !== 'all-users',
-      then: yup.string().required('Legg inn gyldig epost'),
-    }),
-  // expires: yup.string(),
+      .string()
+      .email('Du må skrive inn e-postadressen til hvem tilgangen gjelder for'),
+  accessType: yup.string().required().oneOf(["eternal", "until"], "Du må velge hvor lenge du ønsker tilgang"),
+  expires: yup.string(),
 })
-
 
 
 interface AccessRequestFormProps {
@@ -69,7 +59,7 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
   const [accessType, setAccessType] = useState(accessRequest.expires ? 'until' : 'eternal')
   const [subjectData, setSubjectData] = useState({
     subject: accessRequest.subject,
-    subjectType: accessRequest.subjectType,
+    subjectType: accessRequest.subjectType ? accessRequest.subjectType : SubjectType.User,
   })
   const router = useRouter()
 
@@ -83,11 +73,12 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
   const { formState, handleSubmit, control, watch, register, reset } = useForm({
     resolver: yupResolver(accessRequestValidation),
     defaultValues: {
-      subjectType: accessRequest.subjectType,
-      subject: accessRequest.subject,
+      subjectType: subjectData.subjectType,
+      subject: subjectData.subject,
       datasetID: accessRequest.datasetID,
-      expires: accessRequest.expires,
-      polly: accessRequest.polly,
+      accessType: accessType,
+      expires: expireDate,
+      polly,
     }
   })
 
@@ -151,40 +142,34 @@ const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit, dataproduc
         <Heading level="1" size="large" className="pb-8">Tilgangssøknad for {dataset.name}</Heading>
         <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-10 h-[90%]">
           <div>
-              <Controller
-                rules={{ required: true }}
-                control={control}
-                name="subjectType"
-                render={({ field }) => (
-                  <RadioGroup
-                    legend="Hvem gjelder tilgangen for?"
-                    onChange={(val: string) => setSubjectType(val)}>
-                    <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.User} value="user">Bruker</Radio>
-                    <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.Group} value="group">Gruppe</Radio>
-                    <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.ServiceAccount} value="serviceAccount">Servicebruker</Radio>
-                  </RadioGroup>
-                )}
-              />
-            <TextField onChange={setSubject}
+            <RadioGroup
+              { ...register("subjectType")}
+              legend="Hvem gjelder tilgangen for?"
+              error={formState.errors?.subjectType?.message}>
+              <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.User} value="user">Bruker</Radio>
+              <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.Group} value="group">Gruppe</Radio>
+              <Radio disabled={isEdit} checked={subjectData.subjectType == SubjectType.ServiceAccount} value="serviceAccount">Servicebruker</Radio>
+            </RadioGroup>
+            <TextField 
+              { ...register("subject")}
               className="hidden-label"
               label="E-post-adresse"
               placeholder="Skriv inn e-post-adresse"
-              defaultValue={accessRequest.subject ? accessRequest.subject : ""}
+              error={formState.errors?.subject?.message}
               size="medium"
             />
           </div>
           <div>
-            <RadioGroup legend="Hvor lenge ønsker du tilgang?" onChange={(value: string) => {
-              setAccessType(value)
-              value === 'eternal' && setExpireDate("")
-            }}>
+            <RadioGroup 
+              legend="Hvor lenge ønsker du tilgang?" 
+              error={formState.errors?.accessType?.message} 
+              { ...register("accessType")}>
               <Radio value='until' checked={accessType === 'until'}>Til dato</Radio>
               <div className="ml-8">
               <Datepicker
                 locale="nb"
-                onChange={setExpireDate}
-                disabled={accessType === 'eternal'}
-                value={expireDate}
+                { ...register("expires")}
+                disabled={formState.accessType === 'eternal'}
                 inputLabel=""
                 limitations={{
                   minDate: new Date().toISOString()

@@ -15,7 +15,7 @@ export const PageLayout = ({children}: { children: React.ReactNode }) => {
         <div className="min-h-screen flex flex-col">
             <Header className="flex flex-row justify-between">
                 <Header.Title><Logo/></Header.Title>
-                <div className="flex flex-row ">
+                <div className="flex flex-row">
                     {userInfo && <Header.Button className="border-transparent" onClick={async () => await router.push('/dataproduct/new')}><AddCircle/></Header.Button>}
                     <Header.Button className={userInfo ? "" : "border-transparent"} onClick={async () => await router.push('/about')}><Information/></Header.Button>
                     <User/>
