@@ -4,14 +4,16 @@ import {
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { useRouter } from "next/router";
-import AccessRequestForm, {AccessRequestFormInput} from "./accessRequestForm";
+import AccessRequestFormV2, {AccessRequestFormInput} from './accessRequestFormV2';
+import { DatasetQuery } from '../../../lib/schema/datasetQuery';
 
 interface UpdateAccessRequestFormProps {
   updateAccessRequestData: AccessRequest
+  dataset: DatasetQuery
+  setModal: (value: boolean) => void
 }
 
-const UpdateAccessRequest = ({updateAccessRequestData}: UpdateAccessRequestFormProps) => {
-  const router = useRouter()
+const UpdateAccessRequest = ({dataset, updateAccessRequestData, setModal}: UpdateAccessRequestFormProps) => {
   const [updateAccessRequest] = useUpdateAccessRequestMutation()
   const accessRequest: AccessRequestFormInput = {
     ...updateAccessRequestData
@@ -26,14 +28,15 @@ const UpdateAccessRequest = ({updateAccessRequestData}: UpdateAccessRequestFormP
             owner: updateAccessRequestData.owner,
             polly: requestData.polly
           },
-        }
+        },
+        refetchQueries: ["userInfoDetails"]
       }).then(() => {
-        router.push(`/user/requests`)
+        setModal(false)
       })
   }
 
   return (
-      <AccessRequestForm accessRequest={accessRequest} isEdit={true} isView={false} onSubmit={onSubmit}/>
+      <AccessRequestFormV2 dataset={dataset} accessRequest={accessRequest} isEdit={true} onSubmit={onSubmit}/>
   )
 }
 

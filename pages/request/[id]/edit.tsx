@@ -1,6 +1,6 @@
 import LoaderSpinner from '../../../components/lib/spinner'
 import ErrorMessage from '../../../components/lib/error'
-import { useAccessRequestQuery } from '../../../lib/schema/graphql'
+import { useAccessRequestQuery, useDatasetQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../lib/apollo'
 import * as React from 'react'
@@ -20,16 +20,27 @@ const AccessRequestEdit = (props: RequestProps) => {
     ssr: true,
   })
 
-  if (error) return <ErrorMessage error={error} />
+  
 
+  if (error) return <ErrorMessage error={error} />
   if (loading || !data?.accessRequest) return <LoaderSpinner />
+  
+  
+  const { data: dataset, loading: datasetLoading, error: datasetError } = useDatasetQuery({
+    variables: {
+        id: data?.accessRequest.datasetID
+    }
+  })
+
+  if (datasetError) return <ErrorMessage error={datasetError} />
+  if (datasetLoading || !dataset?.dataset) return <LoaderSpinner />
 
   return (
     <>
       <Head>
         <title>rediger tilgangssøknad</title>
       </Head>
-      <UpdateAccessRequest updateAccessRequestData={data.accessRequest} />
+      <UpdateAccessRequest dataset={dataset.dataset} updateAccessRequestData={data.accessRequest} />
     </>
   )
 }

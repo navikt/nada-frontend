@@ -6,8 +6,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 import * as yup from 'yup'
-import { PollyInput, SubjectType, usePollyQuery } from '../../../lib/schema/graphql';
-import { AccessRequestFormInput } from './accessRequestForm';
+import { Maybe, PollyInput, Scalars, SubjectType, usePollyQuery } from '../../../lib/schema/graphql';
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 
 const schema = yup.object({
@@ -17,7 +16,19 @@ const schema = yup.object({
     expires: yup.string().matches(/\d{4}-[01]\d-[0-3]\d/, "Du må velge en dato")
 }).required();
 
+export type AccessRequestFormInput = {
+    id?: Maybe<Scalars['ID']>
+    datasetID: Scalars['ID']
+    expires?: Maybe<Scalars['Time']>
+    polly?: Maybe<PollyInput>
+    subject?: Maybe<Scalars['String']>
+    subjectType?: Maybe<SubjectType>
+    status?: Maybe<Scalars['String']>
+    reason?: Maybe<Scalars['String']>
+  }
+
 interface AccessRequestFormProps {
+    accessRequest?: AccessRequestFormInput
     dataset: DatasetQuery
     isEdit: boolean
     onSubmit: (requestData: AccessRequestFormInput) => void
@@ -30,7 +41,7 @@ interface AccessRequestFields {
     expires: string,
 }
 
-const AccessRequestFormV2 = ({ dataset, isEdit, onSubmit }: AccessRequestFormProps) => {
+const AccessRequestFormV2 = ({ accessRequest, dataset, isEdit, onSubmit }: AccessRequestFormProps) => {
     const [searchText, setSearchText] = useState('')
     const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
     const router = useRouter()
@@ -38,10 +49,10 @@ const AccessRequestFormV2 = ({ dataset, isEdit, onSubmit }: AccessRequestFormPro
     const { register, handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            subject: "",
-            subjectType: SubjectType.User,
-            accessType: "until",
-            expires: ""
+            subject: accessRequest?.subject ? accessRequest.subject : "",
+            subjectType: accessRequest?.subjectType ? accessRequest.subjectType : SubjectType.User,
+            accessType: accessRequest?.expires ? "until" : "eternal",
+            expires: accessRequest?.expires ? new Date(accessRequest.expires).toISOString().substr(0, 10) : ""
         }
     });
 
@@ -51,7 +62,6 @@ const AccessRequestFormV2 = ({ dataset, isEdit, onSubmit }: AccessRequestFormPro
       })
 
     const onSubmitForm = (data: AccessRequestFields) => {
-        console.log(JSON.stringify(data))
         const accessRequest: AccessRequestFormInput = {
             datasetID: dataset.id,
             subject: data.subject,
@@ -99,6 +109,7 @@ const AccessRequestFormV2 = ({ dataset, isEdit, onSubmit }: AccessRequestFormPro
                     />
                     <TextField
                         {...register("subject")}
+                        disabled={isEdit}
                         className="hidden-label"
                         label="E-post-adresse"
                         placeholder="Skriv inn e-post-adresse"
@@ -120,7 +131,7 @@ const AccessRequestFormV2 = ({ dataset, isEdit, onSubmit }: AccessRequestFormPro
                                     name="expires"
                                     control={control}
                                     render={(datepickerProps) => (
-                                        <>
+                                        <div className="ml-8">
                                             <Datepicker
                                                 {...datepickerProps.field}
                                                 disabled={field.value === "eternal"}
@@ -132,7 +143,7 @@ const AccessRequestFormV2 = ({ dataset, isEdit, onSubmit }: AccessRequestFormPro
                                             {errors?.expires && <div className="navds-error-message navds-label">
                                                 {errors.expires.message}
                                             </div>}
-                                        </>
+                                        </div>
                                     )}
                                 />
                                 <Radio value="eternal">For alltid</Radio>

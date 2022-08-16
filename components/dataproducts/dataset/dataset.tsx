@@ -42,15 +42,6 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
     const [accessRequested, setAccessRequested] = useState(false);
 
-    const defaultAccessRequestValues: NewAccessRequest = {
-        owner: userInfo?.email,
-        datasetID: dataset.id,
-        expires: "",
-        polly: null,
-        subject: userInfo?.email,
-        subjectType: SubjectType.User,
-    }
-
 
     return <div className="flex">
         <Modal 
@@ -60,7 +51,7 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
             className="w-full md:w-1/3 px-8 h-[52rem]"
         >
             <Modal.Content className="h-full">
-                <NewAccessRequestForm dataset={dataset} newAccessRequest={defaultAccessRequestValues}/>
+                <NewAccessRequestForm dataset={dataset} />
             </Modal.Content>
         </Modal>
         <div className="block pt-8 pr-8">

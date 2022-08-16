@@ -14,16 +14,12 @@ import { UserState } from '../../../lib/context';
 
 interface NewAccessRequestFormProps {
   dataset: DatasetQuery
-  newAccessRequest: NewAccessRequest
 }
 
-const NewAccessRequestForm = ({dataset, newAccessRequest}: NewAccessRequestFormProps) => {
+const NewAccessRequestForm = ({dataset}: NewAccessRequestFormProps) => {
   const [createAccessRequest] = useCreateAccessRequestMutation()
   const router = useRouter()
-  const accessRequest: AccessRequestFormInput = {
-    ...newAccessRequest
-  }
-
+  
   const userInfo = useContext(UserState)
 
   const {data, error, loading} = useDataproductQuery({
