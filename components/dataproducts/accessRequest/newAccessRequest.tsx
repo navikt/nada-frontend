@@ -3,7 +3,8 @@ import {
   useCreateAccessRequestMutation, useDataproductQuery, useDatasetQuery
 } from '../../../lib/schema/graphql'
 import { useContext } from 'react'
-import AccessRequestForm, {AccessRequestFormInput} from "./accessRequestForm";
+import AccessRequestFormV2 from "./accessRequestFormV2";
+import {AccessRequestFormInput} from "./accessRequestForm"
 import {useRouter} from "next/router";
 import ErrorMessage from "../../lib/error";
 import LoaderSpinner from "../../lib/spinner";
@@ -51,7 +52,7 @@ const NewAccessRequestForm = ({dataset, newAccessRequest}: NewAccessRequestFormP
   const isOwner = (userInfo?.groups.map(g => g.email).concat([userInfo?.email]) || []).includes(data.dataproduct.owner.group)
 
   return (
-      <AccessRequestForm accessRequest={accessRequest} isEdit={false} isView={false} onSubmit={onSubmit} dataset={dataset} dataproductSlug={data.dataproduct.slug} isOwner={isOwner} />
+      <AccessRequestFormV2 isEdit={false} />
   )
 }
 
