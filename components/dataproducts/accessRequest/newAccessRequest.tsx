@@ -52,7 +52,7 @@ const NewAccessRequestForm = ({dataset, newAccessRequest}: NewAccessRequestFormP
   const isOwner = (userInfo?.groups.map(g => g.email).concat([userInfo?.email]) || []).includes(data.dataproduct.owner.group)
 
   return (
-      <AccessRequestFormV2 isEdit={false} />
+      <AccessRequestFormV2 dataset={dataset} isEdit={false} onSubmit={onSubmit}/>
   )
 }
 
