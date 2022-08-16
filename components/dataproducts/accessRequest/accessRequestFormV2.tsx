@@ -51,7 +51,7 @@ const AccessRequestFormV2 = ({ accessRequest, dataset, isEdit, onSubmit }: Acces
         defaultValues: {
             subject: accessRequest?.subject ? accessRequest.subject : "",
             subjectType: accessRequest?.subjectType ? accessRequest.subjectType : SubjectType.User,
-            accessType: accessRequest?.expires ? "until" : "eternal",
+            accessType: (!isEdit || accessRequest?.expires) ? "until" : "eternal",
             expires: accessRequest?.expires ? new Date(accessRequest.expires).toISOString().substr(0, 10) : ""
         }
     });
