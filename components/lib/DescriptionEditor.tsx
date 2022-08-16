@@ -52,7 +52,7 @@ export const DescriptionEditor = <FV extends Record<string, any>>({
 
   return (
     <div>
-      <div>
+      <div className="flex flex-col">
         <label
           style={{ display: 'inline' }}
           htmlFor={name}
@@ -60,12 +60,12 @@ export const DescriptionEditor = <FV extends Record<string, any>>({
         >
           {label}
         </label>
-        <MarkdownNotice>
-          formattering i Markdown,{' '}
+        <span className="italic text-[#555]">
+          Formattering i Markdown,{' '}
           <Link href={'https://guides.github.com/features/mastering-markdown/'}>
             se innføring
           </Link>
-        </MarkdownNotice>
+        </span>
       </div>
       <MDEditorNAVLook
         {...inputProps}

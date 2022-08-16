@@ -5,23 +5,25 @@ import {
     useDataproductQuery,
     useDeleteDataproductMutation
 } from '../../../../lib/schema/graphql'
-import {GetServerSideProps} from 'next'
-import {addApolloState, initializeApollo} from '../../../../lib/apollo'
-import {GET_DATAPRODUCT} from '../../../../lib/queries/dataproduct/dataproduct'
+import { GetServerSideProps } from 'next'
+import { addApolloState, initializeApollo } from '../../../../lib/apollo'
+import { GET_DATAPRODUCT } from '../../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
-import {useContext, useEffect, useState} from 'react'
+import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
 import Head from 'next/head'
-import TopBar, {TopBarActions} from '../../../../components/lib/topBar'
-import {Description} from '../../../../components/lib/detailTypography'
-import {DataproductSidebar} from '../../../../components/dataproducts/metadataTable'
+import TopBar, { TopBarActions } from '../../../../components/lib/topBar'
+import { Description } from '../../../../components/lib/detailTypography'
+import { DataproductSidebar } from '../../../../components/dataproducts/metadataTable'
 import styled from 'styled-components'
-import {useRouter} from 'next/router'
-import TabPanel, {TabPanelType} from '../../../../components/lib/tabPanel'
-import {UserState} from '../../../../lib/context'
+import { useRouter } from 'next/router'
+import TabPanel, { TabPanelType } from '../../../../components/lib/tabPanel'
+import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
 import Link from "next/link";
 import Dataset from '../../../../components/dataproducts/dataset/dataset'
+import { AddCircle } from '@navikt/ds-icons'
+import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
 
 const Container = styled.div`
   display: flex;
@@ -42,7 +44,7 @@ interface DataproductProps {
 }
 
 const Dataproduct = (props: DataproductProps) => {
-    const {id} = props
+    const { id } = props
     const router = useRouter()
 
     const [showDelete, setShowDelete] = useState(false)
@@ -50,12 +52,12 @@ const Dataproduct = (props: DataproductProps) => {
 
     const userInfo = useContext(UserState)
     const productQuery = useDataproductQuery({
-        variables: {id},
+        variables: { id },
         ssr: true,
     })
 
-    const isOwner = userInfo?.groups === undefined 
-        ? false 
+    const isOwner = userInfo?.groups === undefined
+        ? false
         : userInfo.groups.some((g: Group) => g.email === productQuery?.data?.dataproduct?.owner.group)
 
     useEffect(() => {
@@ -67,7 +69,7 @@ const Dataproduct = (props: DataproductProps) => {
     })
 
     const [deleteDataproduct] = useDeleteDataproductMutation({
-        variables: {id: id},
+        variables: { id: id },
         awaitRefetchQueries: true,
         refetchQueries: ['searchContent'],
     })
@@ -80,34 +82,42 @@ const Dataproduct = (props: DataproductProps) => {
             setDeleteError(e.toString())
         }
     }
-    if (productQuery.error) return <ErrorMessage error={productQuery.error}/>
-    if (productQuery.loading || !productQuery.data?.dataproduct) return <LoaderSpinner/>
+    if (productQuery.error) return <ErrorMessage error={productQuery.error} />
+    if (productQuery.loading || !productQuery.data?.dataproduct) return <LoaderSpinner />
 
     const product = productQuery.data.dataproduct
 
     const menuItems: Array<{
-        title: string
+        title: any
         slug: string
         component: any
     }> = [
-        {
-            title: 'Beskrivelse',
-            slug: 'info',
-            component: (
-                <Description markdown={product.description}/>
-            ),
-        }
-    ];
+            {
+                title: 'Beskrivelse',
+                slug: 'info',
+                component: (
+                    <Description markdown={product.description} />
+                ),
+            },
+        ];
 
     product.datasets.forEach((dataset) => {
         menuItems.push({
             title: `${dataset.name} (${dataset.datasource.type})`,
             slug: dataset.id,
             component: (
-                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner}/>
+                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner} />
             )
         })
     });
+
+    menuItems.push({
+        title: <div className="flex flex-row text-base mt-2"><AddCircle className="mr-1" />Legg til datasett</div>,
+        slug: 'new',
+        component: (
+            <NewDatasetForm dataproductID={productQuery.data?.dataproduct.id}/>
+        ),
+    })
 
     const currentPage = menuItems
         .map((e) => e.slug)
@@ -127,7 +137,7 @@ const Dataproduct = (props: DataproductProps) => {
                 }
             </TopBar>
             <Container>
-                <DataproductSidebar product={product} isOwner={isOwner} menuItems={menuItems} currentPage={currentPage}/>
+                <DataproductSidebar product={product} isOwner={isOwner} menuItems={menuItems} currentPage={currentPage} />
                 <MainPage>
                     {menuItems.map((i, idx) => (
                         <TabPanel
@@ -153,7 +163,7 @@ const Dataproduct = (props: DataproductProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {id} = context.query
+    const { id } = context.query
     const cookie = context.req.headers.cookie
 
     const apolloClient = initializeApollo()
@@ -161,7 +171,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     try {
         await apolloClient.query({
             query: GET_DATAPRODUCT,
-            variables: {id},
+            variables: { id },
             context: {
                 headers: {
                     cookie,
@@ -173,7 +183,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     return addApolloState(apolloClient, {
-        props: {id},
+        props: { id },
     })
 }
 

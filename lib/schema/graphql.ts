@@ -316,6 +316,7 @@ export type Mutation = {
    * Requires authentication.
    */
   revokeAccessToDataset: Scalars['Boolean']
+  triggerMetadataSync: Scalars['Boolean']
   /**
    * createAccessRequest creates a new access request for a dataset
    *
@@ -902,13 +903,20 @@ export type UserInfo = {
   accessRequests: Array<AccessRequest>
   /** accessable is a list of dataproducts which the user has explicit access to. */
   accessable: Array<Dataproduct>
+  /** azureGroups is the azure groups the user is member of. */
+  azureGroups?: Maybe<Array<Group>>
   /** dataproducts is a list of dataproducts with one of the users groups as owner. */
   dataproducts: Array<Dataproduct>
   /** email of user. */
   email: Scalars['String']
   /** gcpProjects is GCP projects the user is a member of. */
   gcpProjects: Array<GcpProject>
-  /** groups the user is a member of. */
+  /** googleGroups is the google groups the user is member of. */
+  googleGroups?: Maybe<Array<Group>>
+  /**
+   * groups the user is a member of.
+   * @deprecated renamed to googleGroups
+   */
   groups: Array<Group>
   /** loginExpiration is when the token expires. */
   loginExpiration: Scalars['Time']
@@ -1239,6 +1247,15 @@ export type UpdateMappingMutationVariables = Exact<{
 export type UpdateMappingMutation = {
   __typename?: 'Mutation'
   mapDataset: boolean
+}
+
+export type CreateDatasetMutationVariables = Exact<{
+  input: NewDataset
+}>
+
+export type CreateDatasetMutation = {
+  __typename?: 'Mutation'
+  createDataset: { __typename?: 'Dataset'; id: string; slug: string }
 }
 
 export type DatasetQueryVariables = Exact<{
@@ -2787,6 +2804,57 @@ export type UpdateMappingMutationResult =
 export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<
   UpdateMappingMutation,
   UpdateMappingMutationVariables
+>
+export const CreateDatasetDocument = gql`
+  mutation createDataset($input: NewDataset!) {
+    createDataset(input: $input) {
+      id
+      slug
+    }
+  }
+`
+export type CreateDatasetMutationFn = Apollo.MutationFunction<
+  CreateDatasetMutation,
+  CreateDatasetMutationVariables
+>
+
+/**
+ * __useCreateDatasetMutation__
+ *
+ * To run a mutation, you first call `useCreateDatasetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDatasetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDatasetMutation, { data, loading, error }] = useCreateDatasetMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDatasetMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDatasetMutation,
+    CreateDatasetMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreateDatasetMutation,
+    CreateDatasetMutationVariables
+  >(CreateDatasetDocument, options)
+}
+export type CreateDatasetMutationHookResult = ReturnType<
+  typeof useCreateDatasetMutation
+>
+export type CreateDatasetMutationResult =
+  Apollo.MutationResult<CreateDatasetMutation>
+export type CreateDatasetMutationOptions = Apollo.BaseMutationOptions<
+  CreateDatasetMutation,
+  CreateDatasetMutationVariables
 >
 export const DatasetDocument = gql`
   query Dataset($id: ID!) {
