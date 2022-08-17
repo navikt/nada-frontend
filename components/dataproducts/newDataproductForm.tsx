@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { useForm } from 'react-hook-form'
-import { newDataproductValidation } from '../../lib/schema/yupValidations'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
 import PiiCheckboxInput from './piiCheckboxInput'
@@ -8,40 +7,112 @@ import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
-import TeamSelector from '../lib/teamSelector'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
-import { DataproductSourceForm } from './dataproductSourceForm'
-import { NewDataproduct } from '../../lib/schema/graphql'
-import { useEffect } from 'react'
 import DescriptionEditor from '../lib/DescriptionEditor'
-import { Fieldset, TextField } from '@navikt/ds-react'
-import { CreateForm } from '../lib/CreateForm'
+import { Heading, Select, TextField } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
+import * as yup from 'yup'
+import { Divider } from '@navikt/ds-react-internal'
+import { useContext, useState } from 'react'
+import { UserState } from '../../lib/context'
+import { TreeView } from '@mui/lab'
+import { Project } from './datasource/project'
+
+const schema = yup.object().shape({
+  name: yup.string().required("Du må fylle inn navn"),
+  description: yup.string(),
+  team: yup.string().required("Velg et eierteam for produktet"),
+  teamkatalogenTeam: yup.string(),
+  datasetName: yup.string().required("Du må fylle inn navn"),
+  datasetDescription: yup.string(),
+  sourceCodeURL: yup.string().url("Link må være en gyldig URL"),
+  bigquery: yup.object({
+    dataset: yup.string().required(),
+    projectID: yup.string().required(),
+    table: yup.string().required()
+  }),
+  keywords: yup.array().of(yup.string()),
+  pii: yup.boolean().required()
+})
+
+interface BigQueryFields {
+  dataset: string
+  projectID: string
+  table: string
+}
+
+export interface NewDataproductFields {
+  name: string
+  description: string
+  team: string
+  teamkatalogenTeam: string
+  datasetName: string
+  datasetDescription: string
+  sourceCodeURL: string
+  bigquery: BigQueryFields
+  keywords: string[]
+  pii: boolean
+}
 
 export const NewDataproductForm = () => {
   const router = useRouter()
+  const userInfo = useContext(UserState)
+  const [activePaths, setActivePaths] = useState<string[]>([])
+
+
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
-      resolver: yupResolver(newDataproductValidation),
+      resolver: yupResolver(schema),
+      defaultValues: {
+        name: "",
+        description: "",
+        team: "",
+        teamkatalogenTeam: "",
+        datasetName: "",
+        datasetDescription: "",
+        sourceCodeURL: "",
+        bigquery: {
+          dataset: "",
+          projectID: "",
+          table: "",
+        },
+        keywords: [],
+        pii: true,
+      }
     })
 
   const { errors } = formState
   const keywords = watch('keywords')
 
-  const onDelete = (keyword: string) => {
-    setValue('keywords',keywords.filter((k: string) => k !== keyword))
+  const onDeleteKeyword = (keyword: string) => {
+    setValue('keywords', keywords.filter((k: string) => k !== keyword))
   }
 
-  const onAdd = (keyword: string) => {
-    keywords ?
-        setValue('keywords',[...keywords, keyword]) :
-        setValue('keywords',[keyword])
+  const onAddKeyword = (keyword: string) => {
+    setValue('keywords',[...keywords, keyword])
   }
 
-  const onSubmit = async (requestData: NewDataproduct) => {
+  const valueOrNull = (val: string) => val == "" ? null : val
+
+  const onSubmit = async (data: NewDataproductFields) => {
+    console.log(JSON.stringify(data))
+    return
     try {
       await createDataproduct({
-        variables: { input: requestData },
+        variables: { input: {
+          name: data.name,
+          description: valueOrNull(data.description),
+          group: data.team,
+          teamkatalogenURL: valueOrNull(data.teamkatalogenTeam),
+          datasets: [{
+            name: data.datasetName,
+            description: valueOrNull(data.datasetDescription),
+            repo: valueOrNull(data.sourceCodeURL),
+            bigquery: data.bigquery,
+            keywords: data.keywords,
+            pii: data.pii
+          }]
+        }},
       })
       amplitudeLog('skjema fullført', { skjemanavn: 'nytt-dataprodukt' })
     } catch (e) {
@@ -52,16 +123,18 @@ export const NewDataproductForm = () => {
     }
   }
 
-  useEffect(() => {
-    setValue('pii', true)
-  }, [setValue])
+  
+  register('bigquery.projectID')
+  register('bigquery.dataset')
+  register('bigquery.table')
 
-  const group = watch('group')
+  const team = watch('team')
+  
 
   const [createDataproduct, { loading, error: backendError }] =
     useMutation(CREATE_DATAPRODUCT, {
       onCompleted: (data) =>
-        router.push(`/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}/access`),
+        router.push(`/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}`),
     })
 
 
@@ -86,13 +159,24 @@ export const NewDataproductForm = () => {
     })
   }
 
+  const teamProjects = userInfo?.gcpProjects
+    .filter((project) => project.group.email == team)
+    .map((group) => group.id)
+
+  const handleNodeSelect = (e: any, node: string) => {
+    const [projectID, datasetID, tableID] = node.split('/')
+    if (projectID && datasetID && tableID) {
+      setValue('bigquery.projectID', projectID)
+      setValue('bigquery.dataset', datasetID)
+      setValue('bigquery.table', tableID)
+    }
+  }
+
   return (
-    <CreateForm onSubmit={handleSubmit(onSubmit, onError)}>
-      <Fieldset legend="Nytt dataprodukt" errorPropagation={false}>
+    <form className="pt-12" onSubmit={handleSubmit(onSubmit, onError)}>
         {backendError && <ErrorMessage error={backendError} />}
         <TextField
-          id="name"
-          label="Navn"
+          label="Navn på dataprodukt"
           {...register('name')}
           error={errors.name?.message}
         />
@@ -101,38 +185,63 @@ export const NewDataproductForm = () => {
           name="description"
           control={control}
         />
-        <TextField
-            type={'url'}
-          id="repo"
-          label="Link til kildekode"
-          {...register('repo')}
-          error={errors.repo?.message}
-        />
-        <TeamSelector register={register} errors={errors} />
-        {group ? (
-            <TeamkatalogenSelector
-                group={group}
+        <Select
+          label='Team'
+          {...register('team')}
+          error={errors.team?.message}
+          >
+          <option value=''>Velg team</option>
+          {[...new Set(userInfo?.gcpProjects
+              .map(({group}: {group: {name: string}}) => <option 
+                value={userInfo?.groups.filter((g) => g.name === group.name)[0].email} 
+                key={group.name}>{group.name}</option>
+              ))
+          ]}
+        </Select>
+        <TeamkatalogenSelector
+                group={team}
                 register={register}
                 errors={errors}
                 watch={watch}
-            />
-        ) : null}
-        <DataproductSourceForm
-          register={register}
-          watch={watch}
-          errors={errors}
-          setValue={setValue}
         />
-
-        <KeywordsInput
-            onAdd={onAdd}
-            onDelete={onDelete}
-            keywords={keywords || []}
-            error={errors.keywords?.[0].message}
+        <Divider />
+        <Heading level="2" size="medium" spacing>Legg til et datasett (Flere datasett kan legges til etter lagring)</Heading>
+        <TextField
+          label="Navn på datasett"
+          {...register('datasetName')}
+          error={errors.datasetName?.message}
         />
-        <PiiCheckboxInput register={register} watch={watch} />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="datasetDescription"
+          control={control}
+        />
+        <TextField
+          label="Link til kildekode"
+          {...register('sourceCodeURL')}
+          error={errors.sourceCodeURL?.message}
+        />
+        <div>
+            { //todo: ikke bruk mui >:(
+            }
+            <TreeView
+                onNodeSelect={handleNodeSelect}
+                onNodeToggle={(x, n) => setActivePaths(n)}
+            >
+                {teamProjects?.map((projectID) => {
+                    return (
+                        <Project
+                            key={projectID}
+                            projectID={projectID}
+                            activePaths={activePaths}
+                        />
+                    )
+                })}
+            </TreeView>
+            {errors.bigquery && <div className="navds-error-message navds-label">Velg en tabell eller et view</div>}
+        </div>
+        
         <RightJustifiedSubmitButton onCancel={onCancel} loading={loading} />
-      </Fieldset>
-    </CreateForm>
+    </form>
   )
 }
