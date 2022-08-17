@@ -2,8 +2,6 @@ import { Select } from "@navikt/ds-react"
 import { useContext } from "react"
 import { FieldErrors, FieldValues, SetFieldValue, UseFormRegister, UseFormWatch } from 'react-hook-form'
 import { UserState } from "../../../lib/context"
-import DatasetTables from "../datasource/datasetTables"
-import ProjectDatasets from "../datasource/projectDatasets"
 import ProjectTables from "../datasource/projectTables"
 
 interface DatasetSourceFormProps {
@@ -24,7 +22,6 @@ const DatasetSourceForm = ({
     const userInfo = useContext(UserState)
 
     const teamProject = userInfo?.gcpProjects.find((project) => project.group.email === team)?.id
-    const bqDataset = watch("bigquery.dataset")
 
     register("bigquery.projectID")
     register("bigquery.dataset")
@@ -38,10 +35,6 @@ const DatasetSourceForm = ({
         setValue("bigquery.table", tableIDParts[2])
     }
 
-    const handleOnChangeTable = (e: any) => {
-        setValue("bigquery.table", e.target.value)
-    }
-
     return (
         <>
             {teamProject &&
@@ -52,12 +45,6 @@ const DatasetSourceForm = ({
                 </Select>
                 </>
             }
-            {/* {bqDataset &&
-                <Select onChange={handleOnChangeTable} label="Velg tabell i bigquery datasett">
-                    <option value="">Velg bigquery tabell</option>
-                    <DatasetTables projectID={teamProject as string} datasetID={bqDataset} />
-                </Select>
-            } */}
         </>
     )
 }
