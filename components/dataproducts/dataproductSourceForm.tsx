@@ -19,9 +19,11 @@ interface DataproductSourceFormProps {
     watch: UseFormWatch<FieldValues>
     errors: FieldErrors<FieldValues>
     setValue: SetFieldValue<FieldValues>
+    team: string
 }
 
 export const DataproductSourceForm = ({
+    team,
     errors,
     register,
     watch,
@@ -33,10 +35,9 @@ export const DataproductSourceForm = ({
     register('bigquery.projectID')
     register('bigquery.dataset')
     register('bigquery.table')
-    const group = watch('group')
 
     const teamProjects = userInfo?.gcpProjects
-        .filter((project) => project.group.email == group)
+        .filter((project) => project.group.email == team)
         .map((group) => group.id)
 
     const handleNodeSelect = (e: any, node: string) => {

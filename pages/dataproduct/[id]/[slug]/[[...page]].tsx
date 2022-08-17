@@ -115,7 +115,7 @@ const Dataproduct = (props: DataproductProps) => {
         title: <div className="flex flex-row text-base mt-2"><AddCircle className="mr-1" />Legg til datasett</div>,
         slug: 'new',
         component: (
-            <NewDatasetForm dataproductID={productQuery.data?.dataproduct.id}/>
+            <NewDatasetForm dataproduct={productQuery.data}/>
         ),
     })
 

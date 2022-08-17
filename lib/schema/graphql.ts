@@ -101,6 +101,14 @@ export type BigQuery = {
   tableType: BigQueryType
 }
 
+export type BigQuerySource = {
+  __typename?: 'BigQuerySource'
+  /** dataset is the name of the BigQuery dataset. */
+  dataset: Scalars['String']
+  /** table is the name of the BigQuery table. */
+  table: Scalars['String']
+}
+
 /** BigQueryTable contains information about a BigQuery table. */
 export type BigQueryTable = {
   __typename?: 'BigQueryTable'
@@ -570,6 +578,7 @@ export type Query = {
   /** dataset returns the given dataset. */
   dataset: Dataset
   datasetsInDataproduct: Array<Dataset>
+  gcpGetAllTablesInProject: Array<BigQuerySource>
   /**
    * gcpGetDatasets returns all datasets for a given project.
    *
@@ -634,6 +643,10 @@ export type QueryDatasetArgs = {
 
 export type QueryDatasetsInDataproductArgs = {
   dataproductID: Scalars['ID']
+}
+
+export type QueryGcpGetAllTablesInProjectArgs = {
+  projectID: Scalars['String']
 }
 
 export type QueryGcpGetDatasetsArgs = {
@@ -1095,6 +1108,11 @@ export type DataproductQuery = {
     created: any
     slug: string
     keywords: Array<string>
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
     datasets: Array<{
       __typename?: 'Dataset'
       id: string
@@ -1141,11 +1159,6 @@ export type DataproductQuery = {
         }>
       }
     }>
-    owner: {
-      __typename?: 'Owner'
-      group: string
-      teamkatalogenURL?: string | null | undefined
-    }
   }
 }
 
@@ -1196,6 +1209,19 @@ export type DeleteDataproductMutationVariables = Exact<{
 export type DeleteDataproductMutation = {
   __typename?: 'Mutation'
   deleteDataproduct: boolean
+}
+
+export type GcpGetAllTablesInProjectQueryVariables = Exact<{
+  projectID: Scalars['String']
+}>
+
+export type GcpGetAllTablesInProjectQuery = {
+  __typename?: 'Query'
+  gcpGetAllTablesInProject: Array<{
+    __typename?: 'BigQuerySource'
+    table: string
+    dataset: string
+  }>
 }
 
 export type GcpGetDatasetsQueryVariables = Exact<{
@@ -1255,7 +1281,7 @@ export type CreateDatasetMutationVariables = Exact<{
 
 export type CreateDatasetMutation = {
   __typename?: 'Mutation'
-  createDataset: { __typename?: 'Dataset'; id: string; slug: string }
+  createDataset: { __typename?: 'Dataset'; id: string; dataproductID: string }
 }
 
 export type DatasetQueryVariables = Exact<{
@@ -2254,6 +2280,10 @@ export const DataproductDocument = gql`
       description
       created
       slug
+      owner {
+        group
+        teamkatalogenURL
+      }
       keywords
       datasets {
         id
@@ -2535,6 +2565,65 @@ export type DeleteDataproductMutationOptions = Apollo.BaseMutationOptions<
   DeleteDataproductMutation,
   DeleteDataproductMutationVariables
 >
+export const GcpGetAllTablesInProjectDocument = gql`
+  query gcpGetAllTablesInProject($projectID: String!) {
+    gcpGetAllTablesInProject(projectID: $projectID) {
+      table
+      dataset
+    }
+  }
+`
+
+/**
+ * __useGcpGetAllTablesInProjectQuery__
+ *
+ * To run a query within a React component, call `useGcpGetAllTablesInProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGcpGetAllTablesInProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGcpGetAllTablesInProjectQuery({
+ *   variables: {
+ *      projectID: // value for 'projectID'
+ *   },
+ * });
+ */
+export function useGcpGetAllTablesInProjectQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GcpGetAllTablesInProjectQuery,
+    GcpGetAllTablesInProjectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    GcpGetAllTablesInProjectQuery,
+    GcpGetAllTablesInProjectQueryVariables
+  >(GcpGetAllTablesInProjectDocument, options)
+}
+export function useGcpGetAllTablesInProjectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GcpGetAllTablesInProjectQuery,
+    GcpGetAllTablesInProjectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GcpGetAllTablesInProjectQuery,
+    GcpGetAllTablesInProjectQueryVariables
+  >(GcpGetAllTablesInProjectDocument, options)
+}
+export type GcpGetAllTablesInProjectQueryHookResult = ReturnType<
+  typeof useGcpGetAllTablesInProjectQuery
+>
+export type GcpGetAllTablesInProjectLazyQueryHookResult = ReturnType<
+  typeof useGcpGetAllTablesInProjectLazyQuery
+>
+export type GcpGetAllTablesInProjectQueryResult = Apollo.QueryResult<
+  GcpGetAllTablesInProjectQuery,
+  GcpGetAllTablesInProjectQueryVariables
+>
 export const GcpGetDatasetsDocument = gql`
   query gcpGetDatasets($projectID: String!) {
     gcpGetDatasets(projectID: $projectID)
@@ -2809,7 +2898,7 @@ export const CreateDatasetDocument = gql`
   mutation createDataset($input: NewDataset!) {
     createDataset(input: $input) {
       id
-      slug
+      dataproductID
     }
   }
 `

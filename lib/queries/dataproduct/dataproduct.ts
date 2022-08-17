@@ -9,6 +9,10 @@ export const GET_DATAPRODUCT = gql`
       description
       created
       slug
+      owner {
+        group
+        teamkatalogenURL
+      }
       keywords
       datasets {
         id
