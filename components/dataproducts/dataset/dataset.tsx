@@ -77,6 +77,14 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                 ? <DatasetAlert variant="warning" narrow={true}>Inneholder persondata</DatasetAlert>
                 : <DatasetAlert variant="success" narrow={true}>Inneholder <b>ikke</b> persondata</DatasetAlert>
             }
+            {dataset.description && 
+                <section className="mb-3">
+                    <Heading level="3" size="small" spacing>Beskrivelse</Heading>
+                    <article>
+                        {dataset.description}
+                    </article>
+                </section>
+            }
             <section className="mb-3 flex flex-col">
                 <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
                     <DatasetMetadata datasource={dataset.datasource}/>
