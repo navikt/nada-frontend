@@ -1,8 +1,8 @@
 import { useMutation } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { Button, Heading, TextField } from "@navikt/ds-react";
+import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from 'yup'
 import { CREATE_DATASET } from "../../../lib/queries/dataset/createDataset";
 import { DataproductQuery } from "../../../lib/schema/graphql";
@@ -40,6 +40,7 @@ const schema = yup.object().shape({
         projectID: yup.string().required(),
         table: yup.string().required()
     }),
+    pii: yup.bool().required("Du må spesifisere om datasettet inneholder personidentifiserende informasjon")
 });
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -104,7 +105,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
                     label="Link til kildekode"
                     error={errors.repo?.message}
                 />
-                <DatasetSourceForm 
+                <DatasetSourceForm
                     label="Velg tabell eller view"
                     team={team}
                     register={register}
@@ -118,7 +119,17 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
                     keywords={keywords || []}
                     error={errors.keywords?.[0].message}
                 />
-                <PiiCheckboxInput register={register} watch={watch} />
+                <Controller
+                    name="pii"
+                    control={control}
+                    render={({ field }) => (<RadioGroup
+                        {...field}
+                        legend="Inneholder datasettet personidentifiserende informasjon?"
+                        error={errors?.pii?.message}>
+                        <Radio value={true}>Ja, inneholder personidentifiserende informasjon</Radio>
+                        <Radio value={false}>Nei, inneholder ikke personidentifiserende informasjon</Radio>
+                    </RadioGroup>)}
+                />
                 <div className="flex flex-row gap-4 grow items-end">
                     <Button type='button' variant='secondary' onClick={() => { router.push(`/dataproduct/${dataproduct.dataproduct.id}/${dataproduct.dataproduct.slug}/info`) }}>Avbryt</Button>
                     <Button type='submit'>Lagre</Button>
