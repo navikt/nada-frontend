@@ -111,13 +111,15 @@ const Dataproduct = (props: DataproductProps) => {
         })
     });
 
-    menuItems.push({
-        title: <div className="flex flex-row text-base mt-2"><AddCircle className="mr-1" />Legg til datasett</div>,
-        slug: 'new',
-        component: (
-            <NewDatasetForm dataproduct={productQuery.data}/>
-        ),
-    })
+    if (isOwner) {
+        menuItems.push({
+            title: <div className="flex flex-row text-base mt-2"><AddCircle className="mr-1" />Legg til datasett</div>,
+            slug: 'new',
+            component: (
+                <NewDatasetForm dataproduct={productQuery.data}/>
+            ),
+        })
+    }
 
     const currentPage = menuItems
         .map((e) => e.slug)
