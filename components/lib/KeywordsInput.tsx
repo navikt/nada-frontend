@@ -76,7 +76,7 @@ export const KeywordsInput = ({
   }
 
   return (
-    <>
+    <div>
       <StyledRectTags>
         <label>Nøkkelord</label>
         <ReactTags
@@ -87,11 +87,13 @@ export const KeywordsInput = ({
           allowNew
         />
       </StyledRectTags>
-      {keywords.map((k, i) => {
-        return <KeywordPill key={i} keyword={k} onClick={() => onDelete(k)} remove={true}>{k}</KeywordPill>
-      })}
+      <div className="flex flex-row gap-1 flex-wrap">
+        {keywords.map((k, i) => {
+          return <KeywordPill key={i} keyword={k} onClick={() => onDelete(k)} remove={true}>{k}</KeywordPill>
+        })}
+      </div>
       {error && <p>{error}</p>}
-    </>
+    </div>
   )
 }
 

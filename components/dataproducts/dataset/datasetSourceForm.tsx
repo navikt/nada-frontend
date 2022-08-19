@@ -6,6 +6,7 @@ import ProjectTables from "../datasource/projectTables"
 
 interface DatasetSourceFormProps {
     team: string,
+    label: string,
     register: UseFormRegister<FieldValues>
     watch: UseFormWatch<FieldValues>
     errors: FieldErrors<FieldValues>
@@ -14,6 +15,7 @@ interface DatasetSourceFormProps {
 
 const DatasetSourceForm = ({
     team,
+    label,
     errors,
     register,
     watch,
@@ -39,7 +41,7 @@ const DatasetSourceForm = ({
         <>
             {teamProject &&
                 <>
-                <Select onChange={handleOnChangeDataset} label="Datasett">
+                <Select onChange={handleOnChangeDataset} label={label}>
                     <option value="">Velg datasett</option>
                     <ProjectTables projectID={teamProject}/>
                 </Select>

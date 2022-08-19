@@ -5,7 +5,7 @@ import ErrorMessage from './error'
 import LoaderSpinner from './spinner'
 
 type TeamkatalogenSelectorProps = {
-  group: any
+  group?: string
   register: any
   errors: any
   watch: any
@@ -16,9 +16,8 @@ export const TeamkatalogenSelector = ({
   errors,
   watch,
 }: TeamkatalogenSelectorProps) => {
-  const query = group.split('@')[0]
-  const { data, error } = useTeamkatalogenQuery({
-    variables: { q: query },
+  const { data, error } = [undefined, ""].includes(group) ? {data: {teamkatalogen: []}, error: null} : useTeamkatalogenQuery({
+    variables: { q: group === undefined ? "" : group.split('@')[0] },
   })
 
   if (error) return <ErrorMessage error={error} />

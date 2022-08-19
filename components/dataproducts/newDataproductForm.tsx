@@ -17,6 +17,7 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import { TreeView } from '@mui/lab'
 import { Project } from './datasource/project'
+import DatasetSourceForm from './dataset/datasetSourceForm'
 
 const schema = yup.object().shape({
   name: yup.string().required("Du må fylle inn navn"),
@@ -62,23 +63,7 @@ export const NewDataproductForm = () => {
 
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
-      resolver: yupResolver(schema),
-      defaultValues: {
-        name: "",
-        description: "",
-        team: "",
-        teamkatalogenTeam: "",
-        datasetName: "",
-        datasetDescription: "",
-        sourceCodeURL: "",
-        bigquery: {
-          dataset: "",
-          projectID: "",
-          table: "",
-        },
-        keywords: [],
-        pii: true,
-      }
+      resolver: yupResolver(schema)
     })
 
   const { errors } = formState
@@ -89,14 +74,12 @@ export const NewDataproductForm = () => {
   }
 
   const onAddKeyword = (keyword: string) => {
-    setValue('keywords',[...keywords, keyword])
+    keywords ? setValue('keywords',[...keywords, keyword]) : setValue('keywords', [keyword])
   }
 
   const valueOrNull = (val: string) => val == "" ? null : val
 
   const onSubmit = async (data: NewDataproductFields) => {
-    console.log(JSON.stringify(data))
-    return
     try {
       await createDataproduct({
         variables: { input: {
@@ -173,7 +156,7 @@ export const NewDataproductForm = () => {
   }
 
   return (
-    <form className="pt-12" onSubmit={handleSubmit(onSubmit, onError)}>
+    <form className="pt-12 flex flex-col gap-10" onSubmit={handleSubmit(onSubmit, onError)}>
         {backendError && <ErrorMessage error={backendError} />}
         <TextField
           label="Navn på dataprodukt"
@@ -205,7 +188,7 @@ export const NewDataproductForm = () => {
                 watch={watch}
         />
         <Divider />
-        <Heading level="2" size="medium" spacing>Legg til et datasett (Flere datasett kan legges til etter lagring)</Heading>
+        <Heading level="2" size="medium">Legg til et datasett (Flere datasett kan legges til etter lagring)</Heading>
         <TextField
           label="Navn på datasett"
           {...register('datasetName')}
@@ -221,26 +204,21 @@ export const NewDataproductForm = () => {
           {...register('sourceCodeURL')}
           error={errors.sourceCodeURL?.message}
         />
-        <div>
-            { //todo: ikke bruk mui >:(
-            }
-            <TreeView
-                onNodeSelect={handleNodeSelect}
-                onNodeToggle={(x, n) => setActivePaths(n)}
-            >
-                {teamProjects?.map((projectID) => {
-                    return (
-                        <Project
-                            key={projectID}
-                            projectID={projectID}
-                            activePaths={activePaths}
-                        />
-                    )
-                })}
-            </TreeView>
-            {errors.bigquery && <div className="navds-error-message navds-label">Velg en tabell eller et view</div>}
-        </div>
-        
+        <DatasetSourceForm
+          label="Velg tabell eller view"
+          team={team}
+          register={register}
+          watch={watch}
+          errors={errors}
+          setValue={setValue}
+        />
+        <KeywordsInput
+          onAdd={onAddKeyword}
+          onDelete={onDeleteKeyword}
+          keywords={keywords || []}
+          error={errors.keywords?.[0].message}
+        />
+        <PiiCheckboxInput register={register} watch={watch} />
         <RightJustifiedSubmitButton onCancel={onCancel} loading={loading} />
     </form>
   )

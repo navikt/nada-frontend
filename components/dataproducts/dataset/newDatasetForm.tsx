@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { Button, TextField } from "@navikt/ds-react";
+import { Button, Heading, TextField } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup'
@@ -83,13 +83,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
 
     return (
         <div className="pt-8 pr-8">
+            <Heading level="1" size="medium" spacing>Nytt datasett</Heading>
             <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-10 h-[90%]">
-                <div>Navn på datasettet</div>
                 <TextField
                     {...register("name")}
-                    className="hidden-label"
-                    label="dataset-name"
-                    placeholder="Skriv inn navn på datasett"
+                    label="Skriv inn navn"
                     error={errors?.name?.message}
                     size="medium"
                 />
@@ -107,6 +105,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
                     error={errors.repo?.message}
                 />
                 <DatasetSourceForm 
+                    label="Velg tabell eller view"
                     team={team}
                     register={register}
                     watch={watch}
