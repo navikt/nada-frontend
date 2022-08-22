@@ -14,7 +14,7 @@ import amplitudeLog from '../../../../lib/amplitude'
 import Head from 'next/head'
 import TopBar, { TopBarActions } from '../../../../components/lib/topBar'
 import { Description } from '../../../../components/lib/detailTypography'
-import { DataproductSidebar } from '../../../../components/dataproducts/metadataTable'
+import { DataproductSidebar } from '../../../../components/dataproducts/dataproductSidebar'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import TabPanel, { TabPanelType } from '../../../../components/lib/tabPanel'
@@ -96,7 +96,7 @@ const Dataproduct = (props: DataproductProps) => {
                 title: 'Beskrivelse',
                 slug: 'info',
                 component: (
-                    <Description markdown={product.description} />
+                    <Description keywords={product.keywords} markdown={product.description} />
                 ),
             },
         ];
