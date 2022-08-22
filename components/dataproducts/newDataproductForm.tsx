@@ -18,6 +18,7 @@ import { UserState } from '../../lib/context'
 import { TreeView } from '@mui/lab'
 import { Project } from './datasource/project'
 import DatasetSourceForm from './dataset/datasetSourceForm'
+import { SearchContentDocument } from '../../lib/schema/graphql'
 
 const schema = yup.object().shape({
   name: yup.string().required("Du må fylle inn navn"),
@@ -96,6 +97,7 @@ export const NewDataproductForm = () => {
             pii: data.pii
           }]
         }},
+        refetchQueries: ["searchContent"]
       })
       amplitudeLog('skjema fullført', { skjemanavn: 'nytt-dataprodukt' })
     } catch (e) {

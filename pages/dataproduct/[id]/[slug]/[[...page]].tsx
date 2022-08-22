@@ -2,6 +2,7 @@ import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
 import {
     Group,
+    SearchContentDocument,
     useDataproductQuery,
     useDeleteDataproductMutation
 } from '../../../../lib/schema/graphql'
@@ -180,6 +181,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     cookie,
                 },
             },
+        })
+    } catch (e) {
+        console.log(e)
+    }
+
+    try {
+        await apolloClient.query({
+            query: SearchContentDocument,
+            variables: {q: {limit: 6}},
         })
     } catch (e) {
         console.log(e)
