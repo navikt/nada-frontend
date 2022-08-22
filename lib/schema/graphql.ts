@@ -1344,6 +1344,15 @@ export type DatasetQuery = {
   }
 }
 
+export type DeleteDatasetMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type DeleteDatasetMutation = {
+  __typename?: 'Mutation'
+  deleteDataset: boolean
+}
+
 export type GroupStatsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GroupStatsQuery = {
@@ -3037,6 +3046,54 @@ export type DatasetLazyQueryHookResult = ReturnType<typeof useDatasetLazyQuery>
 export type DatasetQueryResult = Apollo.QueryResult<
   DatasetQuery,
   DatasetQueryVariables
+>
+export const DeleteDatasetDocument = gql`
+  mutation deleteDataset($id: ID!) {
+    deleteDataset(id: $id)
+  }
+`
+export type DeleteDatasetMutationFn = Apollo.MutationFunction<
+  DeleteDatasetMutation,
+  DeleteDatasetMutationVariables
+>
+
+/**
+ * __useDeleteDatasetMutation__
+ *
+ * To run a mutation, you first call `useDeleteDatasetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDatasetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDatasetMutation, { data, loading, error }] = useDeleteDatasetMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteDatasetMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteDatasetMutation,
+    DeleteDatasetMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    DeleteDatasetMutation,
+    DeleteDatasetMutationVariables
+  >(DeleteDatasetDocument, options)
+}
+export type DeleteDatasetMutationHookResult = ReturnType<
+  typeof useDeleteDatasetMutation
+>
+export type DeleteDatasetMutationResult =
+  Apollo.MutationResult<DeleteDatasetMutation>
+export type DeleteDatasetMutationOptions = Apollo.BaseMutationOptions<
+  DeleteDatasetMutation,
+  DeleteDatasetMutationVariables
 >
 export const GroupStatsDocument = gql`
   query groupStats {

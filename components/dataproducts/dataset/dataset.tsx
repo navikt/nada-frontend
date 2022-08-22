@@ -1,7 +1,7 @@
 import { Heading, Link, Alert, Modal } from "@navikt/ds-react";
 import { isAfter, parseISO } from "date-fns";
 import humanizeDate from "../../../lib/humanizeDate";
-import { NewAccessRequest, SubjectType, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
+import { DataproductQuery, NewAccessRequest, SubjectType, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
 import DatasetTableSchema from "./datasetTableSchema";
 import Explore from "../../../components/dataproducts/explore";
 import BigQueryLogo from "../../lib/icons/bigQueryLogo";
@@ -34,11 +34,12 @@ interface EntryProps {
     dataset: DatasetQuery
     userInfo: UserInfoDetailsQuery['userInfo'] | undefined
     isOwner: boolean
+    product: DataproductQuery | undefined
 }
 
 
 
-const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
+const Dataset = ({dataset, userInfo, isOwner, product}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
     const [accessRequested, setAccessRequested] = useState(false);
 
@@ -71,7 +72,7 @@ const Dataset = ({dataset, userInfo, isOwner}: EntryProps) => {
                     </IconBox>
                     {dataset.name}
                 </Heading>
-                {isOwner && <DatasetOwnerMenu />}
+                {isOwner && <DatasetOwnerMenu datasetName={dataset.name} datasetId= {dataset.id} dataproduct = {product}/>}
             </div>
             {dataset.pii 
                 ? <DatasetAlert variant="warning" narrow={true}>Inneholder persondata</DatasetAlert>

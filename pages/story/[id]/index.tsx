@@ -74,6 +74,7 @@ const StoryPage = () => {
         onConfirm={() => onDelete()}
         name={story.name}
         error={deleteError}
+        resource = "dataprodukt"
       />
       <TokenModal
         open={showToken}

@@ -106,7 +106,7 @@ const Dataproduct = (props: DataproductProps) => {
             title: `${dataset.name} (${dataset.datasource.type})`,
             slug: dataset.id,
             component: (
-                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner} />
+                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner} product = {productQuery.data}/>
             )
         })
     });
@@ -157,6 +157,7 @@ const Dataproduct = (props: DataproductProps) => {
                         onConfirm={() => onDelete()}
                         name={product.name}
                         error={deleteError}
+                        resource = "dataprodukt"
                     />
                 </MainPage>
             </Container>
