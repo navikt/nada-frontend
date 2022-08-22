@@ -26,10 +26,10 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
     }
 
     return <div className="flex flex-initial flex-col h-[80vh] justify-between pt-8 w-64">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
             {menuItems.map(({ title, slug }, idx) => currentPage == idx
-                ? <p className="font-semibold mx-1" key={idx}>{title}</p>
-                : <Link className="font-semibold no-underline mx-1 hover:underline hover:cursor-pointer" href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</Link>
+                ? <p className="border-l-[6px] border-l-link px-1 font-semibold py-1" key={idx}>{title}</p>
+                : <a className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1" href="#" key={idx} onClick={e => handleChange(e, slug)}>{title}</a>
             )}
         </div>
         <div className="h-fit w-64 text-base leading-4 pr-4 pb-0 fixed bottom-0">
