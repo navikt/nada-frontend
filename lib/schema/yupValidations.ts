@@ -12,9 +12,6 @@ export const updateDataproductValidation = yup.object().shape({
   slug: yup.string(),
   repo: yup.string(),
   teamkatalogenURL: yup.string().url().nullable(),
-  pii: yup
-    .boolean()
-    .required('Inneholder datasettet personidentifiserende informasjon?'),
 })
 
 export const newDataproductValidation = updateDataproductValidation.concat(
