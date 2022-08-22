@@ -7,6 +7,7 @@ import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import {DataproductQuery, useUpdateDataproductMutation,} from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import {useRouter} from 'next/router'
+import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
 
 interface EditDatacollectionFormProps {
   product: DataproductQuery['dataproduct']
@@ -31,7 +32,15 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
     updateDataproduct({
       variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
-      refetchQueries: ['Dataproduct', 'searchContent'],
+      refetchQueries: [
+        {
+            query: GET_DATAPRODUCT,
+            variables: {
+              id: product.id
+            }
+          },
+          'searchContent'
+        ],
     }).then(() => {
       setBackendError(undefined)
       router.push(`/dataproduct/${product.id}/${product.slug}`)
