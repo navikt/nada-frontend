@@ -96,7 +96,7 @@ const Dataproduct = (props: DataproductProps) => {
                 title: 'Beskrivelse',
                 slug: 'info',
                 component: (
-                    <Description markdown={product.description} />
+                    <Description keywords={product.keywords} markdown={product.description} />
                 ),
             },
         ];

@@ -55,22 +55,6 @@ export const DataproductSidebar = ({ product, isOwner, menuItems, currentPage }:
             <Subject>
                 {humanizeDate(product.lastModified)}
             </Subject>
-            {!!product.keywords.length && <>
-                <SubjectHeader>Nøkkelord</SubjectHeader>
-                <KeywordBox>
-                    {!!product.keywords.length && (<>{product.keywords.map((k, i) => (
-                        <Link key={i} href={`/search?keywords=${k}`}>
-                            <a>
-                                <KeywordPill key={k} keyword={k}>
-                                    {k}
-                                </KeywordPill>
-                            </a>
-                        </Link>
-                    ))}</>
-                    )}
-                </KeywordBox>
-            </>
-            }
         </div>
     </div>
 }
