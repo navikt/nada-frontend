@@ -79,6 +79,7 @@ const Search = () => {
 
     const search = useSearchContentWithOptionsQuery({
         variables: {options: {limit: 100, ...filters}},
+        fetchPolicy: "network-only"
     })
 
     const updateQuery = async (key: string, value: string | string[], clear?: boolean) => {
