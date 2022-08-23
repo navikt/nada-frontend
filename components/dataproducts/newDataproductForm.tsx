@@ -19,6 +19,7 @@ import { TreeView } from '@mui/lab'
 import { Project } from './datasource/project'
 import DatasetSourceForm from './dataset/datasetSourceForm'
 import { SearchContentDocument } from '../../lib/schema/graphql'
+import DataproductSourceForm from './dataproductSourceForm'
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
@@ -227,7 +228,7 @@ export const NewDataproductForm = () => {
         {...register('sourceCodeURL')}
         error={errors.sourceCodeURL?.message}
       />
-      <DatasetSourceForm
+      <DataproductSourceForm
         label="Velg tabell eller view"
         team={team}
         register={register}

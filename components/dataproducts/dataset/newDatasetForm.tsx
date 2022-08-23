@@ -8,6 +8,7 @@ import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { DataproductQuery } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import KeywordsInput from '../../lib/KeywordsInput'
+import DataproductSourceForm from '../dataproductSourceForm'
 import PiiCheckboxInput from '../piiCheckboxInput'
 import DatasetSourceForm from './datasetSourceForm'
 
@@ -128,7 +129,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           label="Link til kildekode"
           error={errors.repo?.message}
         />
-        <DatasetSourceForm
+        <DataproductSourceForm
           label="Velg tabell eller view"
           team={team}
           register={register}

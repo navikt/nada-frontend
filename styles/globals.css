@@ -39,6 +39,18 @@
   @apply hidden;
 }
 
+.MuiTreeItem-label {
+  @apply text-lg !important;
+}
+
+.MuiTreeItem-content {
+  @apply px-0 py-[0.125rem] hover:bg-interaction-primary-hover-subtle hover:text-text !important;
+}
+
+.Mui-selected {
+  @apply bg-interaction-primary-selected text-text-inverted hover:bg-interaction-primary hover:text-text-inverted !important;
+}
+
 html,
 body {
   padding: 0;
