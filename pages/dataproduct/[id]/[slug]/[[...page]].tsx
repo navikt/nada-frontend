@@ -133,15 +133,15 @@ const Dataproduct = (props: DataproductProps) => {
             </Head>
             <TopBar name={product.name} type={product.__typename}>
                 {isOwner &&
-                    <TopBarActions>
-                        <Link href={`/dataproduct/${product.id}/${product.slug}/edit`}>Endre dataprodukt</Link>
+                    <div className="flex ml-16 gap-2">
+                        <a className="px-2 border-r-[1px] border-border" href={`/dataproduct/${product.id}/${product.slug}/edit`}>Endre dataprodukt</a>
                         <a href="#" onClick={() => setShowDelete(true)}>Slette dataprodukt</a>
-                    </TopBarActions>
+                    </div>
                 }
             </TopBar>
-            <Container>
+            <div className="flex flex-row h-full flex-grow">
                 <DataproductSidebar product={product} isOwner={isOwner} menuItems={menuItems} currentPage={currentPage} />
-                <MainPage>
+                <div className="pl-4 flex-grow border-l-[1px] border-border">
                     {menuItems.map((i, idx) => (
                         <TabPanel
                             key={idx}
@@ -160,8 +160,8 @@ const Dataproduct = (props: DataproductProps) => {
                         error={deleteError}
                         resource = "dataprodukt"
                     />
-                </MainPage>
-            </Container>
+                </div>
+            </div>
         </>
     )
 }

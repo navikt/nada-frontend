@@ -52,33 +52,33 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
     )
   }
   return (
-    <div className="pt-12">
-        <Heading level="1" size="large" spacing>Rediger dataprodukt</Heading>
-        <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            style={{ width: '350px', display: 'block' }}
-            id="name"
-            label="Navn"
-            {...register('name')}
-            error={errors.name?.message}
-          />
-          <DescriptionEditor
-            label="Beskrivelse"
-            name="description"
-            control={control}
-          />
-          <TeamkatalogenSelector
-            group={product.owner.group}
-            register={register}
-            errors={errors}
-            watch={watch}
-          />
-          <div className="flex flex-row gap-4 grow items-end">
-            <Button type='button' variant='secondary' onClick={() => {router.push(`/dataproduct/${product.id}/${product.slug}`)}}>Avbryt</Button>
-            <Button type='submit'>Lagre</Button>
-          </div>
-        </form>
+    <>
+      <Heading level="1" size="large" spacing>Endre dataprodukt</Heading>
+      <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
+        <TextField
+          style={{ width: '350px', display: 'block' }}
+          id="name"
+          label="Navn"
+          {...register('name')}
+          error={errors.name?.message}
+        />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="description"
+          control={control}
+        />
+        <TeamkatalogenSelector
+          group={product.owner.group}
+          register={register}
+          errors={errors}
+          watch={watch}
+        />
+        <div className="flex flex-row gap-4 grow items-end">
+          <Button type='button' variant='secondary' onClick={() => {router.push(`/dataproduct/${product.id}/${product.slug}`)}}>Avbryt</Button>
+          <Button type='submit'>Lagre</Button>
         </div>
+      </form>
+    </>
   )
 }
 export default EditDataproduct
