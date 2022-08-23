@@ -1,13 +1,13 @@
 overwrite: true
-schema: "http://127.0.0.1:8080/api/query"
+schema: 'http://127.0.0.1:8080/api/query'
 documents:
-  - "lib/queries/*/*.ts"
+  - 'lib/queries/*/*.ts'
 generates:
   lib/schema/graphql.ts:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
     config:
       withHooks: true
       withMutationFn: true

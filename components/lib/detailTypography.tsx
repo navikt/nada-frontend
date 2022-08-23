@@ -17,21 +17,31 @@ export const StyledDescription = styled.div`
   margin-top: 2rem;
 `
 
-export const Description = ({ keywords, markdown }: { keywords: string[], markdown?: string | null }) => (
+export const Description = ({
+  keywords,
+  markdown,
+}: {
+  keywords: string[]
+  markdown?: string | null
+}) => (
   <StyledDescription>
     <ReactMarkdown remarkPlugins={[remarkGfm]}>
       {markdown || '*ingen beskrivelse*'}
     </ReactMarkdown>
-    {!!keywords.length && <div className="flex flex-row gap-1 flex-wrap my-2">
-        <>{keywords.map((k, i) => (
+    {!!keywords.length && (
+      <div className="flex flex-row gap-1 flex-wrap my-2">
+        <>
+          {keywords.map((k, i) => (
             <Link key={i} href={`/search?keywords=${k}`}>
-                <a>
-                    <KeywordPill key={k} keyword={k}>
-                        {k}
-                    </KeywordPill>
-                </a>
+              <a>
+                <KeywordPill key={k} keyword={k}>
+                  {k}
+                </KeywordPill>
+              </a>
             </Link>
-        ))}</>
-    </div>}
+          ))}
+        </>
+      </div>
+    )}
   </StyledDescription>
 )

@@ -1,4 +1,7 @@
-import { SubjectType, useGrantAccessMutation } from '../../../lib/schema/graphql'
+import {
+  SubjectType,
+  useGrantAccessMutation,
+} from '../../../lib/schema/graphql'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import * as React from 'react'
 import { useState } from 'react'
@@ -20,12 +23,12 @@ interface AddAccessProps {
 }
 
 const AddAccess = ({
-                     dataproductID,
-                     dataproductName,
-                     open,
-                     setOpen,
-                     subject,
-                   }: AddAccessProps) => {
+  dataproductID,
+  dataproductName,
+  open,
+  setOpen,
+  subject,
+}: AddAccessProps) => {
   const [date, setDate] = useState<Date | null>(endOfDay(new Date()))
   const [formError, setFormError] = useState('')
   const [grantAccess] = useGrantAccessMutation()
@@ -46,7 +49,7 @@ const AddAccess = ({
             subject,
             subjectType: SubjectType.User,
             expires: date,
-          }
+          },
         },
         refetchQueries: ['DataproductAccess', 'userInfoDetails'],
       })
@@ -74,10 +77,10 @@ const AddAccess = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
-              label='Til'
-              inputFormat='dd.MM.yyyy'
+              label="Til"
+              inputFormat="dd.MM.yyyy"
               value={date}
-              onChange={(newVal => setDate(newVal))}
+              onChange={(newVal) => setDate(newVal)}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>

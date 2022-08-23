@@ -1,6 +1,10 @@
 import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
-import { Group, useDataproductQuery, useDeleteDataproductMutation } from '../../../../lib/schema/graphql'
+import {
+  Group,
+  useDataproductQuery,
+  useDeleteDataproductMutation,
+} from '../../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../../lib/apollo'
 import { GET_DATAPRODUCT } from '../../../../lib/queries/dataproduct/dataproduct'
@@ -26,7 +30,6 @@ const DataproductEdit = (props: DataproductProps) => {
   const userInfo = useContext(UserState)
   const router = useRouter()
 
-
   const { data, loading, error } = useDataproductQuery({
     variables: { id },
     ssr: true,
@@ -43,48 +46,55 @@ const DataproductEdit = (props: DataproductProps) => {
 
   if (loading || !data?.dataproduct) return <LoaderSpinner />
 
-  const isOwner = userInfo?.groups === undefined
-    ? false
-    : userInfo.groups.some((g: Group) => g.email === data.dataproduct.owner.group)
-  
+  const isOwner =
+    userInfo?.groups === undefined
+      ? false
+      : userInfo.groups.some(
+          (g: Group) => g.email === data.dataproduct.owner.group
+        )
+
   const [deleteDataproduct] = useDeleteDataproductMutation({
-      variables: { id: id },
-      awaitRefetchQueries: true,
-      refetchQueries: ['searchContent'],
+    variables: { id: id },
+    awaitRefetchQueries: true,
+    refetchQueries: ['searchContent'],
   })
 
   const onDelete = async () => {
-      try {
-          await deleteDataproduct()
-          await router.push('/')
-      } catch (e: any) {
-          setDeleteError(e.toString())
-      }
+    try {
+      await deleteDataproduct()
+      await router.push('/')
+    } catch (e: any) {
+      setDeleteError(e.toString())
+    }
   }
 
   return (
     <>
       <Head>
-          <title>{data.dataproduct.name}</title>
+        <title>{data.dataproduct.name}</title>
       </Head>
       <TopBar name={data.dataproduct.name} type={data.dataproduct.__typename}>
-          {isOwner &&
-              <div className="flex ml-16 gap-2">
-                  <p className="font-bold px-2 border-r-[1px] border-border">Endre dataprodukt</p>
-                  <a href="#" onClick={() => setShowDelete(true)}>Slette dataprodukt</a>
-              </div>
-          }
+        {isOwner && (
+          <div className="flex ml-16 gap-2">
+            <p className="font-bold px-2 border-r-[1px] border-border">
+              Endre dataprodukt
+            </p>
+            <a href="#" onClick={() => setShowDelete(true)}>
+              Slette dataprodukt
+            </a>
+          </div>
+        )}
       </TopBar>
       <div className="flex flex-col h-full flex-grow">
         <EditDataproduct product={data.dataproduct} />
       </div>
       <DeleteModal
-          open={showDelete}
-          onCancel={() => setShowDelete(false)}
-          onConfirm={() => onDelete()}
-          name={data.dataproduct.name}
-          error={deleteError}
-          resource = "dataprodukt"
+        open={showDelete}
+        onCancel={() => setShowDelete(false)}
+        onConfirm={() => onDelete()}
+        name={data.dataproduct.name}
+        error={deleteError}
+        resource="dataprodukt"
       />
     </>
   )

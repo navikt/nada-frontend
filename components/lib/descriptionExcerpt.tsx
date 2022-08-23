@@ -30,14 +30,13 @@ const StyledDescription = styled.div`
 `
 
 export const DescriptionExcerpt = ({ excerpt }: { excerpt: string }) => {
-
   return (
     <StyledDescription>
       <HTMLEllipsis
         unsafeHTML={marked.parse(excerpt)}
-        maxLine='5'
-        ellipsis='…'
-        basedOn='letters'
+        maxLine="5"
+        ellipsis="…"
+        basedOn="letters"
       />
     </StyledDescription>
   )

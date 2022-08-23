@@ -37,11 +37,11 @@ const AccessRequestView = (props: RequestProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { id } = context.query
-    const apolloClient = initializeApollo()
-      return addApolloState(apolloClient, {
-      props: { id },
-    })
-  }
+  const { id } = context.query
+  const apolloClient = initializeApollo()
+  return addApolloState(apolloClient, {
+    props: { id },
+  })
+}
 
 export default AccessRequestView

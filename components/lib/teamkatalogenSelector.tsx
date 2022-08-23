@@ -16,9 +16,11 @@ export const TeamkatalogenSelector = ({
   errors,
   watch,
 }: TeamkatalogenSelectorProps) => {
-  const { data, error } = [undefined, ""].includes(group) ? {data: {teamkatalogen: []}, error: null} : useTeamkatalogenQuery({
-    variables: { q: group === undefined ? "" : group.split('@')[0] },
-  })
+  const { data, error } = [undefined, ''].includes(group)
+    ? { data: { teamkatalogen: [] }, error: null }
+    : useTeamkatalogenQuery({
+        variables: { q: group === undefined ? '' : group.split('@')[0] },
+      })
 
   if (error) return <ErrorMessage error={error} />
   if (!data) return <LoaderSpinner />

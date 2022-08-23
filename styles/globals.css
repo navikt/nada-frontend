@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .explore-header > h1 {
   @apply hover:underline selection:underline;
 }
@@ -16,26 +15,27 @@
 }
 
 .select__control {
-  @apply border-border hover:border-focus min-h-[48px] 
+  @apply border-border hover:border-focus min-h-[48px];
 }
 
 .select__option {
-  @apply hover:bg-focus hover:text-text-inverted
+  @apply hover:bg-focus hover:text-text-inverted;
 }
 
 .select__option--is-focused {
-  @apply bg-focus text-text-inverted
+  @apply bg-focus text-text-inverted;
 }
 
 .select__control--is-focused {
-  @apply border-focus border-2 hover:border-focus
+  @apply border-focus border-2 hover:border-focus;
 }
 
 .select__menu-list {
-  @apply max-h-44
+  @apply max-h-44;
 }
 
-.select__dropdown-indicator, .select__indicator-separator {
+.select__dropdown-indicator,
+.select__indicator-separator {
   @apply hidden;
 }
 

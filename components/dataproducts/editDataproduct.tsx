@@ -1,12 +1,15 @@
-import {Button, ErrorSummary, Heading, TextField} from '@navikt/ds-react'
-import {useForm} from 'react-hook-form'
-import {updateDataproductValidation} from '../../lib/schema/yupValidations'
-import {yupResolver} from '@hookform/resolvers/yup/dist/yup'
-import {useState} from 'react'
+import { Button, ErrorSummary, Heading, TextField } from '@navikt/ds-react'
+import { useForm } from 'react-hook-form'
+import { updateDataproductValidation } from '../../lib/schema/yupValidations'
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { useState } from 'react'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
-import {DataproductQuery, useUpdateDataproductMutation,} from '../../lib/schema/graphql'
+import {
+  DataproductQuery,
+  useUpdateDataproductMutation,
+} from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
 import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
 
 interface EditDatacollectionFormProps {
@@ -34,13 +37,13 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       awaitRefetchQueries: true,
       refetchQueries: [
         {
-            query: GET_DATAPRODUCT,
-            variables: {
-              id: product.id
-            }
+          query: GET_DATAPRODUCT,
+          variables: {
+            id: product.id,
           },
-          'searchContent'
-        ],
+        },
+        'searchContent',
+      ],
     }).then(() => {
       setBackendError(undefined)
       router.push(`/dataproduct/${product.id}/${product.slug}`)
@@ -53,7 +56,9 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   }
   return (
     <>
-      <Heading level="1" size="large" spacing>Endre dataprodukt</Heading>
+      <Heading level="1" size="large" spacing>
+        Endre dataprodukt
+      </Heading>
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
         <TextField
           style={{ width: '350px', display: 'block' }}
@@ -74,8 +79,16 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           watch={watch}
         />
         <div className="flex flex-row gap-4 grow items-end">
-          <Button type='button' variant='secondary' onClick={() => {router.push(`/dataproduct/${product.id}/${product.slug}`)}}>Avbryt</Button>
-          <Button type='submit'>Lagre</Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              router.push(`/dataproduct/${product.id}/${product.slug}`)
+            }}
+          >
+            Avbryt
+          </Button>
+          <Button type="submit">Lagre</Button>
         </div>
       </form>
     </>

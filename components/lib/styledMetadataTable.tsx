@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {ColorSchemeTypes} from './colorScheme'
+import { ColorSchemeTypes } from './colorScheme'
 
 interface StyledMetadataTableProps {
   type: ColorSchemeTypes

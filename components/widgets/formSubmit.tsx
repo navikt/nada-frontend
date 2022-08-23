@@ -57,40 +57,52 @@ export const RightJustifiedSubmitButton = ({
 export const RightJustifiedGrantButton = ({
   onDeny,
   onApprove,
-  setDenyReason
+  setDenyReason,
 }: RightJustifiedGrantButtonProps) => {
-  const [isCancelling, setIsCancelling] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false)
 
   const stageCancel = () => {
-    setIsCancelling(true);
+    setIsCancelling(true)
   }
 
-  return (<>
-    <SubmitButton>
-      <Button type={'button'} disabled={isCancelling} variant={'danger'} onClick={stageCancel}>
-        Avslå
-      </Button>
-      <Button type={'submit'} onClick={onApprove}>
-        Godkjenn
-      </Button>
-    </SubmitButton>
-    {isCancelling &&
-      <SpecifyReasonDenyButton onDeny={onDeny} setDenyReason={setDenyReason} />
-    }
-  </>)
+  return (
+    <>
+      <SubmitButton>
+        <Button
+          type={'button'}
+          disabled={isCancelling}
+          variant={'danger'}
+          onClick={stageCancel}
+        >
+          Avslå
+        </Button>
+        <Button type={'submit'} onClick={onApprove}>
+          Godkjenn
+        </Button>
+      </SubmitButton>
+      {isCancelling && (
+        <SpecifyReasonDenyButton
+          onDeny={onDeny}
+          setDenyReason={setDenyReason}
+        />
+      )}
+    </>
+  )
 }
 
 export const SpecifyReasonDenyButton = ({
   onDeny,
-  setDenyReason
+  setDenyReason,
 }: SpecifyReasonDenyButtonProps) => (
   <>
-        <SpacedTextField
-          label="Begrunnelse for avslag"
-          onChange={(e) => setDenyReason(e.target.value)}
-        />
-        <Button type={'button'} variant={'danger'} onClick={onDeny} >Avslå</Button>
-      </>
+    <SpacedTextField
+      label="Begrunnelse for avslag"
+      onChange={(e) => setDenyReason(e.target.value)}
+    />
+    <Button type={'button'} variant={'danger'} onClick={onDeny}>
+      Avslå
+    </Button>
+  </>
 )
 
 export default RightJustifiedSubmitButton

@@ -10,19 +10,21 @@ type StorySelectorProps = {
 export const StorySelector = ({ register, group }: StorySelectorProps) => {
   const userInfo = useContext(UserState)
 
-  const stories = [...new Set(userInfo?.stories.filter((s) => s.owner?.group == group).map((s) => { return { id: s.id, name: s.name } }))]
+  const stories = [
+    ...new Set(
+      userInfo?.stories
+        .filter((s) => s.owner?.group == group)
+        .map((s) => {
+          return { id: s.id, name: s.name }
+        })
+    ),
+  ]
 
   return (
-    <Select
-      label='Story'
-      {...register('target')}
-    >
-      <option value=''>Ny historie</option>
+    <Select label="Story" {...register('target')}>
+      <option value="">Ny historie</option>
       {stories.map((target) => (
-        <option
-          value={target.id}
-          key={target.id}
-        >
+        <option value={target.id} key={target.id}>
           Overskriv {target.name}
         </option>
       ))}
