@@ -8,8 +8,6 @@ import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { DataproductQuery } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import KeywordsInput from '../../lib/KeywordsInput'
-import DataproductSourceForm from '../dataproductSourceForm'
-import PiiCheckboxInput from '../piiCheckboxInput'
 import DatasetSourceForm from './datasetSourceForm'
 
 interface NewDatasetFormProps {
@@ -61,7 +59,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     resolver: yupResolver(schema),
   })
 
-  const onDelete = (keyword: string) => {
+  const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
       keywords.filter((k: string) => k !== keyword)
@@ -71,7 +69,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   const keywords = watch('keywords')
   const team = dataproduct.dataproduct.owner.group
 
-  const onAdd = (keyword: string) => {
+  const onAddKeyword = (keyword: string) => {
     keywords
       ? setValue('keywords', [...keywords, keyword])
       : setValue('keywords', [keyword])
@@ -129,7 +127,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           label="Link til kildekode"
           error={errors.repo?.message}
         />
-        <DataproductSourceForm
+        <DatasetSourceForm
           label="Velg tabell eller view"
           team={team}
           register={register}
@@ -138,8 +136,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           setValue={setValue}
         />
         <KeywordsInput
-          onAdd={onAdd}
-          onDelete={onDelete}
+          onAdd={onAddKeyword}
+          onDelete={onDeleteKeyword}
           keywords={keywords || []}
           error={errors.keywords?.[0].message}
         />

@@ -19,13 +19,15 @@ const MenuButton = styled(Button)`
 interface IDatasetOwnerMenuProps {
   datasetName: string
   datasetId: string
-  dataproduct: DataproductQuery | undefined
+  dataproduct: DataproductQuery['dataproduct']
+  setEdit: (value: boolean) => void
 }
 
 const DatasetOwnerMenu = ({
   datasetName,
   datasetId,
   dataproduct,
+  setEdit,
 }: IDatasetOwnerMenuProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
@@ -45,7 +47,7 @@ const DatasetOwnerMenu = ({
       {
         query: GET_DATAPRODUCT,
         variables: {
-          id: dataproduct?.dataproduct.id,
+          id: dataproduct?.id,
         },
       },
     ],
@@ -55,7 +57,7 @@ const DatasetOwnerMenu = ({
     try {
       await deleteDataset()
       await router.push(
-        `/dataproduct/${dataproduct?.dataproduct.id}/${dataproduct?.dataproduct.slug}/info`
+        `/dataproduct/${dataproduct?.id}/${dataproduct?.slug}/info`
       )
     } catch (e: any) {
       setDeleteError(e.toString())
@@ -78,7 +80,7 @@ const DatasetOwnerMenu = ({
           </Dropdown.Menu.GroupedList>
           <Divider />
           <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item onClick={() => setEdit(true)}>
               Endre datasett
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item onClick={() => setShowDelete(true)}>

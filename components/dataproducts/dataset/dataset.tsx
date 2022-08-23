@@ -1,29 +1,18 @@
 import { Heading, Link, Alert, Modal } from '@navikt/ds-react'
 import { isAfter, parseISO } from 'date-fns'
-import humanizeDate from '../../../lib/humanizeDate'
 import {
   DataproductQuery,
-  NewAccessRequest,
-  SubjectType,
+  DatasetQuery,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
-import DatasetTableSchema from './datasetTableSchema'
-import Explore from '../../../components/dataproducts/explore'
-import BigQueryLogo from '../../lib/icons/bigQueryLogo'
-import IconBox from '../../lib/icons/iconBox'
 import * as React from 'react'
-import DatasetMetadata from './datasetMetadata'
-import SpacedDiv from '../../lib/spacedDiv'
-import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { useState } from 'react'
-import { KeywordBox, KeywordPill } from '../../lib/keywordList'
-import DatasetOwnerMenu from './datasetOwnerMenu'
-import NewAccessRequestForm from '../accessRequest/newAccessRequest'
-import { SuccessColored, WarningColored } from '@navikt/ds-icons'
+import EditDataset from './editDatasetForm'
+import ViewDataset from './viewDataset'
 
 const findAccessType = (
   groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined,
-  dataset: DatasetQuery,
+  dataset: DatasetQuery['dataset'],
   isOwner: boolean
 ) => {
   if (!groups) return { type: 'utlogget' }
@@ -36,144 +25,32 @@ const findAccessType = (
   return { type: 'none' }
 }
 
-const DatasetAlert = ({
-  narrow,
-  variant,
-  children,
-}: {
-  narrow?: boolean
-  children: React.ReactNode
-  variant: 'info' | 'success' | 'warning'
-}) => {
-  return (
-    <Alert
-      variant={variant}
-      size="small"
-      className={`${narrow && 'w-fit'} mb-3`}
-    >
-      {children}
-    </Alert>
-  )
-}
-
 interface EntryProps {
-  dataset: DatasetQuery
+  dataproduct: DataproductQuery['dataproduct']
+  dataset: DatasetQuery['dataset']
   userInfo: UserInfoDetailsQuery['userInfo'] | undefined
   isOwner: boolean
-  product: DataproductQuery | undefined
 }
 
-const Dataset = ({ dataset, userInfo, isOwner, product }: EntryProps) => {
+const Dataset = ({ dataset, userInfo, isOwner, dataproduct }: EntryProps) => {
   const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
-  const [accessRequested, setAccessRequested] = useState(false)
+  const [edit, setEdit] = useState(false)
 
   return (
-    <div className="flex">
-      <Modal
-        open={accessRequested}
-        aria-label="Søk om tilgang til datasettet"
-        onClose={() => setAccessRequested(false)}
-        className="w-full md:w-1/3 px-8 h-[52rem]"
-      >
-        <Modal.Content className="h-full">
-          <NewAccessRequestForm dataset={dataset} />
-        </Modal.Content>
-      </Modal>
-      <div className="block pt-8 pr-8">
-        {accessType.type === 'utlogget' && (
-          <DatasetAlert variant="info">Du er ikke innlogget</DatasetAlert>
-        )}
-        {accessType.type === 'none' && (
-          <DatasetAlert variant="info">
-            Du har ikke tilgang til datasettet.{' '}
-            <a href="#" onClick={() => setAccessRequested(true)}>
-              Søk om tilgang
-            </a>
-          </DatasetAlert>
-        )}
-        <div className='flex flex-row justify-between w-full'>
-          <div>
-            <div className="flex items-center gap-4 mb-2">
-              <Heading
-                className="inline-flex items-center gap-3"
-                level="2"
-                size="large"
-              >
-                <IconBox size={42} inline={true}>
-                  <BigQueryLogo />
-                </IconBox>
-                {dataset.name}
-              </Heading>
-              {isOwner && (
-                <DatasetOwnerMenu
-                  datasetName={dataset.name}
-                  datasetId={dataset.id}
-                  dataproduct={product}
-                />
-              )}
-            </div>
-          </div>
-          <div className='flex flex-col items-end gap-2 w-72'>
-              <div className='flex flex-row gap-1 flex-wrap justify-end'>
-                {dataset.keywords.map((keyword, idx) => (
-                  <KeywordPill key={idx} keyword={keyword}>
-                    {keyword}
-                  </KeywordPill>
-                ))}
-                {dataset.keywords.map((keyword, idx) => (
-                  <KeywordPill key={idx} keyword={keyword}>
-                    {keyword}
-                  </KeywordPill>
-                ))}
-                {dataset.keywords.map((keyword, idx) => (
-                  <KeywordPill key={idx} keyword={keyword}>
-                    {keyword}
-                  </KeywordPill>
-                ))}
-
-              </div>
-          {dataset.pii ? (
-            <p className='flex flex-row gap-2 items-center'>
-            <WarningColored />
-            <span>Inneholder persondata</span>  
-            </p>
-            ) : (
-            <p className='flex flex-row gap-2 items-center'>
-                <SuccessColored />
-                <span>Inneholder <b>ikke</b> persondata</span>
-            </p>
-          )}
-          </div>
-        </div>
-
-        {dataset.description && (
-          <section className="mb-3">
-            <Heading level="3" size="small" spacing>
-              Beskrivelse
-            </Heading>
-            <article>{dataset.description}</article>
-          </section>
-        )}
-        <section className="mb-3 flex flex-col">
-          <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-            <DatasetMetadata datasource={dataset.datasource} />
-            <DatasetTableSchema datasource={dataset.datasource} />
-          </article>
-          {userInfo && accessType.type !== 'none' && (
-            <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-              <Heading spacing level="3" size="small">
-                Utforsk
-              </Heading>
-              <Explore
-                dataproductId={dataset.id}
-                dataset={dataset}
-                isOwner={accessType.type === 'owner'}
-              />
-            </article>
-          )}
-        </section>
-      </div>
-    </div>
+    <>
+      {edit ? (
+        <EditDataset dataset={dataset} setEdit={setEdit} />
+      ) : (
+        <ViewDataset
+          dataset={dataset}
+          dataproduct={dataproduct}
+          accessType={accessType}
+          userInfo={userInfo}
+          isOwner={isOwner}
+          setEdit={setEdit}
+        />
+      )}
+    </>
   )
 }
 

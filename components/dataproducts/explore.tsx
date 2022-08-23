@@ -7,6 +7,7 @@ import ExploreLink, { ItemType } from './exploreLink'
 import { useState } from 'react'
 import ErrorMessage from '../lib/error'
 import { DatasetQuery } from '../../lib/schema/datasetQuery'
+import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
 
 interface ExploreProps {
   dataproductId: string
@@ -30,7 +31,14 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
           datasetID: dataset.id,
           services: [MappingService.Metabase],
         },
-        refetchQueries: ['Dataproduct'],
+        refetchQueries: [
+          {
+            query: GET_DATAPRODUCT,
+            variables: {
+              id: dataproductId,
+            },
+          },
+        ],
       })
     } catch (e: any) {
       setFormError(e)

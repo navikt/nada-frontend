@@ -1117,14 +1117,24 @@ export type DataproductQuery = {
       __typename?: 'Dataset'
       id: string
       dataproductID: string
+      lastModified: any
+      name: string
       description?: string | null | undefined
       created: any
-      name: string
-      keywords: Array<string>
-      mappings: Array<MappingService>
-      pii: boolean
       repo?: string | null | undefined
       slug: string
+      pii: boolean
+      keywords: Array<string>
+      mappings: Array<MappingService>
+      services: {
+        __typename?: 'DatasetServices'
+        metabase?: string | null | undefined
+      }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
       access: Array<{
         __typename?: 'Access'
         id: string
@@ -1135,10 +1145,6 @@ export type DataproductQuery = {
         revoked?: any | null | undefined
         accessRequestID?: string | null | undefined
       }>
-      services: {
-        __typename?: 'DatasetServices'
-        metabase?: string | null | undefined
-      }
       datasource: {
         __typename?: 'BigQuery'
         projectID: string
@@ -1351,6 +1357,16 @@ export type DeleteDatasetMutationVariables = Exact<{
 export type DeleteDatasetMutation = {
   __typename?: 'Mutation'
   deleteDataset: boolean
+}
+
+export type UpdateDatasetMutationVariables = Exact<{
+  id: Scalars['ID']
+  input: UpdateDataset
+}>
+
+export type UpdateDatasetMutation = {
+  __typename?: 'Mutation'
+  updateDataset: { __typename?: 'Dataset'; id: string; dataproductID: string }
 }
 
 export type GroupStatsQueryVariables = Exact<{ [key: string]: never }>
@@ -2297,6 +2313,22 @@ export const DataproductDocument = gql`
       datasets {
         id
         dataproductID
+        lastModified
+        name
+        description
+        created
+        repo
+        slug
+        pii
+        keywords
+        mappings
+        services {
+          metabase
+        }
+        owner {
+          group
+          teamkatalogenURL
+        }
         access {
           id
           subject
@@ -2305,17 +2337,6 @@ export const DataproductDocument = gql`
           created
           revoked
           accessRequestID
-        }
-        description
-        created
-        name
-        keywords
-        mappings
-        pii
-        repo
-        slug
-        services {
-          metabase
         }
         datasource {
           type: __typename
@@ -3094,6 +3115,58 @@ export type DeleteDatasetMutationResult =
 export type DeleteDatasetMutationOptions = Apollo.BaseMutationOptions<
   DeleteDatasetMutation,
   DeleteDatasetMutationVariables
+>
+export const UpdateDatasetDocument = gql`
+  mutation updateDataset($id: ID!, $input: UpdateDataset!) {
+    updateDataset(id: $id, input: $input) {
+      id
+      dataproductID
+    }
+  }
+`
+export type UpdateDatasetMutationFn = Apollo.MutationFunction<
+  UpdateDatasetMutation,
+  UpdateDatasetMutationVariables
+>
+
+/**
+ * __useUpdateDatasetMutation__
+ *
+ * To run a mutation, you first call `useUpdateDatasetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDatasetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDatasetMutation, { data, loading, error }] = useUpdateDatasetMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateDatasetMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateDatasetMutation,
+    UpdateDatasetMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    UpdateDatasetMutation,
+    UpdateDatasetMutationVariables
+  >(UpdateDatasetDocument, options)
+}
+export type UpdateDatasetMutationHookResult = ReturnType<
+  typeof useUpdateDatasetMutation
+>
+export type UpdateDatasetMutationResult =
+  Apollo.MutationResult<UpdateDatasetMutation>
+export type UpdateDatasetMutationOptions = Apollo.BaseMutationOptions<
+  UpdateDatasetMutation,
+  UpdateDatasetMutationVariables
 >
 export const GroupStatsDocument = gql`
   query groupStats {

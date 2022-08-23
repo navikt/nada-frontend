@@ -118,7 +118,7 @@ const Dataproduct = (props: DataproductProps) => {
           dataset={dataset}
           userInfo={userInfo}
           isOwner={isOwner}
-          product={productQuery.data}
+          dataproduct={product}
         />
       ),
     })
