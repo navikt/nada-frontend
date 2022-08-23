@@ -127,7 +127,7 @@ const Dataproduct = (props: DataproductProps) => {
   if (isOwner) {
     menuItems.push({
       title: (
-        <div className="flex flex-row text-base mt-2">
+        <div className="flex flex-row items-center text-base mt-2">
           <AddCircle className="mr-1" />
           Legg til datasett
         </div>
