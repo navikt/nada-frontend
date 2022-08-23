@@ -16,10 +16,11 @@ const MenuButton = styled(Button)`
 interface IDatasetOwnerMenuProps{
     datasetName: string;
     datasetId: string;
-    dataproduct: DataproductQuery | undefined;
+    dataproduct: DataproductQuery["dataproduct"];
+    setEdit: (value: boolean) => void
 }
 
-const DatasetOwnerMenu = ({datasetName, datasetId, dataproduct}: IDatasetOwnerMenuProps) => {
+const DatasetOwnerMenu = ({datasetName, datasetId, dataproduct, setEdit}: IDatasetOwnerMenuProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState<Element | null>(null)
     const [showDelete, setShowDelete] = useState(false)
@@ -39,7 +40,7 @@ const DatasetOwnerMenu = ({datasetName, datasetId, dataproduct}: IDatasetOwnerMe
             {
                 query: GET_DATAPRODUCT,
                 variables: {
-                  id: dataproduct?.dataproduct.id
+                  id: dataproduct?.id
                 }
               },
             ],
@@ -48,7 +49,7 @@ const DatasetOwnerMenu = ({datasetName, datasetId, dataproduct}: IDatasetOwnerMe
     const onDelete = async () => {
         try {
             await deleteDataset()
-            await router.push(`/dataproduct/${dataproduct?.dataproduct.id}/${dataproduct?.dataproduct.slug}/info`)
+            await router.push(`/dataproduct/${dataproduct?.id}/${dataproduct?.slug}/info`)
         } catch (e: any) {
             setDeleteError(e.toString())
         }
@@ -64,7 +65,7 @@ const DatasetOwnerMenu = ({datasetName, datasetId, dataproduct}: IDatasetOwnerMe
             </Dropdown.Menu.GroupedList>
             <Divider />
             <Dropdown.Menu.GroupedList>
-                <Dropdown.Menu.GroupedList.Item>Endre datasett</Dropdown.Menu.GroupedList.Item>
+                <Dropdown.Menu.GroupedList.Item onClick={() => setEdit(true)}>Endre datasett</Dropdown.Menu.GroupedList.Item>
                 <Dropdown.Menu.GroupedList.Item onClick={()=> setShowDelete(true)}>Slett datasett</Dropdown.Menu.GroupedList.Item>
             </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>

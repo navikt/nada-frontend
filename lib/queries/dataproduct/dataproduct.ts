@@ -17,6 +17,22 @@ export const GET_DATAPRODUCT = gql`
       datasets {
         id
         dataproductID
+        lastModified
+        name
+        description
+        created
+        repo
+        slug
+        pii
+        keywords
+        mappings
+        services {
+          metabase
+        }
+        owner {
+          group
+          teamkatalogenURL
+        }
         access {
           id
           subject
@@ -25,17 +41,6 @@ export const GET_DATAPRODUCT = gql`
           created
           revoked
           accessRequestID
-        }
-        description
-        created
-        name
-        keywords
-        mappings
-        pii
-        repo
-        slug
-        services {
-          metabase
         }
         datasource {
           type: __typename

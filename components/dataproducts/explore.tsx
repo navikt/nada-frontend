@@ -2,10 +2,11 @@ import {
     MappingService, useDataproductQuery,
     useUpdateMappingMutation
 } from "../../lib/schema/graphql";
-import ExploreLink, {ItemType} from "./exploreLink";
-import {useState} from "react";
+import ExploreLink, { ItemType } from "./exploreLink";
+import { useState } from "react";
 import ErrorMessage from "../lib/error";
 import { DatasetQuery } from '../../lib/schema/datasetQuery'
+import { GET_DATAPRODUCT } from "../../lib/queries/dataproduct/dataproduct";
 
 
 interface ExploreProps {
@@ -14,7 +15,7 @@ interface ExploreProps {
     isOwner: boolean
 }
 
-const Explore = ({dataproductId, dataset, isOwner}: ExploreProps) => {
+const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
     const [formError, setFormError] = useState(undefined)
     const [updateMapping] = useUpdateMappingMutation()
     useDataproductQuery({
@@ -24,10 +25,18 @@ const Explore = ({dataproductId, dataset, isOwner}: ExploreProps) => {
     })
 
     const addToMetabase = async () => {
-        try{
+        try {
             await updateMapping({
-                variables: {datasetID: dataset.id, services: [MappingService.Metabase]},
-                refetchQueries: ['Dataproduct'],
+                variables: { datasetID: dataset.id, services: [MappingService.Metabase] },
+                refetchQueries:
+                    [
+                        {
+                            query: GET_DATAPRODUCT,
+                            variables: {
+                                id: dataproductId
+                            }
+                        },
+                    ]
             })
 
         } catch (e: any) {
@@ -36,9 +45,9 @@ const Explore = ({dataproductId, dataset, isOwner}: ExploreProps) => {
     }
 
     const removeFromMetabase = async () => {
-        try{
+        try {
             await updateMapping({
-                variables: {datasetID: dataset.id, services: []},
+                variables: { datasetID: dataset.id, services: [] },
                 refetchQueries: ['Dataproduct'],
             })
 
@@ -55,11 +64,11 @@ const Explore = ({dataproductId, dataset, isOwner}: ExploreProps) => {
     return (
         <>
             <div className="flex flex-row flex-wrap mt-3 gap-5">
-                <ExploreLink isOwner={isOwner} url={bigQueryUrl} type={ItemType.bigQuery}/>
-                <ExploreLink isOwner={isOwner} url={services.metabase} type={ItemType.metabase} add={addToMetabase} remove={removeFromMetabase} mappings={mappings}/>
+                <ExploreLink isOwner={isOwner} url={bigQueryUrl} type={ItemType.bigQuery} />
+                <ExploreLink isOwner={isOwner} url={services.metabase} type={ItemType.metabase} add={addToMetabase} remove={removeFromMetabase} mappings={mappings} />
             </div>
             {formError &&
-            <ErrorMessage error={formError}/>
+                <ErrorMessage error={formError} />
             }
         </>)
 

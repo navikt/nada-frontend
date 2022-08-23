@@ -107,7 +107,7 @@ const Dataproduct = (props: DataproductProps) => {
             title: `${dataset.name} (${dataset.datasource.type})`,
             slug: dataset.id,
             component: (
-                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner} product = {productQuery.data}/>
+                <Dataset dataset={dataset} userInfo={userInfo} isOwner={isOwner} dataproduct={product}/>
             )
         })
     });

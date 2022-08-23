@@ -48,14 +48,14 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         resolver: yupResolver(schema),
     });
 
-    const onDelete = (keyword: string) => {
+    const onDeleteKeyword = (keyword: string) => {
         setValue('keywords', keywords.filter((k: string) => k !== keyword))
     }
 
     const keywords = watch('keywords')
     const team = dataproduct.dataproduct.owner.group
 
-    const onAdd = (keyword: string) => {
+    const onAddKeyword = (keyword: string) => {
         keywords ?
             setValue('keywords', [...keywords, keyword]) :
             setValue('keywords', [keyword])
@@ -113,8 +113,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
                     setValue={setValue}
                 />
                 <KeywordsInput
-                    onAdd={onAdd}
-                    onDelete={onDelete}
+                    onAdd={onAddKeyword}
+                    onDelete={onDeleteKeyword}
                     keywords={keywords || []}
                     error={errors.keywords?.[0].message}
                 />

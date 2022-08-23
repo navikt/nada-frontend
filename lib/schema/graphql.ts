@@ -1117,14 +1117,24 @@ export type DataproductQuery = {
       __typename?: 'Dataset'
       id: string
       dataproductID: string
+      lastModified: any
+      name: string
       description?: string | null | undefined
       created: any
-      name: string
-      keywords: Array<string>
-      mappings: Array<MappingService>
-      pii: boolean
       repo?: string | null | undefined
       slug: string
+      pii: boolean
+      keywords: Array<string>
+      mappings: Array<MappingService>
+      services: {
+        __typename?: 'DatasetServices'
+        metabase?: string | null | undefined
+      }
+      owner: {
+        __typename?: 'Owner'
+        group: string
+        teamkatalogenURL?: string | null | undefined
+      }
       access: Array<{
         __typename?: 'Access'
         id: string
@@ -1135,10 +1145,6 @@ export type DataproductQuery = {
         revoked?: any | null | undefined
         accessRequestID?: string | null | undefined
       }>
-      services: {
-        __typename?: 'DatasetServices'
-        metabase?: string | null | undefined
-      }
       datasource: {
         __typename?: 'BigQuery'
         projectID: string
@@ -2307,6 +2313,22 @@ export const DataproductDocument = gql`
       datasets {
         id
         dataproductID
+        lastModified
+        name
+        description
+        created
+        repo
+        slug
+        pii
+        keywords
+        mappings
+        services {
+          metabase
+        }
+        owner {
+          group
+          teamkatalogenURL
+        }
         access {
           id
           subject
@@ -2315,17 +2337,6 @@ export const DataproductDocument = gql`
           created
           revoked
           accessRequestID
-        }
-        description
-        created
-        name
-        keywords
-        mappings
-        pii
-        repo
-        slug
-        services {
-          metabase
         }
         datasource {
           type: __typename
