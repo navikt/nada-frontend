@@ -1,7 +1,7 @@
-import { Heading, Link, Alert, Modal } from "@navikt/ds-react";
+import { Heading, Alert, Modal } from "@navikt/ds-react";
 import { isAfter, parseISO } from "date-fns";
 import humanizeDate from "../../../lib/humanizeDate";
-import { DataproductQuery, NewAccessRequest, SubjectType, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
+import { DataproductQuery, DatasetQuery, UserInfoDetailsQuery } from "../../../lib/schema/graphql";
 import DatasetTableSchema from "./datasetTableSchema";
 import Explore from "../../../components/dataproducts/explore";
 import BigQueryLogo from "../../lib/icons/bigQueryLogo";
@@ -9,15 +9,13 @@ import IconBox from "../../lib/icons/iconBox";
 import * as React from "react";
 import DatasetMetadata from "./datasetMetadata";
 import SpacedDiv from "../../lib/spacedDiv";
-import { DatasetQuery } from "../../../lib/schema/datasetQuery";
 import { useState } from "react";
 import {KeywordBox, KeywordPill} from "../../lib/keywordList";
 import DatasetOwnerMenu from "./datasetOwnerMenu";
 import NewAccessRequestForm from "../accessRequest/newAccessRequest";
 
 
-
-const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataset: DatasetQuery, isOwner: boolean) => {
+const findAccessType = (groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined, dataset: DatasetQuery["dataset"], isOwner: boolean) => {
     if (!groups) return {type: "utlogget"}
     if (isOwner) return {type: "owner"}
     const activeAccess = dataset.access.filter(a => (!a.revoked && (!a.expires || isAfter(parseISO(a.expires), Date.now()))))[0]
@@ -31,7 +29,8 @@ const DatasetAlert = ({narrow, variant, children}: {narrow?: boolean, children: 
 }
 
 interface EntryProps {
-    dataset: DatasetQuery
+    dataproduct: DataproductQuery["dataproduct"]
+    dataset: DatasetQuery["dataset"]
     userInfo: UserInfoDetailsQuery['userInfo'] | undefined
     isOwner: boolean
     product: DataproductQuery | undefined
@@ -42,7 +41,6 @@ interface EntryProps {
 const Dataset = ({dataset, userInfo, isOwner, product}: EntryProps) => {
     const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
     const [accessRequested, setAccessRequested] = useState(false);
-
 
     return <div className="flex">
         <Modal 

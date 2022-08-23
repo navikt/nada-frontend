@@ -8,7 +8,6 @@ import { CREATE_DATASET } from "../../../lib/queries/dataset/createDataset";
 import { DataproductQuery } from "../../../lib/schema/graphql";
 import DescriptionEditor from "../../lib/DescriptionEditor";
 import KeywordsInput from "../../lib/KeywordsInput";
-import PiiCheckboxInput from "../piiCheckboxInput";
 import DatasetSourceForm from "./datasetSourceForm";
 
 interface NewDatasetFormProps {
