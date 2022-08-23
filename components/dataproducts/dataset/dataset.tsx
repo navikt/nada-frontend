@@ -19,6 +19,7 @@ import { useState } from 'react'
 import { KeywordBox, KeywordPill } from '../../lib/keywordList'
 import DatasetOwnerMenu from './datasetOwnerMenu'
 import NewAccessRequestForm from '../accessRequest/newAccessRequest'
+import { SuccessColored, WarningColored } from '@navikt/ds-icons'
 
 const findAccessType = (
   groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined,
@@ -82,16 +83,6 @@ const Dataset = ({ dataset, userInfo, isOwner, product }: EntryProps) => {
         {accessType.type === 'utlogget' && (
           <DatasetAlert variant="info">Du er ikke innlogget</DatasetAlert>
         )}
-        {accessType.type === 'user' && (
-          <DatasetAlert variant="success">
-            Du har tilgang
-            {accessType.expires &&
-              ` til: ${humanizeDate(accessType.expires)}`}.{' '}
-            <a href="#" onClick={() => setAccessRequested(true)}>
-              Søk om tilgang
-            </a>
-          </DatasetAlert>
-        )}
         {accessType.type === 'none' && (
           <DatasetAlert variant="info">
             Du har ikke tilgang til datasettet.{' '}
@@ -100,34 +91,61 @@ const Dataset = ({ dataset, userInfo, isOwner, product }: EntryProps) => {
             </a>
           </DatasetAlert>
         )}
-        <div className="flex items-center gap-4 mb-2">
-          <Heading
-            className="inline-flex items-center gap-3"
-            level="2"
-            size="large"
-          >
-            <IconBox size={42} inline={true}>
-              <BigQueryLogo />
-            </IconBox>
-            {dataset.name}
-          </Heading>
-          {isOwner && (
-            <DatasetOwnerMenu
-              datasetName={dataset.name}
-              datasetId={dataset.id}
-              dataproduct={product}
-            />
+        <div className='flex flex-row justify-between w-full'>
+          <div>
+            <div className="flex items-center gap-4 mb-2">
+              <Heading
+                className="inline-flex items-center gap-3"
+                level="2"
+                size="large"
+              >
+                <IconBox size={42} inline={true}>
+                  <BigQueryLogo />
+                </IconBox>
+                {dataset.name}
+              </Heading>
+              {isOwner && (
+                <DatasetOwnerMenu
+                  datasetName={dataset.name}
+                  datasetId={dataset.id}
+                  dataproduct={product}
+                />
+              )}
+            </div>
+          </div>
+          <div className='flex flex-col items-end gap-2 w-72'>
+              <div className='flex flex-row gap-1 flex-wrap justify-end'>
+                {dataset.keywords.map((keyword, idx) => (
+                  <KeywordPill key={idx} keyword={keyword}>
+                    {keyword}
+                  </KeywordPill>
+                ))}
+                {dataset.keywords.map((keyword, idx) => (
+                  <KeywordPill key={idx} keyword={keyword}>
+                    {keyword}
+                  </KeywordPill>
+                ))}
+                {dataset.keywords.map((keyword, idx) => (
+                  <KeywordPill key={idx} keyword={keyword}>
+                    {keyword}
+                  </KeywordPill>
+                ))}
+
+              </div>
+          {dataset.pii ? (
+            <p className='flex flex-row gap-2 items-center'>
+            <WarningColored />
+            <span>Inneholder persondata</span>  
+            </p>
+            ) : (
+            <p className='flex flex-row gap-2 items-center'>
+                <SuccessColored />
+                <span>Inneholder <b>ikke</b> persondata</span>
+            </p>
           )}
+          </div>
         </div>
-        {dataset.pii ? (
-          <DatasetAlert variant="warning" narrow={true}>
-            Inneholder persondata
-          </DatasetAlert>
-        ) : (
-          <DatasetAlert variant="success" narrow={true}>
-            Inneholder <b>ikke</b> persondata
-          </DatasetAlert>
-        )}
+
         {dataset.description && (
           <section className="mb-3">
             <Heading level="3" size="small" spacing>
@@ -139,15 +157,6 @@ const Dataset = ({ dataset, userInfo, isOwner, product }: EntryProps) => {
         <section className="mb-3 flex flex-col">
           <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
             <DatasetMetadata datasource={dataset.datasource} />
-            <SpacedDiv>
-              <KeywordBox>
-                {dataset.keywords.map((keyword, idx) => (
-                  <KeywordPill key={idx} keyword={keyword}>
-                    {keyword}
-                  </KeywordPill>
-                ))}
-              </KeywordBox>
-            </SpacedDiv>
             <DatasetTableSchema datasource={dataset.datasource} />
           </article>
           {userInfo && accessType.type !== 'none' && (
