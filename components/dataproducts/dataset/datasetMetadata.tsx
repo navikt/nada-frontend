@@ -2,25 +2,11 @@ import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import humanizeDate from '../../../lib/humanizeDate'
 import Copy from '../../lib/copy'
-import styled from 'styled-components'
-import { BodyShort, Heading } from '@navikt/ds-react'
-import SpacedDiv from '../../lib/spacedDiv'
+import { Heading } from '@navikt/ds-react'
 
 interface DataproductTableSchemaProps {
   datasource: DatasetQuery['dataset']['datasource']
 }
-
-const MetadataEntry = styled.div`
-  padding-bottom: 0.25rem;
-  align-items: center;
-  display: flex;
-  gap: 0.25rem;
-`
-
-const Label = styled.span`
-  font-weight: bold;
-  font-size: 16px;
-`
 
 const DatasetMetadata = ({ datasource }: DataproductTableSchemaProps) => {
   const schema = datasource.schema
@@ -49,18 +35,19 @@ const DatasetMetadata = ({ datasource }: DataproductTableSchemaProps) => {
   })
 
   return (
-    <SpacedDiv>
+    <div className="mb-3">
       <Heading spacing level="3" size="small">
         Metadata
       </Heading>
       <>
         {entries.map(({ k, v, copy }, idx) => (
-          <MetadataEntry key={idx}>
-            <Label>{k}:</Label> {v} {copy && <Copy text={v.toString()} />}
-          </MetadataEntry>
+          <div className="mb-1 items-center flex gap-1" key={idx}>
+            <span className="font-bold text-xs">{k}:</span> {v}{' '}
+            {copy && <Copy text={v.toString()} />}
+          </div>
         ))}
       </>
-    </SpacedDiv>
+    </div>
   )
 }
 export default DatasetMetadata

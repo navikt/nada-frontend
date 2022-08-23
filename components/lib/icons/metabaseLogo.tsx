@@ -2,8 +2,8 @@ import * as React from 'react'
 
 const MetabaseLogo = () => (
   <svg
-    width={1975}
-    height={2500}
+    width={50}
+    height={50}
     viewBox="0 0 256 324"
     xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="xMidYMid"

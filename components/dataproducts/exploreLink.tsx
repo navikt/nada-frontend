@@ -39,8 +39,9 @@ export const ExploreLink = ({
           className="border-l-8 border-border-inverted pl-4 py-1"
           target="_blank"
           rel="norefferer"
-          href={url}>
-            Åpne i Google Cloud Console <ExternalLink />
+          href={url}
+        >
+          Åpne i Google Cloud Console <ExternalLink />
         </Link>
       )
     }
@@ -51,17 +52,19 @@ export const ExploreLink = ({
             className="border-l-8 border-border-inverted pl-4 py-1"
             target="_blank"
             rel="norefferer"
-            href={url}>
-              Åpne i Metabase <ExternalLink />
+            href={url}
+          >
+            Åpne i Metabase <ExternalLink />
           </Link>
-          {isOwner &&
+          {isOwner && (
             <Link
               className="border-l-8 border-border-inverted pl-4 py-1"
-              href="#" 
-              onClick={handleDelete}>
+              href="#"
+              onClick={handleDelete}
+            >
               Fjern datasettet fra Metabase
             </Link>
-          }
+          )}
         </div>
       )
     }
@@ -76,10 +79,7 @@ export const ExploreLink = ({
           onClick={add}
         >
           Legger til i Metabase
-          <Loader
-            transparent
-            size='small'
-          />
+          <Loader transparent size="small" />
         </Link>
       )
     }

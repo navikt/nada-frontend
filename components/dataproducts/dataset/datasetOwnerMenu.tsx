@@ -69,9 +69,13 @@ const DatasetOwnerMenu = ({
       <DropdownContext.Provider
         value={{ isOpen, setIsOpen, anchorEl, setAnchorEl }}
       >
-        <MenuButton variant="tertiary" onClick={handleMenuButtonClick}>
+        <Button
+          className="min-w-min p-0 rounded-full"
+          variant="tertiary"
+          onClick={handleMenuButtonClick}
+        >
           <EllipsisCircleH />
-        </MenuButton>
+        </Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
             <Dropdown.Menu.GroupedList.Item>

@@ -26,12 +26,6 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
 
 type DescriptionEditorProps<T> = { label: string } & UseControllerProps<T>
 
-const MarkdownNotice = styled.span`
-  margin-left: 1em;
-  color: #555;
-  font-style: italic;
-`
-
 const MDEditorNAVLook = styled(MDEditor)`
   margin-top: 8px;
   border: 1px solid black;
