@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link, Loader } from '@navikt/ds-react'
 import { MappingService } from '../../lib/schema/graphql'
-import { Delete, Add, ExternalLink } from '@navikt/ds-icons'
+import { ExternalLink } from '@navikt/ds-icons'
 
 export enum ItemType {
   metabase = 1,
@@ -35,8 +35,10 @@ export const ExploreLink = ({
   if (url) {
     if (type === ItemType.bigQuery) {
       return (
-        <Link 
+        <Link
           className="border-l-8 border-border-inverted pl-4 py-1"
+          target="_blank"
+          rel="norefferer"
           href={url}>
             Åpne i Google Cloud Console <ExternalLink />
         </Link>
@@ -45,17 +47,19 @@ export const ExploreLink = ({
     if (type === ItemType.metabase) {
       return (
         <div className="flex flex-col">
-          <Link 
+          <Link
             className="border-l-8 border-border-inverted pl-4 py-1"
+            target="_blank"
+            rel="norefferer"
             href={url}>
               Åpne i Metabase <ExternalLink />
           </Link>
           {isOwner &&
-            <Link 
+            <Link
               className="border-l-8 border-border-inverted pl-4 py-1"
               href="#" 
               onClick={handleDelete}>
-              Fjern datasettet fra Metabase <Delete /> 
+              Fjern datasettet fra Metabase
             </Link>
           }
         </div>
@@ -86,7 +90,7 @@ export const ExploreLink = ({
           href="#"
           onClick={add}
         >
-          Legg til i Metabase<Add />
+          Legg til i Metabase
         </Link>
       )
     }
