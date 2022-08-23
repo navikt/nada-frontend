@@ -15,10 +15,7 @@ import * as yup from 'yup'
 import { Divider } from '@navikt/ds-react-internal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
-import { TreeView } from '@mui/lab'
-import { Project } from './datasource/project'
 import DatasetSourceForm from './dataset/datasetSourceForm'
-import { SearchContentDocument } from '../../lib/schema/graphql'
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),

@@ -9,16 +9,7 @@ import {
 } from 'react-hook-form'
 import { Project } from './datasource/project'
 import { UserState } from '../../lib/context'
-import styled from 'styled-components'
-
-const ErrorMessage = styled.div`
-  font-size: var(--navds-font-size-large);
-  font-weight: var(--navds-font-weight-bold);
-  letter-spacing: 0;
-  line-height: var(--navds-font-line-height-large);
-  margin: 0;
-  color: var(--navds-error-message-color-text);
-`
+import { Label } from '@navikt/ds-react'
 
 interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
@@ -26,9 +17,11 @@ interface DataproductSourceFormProps {
   errors: FieldErrors<FieldValues>
   setValue: SetFieldValue<FieldValues>
   team: string
+  label: string
 }
 
 export const DataproductSourceForm = ({
+  label,
   team,
   errors,
   register,
@@ -57,6 +50,7 @@ export const DataproductSourceForm = ({
 
   return (
     <div>
+      <Label>{label}</Label>
       <TreeView
         onNodeSelect={handleNodeSelect}
         onNodeToggle={(x, n) => setActivePaths(n)}
@@ -72,7 +66,7 @@ export const DataproductSourceForm = ({
         })}
       </TreeView>
       {errors.bigquery && (
-        <ErrorMessage>Velg en tabell eller et view</ErrorMessage>
+        <div className="flex gap-2 navds-error-message navds-label before:content-['•']">Velg en tabell eller et view</div>
       )}
     </div>
   )

@@ -1,20 +1,12 @@
-import { Heading, Alert, Modal } from '@navikt/ds-react'
+import { Heading, Link, Alert, Modal } from '@navikt/ds-react'
 import { isAfter, parseISO } from 'date-fns'
 import {
   DataproductQuery,
   DatasetQuery,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
-import DatasetTableSchema from './datasetTableSchema'
-import Explore from '../../../components/dataproducts/explore'
-import BigQueryLogo from '../../lib/icons/bigQueryLogo'
-import IconBox from '../../lib/icons/iconBox'
 import * as React from 'react'
-import DatasetMetadata from './datasetMetadata'
-import SpacedDiv from '../../lib/spacedDiv'
 import { useState } from 'react'
-import { KeywordBox, KeywordPill } from '../../lib/keywordList'
-import NewAccessRequestForm from '../accessRequest/newAccessRequest'
 import EditDataset from './editDatasetForm'
 import ViewDataset from './viewDataset'
 

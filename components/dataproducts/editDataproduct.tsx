@@ -55,9 +55,9 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
     )
   }
   return (
-    <div className="pt-12">
+    <>
       <Heading level="1" size="large" spacing>
-        Rediger dataprodukt
+        Endre dataprodukt
       </Heading>
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
         <TextField
@@ -91,7 +91,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           <Button type="submit">Lagre</Button>
         </div>
       </form>
-    </div>
+    </>
   )
 }
 export default EditDataproduct
