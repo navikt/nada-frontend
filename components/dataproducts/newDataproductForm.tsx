@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
 import PiiCheckboxInput from './piiCheckboxInput'
@@ -9,7 +9,7 @@ import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataprod
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
-import { Heading, Select, TextField } from '@navikt/ds-react'
+import { Heading, Radio, RadioGroup, Select, TextField } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
 import { Divider } from '@navikt/ds-react-internal'
@@ -82,6 +82,7 @@ export const NewDataproductForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
   const onSubmit = async (data: NewDataproductFields) => {
+    console.log(data.pii)
     try {
       await createDataproduct({
         variables: {
@@ -238,7 +239,24 @@ export const NewDataproductForm = () => {
         keywords={keywords || []}
         error={errors.keywords?.[0].message}
       />
-      <PiiCheckboxInput register={register} watch={watch} />
+      <Controller
+        name="pii"
+        control={control}
+        render={({ field }) => (
+          <RadioGroup
+            {...field}
+            legend="Inneholder datasettet personidentifiserende informasjon?"
+            error={errors?.pii?.message}
+          >
+            <Radio value={true}>
+              Ja, inneholder personidentifiserende informasjon
+            </Radio>
+            <Radio value={false}>
+              Nei, inneholder ikke personidentifiserende informasjon
+            </Radio>
+          </RadioGroup>
+        )}
+      />
       <RightJustifiedSubmitButton onCancel={onCancel} loading={loading} />
     </form>
   )

@@ -63,7 +63,7 @@ const EditDataset = ({ dataset, setEdit }: EditDatasetFormProps) => {
         name: dataset.name,
         description: dataset.description || '',
         pii: dataset.pii,
-        repo: dataset.repo,
+        repo: dataset.repo || '',
         keywords: dataset.keywords,
         bigquery: {
           projectID: dataset.datasource.projectID,
