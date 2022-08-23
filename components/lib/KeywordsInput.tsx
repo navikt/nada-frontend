@@ -1,7 +1,6 @@
 import ReactTags from 'react-tag-autocomplete'
 import styled from 'styled-components'
-import KeywordPill from "./keywordList";
-
+import KeywordPill from './keywordList'
 
 const StyledRectTags = styled.div`
   margin-top: 8px;
@@ -47,10 +46,10 @@ const StyledRectTags = styled.div`
   }
 `
 export interface KeywordsInputProps {
-  error?: string,
-  onAdd: (value: string) => void,
-  onDelete: (value: string) => void,
-  keywords: string[],
+  error?: string
+  onAdd: (value: string) => void
+  onDelete: (value: string) => void
+  keywords: string[]
 }
 
 export const KeywordsInput = ({
@@ -59,7 +58,6 @@ export const KeywordsInput = ({
   onDelete,
   keywords,
 }: KeywordsInputProps) => {
-
   const classNames = {
     root: 'react-tags',
     rootFocused: 'is-focused',
@@ -89,7 +87,16 @@ export const KeywordsInput = ({
       </StyledRectTags>
       <div className="flex flex-row gap-1 flex-wrap">
         {keywords.map((k, i) => {
-          return <KeywordPill key={i} keyword={k} onClick={() => onDelete(k)} remove={true}>{k}</KeywordPill>
+          return (
+            <KeywordPill
+              key={i}
+              keyword={k}
+              onClick={() => onDelete(k)}
+              remove={true}
+            >
+              {k}
+            </KeywordPill>
+          )
         })}
       </div>
       {error && <p>{error}</p>}

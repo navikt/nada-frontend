@@ -15,12 +15,23 @@ export const StyledIconBox = styled.div`
   margin-left: ${(p: IconBoxProps) => (p.justifyRight ? 'auto' : 'default')};
   margin: 0 auto;
   overflow: hidden;
-  height: ${(p: IconBoxProps) => p.height? p.height :p.size}px;
+  height: ${(p: IconBoxProps) => (p.height ? p.height : p.size)}px;
   width: ${(p: IconBoxProps) => p.size}px;
 `
 
-export const IconBox = ({ size, height, children, justifyRight, inline }: IconBoxProps) => (
-  <StyledIconBox size={size} height={height} justifyRight={justifyRight} inline={inline}>
+export const IconBox = ({
+  size,
+  height,
+  children,
+  justifyRight,
+  inline,
+}: IconBoxProps) => (
+  <StyledIconBox
+    size={size}
+    height={height}
+    justifyRight={justifyRight}
+    inline={inline}
+  >
     {children}
   </StyledIconBox>
 )

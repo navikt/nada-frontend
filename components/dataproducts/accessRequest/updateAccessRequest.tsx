@@ -3,9 +3,11 @@ import {
   useUpdateAccessRequestMutation,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { useRouter } from "next/router";
-import AccessRequestFormV2, {AccessRequestFormInput} from './accessRequestFormV2';
-import { DatasetQuery } from '../../../lib/schema/datasetQuery';
+import { useRouter } from 'next/router'
+import AccessRequestFormV2, {
+  AccessRequestFormInput,
+} from './accessRequestFormV2'
+import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 
 interface UpdateAccessRequestFormProps {
   updateAccessRequestData: AccessRequest
@@ -13,30 +15,39 @@ interface UpdateAccessRequestFormProps {
   setModal: (value: boolean) => void
 }
 
-const UpdateAccessRequest = ({dataset, updateAccessRequestData, setModal}: UpdateAccessRequestFormProps) => {
+const UpdateAccessRequest = ({
+  dataset,
+  updateAccessRequestData,
+  setModal,
+}: UpdateAccessRequestFormProps) => {
   const [updateAccessRequest] = useUpdateAccessRequestMutation()
   const accessRequest: AccessRequestFormInput = {
-    ...updateAccessRequestData
+    ...updateAccessRequestData,
   }
 
   const onSubmit = async (requestData: AccessRequestFormInput) => {
-      updateAccessRequest({
-        variables: {
-          input: {
-            id: updateAccessRequestData.id,
-            expires: requestData.expires,
-            owner: updateAccessRequestData.owner,
-            polly: requestData.polly
-          },
+    updateAccessRequest({
+      variables: {
+        input: {
+          id: updateAccessRequestData.id,
+          expires: requestData.expires,
+          owner: updateAccessRequestData.owner,
+          polly: requestData.polly,
         },
-        refetchQueries: ["userInfoDetails"]
-      }).then(() => {
-        setModal(false)
-      })
+      },
+      refetchQueries: ['userInfoDetails'],
+    }).then(() => {
+      setModal(false)
+    })
   }
 
   return (
-      <AccessRequestFormV2 dataset={dataset} accessRequest={accessRequest} isEdit={true} onSubmit={onSubmit}/>
+    <AccessRequestFormV2
+      dataset={dataset}
+      accessRequest={accessRequest}
+      isEdit={true}
+      onSubmit={onSubmit}
+    />
   )
 }
 

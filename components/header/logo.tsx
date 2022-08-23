@@ -13,13 +13,13 @@ const LogoBox = styled.div`
 `
 
 export const Logo = () => (
-    <LogoBox>
-        <Link href="/">
-            <a>
-                <img src="/navdata-logo-white.svg" width={"100"} alt={"nav data"}/>
-            </a>
-        </Link>
-    </LogoBox>
+  <LogoBox>
+    <Link href="/">
+      <a>
+        <img src="/navdata-logo-white.svg" width={'100'} alt={'nav data'} />
+      </a>
+    </Link>
+  </LogoBox>
 )
 
 export default Logo

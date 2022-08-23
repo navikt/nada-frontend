@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 interface SubHeaderProps {
-  onClick?: () => void,
+  onClick?: () => void
 }
 
 const SubHeader = styled.h4<SubHeaderProps>`
