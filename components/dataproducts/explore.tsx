@@ -63,7 +63,7 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
 
   return (
     <>
-      <div className="flex flex-row flex-wrap mt-3 gap-5">
+      <div className="flex flex-col">
         <ExploreLink
           isOwner={isOwner}
           url={bigQueryUrl}

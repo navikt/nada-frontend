@@ -86,7 +86,7 @@ const ViewDataset = ({
           </DatasetAlert>
         )}
         <div className='flex flex-row justify-between w-full'>
-          <div>
+          <div className="flex flex-col gap-2">
             <div className="flex items-center gap-4 mb-2">
               <Heading
                 className="inline-flex items-center gap-3"
@@ -106,6 +106,17 @@ const ViewDataset = ({
                   dataproduct={dataproduct}
                 />
               )}
+            </div>
+            <div>
+            {userInfo && accessType.type !== 'none' && (
+            <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
+              <Explore
+                dataproductId={dataset.id}
+                dataset={dataset}
+                isOwner={accessType.type === 'owner'}
+              />
+            </article>
+          )}
             </div>
           </div>
           <div className='flex flex-col items-end gap-2 w-72'>
@@ -142,18 +153,6 @@ const ViewDataset = ({
             <DatasetMetadata datasource={dataset.datasource} />
             <DatasetTableSchema datasource={dataset.datasource} />
           </article>
-          {userInfo && accessType.type !== 'none' && (
-            <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-              <Heading spacing level="3" size="small">
-                Utforsk
-              </Heading>
-              <Explore
-                dataproductId={dataset.id}
-                dataset={dataset}
-                isOwner={accessType.type === 'owner'}
-              />
-            </article>
-          )}
         </section>
       </div>
     </>
