@@ -85,7 +85,8 @@ const Dataset = ({ dataset, userInfo, isOwner, product }: EntryProps) => {
         {accessType.type === 'user' && (
           <DatasetAlert variant="success">
             Du har tilgang
-            {accessType.expires && ` til: ${humanizeDate(accessType.expires)}`}.{' '}
+            {accessType.expires &&
+              ` til: ${humanizeDate(accessType.expires)}`}.{' '}
             <a href="#" onClick={() => setAccessRequested(true)}>
               Søk om tilgang
             </a>
