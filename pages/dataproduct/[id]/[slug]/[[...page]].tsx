@@ -161,7 +161,7 @@ const Dataproduct = (props: DataproductProps) => {
           </div>
         )}
       </TopBar>
-      <div className="flex flex-row h-full flex-grow">
+      <div className="flex flex-row h-full">
         <DataproductSidebar
           product={product}
           isOwner={isOwner}

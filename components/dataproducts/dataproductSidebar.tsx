@@ -31,7 +31,7 @@ export const DataproductSidebar = ({
   }
 
   return (
-    <div className="flex flex-initial flex-col h-[80vh] justify-between pt-8 w-64">
+    <div className="flex flex-col h-[80vh] justify-between pt-8 w-64">
       <div className="flex flex-col gap-2">
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
@@ -53,7 +53,7 @@ export const DataproductSidebar = ({
           )
         )}
       </div>
-      <div className="h-fit w-64 text-base leading-4 pr-4 pb-0 fixed bottom-0">
+      <div className="h-fit w-64 text-base leading-4 pr-4 pb-0 bottom-0">
         <Subject>
           {isOwner && (
             <Alert variant="success" size="small">
