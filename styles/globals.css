@@ -43,9 +43,9 @@
   /* sorry for normal css */
   font-size: 1.125rem !important;
   line-height: 1.5rem !important;
-  letter-spacing: 0;
+  letter-spacing: 0 !important;
   font-family: var(--navds-font-family) !important;
-  appearance: none;
+  appearance: none !important;
 }
 
 .MuiTreeView-root {

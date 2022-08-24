@@ -13,7 +13,7 @@ import * as yup from 'yup'
 import { Divider } from '@navikt/ds-react-internal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
-import DataproductSourceForm from './dataproductSourceForm'
+import DatasetSourceForm from './dataset/datasetSourceForm'
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
@@ -147,7 +147,7 @@ export const NewDataproductForm = () => {
 
   return (
     <div className="mt-8">
-    <Heading level="1" size="large">Nytt datasett</Heading>
+    <Heading level="1" size="large">Legg til dataprodukt</Heading>
     <form
       className="pt-12 flex flex-col gap-10"
       onSubmit={handleSubmit(onSubmit, onError)}
@@ -167,7 +167,7 @@ export const NewDataproductForm = () => {
       <Select 
         className="w-[32rem]"
         label="Velg gruppe fra GCP" {...register('team')} error={errors.team?.message}>
-        <option value="">Velg team</option>
+        <option value="">Velg gruppe</option>
         {[
           ...new Set(
             userInfo?.gcpProjects.map(
@@ -213,7 +213,7 @@ export const NewDataproductForm = () => {
         {...register('sourceCodeURL')}
         error={errors.sourceCodeURL?.message}
       />
-      <DataproductSourceForm
+      <DatasetSourceForm
         label="Velg tabell eller view fra GCP"
         team={team}
         register={register}
