@@ -40,15 +40,28 @@
 }
 
 .MuiTreeItem-label {
-  @apply text-lg !important;
+  /* sorry for normal css */
+  font-size: 1.125rem !important;
+  line-height: 1.5rem !important;
+  letter-spacing: 0;
+  font-family: var(--navds-font-family) !important;
+  appearance: none;
+}
+
+.MuiTreeView-root {
+  @apply w-[32rem] border-[1px] border-border rounded p-1 !important;
 }
 
 .MuiTreeItem-content {
-  @apply px-0 py-[0.125rem] hover:bg-interaction-primary-hover-subtle hover:text-text !important;
+  @apply px-2 py-1 hover:bg-interaction-primary-hover-subtle hover:text-text !important;
 }
 
 .Mui-selected {
   @apply bg-interaction-primary-selected text-text-inverted hover:bg-interaction-primary hover:text-text-inverted !important;
+}
+
+.react-tags__search-wrapper > .navds-text-field__input {
+  @apply w-[32rem] !important;
 }
 
 html,

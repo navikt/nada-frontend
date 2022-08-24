@@ -2,20 +2,18 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Controller, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
-import PiiCheckboxInput from './piiCheckboxInput'
-import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
-import { Heading, Radio, RadioGroup, Select, TextField } from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup, Select, TextField } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
 import { Divider } from '@navikt/ds-react-internal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
-import DatasetSourceForm from './dataset/datasetSourceForm'
+import DataproductSourceForm from './dataproductSourceForm'
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
@@ -114,10 +112,6 @@ export const NewDataproductForm = () => {
     }
   }
 
-  register('bigquery.projectID')
-  register('bigquery.dataset')
-  register('bigquery.table')
-
   const team = watch('team')
 
   const [createDataproduct, { loading, error: backendError }] = useMutation(
@@ -151,26 +145,16 @@ export const NewDataproductForm = () => {
     })
   }
 
-  const teamProjects = userInfo?.gcpProjects
-    .filter((project) => project.group.email == team)
-    .map((group) => group.id)
-
-  const handleNodeSelect = (e: any, node: string) => {
-    const [projectID, datasetID, tableID] = node.split('/')
-    if (projectID && datasetID && tableID) {
-      setValue('bigquery.projectID', projectID)
-      setValue('bigquery.dataset', datasetID)
-      setValue('bigquery.table', tableID)
-    }
-  }
-
   return (
+    <div className="mt-8">
+    <Heading level="1" size="large">Nytt datasett</Heading>
     <form
       className="pt-12 flex flex-col gap-10"
       onSubmit={handleSubmit(onSubmit, onError)}
     >
       {backendError && <ErrorMessage error={backendError} />}
       <TextField
+        className="w-[32rem]"
         label="Navn på dataprodukt"
         {...register('name')}
         error={errors.name?.message}
@@ -180,7 +164,9 @@ export const NewDataproductForm = () => {
         name="description"
         control={control}
       />
-      <Select label="Team" {...register('team')} error={errors.team?.message}>
+      <Select 
+        className="w-[32rem]"
+        label="Velg gruppe fra GCP" {...register('team')} error={errors.team?.message}>
         <option value="">Velg team</option>
         {[
           ...new Set(
@@ -212,6 +198,7 @@ export const NewDataproductForm = () => {
       </Heading>
       <TextField
         label="Navn på datasett"
+        className="w-[32rem]"
         {...register('datasetName')}
         error={errors.datasetName?.message}
       />
@@ -222,11 +209,12 @@ export const NewDataproductForm = () => {
       />
       <TextField
         label="Link til kildekode"
+        className="w-[32rem]"
         {...register('sourceCodeURL')}
         error={errors.sourceCodeURL?.message}
       />
-      <DatasetSourceForm
-        label="Velg tabell eller view"
+      <DataproductSourceForm
+        label="Velg tabell eller view fra GCP"
         team={team}
         register={register}
         watch={watch}
@@ -257,7 +245,17 @@ export const NewDataproductForm = () => {
           </RadioGroup>
         )}
       />
-      <RightJustifiedSubmitButton onCancel={onCancel} loading={loading} />
+      <div className="flex flex-row gap-4 mb-16">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={onCancel}
+        >
+          Avbryt
+        </Button>
+        <Button type="submit">Lagre</Button>
+      </div>
     </form>
+    </div>
   )
 }

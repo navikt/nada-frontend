@@ -1,36 +1,20 @@
 import dynamic from 'next/dynamic'
 import { useController, UseControllerProps } from 'react-hook-form'
-import styled from 'styled-components'
 import Link from 'next/link'
 import { Loader } from '@navikt/ds-react'
 
-const MDEditorPlaceholder = styled.div`
-  height: 200px;
-  margin-top: 8px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid black;
-  border-radius: 3px;
-`
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
   loading: () => (
-    <MDEditorPlaceholder>
+    <div className="h-48 mt-2 w-[64rem] flex items-center justify-center border-[1px] border-border rounded">
       <Loader size="2xlarge" />
-    </MDEditorPlaceholder>
+    </div>
   ),
 })
 
 type DescriptionEditorProps<T> = { label: string } & UseControllerProps<T>
 
-const MDEditorNAVLook = styled(MDEditor)`
-  margin-top: 8px;
-  border: 1px solid black;
-  box-shadow: none;
-`
 
 export const DescriptionEditor = <FV extends Record<string, any>>({
   name,
@@ -61,9 +45,9 @@ export const DescriptionEditor = <FV extends Record<string, any>>({
           </Link>
         </span>
       </div>
-      <MDEditorNAVLook
+      <MDEditor
+        className="navds-body-short navds-body-medium w-[64rem] mt-2 border-[1px] border-border shadow-none"
         {...inputProps}
-        className={'navds-body-short navds-body-medium'}
         style={{}}
       />
     </div>

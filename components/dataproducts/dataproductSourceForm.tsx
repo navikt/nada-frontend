@@ -46,31 +46,46 @@ export const DataproductSourceForm = ({
       setValue('bigquery.dataset', datasetID)
       setValue('bigquery.table', tableID)
     }
+    else {
+      setValue('bigquery.projectID', undefined)
+      setValue('bigquery.dataset', undefined)
+      setValue('bigquery.table', undefined)
+    }
   }
 
   return (
-    <div>
+    <div className="grid justify-start gap-2">
       <Label>{label}</Label>
-      <TreeView
-        onNodeSelect={handleNodeSelect}
-        onNodeToggle={(x, n) => setActivePaths(n)}
-      >
-        {teamProjects?.map((projectID) => {
-          return (
-            <Project
-              key={projectID}
-              projectID={projectID}
-              activePaths={activePaths}
-            />
-          )
-        })}
-      </TreeView>
-      {errors.bigquery && (
-        <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
-          Velg en tabell eller et view
+      {team ? (
+        <div>
+          <TreeView
+            onNodeSelect={handleNodeSelect}
+            onNodeToggle={(x, n) => setActivePaths(n)}
+          >
+            {teamProjects?.map((projectID) =>
+                <Project
+                  key={projectID}
+                  projectID={projectID}
+                  activePaths={activePaths}
+                />)}
+          </TreeView>
+          {errors.bigquery && (
+            <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
+              Velg en tabell eller et view
+            </div>
+          )}
+        </div>)
+      : (<div className="flex flex-col gap-2">
+          <div className="w-[32rem] h-[48px] border-[1px] border-border rounded p-1">
+          </div>
+          <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
+            Du må velge gruppe i GCP før du kan velge tabell eller view
+          </div>
         </div>
-      )}
-    </div>
-  )
+        )
+      }
+    </div>)
+
 }
+
 export default DataproductSourceForm

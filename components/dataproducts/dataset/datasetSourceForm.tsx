@@ -47,14 +47,12 @@ const DatasetSourceForm = ({
 
   return (
     <>
-      {teamProject && (
-        <>
-          <Select onChange={handleOnChangeDataset} label={label}>
-            <option value="">Velg datasett</option>
-            <ProjectTables projectID={teamProject} />
-          </Select>
-        </>
-      )}
+      <Select 
+        className=""
+        onChange={handleOnChangeDataset} label={label}>
+        <option value="">Velg datasett</option>
+        <ProjectTables projectID={teamProject} />
+      </Select>
     </>
   )
 }
