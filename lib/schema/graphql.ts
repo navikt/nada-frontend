@@ -27,6 +27,8 @@ export type Scalars = {
 /** Access contains metadata on an access entry. */
 export type Access = {
   __typename?: 'Access'
+  /** accessRequest is the accessRequest for this grant */
+  accessRequest?: Maybe<AccessRequest>
   /** accessRequestID is the id of the access request for this grant. */
   accessRequestID?: Maybe<Scalars['ID']>
   /** created is timestamp for when access was created */
@@ -1144,6 +1146,23 @@ export type DataproductQuery = {
         created: any
         revoked?: any | null | undefined
         accessRequestID?: string | null | undefined
+        accessRequest?:
+          | {
+              __typename?: 'AccessRequest'
+              id: string
+              polly?:
+                | {
+                    __typename?: 'Polly'
+                    id: string
+                    name: string
+                    externalID: string
+                    url: string
+                  }
+                | null
+                | undefined
+            }
+          | null
+          | undefined
       }>
       datasource: {
         __typename?: 'BigQuery'
@@ -1327,6 +1346,23 @@ export type DatasetQuery = {
       created: any
       revoked?: any | null | undefined
       accessRequestID?: string | null | undefined
+      accessRequest?:
+        | {
+            __typename?: 'AccessRequest'
+            id: string
+            polly?:
+              | {
+                  __typename?: 'Polly'
+                  id: string
+                  name: string
+                  externalID: string
+                  url: string
+                }
+              | null
+              | undefined
+          }
+        | null
+        | undefined
     }>
     datasource: {
       __typename?: 'BigQuery'
@@ -2337,6 +2373,15 @@ export const DataproductDocument = gql`
           created
           revoked
           accessRequestID
+          accessRequest {
+            id
+            polly {
+              id
+              name
+              externalID
+              url
+            }
+          }
         }
         datasource {
           type: __typename
@@ -3004,6 +3049,15 @@ export const DatasetDocument = gql`
         created
         revoked
         accessRequestID
+        accessRequest {
+          id
+          polly {
+            id
+            name
+            externalID
+            url
+          }
+        }
       }
       datasource {
         type: __typename

@@ -1,5 +1,5 @@
-import { Select } from '@navikt/ds-react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
+import TreeView from '@mui/lab/TreeView'
 import {
   FieldErrors,
   FieldValues,
@@ -7,56 +7,85 @@ import {
   UseFormRegister,
   UseFormWatch,
 } from 'react-hook-form'
+import { Project } from '../datasource/project'
 import { UserState } from '../../../lib/context'
-import ProjectTables from '../datasource/projectTables'
+import { Label } from '@navikt/ds-react'
 
-interface DatasetSourceFormProps {
-  team: string
-  label: string
+interface DataproductSourceFormProps {
   register: UseFormRegister<FieldValues>
   watch: UseFormWatch<FieldValues>
   errors: FieldErrors<FieldValues>
   setValue: SetFieldValue<FieldValues>
+  team: string
+  label: string
 }
 
-const DatasetSourceForm = ({
-  team,
+export const DataproductSourceForm = ({
   label,
+  team,
   errors,
   register,
   watch,
   setValue,
-}: DatasetSourceFormProps) => {
+}: DataproductSourceFormProps) => {
   const userInfo = useContext(UserState)
 
-  const teamProject = userInfo?.gcpProjects.find(
-    (project) => project.group.email === team
-  )?.id
-
+  const [activePaths, setActivePaths] = useState<string[]>([])
   register('bigquery.projectID')
   register('bigquery.dataset')
   register('bigquery.table')
 
-  const handleOnChangeDataset = (e: any) => {
-    console.log(e.target.value)
-    const tableIDParts = e.target.value.split('.')
-    setValue('bigquery.projectID', teamProject)
-    setValue('bigquery.dataset', tableIDParts[1])
-    setValue('bigquery.table', tableIDParts[2])
+  const teamProjects = userInfo?.gcpProjects
+    .filter((project) => project.group.email == team)
+    .map((group) => group.id)
+
+  const handleNodeSelect = (e: any, node: string) => {
+    const [projectID, datasetID, tableID] = node.split('/')
+    if (projectID && datasetID && tableID) {
+      setValue('bigquery.projectID', projectID)
+      setValue('bigquery.dataset', datasetID)
+      setValue('bigquery.table', tableID)
+    }
+    else {
+      setValue('bigquery.projectID', undefined)
+      setValue('bigquery.dataset', undefined)
+      setValue('bigquery.table', undefined)
+    }
   }
 
   return (
-    <>
-      {teamProject && (
-        <>
-          <Select onChange={handleOnChangeDataset} label={label}>
-            <option value="">Velg datasett</option>
-            <ProjectTables projectID={teamProject} />
-          </Select>
-        </>
-      )}
-    </>
-  )
+    <div className="flex flex-col justify-start gap-2">
+      <Label>{label}</Label>
+      {team ? (
+        <div>
+          <TreeView
+            onNodeSelect={handleNodeSelect}
+            onNodeToggle={(x, n) => setActivePaths(n)}
+          >
+            {teamProjects?.map((projectID) =>
+                <Project
+                  key={projectID}
+                  projectID={projectID}
+                  activePaths={activePaths}
+                />)}
+          </TreeView>
+          {errors.bigquery && (
+            <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
+              Velg en tabell eller et view
+            </div>
+          )}
+        </div>)
+      : (<div className="flex flex-col gap-2">
+          <div className="w-full 2xl:w-[32rem] h-[48px] border-[1px] border-border rounded p-1">
+          </div>
+          <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
+            Du må velge gruppe i GCP før du kan velge tabell eller view
+          </div>
+        </div>
+        )
+      }
+    </div>)
+
 }
 
-export default DatasetSourceForm
+export default DataproductSourceForm

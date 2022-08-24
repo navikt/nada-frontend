@@ -102,7 +102,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   return (
     <div className="pt-8 pr-8">
       <Heading level="1" size="medium" spacing>
-        Nytt datasett
+        Legg til datasett
       </Heading>
       <form
         onSubmit={handleSubmit(onSubmitForm)}
@@ -110,6 +110,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       >
         <TextField
           {...register('name')}
+          className="w-full 2xl:w-[32rem]"
           label="Skriv inn navn"
           error={errors?.name?.message}
           size="medium"
@@ -123,6 +124,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         <TextField
           {...register('repo')}
           type={'url'}
+          className="w-full 2xl:w-[32rem]"
           id="repo"
           label="Link til kildekode"
           error={errors.repo?.message}

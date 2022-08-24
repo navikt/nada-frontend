@@ -29,6 +29,15 @@ export const GET_DATASET = gql`
         created
         revoked
         accessRequestID
+        accessRequest {
+          id
+          polly {
+            id
+            name
+            externalID
+            url
+          }
+        }
       }
       datasource {
         type: __typename
