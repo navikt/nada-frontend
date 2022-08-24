@@ -18,6 +18,7 @@ import {
 import { GET_DATASET } from '../../../lib/queries/dataset/dataset'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import KeywordsInput from '../../lib/KeywordsInput'
+import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 
 interface EditDatasetFormProps {
   dataset: DatasetQuery['dataset']
@@ -104,6 +105,12 @@ const EditDataset = ({ dataset, setEdit }: EditDatasetFormProps) => {
           query: GET_DATASET,
           variables: {
             id: dataset.id,
+          },
+        },
+        {
+          query: GET_DATAPRODUCT,
+          variables: {
+              id: dataset.dataproductID
           },
         },
         'searchContent',
