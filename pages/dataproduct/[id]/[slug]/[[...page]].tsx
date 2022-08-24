@@ -16,28 +16,13 @@ import Head from 'next/head'
 import TopBar, { TopBarActions } from '../../../../components/lib/topBar'
 import { Description } from '../../../../components/lib/detailTypography'
 import { DataproductSidebar } from '../../../../components/dataproducts/dataproductSidebar'
-import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import TabPanel, { TabPanelType } from '../../../../components/lib/tabPanel'
 import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
-import Link from 'next/link'
 import Dataset from '../../../../components/dataproducts/dataset/dataset'
 import { AddCircle } from '@navikt/ds-icons'
 import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  flex-grow: 1;
-`
-
-const MainPage = styled.div`
-  flex-grow: 1;
-  border-left: 1px #e5e5e5 solid;
-  padding-left: 2rem;
-`
 
 interface DataproductProps {
   id: string

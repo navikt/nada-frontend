@@ -6,12 +6,6 @@ import { useRouter } from 'next/router'
 import { DraftToolbar } from '../../../../components/stories/draftToolbar'
 import ErrorMessage from '../../../../components/lib/error'
 import LoaderSpinner from '../../../../components/lib/spinner'
-import styled from 'styled-components'
-
-const Container = styled.div`
-  margin-top: 50px;
-  gap: 20px;
-`
 
 const StoryDraft = () => {
   const router = useRouter()
@@ -33,9 +27,9 @@ const StoryDraft = () => {
       <DraftToolbar
         onSave={() => router.push(`/story/draft/${story.id}/save`)}
       />
-      <Container>
+      <div className="mt-12 flex gap-5">
         <Story story={story} draft={true} />
-      </Container>
+      </div>
     </>
   )
 }

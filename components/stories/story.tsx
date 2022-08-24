@@ -1,22 +1,15 @@
 import styled from 'styled-components'
 import { InView } from 'react-intersection-observer'
-import {
-  StoryQuery,
-  StoryViewHeader,
-  StoryViewMarkdown,
-  StoryViewPlotly,
-} from '../../lib/schema/graphql'
+import { StoryQuery } from '../../lib/schema/graphql'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Header from './header'
 
 //@ts-ignore
-import Plot from 'react-plotly.js'
 import Plotly from './plotly'
 import LoaderSpinner from '../lib/spinner'
 import TopBar, { TopBarActions } from '../lib/topBar'
 import * as React from 'react'
-import Vega from './vegaView'
 import Link from 'next/link'
 import { Dispatch, SetStateAction } from 'react'
 import { navRod } from '../../styles/constants'

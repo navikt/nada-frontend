@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { FileContent } from '@navikt/ds-icons'
-import IconBox from './icons/iconBox'
 import BigQueryLogo from './icons/bigQueryLogo'
 import * as React from 'react'
 import StoryLogo from './icons/storyLogo'
@@ -42,11 +41,11 @@ const TopBar = ({ name, type, children }: TopBarProps) => {
   return (
     <div className="flex items-center flex-wrap text-text p-4">
       <span className="flex gap-5 items-center">
-        <IconBox size={42}>
+        <div className="h-[42px] w-[42px]">
           {type === 'Story' && <StoryLogo />}
           {type === 'Dataproduct' && <BigQueryLogo />}
           {type === 'AccessRequest' && <FileContent />}
-        </IconBox>
+        </div>
         <h1 className="m-0 font-light pr-3">{name}</h1>
       </span>
       {children}

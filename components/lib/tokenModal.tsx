@@ -3,15 +3,7 @@ import { Modal } from '@navikt/ds-react'
 import { useStoryTokenQuery } from '../../lib/schema/graphql'
 import ErrorMessage from './error'
 import LoaderSpinner from './spinner'
-import styled from 'styled-components'
 import Copy from './copy'
-
-const TokenBox = styled.span`
-border: 1px solid black;
-padding 15px;
-border-radius: 5px;
-background-color: #f0f0f0;
-`
 
 interface tokenModalProps {
   open: boolean
@@ -30,10 +22,10 @@ export const TokenModal = ({ id, open, onCancel }: tokenModalProps) => {
           {token.error && <ErrorMessage error={token.error} />}
           {token.loading || (!token.data && <LoaderSpinner />)}
           {token.data && (
-            <TokenBox>
+            <span className="border-[1px] border-border rounded-md p-4 bg-[#f0f0f0]">
               {updateLink}
               <Copy text={updateLink} />
-            </TokenBox>
+            </span>
           )}
         </div>
       </Modal.Content>

@@ -66,7 +66,9 @@ export const DataproductSourceForm = ({
         })}
       </TreeView>
       {errors.bigquery && (
-        <div className="flex gap-2 navds-error-message navds-label before:content-['•']">Velg en tabell eller et view</div>
+        <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
+          Velg en tabell eller et view
+        </div>
       )}
     </div>
   )

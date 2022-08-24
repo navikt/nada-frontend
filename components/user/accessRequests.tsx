@@ -1,57 +1,21 @@
-import { Card, CardHeader } from '@mui/material'
-import { FileContent } from '@navikt/ds-icons'
 import {
   Alert,
   Button,
   Heading,
-  Link,
   Panel,
   BodyLong,
   Modal,
   ErrorMessage,
 } from '@navikt/ds-react'
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import humanizeDate from '../../lib/humanizeDate'
 import {
   AccessRequest,
-  useDataproductQuery,
   useDatasetQuery,
   useDeleteAccessRequestMutation,
 } from '../../lib/schema/graphql'
 import UpdateAccessRequest from '../dataproducts/accessRequest/updateAccessRequest'
-import IconBox from '../lib/icons/iconBox'
 import LoaderSpinner from '../lib/spinner'
-
-const Results = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  a {
-    text-decoration: none;
-  }
-  margin-bottom: 1rem;
-`
-
-const WideLink = styled(Link)`
-  width: 100%;
-`
-
-const StyledCard = styled(Card)`
-  width: 100%;
-  padding-bottom: 10px;
-  cursor: pointer;
-  box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
-  :hover {
-    box-shadow: rgb(239, 239, 239) 0px 1px 0px 0.5px;
-  }
-`
-
-const RequestRow = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-`
 
 interface AccessRequests {
   accessRequests: Array<AccessRequest>
@@ -157,12 +121,12 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   return (
     <>
       {error && <Alert variant={'error'}>{error}</Alert>}
-      <Results>
+      <div className="flex flex-col gap-5 mb-4">
         <Heading size="small" level="2">
           Ubehandlede tilgangssøknader
         </Heading>
         {pendingAccessRequests.map((req, idx) => (
-          <RequestRow key={idx}>
+          <div className="w-full flex flex-row" key={idx}>
             <ViewRequestButton
               key={`${idx}_show`}
               request={req}
@@ -173,23 +137,23 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
               request={req}
               setError={setError}
             />
-          </RequestRow>
+          </div>
         ))}
-      </Results>
-      <Results>
+      </div>
+      <div className="flex flex-col gap-5 mb-4">
         <Heading size="small" level="2">
           Avslåtte tilgangssøknader
         </Heading>
         {deniedAccessRequests.map((req, idx) => (
-          <RequestRow key={idx}>
+          <div className="w-full flex flex-row" key={idx}>
             <ViewRequestButton
               key={`${idx}_show`}
               request={req}
               type={RequestStatusType.Denied}
             />
-          </RequestRow>
+          </div>
         ))}
-      </Results>
+      </div>
     </>
   )
 }

@@ -7,16 +7,6 @@ import {
 } from '../../../lib/schema/graphql'
 import { Alert, Button, Table, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
-
-const SpacedTextField = styled(TextField)`
-  margin-bottom: var(--navds-spacing-3);
-`
-
-const IndentedRow = styled.div`
-  padding-left: 1rem;
-  border-left: 1px solid rgba(224, 224, 224, 1);
-`
 
 interface AccessListProps {
   accessQuery: AccessRequestsForDatasetQuery | undefined

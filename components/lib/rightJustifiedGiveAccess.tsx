@@ -1,15 +1,4 @@
 import { Button, Loader } from '@navikt/ds-react'
-import styled from 'styled-components'
-
-export const StyledButtonDiv = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-
-  & button {
-    margin: 1em 0 1em 1em;
-  }
-`
 
 interface RightJustifiedGiveAccessProps {
   onClick: () => void
@@ -20,7 +9,7 @@ export const RightJustifiedGiveAccess = ({
   onClick,
   loading,
 }: RightJustifiedGiveAccessProps) => (
-  <StyledButtonDiv>
+  <div className="w-full flex justify-end gap-4">
     <Button onClick={onClick}>
       {loading ? (
         <>
@@ -30,7 +19,7 @@ export const RightJustifiedGiveAccess = ({
         'Be om tilgang'
       )}
     </Button>
-  </StyledButtonDiv>
+  </div>
 )
 
 export default RightJustifiedGiveAccess
