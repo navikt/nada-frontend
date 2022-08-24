@@ -154,7 +154,7 @@ export const NewDataproductForm = () => {
     >
       {backendError && <ErrorMessage error={backendError} />}
       <TextField
-        className="w-[32rem]"
+        className="w-full 2xl:w-[32rem]"
         label="Navn på dataprodukt"
         {...register('name')}
         error={errors.name?.message}
@@ -165,7 +165,7 @@ export const NewDataproductForm = () => {
         control={control}
       />
       <Select 
-        className="w-[32rem]"
+        className="w-full 2xl:w-[32rem]"
         label="Velg gruppe fra GCP" {...register('team')} error={errors.team?.message}>
         <option value="">Velg gruppe</option>
         {[
@@ -198,7 +198,7 @@ export const NewDataproductForm = () => {
       </Heading>
       <TextField
         label="Navn på datasett"
-        className="w-[32rem]"
+        className="w-full 2xl:w-[32rem]"
         {...register('datasetName')}
         error={errors.datasetName?.message}
       />
@@ -209,7 +209,7 @@ export const NewDataproductForm = () => {
       />
       <TextField
         label="Link til kildekode"
-        className="w-[32rem]"
+        className="w-full 2xl:w-[32rem]"
         {...register('sourceCodeURL')}
         error={errors.sourceCodeURL?.message}
       />

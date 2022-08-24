@@ -70,7 +70,7 @@ const ViewDataset = ({
           </Modal.Content>
         </Modal>
       </div>
-      <div className="block pt-8 pr-8">
+      <div className="flex flex-col gap-8 pt-8 pr-8">
         {accessType.type === 'utlogget' && (
           <DatasetAlert variant="info">Du er ikke innlogget</DatasetAlert>
         )}
@@ -82,7 +82,7 @@ const ViewDataset = ({
             </a>
           </DatasetAlert>
         )}
-        <div className="flex flex-row justify-between w-full">
+        <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-4 mb-2">
               <Heading
@@ -104,25 +104,12 @@ const ViewDataset = ({
                 />
               )}
             </div>
-            <div>
-              {userInfo && accessType.type !== 'none' && (
-                <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-                  <Explore
-                    dataproductId={dataset.id}
-                    dataset={dataset}
-                    isOwner={accessType.type === 'owner'}
-                  />
-                </article>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col items-end gap-2 w-72">
-            <div className="flex flex-row gap-1 flex-wrap justify-end">
-              {dataset.keywords.map((keyword, idx) => (
-                <KeywordPill key={idx} keyword={keyword}>
-                  {keyword}
-                </KeywordPill>
-              ))}
+            <div className="flex flex-row gap-1 flex-wrap">
+                {dataset.keywords.map((keyword, idx) => (
+                  <KeywordPill key={idx} keyword={keyword}>
+                    {keyword}
+                  </KeywordPill>
+                ))}
             </div>
             {dataset.pii ? (
               <p className="flex flex-row gap-2 items-center">
@@ -138,6 +125,17 @@ const ViewDataset = ({
               </p>
             )}
           </div>
+          <div>
+            {userInfo && accessType.type !== 'none' && (
+              <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
+                <Explore
+                  dataproductId={dataset.id}
+                  dataset={dataset}
+                  isOwner={accessType.type === 'owner'}
+                />
+              </article>
+            )}
+          </div>
         </div>
         {dataset.description && (
           <section className="mb-3">
@@ -147,12 +145,8 @@ const ViewDataset = ({
             <article>{dataset.description}</article>
           </section>
         )}
-        <section className="mb-3 flex flex-col">
-          <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-            <DatasetMetadata datasource={dataset.datasource} />
-            <DatasetTableSchema datasource={dataset.datasource} />
-          </article>
-        </section>
+        <DatasetMetadata datasource={dataset.datasource} />
+        <DatasetTableSchema datasource={dataset.datasource} />
       </div>
     </>
   )

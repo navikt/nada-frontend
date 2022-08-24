@@ -30,8 +30,8 @@ export const KeywordsInput = ({
   }
 
   return (
-    <div className="grid gap-2">
-      <div className="grid justify-start gap-2">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col justify-start gap-2">
         <label className="navds-label">Nøkkelord</label>
         <ReactTags
           classNames={{ ...classNames, searchInput: 'navds-text-field__input' }}
@@ -41,7 +41,7 @@ export const KeywordsInput = ({
           allowNew
         />
       </div>
-      <div className="flex flex-row gap-1 flex-wrap w-[32rem]">
+      <div className="flex flex-row gap-1 flex-wrap w-full 2xl:w-[32rem]">
         {keywords.map((k, i) => {
           return (
             <KeywordPill
