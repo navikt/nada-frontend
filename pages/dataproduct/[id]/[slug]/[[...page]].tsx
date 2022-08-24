@@ -16,28 +16,13 @@ import Head from 'next/head'
 import TopBar, { TopBarActions } from '../../../../components/lib/topBar'
 import { Description } from '../../../../components/lib/detailTypography'
 import { DataproductSidebar } from '../../../../components/dataproducts/dataproductSidebar'
-import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import TabPanel, { TabPanelType } from '../../../../components/lib/tabPanel'
 import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
-import Link from 'next/link'
 import Dataset from '../../../../components/dataproducts/dataset/dataset'
 import { AddCircle } from '@navikt/ds-icons'
 import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  flex-grow: 1;
-`
-
-const MainPage = styled.div`
-  flex-grow: 1;
-  border-left: 1px #e5e5e5 solid;
-  padding-left: 2rem;
-`
 
 interface DataproductProps {
   id: string
@@ -127,8 +112,8 @@ const Dataproduct = (props: DataproductProps) => {
   if (isOwner) {
     menuItems.push({
       title: (
-        <div className="flex flex-row items-center text-base mt-2">
-          <AddCircle className="mr-1" />
+        <div className="flex flex-row items-center text-base">
+          <AddCircle className="mr-2" />
           Legg til datasett
         </div>
       ),
@@ -148,7 +133,7 @@ const Dataproduct = (props: DataproductProps) => {
       </Head>
       <TopBar name={product.name} type={product.__typename}>
         {isOwner && (
-          <div className="flex ml-16 gap-2">
+          <div className="flex gap-2">
             <a
               className="px-2 border-r-[1px] border-border"
               href={`/dataproduct/${product.id}/${product.slug}/edit`}
@@ -161,14 +146,14 @@ const Dataproduct = (props: DataproductProps) => {
           </div>
         )}
       </TopBar>
-      <div className="flex flex-row h-full">
+      <div className="flex flex-row h-full flex-grow">
         <DataproductSidebar
           product={product}
           isOwner={isOwner}
           menuItems={menuItems}
           currentPage={currentPage}
         />
-        <div className="pl-4 flex-grow border-l-[1px] border-border">
+        <div className="pl-4 flex-grow border-l-[1px] border-border-inverted">
           {menuItems.map((i, idx) => (
             <TabPanel
               key={idx}

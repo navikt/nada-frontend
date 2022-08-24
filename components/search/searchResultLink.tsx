@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import IconBox from '../lib/icons/iconBox'
 import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { KeywordPill, KeywordBox } from '../lib/keywordList'
 import StoryLogo from '../lib/icons/storyLogo'
@@ -42,9 +41,9 @@ export const SearchResultLink = ({
           <CardHeader
             style={{ paddingBottom: '0px' }}
             avatar={
-              <IconBox size={42}>
+              <div className="h-[42px] w-[42-px]">
                 {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
-              </IconBox>
+              </div>
             }
             titleTypographyProps={{ variant: 'h6' }}
             title={name}

@@ -2,20 +2,8 @@ import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import * as React from 'react'
 import remarkGfm from 'remark-gfm'
-import { SubjectHeader } from '../subject'
-import KeywordPill, { KeywordBox } from './keywordList'
+import KeywordPill from './keywordList'
 import { Link } from '@navikt/ds-react'
-
-export const Name = styled.h1`
-  margin: 0;
-  font-weight: 300;
-`
-
-export const StyledDescription = styled.div`
-  border-radius: 10px;
-  text-align: justify;
-  margin-top: 2rem;
-`
 
 export const Description = ({
   keywords,
@@ -24,7 +12,7 @@ export const Description = ({
   keywords: string[]
   markdown?: string | null
 }) => (
-  <StyledDescription>
+  <div className="rounded-xl text-justify mt-8">
     <ReactMarkdown remarkPlugins={[remarkGfm]}>
       {markdown || '*ingen beskrivelse*'}
     </ReactMarkdown>
@@ -43,5 +31,5 @@ export const Description = ({
         </>
       </div>
     )}
-  </StyledDescription>
+  </div>
 )

@@ -75,7 +75,7 @@ const DataproductEdit = (props: DataproductProps) => {
       </Head>
       <TopBar name={data.dataproduct.name} type={data.dataproduct.__typename}>
         {isOwner && (
-          <div className="flex ml-16 gap-2">
+          <div className="flex gap-2">
             <p className="font-bold px-2 border-r-[1px] border-border">
               Endre dataprodukt
             </p>

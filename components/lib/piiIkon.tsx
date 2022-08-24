@@ -1,30 +1,17 @@
-import styled from 'styled-components'
 import { Success, Warning } from '@navikt/ds-icons'
 import { navGronn, navRod } from '../../styles/constants'
 
-interface PiiIkonProps {
-  pii: boolean
-}
-
-const PiiIkonDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0.5em auto;
-  svg {
-    margin-right: 0.5em;
-  }
-`
-export const PiiIkon = ({ pii }: PiiIkonProps) =>
+export const PiiIkon = ({ pii }: { pii: boolean }) =>
   pii ? (
-    <PiiIkonDiv>
+    <div className="flex align-center my-2 mx-auto gap-2">
       <Warning color={navRod} />
       <p>Inneholder personidentifiserende informasjon (PII)</p>
-    </PiiIkonDiv>
+    </div>
   ) : (
-    <PiiIkonDiv>
+    <div className="flex align-center my-2 mx-auto gap-2">
       <Success color={navGronn} />
       <p>
         Inneholder <b>ikke</b> personidentifiserende informasjon (PII)
       </p>
-    </PiiIkonDiv>
+    </div>
   )

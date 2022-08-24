@@ -10,7 +10,6 @@ import {
 import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { Heading } from '@navikt/ds-react'
-import SpacedDiv from '../../lib/spacedDiv'
 
 interface DataproductTableSchemaProps {
   datasource: DatasetQuery['dataset']['datasource']
@@ -21,7 +20,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
   return (
-    <SpacedDiv>
+    <div className="mb-3">
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
@@ -52,7 +51,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </SpacedDiv>
+    </div>
   )
 }
 export default DatasetTableSchema

@@ -1,50 +1,6 @@
 import ReactTags from 'react-tag-autocomplete'
-import styled from 'styled-components'
 import KeywordPill from './keywordList'
 
-const StyledRectTags = styled.div`
-  margin-top: 8px;
-
-  label {
-    box-sizing: border-box;
-    color: rgb(38, 38, 38);
-    font-family: 'Source Sans Pro', Arial, sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: normal;
-    line-height: 24px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-top: 0px;
-  }
-
-  .react-tags {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column-reverse;
-  }
-  .react-tags__search {
-    margin-bottom: 8px;
-  }
-
-  .navds-text-field__input {
-    width: 100% !important;
-  }
-
-  .react-tags__selected-tag {
-    margin-right: 8px;
-    appearance: none;
-    background-color: #ffd799;
-    border: none;
-    border-radius: 16px;
-    padding: 0.25em 0.75em;
-    display: inline-flex;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-  }
-`
 export interface KeywordsInputProps {
   error?: string
   onAdd: (value: string) => void
@@ -74,9 +30,9 @@ export const KeywordsInput = ({
   }
 
   return (
-    <div>
-      <StyledRectTags>
-        <label>Nøkkelord</label>
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col justify-start gap-2">
+        <label className="navds-label">Nøkkelord</label>
         <ReactTags
           classNames={{ ...classNames, searchInput: 'navds-text-field__input' }}
           onDelete={() => {}}
@@ -84,8 +40,8 @@ export const KeywordsInput = ({
           placeholderText={'nøkkelord (trykk enter for å legge til)'}
           allowNew
         />
-      </StyledRectTags>
-      <div className="flex flex-row gap-1 flex-wrap">
+      </div>
+      <div className="flex flex-row gap-1 flex-wrap w-full 2xl:w-[32rem]">
         {keywords.map((k, i) => {
           return (
             <KeywordPill

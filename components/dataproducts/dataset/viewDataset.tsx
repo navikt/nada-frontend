@@ -1,16 +1,13 @@
 import { WarningColored, SuccessColored } from '@navikt/ds-icons'
 import { Alert, Heading, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
-import humanizeDate from '../../../lib/humanizeDate'
 import {
   DataproductQuery,
   DatasetQuery,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
-import IconBox from '../../lib/icons/iconBox'
 import KeywordPill, { KeywordBox } from '../../lib/keywordList'
-import SpacedDiv from '../../lib/spacedDiv'
 import NewAccessRequestForm from '../accessRequest/newAccessRequest'
 import Explore from '../explore'
 import DatasetMetadata from './datasetMetadata'
@@ -73,8 +70,8 @@ const ViewDataset = ({
           </Modal.Content>
         </Modal>
       </div>
-      <div className="block pt-8 pr-8">
-      {accessType.type === 'utlogget' && (
+      <div className="flex flex-col gap-8 pt-8 pr-8">
+        {accessType.type === 'utlogget' && (
           <DatasetAlert variant="info">Du er ikke innlogget</DatasetAlert>
         )}
         {accessType.type === 'none' && (
@@ -85,17 +82,17 @@ const ViewDataset = ({
             </a>
           </DatasetAlert>
         )}
-        <div className='flex flex-row justify-between w-full'>
-          <div>
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
             <div className="flex items-center gap-4 mb-2">
               <Heading
                 className="inline-flex items-center gap-3"
                 level="2"
                 size="large"
               >
-                <IconBox size={42} inline={true}>
+                <div className="h-[42px] w-[42px]">
                   <BigQueryLogo />
-                </IconBox>
+                </div>
                 {dataset.name}
               </Heading>
               {isOwner && (
@@ -107,26 +104,37 @@ const ViewDataset = ({
                 />
               )}
             </div>
-          </div>
-          <div className='flex flex-col items-end gap-2 w-72'>
-              <div className='flex flex-row gap-1 flex-wrap justify-end'>
+            <div className="flex flex-row gap-1 flex-wrap">
                 {dataset.keywords.map((keyword, idx) => (
                   <KeywordPill key={idx} keyword={keyword}>
                     {keyword}
                   </KeywordPill>
                 ))}
-              </div>
-          {dataset.pii ? (
-            <p className='flex flex-row gap-2 items-center'>
-            <WarningColored />
-            <span>Inneholder persondata</span>  
-            </p>
+            </div>
+            {dataset.pii ? (
+              <p className="flex flex-row gap-2 items-center">
+                <WarningColored />
+                <span>Inneholder persondata</span>
+              </p>
             ) : (
-            <p className='flex flex-row gap-2 items-center'>
+              <p className="flex flex-row gap-2 items-center">
                 <SuccessColored />
-                <span>Inneholder <b>ikke</b> persondata</span>
-            </p>
-          )}
+                <span>
+                  Inneholder <b>ikke</b> persondata
+                </span>
+              </p>
+            )}
+          </div>
+          <div>
+            {userInfo && accessType.type !== 'none' && (
+              <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
+                <Explore
+                  dataproductId={dataset.id}
+                  dataset={dataset}
+                  isOwner={accessType.type === 'owner'}
+                />
+              </article>
+            )}
           </div>
         </div>
         {dataset.description && (
@@ -137,24 +145,8 @@ const ViewDataset = ({
             <article>{dataset.description}</article>
           </section>
         )}
-        <section className="mb-3 flex flex-col">
-          <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-            <DatasetMetadata datasource={dataset.datasource} />
-            <DatasetTableSchema datasource={dataset.datasource} />
-          </article>
-          {userInfo && accessType.type !== 'none' && (
-            <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-              <Heading spacing level="3" size="small">
-                Utforsk
-              </Heading>
-              <Explore
-                dataproductId={dataset.id}
-                dataset={dataset}
-                isOwner={accessType.type === 'owner'}
-              />
-            </article>
-          )}
-        </section>
+        <DatasetMetadata datasource={dataset.datasource} />
+        <DatasetTableSchema datasource={dataset.datasource} />
       </div>
     </>
   )
