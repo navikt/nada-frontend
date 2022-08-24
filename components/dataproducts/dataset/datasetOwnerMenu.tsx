@@ -78,12 +78,6 @@ const DatasetOwnerMenu = ({
         </Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Item>
-              Tilganger
-            </Dropdown.Menu.GroupedList.Item>
-          </Dropdown.Menu.GroupedList>
-          <Divider />
-          <Dropdown.Menu.GroupedList>
             <Dropdown.Menu.GroupedList.Item onClick={() => setEdit(true)}>
               Endre datasett
             </Dropdown.Menu.GroupedList.Item>

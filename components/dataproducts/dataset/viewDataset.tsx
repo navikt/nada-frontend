@@ -8,6 +8,7 @@ import {
 } from '../../../lib/schema/graphql'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import KeywordPill, { KeywordBox } from '../../lib/keywordList'
+import DatasetAccess from '../access/datasetAccess'
 import NewAccessRequestForm from '../accessRequest/newAccessRequest'
 import Explore from '../explore'
 import DatasetMetadata from './datasetMetadata'
@@ -55,7 +56,7 @@ const ViewDataset = ({
   setEdit,
 }: ViewDatasetProps) => {
   const [accessRequested, setAccessRequested] = useState(false)
-
+  
   return (
     <>
       <div className="flex">
@@ -149,6 +150,7 @@ const ViewDataset = ({
         )}
         <section className="mb-3 flex flex-col">
           <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
+            {isOwner && <DatasetAccess id={dataset.id} access={dataset.access} />}
             <DatasetMetadata datasource={dataset.datasource} />
             <DatasetTableSchema datasource={dataset.datasource} />
           </article>
