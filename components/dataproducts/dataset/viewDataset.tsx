@@ -56,7 +56,7 @@ const ViewDataset = ({
   setEdit,
 }: ViewDatasetProps) => {
   const [accessRequested, setAccessRequested] = useState(false)
-  
+
   return (
     <>
       <div className="flex">
@@ -106,11 +106,11 @@ const ViewDataset = ({
               )}
             </div>
             <div className="flex flex-row gap-1 flex-wrap">
-                {dataset.keywords.map((keyword, idx) => (
-                  <KeywordPill key={idx} keyword={keyword}>
-                    {keyword}
-                  </KeywordPill>
-                ))}
+              {dataset.keywords.map((keyword, idx) => (
+                <KeywordPill key={idx} keyword={keyword}>
+                  {keyword}
+                </KeywordPill>
+              ))}
             </div>
             {dataset.pii ? (
               <p className="flex flex-row gap-2 items-center">
@@ -146,13 +146,9 @@ const ViewDataset = ({
             <article>{dataset.description}</article>
           </section>
         )}
-        <section className="mb-3 flex flex-col">
-          <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
-            {isOwner && <DatasetAccess id={dataset.id} access={dataset.access} />}
-            <DatasetMetadata datasource={dataset.datasource} />
-            <DatasetTableSchema datasource={dataset.datasource} />
-          </article>
-        </section>
+        {isOwner && <DatasetAccess id={dataset.id} access={dataset.access} />}
+        <DatasetMetadata datasource={dataset.datasource} />
+        <DatasetTableSchema datasource={dataset.datasource} />
       </div>
     </>
   )

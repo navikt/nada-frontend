@@ -3,7 +3,6 @@ import { useController, UseControllerProps } from 'react-hook-form'
 import Link from 'next/link'
 import { Loader } from '@navikt/ds-react'
 
-
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
   loading: () => (
@@ -14,7 +13,6 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
 })
 
 type DescriptionEditorProps<T> = { label: string } & UseControllerProps<T>
-
 
 export const DescriptionEditor = <FV extends Record<string, any>>({
   name,

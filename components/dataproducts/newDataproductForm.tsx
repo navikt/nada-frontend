@@ -7,7 +7,14 @@ import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataprod
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
-import { Button, Heading, Radio, RadioGroup, Select, TextField } from '@navikt/ds-react'
+import {
+  Button,
+  Heading,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+} from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
 import { Divider } from '@navikt/ds-react-internal'
@@ -147,115 +154,116 @@ export const NewDataproductForm = () => {
 
   return (
     <div className="mt-8">
-    <Heading level="1" size="large">Legg til dataprodukt</Heading>
-    <form
-      className="pt-12 flex flex-col gap-10"
-      onSubmit={handleSubmit(onSubmit, onError)}
-    >
-      {backendError && <ErrorMessage error={backendError} />}
-      <TextField
-        className="w-full 2xl:w-[32rem]"
-        label="Navn på dataprodukt"
-        {...register('name')}
-        error={errors.name?.message}
-      />
-      <DescriptionEditor
-        label="Beskrivelse"
-        name="description"
-        control={control}
-      />
-      <Select 
-        className="w-full 2xl:w-[32rem]"
-        label="Velg gruppe fra GCP" {...register('team')} error={errors.team?.message}>
-        <option value="">Velg gruppe</option>
-        {[
-          ...new Set(
-            userInfo?.gcpProjects.map(
-              ({ group }: { group: { name: string } }) => (
-                <option
-                  value={
-                    userInfo?.groups.filter((g) => g.name === group.name)[0]
-                      .email
-                  }
-                  key={group.name}
-                >
-                  {group.name}
-                </option>
-              )
-            )
-          ),
-        ]}
-      </Select>
-      <TeamkatalogenSelector
-        group={team}
-        register={register}
-        errors={errors}
-        watch={watch}
-      />
-      <Divider />
-      <Heading level="2" size="medium">
-        Legg til et datasett (Flere datasett kan legges til etter lagring)
+      <Heading level="1" size="large">
+        Legg til dataprodukt
       </Heading>
-      <TextField
-        label="Navn på datasett"
-        className="w-full 2xl:w-[32rem]"
-        {...register('datasetName')}
-        error={errors.datasetName?.message}
-      />
-      <DescriptionEditor
-        label="Beskrivelse"
-        name="datasetDescription"
-        control={control}
-      />
-      <TextField
-        label="Link til kildekode"
-        className="w-full 2xl:w-[32rem]"
-        {...register('sourceCodeURL')}
-        error={errors.sourceCodeURL?.message}
-      />
-      <DatasetSourceForm
-        label="Velg tabell eller view fra GCP"
-        team={team}
-        register={register}
-        watch={watch}
-        errors={errors}
-        setValue={setValue}
-      />
-      <KeywordsInput
-        onAdd={onAddKeyword}
-        onDelete={onDeleteKeyword}
-        keywords={keywords || []}
-        error={errors.keywords?.[0].message}
-      />
-      <Controller
-        name="pii"
-        control={control}
-        render={({ field }) => (
-          <RadioGroup
-            {...field}
-            legend="Inneholder datasettet personidentifiserende informasjon?"
-            error={errors?.pii?.message}
-          >
-            <Radio value={true}>
-              Ja, inneholder personidentifiserende informasjon
-            </Radio>
-            <Radio value={false}>
-              Nei, inneholder ikke personidentifiserende informasjon
-            </Radio>
-          </RadioGroup>
-        )}
-      />
-      <div className="flex flex-row gap-4 mb-16">
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onCancel}
+      <form
+        className="pt-12 flex flex-col gap-10"
+        onSubmit={handleSubmit(onSubmit, onError)}
+      >
+        {backendError && <ErrorMessage error={backendError} />}
+        <TextField
+          className="w-full 2xl:w-[32rem]"
+          label="Navn på dataprodukt"
+          {...register('name')}
+          error={errors.name?.message}
+        />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="description"
+          control={control}
+        />
+        <Select
+          className="w-full 2xl:w-[32rem]"
+          label="Velg gruppe fra GCP"
+          {...register('team')}
+          error={errors.team?.message}
         >
-          Avbryt
-        </Button>
-        <Button type="submit">Lagre</Button>
-      </div>
-    </form>
+          <option value="">Velg gruppe</option>
+          {[
+            ...new Set(
+              userInfo?.gcpProjects.map(
+                ({ group }: { group: { name: string } }) => (
+                  <option
+                    value={
+                      userInfo?.groups.filter((g) => g.name === group.name)[0]
+                        .email
+                    }
+                    key={group.name}
+                  >
+                    {group.name}
+                  </option>
+                )
+              )
+            ),
+          ]}
+        </Select>
+        <TeamkatalogenSelector
+          group={team}
+          register={register}
+          errors={errors}
+          watch={watch}
+        />
+        <Divider />
+        <Heading level="2" size="medium">
+          Legg til et datasett (Flere datasett kan legges til etter lagring)
+        </Heading>
+        <TextField
+          label="Navn på datasett"
+          className="w-full 2xl:w-[32rem]"
+          {...register('datasetName')}
+          error={errors.datasetName?.message}
+        />
+        <DescriptionEditor
+          label="Beskrivelse"
+          name="datasetDescription"
+          control={control}
+        />
+        <TextField
+          label="Link til kildekode"
+          className="w-full 2xl:w-[32rem]"
+          {...register('sourceCodeURL')}
+          error={errors.sourceCodeURL?.message}
+        />
+        <DatasetSourceForm
+          label="Velg tabell eller view fra GCP"
+          team={team}
+          register={register}
+          watch={watch}
+          errors={errors}
+          setValue={setValue}
+        />
+        <KeywordsInput
+          onAdd={onAddKeyword}
+          onDelete={onDeleteKeyword}
+          keywords={keywords || []}
+          error={errors.keywords?.[0].message}
+        />
+        <Controller
+          name="pii"
+          control={control}
+          render={({ field }) => (
+            <RadioGroup
+              {...field}
+              legend="Inneholder datasettet personidentifiserende informasjon?"
+              error={errors?.pii?.message}
+            >
+              <Radio value={true}>
+                Ja, inneholder personidentifiserende informasjon
+              </Radio>
+              <Radio value={false}>
+                Nei, inneholder ikke personidentifiserende informasjon
+              </Radio>
+            </RadioGroup>
+          )}
+        />
+        <div className="flex flex-row gap-4 mb-16">
+          <Button type="button" variant="secondary" onClick={onCancel}>
+            Avbryt
+          </Button>
+          <Button type="submit">Lagre</Button>
+        </div>
+      </form>
     </div>
   )
 }

@@ -10,8 +10,6 @@ import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 import Tabell from '../../lib/icons/tabell'
 
-
-
 const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
   materialized_view: <Tabell />,
   table: <Tabell />,

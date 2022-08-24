@@ -110,7 +110,7 @@ const EditDataset = ({ dataset, setEdit }: EditDatasetFormProps) => {
         {
           query: GET_DATAPRODUCT,
           variables: {
-              id: dataset.dataproductID
+            id: dataset.dataproductID,
           },
         },
         'searchContent',
