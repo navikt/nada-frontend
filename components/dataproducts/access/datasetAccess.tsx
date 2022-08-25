@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import humanizeDate from '../../../lib/humanizeDate'
-import { isAfter, parseISO } from 'date-fns'
+import { isAfter, parseISO, format } from 'date-fns'
 import {
   useRevokeAccessMutation,
   useAccessRequestsForDatasetQuery,
@@ -17,17 +16,33 @@ import {
   Modal,
   Table,
   Textarea,
-  TextField,
 } from '@navikt/ds-react'
 import { GET_DATASET_ACCESS } from '../../../lib/queries/access/datasetAccess'
 import LoaderSpinner from '../../lib/spinner'
 import { ExternalLink } from '@navikt/ds-icons'
 import { GET_ACCESS_REQUESTS_FOR_DATASET } from '../../../lib/queries/accessRequest/accessRequestsForDataset'
+import { nb } from 'date-fns/locale'
 
 interface AccessEntry {
   subject: string
   canRequest: boolean
   access: access
+}
+
+const humanizeDateAccessForm = (isoDate: string, dateFormat = 'dd. MMMM yyyy') => {
+    try {
+      const parsed = parseISO(isoDate)
+      return (
+        <time
+          dateTime={isoDate}
+          title={format(parsed, 'dd. MMMM yyyy HH:mm:ii', { locale: nb })}
+        >
+          {format(parsed, dateFormat, { locale: nb })}
+        </time>
+      )
+    } catch (e) {
+      return <></>
+    }
 }
 
 const productAccess = (access: access[]): AccessEntry[] => {
@@ -224,7 +239,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                 <Table.DataCell className="w-72">{r.subject}</Table.DataCell>
                 <Table.DataCell className="w-36">{r.subjectType}</Table.DataCell>
                 <Table.DataCell className="w-52">
-                  {r.expires ? humanizeDate(r.expires) : 'For alltid'}
+                  {r.expires ? humanizeDateAccessForm(r.expires) : 'For alltid'}
                 </Table.DataCell>
                 <Table.DataCell className="w-52">
                   {r.polly?.url ? (
@@ -313,8 +328,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                   {a.access.subject.split(":")[0]}
                 </Table.DataCell>
                 <Table.DataCell className="w-52">
-                Til 23. november 2022
-                  {/* {a.access?.expires ? humanizeDate(a.access?.expires) : 'For alltid'} */}
+                {a.access.expires ? humanizeDateAccessForm(a.access.expires) : "For alltid"}
                 </Table.DataCell>
                 <Table.DataCell className="w-52">
                   {a.access?.accessRequest?.polly ? (
