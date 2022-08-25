@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import StringToColor from '../../lib/stringToColor'
+import stringToColors from '../../lib/stringToColor'
 import { Tag } from '@navikt/ds-react'
 
 const { contrastColor } = require('contrast-color')
@@ -15,6 +15,7 @@ export const KeywordBox = styled.div`
 interface KeywordSpanProps {
   color: string
   textcolor?: string
+  borderColor?: string
   horizontal?: boolean
   compact?: boolean
   onClick?: () => void
@@ -26,7 +27,7 @@ const KeywordPillStyle = styled(Tag)<KeywordSpanProps>`
   display: ${(props) => (props.horizontal ? 'block' : 'inline-block')};
   background-color: ${(props) => props.color};
   color: ${(props) => props.textcolor};
-  border-color: #707070;
+  border-color: ${(props) => props.borderColor};
   :hover {
     ${(props) => props.remove && 'text-decoration: line-through;'}
     ${(props) => props.remove && 'text-decoration-thickness: 3px;'}
@@ -50,13 +51,14 @@ export const KeywordPill = ({
   onClick,
   remove,
 }: keywordPillProps) => {
-  const color = StringToColor(keyword)
+  const [bgColor, borderColor] = stringToColors(keyword)
   return (
     <KeywordPillStyle
       variant="info"
       size="small"
-      color={color}
-      textcolor={contrastColor({ bgColor: color })}
+      color={bgColor}
+      textcolor={contrastColor({ bgColor: bgColor })}
+      borderColor={borderColor}
       horizontal={horizontal}
       compact={compact}
       onClick={onClick}
