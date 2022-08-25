@@ -164,6 +164,8 @@ export type Dataset = {
   access: Array<Access>
   /** created is the timestamp for when the dataset was created */
   created: Scalars['Time']
+  /** dataproduct is the dataproduct containing the dataset */
+  dataproduct: Dataproduct
   /** dataproductID is the id of the dataproduct containing the dataset */
   dataproductID: Scalars['ID']
   /** datasource contains metadata on the datasource */
@@ -756,7 +758,7 @@ export type SearchQuery = {
   text?: Maybe<Scalars['String']>
 }
 
-export type SearchResult = Dataproduct | Story
+export type SearchResult = Dataproduct | Dataset | Story
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow'
@@ -1455,6 +1457,7 @@ export type SearchContentQuery = {
             teamkatalogenURL?: string | null | undefined
           }
         }
+      | { __typename?: 'Dataset' }
       | { __typename?: 'Story' }
   }>
 }
@@ -1478,6 +1481,22 @@ export type SearchContentWithOptionsQuery = {
           lastModified: any
           keywords: Array<string>
           slug: string
+          owner: {
+            __typename?: 'Owner'
+            group: string
+            teamkatalogenURL?: string | null | undefined
+          }
+        }
+      | {
+          __typename: 'Dataset'
+          id: string
+          name: string
+          description?: string | null | undefined
+          created: any
+          lastModified: any
+          keywords: Array<string>
+          slug: string
+          dataproduct: { __typename?: 'Dataproduct'; id: string; slug: string }
           owner: {
             __typename?: 'Owner'
             group: string
@@ -3412,6 +3431,24 @@ export const SearchContentWithOptionsDocument = gql`
           id
           name
           description
+          created
+          lastModified
+          keywords
+          slug
+          owner {
+            group
+            teamkatalogenURL
+          }
+        }
+        ... on Dataset {
+          __typename
+          id
+          name
+          description
+          dataproduct {
+            id
+            slug
+          }
           created
           lastModified
           keywords
