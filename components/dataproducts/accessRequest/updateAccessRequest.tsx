@@ -3,10 +3,9 @@ import {
   useUpdateAccessRequestMutation,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { useRouter } from 'next/router'
-import AccessRequestFormV2, {
+import AccessRequestForm, {
   AccessRequestFormInput,
-} from './accessRequestFormV2'
+} from './accessRequestForm'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 
 interface UpdateAccessRequestFormProps {
@@ -42,7 +41,7 @@ const UpdateAccessRequest = ({
   }
 
   return (
-    <AccessRequestFormV2
+    <AccessRequestForm
       dataset={dataset}
       accessRequest={accessRequest}
       isEdit={true}

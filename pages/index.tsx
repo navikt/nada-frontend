@@ -16,6 +16,7 @@ import { USER_INFO } from '../lib/queries/userInfo/userInfo'
 import BigQueryLogo from '../components/lib/icons/bigQueryLogo'
 import StoryLogo from '../components/lib/icons/storyLogo'
 import MetabaseLogo from '../components/lib/icons/metabaseLogo'
+import Link from 'next/link'
 
 const SEARCH_LIMIT = 6
 
@@ -42,8 +43,8 @@ const LandingPage = () => {
       />
 
       <div className="flex flex-row flex-wrap content-center gap-18">
+        <Link href="/search?types=dataproduct">
         <a
-          href="/search?types=dataproduct"
           className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg"
         >
           <div className="h-36 w-36 flex flex-col items-center justify-center">
@@ -53,8 +54,9 @@ const LandingPage = () => {
             <p>Produkter</p>
           </div>
         </a>
+        </Link>
+        <Link href="/search?types=story">
         <a
-          href="/search?types=story"
           className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg"
         >
           <div className="h-36 w-36 flex flex-col items-center justify-center">
@@ -64,6 +66,7 @@ const LandingPage = () => {
             <p>Fortellinger</p>
           </div>
         </a>
+        </Link>
         <a
           href="https://metabase.intern.nav.no"
           target="_blank"

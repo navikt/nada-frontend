@@ -1,21 +1,19 @@
-import { theme } from '@navikt/ds-tailwind'
-
 const stringBgColors = [
-  'limegreen-100',
-  'green-100',
-  'orange-100',
-  'deepblue-100',
-  'purple-100',
-  'gray-100',
+  'bg-limegreen-100',
+  'bg-green-100',
+  'bg-orange-100',
+  'bg-deepblue-100',
+  'bg-purple-100',
+  'bg-gray-100',
 ]
 
 const stringBorderColors = [
-  'limegreen-300',
-  'green-300',
-  'orange-300',
-  'deepblue-300',
-  'purple-300',
-  'gray-300',
+  'border-limegreen-300',
+  'border-green-300',
+  'border-orange-300',
+  'border-deepblue-300',
+  'border-purple-300',
+  'border-gray-300',
 ]
 
 const stringToColors = (str: string): [string, string] => {
@@ -27,8 +25,8 @@ const stringToColors = (str: string): [string, string] => {
   }
   let colorIndex = hash % stringBgColors.length
   return [
-    theme.colors[stringBgColors[colorIndex]],
-    theme.colors[stringBorderColors[colorIndex]],
+    stringBgColors[colorIndex],
+    stringBorderColors[colorIndex],
   ]
 }
 

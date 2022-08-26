@@ -10,20 +10,30 @@ type TeamkatalogenSelectorProps = {
   errors: any
   watch: any
 }
+
+interface team {
+    name: string
+    url: string
+}
+
 export const TeamkatalogenSelector = ({
   group,
   register,
   errors,
   watch,
 }: TeamkatalogenSelectorProps) => {
-  const { data, error } = [undefined, ''].includes(group)
-    ? { data: { teamkatalogen: [] }, error: null }
-    : useTeamkatalogenQuery({
+  const { data, error } = useTeamkatalogenQuery({
         variables: { q: group === undefined ? '' : group.split('@')[0] },
       })
 
-  if (error) return <ErrorMessage error={error} />
   if (!data) return <LoaderSpinner />
+
+  let teams : team[]
+  if (error) {
+      teams = []
+  } else {
+      teams = data.teamkatalogen 
+  }
 
   return (
     <Select
@@ -33,7 +43,7 @@ export const TeamkatalogenSelector = ({
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>
-      {data.teamkatalogen.map((team) => (
+      {teams.map((team) => (
         <option value={team.url} key={team.name}>
           {team.name}
         </option>

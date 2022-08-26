@@ -30,6 +30,12 @@ const DataproductEdit = (props: DataproductProps) => {
   const userInfo = useContext(UserState)
   const router = useRouter()
 
+  const [deleteDataproduct] = useDeleteDataproductMutation({
+    variables: { id: id },
+    awaitRefetchQueries: true,
+    refetchQueries: ['searchContent'],
+  })
+
   const { data, loading, error } = useDataproductQuery({
     variables: { id },
     ssr: true,
@@ -52,12 +58,6 @@ const DataproductEdit = (props: DataproductProps) => {
       : userInfo.groups.some(
           (g: Group) => g.email === data.dataproduct.owner.group
         )
-
-  const [deleteDataproduct] = useDeleteDataproductMutation({
-    variables: { id: id },
-    awaitRefetchQueries: true,
-    refetchQueries: ['searchContent'],
-  })
 
   const onDelete = async () => {
     try {

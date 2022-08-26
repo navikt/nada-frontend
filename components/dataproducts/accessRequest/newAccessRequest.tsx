@@ -5,7 +5,7 @@ import {
   useDatasetQuery,
 } from '../../../lib/schema/graphql'
 import { useContext } from 'react'
-import AccessRequestFormV2 from './accessRequestFormV2'
+import AccessRequestForm from './accessRequestForm'
 import { AccessRequestFormInput } from './accessRequestForm'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../../lib/error'
@@ -51,7 +51,7 @@ const NewAccessRequestForm = ({ dataset }: NewAccessRequestFormProps) => {
   ).includes(data.dataproduct.owner.group)
 
   return (
-    <AccessRequestFormV2 dataset={dataset} isEdit={false} onSubmit={onSubmit} />
+    <AccessRequestForm dataset={dataset} isEdit={false} onSubmit={onSubmit} />
   )
 }
 

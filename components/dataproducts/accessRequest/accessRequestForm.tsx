@@ -1,59 +1,41 @@
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { Datepicker } from '@navikt/ds-datepicker'
+import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import AsyncSelect from 'react-select/async'
+import * as yup from 'yup'
 import {
+  Maybe,
+  PollyInput,
+  Scalars,
   SubjectType,
   usePollyQuery,
-  PollyInput,
-  Maybe,
-  Scalars,
-  useUserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
-import * as React from 'react'
-import { ChangeEvent, useState } from 'react'
-import {
-  Alert,
-  Button,
-  Heading,
-  Link,
-  Radio,
-  RadioGroup,
-  TextField,
-} from '@navikt/ds-react'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import * as yup from 'yup'
-import ErrorMessage from '../../lib/error'
-import LoaderSpinner from '../../lib/spinner'
-import { useRouter } from 'next/router'
-import { Datepicker } from '@navikt/ds-datepicker'
-import AsyncSelect from 'react-select/async'
 
-export const accessRequestValidation = yup.object().shape({
-  subjectType: yup
-    .string()
-    .required()
-    .oneOf(
-      ['group', 'user', 'serviceAccount'],
-      'Du må velge hvem tilgangen gjelder for'
-    ),
-  subject: yup
-    .string()
-    .email('Du må skrive inn e-postadressen til hvem tilgangen gjelder for'),
-  accessType: yup
-    .string()
-    .required()
-    .oneOf(['eternal', 'until'], 'Du må velge hvor lenge du ønsker tilgang'),
-  expires: yup.string(),
-})
-
-interface AccessRequestFormProps {
-  accessRequest: AccessRequestFormInput
-  dataset: DatasetQuery
-  dataproductSlug: string
-  isOwner: boolean
-  isEdit: boolean
-  isView: boolean
-  onSubmit: (requestData: AccessRequestFormInput) => void
-}
+const schema = yup
+  .object({
+    subject: yup
+      .string()
+      .required(
+        'Du må skrive inn e-postadressen til hvem tilgangen gjelder for'
+      )
+      .email('E-postadresssen er ikke gyldig'),
+    subjectType: yup
+      .string()
+      .required('Du må velge hvem tilgangen gjelder for')
+      .oneOf([SubjectType.User, SubjectType.Group, SubjectType.ServiceAccount]),
+    accessType: yup
+      .string()
+      .required('Du må velge hvor lenge du ønsker tilgang')
+      .oneOf(['eternal', 'until']),
+    expires: yup
+      .string()
+      .matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato'),
+  })
+  .required()
 
 export type AccessRequestFormInput = {
   id?: Maybe<Scalars['ID']>
@@ -66,39 +48,48 @@ export type AccessRequestFormInput = {
   reason?: Maybe<Scalars['String']>
 }
 
-const AccessRequestForm = ({
+interface AccessRequestFormProps {
+  accessRequest?: AccessRequestFormInput
+  dataset: DatasetQuery
+  isEdit: boolean
+  onSubmit: (requestData: AccessRequestFormInput) => void
+}
+
+interface AccessRequestFields {
+  subject: string
+  subjectType: SubjectType
+  accessType: string
+  expires: string
+}
+
+const AccessRequestFormV2 = ({
   accessRequest,
-  isEdit,
-  isView,
-  onSubmit,
-  dataproductSlug,
   dataset,
-  isOwner,
+  isEdit,
+  onSubmit,
 }: AccessRequestFormProps) => {
-  const [formError, setFormError] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [polly, setPolly] = useState<PollyInput | undefined | null>(
-    accessRequest.polly
-  )
-  const [expireDate, setExpireDate] = useState<string>(
-    accessRequest.expires ? accessRequest.expires : ''
-  )
-  const [accessType, setAccessType] = useState(
-    accessRequest.expires ? 'until' : 'eternal'
-  )
-  const [subjectData, setSubjectData] = useState({
-    subject: accessRequest.subject,
-    subjectType: accessRequest.subjectType
-      ? accessRequest.subjectType
-      : SubjectType.User,
-  })
+  const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
   const router = useRouter()
 
   const {
-    data: userInfo,
-    error: userError,
-    loading: userLoading,
-  } = useUserInfoDetailsQuery()
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      subject: accessRequest?.subject ? accessRequest.subject : '',
+      subjectType: accessRequest?.subjectType
+        ? accessRequest.subjectType
+        : SubjectType.User,
+      accessType: !isEdit || accessRequest?.expires ? 'until' : 'eternal',
+      expires: accessRequest?.expires
+        ? new Date(accessRequest.expires).toISOString().substr(0, 10)
+        : '',
+    },
+  })
 
   const {
     data: searchData,
@@ -109,51 +100,13 @@ const AccessRequestForm = ({
     skip: searchText.length < 3,
   })
 
-  const { formState, handleSubmit, control, watch, register, reset } = useForm({
-    resolver: yupResolver(accessRequestValidation),
-    defaultValues: {
-      subjectType: subjectData.subjectType,
-      subject: subjectData.subject,
-      datasetID: accessRequest.datasetID,
-      accessType: accessType,
-      expires: expireDate,
-      polly,
-    },
-  })
-
-  if (userError) return <ErrorMessage error={userError} />
-  if (userLoading || !userInfo) return <LoaderSpinner />
-
-  const toSubjectType = (s: string): SubjectType => {
-    switch (s) {
-      case 'all-users':
-      case 'group':
-        return SubjectType.Group
-      case 'serviceAccount':
-        return SubjectType.ServiceAccount
-    }
-    return SubjectType.User
-  }
-
-  const setSubject = (event: ChangeEvent<HTMLInputElement>) => {
-    setSubjectData((prevState) => {
-      return { ...prevState, subject: event.target.value }
-    })
-  }
-
-  const setSubjectType = (value: string) => {
-    setSubjectData((prevState) => {
-      return { ...prevState, subjectType: toSubjectType(value) }
-    })
-  }
-
-  const onSubmitForm = (requestData: AccessRequestFormInput) => {
+  const onSubmitForm = (data: AccessRequestFields) => {
     const accessRequest: AccessRequestFormInput = {
-      ...requestData,
+      datasetID: dataset.id,
+      subject: data.subject,
+      subjectType: data.subjectType,
       polly: polly,
-      expires: new Date(expireDate),
-      subject: subjectData.subject,
-      subjectType: subjectData.subjectType,
+      expires: data.accessType === 'eternal' ? null : new Date(data.expires),
     }
     onSubmit(accessRequest)
   }
@@ -196,88 +149,94 @@ const AccessRequestForm = ({
         className="flex flex-col gap-10 h-[90%]"
       >
         <div>
-          <RadioGroup
-            {...register('subjectType')}
-            legend="Hvem gjelder tilgangen for?"
-            error={formState.errors?.subjectType?.message}
-          >
-            <Radio
-              disabled={isEdit}
-              checked={subjectData.subjectType == SubjectType.User}
-              value="user"
-            >
-              Bruker
-            </Radio>
-            <Radio
-              disabled={isEdit}
-              checked={subjectData.subjectType == SubjectType.Group}
-              value="group"
-            >
-              Gruppe
-            </Radio>
-            <Radio
-              disabled={isEdit}
-              checked={subjectData.subjectType == SubjectType.ServiceAccount}
-              value="serviceAccount"
-            >
-              Servicebruker
-            </Radio>
-          </RadioGroup>
+          <Controller
+            name="subjectType"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup
+                {...field}
+                legend="Hvem gjelder tilgangen for?"
+                error={errors?.subjectType?.message}
+              >
+                <Radio disabled={isEdit} value={SubjectType.User}>
+                  Bruker
+                </Radio>
+                <Radio disabled={isEdit} value={SubjectType.Group}>
+                  Gruppe
+                </Radio>
+                <Radio disabled={isEdit} value={SubjectType.ServiceAccount}>
+                  Servicebruker
+                </Radio>
+              </RadioGroup>
+            )}
+          />
           <TextField
             {...register('subject')}
+            disabled={isEdit}
             className="hidden-label"
             label="E-post-adresse"
             placeholder="Skriv inn e-post-adresse"
-            error={formState.errors?.subject?.message}
+            error={errors?.subject?.message}
             size="medium"
           />
         </div>
         <div>
-          <RadioGroup
-            legend="Hvor lenge ønsker du tilgang?"
-            error={formState.errors?.accessType?.message}
-            {...register('accessType')}
-          >
-            <Radio value="until" checked={accessType === 'until'}>
-              Til dato
-            </Radio>
-            <div className="ml-8">
-              <Datepicker
-                locale="nb"
-                {...register('expires')}
-                disabled={formState.accessType === 'eternal'}
-                inputLabel=""
-                limitations={{
-                  minDate: new Date().toISOString(),
-                }}
-              />
-            </div>
-            <Radio value="eternal" checked={accessType === 'eternal'}>
-              For alltid
-            </Radio>
-          </RadioGroup>
-        </div>
-        <div>
-          <label className="navds-label">
-            Velg behandling fra behandlingskatalogen
-          </label>
-          <AsyncSelect
-            className="pt-2"
-            classNamePrefix="select"
-            cacheOptions
-            isClearable
-            placeholder="Skriv inn navnet på behandlingen"
-            noOptionsMessage={({ inputValue }) =>
-              inputValue ? 'Finner ikke behandling' : null
-            }
-            loadingMessage={() => 'Søker etter behandling...'}
-            loadOptions={loadOptions}
-            isLoading={searchLoading}
-            onChange={onInputChange}
-            menuIsOpen={true}
+          <Controller
+            name="accessType"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup
+                {...field}
+                legend="Hvor lenge ønsker du tilgang?"
+                error={errors?.accessType?.message}
+              >
+                <Radio value="until">Til dato</Radio>
+                <Controller
+                  name="expires"
+                  control={control}
+                  render={(datepickerProps) => (
+                    <div className="ml-8">
+                      <Datepicker
+                        {...datepickerProps.field}
+                        disabled={field.value === 'eternal'}
+                        inputLabel=""
+                        limitations={{
+                          minDate: new Date().toISOString(),
+                        }}
+                      />
+                      {errors?.expires && (
+                        <div className="navds-error-message navds-label">
+                          {errors.expires.message}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                />
+                <Radio value="eternal">For alltid</Radio>
+              </RadioGroup>
+            )}
           />
+          <div>
+            <label className="navds-label">
+              Velg behandling fra behandlingskatalogen
+            </label>
+            <AsyncSelect
+              className="pt-2"
+              classNamePrefix="select"
+              cacheOptions
+              isClearable
+              placeholder="Skriv inn navnet på behandlingen"
+              noOptionsMessage={({ inputValue }) =>
+                inputValue ? 'Finner ikke behandling' : null
+              }
+              loadingMessage={() => 'Søker etter behandling...'}
+              loadOptions={loadOptions}
+              isLoading={searchLoading}
+              onChange={onInputChange}
+              menuIsOpen={true}
+            />
+          </div>
         </div>
-        {formError && <Alert variant={'error'}>{formError}</Alert>}
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
@@ -295,4 +254,4 @@ const AccessRequestForm = ({
   )
 }
 
-export default AccessRequestForm
+export default AccessRequestFormV2
