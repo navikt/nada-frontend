@@ -6,6 +6,7 @@ import {
   useAccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
   useDenyAccessRequestMutation,
+  AccessRequest,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
@@ -29,20 +30,23 @@ interface AccessEntry {
   access: access
 }
 
-const humanizeDateAccessForm = (isoDate: string, dateFormat = 'dd. MMMM yyyy') => {
-    try {
-      const parsed = parseISO(isoDate)
-      return (
-        <time
-          dateTime={isoDate}
-          title={format(parsed, 'dd. MMMM yyyy HH:mm:ii', { locale: nb })}
-        >
-          {format(parsed, dateFormat, { locale: nb })}
-        </time>
-      )
-    } catch (e) {
-      return <></>
-    }
+const humanizeDateAccessForm = (
+  isoDate: string,
+  dateFormat = 'dd. MMMM yyyy'
+) => {
+  try {
+    const parsed = parseISO(isoDate)
+    return (
+      <time
+        dateTime={isoDate}
+        title={format(parsed, 'dd. MMMM yyyy HH:mm:ii', { locale: nb })}
+      >
+        {format(parsed, dateFormat, { locale: nb })}
+      </time>
+    )
+  } catch (e) {
+    return <></>
+  }
 }
 
 const productAccess = (access: access[]): AccessEntry[] => {
@@ -92,10 +96,121 @@ interface AccessListProps {
   access: access[]
 }
 
+interface AccessModalProps {
+  accessEntry: AccessEntry
+  action: (a: access, setOpen: Function) => void
+}
+
+interface AccessRequestModalProps {
+  requestID: string
+  actionDeny: (requestID: string, setOpen: Function) => void
+  actionApprove: (requestID: string) => void
+}
+
+const AccessRequestModal = ({
+  requestID,
+  actionDeny,
+  actionApprove,
+}: AccessRequestModalProps) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <Modal
+        open={open}
+        aria-label="Avslå søknad"
+        onClose={() => setOpen(false)}
+        className="w-full md:w-1/3 px-8 h-[20rem]"
+      >
+        <Modal.Content className="h-full">
+          <div className="flex flex-col gap-8">
+            <Heading level="1" size="medium">
+              Avslå søknad
+            </Heading>
+            <Textarea label="Begrunnelse" />
+            <div className="flex flex-row gap-4">
+              <Button
+                onClick={() => setOpen(false)}
+                variant="secondary"
+                size="small"
+              >
+                Avbryt
+              </Button>
+              <Button
+                onClick={() => actionDeny(requestID, setOpen)}
+                variant="primary"
+                size="small"
+              >
+                Avslå
+              </Button>
+            </div>
+          </div>
+        </Modal.Content>
+      </Modal>
+      <div className="flex flex-row flex-nowrap gap-4 justify-end">
+        <Button
+          onClick={() => actionApprove(requestID)}
+          variant="secondary"
+          size="small"
+        >
+          Godkjenn
+        </Button>
+        <Button onClick={() => setOpen(true)} variant="secondary" size="small">
+          Avslå
+        </Button>
+      </div>
+    </>
+  )
+}
+
+const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <Modal
+        open={open}
+        aria-label="Fjerne tilgang"
+        onClose={() => setOpen(false)}
+        className="w-full md:w-1/3 px-8 h-[12rem]"
+      >
+        <Modal.Content className="h-full">
+          <div className="flex flex-col gap-8">
+            <Heading level="1" size="medium">
+              Fjerne tilgang
+            </Heading>
+            <div>Er du sikker på at du vil fjerne tilgangen?</div>
+            <div className="flex flex-row gap-4">
+              <Button
+                onClick={() => setOpen(false)}
+                variant="secondary"
+                size="small"
+              >
+                Avbryt
+              </Button>
+              <Button
+                onClick={() => action(accessEntry.access, setOpen)}
+                variant="primary"
+                size="small"
+              >
+                Fjern
+              </Button>
+            </div>
+          </div>
+        </Modal.Content>
+      </Modal>
+      <Button
+        onClick={() => setOpen(true)}
+        className="flex-nowrap"
+        variant="secondary"
+        size="small"
+      >
+        Fjern tilgang
+      </Button>
+    </>
+  )
+}
+
 const DatasetAccess = ({ id, access }: AccessListProps) => {
   const [formError, setFormError] = useState('')
-  const [showRemoveAccess, setShowRemoveAccess] = useState(false)
-  const [showDenyRequest, setShowDenyRequest] = useState(false)
   const [revokeAccess] = useRevokeAccessMutation()
   const [approveAccessRequest] = useApproveAccessRequestMutation()
   const [denyAccessRequest] = useDenyAccessRequestMutation()
@@ -115,7 +230,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
   const datasetAccessRequests =
     datasetAccessQuery.data?.accessRequestsForDataset
 
-  const handleApproveRequest = async (requestID: string) => {
+  const approveRequest = async (requestID: string) => {
     try {
       await approveAccessRequest({
         variables: { id: requestID },
@@ -139,7 +254,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
     }
   }
 
-  const denyRequest = async (requestID: string) => {
+  const denyRequest = async (requestID: string, setOpen: Function) => {
     try {
       await denyAccessRequest({
         variables: { id: requestID },
@@ -155,14 +270,14 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
     } catch (e: any) {
       setFormError(e.message)
     } finally {
-      setShowDenyRequest(false)
+      setOpen(false)
     }
   }
 
-  const removeAccess = async (id: string, a: AccessEntry) => {
+  const removeAccess = async (a: access, setOpen: Function) => {
     try {
       await revokeAccess({
-        variables: { id: a.access.id },
+        variables: { id: a.id },
         refetchQueries: [
           {
             query: GET_DATASET_ACCESS,
@@ -175,13 +290,10 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
     } catch (e: any) {
       setFormError(e.message)
     } finally {
-      setShowRemoveAccess(false)
+      setOpen(false)
     }
   }
 
-  if (access.length === 0) {
-    return <>Ingen har tilgang til produktet</>
-  }
   const accesses = productAccess(access)
 
   return (
@@ -191,173 +303,107 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
         <Heading level="2" size="small">
           Tilgangssøknader
         </Heading>
-        <Table>
-          <Table.Row>
-            <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
-            <Table.HeaderCell>Brukertype</Table.HeaderCell>
-            <Table.HeaderCell>Tilgang</Table.HeaderCell>
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-          </Table.Row>
-          {datasetAccessRequests.map((r, i) => (
-            <>
-              <Modal
-                open={showDenyRequest}
-                aria-label="Avslå søknad"
-                onClose={() => setShowDenyRequest(false)}
-                className="w-full md:w-1/3 px-8 h-[20rem]"
-              >
-                <Modal.Content className="h-full">
-                  <div className="flex flex-col gap-8">
-                    <Heading level="1" size="medium">
-                    Avslå søknad
-                    </Heading>
-                    <Textarea label="Begrunnelse" />
-                    <div className="flex flex-row gap-4">
-                      <Button
-                        onClick={() => setShowDenyRequest(false)}
-                        variant="secondary"
-                        size="small"
-                      >
-                        Avbryt
-                      </Button>
-                      <Button
-                        onClick={() => denyRequest(r.id)}
-                        variant="primary"
-                        size="small"
-                      >
-                        Avslå
-                      </Button>
-                    </div>
-                  </div>
-                </Modal.Content>
-              </Modal>
-              <Table.Row
-                className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
-                key={i + '-request'}
-              >
-                <Table.DataCell className="w-72">{r.subject}</Table.DataCell>
-                <Table.DataCell className="w-36">{r.subjectType}</Table.DataCell>
-                <Table.DataCell className="w-52">
-                  {r.expires ? humanizeDateAccessForm(r.expires) : 'For alltid'}
-                </Table.DataCell>
-                <Table.DataCell className="w-52">
-                  {r.polly?.url ? (
-                    <Link target="_blank" rel="norefferer" href={r.polly.url}>
-                      Åpne behandling
-                      <ExternalLink />
-                    </Link>
-                  ) : (
-                    'Ingen behandling'
-                  )}
-                </Table.DataCell>
-                <Table.DataCell className="w-48" align="right">
-                  <div className="flex flex-row flex-nowrap gap-4 justify-end">
-                  <Button
-                    onClick={() => handleApproveRequest(r.id)}
-                    variant="secondary"
-                    size="small"
-                  >
-                    Godkjenn
-                  </Button>
-                  <Button
-                    onClick={() => setShowDenyRequest(true)}
-                    variant="secondary"
-                    size="small"
-                  >
-                    Avslå
-                  </Button>
-                  </div>
-                </Table.DataCell>
-              </Table.Row>
-            </>
-          ))}
-        </Table>
+        {datasetAccessRequests.length > 0 ? (
+          <Table>
+            <Table.Row>
+              <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
+              <Table.HeaderCell>Brukertype</Table.HeaderCell>
+              <Table.HeaderCell>Tilgang</Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+            </Table.Row>
+            {datasetAccessRequests.map((r, i) => (
+              <>
+                <Table.Row
+                  className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
+                  key={i + '-request'}
+                >
+                  <Table.DataCell className="w-72">{r.subject}</Table.DataCell>
+                  <Table.DataCell className="w-36">
+                    {r.subjectType}
+                  </Table.DataCell>
+                  <Table.DataCell className="w-52">
+                    {r.expires
+                      ? humanizeDateAccessForm(r.expires)
+                      : 'For alltid'}
+                  </Table.DataCell>
+                  <Table.DataCell className="w-52">
+                    {r.polly?.url ? (
+                      <Link target="_blank" rel="norefferer" href={r.polly.url}>
+                        Åpne behandling
+                        <ExternalLink />
+                      </Link>
+                    ) : (
+                      'Ingen behandling'
+                    )}
+                  </Table.DataCell>
+                  <Table.DataCell className="w-48" align="right">
+                    <AccessRequestModal
+                      requestID={r.id}
+                      actionApprove={approveRequest}
+                      actionDeny={denyRequest}
+                    />
+                  </Table.DataCell>
+                </Table.Row>
+              </>
+            ))}
+          </Table>
+        ) : (
+          'Ingen tilganssøknader'
+        )}
       </div>
       <div>
         <Heading level="2" size="small">
           Aktive tilganger
         </Heading>
-        <Table>
-          <Table.Row className="border-none border-transparent">
-            <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
-            <Table.HeaderCell>Brukertype</Table.HeaderCell>
-            <Table.HeaderCell>Tilgang</Table.HeaderCell>
-            <Table.HeaderCell />
-            <Table.HeaderCell />
-          </Table.Row>
-          {accesses.map((a, i) => (
-            <>
-              <Modal
-                open={showRemoveAccess}
-                aria-label="Fjerne tilgang"
-                onClose={() => setShowRemoveAccess(false)}
-                className="w-full md:w-1/3 px-8 h-[12rem]"
-              >
-                <Modal.Content className="h-full">
-                  <div className="flex flex-col gap-8">
-                    <Heading level="1" size="medium">
-                      Fjerne tilgang
-                    </Heading>
-                    <div>Er du sikker på at du vil fjerne tilgangen?</div>
-                    <div className="flex flex-row gap-4">
-                      <Button
-                        onClick={() => setShowRemoveAccess(false)}
-                        variant="secondary"
-                        size="small"
+        {accesses.length > 0 ? (
+          <Table>
+            <Table.Row className="border-none border-transparent">
+              <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
+              <Table.HeaderCell>Brukertype</Table.HeaderCell>
+              <Table.HeaderCell>Tilgang</Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+            </Table.Row>
+            {accesses.map((a, i) => (
+              <>
+                <Table.Row
+                  className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
+                  key={i + '-access'}
+                >
+                  <Table.DataCell className="w-72">{a.subject}</Table.DataCell>
+                  <Table.DataCell className="w-36">
+                    {a.access.subject.split(':')[0]}
+                  </Table.DataCell>
+                  <Table.DataCell className="w-52">
+                    {a.access.expires
+                      ? humanizeDateAccessForm(a.access.expires)
+                      : 'For alltid'}
+                  </Table.DataCell>
+                  <Table.DataCell className="w-52">
+                    {a.access?.accessRequest?.polly ? (
+                      <Link
+                        target="_blank"
+                        rel="norefferer"
+                        href={a.access?.accessRequest.polly.url}
                       >
-                        Avbryt
-                      </Button>
-                      <Button
-                        onClick={() => removeAccess(id, a)}
-                        variant="primary"
-                        size="small"
-                      >
-                        Fjern
-                      </Button>
-                    </div>
-                  </div>
-                </Modal.Content>
-              </Modal>
-              <Table.Row
-                className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
-                key={i + '-access'}
-              >
-                <Table.DataCell className="w-72">{a.subject}</Table.DataCell>
-                <Table.DataCell className="w-36">
-                  {a.access.subject.split(":")[0]}
-                </Table.DataCell>
-                <Table.DataCell className="w-52">
-                {a.access.expires ? humanizeDateAccessForm(a.access.expires) : "For alltid"}
-                </Table.DataCell>
-                <Table.DataCell className="w-52">
-                  {a.access?.accessRequest?.polly ? (
-                    <Link
-                      target="_blank"
-                      rel="norefferer"
-                      href={a.access?.accessRequest.polly.url}
-                    >
-                      Åpne behandling
-                      <ExternalLink />
-                    </Link>
-                  ) : (
-                    'Ingen behandling'
-                  )}
-                </Table.DataCell>
-                <Table.DataCell className="w-48" align="right">
-                  <Button
-                    onClick={() => setShowRemoveAccess(true)}
-                    className="flex-nowrap"
-                    variant="secondary"
-                    size="small"
-                  >
-                    Fjern tilgang
-                  </Button>
-                </Table.DataCell>
-              </Table.Row>
-            </>
-          ))}
-        </Table>
+                        Åpne behandling
+                        <ExternalLink />
+                      </Link>
+                    ) : (
+                      'Ingen behandling'
+                    )}
+                  </Table.DataCell>
+                  <Table.DataCell className="w-48" align="right">
+                    <AccessModal accessEntry={a} action={removeAccess} />
+                  </Table.DataCell>
+                </Table.Row>
+              </>
+            ))}
+          </Table>
+        ) : (
+          'Ingen aktive tilganger'
+        )}
       </div>
     </div>
   )
