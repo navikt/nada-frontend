@@ -22,46 +22,47 @@ export const SearchResultLink = ({
   excerpt,
 }: SearchResultProps) => {
   return (
-    <div className="flex flex-col w-full border border-border-inverted rounded px-4 py-2">
-      <div className="flex gap-4">
-        <div className="h-[42px] w-[42-px]">
-          {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
+    <Link href={link} className="nada-search-result">
+      <div className="flex flex-col w-full border border-border-inverted rounded px-4 py-2">
+        <div className="flex gap-4">
+          <div className="h-[42px] w-[42-px]">
+            {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
+          </div>
+          <div>
+              <Heading
+                className="text-link"
+                level="2"
+                size="medium"
+              >
+                {name}
+              </Heading>
+            <p>eier: {group}</p>
+          </div>
         </div>
-        <div>
-          <Link href={link}>
-            <Heading
-              className="underline hover:no-underline"
-              level="2"
-              size="medium"
-            >
-              {name}
-            </Heading>
-          </Link>
-          <p>eier: {group}</p>
-        </div>
+
+        {excerpt && (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: excerpt.replace(
+                /\(\(START\)\)(.*?)\(\(STOP\)\)/g,
+                `<i><b>$1</b></i>`
+              ),
+            }}
+            style={{ margin: '10px 16px 0' }}
+          />
+        )}
+
+        <KeywordBox className="place-self-end">
+          {keywords &&
+            keywords.map((k, i) => (
+              <KeywordPill key={i} keyword={k} compact={true}>
+                {k}
+              </KeywordPill>
+            ))}
+        </KeywordBox>
       </div>
+    </Link>
 
-      {excerpt && (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: excerpt.replace(
-              /\(\(START\)\)(.*?)\(\(STOP\)\)/g,
-              `<i><b>$1</b></i>`
-            ),
-          }}
-          style={{ margin: '10px 16px 0' }}
-        />
-      )}
-
-      <KeywordBox className="place-self-end">
-        {keywords &&
-          keywords.map((k, i) => (
-            <KeywordPill key={i} keyword={k} compact={true}>
-              {k}
-            </KeywordPill>
-          ))}
-      </KeywordBox>
-    </div>
   )
 }
 

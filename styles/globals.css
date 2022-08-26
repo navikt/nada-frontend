@@ -68,6 +68,17 @@
   @apply w-full 2xl:w-[32rem] !important;
 }
 
+.nada-search-result > div {
+  @apply text-text;
+}
+
+.nada-search-result:hover > div > div > div > h2 {
+  @apply text-link underline hover:no-underline;
+}
+
+
+
+
 html,
 body {
   padding: 0;
