@@ -1,9 +1,8 @@
 import { EllipsisCircleH } from '@navikt/ds-icons'
 import { Button } from '@navikt/ds-react'
-import { Divider, Dropdown, DropdownContext } from '@navikt/ds-react-internal'
+import { Dropdown, DropdownContext } from '@navikt/ds-react-internal'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import styled from 'styled-components'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import {
   DataproductQuery,
@@ -11,11 +10,6 @@ import {
 } from '../../../lib/schema/graphql'
 import DeleteModal from '../../lib/deleteModal'
 
-const MenuButton = styled(Button)`
-  min-width: unset;
-  padding: 0;
-  border-radius: 50%;
-`
 interface IDatasetOwnerMenuProps {
   datasetName: string
   datasetId: string

@@ -39,7 +39,7 @@ interface TopBarProps {
 
 const TopBar = ({ name, type, children }: TopBarProps) => {
   return (
-    <div className="flex flex-col flex-wrap text-text p-4 gap-2 border-b-[1px] border-border-inverted">
+    <div className="flex flex-col flex-wrap text-text p-4 gap-2 border-b border-border-inverted">
       <span className="flex gap-5 items-center">
         <div className="h-[42px] w-[42px]">
           {type === 'Story' && <StoryLogo />}

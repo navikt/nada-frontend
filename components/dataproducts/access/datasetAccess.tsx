@@ -29,20 +29,23 @@ interface AccessEntry {
   access: access
 }
 
-const humanizeDateAccessForm = (isoDate: string, dateFormat = 'dd. MMMM yyyy') => {
-    try {
-      const parsed = parseISO(isoDate)
-      return (
-        <time
-          dateTime={isoDate}
-          title={format(parsed, 'dd. MMMM yyyy HH:mm:ii', { locale: nb })}
-        >
-          {format(parsed, dateFormat, { locale: nb })}
-        </time>
-      )
-    } catch (e) {
-      return <></>
-    }
+const humanizeDateAccessForm = (
+  isoDate: string,
+  dateFormat = 'dd. MMMM yyyy'
+) => {
+  try {
+    const parsed = parseISO(isoDate)
+    return (
+      <time
+        dateTime={isoDate}
+        title={format(parsed, 'dd. MMMM yyyy HH:mm:ii', { locale: nb })}
+      >
+        {format(parsed, dateFormat, { locale: nb })}
+      </time>
+    )
+  } catch (e) {
+    return <></>
+  }
 }
 
 const productAccess = (access: access[]): AccessEntry[] => {
@@ -210,7 +213,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                 <Modal.Content className="h-full">
                   <div className="flex flex-col gap-8">
                     <Heading level="1" size="medium">
-                    Avslå søknad
+                      Avslå søknad
                     </Heading>
                     <Textarea label="Begrunnelse" />
                     <div className="flex flex-row gap-4">
@@ -237,7 +240,9 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                 key={i + '-request'}
               >
                 <Table.DataCell className="w-72">{r.subject}</Table.DataCell>
-                <Table.DataCell className="w-36">{r.subjectType}</Table.DataCell>
+                <Table.DataCell className="w-36">
+                  {r.subjectType}
+                </Table.DataCell>
                 <Table.DataCell className="w-52">
                   {r.expires ? humanizeDateAccessForm(r.expires) : 'For alltid'}
                 </Table.DataCell>
@@ -253,20 +258,20 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                 </Table.DataCell>
                 <Table.DataCell className="w-48" align="right">
                   <div className="flex flex-row flex-nowrap gap-4 justify-end">
-                  <Button
-                    onClick={() => handleApproveRequest(r.id)}
-                    variant="secondary"
-                    size="small"
-                  >
-                    Godkjenn
-                  </Button>
-                  <Button
-                    onClick={() => setShowDenyRequest(true)}
-                    variant="secondary"
-                    size="small"
-                  >
-                    Avslå
-                  </Button>
+                    <Button
+                      onClick={() => handleApproveRequest(r.id)}
+                      variant="secondary"
+                      size="small"
+                    >
+                      Godkjenn
+                    </Button>
+                    <Button
+                      onClick={() => setShowDenyRequest(true)}
+                      variant="secondary"
+                      size="small"
+                    >
+                      Avslå
+                    </Button>
                   </div>
                 </Table.DataCell>
               </Table.Row>
@@ -325,10 +330,12 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
               >
                 <Table.DataCell className="w-72">{a.subject}</Table.DataCell>
                 <Table.DataCell className="w-36">
-                  {a.access.subject.split(":")[0]}
+                  {a.access.subject.split(':')[0]}
                 </Table.DataCell>
                 <Table.DataCell className="w-52">
-                {a.access.expires ? humanizeDateAccessForm(a.access.expires) : "For alltid"}
+                  {a.access.expires
+                    ? humanizeDateAccessForm(a.access.expires)
+                    : 'For alltid'}
                 </Table.DataCell>
                 <Table.DataCell className="w-52">
                   {a.access?.accessRequest?.polly ? (

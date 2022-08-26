@@ -1,31 +1,6 @@
 import * as React from 'react'
-import styled from 'styled-components'
 import { Copy as CopyIcon } from '@navikt/ds-icons'
 import { useState } from 'react'
-
-const Copied = styled.div`
-  position: absolute;
-  right: 20px;
-  top: -4px;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background-color: #555;
-  color: #f5f5f5;
-`
-
-const CopyWrapper = styled.div`
-  position: relative;
-  display: inline;
-`
-
-const StyledCopy = styled(CopyIcon)`
-  margin-left: 10px;
-  cursor: pointer;
-  :hover {
-    color: #999;
-    padding-top: 2px;
-  }
-`
 
 let timeout: NodeJS.Timeout | undefined = undefined
 
@@ -50,10 +25,17 @@ const Copy = ({ text }: CopyProps) => {
     }, 1500)
   }
   return (
-    <CopyWrapper>
-      <StyledCopy onClick={(e) => copyToClipboard(e, text)} />
-      {copied && <Copied>kopiert</Copied>}
-    </CopyWrapper>
+    <div className="inline relative">
+      <CopyIcon
+        className="text-interaction-primary cursor-pointer hover:text-interaction-primary-hover hover:h-4"
+        onClick={(e) => copyToClipboard(e, text)}
+      />
+      {copied && (
+        <div className="absolute left-5 -top-2 px-2 p-1 rounded bg-gray-100 border border-gray-300">
+          kopiert
+        </div>
+      )}
+    </div>
   )
 }
 
