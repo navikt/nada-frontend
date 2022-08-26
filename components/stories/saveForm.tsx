@@ -122,8 +122,9 @@ function SaveForm({ story }: SaveFormProps) {
                       ({ group }: { group: { name: string } }) => (
                         <option
                           value={
-                            userInfo?.groups.filter((g) => g.name === group.name)[0]
-                              .email
+                            userInfo?.groups.filter(
+                              (g) => g.name === group.name
+                            )[0].email
                           }
                           key={group.name}
                         >

@@ -5,7 +5,6 @@ interface RightJustifiedSubmitButtonProps {
   loading?: boolean
 }
 
-
 export const RightJustifiedSubmitButton = ({
   onCancel,
   loading,

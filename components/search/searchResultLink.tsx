@@ -29,13 +29,9 @@ export const SearchResultLink = ({
             {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
           </div>
           <div>
-              <Heading
-                className="text-link"
-                level="2"
-                size="medium"
-              >
-                {name}
-              </Heading>
+            <Heading className="text-link" level="2" size="medium">
+              {name}
+            </Heading>
             <p>eier: {group}</p>
           </div>
         </div>
@@ -62,7 +58,6 @@ export const SearchResultLink = ({
         </KeywordBox>
       </div>
     </Link>
-
   )
 }
 

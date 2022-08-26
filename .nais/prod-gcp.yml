@@ -8,7 +8,7 @@ metadata:
 spec:
   # Note: As the backend URL is baked into source at build time,
   # the environment has been moved to the Dockerfile.
-  image: { { image } }
+  image: {{image}}
   port: 3000
   ingresses:
     - 'https://data.intern.nav.no/'

@@ -44,28 +44,24 @@ const LandingPage = () => {
 
       <div className="flex flex-row flex-wrap content-center gap-18">
         <Link href="/search?types=dataproduct">
-        <a
-          className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg"
-        >
-          <div className="h-36 w-36 flex flex-col items-center justify-center">
-            <div className="h-[50px] w-[50px]">
-              <BigQueryLogo />
+          <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
+            <div className="h-36 w-36 flex flex-col items-center justify-center">
+              <div className="h-[50px] w-[50px]">
+                <BigQueryLogo />
+              </div>
+              <p>Produkter</p>
             </div>
-            <p>Produkter</p>
-          </div>
-        </a>
+          </a>
         </Link>
         <Link href="/search?types=story">
-        <a
-          className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg"
-        >
-          <div className="h-36 w-36 flex flex-col items-center justify-center">
-            <div className="h-[50px] w-[50px] text-link">
-              <StoryLogo />
+          <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
+            <div className="h-36 w-36 flex flex-col items-center justify-center">
+              <div className="h-[50px] w-[50px] text-link">
+                <StoryLogo />
+              </div>
+              <p>Fortellinger</p>
             </div>
-            <p>Fortellinger</p>
-          </div>
-        </a>
+          </a>
         </Link>
         <a
           href="https://metabase.intern.nav.no"

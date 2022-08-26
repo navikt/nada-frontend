@@ -15,7 +15,6 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../../lib/context'
 import amplitudeLog from '../../../lib/amplitude'
 
-
 const StoryPage = () => {
   const router = useRouter()
   const id = router.query.id as string

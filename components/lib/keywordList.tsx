@@ -32,7 +32,9 @@ export const KeywordPill = ({
       variant="info"
       size="small"
       onClick={onClick}
-      className={`cursor-pointer ${bgColor} ${borderColor} text-text ${horizontal ? 'block' : 'inline-block'} ${remove && "hover:decoration-[3px] hover:line-through"}`}
+      className={`cursor-pointer ${bgColor} ${borderColor} text-text ${
+        horizontal ? 'block' : 'inline-block'
+      } ${remove && 'hover:decoration-[3px] hover:line-through'}`}
     >
       {children}
     </Tag>

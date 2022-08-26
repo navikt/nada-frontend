@@ -24,10 +24,7 @@ const stringToColors = (str: string): [string, string] => {
     hash += trimed.charCodeAt(i)
   }
   let colorIndex = hash % stringBgColors.length
-  return [
-    stringBgColors[colorIndex],
-    stringBorderColors[colorIndex],
-  ]
+  return [stringBgColors[colorIndex], stringBorderColors[colorIndex]]
 }
 
 export default stringToColors

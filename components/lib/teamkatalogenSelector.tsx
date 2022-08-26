@@ -12,8 +12,8 @@ type TeamkatalogenSelectorProps = {
 }
 
 interface team {
-    name: string
-    url: string
+  name: string
+  url: string
 }
 
 export const TeamkatalogenSelector = ({
@@ -23,16 +23,16 @@ export const TeamkatalogenSelector = ({
   watch,
 }: TeamkatalogenSelectorProps) => {
   const { data, error } = useTeamkatalogenQuery({
-        variables: { q: group === undefined ? '' : group.split('@')[0] },
-      })
+    variables: { q: group === undefined ? '' : group.split('@')[0] },
+  })
 
   if (!data) return <LoaderSpinner />
 
-  let teams : team[]
+  let teams: team[]
   if (error) {
-      teams = []
+    teams = []
   } else {
-      teams = data.teamkatalogen 
+    teams = data.teamkatalogen
   }
 
   return (

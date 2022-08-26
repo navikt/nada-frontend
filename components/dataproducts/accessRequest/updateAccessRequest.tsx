@@ -3,9 +3,7 @@ import {
   useUpdateAccessRequestMutation,
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import AccessRequestForm, {
-  AccessRequestFormInput,
-} from './accessRequestForm'
+import AccessRequestForm, { AccessRequestFormInput } from './accessRequestForm'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 
 interface UpdateAccessRequestFormProps {

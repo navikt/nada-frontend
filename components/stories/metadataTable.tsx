@@ -5,7 +5,6 @@ import { StoryQuery } from '../../lib/schema/graphql'
 import Link from 'next/link'
 import { KeywordPill } from '../lib/keywordList'
 
-
 interface StoryProps {
   children?: React.ReactNode
   owner: StoryQuery['story']['owner']
