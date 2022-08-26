@@ -36,8 +36,8 @@ type ResultListInterface = {
     __typename?: 'Dataset' | undefined
     id: string
     dataproduct: {
-        id: string
-        slug: string
+      id: string
+      slug: string
     }
     name: string
     keywords: string[]
@@ -52,7 +52,12 @@ type ResultListInterface = {
   }[]
 }
 
-const ResultList = ({ search, dataproducts, datasets, stories }: ResultListInterface) => {
+const ResultList = ({
+  search,
+  dataproducts,
+  datasets,
+  stories,
+}: ResultListInterface) => {
   if (dataproducts) {
     return (
       <Results>
@@ -71,18 +76,18 @@ const ResultList = ({ search, dataproducts, datasets, stories }: ResultListInter
 
   if (datasets) {
     return (
-        <Results>
-          {datasets.map((d, idx) => (
-            <SearchResultLink
-              key={idx}
-              group={d.owner.group}
-              name={d.name}
-              keywords={d.keywords}
-              link={`/dataproduct/${d.dataproduct.id}/${d.dataproduct.slug}/${d.id}`}
-            />
-          ))}
-        </Results>
-      )
+      <Results>
+        {datasets.map((d, idx) => (
+          <SearchResultLink
+            key={idx}
+            group={d.owner.group}
+            name={d.name}
+            keywords={d.keywords}
+            link={`/dataproduct/${d.dataproduct.id}/${d.dataproduct.slug}/${d.id}`}
+          />
+        ))}
+      </Results>
+    )
   }
 
   if (search) {
@@ -114,16 +119,16 @@ const ResultList = ({ search, dataproducts, datasets, stories }: ResultListInter
             }
 
             if (d.result.__typename === 'Dataset') {
-                return (
-                  <SearchResultLink
-                    key={idx}
-                    group={d.result.owner.group}
-                    name={d.result.name}
-                    keywords={d.result.keywords}
-                    excerpt={d.excerpt}
-                    link={`/dataproduct/${d.result.dataproduct.id}/${d.result.dataproduct.slug}/${d.result.id}`}
-                  />
-                )
+              return (
+                <SearchResultLink
+                  key={idx}
+                  group={d.result.owner.group}
+                  name={d.result.name}
+                  keywords={d.result.keywords}
+                  excerpt={d.excerpt}
+                  link={`/dataproduct/${d.result.dataproduct.id}/${d.result.dataproduct.slug}/${d.result.id}`}
+                />
+              )
             }
 
             if (d.result.__typename === 'Story') {

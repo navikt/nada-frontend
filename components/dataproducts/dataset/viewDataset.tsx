@@ -128,7 +128,7 @@ const ViewDataset = ({
           </div>
           <div>
             {userInfo && accessType.type !== 'none' && (
-              <article className="border-b-[1px] border-divider mb-3 last:border-b-0">
+              <article className="border-b border-divider mb-3 last:border-b-0">
                 <Explore
                   dataproductId={dataset.id}
                   dataset={dataset}

@@ -5,7 +5,6 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import { useRouter } from 'next/router'
-import Profile from '../../components/user/profile'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import TabPanel, { TabPanelType } from '../../components/lib/tabPanel'
@@ -32,13 +31,6 @@ export const UserPages = () => {
     slug: string
     component: any
   }> = [
-    {
-      title: 'Min profil',
-      slug: 'profile',
-      component: (
-        <Profile username={data.userInfo.name} groups={data.userInfo.groups} />
-      ),
-    },
     {
       title: 'Mine produkter',
       slug: 'products',

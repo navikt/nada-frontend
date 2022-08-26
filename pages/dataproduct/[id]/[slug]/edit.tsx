@@ -76,7 +76,7 @@ const DataproductEdit = (props: DataproductProps) => {
       <TopBar name={data.dataproduct.name} type={data.dataproduct.__typename}>
         {isOwner && (
           <div className="flex gap-2">
-            <p className="font-bold px-2 border-r-[1px] border-border">
+            <p className="font-bold px-2 border-r border-border">
               Endre dataprodukt
             </p>
             <a href="#" onClick={() => setShowDelete(true)}>

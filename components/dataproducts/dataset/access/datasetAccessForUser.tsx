@@ -1,14 +1,9 @@
 import { ApolloError } from '@apollo/client'
-import { Alert, ErrorMessage, Heading, Link } from '@navikt/ds-react'
+import { ErrorMessage, Heading } from '@navikt/ds-react'
 import * as React from 'react'
-import styled from 'styled-components'
 import humanizeDate from '../../../../lib/humanizeDate'
 import { DatasetQuery } from '../../../../lib/schema/datasetQuery'
-import {
-  AccessRequestsForDatasetQuery,
-  useAccessRequestsForDatasetQuery,
-  UserInfoDetailsQuery,
-} from '../../../../lib/schema/graphql'
+import { AccessRequestsForDatasetQuery } from '../../../../lib/schema/graphql'
 import LoaderSpinner from '../../../lib/spinner'
 
 interface AccessProps {
@@ -18,20 +13,14 @@ interface AccessProps {
   loading: boolean
 }
 
-const Section = styled.section`
-  margin-bottom: 0.75rem;
-  display: flex;
-  flex-direction: column;
-`
-
 const DatasetAccess = ({ dataset, access, error, loading }: AccessProps) => {
   if (error) return <ErrorMessage error={error} />
   if (loading || !access) return <LoaderSpinner />
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
       {access.accessRequestsForDataset.length > 0 && (
-        <Section>
+        <section>
           <Heading spacing level="3" size="small">
             Tilganger
           </Heading>
@@ -40,10 +29,10 @@ const DatasetAccess = ({ dataset, access, error, loading }: AccessProps) => {
               <li key={a.id}>{a.subject}</li>
             ))}
           </ul>
-        </Section>
+        </section>
       )}
       {dataset.access.length > 0 && (
-        <Section>
+        <section>
           <Heading spacing level="3" size="small">
             Aktive tilganger
           </Heading>
@@ -55,9 +44,9 @@ const DatasetAccess = ({ dataset, access, error, loading }: AccessProps) => {
               </li>
             ))}
           </ul>
-        </Section>
+        </section>
       )}
-    </>
+    </div>
   )
 }
 

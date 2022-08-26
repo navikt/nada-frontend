@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import * as React from 'react'
 import remarkGfm from 'remark-gfm'
