@@ -6,7 +6,6 @@ import {
   useAccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
   useDenyAccessRequestMutation,
-  AccessRequest,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
