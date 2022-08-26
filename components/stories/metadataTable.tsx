@@ -2,39 +2,9 @@ import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
 import { StoryQuery } from '../../lib/schema/graphql'
-import styled from 'styled-components'
 import Link from 'next/link'
 import { KeywordPill } from '../lib/keywordList'
 
-const KeywordBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  flex-wrap: wrap;
-`
-const SubjectContent = styled.div`
-  font-size: 14px;
-  color: #222;
-`
-
-type SubjectHeaderProps = {
-  centered?: boolean
-}
-const SubjectHeader = styled.h2<SubjectHeaderProps>`
-  ${(props) => props.centered && 'margin: 0 auto;'}
-  color: #222;
-  font-weight: 500;
-  font-size: 18px;
-`
-const StyledMetadataTable = styled.div`
-  height: fit-content;
-  min-width: 250px;
-  font-size: 16px;
-  line-height: 1;
-  border-top: 1px #ddd solid;
-  margin-left: 18px;
-  margin-right: 18px;
-`
 
 interface StoryProps {
   children?: React.ReactNode
@@ -44,16 +14,6 @@ interface StoryProps {
   keywords: string[] | undefined
 }
 
-const StyledUl = styled.ul`
-  padding-left: 0;
-  margin-top: 0px;
-`
-
-const StyledLi = styled.li`
-  display: inline-block;
-  padding-right: 20px;
-`
-
 export const MetadataTable = ({
   owner,
   created,
@@ -62,14 +22,14 @@ export const MetadataTable = ({
   children,
 }: StoryProps) => {
   return (
-    <StyledMetadataTable>
-      <StyledUl>
+    <div className="h-fit min-w-[250px] text-medium border-t border-border mx-5">
+      <ul className="pl-0 mt-0">
         {children}
         {owner?.group && (
           <>
-            <StyledLi>
-              <SubjectHeader>Eier</SubjectHeader>
-              <SubjectContent>
+            <li className="inline-block pr-5 text-gray-800">
+              <h2 className="text-lg font-bold">Eier</h2>
+              <div className="text-medium">
                 {owner?.teamkatalogenURL ? (
                   <a
                     href={owner.teamkatalogenURL}
@@ -81,29 +41,29 @@ export const MetadataTable = ({
                 ) : (
                   owner?.group.split('@')[0]
                 )}
-              </SubjectContent>
-            </StyledLi>
+              </div>
+            </li>
           </>
         )}
-        <StyledLi>
-          <SubjectHeader>Opprettet</SubjectHeader>
-          <SubjectContent>{humanizeDate(created)}</SubjectContent>
-        </StyledLi>
+        <li className="inline-block pr-5 text-gray-800">
+          <h2 className="text-lg font-bold">Opprettet</h2>
+          <div className="text-medium">{humanizeDate(created)}</div>
+        </li>
         {lastModified && (
           <>
-            <StyledLi>
-              <SubjectHeader>Oppdatert</SubjectHeader>
-              <SubjectContent>
+            <li className="inline-block pr-5 text-gray-800">
+              <h2 className="text-lg font-bold">Oppdatert</h2>
+              <div className="text-medium">
                 {humanizeDate(lastModified, 'PP HH:mm')}
-              </SubjectContent>
-            </StyledLi>
+              </div>
+            </li>
           </>
         )}
         {!!keywords && keywords.length > 0 && (
           <>
-            <StyledLi>
-              <SubjectHeader>Nøkkelord</SubjectHeader>
-              <KeywordBox>
+            <li className="inline-block pr-5 text-gray-800">
+              <h2 className="text-lg font-bold">Nøkkelord</h2>
+              <div className="flex gap-1 flex-wrap">
                 {!!keywords && (
                   <>
                     {keywords.map((k, i) => (
@@ -117,11 +77,11 @@ export const MetadataTable = ({
                     ))}
                   </>
                 )}
-              </KeywordBox>
-            </StyledLi>
+              </div>
+            </li>
           </>
         )}
-      </StyledUl>
-    </StyledMetadataTable>
+      </ul>
+    </div>
   )
 }

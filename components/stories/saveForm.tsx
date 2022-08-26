@@ -1,12 +1,10 @@
-import { Fieldset } from '@navikt/ds-react'
-import styled from 'styled-components'
+import { Fieldset, Select } from '@navikt/ds-react'
 import {
   NewStory,
   StoryQuery,
   usePublishStoryMutation,
 } from '../../lib/schema/graphql'
 import TopBar from '../lib/topBar'
-import TeamSelector from '../lib/teamSelector'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
@@ -17,21 +15,6 @@ import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from '../lib/KeywordsInput'
 import { useContext, useEffect } from 'react'
 import { UserState } from '../../lib/context'
-
-const Container = styled.div`
-  width: 768px;
-  margin: 0 auto;
-  margin-top: 40px;
-`
-
-const DataproductBox = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
-`
-
-const DataproductBody = styled.div`
-  padding: 1em 1em 2em 1em;
-`
 
 interface SaveFormProps {
   story: StoryQuery['story']
@@ -120,13 +103,37 @@ function SaveForm({ story }: SaveFormProps) {
   }
 
   return (
-    <Container>
-      <DataproductBox>
+    <div className="w-[48rem] my-0 mx-auto mt-10">
+      <div className="border border-border rounded">
         <TopBar name={`Lagre ${story.name}`} type={story.__typename} />
-        <DataproductBody>
+        <div className="p-1">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
-              <TeamSelector register={register} errors={errors} />
+              <Select
+                className="w-full 2xl:w-[32rem]"
+                label="Velg gruppe fra GCP"
+                {...register('group')}
+                error={errors.group?.message}
+              >
+                <option value="">Velg gruppe</option>
+                {[
+                  ...new Set(
+                    userInfo?.gcpProjects.map(
+                      ({ group }: { group: { name: string } }) => (
+                        <option
+                          value={
+                            userInfo?.groups.filter((g) => g.name === group.name)[0]
+                              .email
+                          }
+                          key={group.name}
+                        >
+                          {group.name}
+                        </option>
+                      )
+                    )
+                  ),
+                ]}
+              </Select>
               {group && (
                 <TeamkatalogenSelector
                   group={group}
@@ -147,9 +154,9 @@ function SaveForm({ story }: SaveFormProps) {
               />
             </Fieldset>
           </form>
-        </DataproductBody>
-      </DataproductBox>
-    </Container>
+        </div>
+      </div>
+    </div>
   )
 }
 

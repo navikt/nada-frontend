@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import styled from 'styled-components'
 import SideMenu from '../components/search/sidemenu'
 import Filters from '../components/search/filters'
 import {
@@ -10,19 +9,6 @@ import {
   useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
 import ResultList from '../components/search/resultList'
-
-const Container = styled.div`
-  margin-top: 100px;
-  display: flex;
-`
-const SideContainer = styled.div`
-  flex-shrink: 0;
-  width: 300px;
-  padding-right: 30px;
-`
-const Main = styled.div`
-  flex-grow: 1;
-`
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -115,17 +101,17 @@ const Search = () => {
       <Head>
         <title>Kategorier</title>
       </Head>
-      <Container>
-        <SideContainer>
+      <div className="flex mt-[100px]">
+        <div className="flex-shrink-0 w-[300px] pr-7">
           {router.isReady && (
             <SideMenu filters={filters} updateQuery={updateQuery} />
           )}
-        </SideContainer>
-        <Main>
+        </div>
+        <div className="flex-grow">
           <Filters filters={filters} updateQuery={updateQuery} />
           <ResultList search={search} />
-        </Main>
-      </Container>
+        </div>
+      </div>
     </>
   )
 }

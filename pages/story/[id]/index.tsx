@@ -7,22 +7,14 @@ import {
 } from '../../../lib/schema/graphql'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
 import ErrorMessage from '../../../components/lib/error'
 import LoaderSpinner from '../../../components/lib/spinner'
-import { MetadataTable } from '../../../components/stories/metadataTable'
 import DeleteModal from '../../../components/lib/deleteModal'
 import TokenModal from '../../../components/lib/tokenModal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../../lib/context'
 import amplitudeLog from '../../../lib/amplitude'
 
-const Container = styled.div`
-  margin-top: 50px;
-  gap: 20px;
-`
-
-const MainPage = styled.div``
 
 const StoryPage = () => {
   const router = useRouter()
@@ -68,16 +60,14 @@ const StoryPage = () => {
       <Head>
         <title>{story.name}</title>
       </Head>
-      <Container>
-        <MainPage>
-          <Story
-            story={story}
-            setShowDelete={setShowDelete}
-            setShowToken={setShowToken}
-            isOwner={isOwner}
-          />
-        </MainPage>
-      </Container>
+      <div className="mt-[50px] gap-5">
+        <Story
+          story={story}
+          setShowDelete={setShowDelete}
+          setShowToken={setShowToken}
+          isOwner={isOwner}
+        />
+      </div>
       <DeleteModal
         open={showDelete}
         onCancel={() => setShowDelete(false)}
