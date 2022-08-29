@@ -291,6 +291,7 @@ export type Mutation = {
    * Requires authentication.
    */
   revokeAccessToDataproduct: Scalars['Boolean']
+  triggerMetadataSync: Scalars['Boolean']
   /**
    * createAccessRequest creates a new access request for a dataproduct
    *
@@ -492,6 +493,23 @@ export type PollyInput = {
   url: Scalars['String']
 }
 
+/** Quarto contains the metadata and content of data stories. */
+export type Quarto = {
+  __typename?: 'Quarto'
+  /** content is the content of the quarto */
+  content: Scalars['String']
+  /** created is the timestamp for when the data story was created. */
+  created: Scalars['Time']
+  /** id of the data story. */
+  id: Scalars['ID']
+  /** keywords for the story used as tags. */
+  keywords: Array<Scalars['String']>
+  /** lastModified is the timestamp for when the data story was last modified. */
+  lastModified?: Maybe<Scalars['Time']>
+  /** name of the data story. */
+  owner: Owner
+}
+
 export type Query = {
   __typename?: 'Query'
   /** accessRequest returns one specific access request */
@@ -520,6 +538,10 @@ export type Query = {
   keywords: Array<Keyword>
   /** searches polly for process purposes matching query input */
   polly: Array<QueryPolly>
+  /** quarto returns the given quarto. */
+  quarto: Quarto
+  /** quartos returns all published quartos. */
+  quartos: Array<Quarto>
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>
   /** stories returns all either draft or published stories depending on the draft boolean. */
@@ -580,6 +602,10 @@ export type QueryKeywordsArgs = {
 
 export type QueryPollyArgs = {
   q: Scalars['String']
+}
+
+export type QueryQuartoArgs = {
+  id: Scalars['ID']
 }
 
 export type QuerySearchArgs = {
@@ -820,13 +846,20 @@ export type UserInfo = {
   accessRequests: Array<AccessRequest>
   /** accessable is a list of dataproducts which the user has explicit access to. */
   accessable: Array<Dataproduct>
+  /** azureGroups is the azure groups the user is member of. */
+  azureGroups?: Maybe<Array<Group>>
   /** dataproducts is a list of dataproducts with one of the users groups as owner. */
   dataproducts: Array<Dataproduct>
   /** email of user. */
   email: Scalars['String']
   /** gcpProjects is GCP projects the user is a member of. */
   gcpProjects: Array<GcpProject>
-  /** groups the user is a member of. */
+  /** googleGroups is the google groups the user is member of. */
+  googleGroups?: Maybe<Array<Group>>
+  /**
+   * groups the user is a member of.
+   * @deprecated renamed to googleGroups
+   */
   groups: Array<Group>
   /** loginExpiration is when the token expires. */
   loginExpiration: Scalars['Time']
@@ -1179,6 +1212,24 @@ export type PollyQuery = {
     name: string
     url: string
   }>
+}
+
+export type QuartoQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type QuartoQuery = {
+  __typename?: 'Query'
+  quarto: {
+    __typename?: 'Quarto'
+    id: string
+    content: string
+    owner: {
+      __typename?: 'Owner'
+      group: string
+      teamkatalogenURL?: string | null | undefined
+    }
+  }
 }
 
 export type SearchContentQueryVariables = Exact<{
@@ -2828,6 +2879,59 @@ export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>
 export type PollyQueryResult = Apollo.QueryResult<
   PollyQuery,
   PollyQueryVariables
+>
+export const QuartoDocument = gql`
+  query Quarto($id: ID!) {
+    quarto(id: $id) {
+      id
+      owner {
+        group
+        teamkatalogenURL
+      }
+      content
+    }
+  }
+`
+
+/**
+ * __useQuartoQuery__
+ *
+ * To run a query within a React component, call `useQuartoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuartoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuartoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuartoQuery(
+  baseOptions: Apollo.QueryHookOptions<QuartoQuery, QuartoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<QuartoQuery, QuartoQueryVariables>(
+    QuartoDocument,
+    options
+  )
+}
+export function useQuartoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<QuartoQuery, QuartoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<QuartoQuery, QuartoQueryVariables>(
+    QuartoDocument,
+    options
+  )
+}
+export type QuartoQueryHookResult = ReturnType<typeof useQuartoQuery>
+export type QuartoLazyQueryHookResult = ReturnType<typeof useQuartoLazyQuery>
+export type QuartoQueryResult = Apollo.QueryResult<
+  QuartoQuery,
+  QuartoQueryVariables
 >
 export const SearchContentDocument = gql`
   query searchContent($q: SearchQuery!) {
