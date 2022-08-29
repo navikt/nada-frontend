@@ -87,7 +87,7 @@ const AccessRequestFormV2 = ({
       accessType: !isEdit || accessRequest?.expires ? 'until' : 'eternal',
       expires: accessRequest?.expires
         ? new Date(accessRequest.expires).toISOString().substr(0, 10)
-        : '',
+        : undefined,
     },
   })
 
