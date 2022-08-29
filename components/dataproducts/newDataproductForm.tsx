@@ -27,7 +27,7 @@ const schema = yup.object().shape({
   description: yup.string(),
   team: yup.string().required('Velg et eierteam for produktet'),
   teamkatalogenTeam: yup.string(),
-  teamKontaktpunkt: yup
+  teamContact: yup
     .string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
@@ -52,7 +52,7 @@ export interface NewDataproductFields {
   description: string
   team: string
   teamkatalogenTeam: string
-  teamKontaktpunkt: string
+  teamContact: string
   datasetName: string
   datasetDescription: string
   sourceCodeURL: string
@@ -99,7 +99,7 @@ export const NewDataproductForm = () => {
             description: valueOrNull(data.description),
             group: data.team,
             teamkatalogenURL: valueOrNull(data.teamkatalogenTeam),
-            teamKontaktpunkt: valueOrNull(data.teamKontaktpunkt),
+            teamContact: valueOrNull(data.teamContact),
             datasets: [
               {
                 name: data.datasetName,
@@ -210,8 +210,8 @@ export const NewDataproductForm = () => {
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
-          {...register('teamKontaktpunkt')}
-          error = {errors.teamKontaktpunkt?.message}
+          {...register('teamContact')}
+          error = {errors.teamContact?.message}
           className="w-full 2xl:w-[32rem]"
         />
         <Divider />

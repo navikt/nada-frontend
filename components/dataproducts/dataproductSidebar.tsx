@@ -75,6 +75,21 @@ export const DataproductSidebar = ({
             product.owner?.group.split('@')[0]
           )}
         </Subject>
+        <SubjectHeader>Kontaktpunkt</SubjectHeader>
+        <Subject>
+          {product.owner?.teamContact ? (
+            <a
+              href={product.owner.teamContact}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {product.owner.teamContact} <ExternalLink />
+            </a>
+          ) : (
+            'Ukjent'
+          )}
+        </Subject>
+
         <SubjectHeader>Opprettet</SubjectHeader>
         <Subject>{humanizeDate(product.created)}</Subject>
         <SubjectHeader>Oppdatert</SubjectHeader>

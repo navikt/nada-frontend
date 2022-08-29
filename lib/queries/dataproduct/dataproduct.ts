@@ -12,6 +12,7 @@ export const GET_DATAPRODUCT = gql`
       owner {
         group
         teamkatalogenURL
+        teamContact
       }
       keywords
       datasets {
@@ -32,6 +33,7 @@ export const GET_DATAPRODUCT = gql`
         owner {
           group
           teamkatalogenURL
+          teamContact
         }
         access {
           id
