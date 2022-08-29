@@ -57,8 +57,6 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
         return 'Datafortelling'
       case MappingService.Metabase:
         return 'Metabase'
-      case SearchType.Dataset:
-        return 'Datasett'
     }
   }
 

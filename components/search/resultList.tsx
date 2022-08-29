@@ -118,19 +118,6 @@ const ResultList = ({
               )
             }
 
-            if (d.result.__typename === 'Dataset') {
-              return (
-                <SearchResultLink
-                  key={idx}
-                  group={d.result.owner.group}
-                  name={d.result.name}
-                  keywords={d.result.keywords}
-                  excerpt={d.excerpt}
-                  link={`/dataproduct/${d.result.dataproduct.id}/${d.result.dataproduct.slug}/${d.result.id}`}
-                />
-              )
-            }
-
             if (d.result.__typename === 'Story') {
               console.log(d.result.keywords)
               return (
