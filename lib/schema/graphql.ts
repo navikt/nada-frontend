@@ -1186,6 +1186,13 @@ export type PollyQueryVariables = Exact<{
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
+export type QuartoQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type QuartoQuery = { __typename?: 'Query', quarto: { __typename?: 'Quarto', id: string, content: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } };
+
 export type SearchContentQueryVariables = Exact<{
   q: SearchQuery;
 }>;
@@ -2375,6 +2382,46 @@ export function usePollyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Poll
 export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
+export const QuartoDocument = gql`
+    query Quarto($id: ID!) {
+  quarto(id: $id) {
+    id
+    owner {
+      group
+      teamkatalogenURL
+    }
+    content
+  }
+}
+    `;
+
+/**
+ * __useQuartoQuery__
+ *
+ * To run a query within a React component, call `useQuartoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuartoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuartoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuartoQuery(baseOptions: Apollo.QueryHookOptions<QuartoQuery, QuartoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuartoQuery, QuartoQueryVariables>(QuartoDocument, options);
+      }
+export function useQuartoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuartoQuery, QuartoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuartoQuery, QuartoQueryVariables>(QuartoDocument, options);
+        }
+export type QuartoQueryHookResult = ReturnType<typeof useQuartoQuery>;
+export type QuartoLazyQueryHookResult = ReturnType<typeof useQuartoLazyQuery>;
+export type QuartoQueryResult = Apollo.QueryResult<QuartoQuery, QuartoQueryVariables>;
 export const SearchContentDocument = gql`
     query searchContent($q: SearchQuery!) {
   search(q: $q) {
