@@ -4,7 +4,6 @@ import { ExternalLink } from '@navikt/ds-icons'
 import { DataproductQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { Alert, Link } from '@navikt/ds-react'
-import { KeywordBox, KeywordPill } from '../lib/keywordList'
 import { Subject, SubjectHeader } from '../subject'
 
 interface DataproductDetailProps {
@@ -64,13 +63,13 @@ export const DataproductSidebar = ({
         <SubjectHeader>Eier</SubjectHeader>
         <Subject>
           {product.owner?.teamkatalogenURL ? (
-            <a
+            <Link
               href={product.owner.teamkatalogenURL}
               target="_blank"
               rel="noreferrer"
             >
               {product.owner.group.split('@')[0]} <ExternalLink />
-            </a>
+            </Link>
           ) : (
             product.owner?.group.split('@')[0]
           )}
