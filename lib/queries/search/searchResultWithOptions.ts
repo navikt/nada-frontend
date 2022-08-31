@@ -19,24 +19,6 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
             teamkatalogenURL
           }
         }
-        ... on Dataset {
-          __typename
-          id
-          name
-          description
-          dataproduct {
-            id
-            slug
-          }
-          created
-          lastModified
-          keywords
-          slug
-          owner {
-            group
-            teamkatalogenURL
-          }
-        }
         ... on Story {
           __typename
           id

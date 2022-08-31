@@ -138,6 +138,7 @@ const ViewDataset = ({
             )}
           </div>
         </div>
+        {isOwner && <DatasetAccess id={dataset.id} access={dataset.access} />}
         {dataset.description && (
           <section className="mb-3">
             <Heading level="3" size="small" spacing>
@@ -146,7 +147,6 @@ const ViewDataset = ({
             <article>{dataset.description}</article>
           </section>
         )}
-        {isOwner && <DatasetAccess id={dataset.id} access={dataset.access} />}
         <DatasetMetadata datasource={dataset.datasource} />
         <DatasetTableSchema datasource={dataset.datasource} />
       </div>
