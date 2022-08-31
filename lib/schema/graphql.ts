@@ -818,7 +818,7 @@ export type SearchQuery = {
   text?: Maybe<Scalars['String']>;
 };
 
-export type SearchResult = Dataproduct | Dataset | Story;
+export type SearchResult = Dataproduct | Story;
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow';
@@ -828,7 +828,6 @@ export type SearchResultRow = {
 
 export enum SearchType {
   Dataproduct = 'dataproduct',
-  Dataset = 'dataset',
   Story = 'story'
 }
 
@@ -1205,14 +1204,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Dataset' } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Dataset' } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
