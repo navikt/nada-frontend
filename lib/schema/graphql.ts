@@ -818,7 +818,7 @@ export type SearchQuery = {
   text?: Maybe<Scalars['String']>;
 };
 
-export type SearchResult = Dataproduct | Dataset | Story;
+export type SearchResult = Dataproduct | Story;
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow';
@@ -828,7 +828,6 @@ export type SearchResultRow = {
 
 export enum SearchType {
   Dataproduct = 'dataproduct',
-  Dataset = 'dataset',
   Story = 'story'
 }
 
@@ -1193,19 +1192,26 @@ export type PollyQueryVariables = Exact<{
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
+export type QuartoQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type QuartoQuery = { __typename?: 'Query', quarto: { __typename?: 'Quarto', id: string, content: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } };
+
 export type SearchContentQueryVariables = Exact<{
   q: SearchQuery;
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Dataset' } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Dataset', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', id: string, slug: string }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2384,6 +2390,46 @@ export function usePollyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Poll
 export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
+export const QuartoDocument = gql`
+    query Quarto($id: ID!) {
+  quarto(id: $id) {
+    id
+    owner {
+      group
+      teamkatalogenURL
+    }
+    content
+  }
+}
+    `;
+
+/**
+ * __useQuartoQuery__
+ *
+ * To run a query within a React component, call `useQuartoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuartoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuartoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuartoQuery(baseOptions: Apollo.QueryHookOptions<QuartoQuery, QuartoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QuartoQuery, QuartoQueryVariables>(QuartoDocument, options);
+      }
+export function useQuartoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuartoQuery, QuartoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QuartoQuery, QuartoQueryVariables>(QuartoDocument, options);
+        }
+export type QuartoQueryHookResult = ReturnType<typeof useQuartoQuery>;
+export type QuartoLazyQueryHookResult = ReturnType<typeof useQuartoLazyQuery>;
+export type QuartoQueryResult = Apollo.QueryResult<QuartoQuery, QuartoQueryVariables>;
 export const SearchContentDocument = gql`
     query searchContent($q: SearchQuery!) {
   search(q: $q) {
@@ -2445,24 +2491,6 @@ export const SearchContentWithOptionsDocument = gql`
         id
         name
         description
-        created
-        lastModified
-        keywords
-        slug
-        owner {
-          group
-          teamkatalogenURL
-        }
-      }
-      ... on Dataset {
-        __typename
-        id
-        name
-        description
-        dataproduct {
-          id
-          slug
-        }
         created
         lastModified
         keywords

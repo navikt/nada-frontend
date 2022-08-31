@@ -32,18 +32,6 @@ type ResultListInterface = {
     slug: string
     owner: { __typename?: 'Owner' | undefined; group: string }
   }[]
-  datasets?: {
-    __typename?: 'Dataset' | undefined
-    id: string
-    dataproduct: {
-      id: string
-      slug: string
-    }
-    name: string
-    keywords: string[]
-    slug: string
-    owner: { __typename?: 'Owner' | undefined; group: string }
-  }[]
   stories?: {
     __typename?: 'Story'
     id: string
@@ -55,7 +43,6 @@ type ResultListInterface = {
 const ResultList = ({
   search,
   dataproducts,
-  datasets,
   stories,
 }: ResultListInterface) => {
   if (dataproducts) {
@@ -68,22 +55,6 @@ const ResultList = ({
             name={d.name}
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
-          />
-        ))}
-      </Results>
-    )
-  }
-
-  if (datasets) {
-    return (
-      <Results>
-        {datasets.map((d, idx) => (
-          <SearchResultLink
-            key={idx}
-            group={d.owner.group}
-            name={d.name}
-            keywords={d.keywords}
-            link={`/dataproduct/${d.dataproduct.id}/${d.dataproduct.slug}/${d.id}`}
           />
         ))}
       </Results>
@@ -114,19 +85,6 @@ const ResultList = ({
                   keywords={d.result.keywords}
                   excerpt={d.excerpt}
                   link={`/dataproduct/${d.result.id}/${d.result.slug}`}
-                />
-              )
-            }
-
-            if (d.result.__typename === 'Dataset') {
-              return (
-                <SearchResultLink
-                  key={idx}
-                  group={d.result.owner.group}
-                  name={d.result.name}
-                  keywords={d.result.keywords}
-                  excerpt={d.excerpt}
-                  link={`/dataproduct/${d.result.dataproduct.id}/${d.result.dataproduct.slug}/${d.result.id}`}
                 />
               )
             }

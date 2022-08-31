@@ -1,5 +1,5 @@
 import { WarningColored, SuccessColored } from '@navikt/ds-icons'
-import { Alert, Heading, Modal } from '@navikt/ds-react'
+import { Alert, Heading, Link, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
 import {
   DataproductQuery,
@@ -9,6 +9,7 @@ import {
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import KeywordPill, { KeywordBox } from '../../lib/keywordList'
 import DatasetAccess from '../access/datasetAccess'
+import NewDatasetAccess from '../access/newDatasetAccess'
 import NewAccessRequestForm from '../accessRequest/newAccessRequest'
 import Explore from '../explore'
 import DatasetMetadata from './datasetMetadata'
@@ -56,6 +57,7 @@ const ViewDataset = ({
   setEdit,
 }: ViewDatasetProps) => {
   const [accessRequested, setAccessRequested] = useState(false)
+  const [showNewAccess, setShowNewAccess] = useState(false)
 
   return (
     <>
@@ -68,6 +70,16 @@ const ViewDataset = ({
         >
           <Modal.Content className="h-full">
             <NewAccessRequestForm dataset={dataset} />
+          </Modal.Content>
+        </Modal>
+        <Modal
+          open={showNewAccess}
+          aria-label="Legg til tilgang til datasettet"
+          onClose={() => setShowNewAccess(false)}
+          className="w-full md:w-1/3 px-8 h-[52rem]"
+        >
+          <Modal.Content className="h-full">
+            <NewDatasetAccess dataset={dataset} setShowNewAccess={setShowNewAccess}/>
           </Modal.Content>
         </Modal>
       </div>
@@ -138,6 +150,12 @@ const ViewDataset = ({
             )}
           </div>
         </div>
+        {isOwner && 
+        <>
+            <DatasetAccess id={dataset.id} access={dataset.access} />
+            <Link className="cursor-pointer" onClick={() => {setShowNewAccess(true)}}>Legg til tilgang</Link>
+        </>
+        }
         {dataset.description && (
           <section className="mb-3">
             <Heading level="3" size="small" spacing>
@@ -146,7 +164,6 @@ const ViewDataset = ({
             <article>{dataset.description}</article>
           </section>
         )}
-        {isOwner && <DatasetAccess id={dataset.id} access={dataset.access} />}
         <DatasetMetadata datasource={dataset.datasource} />
         <DatasetTableSchema datasource={dataset.datasource} />
       </div>

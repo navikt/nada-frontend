@@ -375,7 +375,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
             ))}
           </Table>
         ) : (
-          'Ingen tilganssøknader'
+          'Ingen tilgangssøknader'
         )}
       </div>
       <div>
