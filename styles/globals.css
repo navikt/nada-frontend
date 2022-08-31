@@ -76,6 +76,14 @@
   @apply text-link underline hover:no-underline;
 }
 
+.nada-search-result:focus > div > div > div > h2 {
+  @apply text-white
+}
+
+.nada-search-result:focus > div > div {
+  @apply text-white
+}
+
 html,
 body {
   padding: 0;
