@@ -25,7 +25,7 @@ export const SearchResultLink = ({
     <Link href={link} className="nada-search-result max-w-[47rem]">
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
-          <div className="h-[42px] w-[42-px]">
+          <div className="h-[42px] w-[42px]">
             {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
           </div>
           <div>
