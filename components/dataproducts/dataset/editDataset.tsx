@@ -11,7 +11,7 @@ interface EditDatasetProps {
 const EditDataset = ({datasetID, setEdit}: EditDatasetProps) => {
     const { data, loading, error } = useDatasetQuery({
         variables: { id: datasetID, rawDesc: true },
-        ssr: true,
+        fetchPolicy: "network-only"
     })
 
     if (error) return <ErrorMessage error={error} />
