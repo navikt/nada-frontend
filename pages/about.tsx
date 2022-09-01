@@ -23,7 +23,7 @@ const About = () => {
                     <p>
 
                         Data deles fra teamene som <a
-                        href={'https://docs.knada.io/dele-data/dataprodukt'}>dataprodukter</a>.<br/>
+                        href={'https://docs.knada.io/dataprodukter/definisjon/'}>dataprodukter</a>.<br/>
                         Dataprodukter som ikke inneholder personopplysninger eller andre sensitive data vil som regel
                         kunne
                         være
