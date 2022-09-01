@@ -5,6 +5,7 @@ import { DataproductQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { Alert, Link } from '@navikt/ds-react'
 import { Subject, SubjectHeader } from '../subject'
+import { isEmail } from '../../lib/validators'
 
 interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
@@ -27,6 +28,12 @@ export const DataproductSidebar = ({
 
   const handleChange = (event: React.SyntheticEvent, newSlug: string) => {
     router.push(`/dataproduct/${product.id}/${product.slug}/${newSlug}`)
+  }
+
+  const makeTeamContactHref = (teamContact: string) => {
+    return isEmail(teamContact)
+      ? `mailto:${teamContact}`
+      : `https://slack.com/app_redirect?channel=${teamContact}`
   }
 
   return (
@@ -78,7 +85,7 @@ export const DataproductSidebar = ({
         <Subject>
           {product.owner?.teamContact ? (
             <a
-              href={product.owner.teamContact}
+              href={makeTeamContactHref(product.owner.teamContact)}
               target="_blank"
               rel="noreferrer"
             >
