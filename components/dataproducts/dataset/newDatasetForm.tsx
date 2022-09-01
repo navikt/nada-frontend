@@ -86,8 +86,6 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   )
 
   const onSubmitForm = async (requestData: any) => {
-    console.log('')
-    console.log(requestData)
     requestData.dataproductID = dataproduct.dataproduct.id
     try {
       await createDataset({
