@@ -1,6 +1,8 @@
 import { WarningColored, SuccessColored } from '@navikt/ds-icons'
 import { Alert, Heading, Link, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import {
   DataproductQuery,
   DatasetQuery,
@@ -161,7 +163,9 @@ const ViewDataset = ({
             <Heading level="3" size="small" spacing>
               Beskrivelse
             </Heading>
-            <article>{dataset.description}</article>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {dataset.description}
+            </ReactMarkdown>
           </section>
         )}
         <DatasetMetadata datasource={dataset.datasource} />

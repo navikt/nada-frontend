@@ -13,7 +13,7 @@ import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
 import Head from 'next/head'
-import TopBar, { TopBarActions } from '../../../../components/lib/topBar'
+import TopBar from '../../../../components/lib/topBar'
 import { Description } from '../../../../components/lib/detailTypography'
 import { DataproductSidebar } from '../../../../components/dataproducts/dataproductSidebar'
 import { useRouter } from 'next/router'
@@ -38,7 +38,7 @@ const Dataproduct = (props: DataproductProps) => {
 
   const userInfo = useContext(UserState)
   const productQuery = useDataproductQuery({
-    variables: { id },
+    variables: { id, rawDesc: false },
     ssr: true,
   })
 

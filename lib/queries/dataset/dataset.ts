@@ -1,13 +1,13 @@
 import { gql } from 'graphql-tag'
 
 export const GET_DATASET = gql`
-  query Dataset($id: ID!) {
+  query Dataset($id: ID!, $rawDesc: Boolean) {
     dataset(id: $id) {
       id
       dataproductID
       lastModified
       name
-      description
+      description(raw: $rawDesc)
       created
       repo
       slug

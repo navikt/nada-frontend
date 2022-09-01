@@ -21,7 +21,7 @@ import KeywordsInput from '../../lib/KeywordsInput'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 
 interface EditDatasetFormProps {
-  dataset: DatasetQuery['dataset']
+  dataset: DatasetQuery["dataset"]
   setEdit: (value: boolean) => void
 }
 
@@ -54,9 +54,10 @@ const schema = yup.object().shape({
   }),
 })
 
-const EditDataset = ({ dataset, setEdit }: EditDatasetFormProps) => {
+const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   const [backendError, setBackendError] = useState()
   const [updateDataset] = useUpdateDatasetMutation()
+
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
       resolver: yupResolver(schema),
@@ -201,4 +202,4 @@ const EditDataset = ({ dataset, setEdit }: EditDatasetFormProps) => {
     </div>
   )
 }
-export default EditDataset
+export default EditDatasetForm

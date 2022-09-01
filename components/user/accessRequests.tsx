@@ -40,7 +40,7 @@ interface DeleteRequestInterface {
 const ViewRequestButton = ({ request, type }: RequestInterface) => {
   const [open, setOpen] = useState(false)
   const { data, error, loading } = useDatasetQuery({
-    variables: { id: request.datasetID },
+    variables: { id: request.datasetID, rawDesc: false },
     ssr: true,
   })
 
