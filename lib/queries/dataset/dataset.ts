@@ -20,6 +20,7 @@ export const GET_DATASET = gql`
       owner {
         group
         teamkatalogenURL
+        teamContact
       }
       access {
         id

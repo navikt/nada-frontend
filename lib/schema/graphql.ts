@@ -1177,7 +1177,7 @@ export type DatasetQueryVariables = Exact<{
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1218,14 +1218,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1785,6 +1785,7 @@ export const DataproductDocument = gql`
     owner {
       group
       teamkatalogenURL
+      teamContact
     }
   }
 }
@@ -2199,6 +2200,7 @@ export const DatasetDocument = gql`
     owner {
       group
       teamkatalogenURL
+      teamContact
     }
     access {
       id
@@ -2464,6 +2466,7 @@ export const SearchContentDocument = gql`
         owner {
           group
           teamkatalogenURL
+          teamContact
         }
       }
     }
@@ -2515,6 +2518,7 @@ export const SearchContentWithOptionsDocument = gql`
         owner {
           group
           teamkatalogenURL
+          teamContact
         }
       }
       ... on Story {

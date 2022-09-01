@@ -76,6 +76,7 @@ export const GET_DATAPRODUCT = gql`
       owner {
         group
         teamkatalogenURL
+        teamContact
       }
     }
   }

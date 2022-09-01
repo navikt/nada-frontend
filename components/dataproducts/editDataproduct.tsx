@@ -6,6 +6,7 @@ import { useState } from 'react'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import {
   DataproductQuery,
+  UpdateDataproduct,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
@@ -32,9 +33,10 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
     })
 
   const { errors } = formState
-  const onSubmit = (requestData: any) => {
+  const onSubmit = (requestData: UpdateDataproduct) => {
+      
     updateDataproduct({
-      variables: { id: product.id, input: requestData },
+      variables: { id: product.id, input: requestData},
       awaitRefetchQueries: true,
       refetchQueries: [
         {
@@ -55,6 +57,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
+  
   return (
     <>
       <Heading level="1" size="large" spacing>
@@ -84,7 +87,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           id="teamContact"
           label="Ønsket kontaktpunkt for dataproduktet"
           {...register('teamContact')}
-          error={errors.name?.message}
+          error={errors.teamContact?.message}
         />
         <div className="flex flex-row gap-4 grow items-end">
           <Button
