@@ -5,6 +5,7 @@ import { DataproductQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { Alert, Link } from '@navikt/ds-react'
 import { Subject, SubjectHeader } from '../subject'
+import { isEmail } from '../../lib/validators'
 
 interface DataproductDetailProps {
   product: DataproductQuery['dataproduct']
@@ -27,6 +28,12 @@ export const DataproductSidebar = ({
 
   const handleChange = (event: React.SyntheticEvent, newSlug: string) => {
     router.push(`/dataproduct/${product.id}/${product.slug}/${newSlug}`)
+  }
+
+  const makeTeamContactHref = (teamContact: string) => {
+    return isEmail(teamContact)
+      ? `mailto:${teamContact}`
+      : `https://slack.com/app_redirect?channel=${teamContact}`
   }
 
   return (
@@ -74,6 +81,21 @@ export const DataproductSidebar = ({
             product.owner?.group.split('@')[0]
           )}
         </Subject>
+        <SubjectHeader>Kontaktpunkt</SubjectHeader>
+        <Subject>
+          {product.owner?.teamContact ? (
+            <a
+              href={makeTeamContactHref(product.owner.teamContact)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {product.owner.teamContact} <ExternalLink />
+            </a>
+          ) : (
+            'Ukjent'
+          )}
+        </Subject>
+
         <SubjectHeader>Opprettet</SubjectHeader>
         <Subject>{humanizeDate(product.created)}</Subject>
         <SubjectHeader>Oppdatert</SubjectHeader>

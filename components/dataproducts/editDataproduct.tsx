@@ -27,6 +27,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
         name: product.name,
         description: product.description || '',
         teamkatalogenURL: product.owner.teamkatalogenURL,
+        teamContact: product.owner.teamContact,
       },
     })
 
@@ -77,6 +78,13 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           register={register}
           errors={errors}
           watch={watch}
+        />
+        <TextField
+          style={{ width: '350px', display: 'block' }}
+          id="teamContact"
+          label="Ønsket kontaktpunkt for dataproduktet"
+          {...register('teamContact')}
+          error={errors.name?.message}
         />
         <div className="flex flex-row gap-4 grow items-end">
           <Button
