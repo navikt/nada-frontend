@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { Datepicker } from '@navikt/ds-datepicker'
 import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
@@ -14,6 +14,7 @@ import {
   usePollyQuery,
 } from '../../../lib/schema/graphql'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
+import { UserState } from '../../../lib/context'
 
 const schema = yup
   .object({
@@ -71,6 +72,7 @@ const AccessRequestFormV2 = ({
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
   const router = useRouter()
+  const userInfo = useContext(UserState)
 
   const {
     register,
@@ -80,7 +82,7 @@ const AccessRequestFormV2 = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      subject: accessRequest?.subject ? accessRequest.subject : '',
+      subject: accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo?.email :  "",
       subjectType: accessRequest?.subjectType
         ? accessRequest.subjectType
         : SubjectType.User,
