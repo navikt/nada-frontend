@@ -1,120 +1,45 @@
-import {
-  QueryPolly,
-  SubjectType,
-  useDataproductQuery,
-  usePollyQuery,
-  PollyInput, Maybe, Scalars, useUserInfoDetailsQuery, useApproveAccessRequestMutation, useDenyAccessRequestMutation
-} from '../../../lib/schema/graphql'
-import * as React from 'react'
-import { ChangeEvent, useState } from 'react'
-import { Delete, ExternalLink } from '@navikt/ds-icons'
-import { Alert, Heading, Link, TextField } from '@navikt/ds-react'
-import styled from 'styled-components'
-import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField as MuiTextField, } from '@mui/material'
-import RightJustifiedSubmitButton from '../../widgets/formSubmit'
-import { RightJustifiedGrantButton } from '../../widgets/formSubmit'
+import { Datepicker } from '@navikt/ds-datepicker'
+import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
-import ErrorMessage from '../../lib/error'
-import LoaderSpinner from '../../lib/spinner'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab'
-import TopBar from '../../lib/topBar'
-import { useRouter } from "next/router";
+import {
+  Maybe,
+  PollyInput,
+  Scalars,
+  SubjectType,
+  usePollyQuery,
+} from '../../../lib/schema/graphql'
+import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 
-export const accessRequestValidation = yup.object().shape({
-  subjectType: yup.string().required(),
-  // subject: yup
-  //   .string()
-  //   .email('Gyldig epost for gruppe eller bruker')
-  //   .when('subjectType', {
-  //     is: (subjectType: string) => subjectType !== 'all-users',
-  //     then: yup.string().required('Legg inn gyldig epost'),
-  //   }),
-  // expires: yup.string(),
-})
-
-const SpacedFormControl = styled(FormControl)`
-  margin-bottom: var(--navds-spacing-3);
-  display: block;
-`
-
-const SpacedDatePicker = styled(MuiTextField)`
-  margin-bottom: var(--navds-spacing-3);
-`
-
-const SpacedTextField = styled(TextField)`
-  margin-bottom: var(--navds-spacing-3);
-`
-
-const LinkButton = styled.button`
-  background: none !important;
-  border: none;
-  padding: 0 !important;
-  cursor: pointer;
-  color: var(--navds-link-color-text);
-  text-decoration: underline;
-  display: inline-flex;
-  align-items: center;
-  grid-gap: var(--navds-spacing-1);
-  gap: var(--navds-spacing-1);
-
-  &:hover {
-    text-decoration: none;
-  }
-
-  &:active,
-  &:focus {
-    outline: none;
-    color: var(--navds-link-color-text-active);
-    text-decoration: none;
-    background: var(--navds-link-color-background-active) !important;
-    -webkit-box-shadow: var(--navds-text-shadow);
-    box-shadow: var(--navds-text-shadow);
-  }
-`
-
-const Container = styled.div`
-  width: 768px;
-  margin: 0 auto;
-  margin-top: 40px;
-`
-
-const AccessRequestBox = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
-`
-
-const AccessRequestBody = styled.div`
-  padding: 1em 1em 2em 1em;
-`
-
-const Selection = styled.div`
-  display: flex;
-  column-gap: 0.5em;
-`
-
-const IconBox = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const RedDelete = styled(Delete)`
-  color: #BA3A26;
-  cursor: pointer;
-`
-
-interface AccessRequestFormProps {
-  accessRequest: AccessRequestFormInput
-  isEdit: boolean
-  isView: boolean
-  onSubmit: (requestData: AccessRequestFormInput) => void
-}
+const schema = yup
+  .object({
+    subject: yup
+      .string()
+      .required(
+        'Du må skrive inn e-postadressen til hvem tilgangen gjelder for'
+      )
+      .email('E-postadresssen er ikke gyldig'),
+    subjectType: yup
+      .string()
+      .required('Du må velge hvem tilgangen gjelder for')
+      .oneOf([SubjectType.User, SubjectType.Group, SubjectType.ServiceAccount]),
+    accessType: yup
+      .string()
+      .required('Du må velge hvor lenge du ønsker tilgang')
+      .oneOf(['eternal', 'until']),
+    expires: yup
+      .string()
+      .matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato'),
+  })
+  .required()
 
 export type AccessRequestFormInput = {
   id?: Maybe<Scalars['ID']>
-  dataproductID: Scalars['ID']
+  datasetID: Scalars['ID']
   expires?: Maybe<Scalars['Time']>
   polly?: Maybe<PollyInput>
   subject?: Maybe<Scalars['String']>
@@ -123,268 +48,210 @@ export type AccessRequestFormInput = {
   reason?: Maybe<Scalars['String']>
 }
 
-const AccessRequestForm = ({ accessRequest, isEdit, isView, onSubmit }: AccessRequestFormProps) => {
-  const [formError, setFormError] = useState('')
+interface AccessRequestFormProps {
+  accessRequest?: AccessRequestFormInput
+  dataset: DatasetQuery
+  isEdit: boolean
+  onSubmit: (requestData: AccessRequestFormInput) => void
+}
+
+interface AccessRequestFields {
+  subject: string
+  subjectType: SubjectType
+  accessType: string
+  expires: string
+}
+
+const AccessRequestFormV2 = ({
+  accessRequest,
+  dataset,
+  isEdit,
+  onSubmit,
+}: AccessRequestFormProps) => {
   const [searchText, setSearchText] = useState('')
-  const [denyReason, setDenyReason] = useState('')
-  const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest.polly)
-  const [expireDate, setExpireDate] = useState<Date | null>(accessRequest.expires)
-  const [accessType, setAccessType] = useState(accessRequest.expires === undefined ? 'eternal' : 'until')
-  const [subjectData, setSubjectData] = useState({
-    subject: accessRequest.subject,
-    subjectType: accessRequest.subjectType,
-  })
-  const [approveAccessRequest] = useApproveAccessRequestMutation()
-  const [denyAccessRequest] = useDenyAccessRequestMutation()
+  const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
   const router = useRouter()
 
-  const { data, error, loading } = useDataproductQuery({
-    variables: { id: accessRequest.dataproductID },
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      subject: accessRequest?.subject ? accessRequest.subject : '',
+      subjectType: accessRequest?.subjectType
+        ? accessRequest.subjectType
+        : SubjectType.User,
+      accessType: !isEdit || accessRequest?.expires ? 'until' : 'eternal',
+      expires: accessRequest?.expires
+        ? new Date(accessRequest.expires).toISOString().substr(0, 10)
+        : undefined,
+    },
   })
 
-  const { data: userInfo, error: userError, loading: userLoading } = useUserInfoDetailsQuery()
-
-  const { data: searchData, error: searchError, loading: searchLoading } = usePollyQuery({
+  const {
+    data: searchData,
+    error: searchError,
+    loading: searchLoading,
+  } = usePollyQuery({
     variables: { q: searchText },
     skip: searchText.length < 3,
   })
 
-  const { formState, handleSubmit, control, watch, register, reset } = useForm({
-    resolver: yupResolver(accessRequestValidation),
-    defaultValues: {
-      subjectType: accessRequest.subjectType,
-      subject: accessRequest.subject,
-      dataproductID: accessRequest.dataproductID,
-      expires: accessRequest.expires,
-      polly: accessRequest.polly,
-    }
-  })
-
-  if (error) return <ErrorMessage error={error} />
-  if (userError) return <ErrorMessage error={userError} />
-  if (loading || userLoading || !data || !userInfo) return <LoaderSpinner />
-
-  const toSubjectType = (s: string): SubjectType => {
-    switch (s) {
-      case 'all-users':
-      case 'group':
-        return SubjectType.Group
-      case 'serviceAccount':
-        return SubjectType.ServiceAccount
-    }
-    return SubjectType.User
-  }
-
-  const onSearch = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setSearchText(e.target.value)
-  }
-
-  const onSelect = (search: QueryPolly) => {
-    setSearchText("")
-    setPolly({
-      id: null,
-      name: search.name,
-      url: search.url,
-      externalID: search.externalID,
-    })
-  }
-
-  const setSubject = (event: ChangeEvent<HTMLInputElement>) => {
-    setSubjectData((prevState) => {
-      return { ...prevState, subject: event.target.value }
-    })
-  }
-
-  const setSubjectType = (event: ChangeEvent<HTMLInputElement>) => {
-    setSubjectData((prevState) => {
-      return { ...prevState, subjectType: toSubjectType(event.target.value) }
-    })
-  }
-
-  const onSubmitForm = (requestData: AccessRequestFormInput) => {
+  const onSubmitForm = (data: AccessRequestFields) => {
     const accessRequest: AccessRequestFormInput = {
-      ...requestData,
+      datasetID: dataset.id,
+      subject: data.subject,
+      subjectType: data.subjectType,
       polly: polly,
-      expires: expireDate,
-      subject: subjectData.subject,
-      subjectType: subjectData.subjectType,
+      expires: data.accessType === 'eternal' ? null : new Date(data.expires),
     }
     onSubmit(accessRequest)
   }
 
-  const isOwner = () => {
-    const emails = userInfo.userInfo.groups.map(g => g.email).concat([userInfo.userInfo.email])
-    return emails.includes(data.dataproduct.owner.group)
+  interface Option {
+    value: string
+    label: string
   }
 
-  const onApprove = async () => {
-    try {
-      await approveAccessRequest({
-            variables: { id: accessRequest.id as string },
-            awaitRefetchQueries: true,
-            refetchQueries: ['DataproductAccess', 'accessRequestsForDataproduct'],
-          },
+  const loadOptions = (
+    input: string,
+    callback: (options: Option[]) => void
+  ) => {
+    setSearchText(input)
+    setTimeout(() => {
+      callback(
+        searchData
+          ? searchData.polly.map((el) => {
+              return { value: el.externalID, label: el.name }
+            })
+          : []
       )
-    } catch (e: any) {
-      setFormError(e.message)
-    }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
+    }, 250)
   }
 
-  const onDeny = async () => {
-    try {
-      await denyAccessRequest({
-            variables: { id: accessRequest.id as string, reason: denyReason },
-            awaitRefetchQueries: true,
-            refetchQueries: ['accessRequestsForDataproduct'],
-          },
-      )
-    } catch (e: any) {
-      setFormError(e.message)
-    }
-    await router.push(`/dataproduct/${accessRequest.dataproductID}/${data.dataproduct.slug}/access`)
+  const onInputChange = (newOption: Option | null) => {
+    newOption != null
+      ? searchData &&
+        setPolly(searchData.polly.find((e) => e.externalID == newOption.value))
+      : setPolly(null)
   }
 
   return (
-    <Container>
-      <AccessRequestBox>
-        <TopBar type="AccessRequest" name="Tilgangssøknad for dataprodukt" />
-        <AccessRequestBody>
-          <form onSubmit={handleSubmit(onSubmitForm)}>
-            <SpacedTextField
-              label="Dataprodukt"
-              defaultValue={data.dataproduct.name}
-              disabled={true}
-            />
-            <TextField onChange={setSubject}
-              label="Tilgang gjelder for"
-              defaultValue={accessRequest.subject ? accessRequest.subject : ""}
-              size="medium"
-              disabled={isEdit || isView}
-            />
-            <SpacedFormControl>
-              <Controller
-                rules={{ required: true }}
-                control={control}
-                name="subjectType"
-                render={({ field }) => (
-                  <RadioGroup {...field} onChange={setSubjectType}>
-                    <FormControlLabel
-                      disabled={isEdit || isView}
-                      checked={subjectData.subjectType == SubjectType.Group}
-                      value="group"
-                      control={<Radio />}
-                      label="Gruppe"
-                    />
-                    <FormControlLabel
-                      disabled={isEdit || isView}
-                      checked={subjectData.subjectType == SubjectType.User}
-                      value="user"
-                      control={<Radio />}
-                      label="Bruker (e-post)"
-                    />
-                    <FormControlLabel
-                      disabled={isEdit || isView}
-                      checked={subjectData.subjectType == SubjectType.ServiceAccount}
-                      value="serviceAccount"
-                      control={<Radio />}
-                      label="Servicebruker"
-                    />
-                  </RadioGroup>
-                )}
-              />
-            </SpacedFormControl>
-            <Heading size="xsmall">
-              Utløper
-            </Heading>
-            <RadioGroup onClick={(e: any) => {
-              e.target.value !== undefined && setAccessType(e.target.value)
-              e.target.value === 'eternal' && setExpireDate(null)
-            }}>
-              <FormControlLabel
-                value='eternal'
-                control={<Radio />}
-                disabled={isView}
-                label='Har alltid tilgang'
-                checked={accessType === 'eternal'}
-              />
-              <FormControlLabel
-                value='until'
-                control={<Radio />}
-                disabled={isView}
-                label='Har tilgang til denne datoen'
-                checked={accessType === 'until'}
-              />
-            </RadioGroup>
-            {accessType === 'until' && <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DesktopDatePicker
-                inputFormat="dd.MM.yyyy"
-                mask="__.__.____"
-                value={expireDate}
-                onChange={(newVal) => setExpireDate(newVal)}
-                disabled={isView}
-                renderInput={(params) => <SpacedDatePicker {...params} />}
-              />
-            </LocalizationProvider>}
-            {!polly && (
-              <>
-                <SpacedTextField
-                  label="Behandling"
-                  onChange={(e) => {
-                    onSearch(e)
-                  }}
-                  disabled={isView}
+    <div className="h-full">
+      <Heading level="1" size="large" className="pb-8">
+        Tilgangssøknad for {dataset.name}
+      </Heading>
+      <form
+        onSubmit={handleSubmit(onSubmitForm)}
+        className="flex flex-col gap-10 h-[90%]"
+      >
+        <div>
+          <Controller
+            name="subjectType"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup
+                {...field}
+                legend="Hvem gjelder tilgangen for?"
+                error={errors?.subjectType?.message}
+              >
+                <Radio disabled={isEdit} value={SubjectType.User}>
+                  Bruker
+                </Radio>
+                <Radio disabled={isEdit} value={SubjectType.Group}>
+                  Gruppe
+                </Radio>
+                <Radio disabled={isEdit} value={SubjectType.ServiceAccount}>
+                  Servicebruker
+                </Radio>
+              </RadioGroup>
+            )}
+          />
+          <TextField
+            {...register('subject')}
+            disabled={isEdit}
+            className="hidden-label"
+            label="E-post-adresse"
+            placeholder="Skriv inn e-post-adresse"
+            error={errors?.subject?.message}
+            size="medium"
+          />
+        </div>
+        <div>
+          <Controller
+            name="accessType"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup
+                {...field}
+                legend="Hvor lenge ønsker du tilgang?"
+                error={errors?.accessType?.message}
+              >
+                <Radio value="until">Til dato</Radio>
+                <Controller
+                  name="expires"
+                  control={control}
+                  render={(datepickerProps) => (
+                    <div className="ml-8">
+                      <Datepicker
+                        {...datepickerProps.field}
+                        disabled={field.value === 'eternal'}
+                        inputLabel=""
+                        limitations={{
+                          minDate: new Date().toISOString(),
+                        }}
+                      />
+                      {errors?.expires && (
+                        <div className="navds-error-message navds-label">
+                          {errors.expires.message}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 />
-                {searchText.length >= 3 && (
-                  <>
-                    {searchError && <ErrorMessage error={searchError} />}
-                    {searchLoading && <LoaderSpinner />}
-                    {searchData && searchData.polly.length === 0 ? (
-                      <>Ingen treff</>
-                    ) : (
-                      <>
-                        {searchData &&
-                          searchData.polly.map((searchRes) => {
-                            return (
-                              <div key={searchRes.externalID}>
-                                <LinkButton onClick={() => onSelect(searchRes)}>
-                                  {searchRes.name}
-                                </LinkButton>
-                              </div>
-                            )
-                          })}
-                      </>
-                    )}
-                  </>
-                )}
-              </>
+                <Radio value="eternal">For alltid</Radio>
+              </RadioGroup>
             )}
-            <br />
-            {polly && (<>
-              <Heading size="xsmall" spacing>Behandlingsgrunnlag</Heading>
-              <Selection>
-                <Link href={polly.url} target="_blank" rel="noreferrer">
-                  {polly.name}<ExternalLink />
-                </Link>
-                {!isView && <IconBox><RedDelete onClick={() => {
-                  setPolly(null);
-                }}>Fjern behandling</RedDelete></IconBox>}
-              </Selection>
-            </>
-            )}
-            {formError && <Alert variant={'error'}>{formError}</Alert>}
-            {!isView && <RightJustifiedSubmitButton onCancel={() => {
+          />
+          <div>
+            <label className="navds-label">
+              Velg behandling fra behandlingskatalogen
+            </label>
+            <AsyncSelect
+              className="pt-2"
+              classNamePrefix="select"
+              cacheOptions
+              isClearable
+              placeholder="Skriv inn navnet på behandlingen"
+              noOptionsMessage={({ inputValue }) =>
+                inputValue ? 'Finner ikke behandling' : null
+              }
+              loadingMessage={() => 'Søker etter behandling...'}
+              loadOptions={loadOptions}
+              isLoading={searchLoading}
+              onChange={onInputChange}
+              menuIsOpen={true}
+            />
+          </div>
+        </div>
+        <div className="flex flex-row gap-4 grow items-end">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
               router.push(`/user/requests`)
-            }} />}
-            {accessRequest.status === "pending" && isView && isOwner && <RightJustifiedGrantButton onApprove={onApprove} onDeny={onDeny} setDenyReason={setDenyReason} />}
-            {accessRequest.status === "denied" && <Alert variant={'info'}>Avslått: {accessRequest.reason ? accessRequest.reason : "ingen begrunnelse oppgitt"}</Alert>}
-          </form>
-        </AccessRequestBody>
-      </AccessRequestBox>
-    </Container>
+            }}
+          >
+            Avbryt
+          </Button>
+          <Button type="submit">Lagre</Button>
+        </div>
+      </form>
+    </div>
   )
 }
 
-export default AccessRequestForm
-
-
+export default AccessRequestFormV2

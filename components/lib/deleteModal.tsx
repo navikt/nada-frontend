@@ -1,17 +1,5 @@
 import * as React from 'react'
-import { Modal, Button, Alert } from '@navikt/ds-react'
-import styled from 'styled-components'
-
-const ButtonStyledDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-`
-const ContentBox = styled.div`
-  height: 200px;
-  display: table-cell;
-  vertical-align: middle;
-`
+import { Modal, Button, Alert, Heading } from '@navikt/ds-react'
 
 interface DeleteModalProps {
   open: boolean
@@ -19,6 +7,7 @@ interface DeleteModalProps {
   onConfirm: () => void
   name: string
   error: string
+  resource: 'dataprodukt' | 'datasett'
 }
 export const DeleteModal = ({
   open,
@@ -26,19 +15,21 @@ export const DeleteModal = ({
   onConfirm,
   name,
   error,
+  resource,
 }: DeleteModalProps) => {
   return (
     <Modal open={open} onClose={onCancel}>
-      <Modal.Content>
-        <ContentBox>Er du sikkert på at du vil slette {name}?</ContentBox>
-        <ButtonStyledDiv>
-          <Button onClick={onCancel} style={{ marginRight: '10px' }}>
+      <Modal.Content className="flex flex-col gap-4">
+        <Heading level="2" size="large">
+          Slette {resource}
+        </Heading>
+        <p>Er du sikker på at du vil slette {name}?</p>
+        <div className="flex flex-row gap-3">
+          <Button variant="secondary" onClick={onCancel}>
             Avbryt
           </Button>
-          <Button variant="danger" onClick={onConfirm}>
-            Slett
-          </Button>
-        </ButtonStyledDiv>
+          <Button onClick={onConfirm}>Slett</Button>
+        </div>
         {error && <Alert variant={'error'}>{error}</Alert>}
       </Modal.Content>
     </Modal>

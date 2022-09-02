@@ -1,49 +1,45 @@
-import styled from "styled-components";
-import StringToColor from "../../lib/stringToColor";
+import styled from 'styled-components'
+import stringToColors from '../../lib/stringToColor'
+import { Tag } from '@navikt/ds-react'
 
-const {contrastColor} = require('contrast-color');
-
-interface KeywordSpanProps {
-    color: string,
-    textColor?: string,
-    horizontal?: boolean,
-    compact?: boolean,
-    onClick?: () => void
-    remove?: boolean
-}
-
-const KeywordPillStyle = styled.span<KeywordSpanProps>`
-  cursor: pointer;
-  display: ${(props) => props.horizontal ? 'block' : 'inline-block'};
-  background-color: ${(props) => props.color};
-  color: ${(props) => props.textColor};
-  border-radius: 999px;
-  font-size: 12px;
-  padding: 3px 5px 3px 5px;
-  border: 0.5px solid transparent;
-  :hover {
-    ${(props) => props.remove && 'text-decoration: line-through;'}
-    ${(props) => props.remove && 'text-decoration-thickness: 3px;'}
-  
-  }
+export const KeywordBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 `
 
 interface keywordPillProps {
-    keyword: string,
-    horizontal?: boolean,
-    compact?: boolean,
-    children?: React.ReactNode
-    onClick?: () => void
-    remove?: boolean
+  keyword: string
+  horizontal?: boolean
+  compact?: boolean
+  children?: React.ReactNode
+  onClick?: () => void
+  remove?: boolean
 }
 
-export const KeywordPill = ({keyword, horizontal, children, compact, onClick, remove}: keywordPillProps) => {
-    const color = StringToColor(keyword)
-    return <KeywordPillStyle color={color} textColor={contrastColor({bgColor: color})} horizontal={horizontal}
-                             compact={compact} onClick={onClick} remove={remove}>
-        {children}
-    </KeywordPillStyle>
-
+export const KeywordPill = ({
+  keyword,
+  horizontal,
+  children,
+  onClick,
+  remove,
+}: keywordPillProps) => {
+  const [bgColor, borderColor] = stringToColors(keyword)
+  return (
+    <Tag
+      variant="info"
+      size="small"
+      onClick={onClick}
+      className={`${bgColor} ${borderColor} text-text 
+      ${onClick && 'cursor-pointer'}
+      ${horizontal ? 'block' : 'inline-block'}
+      ${remove && 'hover:decoration-[3px] hover:line-through'}`}
+    >
+      {children}
+    </Tag>
+  )
 }
 
 export default KeywordPill

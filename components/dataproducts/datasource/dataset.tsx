@@ -8,13 +8,12 @@ import { TreeItem } from '@mui/lab'
 
 import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
-
-import BigQueryLogo from '../../lib/icons/bigQueryLogo'
+import Tabell from '../../lib/icons/tabell'
 
 const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
-  materialized_view: <BigQueryLogo />,
-  table: <BigQueryLogo />,
-  view: <BigQueryLogo />,
+  materialized_view: <Tabell />,
+  table: <Tabell />,
+  view: <Tabell />,
 }
 
 export interface DataproductSourceDatasetProps {
@@ -52,6 +51,7 @@ export const Dataset = ({
   const datasetContents = (contents: GcpGetTablesQuery['gcpGetTables']) =>
     contents?.map(({ name, type }) => (
       <TreeItem
+        className="MuiTreeView-leaf"
         endIcon={DataproductTableIconMap[type]}
         nodeId={`${projectID}/${datasetID}/${name}`}
         key={`${projectID}/${datasetID}/${name}`}

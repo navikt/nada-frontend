@@ -1,5 +1,10 @@
 import { useMemo } from 'react'
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from '@apollo/client'
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
 
@@ -25,20 +30,22 @@ const createApolloClient = (cookie?: string) => {
       credentials: 'include',
       headers: {
         cookie,
-      }
+      },
     }),
     cache: new InMemoryCache({
       typePolicies: {
         SearchResultRow: {
-          keyFields: ["result", ["id"]],
+          keyFields: ['result', ['id']],
         },
-      }
-    }
-    ),
+      },
+    }),
   })
 }
 
-export const initializeApollo = (initialState: NormalizedCacheObject | null = null, cookie?: string) => {
+export const initializeApollo = (
+  initialState: NormalizedCacheObject | null = null,
+  cookie?: string
+) => {
   const _apolloClient = apolloClient ?? createApolloClient(cookie)
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -53,7 +60,7 @@ export const initializeApollo = (initialState: NormalizedCacheObject | null = nu
       arrayMerge: (destinationArray, sourceArray) => [
         ...sourceArray,
         ...destinationArray.filter((d) =>
-          sourceArray.every((s) => !isEqual(d, s)),
+          sourceArray.every((s) => !isEqual(d, s))
         ),
       ],
     })
@@ -73,16 +80,19 @@ export const initializeApollo = (initialState: NormalizedCacheObject | null = nu
   return _apolloClient
 }
 
-export const addApolloState = (client: ApolloClient<NormalizedCacheObject>, pageProps: any) => {
+export const addApolloState = (
+  client: ApolloClient<NormalizedCacheObject>,
+  pageProps: any
+) => {
   if (pageProps?.props) {
-    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
   }
 
-  return pageProps;
+  return pageProps
 }
 
 export const useApollo = (pageProps: any) => {
-  const state = pageProps[APOLLO_STATE_PROP_NAME];
-  const store = useMemo(() => initializeApollo(state), [state]);
-  return store;
+  const state = pageProps[APOLLO_STATE_PROP_NAME]
+  const store = useMemo(() => initializeApollo(state), [state])
+  return store
 }

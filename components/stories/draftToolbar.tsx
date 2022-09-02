@@ -11,8 +11,7 @@ const ToolbarDiv = styled.div`
   display: flex;
   flex-direction: row;
   z-index: 10000;
-  background-color: #E6F0FF;
-
+  background-color: #e6f0ff;
 
   h3 {
     margin: 0;
@@ -30,7 +29,9 @@ interface ToolbarProps {
 export function DraftToolbar({ onSave }: ToolbarProps) {
   return (
     <ToolbarDiv>
-      <h3><span>Kladd:</span> ikke lagret</h3>
+      <h3>
+        <span>Kladd:</span> ikke lagret
+      </h3>
       <Button onClick={(_) => onSave()}>Lagre</Button>
     </ToolbarDiv>
   )

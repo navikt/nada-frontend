@@ -1,25 +1,19 @@
 import * as React from 'react'
 import { Story } from '../../../components/stories/story'
-import { Group, useDeleteStoryMutation, useStoryQuery } from '../../../lib/schema/graphql'
+import {
+  Group,
+  useDeleteStoryMutation,
+  useStoryQuery,
+} from '../../../lib/schema/graphql'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import styled from "styled-components";
-import ErrorMessage from "../../../components/lib/error";
-import LoaderSpinner from "../../../components/lib/spinner";
-import { MetadataTable } from "../../../components/stories/metadataTable";
-import DeleteModal from "../../../components/lib/deleteModal";
-import TokenModal from "../../../components/lib/tokenModal";
-import { useContext, useState } from "react";
-import { UserState } from "../../../lib/context";
+import ErrorMessage from '../../../components/lib/error'
+import LoaderSpinner from '../../../components/lib/spinner'
+import DeleteModal from '../../../components/lib/deleteModal'
+import TokenModal from '../../../components/lib/tokenModal'
+import { useContext, useState } from 'react'
+import { UserState } from '../../../lib/context'
 import amplitudeLog from '../../../lib/amplitude'
-
-const Container = styled.div`
-  margin-top: 50px;
-  gap: 20px;
-`
-
-const MainPage = styled.div`
-`
 
 const StoryPage = () => {
   const router = useRouter()
@@ -36,7 +30,7 @@ const StoryPage = () => {
   const [showToken, setShowToken] = useState(false)
   const [deleteError, setDeleteError] = useState('')
 
-  React.useEffect(() =>{
+  React.useEffect(() => {
     const eventProperties = {
       sidetittel: 'datafortelling',
       title: query.data?.story.name,
@@ -44,10 +38,12 @@ const StoryPage = () => {
     amplitudeLog('sidevisning', eventProperties)
   })
 
-  if (query.error) return <ErrorMessage error={query.error}/>
-  if (query.loading || !query.data) return <LoaderSpinner/>
+  if (query.error) return <ErrorMessage error={query.error} />
+  if (query.loading || !query.data) return <LoaderSpinner />
   const story = query.data.story
-  const isOwner = userInfo?.groups.some((g: Group) => g.email === story?.owner?.group) || false
+  const isOwner =
+    userInfo?.groups.some((g: Group) => g.email === story?.owner?.group) ||
+    false
 
   const onDelete = async () => {
     try {
@@ -63,17 +59,21 @@ const StoryPage = () => {
       <Head>
         <title>{story.name}</title>
       </Head>
-      <Container>
-        <MainPage>
-          <Story story={story} setShowDelete={setShowDelete} setShowToken={setShowToken} isOwner={isOwner}/>
-        </MainPage>
-      </Container>
+      <div className="mt-[50px] gap-5">
+        <Story
+          story={story}
+          setShowDelete={setShowDelete}
+          setShowToken={setShowToken}
+          isOwner={isOwner}
+        />
+      </div>
       <DeleteModal
         open={showDelete}
         onCancel={() => setShowDelete(false)}
         onConfirm={() => onDelete()}
         name={story.name}
         error={deleteError}
+        resource="dataprodukt"
       />
       <TokenModal
         open={showToken}

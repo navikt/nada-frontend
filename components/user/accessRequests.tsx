@@ -1,54 +1,30 @@
-import { Card, CardHeader } from '@mui/material'
-import { FileContent } from '@navikt/ds-icons'
-import { Alert, Button, Heading, Link } from '@navikt/ds-react'
-import { useState } from 'react'
-import styled from 'styled-components'
+import {
+  Alert,
+  Button,
+  Heading,
+  Panel,
+  BodyLong,
+  Modal,
+  ErrorMessage,
+} from '@navikt/ds-react'
+import React, { useState } from 'react'
 import humanizeDate from '../../lib/humanizeDate'
 import {
-    AccessRequest,
-    useDataproductQuery,
-    useDeleteAccessRequestMutation,
+  AccessRequest,
+  useDatasetQuery,
+  useDeleteAccessRequestMutation,
 } from '../../lib/schema/graphql'
-import IconBox from '../lib/icons/iconBox'
-
-const Results = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  a {
-    text-decoration: none;
-  }
-  margin-bottom: 1rem;
-`
-
-const WideLink = styled(Link)`
-  width: 100%;
-`
-
-const StyledCard = styled(Card)`
-  width: 100%;
-  padding-bottom: 10px;
-  cursor: pointer;
-  box-shadow: rgb(239, 239, 239) 0px 0px 30px 0px;
-  :hover {
-    box-shadow: rgb(239, 239, 239) 0px 1px 0px 0.5px;
-  }
-`
-
-const RequestRow = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-`
+import UpdateAccessRequest from '../dataproducts/accessRequest/updateAccessRequest'
+import LoaderSpinner from '../lib/spinner'
 
 interface AccessRequests {
   accessRequests: Array<AccessRequest>
 }
 
 export enum RequestStatusType {
-  Approved, 
+  Approved,
   Denied,
-  Pending
+  Pending,
 }
 
 interface RequestInterface {
@@ -57,38 +33,56 @@ interface RequestInterface {
 }
 
 interface DeleteRequestInterface {
-  request: AccessRequest,
+  request: AccessRequest
   setError: (message: string | null) => void
 }
 
 const ViewRequestButton = ({ request, type }: RequestInterface) => {
-  const dataproduct = useDataproductQuery({
-    variables: { id: request.dataproductID },
+  const [open, setOpen] = useState(false)
+  const { data, error, loading } = useDatasetQuery({
+    variables: { id: request.datasetID, rawDesc: false },
     ssr: true,
   })
 
+  if (error) return <ErrorMessage error={error} />
+  if (loading || !data) return <LoaderSpinner />
+
   return (
-    <WideLink href={ type === RequestStatusType.Pending ? `/request/${request.id}/edit` : `/request/${request.id}/view`}>
-      <StyledCard>
-        <CardHeader
-          style={{ paddingBottom: '0px' }}
-          avatar={
-            <IconBox size={42}>
-              <FileContent />
-            </IconBox>
-          }
-          titleTypographyProps={{ variant: 'h6' }}
-          title={dataproduct?.data?.dataproduct.name}
-          subheader={
-            <>
-              <p>Søknad for {request?.subject}</p>
-              <p>Opprettet {humanizeDate(request?.created)}</p>
-              {type === RequestStatusType.Denied && <p>Avslått: {request.reason ? request.reason : "ingen begrunnelse oppgitt"}</p>}
-            </>
-          }
-        />
-      </StyledCard>
-    </WideLink>
+    <>
+      <Modal
+        open={open}
+        aria-label="aaa"
+        onClose={() => setOpen(false)}
+        className="w-full md:w-1/3 px-8 h-[52rem]"
+      >
+        <Modal.Content className="h-full">
+          <UpdateAccessRequest
+            dataset={data.dataset}
+            updateAccessRequestData={request}
+            setModal={setOpen}
+          />
+        </Modal.Content>
+      </Modal>
+      <Panel
+        className="w-full cursor-pointer"
+        border={true}
+        onClick={(_) => setOpen(true)}
+      >
+        <Heading level="2" size="medium">
+          {data.dataset.name}
+        </Heading>
+        <BodyLong>
+          <p>Søknad for {request?.subject}</p>
+          <p>Opprettet {humanizeDate(request?.created)}</p>
+          {type === RequestStatusType.Denied && (
+            <p>
+              Avslått:{' '}
+              {request.reason ? request.reason : 'ingen begrunnelse oppgitt'}
+            </p>
+          )}
+        </BodyLong>
+      </Panel>
+    </>
   )
 }
 
@@ -99,7 +93,7 @@ const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
     try {
       await deleteRequest({
         variables: {
-          id: request.id
+          id: request.id,
         },
         awaitRefetchQueries: true,
         refetchQueries: ['userInfoDetails'],
@@ -118,27 +112,48 @@ const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
 
 const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   const [error, setError] = useState<string | null>(null)
-  const pendingAccessRequests = accessRequests?.filter(a => a.status === 'pending')
-  const deniedAccessRequests = accessRequests?.filter(a => a.status === 'denied')
-  return (<>
+  const pendingAccessRequests = accessRequests?.filter(
+    (a) => a.status === 'pending'
+  )
+  const deniedAccessRequests = accessRequests?.filter(
+    (a) => a.status === 'denied'
+  )
+  return (
+    <>
       {error && <Alert variant={'error'}>{error}</Alert>}
-      <Results>
-        <Heading size="small" level="2">Ubehandlede tilgangssøknader</Heading>
+      <div className="flex flex-col gap-5 mb-4">
+        <Heading size="small" level="2">
+          Ubehandlede tilgangssøknader
+        </Heading>
         {pendingAccessRequests.map((req, idx) => (
-          <RequestRow key={idx}>
-            <ViewRequestButton key={`${idx}_show`} request={req} type={RequestStatusType.Pending} />
-            <DeleteRequestButton key={`${idx}_delete`} request={req} setError={setError} />
-          </RequestRow>
+          <div className="w-full flex flex-row" key={idx}>
+            <ViewRequestButton
+              key={`${idx}_show`}
+              request={req}
+              type={RequestStatusType.Pending}
+            />
+            <DeleteRequestButton
+              key={`${idx}_delete`}
+              request={req}
+              setError={setError}
+            />
+          </div>
         ))}
-      </Results>
-      <Results>
-        <Heading size="small" level="2">Avslåtte tilgangssøknader</Heading>
+      </div>
+      <div className="flex flex-col gap-5 mb-4">
+        <Heading size="small" level="2">
+          Avslåtte tilgangssøknader
+        </Heading>
         {deniedAccessRequests.map((req, idx) => (
-          <RequestRow key={idx}>
-          <ViewRequestButton key={`${idx}_show`} request={req} type={RequestStatusType.Denied} />
-        </RequestRow>
+          <div className="w-full flex flex-row" key={idx}>
+            <ViewRequestButton
+              key={`${idx}_show`}
+              request={req}
+              type={RequestStatusType.Denied}
+            />
+          </div>
         ))}
-      </Results>
+      </div>
     </>
   )
 }

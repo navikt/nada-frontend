@@ -1,104 +1,71 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
-import { StoryQuery } from "../../lib/schema/graphql";
-import styled from "styled-components";
-import Link from "next/link";
-import { KeywordPill } from "../lib/keywordList";
-
-
-const KeywordBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  flex-wrap: wrap;
-`
-const SubjectContent = styled.div`
-    font-size: 14px;
-    color: #222;
-`
-
-type SubjectHeaderProps = {
-  centered?: boolean
-}
-const SubjectHeader = styled.h2<SubjectHeaderProps>`
-    ${(props) => props.centered && 'margin: 0 auto;'}
-    color: #222;
-    font-weight: 500;
-    font-size: 18px;
-`
-const StyledMetadataTable = styled.div`
-  height: fit-content;
-  min-width: 250px;
-  font-size: 16px;
-  line-height: 1;
-  border-top: 1px #ddd solid;
-  margin-left: 18px;
-  margin-right: 18px;
-`
+import { StoryQuery } from '../../lib/schema/graphql'
+import Link from 'next/link'
+import { KeywordPill } from '../lib/keywordList'
 
 interface StoryProps {
-  children?: React.ReactNode,
+  children?: React.ReactNode
   owner: StoryQuery['story']['owner']
   created: string
   lastModified: string
   keywords: string[] | undefined
 }
 
-const StyledUl = styled.ul`
-  padding-left: 0;
-  margin-top: 0px;
-`
-
-const StyledLi = styled.li`
-  display: inline-block;
-  padding-right: 20px;
-`
-
-export const MetadataTable = ({ owner, created, lastModified, keywords, children }: StoryProps) => {
+export const MetadataTable = ({
+  owner,
+  created,
+  lastModified,
+  keywords,
+  children,
+}: StoryProps) => {
   return (
-    <StyledMetadataTable>
-      <StyledUl>
+    <div className="h-fit min-w-[250px] text-medium border-t border-border mx-5">
+      <ul className="pl-0 mt-0">
         {children}
-        {owner?.group && <>
-            <StyledLi>
-                <SubjectHeader>
-                    Eier
-                </SubjectHeader>
-                <SubjectContent>
-                  {owner?.teamkatalogenURL ? (
-                    <a
-                      href={owner.teamkatalogenURL}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {owner.group.split('@')[0]} <ExternalLink/>
-                    </a>
-                  ) : (
-                    owner?.group.split('@')[0]
-                  )}
-                </SubjectContent>
-            </StyledLi>
-        </>}
-        <StyledLi>
-          <SubjectHeader>Opprettet</SubjectHeader>
-          <SubjectContent>
-            {humanizeDate(created)}
-          </SubjectContent>
-        </StyledLi>
-        {lastModified && <>
-            <StyledLi>
-                <SubjectHeader>Oppdatert</SubjectHeader>
-                <SubjectContent>
-                  {humanizeDate(lastModified, "PP HH:mm")}
-                </SubjectContent>
-            </StyledLi>
-        </>}
-        {!!keywords && keywords.length > 0 && <>
-            <StyledLi>
-                <SubjectHeader>Nøkkelord</SubjectHeader>
-                <KeywordBox>
-                  {!!keywords && (<>{keywords.map((k, i) => (
+        {owner?.group && (
+          <>
+            <li className="inline-block pr-5 text-gray-800">
+              <h2 className="text-lg font-bold">Eier</h2>
+              <div className="text-medium">
+                {owner?.teamkatalogenURL ? (
+                  <a
+                    href={owner.teamkatalogenURL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {owner.group.split('@')[0]} <ExternalLink />
+                  </a>
+                ) : (
+                  owner?.group.split('@')[0]
+                )}
+              </div>
+            </li>
+          </>
+        )}
+        <li className="inline-block pr-5 text-gray-800">
+          <h2 className="text-lg font-bold">Opprettet</h2>
+          <div className="text-medium">{humanizeDate(created)}</div>
+        </li>
+        {lastModified && (
+          <>
+            <li className="inline-block pr-5 text-gray-800">
+              <h2 className="text-lg font-bold">Oppdatert</h2>
+              <div className="text-medium">
+                {humanizeDate(lastModified, 'PP HH:mm')}
+              </div>
+            </li>
+          </>
+        )}
+        {!!keywords && keywords.length > 0 && (
+          <>
+            <li className="inline-block pr-5 text-gray-800">
+              <h2 className="text-lg font-bold">Nøkkelord</h2>
+              <div className="flex gap-1 flex-wrap">
+                {!!keywords && (
+                  <>
+                    {keywords.map((k, i) => (
                       <Link key={i} href={`/search?keywords=${k}`}>
                         <a>
                           <KeywordPill key={k} keyword={k}>
@@ -106,11 +73,14 @@ export const MetadataTable = ({ owner, created, lastModified, keywords, children
                           </KeywordPill>
                         </a>
                       </Link>
-                    ))}</>
-                  )}
-                </KeywordBox>
-            </StyledLi>
-        </>}
-      </StyledUl>
-    </StyledMetadataTable>)
+                    ))}
+                  </>
+                )}
+              </div>
+            </li>
+          </>
+        )}
+      </ul>
+    </div>
+  )
 }

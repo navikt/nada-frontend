@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import * as React from "react";
+import * as React from 'react'
 
 export enum TabPanelType {
   vertical = 1,
@@ -21,10 +21,10 @@ const TabPanel = (props: TabPanelProps) => {
       hidden={value !== index}
       id={`${props.type}-tabpanel-${index}`}
       aria-labelledby={`${props.type}-tab-${index}`}
-      style={{width: '100%'}}
+      style={{ width: '100%' }}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <>{children}</>}
     </div>
   )
 }

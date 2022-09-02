@@ -17,6 +17,7 @@ export const SEARCH_CONTENT = gql`
           owner {
             group
             teamkatalogenURL
+            teamContact
           }
         }
       }

@@ -1,22 +1,33 @@
-import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import * as React from 'react'
 import remarkGfm from 'remark-gfm'
+import KeywordPill from './keywordList'
+import { Link } from '@navikt/ds-react'
+import { useRouter } from 'next/router'
 
-export const Name = styled.h1`
-  margin: 0;
-  font-weight: 300;
-`
+export const Description = ({
+    keywords,
+    markdown,
+}: {
+    keywords: string[]
+    markdown?: string | null
+}) => {
+    const router = useRouter()
 
-export const StyledDescription = styled.div`
-  border-radius: 10px;
-  text-align: justify;
-`
+    return (<div className="rounded-xl text-justify mt-8">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {markdown || '*ingen beskrivelse*'}
+        </ReactMarkdown>
+        {!!keywords.length && (
+            <div className="flex flex-row gap-1 flex-wrap my-2">
+                {keywords.map((k, i) => (
+                    <KeywordPill key={k} keyword={k} onClick={() => { router.push(`/search?keywords=${k}`) }}>
+                        {k}
+                    </KeywordPill>
+                ))}
+            </div>
+        )}
+    </div>)
+}
 
-export const Description = ({ markdown }: { markdown?: string | null }) => (
-  <StyledDescription>
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-      {markdown || '*ingen beskrivelse*'}
-    </ReactMarkdown>
-  </StyledDescription>
-)
+

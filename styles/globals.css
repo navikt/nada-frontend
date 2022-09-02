@@ -1,3 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.explore-header > h1 {
+  @apply hover:underline selection:underline;
+}
+
+.hidden-label > .navds-label {
+  @apply hidden;
+}
+
+.ds-datepicker__kalenderknapp:disabled {
+  @apply border-gray-300 cursor-not-allowed;
+}
+
+.select__control {
+  @apply border-border hover:border-focus min-h-[48px];
+}
+
+.select__option {
+  @apply hover:bg-focus hover:text-text-inverted;
+}
+
+.select__option--is-focused {
+  @apply bg-focus text-text-inverted;
+}
+
+.select__control--is-focused {
+  @apply border-focus border-2 hover:border-focus;
+}
+
+.select__menu-list {
+  @apply max-h-44;
+}
+
+.select__dropdown-indicator,
+.select__indicator-separator {
+  @apply hidden;
+}
+
+.MuiTreeItem-label {
+  /* sorry for normal css */
+  font-size: 1.125rem !important;
+  line-height: 1.5rem !important;
+  letter-spacing: 0 !important;
+  font-family: var(--navds-font-family) !important;
+  appearance: none !important;
+}
+
+.MuiTreeView-root {
+  @apply w-full 2xl:w-[32rem] border border-border rounded p-1 !important;
+}
+
+.MuiTreeItem-content {
+  @apply px-2 py-1 hover:bg-interaction-primary-hover-subtle hover:text-text !important;
+}
+
+.Mui-selected {
+  @apply bg-interaction-primary-selected text-text-inverted hover:bg-interaction-primary hover:text-text-inverted !important;
+}
+
+.react-tags {
+  @apply w-full 2xl:w-[32rem] !important;
+}
+
+.react-tags__search-wrapper > .navds-text-field__input {
+  @apply w-full 2xl:w-[32rem] !important;
+}
+
+.nada-search-result > div {
+  @apply text-text;
+}
+
+.nada-search-result:hover > div > div > div > h2 {
+  @apply text-link underline hover:no-underline;
+}
+
+.nada-search-result:focus > div > div > div > h2 {
+  @apply text-white
+}
+
+.nada-search-result:focus > div > div {
+  @apply text-white
+}
+
 html,
 body {
   padding: 0;

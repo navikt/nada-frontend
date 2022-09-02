@@ -1,59 +1,45 @@
-import styled from 'styled-components'
 import User from './header/user'
-import Create from './header/create'
-import Logo from './header/logo'
-import {useRouter} from 'next/router'
-import About from "./header/about";
+import { useRouter } from 'next/router'
+import { Header } from '@navikt/ds-react-internal'
+import { AddCircle, Information, Link } from '@navikt/ds-icons'
+import React, { useContext } from 'react'
+import { UserState } from '../lib/context'
 
-const HeaderBar = styled.header`
-  > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 95vw;
-    max-width: 1500px;
-  }
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.25em 1em;
-  height: 60px;
-  border-bottom: 1px solid #aaa;
-`
+export const PageLayout = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter()
+  const userInfo = useContext(UserState)
 
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-`
-const Main = styled.main`
-  width: 80vw;
-  @media only screen and (max-width: 768px) {
-    width: 95vw;
-  }
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`
-export const PageLayout = ({children}: { children: React.ReactNode }) => {
-    const router = useRouter()
-
-    return (
-        <Container>
-            <HeaderBar role="banner">
-                <div>
-                    {router.pathname !== '/' && <Logo/>}
-                    <div style={{display: 'flex', marginLeft: 'auto'}}>
-                        <About/>
-                        <Create/>
-                        <User/>
-                    </div>
-                </div>
-            </HeaderBar>
-            <Main>{children}</Main>
-        </Container>
-    )
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header className="flex flex-row justify-between">
+        <Header.Title href="/">
+          <div className="cursor-pointer w-24 flex items-center mx-3">
+            <img src="/navdata-logo-white.svg" width={'100'} alt={'nav data'} />
+          </div>
+        </Header.Title>
+        <div className="flex flex-row">
+          {userInfo && (
+            <Header.Button
+              className="border-transparent"
+              onClick={async () => await router.push('/dataproduct/new')}
+            >
+              <AddCircle />
+            </Header.Button>
+          )}
+          <Header.Button
+            className={userInfo ? '' : 'border-transparent'}
+            onClick={async () => await router.push('/about')}
+          >
+            <Information />
+          </Header.Button>
+          <User />
+        </div>
+      </Header>
+      <main className="w-[95vw] md:w-[80vw] flex flex-col grow self-center">
+        {children}
+      </main>
+    </div>
+  )
 }
 
 export default PageLayout

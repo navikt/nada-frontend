@@ -1,7 +1,4 @@
-export type ColorSchemeTypes =
-  | 'Dataproduct'
-  | 'User'
-  | 'Story'
+export type ColorSchemeTypes = 'Dataproduct' | 'User' | 'Story'
 
 export const colorScheme: Record<ColorSchemeTypes, Record<string, string>> = {
   Dataproduct: { dark: '#396375', light: '#98cada' },

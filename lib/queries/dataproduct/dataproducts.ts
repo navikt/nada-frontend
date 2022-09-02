@@ -10,6 +10,7 @@ export const GET_METABASE_PRODUCTS = gql`
       owner {
         group
         teamkatalogenURL
+        teamContact
       }
     }
   }

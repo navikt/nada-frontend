@@ -17,6 +17,7 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
           owner {
             group
             teamkatalogenURL
+            teamContact
           }
         }
         ... on Story {

@@ -1,18 +1,16 @@
 import * as React from 'react'
 import Head from 'next/head'
-import {useUserInfoDetailsQuery} from '../../lib/schema/graphql'
+import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import {useRouter} from 'next/router'
-import Profile from '../../components/user/profile'
+import { useRouter } from 'next/router'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
-import TabPanel, {TabPanelType} from "../../components/lib/tabPanel";
-import SubjectHeader from "../../components/lib/subjectHeader";
-import ResultList from "../../components/search/resultList";
+import TabPanel, { TabPanelType } from '../../components/lib/tabPanel'
+import SubjectHeader from '../../components/lib/subjectHeader'
+import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
-
 
 export const UserPages = () => {
   const router = useRouter()
@@ -26,7 +24,7 @@ export const UserPages = () => {
         <p>Bruk login-knappen øverst.</p>
       </div>
     )
-    console.log(data.userInfo)
+  console.log(data.userInfo)
 
   const menuItems: Array<{
     title: string
@@ -34,46 +32,46 @@ export const UserPages = () => {
     component: any
   }> = [
     {
-      title: 'Min profil',
-      slug: 'profile',
-      component: (
-        <Profile username={data.userInfo.name} groups={data.userInfo.groups} />
-      ),
-    },
-    {
       title: 'Mine produkter',
       slug: 'products',
-      component: (<>
+      component: (
+        <>
           <SubjectHeader>Mine produkter</SubjectHeader>
-          <ResultList dataproducts={data.userInfo.dataproducts}/>
-      </>
+          <ResultList dataproducts={data.userInfo.dataproducts} />
+        </>
       ),
     },
     {
       title: 'Mine tilgangssøknader',
       slug: 'requests',
-      component: (<>
+      component: (
+        <>
           <SubjectHeader>Mine tilgangssøknader</SubjectHeader>
-          <AccessRequestsListForUser accessRequests={data.userInfo.accessRequests}/>
-      </>)
+          <AccessRequestsListForUser
+            accessRequests={data.userInfo.accessRequests}
+          />
+        </>
+      ),
     },
     {
       title: 'Mine tilganger',
       slug: 'access',
-        component: (<>
-                <SubjectHeader>Mine tilganger</SubjectHeader>
-                <ResultList dataproducts={data.userInfo.accessable}/>
-            </>
-        ),
+      component: (
+        <>
+          <SubjectHeader>Mine tilganger</SubjectHeader>
+          <ResultList dataproducts={data.userInfo.accessable} />
+        </>
+      ),
     },
     {
       title: 'Mine fortellinger',
       slug: 'stories',
-        component: (<>
-               <SubjectHeader>Mine fortellinger</SubjectHeader>
-               <ResultList stories={data.userInfo.stories} />
-            </>
-        ),
+      component: (
+        <>
+          <SubjectHeader>Mine fortellinger</SubjectHeader>
+          <ResultList stories={data.userInfo.stories} />
+        </>
+      ),
     },
   ]
 
@@ -100,11 +98,11 @@ export const UserPages = () => {
         }}
       >
         <Tabs
-          orientation='vertical'
-          variant='fullWidth'
+          orientation="vertical"
+          variant="fullWidth"
           value={currentPage}
           onChange={handleChange}
-          aria-label='User profile menu'
+          aria-label="User profile menu"
           sx={{
             borderRight: 1,
             borderColor: 'divider',
@@ -113,21 +111,18 @@ export const UserPages = () => {
           }}
         >
           {menuItems.map((i, idx) => (
-            <Tab
-              key={idx}
-              label={i.title}
-            />
+            <Tab key={idx} label={i.title} />
           ))}
         </Tabs>
         {menuItems.map((i, idx) => (
-                <TabPanel
-                    key={idx}
-                    value={currentPage}
-                    index={idx}
-                    type={TabPanelType.vertical}
-                >
-                    {i.component}
-                </TabPanel>
+          <TabPanel
+            key={idx}
+            value={currentPage}
+            index={idx}
+            type={TabPanelType.vertical}
+          >
+            {i.component}
+          </TabPanel>
         ))}
       </Box>
     </div>
