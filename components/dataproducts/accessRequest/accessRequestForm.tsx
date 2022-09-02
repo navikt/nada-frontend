@@ -82,7 +82,7 @@ const AccessRequestFormV2 = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      subject: accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo?.email :  "",
+      subject: accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo.email :  "",
       subjectType: accessRequest?.subjectType
         ? accessRequest.subjectType
         : SubjectType.User,
