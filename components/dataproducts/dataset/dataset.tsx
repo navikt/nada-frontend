@@ -1,4 +1,3 @@
-import { Heading, Link, Alert, Modal } from '@navikt/ds-react'
 import { isAfter, parseISO } from 'date-fns'
 import {
   DataproductQuery,
@@ -7,7 +6,7 @@ import {
 } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { useState } from 'react'
-import EditDataset from './editDatasetForm'
+import EditDataset from './editDataset'
 import ViewDataset from './viewDataset'
 
 const findAccessType = (
@@ -39,7 +38,7 @@ const Dataset = ({ dataset, userInfo, isOwner, dataproduct }: EntryProps) => {
   return (
     <>
       {edit ? (
-        <EditDataset dataset={dataset} setEdit={setEdit} />
+        <EditDataset datasetID={dataset.id} setEdit={setEdit} />
       ) : (
         <ViewDataset
           dataset={dataset}

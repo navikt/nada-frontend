@@ -22,10 +22,10 @@ export const SearchResultLink = ({
   excerpt,
 }: SearchResultProps) => {
   return (
-    <Link href={link} className="nada-search-result">
-      <div className="flex flex-col w-full border border-border-inverted rounded px-4 py-2">
+    <Link href={link} className="nada-search-result max-w-[47rem]">
+      <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
-          <div className="h-[42px] w-[42-px]">
+          <div className="h-[42px] w-[42px]">
             {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
           </div>
           <div>

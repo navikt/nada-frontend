@@ -2,7 +2,6 @@ import {
   NewAccessRequest,
   useCreateAccessRequestMutation,
   useDataproductQuery,
-  useDatasetQuery,
 } from '../../../lib/schema/graphql'
 import { useContext } from 'react'
 import AccessRequestForm from './accessRequestForm'

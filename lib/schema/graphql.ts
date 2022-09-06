@@ -1104,6 +1104,7 @@ export type CreateDataproductMutation = { __typename?: 'Mutation', createDatapro
 
 export type DataproductQueryVariables = Exact<{
   id: Scalars['ID'];
+  rawDesc?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -1180,10 +1181,11 @@ export type CreateDatasetMutation = { __typename?: 'Mutation', createDataset: { 
 
 export type DatasetQueryVariables = Exact<{
   id: Scalars['ID'];
+  rawDesc?: Maybe<Scalars['Boolean']>;
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1224,14 +1226,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1716,12 +1718,12 @@ export type CreateDataproductMutationHookResult = ReturnType<typeof useCreateDat
 export type CreateDataproductMutationResult = Apollo.MutationResult<CreateDataproductMutation>;
 export type CreateDataproductMutationOptions = Apollo.BaseMutationOptions<CreateDataproductMutation, CreateDataproductMutationVariables>;
 export const DataproductDocument = gql`
-    query Dataproduct($id: ID!) {
+    query Dataproduct($id: ID!, $rawDesc: Boolean) {
   dataproduct(id: $id) {
     id
     lastModified
     name
-    description
+    description(raw: $rawDesc)
     created
     slug
     owner {
@@ -1792,6 +1794,7 @@ export const DataproductDocument = gql`
     owner {
       group
       teamkatalogenURL
+      teamContact
     }
   }
 }
@@ -1810,6 +1813,7 @@ export const DataproductDocument = gql`
  * const { data, loading, error } = useDataproductQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      rawDesc: // value for 'rawDesc'
  *   },
  * });
  */
@@ -2186,13 +2190,13 @@ export type CreateDatasetMutationHookResult = ReturnType<typeof useCreateDataset
 export type CreateDatasetMutationResult = Apollo.MutationResult<CreateDatasetMutation>;
 export type CreateDatasetMutationOptions = Apollo.BaseMutationOptions<CreateDatasetMutation, CreateDatasetMutationVariables>;
 export const DatasetDocument = gql`
-    query Dataset($id: ID!) {
+    query Dataset($id: ID!, $rawDesc: Boolean) {
   dataset(id: $id) {
     id
     dataproductID
     lastModified
     name
-    description
+    description(raw: $rawDesc)
     created
     repo
     slug
@@ -2205,6 +2209,7 @@ export const DatasetDocument = gql`
     owner {
       group
       teamkatalogenURL
+      teamContact
     }
     access {
       id
@@ -2260,6 +2265,7 @@ export const DatasetDocument = gql`
  * const { data, loading, error } = useDatasetQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      rawDesc: // value for 'rawDesc'
  *   },
  * });
  */
@@ -2469,6 +2475,7 @@ export const SearchContentDocument = gql`
         owner {
           group
           teamkatalogenURL
+          teamContact
         }
       }
     }
@@ -2520,6 +2527,7 @@ export const SearchContentWithOptionsDocument = gql`
         owner {
           group
           teamkatalogenURL
+          teamContact
         }
       }
       ... on Story {

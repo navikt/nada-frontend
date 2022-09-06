@@ -1,12 +1,12 @@
 import { gql } from 'graphql-tag'
 
 export const GET_DATAPRODUCT = gql`
-  query Dataproduct($id: ID!) {
+  query Dataproduct($id: ID!, $rawDesc: Boolean) {
     dataproduct(id: $id) {
       id
       lastModified
       name
-      description
+      description(raw: $rawDesc)
       created
       slug
       owner {
@@ -77,6 +77,7 @@ export const GET_DATAPRODUCT = gql`
       owner {
         group
         teamkatalogenURL
+        teamContact
       }
     }
   }

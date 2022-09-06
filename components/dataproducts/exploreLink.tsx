@@ -36,7 +36,7 @@ export const ExploreLink = ({
     if (type === ItemType.bigQuery) {
       return (
         <Link
-          className="border-l-8 border-border-inverted pl-4 py-1"
+          className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
           target="_blank"
           rel="norefferer"
           href={url}
@@ -49,7 +49,7 @@ export const ExploreLink = ({
       return (
         <div className="flex flex-col">
           <Link
-            className="border-l-8 border-border-inverted pl-4 py-1"
+            className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
             target="_blank"
             rel="norefferer"
             href={url}
@@ -58,7 +58,7 @@ export const ExploreLink = ({
           </Link>
           {isOwner && (
             <Link
-              className="border-l-8 border-border-inverted pl-4 py-1"
+              className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
               href="#"
               onClick={handleDelete}
             >
@@ -74,7 +74,7 @@ export const ExploreLink = ({
     if (loading) {
       return (
         <Link
-          className="border-l-8 border-border-inverted pl-4 py-1"
+          className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
           href="#"
           onClick={add}
         >
@@ -86,7 +86,7 @@ export const ExploreLink = ({
     if (addToMetabase) {
       return (
         <Link
-          className="border-l-8 border-border-inverted pl-4 py-1"
+          className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
           href="#"
           onClick={add}
         >

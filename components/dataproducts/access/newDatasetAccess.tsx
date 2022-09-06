@@ -11,6 +11,12 @@ interface NewDatasetAccessProps {
     setShowNewAccess: (val: boolean) => void
 }
 
+const tomorrow = () => {
+    const date = new Date()
+    date.setDate(date.getDate() + 1)
+    return date
+}
+
 const schema = yup
   .object({
     subjectType: yup
@@ -133,7 +139,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                         disabled={field.value === 'eternal'}
                         inputLabel=""
                         limitations={{
-                          minDate: new Date().toISOString(),
+                          minDate: tomorrow().toISOString(),
                         }}
                       />
                     </div>

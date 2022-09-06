@@ -1,13 +1,15 @@
 import { WarningColored, SuccessColored } from '@navikt/ds-icons'
 import { Alert, Heading, Link, Modal } from '@navikt/ds-react'
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import {
   DataproductQuery,
   DatasetQuery,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
-import KeywordPill, { KeywordBox } from '../../lib/keywordList'
+import KeywordPill from '../../lib/keywordList'
 import DatasetAccess from '../access/datasetAccess'
 import NewDatasetAccess from '../access/newDatasetAccess'
 import NewAccessRequestForm from '../accessRequest/newAccessRequest'
@@ -153,7 +155,7 @@ const ViewDataset = ({
         {isOwner && 
         <>
             <DatasetAccess id={dataset.id} access={dataset.access} />
-            <Link className="cursor-pointer" onClick={() => {setShowNewAccess(true)}}>Legg til tilgang</Link>
+            <Link className="cursor-pointer w-fit" onClick={() => {setShowNewAccess(true)}}>Legg til tilgang</Link>
         </>
         }
         {dataset.description && (
@@ -161,7 +163,9 @@ const ViewDataset = ({
             <Heading level="3" size="small" spacing>
               Beskrivelse
             </Heading>
-            <article>{dataset.description}</article>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {dataset.description}
+            </ReactMarkdown>
           </section>
         )}
         <DatasetMetadata datasource={dataset.datasource} />

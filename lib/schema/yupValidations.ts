@@ -12,7 +12,7 @@ export const updateDataproductValidation = yup.object().shape({
   slug: yup.string(),
   repo: yup.string(),
   teamkatalogenURL: yup.string().url().nullable(),
-  teamContact: yup.string().nullable(),
+  teamContact: yup.string().required("Du må spesifisere ønsket kontaktpunkt"),
   productAreaId: yup.string(),
 })
 

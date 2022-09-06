@@ -13,8 +13,7 @@ import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
 import EditDataproduct from '../../../../components/dataproducts/editDataproduct'
 import Head from 'next/head'
-import TopBar, { TopBarActions } from '../../../../components/lib/topBar'
-import { Link } from '@navikt/ds-react'
+import TopBar from '../../../../components/lib/topBar'
 import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
 import { useRouter } from 'next/router'
@@ -37,7 +36,7 @@ const DataproductEdit = (props: DataproductProps) => {
   })
 
   const { data, loading, error } = useDataproductQuery({
-    variables: { id },
+    variables: { id, rawDesc: true },
     ssr: true,
   })
   useEffect(() => {

@@ -84,13 +84,13 @@ export const DataproductSidebar = ({
         <SubjectHeader>Kontaktpunkt</SubjectHeader>
         <Subject>
           {product.owner?.teamContact ? (
-            <a
+            <Link
               href={makeTeamContactHref(product.owner.teamContact)}
               target="_blank"
               rel="noreferrer"
             >
               {product.owner.teamContact} <ExternalLink />
-            </a>
+            </Link>
           ) : (
             'Ukjent'
           )}
