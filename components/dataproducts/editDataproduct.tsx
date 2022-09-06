@@ -3,10 +3,9 @@ import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { useState } from 'react'
-import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import {
   DataproductQuery,
-  UpdateDataproduct,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
@@ -38,7 +37,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   const onSubmit = (requestData: any) => {
     requestData.productAreaId = productAreaId
     updateDataproduct({
-      variables: { id: product.id, input: requestData},
+      variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
       refetchQueries: [
         {
@@ -59,7 +58,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
-  
+
   return (
     <>
       <Heading level="1" size="large" spacing>
