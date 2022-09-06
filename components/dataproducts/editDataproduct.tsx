@@ -6,6 +6,7 @@ import { useState } from 'react'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import {
   DataproductQuery,
+  UpdateDataproduct,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
@@ -34,7 +35,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   const [productAreaId, setProductAreaId] = useState<string>('')
 
   const { errors } = formState
-  const onSubmit = (requestData: any) => {
+  const onSubmit = (requestData: UpdateDataproduct) => {
     requestData.productAreaId = productAreaId
     updateDataproduct({
       variables: { id: product.id, input: requestData },
