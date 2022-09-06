@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
-import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
+import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import {
   Button,
@@ -21,12 +21,13 @@ import { Divider } from '@navikt/ds-react-internal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
+import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
   team: yup.string().required('Velg et eierteam for produktet'),
-  teamkatalogenTeam: yup.string(),
+  teamkatalogenURL: yup.string(),
   teamContact: yup
     .string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
@@ -51,7 +52,7 @@ export interface NewDataproductFields {
   name: string
   description: string
   team: string
-  teamkatalogenTeam: string
+  teamkatalogenURL: string
   teamContact: string
   datasetName: string
   datasetDescription: string
@@ -59,6 +60,7 @@ export interface NewDataproductFields {
   bigquery: BigQueryFields
   keywords: string[]
   pii: boolean
+  productAreaId: string
 }
 
 export const NewDataproductForm = () => {
@@ -70,7 +72,7 @@ export const NewDataproductForm = () => {
     useForm({
       resolver: yupResolver(schema),
     })
-
+ 
   const { errors } = formState
   const keywords = watch('keywords')
 
@@ -91,6 +93,7 @@ export const NewDataproductForm = () => {
 
   const onSubmit = async (data: NewDataproductFields) => {
     console.log(data.pii)
+    const productAreaId = teams.find(it=> it.url == data.teamkatalogenURL)?.productAreaId || ''
     try {
       await createDataproduct({
         variables: {
@@ -98,8 +101,9 @@ export const NewDataproductForm = () => {
             name: data.name,
             description: valueOrNull(data.description),
             group: data.team,
-            teamkatalogenURL: valueOrNull(data.teamkatalogenTeam),
+            teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
             teamContact: valueOrNull(data.teamContact),
+            productAreaId: valueOrNull(productAreaId),
             datasets: [
               {
                 name: data.datasetName,
@@ -124,6 +128,17 @@ export const NewDataproductForm = () => {
   }
 
   const team = watch('team')
+
+  const { data, error } = useTeamkatalogenQuery({
+    variables: { q: team === undefined ? '' : team.split('@')[0] },
+  })
+
+  let teams: Team[]
+  if (error) {
+    teams = []
+  } else {
+    teams = data?.teamkatalogen || []
+  }
 
   const [createDataproduct, { loading, error: backendError }] = useMutation(
     CREATE_DATAPRODUCT,
@@ -204,6 +219,7 @@ export const NewDataproductForm = () => {
         </Select>
         <TeamkatalogenSelector
           group={team}
+          teams={teams}
           register={register}
           errors={errors}
           watch={watch}

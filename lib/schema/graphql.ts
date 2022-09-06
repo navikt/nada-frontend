@@ -136,7 +136,7 @@ export type Dataproduct = {
   /** datasets is the list of associated datasets. */
   datasets: Array<Dataset>;
   /** description of the dataproduct */
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   /** id is the identifier for the dataproduct */
   id: Scalars['ID'];
   /** keywords is the keyword tags for the datasets in the dataproduct. */
@@ -149,6 +149,12 @@ export type Dataproduct = {
   owner: Owner;
   /** slug is the dataproduct slug */
   slug: Scalars['String'];
+};
+
+
+/** Dataproduct contains metadata on a datasource. */
+export type DataproductDescriptionArgs = {
+  raw?: Maybe<Scalars['Boolean']>;
 };
 
 /** Dataset contains metadata on a dataset. */
@@ -165,7 +171,7 @@ export type Dataset = {
   /** datasource contains metadata on the datasource */
   datasource: Datasource;
   /** description of the dataset */
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   /** id is the identifier for the dataset */
   id: Scalars['ID'];
   /** keywords for the dataset used as tags. */
@@ -188,6 +194,12 @@ export type Dataset = {
   services: DatasetServices;
   /** slug is the dataset slug */
   slug: Scalars['String'];
+};
+
+
+/** Dataset contains metadata on a dataset. */
+export type DatasetDescriptionArgs = {
+  raw?: Maybe<Scalars['Boolean']>;
 };
 
 export type DatasetServices = {
@@ -482,8 +494,10 @@ export type NewDataproduct = {
   group: Scalars['String'];
   /** name of dataproduct */
   name: Scalars['String'];
+  /** Id of the team's product area. */
+  productAreaId?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
-  teamContact: Scalars['String'];
+  teamContact?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -556,8 +570,10 @@ export type Owner = {
   __typename?: 'Owner';
   /** owner group is the email for the group. */
   group: Scalars['String'];
+  /** Id of the team's product area. */
+  productAreaId?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
-  teamContact: Scalars['String'];
+  teamContact?: Maybe<Scalars['String']>;
   /** teamkatalogenURL is url for the team in the NAV team catalog. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -932,6 +948,8 @@ export type TeamkatalogenResult = {
   description: Scalars['String'];
   /** team name. */
   name: Scalars['String'];
+  /** Id of the team's product area. */
+  productAreaId: Scalars['String'];
   /** url to team in teamkatalogen. */
   url: Scalars['String'];
 };
@@ -954,8 +972,10 @@ export type UpdateDataproduct = {
   description?: Maybe<Scalars['String']>;
   /** name of dataproduct */
   name: Scalars['String'];
+  /** Id of the team's product area. */
+  productAreaId?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
-  teamContact: Scalars['String'];
+  teamContact?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -1087,19 +1107,19 @@ export type DataproductQueryVariables = Exact<{
 }>;
 
 
-export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description?: string | null | undefined, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact: string }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description?: string | null | undefined, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact: string }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
+export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined, productAreaId?: string | null | undefined }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
 
 export type DataproductSummaryQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DataproductSummaryQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description?: string | null | undefined, created: any, slug: string, keywords: Array<string>, datasets: Array<{ __typename?: 'Dataset', datasource: { __typename?: 'BigQuery', type: 'BigQuery' } }> } };
+export type DataproductSummaryQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, datasets: Array<{ __typename?: 'Dataset', datasource: { __typename?: 'BigQuery', type: 'BigQuery' } }> } };
 
 export type MetabaseProudctsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MetabaseProudctsQuery = { __typename?: 'Query', dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact: string } }> };
+export type MetabaseProudctsQuery = { __typename?: 'Query', dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> };
 
 export type DeleteDataproductMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1163,7 +1183,7 @@ export type DatasetQueryVariables = Exact<{
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description?: string | null | undefined, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null | undefined, slug: string, pii: boolean, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null | undefined }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null | undefined, created: any, revoked?: any | null | undefined, accessRequestID?: string | null | undefined, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null | undefined } | null | undefined }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null | undefined, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1204,14 +1224,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null | undefined, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } } }> };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1278,7 +1298,7 @@ export type TeamkatalogenQueryVariables = Exact<{
 }>;
 
 
-export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string }> };
+export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string, productAreaId: string }> };
 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1288,7 +1308,7 @@ export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typenam
 export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: Array<{ __typename: 'Dataproduct', id: string, name: string, description?: string | null | undefined, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } }> } };
+export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: Array<{ __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } }> } };
 
 
 export const DatasetAccessDocument = gql`
@@ -1708,6 +1728,7 @@ export const DataproductDocument = gql`
       group
       teamkatalogenURL
       teamContact
+      productAreaId
     }
     keywords
     datasets {
@@ -2864,6 +2885,7 @@ export const TeamkatalogenDocument = gql`
   teamkatalogen(q: $q) {
     name
     url
+    productAreaId
   }
 }
     `;

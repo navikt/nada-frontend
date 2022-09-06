@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { useState } from 'react'
-import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
+import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
 import {
   DataproductQuery,
+  useTeamkatalogenQuery,
   useUpdateDataproductMutation,
 } from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
@@ -28,11 +29,24 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
         description: product.description || '',
         teamkatalogenURL: product.owner.teamkatalogenURL,
         teamContact: product.owner.teamContact,
+        productAreaId: product.owner.productAreaId,
       },
     })
 
+  const { data, error } = useTeamkatalogenQuery({
+    variables: { q: product.owner.group === undefined ? '' : product.owner.group.split('@')[0] },
+  })
+
+  let teams: Team[]
+  if (error) {
+    teams = []
+  } else {
+    teams = data?.teamkatalogen || []
+  }
+
   const { errors } = formState
   const onSubmit = (requestData: any) => {
+    const productAreaId = teams.find(it=> it.url == requestData.teamkatalogenURL)?.productAreaId || ''
     updateDataproduct({
       variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
@@ -75,6 +89,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
         />
         <TeamkatalogenSelector
           group={product.owner.group}
+          teams={teams}
           register={register}
           errors={errors}
           watch={watch}
