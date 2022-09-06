@@ -21,15 +21,13 @@ import { Divider } from '@navikt/ds-react-internal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
-import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
   team: yup.string().required('Velg et eierteam for produktet'),
   teamkatalogenURL: yup.string(),
-  teamContact: yup
-    .string(),
+  teamContact: yup.string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
   sourceCodeURL: yup.string().url('Link må være en gyldig URL'),
@@ -67,12 +65,13 @@ export const NewDataproductForm = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
   const [activePaths, setActivePaths] = useState<string[]>([])
+  const [productAreaId, setProductAreaId] = useState<string>('')
 
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
       resolver: yupResolver(schema),
     })
- 
+
   const { errors } = formState
   const keywords = watch('keywords')
 
@@ -93,7 +92,6 @@ export const NewDataproductForm = () => {
 
   const onSubmit = async (data: NewDataproductFields) => {
     console.log(data.pii)
-    const productAreaId = teams.find(it=> it.url == data.teamkatalogenURL)?.productAreaId || ''
     try {
       await createDataproduct({
         variables: {
@@ -128,17 +126,6 @@ export const NewDataproductForm = () => {
   }
 
   const team = watch('team')
-
-  const { data, error } = useTeamkatalogenQuery({
-    variables: { q: team === undefined ? '' : team.split('@')[0] },
-  })
-
-  let teams: Team[]
-  if (error) {
-    teams = []
-  } else {
-    teams = data?.teamkatalogen || []
-  }
 
   const [createDataproduct, { loading, error: backendError }] = useMutation(
     CREATE_DATAPRODUCT,
@@ -218,16 +205,15 @@ export const NewDataproductForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          group={team}
-          teams={teams}
+          team={team}
           register={register}
           errors={errors}
-          watch={watch}
+          setProductAreaId={setProductAreaId}
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
           {...register('teamContact')}
-          error = {errors.teamContact?.message}
+          error={errors.teamContact?.message}
           className="w-full 2xl:w-[32rem]"
         />
         <Divider />
