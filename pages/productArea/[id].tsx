@@ -40,7 +40,7 @@ export interface Story {
 
 const extractProductsAndStories = (data: SearchContentWithOptionsQuery) => {
     let dataproducts: Array<Dataproduct> = []
-    let stories: any = []
+    let stories: Array<Story> = []
     data.search.forEach((elem) => {
         if (elem.result.__typename == "Dataproduct") dataproducts.push(elem.result)
         else if (elem.result.__typename == "Story") stories.push(elem.result)
@@ -66,7 +66,7 @@ const ProductArea = ({ id }: ProductAreaProps) => {
     const { dataproducts, stories } = extractProductsAndStories(productAreaSearch.data)
 
     return (
-        <div className="flex flex-row h-full flex-grow gap-1 ">
+        <div className="flex flex-row h-full flex-grow gap-3 pt-8">
             <ProductAreaSidebar name="Produktområde helse" stats={{ dataproducts: dataproducts.length, stories: stories.length }} />
             <ProductAreaContent dataproducts={dataproducts} stories={stories} />
         </div>

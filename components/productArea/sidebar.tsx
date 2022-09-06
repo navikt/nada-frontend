@@ -1,5 +1,5 @@
 import { Link } from "@navikt/ds-react";
-import { Employer } from "@navikt/ds-icons";
+import { Bandage } from "@navikt/ds-icons";
 
 interface ProductAreaSidebarProps {
     name: string
@@ -11,14 +11,14 @@ interface ProductAreaSidebarProps {
 
 const ProductAreaSidebar = ({ name, stats }: ProductAreaSidebarProps) => {
     return (
-        <div className="py-2">
-            <Link href="#" className="nada-search-result max-w-[47rem] align-top">
-                <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-3">
+        <div>
+            <Link href="#" className="nada-pa-menu-item max-w-[47rem] align-top">
+                <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-3 gap-1">
                     <div className="flex flex-row gap-2">
-                        <Employer />
-                        <div className="whitespace-nowrap">{name}</div>
+                        <Bandage className="h-8 w-8"/>
+                        <div className="whitespace-nowrap align-middle">{name}</div>
                     </div>
-                    <p className="whitespace-nowrap">{stats.stories} fortellinger / {stats.dataproducts} produkter</p>
+                    <p className="whitespace-nowrap text-black">{stats.stories} fortellinger / {stats.dataproducts} produkter</p>
                 </div>
             </Link>
         </div>
