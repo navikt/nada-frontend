@@ -137,10 +137,9 @@ function SaveForm({ story }: SaveFormProps) {
               </Select>
               {group && (
                 <TeamkatalogenSelector
-                  group={group}
+                  team={group}
                   register={register}
                   errors={errors}
-                  watch={watch}
                 />
               )}
               <StorySelector register={register} group={group} />

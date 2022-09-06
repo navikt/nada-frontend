@@ -29,14 +29,16 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
         description: product.description || '',
         teamkatalogenURL: product.owner.teamkatalogenURL,
         teamContact: product.owner.teamContact,
+        productAreaId: product.owner.productAreaId,
       },
     })
+  const [productAreaId, setProductAreaId] = useState<string>('')
 
   const { errors } = formState
   const onSubmit = (requestData: UpdateDataproduct) => {
-      
+    requestData.productAreaId = productAreaId
     updateDataproduct({
-      variables: { id: product.id, input: requestData},
+      variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
       refetchQueries: [
         {
@@ -57,7 +59,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
-  
+
   return (
     <>
       <Heading level="1" size="large" spacing>
@@ -77,10 +79,10 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           control={control}
         />
         <TeamkatalogenSelector
-          group={product.owner.group}
+          team={product.owner.group}
           register={register}
           errors={errors}
-          watch={watch}
+          setProductAreaId={setProductAreaId}
         />
         <TextField
           style={{ width: '350px', display: 'block' }}

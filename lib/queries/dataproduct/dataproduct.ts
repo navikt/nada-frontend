@@ -13,6 +13,7 @@ export const GET_DATAPRODUCT = gql`
         group
         teamkatalogenURL
         teamContact
+        productAreaId
       }
       keywords
       datasets {

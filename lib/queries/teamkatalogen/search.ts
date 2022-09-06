@@ -5,6 +5,7 @@ export const SEARCH_TEAMKATALOGEN = gql`
     teamkatalogen(q: $q) {
       name
       url
+      productAreaId
     }
   }
 `
