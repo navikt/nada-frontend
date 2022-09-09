@@ -58,14 +58,14 @@ export interface NewDataproductFields {
   bigquery: BigQueryFields
   keywords: string[]
   pii: boolean
-  productAreaId: string
+  productAreaID: string
 }
 
 export const NewDataproductForm = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
   const [activePaths, setActivePaths] = useState<string[]>([])
-  const [productAreaId, setProductAreaId] = useState<string>('')
+  const [productAreaID, setProductAreaID] = useState<string>('')
 
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
@@ -101,7 +101,7 @@ export const NewDataproductForm = () => {
             group: data.team,
             teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
             teamContact: valueOrNull(data.teamContact),
-            productAreaId: valueOrNull(productAreaId),
+            productAreaID: valueOrNull(productAreaID),
             datasets: [
               {
                 name: data.datasetName,
@@ -208,7 +208,7 @@ export const NewDataproductForm = () => {
           team={team}
           register={register}
           errors={errors}
-          setProductAreaId={setProductAreaId}
+          setProductAreaID={setProductAreaID}
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
