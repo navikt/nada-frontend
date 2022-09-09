@@ -11,6 +11,7 @@ export const GET_STORY = gql`
       owner {
         group
         teamkatalogenURL
+        productAreaID
       }
       views {
         id

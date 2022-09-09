@@ -13,7 +13,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from '../lib/KeywordsInput'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { UserState } from '../../lib/context'
 
 interface SaveFormProps {
@@ -43,6 +43,7 @@ function SaveForm({ story }: SaveFormProps) {
       } as FromProps,
     })
 
+  const [productAreaID, setProductAreaID] = useState('')
   const { errors } = formState
   const keywords = watch('keywords')
   const group = watch('group')
@@ -83,6 +84,7 @@ function SaveForm({ story }: SaveFormProps) {
     ) {
       return
     }
+    requestData.productAreaID = productAreaID
     publishStory({
       refetchQueries: ['searchContent'],
       variables: {
@@ -140,6 +142,7 @@ function SaveForm({ story }: SaveFormProps) {
                   team={group}
                   register={register}
                   errors={errors}
+                  setProductAreaID={setProductAreaID}
                 />
               )}
               <StorySelector register={register} group={group} />
