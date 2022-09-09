@@ -9,20 +9,20 @@ type TeamkatalogenSelectorProps = {
   team?: string
   register: any
   errors: any
-  setProductAreaId?: Dispatch<SetStateAction<string>>
+  setProductAreaID?: Dispatch<SetStateAction<string>>
 }
 
 export interface Team {
   name: string
   url: string
-  productAreaId: string
+  productAreaID: string
 }
 
 export const TeamkatalogenSelector = ({
   team,
   register,
   errors,
-  setProductAreaId,
+  setProductAreaID,
 }: TeamkatalogenSelectorProps) => {
   const { data, error } = useTeamkatalogenQuery({
     variables: { q: team === undefined ? '' : team.split('@')[0] },
@@ -35,10 +35,10 @@ export const TeamkatalogenSelector = ({
     teams = data?.teamkatalogen || []
   }
 
-  const updateProductAreaId = (url: string) => {
-    const productAreaId =
-      teams.find((it) => it.url == url)?.productAreaId || ''
-    setProductAreaId?.(productAreaId)
+  const updateProductAreaID = (url: string) => {
+    const productAreaID =
+      teams.find((it) => it.url == url)?.productAreaID || ''
+    setProductAreaID?.(productAreaID)
   }
 
   if (!teams) return <LoaderSpinner />
@@ -47,7 +47,7 @@ export const TeamkatalogenSelector = ({
     <Select
       className="w-full 2xl:w-[32rem]"
       label="Team i Teamkatalogen"
-      {...register('teamkatalogenURL', { onChange: (e: any) => updateProductAreaId(e.target.value) })}
+      {...register('teamkatalogenURL', { onChange: (e: any) => updateProductAreaID(e.target.value) })}
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>

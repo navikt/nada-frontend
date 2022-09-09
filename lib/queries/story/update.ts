@@ -6,12 +6,14 @@ export const UPDATE_STORY_METADATA = gql`
     $keywords: [String!]!
     $name: String!
     $teamkatalogenURL: String
+    $productAreaID: String
   ) {
     updateStoryMetadata(
       id: $id
       keywords: $keywords
       name: $name
       teamkatalogenURL: $teamkatalogenURL
+      productAreaID: $productAreaID
     ) {
       id
     }

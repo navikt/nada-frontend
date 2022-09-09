@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form'
 import KeywordsInput from '../lib/KeywordsInput'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { StoryDocument } from '../../lib/schema/graphql'
+import { useState } from 'react'
 
 const Container = styled.div`
   width: 768px;
@@ -39,6 +40,7 @@ function EditForm({ story }: SaveFormProps) {
       teamkatalogenURL: story.owner.teamkatalogenURL,
     },
   })
+  const [productAreaID, setProductAreaID] = useState('')
 
   const { errors } = formState
   const keywords = watch('keywords')
@@ -72,6 +74,7 @@ function EditForm({ story }: SaveFormProps) {
         name: story.name,
         keywords,
         teamkatalogenURL: requestData.teamkatalogenURL,
+        productAreaID: productAreaID,
       },
     })
       .then((published: any) => {
@@ -98,6 +101,7 @@ function EditForm({ story }: SaveFormProps) {
                 team={story.owner.group}
                 register={register}
                 errors={errors}
+                setProductAreaID={setProductAreaID}
               />
               <KeywordsInput
                 onAdd={onAdd}
