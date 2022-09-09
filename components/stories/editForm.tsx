@@ -95,10 +95,9 @@ function EditForm({ story }: SaveFormProps) {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
               <TeamkatalogenSelector
-                group={story.owner.group}
+                team={story.owner.group}
                 register={register}
                 errors={errors}
-                watch={watch}
               />
               <KeywordsInput
                 onAdd={onAdd}

@@ -1,45 +1,53 @@
 import * as React from 'react'
-import { Select } from '@navikt/ds-react'
+import { Label, Select, TextField } from '@navikt/ds-react'
 import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
 import ErrorMessage from './error'
 import LoaderSpinner from './spinner'
+import { Dispatch, SetStateAction } from 'react'
 
 type TeamkatalogenSelectorProps = {
-  group?: string
+  team?: string
   register: any
   errors: any
-  watch: any
+  setProductAreaId?: Dispatch<SetStateAction<string>>
 }
 
-interface team {
+export interface Team {
   name: string
   url: string
+  productAreaId: string
 }
 
 export const TeamkatalogenSelector = ({
-  group,
+  team,
   register,
   errors,
-  watch,
+  setProductAreaId,
 }: TeamkatalogenSelectorProps) => {
   const { data, error } = useTeamkatalogenQuery({
-    variables: { q: group === undefined ? '' : group.split('@')[0] },
+    variables: { q: team === undefined ? '' : team.split('@')[0] },
   })
 
-  if (!data) return <LoaderSpinner />
-
-  let teams: team[]
+  let teams: Team[]
   if (error) {
     teams = []
   } else {
-    teams = data.teamkatalogen
+    teams = data?.teamkatalogen || []
   }
+
+  const updateProductAreaId = (url: string) => {
+    const productAreaId =
+      teams.find((it) => it.url == url)?.productAreaId || ''
+    setProductAreaId?.(productAreaId)
+  }
+
+  if (!teams) return <LoaderSpinner />
 
   return (
     <Select
       className="w-full 2xl:w-[32rem]"
       label="Team i Teamkatalogen"
-      {...register('teamkatalogenURL')}
+      {...register('teamkatalogenURL', { onChange: (e: any) => updateProductAreaId(e.target.value) })}
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>

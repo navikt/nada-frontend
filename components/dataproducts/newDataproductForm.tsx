@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
-import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
+import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import {
   Button,
@@ -26,9 +26,8 @@ const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
   team: yup.string().required('Velg et eierteam for produktet'),
-  teamkatalogenTeam: yup.string(),
-  teamContact: yup
-    .string(),
+  teamkatalogenURL: yup.string(),
+  teamContact: yup.string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
   sourceCodeURL: yup.string().url('Link må være en gyldig URL'),
@@ -51,7 +50,7 @@ export interface NewDataproductFields {
   name: string
   description: string
   team: string
-  teamkatalogenTeam: string
+  teamkatalogenURL: string
   teamContact: string
   datasetName: string
   datasetDescription: string
@@ -59,12 +58,14 @@ export interface NewDataproductFields {
   bigquery: BigQueryFields
   keywords: string[]
   pii: boolean
+  productAreaId: string
 }
 
 export const NewDataproductForm = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
   const [activePaths, setActivePaths] = useState<string[]>([])
+  const [productAreaId, setProductAreaId] = useState<string>('')
 
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
@@ -98,8 +99,9 @@ export const NewDataproductForm = () => {
             name: data.name,
             description: valueOrNull(data.description),
             group: data.team,
-            teamkatalogenURL: valueOrNull(data.teamkatalogenTeam),
+            teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
             teamContact: valueOrNull(data.teamContact),
+            productAreaId: valueOrNull(productAreaId),
             datasets: [
               {
                 name: data.datasetName,
@@ -203,15 +205,15 @@ export const NewDataproductForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          group={team}
+          team={team}
           register={register}
           errors={errors}
-          watch={watch}
+          setProductAreaId={setProductAreaId}
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
           {...register('teamContact')}
-          error = {errors.teamContact?.message}
+          error={errors.teamContact?.message}
           className="w-full 2xl:w-[32rem]"
         />
         <Divider />
