@@ -601,6 +601,20 @@ export type PollyInput = {
   url: Scalars['String'];
 };
 
+export type ProductArea = {
+  __typename?: 'ProductArea';
+  /** dataproducts is the dataproducts owned by the product area. */
+  dataproducts: Array<Dataproduct>;
+  /** externalID is the product area external id in teamkatalogen. */
+  externalID: Scalars['String'];
+  /** id is the id of the product area. */
+  id: Scalars['ID'];
+  /** name is the name of the product area. */
+  name: Scalars['String'];
+  /** stories is the stories owned by the product area. */
+  stories: Array<Story>;
+};
+
 /** Quarto contains the metadata and content of data stories. */
 export type Quarto = {
   __typename?: 'Quarto';
@@ -650,6 +664,10 @@ export type Query = {
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
   polly: Array<QueryPolly>;
+  /** productArea returns the given productArea. */
+  productArea: ProductArea;
+  /** productAreas returns all product areas. */
+  productAreas: Array<ProductArea>;
   /** quarto returns the given quarto. */
   quarto: Quarto;
   /** quartos returns all published quartos. */
@@ -738,6 +756,11 @@ export type QueryKeywordsArgs = {
 
 export type QueryPollyArgs = {
   q: Scalars['String'];
+};
+
+
+export type QueryProductAreaArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -1213,6 +1236,18 @@ export type PollyQueryVariables = Exact<{
 
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
+
+export type ProductAreaQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, externalID: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> } };
+
+export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, externalID: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string }> }> };
 
 export type QuartoQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2418,6 +2453,116 @@ export function usePollyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Poll
 export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
+export const ProductAreaDocument = gql`
+    query ProductArea($id: ID!) {
+  productArea(id: $id) {
+    id
+    externalID
+    name
+    dataproducts {
+      id
+      name
+      description
+      created
+      lastModified
+      keywords
+      slug
+      owner {
+        group
+        teamkatalogenURL
+        teamContact
+      }
+    }
+    stories {
+      id
+      name
+      created
+      lastModified
+      keywords
+      owner {
+        group
+        teamkatalogenURL
+        teamContact
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductAreaQuery__
+ *
+ * To run a query within a React component, call `useProductAreaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductAreaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductAreaQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProductAreaQuery(baseOptions: Apollo.QueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
+      }
+export function useProductAreaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
+        }
+export type ProductAreaQueryHookResult = ReturnType<typeof useProductAreaQuery>;
+export type ProductAreaLazyQueryHookResult = ReturnType<typeof useProductAreaLazyQuery>;
+export type ProductAreaQueryResult = Apollo.QueryResult<ProductAreaQuery, ProductAreaQueryVariables>;
+export const ProductAreasDocument = gql`
+    query ProductAreas {
+  productAreas {
+    id
+    externalID
+    name
+    dataproducts {
+      id
+      name
+      description
+      owner {
+        group
+      }
+    }
+    stories {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductAreasQuery__
+ *
+ * To run a query within a React component, call `useProductAreasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductAreasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductAreasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProductAreasQuery(baseOptions?: Apollo.QueryHookOptions<ProductAreasQuery, ProductAreasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductAreasQuery, ProductAreasQueryVariables>(ProductAreasDocument, options);
+      }
+export function useProductAreasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductAreasQuery, ProductAreasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductAreasQuery, ProductAreasQueryVariables>(ProductAreasDocument, options);
+        }
+export type ProductAreasQueryHookResult = ReturnType<typeof useProductAreasQuery>;
+export type ProductAreasLazyQueryHookResult = ReturnType<typeof useProductAreasLazyQuery>;
+export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, ProductAreasQueryVariables>;
 export const QuartoDocument = gql`
     query Quarto($id: ID!) {
   quarto(id: $id) {

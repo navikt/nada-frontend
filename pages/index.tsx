@@ -17,8 +17,7 @@ import BigQueryLogo from '../components/lib/icons/bigQueryLogo'
 import StoryLogo from '../components/lib/icons/storyLogo'
 import MetabaseLogo from '../components/lib/icons/metabaseLogo'
 import Link from 'next/link'
-import { Link as NavLink } from "@navikt/ds-react";
-import { Employer } from '@navikt/ds-icons'
+import ProductAreaView from '../components/productArea/productAreaView'
 
 const SEARCH_LIMIT = 6
 
@@ -34,16 +33,7 @@ const LandingPage = () => {
 
     return (
         <>
-            <div className="py-2">
-                <NavLink href="/productArea/123" className="nada-search-result max-w-[47rem] align-top">
-                    <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-3">
-                        <div className="flex flex-row gap-2">
-                            <Employer />
-                            <div className="whitespace-nowrap">Produktområde test</div>
-                        </div>
-                    </div>
-                </NavLink>
-            </div>
+            <ProductAreaView/>
             <div className="flex flex-col items-center justify-center gap-20 mt-48">
                 <Head>
                     <title>nav data</title>

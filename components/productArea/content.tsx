@@ -1,10 +1,10 @@
 import { Tabs } from "@navikt/ds-react";
-import { Dataproduct, Story } from "../../pages/productArea/[id]";
+import { Story, Dataproduct } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 
 interface ProductAreaContentProps {
-    dataproducts: Array<Dataproduct>
-    stories: Array<Story>
+    dataproducts: Array<Dataproduct> | undefined
+    stories: Array<Story> | undefined
 }
 
 const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) => {
@@ -43,10 +43,10 @@ const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) 
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {stories.map((s, idx) => (
+                    {stories && stories.map((s, idx) => (
                         <SearchResultLink
                             key={idx}
-                            group={s.group!.group}
+                            group={s.owner.group}
                             name={s.name}
                             keywords={s.keywords}
                             link={`/story/${s.id}`}
@@ -60,7 +60,7 @@ const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) 
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {dataproducts.map((d, idx) => (
+                    {dataproducts && dataproducts.map((d, idx) => (
                         <SearchResultLink
                             key={idx}
                             group={d.owner.group}
