@@ -1250,7 +1250,7 @@ export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, externalID: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, externalID: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } }> }> };
 
 export type QuartoQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2536,6 +2536,14 @@ export const ProductAreasDocument = gql`
     }
     stories {
       id
+      name
+      created
+      lastModified
+      keywords
+      owner {
+        group
+        teamkatalogenURL
+      }
     }
   }
 }

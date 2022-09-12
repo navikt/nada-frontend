@@ -16,6 +16,14 @@ export const GET_PRODUCT_AREAS = gql`
       }
       stories{
         id
+        name
+        created
+        lastModified
+        keywords
+        owner {
+            group
+            teamkatalogenURL
+        }
       }
     }
   }
