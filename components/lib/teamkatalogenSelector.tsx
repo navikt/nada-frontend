@@ -38,14 +38,12 @@ export const TeamkatalogenSelector = ({
     teams = data?.teamkatalogen || []
   }
 
-  const updateProductAreaID = (url: string) => {
-    const productAreaID =
-      teams.find((it) => it.url == url)?.productAreaID || ''
-    setProductAreaID?.(productAreaID)
-
-    const teamID =
-      teams.find((it) => it.url == url)?.teamID || ''
-    setTeamID?.(teamID)
+  const updateTeamkatalogInfo = (url: string) => {
+    const team = teams.find((it) => it.url == url)
+    if (team) {
+        setProductAreaID?.(team.productAreaID)
+        setTeamID?.(team.teamID)
+    } 
   }
 
   if (!teams) return <LoaderSpinner />
@@ -54,7 +52,7 @@ export const TeamkatalogenSelector = ({
     <Select
       className="w-full 2xl:w-[32rem]"
       label="Team i Teamkatalogen"
-      {...register('teamkatalogenURL', { onChange: (e: any) => updateProductAreaID(e.target.value) })}
+      {...register('teamkatalogenURL', { onChange: (e: any) => updateTeamkatalogInfo(e.target.value) })}
       error={errors.owner?.group?.message}
     >
       <option value="">Velg team</option>
