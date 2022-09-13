@@ -1351,6 +1351,7 @@ export type UpdateStoryMetadataMutationVariables = Exact<{
   name: Scalars['String'];
   teamkatalogenURL?: Maybe<Scalars['String']>;
   productAreaID?: Maybe<Scalars['String']>;
+  teamID?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -3025,13 +3026,14 @@ export type StoryTokenQueryHookResult = ReturnType<typeof useStoryTokenQuery>;
 export type StoryTokenLazyQueryHookResult = ReturnType<typeof useStoryTokenLazyQuery>;
 export type StoryTokenQueryResult = Apollo.QueryResult<StoryTokenQuery, StoryTokenQueryVariables>;
 export const UpdateStoryMetadataDocument = gql`
-    mutation updateStoryMetadata($id: ID!, $keywords: [String!]!, $name: String!, $teamkatalogenURL: String, $productAreaID: String) {
+    mutation updateStoryMetadata($id: ID!, $keywords: [String!]!, $name: String!, $teamkatalogenURL: String, $productAreaID: String, $teamID: String) {
   updateStoryMetadata(
     id: $id
     keywords: $keywords
     name: $name
     teamkatalogenURL: $teamkatalogenURL
     productAreaID: $productAreaID
+    teamID: $teamID
   ) {
     id
   }
@@ -3057,6 +3059,7 @@ export type UpdateStoryMetadataMutationFn = Apollo.MutationFunction<UpdateStoryM
  *      name: // value for 'name'
  *      teamkatalogenURL: // value for 'teamkatalogenURL'
  *      productAreaID: // value for 'productAreaID'
+ *      teamID: // value for 'teamID'
  *   },
  * });
  */

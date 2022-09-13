@@ -41,6 +41,7 @@ function EditForm({ story }: SaveFormProps) {
     },
   })
   const [productAreaID, setProductAreaID] = useState('')
+  const [teamID, setTeamID] = useState('')
 
   const { errors } = formState
   const keywords = watch('keywords')
@@ -75,6 +76,7 @@ function EditForm({ story }: SaveFormProps) {
         keywords,
         teamkatalogenURL: requestData.teamkatalogenURL,
         productAreaID: productAreaID,
+        teamID: teamID,
       },
     })
       .then((published: any) => {
@@ -102,6 +104,7 @@ function EditForm({ story }: SaveFormProps) {
                 register={register}
                 errors={errors}
                 setProductAreaID={setProductAreaID}
+                setTeamID={setTeamID}
               />
               <KeywordsInput
                 onAdd={onAdd}
