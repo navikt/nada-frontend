@@ -33,10 +33,12 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       },
     })
   const [productAreaID, setProductAreaID] = useState<string>('')
+  const [teamID, setTeamID] = useState<string>('')
 
   const { errors } = formState
   const onSubmit = (requestData: UpdateDataproduct) => {
     requestData.productAreaID = productAreaID
+    requestData.teamID = teamID
     updateDataproduct({
       variables: { id: product.id, input: requestData },
       awaitRefetchQueries: true,
@@ -83,6 +85,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           register={register}
           errors={errors}
           setProductAreaID={setProductAreaID}
+          setTeamID={setTeamID}
         />
         <TextField
           style={{ width: '350px', display: 'block' }}
