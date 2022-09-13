@@ -44,6 +44,7 @@ function SaveForm({ story }: SaveFormProps) {
     })
 
   const [productAreaID, setProductAreaID] = useState('')
+  const [teamID, setTeamID] = useState('')
   const { errors } = formState
   const keywords = watch('keywords')
   const group = watch('group')
@@ -85,6 +86,7 @@ function SaveForm({ story }: SaveFormProps) {
       return
     }
     requestData.productAreaID = productAreaID
+    requestData.teamID = teamID
     publishStory({
       refetchQueries: ['searchContent'],
       variables: {
@@ -143,6 +145,7 @@ function SaveForm({ story }: SaveFormProps) {
                   register={register}
                   errors={errors}
                   setProductAreaID={setProductAreaID}
+                  setTeamID={setTeamID}
                 />
               )}
               <StorySelector register={register} group={group} />

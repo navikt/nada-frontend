@@ -1,5 +1,6 @@
 import { ErrorMessage, Loader } from "@navikt/ds-react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import ProductAreaContent from "../../components/productArea/content";
 import ProductAreaSidebar from "../../components/productArea/sidebar";
 import { useProductAreaQuery } from "../../lib/schema/graphql";
@@ -35,8 +36,28 @@ export interface Story {
     };
 };
 
+const createDashboardList = (productArea: any) => {
+    let dashboards = []
+    dashboards.push({
+        name: productArea.name,
+        dataproducts: productArea.dataproducts,
+        stories: productArea.stories,
+    })
+    
+    productArea.teams.forEach((t: any) => {
+        dashboards.push({
+            name: t.name,
+            dataproducts: t.dataproducts,
+            stories: t.stories,
+        })
+    })
+
+    return dashboards
+}
+
 const ProductAreaPage = () => {
     const router = useRouter()
+    const [currentDashboard, setCurrentDashboard] = useState(0)
 
     const productAreaQuery = useProductAreaQuery({
         variables: {
@@ -48,11 +69,12 @@ const ProductAreaPage = () => {
     if (productAreaQuery.loading || !productAreaQuery.data?.productArea) return <Loader />
 
     const productArea = productAreaQuery.data.productArea
+    const dashboards = createDashboardList(productArea)
 
     return (
         <div className="flex flex-row h-full flex-grow gap-3 pt-8">
-            <ProductAreaSidebar name={productArea.name} stats={{ dataproducts: productArea.dataproducts.length, stories: productArea.stories.length }} />
-            <ProductAreaContent dataproducts={productArea.dataproducts} stories={productArea.stories} />
+            <ProductAreaSidebar dashboards={dashboards} setCurrentDashboard={setCurrentDashboard} />
+            <ProductAreaContent dashboards={dashboards} currentDashboard={currentDashboard} />
         </div>
     )
 }

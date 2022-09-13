@@ -3,22 +3,23 @@ import { Story, Dataproduct } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 
 interface ProductAreaContentProps {
-    dataproducts: Array<Dataproduct> | undefined
-    stories: Array<Story> | undefined
+    currentDashboard: number
+    dashboards: any
 }
 
-const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) => {
+const ProductAreaContent = ({ currentDashboard, dashboards }: ProductAreaContentProps) => {
+    const dashboard = dashboards[currentDashboard]
     return (
         <Tabs
-            defaultValue="dashboard"
+            defaultValue="stories"
             size="medium"
             className="w-full pt-8"
         >
             <Tabs.List>
-                <Tabs.Tab
+                {/* <Tabs.Tab
                     value="dashboard"
                     label="Dashboard"
-                />
+                /> */}
                 <Tabs.Tab
                     value="stories"
                     label="Fortellinger"
@@ -28,7 +29,7 @@ const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) 
                     label="Produkter"
                 />
             </Tabs.List>
-            <Tabs.Panel
+            {/* <Tabs.Panel
                 value="dashboard"
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
@@ -37,13 +38,13 @@ const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) 
                     width="100%"
                     height="1200"
                 />
-            </Tabs.Panel>
+            </Tabs.Panel> */}
             <Tabs.Panel
                 value="stories"
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {stories && stories.map((s, idx) => (
+                    {dashboard.stories && dashboard.stories.map((s: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={s.owner.group}
@@ -60,7 +61,7 @@ const ProductAreaContent = ({ dataproducts, stories }: ProductAreaContentProps) 
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {dataproducts && dataproducts.map((d, idx) => (
+                    {dashboard.dataproducts && dashboard.dataproducts.map((d: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={d.owner.group}

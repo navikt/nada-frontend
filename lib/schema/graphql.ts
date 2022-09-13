@@ -567,6 +567,8 @@ export type NewStory = {
   productAreaID?: Maybe<Scalars['String']>;
   /** target is the id of the published story to overwrite. Keep empty to create new story. */
   target?: Maybe<Scalars['ID']>;
+  /** Id of the team. */
+  teamID?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -1273,7 +1275,7 @@ export type ProductAreaQueryVariables = Exact<{
 }>;
 
 
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> } };
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> } };
 
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2490,6 +2492,36 @@ export const ProductAreaDocument = gql`
   productArea(id: $id) {
     id
     name
+    teams {
+      id
+      name
+      dataproducts {
+        id
+        name
+        description
+        created
+        lastModified
+        keywords
+        slug
+        owner {
+          group
+          teamkatalogenURL
+          teamContact
+        }
+      }
+      stories {
+        id
+        name
+        created
+        lastModified
+        keywords
+        owner {
+          group
+          teamkatalogenURL
+          teamContact
+        }
+      }
+    }
     dataproducts {
       id
       name
