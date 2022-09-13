@@ -456,6 +456,7 @@ export type MutationUpdateStoryMetadataArgs = {
   keywords: Array<Scalars['String']>;
   name: Scalars['String'];
   productAreaID?: Maybe<Scalars['String']>;
+  teamID?: Maybe<Scalars['String']>;
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
 
@@ -499,6 +500,8 @@ export type NewDataproduct = {
   productAreaID?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
   teamContact?: Maybe<Scalars['String']>;
+  /** Id of the team. */
+  teamID?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -564,6 +567,8 @@ export type NewStory = {
   productAreaID?: Maybe<Scalars['String']>;
   /** target is the id of the published story to overwrite. Keep empty to create new story. */
   target?: Maybe<Scalars['ID']>;
+  /** Id of the team. */
+  teamID?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -602,6 +607,20 @@ export type PollyInput = {
   name: Scalars['String'];
   /** url from polly */
   url: Scalars['String'];
+};
+
+export type ProductArea = {
+  __typename?: 'ProductArea';
+  /** dataproducts is the dataproducts owned by the product area. */
+  dataproducts: Array<Dataproduct>;
+  /** id is the product area external id in teamkatalogen. */
+  id: Scalars['String'];
+  /** name is the name of the product area. */
+  name: Scalars['String'];
+  /** stories is the stories owned by the product area. */
+  stories: Array<Story>;
+  /** teams is the teams in the product area. */
+  teams: Array<Team>;
 };
 
 /** Quarto contains the metadata and content of data stories. */
@@ -653,6 +672,10 @@ export type Query = {
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
   polly: Array<QueryPolly>;
+  /** productArea returns the given productArea. */
+  productArea: ProductArea;
+  /** productAreas returns all product areas. */
+  productAreas: Array<ProductArea>;
   /** quarto returns the given quarto. */
   quarto: Quarto;
   /** quartos returns all published quartos. */
@@ -671,6 +694,8 @@ export type Query = {
   storyToken: StoryToken;
   /** storyView returns the given story view. */
   storyView: StoryView;
+  /** team returns the given team. */
+  team: Team;
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>;
   /** userInfo returns information about the logged in user. */
@@ -744,6 +769,11 @@ export type QueryPollyArgs = {
 };
 
 
+export type QueryProductAreaArgs = {
+  id: Scalars['String'];
+};
+
+
 export type QueryQuartoArgs = {
   id: Scalars['ID'];
 };
@@ -774,6 +804,11 @@ export type QueryStoryTokenArgs = {
 export type QueryStoryViewArgs = {
   draft?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
+};
+
+
+export type QueryTeamArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -945,6 +980,20 @@ export type TableColumn = {
   type: Scalars['String'];
 };
 
+export type Team = {
+  __typename?: 'Team';
+  /** dataproducts is the dataproducts owned by the team. */
+  dataproducts: Array<Dataproduct>;
+  /** id is the team external id in teamkatalogen. */
+  id: Scalars['String'];
+  /** name is the name of the team. */
+  name: Scalars['String'];
+  /** productAreaID is the id of the product area. */
+  productAreaID: Scalars['String'];
+  /** stories is the stories owned by the team. */
+  stories: Array<Story>;
+};
+
 export type TeamkatalogenResult = {
   __typename?: 'TeamkatalogenResult';
   /** team description. */
@@ -953,6 +1002,8 @@ export type TeamkatalogenResult = {
   name: Scalars['String'];
   /** Id of the team's product area. */
   productAreaID: Scalars['String'];
+  /** team id is the id of the team. */
+  teamID: Scalars['String'];
   /** url to team in teamkatalogen. */
   url: Scalars['String'];
 };
@@ -979,6 +1030,8 @@ export type UpdateDataproduct = {
   productAreaID?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
   teamContact?: Maybe<Scalars['String']>;
+  /** Id of the team. */
+  teamID?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -1217,6 +1270,18 @@ export type PollyQueryVariables = Exact<{
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
+export type ProductAreaQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> } };
+
+export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } }> }> };
+
 export type QuartoQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1304,7 +1369,7 @@ export type TeamkatalogenQueryVariables = Exact<{
 }>;
 
 
-export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string, productAreaID: string }> };
+export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string, productAreaID: string, teamID: string }> };
 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2422,6 +2487,152 @@ export function usePollyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Poll
 export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
+export const ProductAreaDocument = gql`
+    query ProductArea($id: String!) {
+  productArea(id: $id) {
+    id
+    name
+    teams {
+      id
+      name
+      dataproducts {
+        id
+        name
+        description
+        created
+        lastModified
+        keywords
+        slug
+        owner {
+          group
+          teamkatalogenURL
+          teamContact
+        }
+      }
+      stories {
+        id
+        name
+        created
+        lastModified
+        keywords
+        owner {
+          group
+          teamkatalogenURL
+          teamContact
+        }
+      }
+    }
+    dataproducts {
+      id
+      name
+      description
+      created
+      lastModified
+      keywords
+      slug
+      owner {
+        group
+        teamkatalogenURL
+        teamContact
+      }
+    }
+    stories {
+      id
+      name
+      created
+      lastModified
+      keywords
+      owner {
+        group
+        teamkatalogenURL
+        teamContact
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductAreaQuery__
+ *
+ * To run a query within a React component, call `useProductAreaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductAreaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductAreaQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProductAreaQuery(baseOptions: Apollo.QueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
+      }
+export function useProductAreaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
+        }
+export type ProductAreaQueryHookResult = ReturnType<typeof useProductAreaQuery>;
+export type ProductAreaLazyQueryHookResult = ReturnType<typeof useProductAreaLazyQuery>;
+export type ProductAreaQueryResult = Apollo.QueryResult<ProductAreaQuery, ProductAreaQueryVariables>;
+export const ProductAreasDocument = gql`
+    query ProductAreas {
+  productAreas {
+    id
+    name
+    dataproducts {
+      id
+      name
+      description
+      owner {
+        group
+      }
+    }
+    stories {
+      id
+      name
+      created
+      lastModified
+      keywords
+      owner {
+        group
+        teamkatalogenURL
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductAreasQuery__
+ *
+ * To run a query within a React component, call `useProductAreasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductAreasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductAreasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProductAreasQuery(baseOptions?: Apollo.QueryHookOptions<ProductAreasQuery, ProductAreasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductAreasQuery, ProductAreasQueryVariables>(ProductAreasDocument, options);
+      }
+export function useProductAreasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductAreasQuery, ProductAreasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductAreasQuery, ProductAreasQueryVariables>(ProductAreasDocument, options);
+        }
+export type ProductAreasQueryHookResult = ReturnType<typeof useProductAreasQuery>;
+export type ProductAreasLazyQueryHookResult = ReturnType<typeof useProductAreasLazyQuery>;
+export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, ProductAreasQueryVariables>;
 export const QuartoDocument = gql`
     query Quarto($id: ID!) {
   quarto(id: $id) {
@@ -2901,6 +3112,7 @@ export const TeamkatalogenDocument = gql`
     name
     url
     productAreaID
+    teamID
   }
 }
     `;

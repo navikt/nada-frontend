@@ -59,6 +59,7 @@ export interface NewDataproductFields {
   keywords: string[]
   pii: boolean
   productAreaID: string
+  teamID: string
 }
 
 export const NewDataproductForm = () => {
@@ -66,6 +67,7 @@ export const NewDataproductForm = () => {
   const userInfo = useContext(UserState)
   const [activePaths, setActivePaths] = useState<string[]>([])
   const [productAreaID, setProductAreaID] = useState<string>('')
+  const [teamID, setTeamID] = useState<string>('')
 
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
@@ -102,6 +104,7 @@ export const NewDataproductForm = () => {
             teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
             teamContact: valueOrNull(data.teamContact),
             productAreaID: valueOrNull(productAreaID),
+            teamID: valueOrNull(teamID),
             datasets: [
               {
                 name: data.datasetName,
@@ -209,6 +212,7 @@ export const NewDataproductForm = () => {
           register={register}
           errors={errors}
           setProductAreaID={setProductAreaID}
+          setTeamID={setTeamID}
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"

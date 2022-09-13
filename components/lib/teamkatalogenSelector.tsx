@@ -10,12 +10,14 @@ type TeamkatalogenSelectorProps = {
   register: any
   errors: any
   setProductAreaID?: Dispatch<SetStateAction<string>>
+  setTeamID?: Dispatch<SetStateAction<string>>
 }
 
 export interface Team {
   name: string
   url: string
   productAreaID: string
+  teamID: string
 }
 
 export const TeamkatalogenSelector = ({
@@ -23,6 +25,7 @@ export const TeamkatalogenSelector = ({
   register,
   errors,
   setProductAreaID,
+  setTeamID,
 }: TeamkatalogenSelectorProps) => {
   const { data, error } = useTeamkatalogenQuery({
     variables: { q: team === undefined ? '' : team.split('@')[0] },
@@ -39,6 +42,10 @@ export const TeamkatalogenSelector = ({
     const productAreaID =
       teams.find((it) => it.url == url)?.productAreaID || ''
     setProductAreaID?.(productAreaID)
+
+    const teamID =
+      teams.find((it) => it.url == url)?.teamID || ''
+    setTeamID?.(teamID)
   }
 
   if (!teams) return <LoaderSpinner />
