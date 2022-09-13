@@ -456,6 +456,7 @@ export type MutationUpdateStoryMetadataArgs = {
   keywords: Array<Scalars['String']>;
   name: Scalars['String'];
   productAreaID?: Maybe<Scalars['String']>;
+  teamID?: Maybe<Scalars['String']>;
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
 
@@ -499,6 +500,8 @@ export type NewDataproduct = {
   productAreaID?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
   teamContact?: Maybe<Scalars['String']>;
+  /** Id of the team. */
+  teamID?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -608,14 +611,14 @@ export type ProductArea = {
   __typename?: 'ProductArea';
   /** dataproducts is the dataproducts owned by the product area. */
   dataproducts: Array<Dataproduct>;
-  /** externalID is the product area external id in teamkatalogen. */
-  externalID: Scalars['String'];
-  /** id is the id of the product area. */
-  id: Scalars['ID'];
+  /** id is the product area external id in teamkatalogen. */
+  id: Scalars['String'];
   /** name is the name of the product area. */
   name: Scalars['String'];
   /** stories is the stories owned by the product area. */
   stories: Array<Story>;
+  /** teams is the teams in the product area. */
+  teams: Array<Team>;
 };
 
 /** Quarto contains the metadata and content of data stories. */
@@ -689,6 +692,8 @@ export type Query = {
   storyToken: StoryToken;
   /** storyView returns the given story view. */
   storyView: StoryView;
+  /** team returns the given team. */
+  team: Team;
   /** searches teamkatalogen for teams where team name matches query input */
   teamkatalogen: Array<TeamkatalogenResult>;
   /** userInfo returns information about the logged in user. */
@@ -763,7 +768,7 @@ export type QueryPollyArgs = {
 
 
 export type QueryProductAreaArgs = {
-  id: Scalars['ID'];
+  id: Scalars['String'];
 };
 
 
@@ -797,6 +802,11 @@ export type QueryStoryTokenArgs = {
 export type QueryStoryViewArgs = {
   draft?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
+};
+
+
+export type QueryTeamArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -968,6 +978,20 @@ export type TableColumn = {
   type: Scalars['String'];
 };
 
+export type Team = {
+  __typename?: 'Team';
+  /** dataproducts is the dataproducts owned by the team. */
+  dataproducts: Array<Dataproduct>;
+  /** id is the team external id in teamkatalogen. */
+  id: Scalars['String'];
+  /** name is the name of the team. */
+  name: Scalars['String'];
+  /** productAreaID is the id of the product area. */
+  productAreaID: Scalars['String'];
+  /** stories is the stories owned by the team. */
+  stories: Array<Story>;
+};
+
 export type TeamkatalogenResult = {
   __typename?: 'TeamkatalogenResult';
   /** team description. */
@@ -976,6 +1000,8 @@ export type TeamkatalogenResult = {
   name: Scalars['String'];
   /** Id of the team's product area. */
   productAreaID: Scalars['String'];
+  /** team id is the id of the team. */
+  teamID: Scalars['String'];
   /** url to team in teamkatalogen. */
   url: Scalars['String'];
 };
@@ -1002,6 +1028,8 @@ export type UpdateDataproduct = {
   productAreaID?: Maybe<Scalars['String']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
   teamContact?: Maybe<Scalars['String']>;
+  /** Id of the team. */
+  teamID?: Maybe<Scalars['String']>;
   /** owner Teamkatalogen URL for the dataproduct. */
   teamkatalogenURL?: Maybe<Scalars['String']>;
 };
@@ -1241,16 +1269,16 @@ export type PollyQueryVariables = Exact<{
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
 export type ProductAreaQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['String'];
 }>;
 
 
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, externalID: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> } };
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined, teamContact?: string | null | undefined } }> } };
 
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, externalID: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null | undefined, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null | undefined } }> }> };
 
 export type QuartoQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1339,7 +1367,7 @@ export type TeamkatalogenQueryVariables = Exact<{
 }>;
 
 
-export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string, productAreaID: string }> };
+export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string, productAreaID: string, teamID: string }> };
 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2458,10 +2486,9 @@ export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
 export const ProductAreaDocument = gql`
-    query ProductArea($id: ID!) {
+    query ProductArea($id: String!) {
   productArea(id: $id) {
     id
-    externalID
     name
     dataproducts {
       id
@@ -2524,7 +2551,6 @@ export const ProductAreasDocument = gql`
     query ProductAreas {
   productAreas {
     id
-    externalID
     name
     dataproducts {
       id
@@ -3054,6 +3080,7 @@ export const TeamkatalogenDocument = gql`
     name
     url
     productAreaID
+    teamID
   }
 }
     `;

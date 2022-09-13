@@ -1,10 +1,9 @@
 import { gql } from 'graphql-tag'
 
 export const GET_PRODUCT_AREA = gql`
-  query ProductArea($id: ID!) {
+  query ProductArea($id: String!) {
     productArea(id: $id) {
       id
-      externalID
       name
       dataproducts{
         id
