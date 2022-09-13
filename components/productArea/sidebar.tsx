@@ -11,7 +11,7 @@ const ProductAreaSidebar = ({ dashboards, setCurrentDashboard }: ProductAreaSide
     return (
         <div className="flex flex-col">
             {dashboards && dashboards.map((d: any, idx: number) => (
-                <Link onClick={() => setCurrentDashboard(idx)} href="#" className="nada-pa-menu-item max-w-[47rem] align-top">
+                <Link key={"dashboard-"+idx} onClick={() => setCurrentDashboard(idx)} href="#" className="nada-pa-menu-item max-w-[47rem] align-top">
                     <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-3 gap-1">
                         <div className="flex flex-row gap-2">
                             <Bandage className="h-8 w-8"/>
