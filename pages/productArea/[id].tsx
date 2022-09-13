@@ -73,7 +73,7 @@ const ProductAreaPage = () => {
 
     return (
         <div className="flex flex-row h-full flex-grow gap-3 pt-8">
-            <ProductAreaSidebar dashboards={dashboards} setCurrentDashboard={setCurrentDashboard} />
+            <ProductAreaSidebar dashboards={dashboards} setCurrentDashboard={setCurrentDashboard} currentDashboard={currentDashboard} />
             <ProductAreaContent dashboards={dashboards} currentDashboard={currentDashboard} />
         </div>
     )
