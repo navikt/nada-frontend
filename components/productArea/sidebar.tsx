@@ -1,16 +1,17 @@
 import * as React from "react";
+import { PAItems } from "../../pages/productArea/[id]";
 
 interface ProductAreaSidebarProps {
-    dashboards: any
-    setCurrentDashboard: Function
-    currentDashboard: number
+    productAreaItems: PAItems
+    setCurrentItem: React.Dispatch<React.SetStateAction<number>>
+    currentItem: number
 }
 
-const ProductAreaSidebar = ({ dashboards, setCurrentDashboard, currentDashboard }: ProductAreaSidebarProps) => {
+const ProductAreaSidebar = ({ productAreaItems, setCurrentItem, currentItem }: ProductAreaSidebarProps) => {
     return (
       <div className="flex w-64 flex-col gap-2">
-          {dashboards.map(( d: any, idx: number) =>
-            currentDashboard == idx ? (
+          {productAreaItems.map(( d: any, idx: number) =>
+            currentItem == idx ? (
               <p
                 className="border-l-[6px] border-l-link px-1 font-semibold py-1"
                 key={idx}
@@ -24,7 +25,7 @@ const ProductAreaSidebar = ({ dashboards, setCurrentDashboard, currentDashboard 
                 className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
                 href="#"
                 key={idx}
-                onClick={() => setCurrentDashboard(idx)}
+                onClick={() => setCurrentItem(idx)}
                 style={ idx == 0 ? {marginBottom: "1rem", borderBottom: "6px solid rgba(0, 103, 197, 1)"} : {} }
               >
                   {d.name}

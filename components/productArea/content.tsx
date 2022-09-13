@@ -1,14 +1,14 @@
 import { Tabs } from "@navikt/ds-react";
-import { Story, Dataproduct } from "../../pages/productArea/[id]";
+import { PAItems } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 
 interface ProductAreaContentProps {
-    currentDashboard: number
-    dashboards: any
+    currentItem: number
+    productAreaItems: PAItems
 }
 
-const ProductAreaContent = ({ currentDashboard, dashboards }: ProductAreaContentProps) => {
-    const dashboard = dashboards[currentDashboard]
+const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaContentProps) => {
+    const item = productAreaItems[currentItem]
     return (
         <Tabs
             defaultValue="stories"
@@ -44,7 +44,7 @@ const ProductAreaContent = ({ currentDashboard, dashboards }: ProductAreaContent
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {dashboard.stories && dashboard.stories.map((s: any, idx: number) => (
+                    {item.stories && item.stories.map((s: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={s.owner.group}
@@ -61,7 +61,7 @@ const ProductAreaContent = ({ currentDashboard, dashboards }: ProductAreaContent
                 className="h-full w-full bg-[#F1F4F1] p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {dashboard.dataproducts && dashboard.dataproducts.map((d: any, idx: number) => (
+                    {item.dataproducts && item.dataproducts.map((d: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={d.owner.group}
