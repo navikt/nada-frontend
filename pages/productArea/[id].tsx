@@ -48,7 +48,7 @@ const createPAItems = (productArea: ProductAreaQuery["productArea"]) => {
         stories: productArea.stories,
     })
     
-    productArea.teams.forEach((t: any) => {
+    productArea.teams.forEach((t) => {
         items.push({
             name: t.name,
             dataproducts: t.dataproducts,
