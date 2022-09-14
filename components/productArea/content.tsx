@@ -54,6 +54,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                             type="story"
                         />
                     ))}
+                    {item.stories.length == 0 && "Ingen fortellinger"}
                 </div>
             </Tabs.Panel>
             <Tabs.Panel
@@ -70,6 +71,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                             link={`/dataproduct/${d.id}/${d.slug}`}
                         />
                     ))}
+                    {item.dataproducts.length == 0 && "Ingen dataprodukter"}
                 </div>
             </Tabs.Panel>
         </Tabs>
