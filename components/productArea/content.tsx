@@ -31,7 +31,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
             </Tabs.List>
             {/* <Tabs.Panel
                 value="dashboard"
-                className="h-full w-full bg-[#F1F4F1] p-8"
+                className="h-full w-full p-8"
             >
                 <iframe
                     src="https://metabase.dev.intern.nav.no/public/dashboard/fd4fc319-7ac3-4eca-9957-b1751da590f9"
@@ -41,7 +41,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
             </Tabs.Panel> */}
             <Tabs.Panel
                 value="stories"
-                className="h-full w-full bg-[#F1F4F1] p-8"
+                className="h-full w-full p-8"
             >
                 <div className="flex flex-col gap-2 ">
                     {item.stories && item.stories.map((s: any, idx: number) => (
@@ -54,11 +54,12 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                             type="story"
                         />
                     ))}
+                    {item.stories.length == 0 && "Ingen fortellinger"}
                 </div>
             </Tabs.Panel>
             <Tabs.Panel
                 value="products"
-                className="h-full w-full bg-[#F1F4F1] p-8"
+                className="h-full w-full p-8"
             >
                 <div className="flex flex-col gap-2 ">
                     {item.dataproducts && item.dataproducts.map((d: any, idx: number) => (
@@ -70,6 +71,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                             link={`/dataproduct/${d.id}/${d.slug}`}
                         />
                     ))}
+                    {item.dataproducts.length == 0 && "Ingen dataprodukter"}
                 </div>
             </Tabs.Panel>
         </Tabs>

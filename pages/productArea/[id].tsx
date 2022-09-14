@@ -48,8 +48,9 @@ const createPAItems = (productArea: ProductAreaQuery["productArea"]) => {
         dataproducts: productArea.dataproducts,
         stories: productArea.stories,
     })
-    
-    productArea.teams.forEach((t) => {
+    productArea.teams.slice().sort((a,b) => {
+        return (b.dataproducts.length + b.stories.length) - (a.dataproducts.length + a.stories.length)
+    }).forEach((t) => {
         items.push({
             name: t.name,
             dataproducts: t.dataproducts,

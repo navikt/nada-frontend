@@ -1,4 +1,4 @@
-name: build and push
+name: "dev: build and push"
 on:
   push:
     branches:
@@ -10,7 +10,7 @@ jobs:
     outputs:
       version: ${{ steps.set-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: set version
         id: set-version
         run: echo ::set-output name=version::"$(date '+%Y-%m-%d')-$(git --no-pager log -1 --pretty=%h)"
@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-20.04
     needs: set-version
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
@@ -39,14 +39,14 @@ jobs:
           echo "image_prefix=$prefix" >> $GITHUB_ENV
           echo "IMAGE=$prefix:$version" >> $GITHUB_ENV
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@ab80d026d4753220c4243394c07c7d80f9638d06 # Use commit-sha1 instead of tag for security concerns
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Dockerimage
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: true
