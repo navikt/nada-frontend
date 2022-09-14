@@ -60,6 +60,7 @@ jobs:
     env:
       IMAGE: ${{ needs.build.outputs.image }}
     steps:
+      - uses: actions/checkout@v3
       - name: Deploy to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -72,6 +73,7 @@ jobs:
     env:
       IMAGE: ${{ needs.build.outputs.image }}
     steps:
+      - uses: actions/checkout@v3
       - name: Deploy to prod
         if: github.ref == 'refs/heads/main'
         uses: nais/deploy/actions/deploy@v1
