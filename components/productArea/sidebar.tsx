@@ -21,14 +21,14 @@ const ProductAreaSidebar = ({ productAreaItems, setCurrentItem, currentItem }: P
                       <p className="whitespace-nowrap">{d.stories.length} fortellinger / {d.dataproducts.length} produkter</p>
                   </div>
               } else if (currentItem == idx) {
-                  return <p
+                  return <div
                     className="border-l-[6px] border-l-link px-1 font-semibold py-1"
                     key={idx}
                     style={ idx == 0 ? {marginBottom: "1rem", borderBottom: "6px solid rgba(0, 103, 197, 1)"} : {} }
                   >
                       {d.name}
                       <p className="whitespace-nowrap text-black">{d.stories.length} fortellinger / {d.dataproducts.length} produkter</p>
-                  </p>
+                  </div>
               } else {
                   return <a
                     className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
