@@ -1,5 +1,6 @@
 import { ErrorMessage, Loader } from "@navikt/ds-react";
 import { useRouter } from "next/router";
+import React from "react";
 import { useState } from "react";
 import ProductAreaContent from "../../components/productArea/content";
 import ProductAreaSidebar from "../../components/productArea/sidebar";
@@ -59,13 +60,16 @@ const createPAItems = (productArea: ProductAreaQuery["productArea"]) => {
     return items
 }
 
-const ProductAreaPage = () => {
-    const router = useRouter()
+interface ProductAreaProps {
+    id: string
+}
+
+const ProductArea = ({id}: ProductAreaProps) => {
     const [currentItem, setCurrentItem] = useState(0)
 
     const productAreaQuery = useProductAreaQuery({
         variables: {
-            id: router.query.id as string
+            id
         },
     })
 
@@ -74,13 +78,19 @@ const ProductAreaPage = () => {
 
     const productArea = productAreaQuery.data.productArea
     const paItems = createPAItems(productArea)
-
     return (
         <div className="flex flex-row h-full flex-grow gap-3 pt-8">
             <ProductAreaSidebar productAreaItems={paItems} setCurrentItem={setCurrentItem} currentItem={currentItem} />
             <ProductAreaContent productAreaItems={paItems} currentItem={currentItem} />
         </div>
     )
+}
+
+const ProductAreaPage = () => {
+    const router = useRouter()
+    if (!router.isReady) return <Loader/>
+
+    return <ProductArea id={router.query.id as string}/>
 }
 
 export default ProductAreaPage;
