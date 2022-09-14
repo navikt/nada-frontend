@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.set-version.outputs.image }}
+      image: ${{ steps.image.outputs.image }}
     steps:
       - uses: actions/checkout@v3
       - name: set Docker image name:tag
