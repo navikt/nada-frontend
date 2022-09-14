@@ -55,7 +55,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
   deploy-dev:
-    runs-on: latest
+    runs-on: ubuntu-latest
     needs: build
     env:
       IMAGE: ${{ needs.build.outputs.image }}
@@ -67,7 +67,7 @@ jobs:
           VAR: ingress=https://data.dev.intern.nav.no/
 
   deploy-prod:
-    runs-on: latest
+    runs-on: ubuntu-latest
     needs: [build, deploy-dev]
     env:
       IMAGE: ${{ needs.build.outputs.image }}
