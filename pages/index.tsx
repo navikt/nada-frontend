@@ -13,11 +13,11 @@ import { useEffect } from 'react'
 import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
 import { USER_INFO } from '../lib/queries/userInfo/userInfo'
-import BigQueryLogo from '../components/lib/icons/bigQueryLogo'
 import StoryLogo from '../components/lib/icons/storyLogo'
 import MetabaseLogo from '../components/lib/icons/metabaseLogo'
 import Link from 'next/link'
 import ProductAreaView from '../components/productArea/productAreaView'
+import DataproductLogo from '../components/lib/icons/dataproductLogo'
 
 const SEARCH_LIMIT = 6
 
@@ -50,7 +50,7 @@ const LandingPage = () => {
                         <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
                             <div className="h-36 w-36 flex flex-col items-center justify-center">
                                 <div className="h-[50px] w-[50px]">
-                                    <BigQueryLogo />
+                                    <DataproductLogo />
                                 </div>
                                 <p>Produkter</p>
                             </div>
