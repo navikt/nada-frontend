@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm'
 import Header from './header'
 
 //@ts-ignore
-import Plotly from './plotly'
 import LoaderSpinner from '../lib/spinner'
 import TopBar, { TopBarActions } from '../lib/topBar'
 import * as React from 'react'
@@ -15,6 +14,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { navRod } from '../../styles/constants'
 import VegaView from './vegaView'
 import { MetadataTable } from './metadataTable'
+import dynamic from 'next/dynamic'
 
 const StoryDiv = styled.div`
   flex-wrap: wrap;
@@ -44,6 +44,7 @@ export function Story({
   setShowToken,
 }: StoryProps) {
   const views = story.views as StoryQuery['story']['views']
+  const Plotly = dynamic(() => import("./plotly"));
 
   return (
     <>
