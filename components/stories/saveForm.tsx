@@ -56,7 +56,7 @@ function SaveForm({ story }: SaveFormProps) {
   useEffect(() => {
     const story = userInfo?.stories.find((s) => s.id == overwriteStory)
     setValue('keywords', story?.keywords || [])
-  }, [overwriteStory])
+  }, [overwriteStory, userInfo?.stories, setValue])
 
   const onDelete = (keyword: string) => {
     setValue(

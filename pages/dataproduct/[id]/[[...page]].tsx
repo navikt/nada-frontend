@@ -26,7 +26,7 @@ const Dataproduct = (props: DataproductProps) => {
 
   useEffect(() => {
     router.push(`/dataproduct/${id}/${product?.slug}/${currentPage}`)
-  }, [])
+  }, [router, id, product?.slug, currentPage])
 
   return (
     <>

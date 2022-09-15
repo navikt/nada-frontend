@@ -45,7 +45,7 @@ const DataproductEdit = (props: DataproductProps) => {
       title: data?.dataproduct.name,
     }
     amplitudeLog('sidevisning', eventProperties)
-  }, [])
+  }, [data?.dataproduct.name])
 
   if (error) return <ErrorMessage error={error} />
 
