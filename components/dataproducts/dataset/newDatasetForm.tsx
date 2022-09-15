@@ -14,23 +14,6 @@ interface NewDatasetFormProps {
   dataproduct: DataproductQuery
 }
 
-interface BigQueryFields {
-  dataset: string
-  projectID: string
-  table: string
-}
-
-interface NewDatasetFormFields {
-  dataproductID: string
-  name: string
-  description: string
-  repo: string
-  pii: boolean
-  keywords: string
-  bigquery: BigQueryFields
-  requesters: []
-}
-
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),

@@ -65,7 +65,6 @@ export interface NewDataproductFields {
 export const NewDataproductForm = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
-  const [activePaths, setActivePaths] = useState<string[]>([])
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
 
