@@ -91,8 +91,7 @@ export const NewDataproductForm = () => {
 
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
-  const onSubmit = async (data: NewDataproductFields) => {
-    console.log(data.pii)
+  const onSubmit = async (data: any) => {
     try {
       await createDataproduct({
         variables: {
