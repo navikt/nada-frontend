@@ -59,13 +59,14 @@ export interface NewDataproductFields {
   keywords: string[]
   pii: boolean
   productAreaID: string
+  teamID: string
 }
 
 export const NewDataproductForm = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
-  const [activePaths, setActivePaths] = useState<string[]>([])
   const [productAreaID, setProductAreaID] = useState<string>('')
+  const [teamID, setTeamID] = useState<string>('')
 
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
@@ -90,8 +91,7 @@ export const NewDataproductForm = () => {
 
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
-  const onSubmit = async (data: NewDataproductFields) => {
-    console.log(data.pii)
+  const onSubmit = async (data: any) => {
     try {
       await createDataproduct({
         variables: {
@@ -102,6 +102,7 @@ export const NewDataproductForm = () => {
             teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
             teamContact: valueOrNull(data.teamContact),
             productAreaID: valueOrNull(productAreaID),
+            teamID: valueOrNull(teamID),
             datasets: [
               {
                 name: data.datasetName,
@@ -209,6 +210,7 @@ export const NewDataproductForm = () => {
           register={register}
           errors={errors}
           setProductAreaID={setProductAreaID}
+          setTeamID={setTeamID}
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
@@ -254,7 +256,6 @@ export const NewDataproductForm = () => {
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
           keywords={keywords || []}
-          error={errors.keywords?.[0].message}
         />
         <Controller
           name="pii"

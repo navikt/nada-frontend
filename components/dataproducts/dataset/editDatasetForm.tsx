@@ -35,7 +35,7 @@ interface EditDatasetFormFields {
     dataset: string
     table: string
   }
-  keywords: []
+  keywords: string[]
 }
 
 const schema = yup.object().shape({
@@ -166,7 +166,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
           keywords={keywords || []}
-          error={errors.keywords?.[0].message}
+          error={errors.keywords?.[0]?.message}
         />
         <Controller
           name="pii"

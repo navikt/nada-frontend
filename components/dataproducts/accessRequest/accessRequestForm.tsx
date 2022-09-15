@@ -60,7 +60,7 @@ interface AccessRequestFields {
   subject: string
   subjectType: SubjectType
   accessType: string
-  expires: string
+  expires: string | undefined
 }
 
 const AccessRequestFormV2 = ({
@@ -108,7 +108,7 @@ const AccessRequestFormV2 = ({
       subject: data.subject,
       subjectType: data.subjectType,
       polly: polly,
-      expires: data.accessType === 'eternal' ? null : new Date(data.expires),
+      expires: data.accessType === 'eternal' || data.expires === undefined ? null : new Date(data.expires),
     }
     onSubmit(accessRequest)
   }

@@ -6,6 +6,7 @@ export const SEARCH_TEAMKATALOGEN = gql`
       name
       url
       productAreaID
+      teamID
     }
   }
 `

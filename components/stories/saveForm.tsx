@@ -44,6 +44,7 @@ function SaveForm({ story }: SaveFormProps) {
     })
 
   const [productAreaID, setProductAreaID] = useState('')
+  const [teamID, setTeamID] = useState('')
   const { errors } = formState
   const keywords = watch('keywords')
   const group = watch('group')
@@ -55,7 +56,7 @@ function SaveForm({ story }: SaveFormProps) {
   useEffect(() => {
     const story = userInfo?.stories.find((s) => s.id == overwriteStory)
     setValue('keywords', story?.keywords || [])
-  }, [overwriteStory])
+  }, [overwriteStory, userInfo?.stories, setValue])
 
   const onDelete = (keyword: string) => {
     setValue(
@@ -85,6 +86,7 @@ function SaveForm({ story }: SaveFormProps) {
       return
     }
     requestData.productAreaID = productAreaID
+    requestData.teamID = teamID
     publishStory({
       refetchQueries: ['searchContent'],
       variables: {
@@ -143,6 +145,7 @@ function SaveForm({ story }: SaveFormProps) {
                   register={register}
                   errors={errors}
                   setProductAreaID={setProductAreaID}
+                  setTeamID={setTeamID}
                 />
               )}
               <StorySelector register={register} group={group} />
@@ -150,7 +153,7 @@ function SaveForm({ story }: SaveFormProps) {
                 onAdd={onAdd}
                 onDelete={onDelete}
                 keywords={keywords || []}
-                error={errors.keywords?.[0].message}
+                error={errors.keywords?.[0]?.message}
               />
               <RightJustifiedSubmitButton
                 onCancel={() => router.push(`/story/draft/${story.id}`)}
