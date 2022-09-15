@@ -10,7 +10,7 @@ export interface SearchResultProps {
   group?: string
   keywords?: string[]
   type?: string
-  excerpt?: string
+  description?: string
 }
 
 export const SearchResultLink = ({
@@ -19,7 +19,7 @@ export const SearchResultLink = ({
   group,
   keywords,
   type,
-  excerpt,
+  description,
 }: SearchResultProps) => {
   return (
     <Link href={link} className="nada-search-result max-w-[47rem]">
@@ -36,15 +36,16 @@ export const SearchResultLink = ({
           </div>
         </div>
 
-        {excerpt && (
+        {description && (
           <div
             dangerouslySetInnerHTML={{
-              __html: excerpt.replace(
+              __html: description.replace(
                 /\(\(START\)\)(.*?)\(\(STOP\)\)/g,
                 `<i><b>$1</b></i>`
               ),
             }}
             style={{ margin: '10px 16px 0' }}
+            className="h-18 overflow-y-hidden line-clamp-3"
           />
         )}
 

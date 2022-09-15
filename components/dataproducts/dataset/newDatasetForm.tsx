@@ -98,7 +98,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   }
 
   return (
-    <div className="pt-8 pr-8">
+    <div className="pt-8 pr-8 w-[46rem]">
       <Heading level="1" size="medium" spacing>
         Legg til datasett
       </Heading>
@@ -108,7 +108,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       >
         <TextField
           {...register('name')}
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
           label="Skriv inn navn"
           error={errors?.name?.message}
           size="medium"
@@ -122,7 +122,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         <TextField
           {...register('repo')}
           type={'url'}
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
           id="repo"
           label="Link til kildekode"
           error={errors.repo?.message}

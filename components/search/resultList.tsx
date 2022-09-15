@@ -83,7 +83,7 @@ const ResultList = ({
                   group={d.result.owner.group}
                   name={d.result.name}
                   keywords={d.result.keywords}
-                  excerpt={d.excerpt}
+                  description={d.result.description}
                   link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                 />
               )
@@ -98,7 +98,7 @@ const ResultList = ({
                   name={d.result.name}
                   type={'story'}
                   keywords={d.result.keywords}
-                  excerpt={d.excerpt}
+                  description={d.excerpt}
                   link={`/story/${d.result.id}`}
                 />
               )
