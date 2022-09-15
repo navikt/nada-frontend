@@ -60,7 +60,7 @@ interface AccessRequestFields {
   subject: string
   subjectType: SubjectType
   accessType: string
-  expires: string
+  expires: string | undefined
 }
 
 const AccessRequestFormV2 = ({

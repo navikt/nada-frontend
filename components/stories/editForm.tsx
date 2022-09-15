@@ -110,7 +110,7 @@ function EditForm({ story }: SaveFormProps) {
                 onAdd={onAdd}
                 onDelete={onDelete}
                 keywords={keywords || []}
-                error={errors.keywords?.[0].message}
+                error={errors.keywords?.[0]?.message}
               />
               <RightJustifiedSubmitButton
                 onCancel={() => router.push(`/story/${story.id}`)}

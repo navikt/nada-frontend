@@ -253,7 +253,6 @@ export const NewDataproductForm = () => {
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
           keywords={keywords || []}
-          error={errors.keywords?.[0].message}
         />
         <Controller
           name="pii"

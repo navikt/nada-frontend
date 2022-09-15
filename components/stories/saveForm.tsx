@@ -153,7 +153,7 @@ function SaveForm({ story }: SaveFormProps) {
                 onAdd={onAdd}
                 onDelete={onDelete}
                 keywords={keywords || []}
-                error={errors.keywords?.[0].message}
+                error={errors.keywords?.[0]?.message}
               />
               <RightJustifiedSubmitButton
                 onCancel={() => router.push(`/story/draft/${story.id}`)}
