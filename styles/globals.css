@@ -118,12 +118,12 @@ body {
 
 ol {
     list-style-type: decimal;
-    padding: inherit;
+    list-style-position: inside;
 }
 
 ul {
     list-style-type: disc;
-    padding: inherit;
+    list-style-position: inside;
 }
 
 a {
