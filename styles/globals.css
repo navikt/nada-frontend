@@ -116,6 +116,16 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+ol {
+    list-style-type: decimal;
+    padding: inherit;
+}
+
+ul {
+    list-style-type: disc;
+    padding: inherit;
+}
+
 a {
   color: inherit;
   text-decoration: underline;
