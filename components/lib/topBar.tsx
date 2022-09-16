@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { FileContent } from '@navikt/ds-icons'
-import BigQueryLogo from './icons/bigQueryLogo'
 import * as React from 'react'
 import StoryLogo from './icons/storyLogo'
+import DataproductLogo from './icons/dataproductLogo'
 
 export const Name = styled.h1`
   margin: 0;
@@ -43,7 +43,7 @@ const TopBar = ({ name, type, children }: TopBarProps) => {
       <span className="flex gap-5 items-center">
         <div className="h-[42px] w-[42px]">
           {type === 'Story' && <StoryLogo />}
-          {type === 'Dataproduct' && <BigQueryLogo />}
+          {type === 'Dataproduct' && <DataproductLogo />}
           {type === 'AccessRequest' && <FileContent />}
         </div>
         <h1 className="m-0 font-light pr-3">{name}</h1>

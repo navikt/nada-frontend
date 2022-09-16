@@ -1,8 +1,8 @@
-import BigQueryLogo from '../lib/icons/bigQueryLogo'
 import { KeywordPill, KeywordBox } from '../lib/keywordList'
 import StoryLogo from '../lib/icons/storyLogo'
 import * as React from 'react'
 import { Heading, Link } from '@navikt/ds-react'
+import DataproductLogo from '../lib/icons/dataproductLogo'
 
 export interface SearchResultProps {
   link: string
@@ -26,7 +26,7 @@ export const SearchResultLink = ({
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
           <div className="h-[42px] w-[42px]">
-            {type === 'story' ? <StoryLogo /> : <BigQueryLogo />}
+            {type === 'story' ? <StoryLogo /> : <DataproductLogo />}
           </div>
           <div>
             <Heading className="text-link" level="2" size="medium">
