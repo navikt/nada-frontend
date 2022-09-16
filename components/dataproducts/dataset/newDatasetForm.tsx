@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, useForm } from 'react-hook-form'

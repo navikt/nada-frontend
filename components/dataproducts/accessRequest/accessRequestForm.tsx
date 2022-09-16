@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Datepicker } from '@navikt/ds-datepicker'
 import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'

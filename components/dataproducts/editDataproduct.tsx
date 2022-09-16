@@ -1,7 +1,7 @@
 import { Button, ErrorSummary, Heading, TextField } from '@navikt/ds-react'
 import { useForm } from 'react-hook-form'
 import { updateDataproductValidation } from '../../lib/schema/yupValidations'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import {

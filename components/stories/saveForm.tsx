@@ -10,7 +10,7 @@ import StorySelector from '../lib/storySelector'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { useRouter } from 'next/router'
 import { useForm, useWatch } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { storyValidation } from '../../lib/schema/yupValidations'
 import KeywordsInput from '../lib/KeywordsInput'
 import { useContext, useEffect, useState } from 'react'

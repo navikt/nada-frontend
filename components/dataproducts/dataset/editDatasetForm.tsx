@@ -7,7 +7,7 @@ import {
   TextField,
 } from '@navikt/ds-react'
 import { Controller, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react'
 import * as yup from 'yup'
 import {

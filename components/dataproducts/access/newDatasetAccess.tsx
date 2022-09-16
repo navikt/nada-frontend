@@ -2,7 +2,7 @@ import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react"
 import { DatasetQuery, SubjectType, useGrantAccessMutation } from "../../../lib/schema/graphql";
 import * as yup from 'yup'
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Datepicker } from "@navikt/ds-datepicker";
 import { GET_DATASET } from "../../../lib/queries/dataset/dataset";
 
