@@ -27,7 +27,7 @@ const StoryDraft = () => {
       <DraftToolbar
         onSave={() => router.push(`/story/draft/${story.id}/save`)}
       />
-      <div className="mt-12 flex gap-5">
+      <div className="mt-12 flex gap-5 flex-col">
         <Story story={story} draft={true} />
       </div>
     </>
