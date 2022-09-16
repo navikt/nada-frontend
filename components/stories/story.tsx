@@ -5,7 +5,6 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Header from './header'
 
-//@ts-ignore
 import LoaderSpinner from '../lib/spinner'
 import TopBar, { TopBarActions } from '../lib/topBar'
 import * as React from 'react'

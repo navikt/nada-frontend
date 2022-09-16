@@ -41,7 +41,7 @@ export const KeywordsInput = ({
           allowNew
         />
       </div>
-      <div className="flex flex-row gap-1 flex-wrap w-full 2xl:w-[32rem]">
+      <div className="flex flex-row gap-1 flex-wrap w-full">
         {keywords.map((k, i) => {
           return (
             <KeywordPill

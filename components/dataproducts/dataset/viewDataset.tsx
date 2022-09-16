@@ -43,7 +43,7 @@ const DatasetAlert = ({
     <Alert
       variant={variant}
       size="small"
-      className={`${narrow && 'w-fit'} mb-3`}
+      className={`${narrow && 'w-fit'} mb-3 -ml-4`}
     >
       {children}
     </Alert>
@@ -97,7 +97,7 @@ const ViewDataset = ({
             </a>
           </DatasetAlert>
         )}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col mb-3">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-4 mb-2">
               <Heading
@@ -142,7 +142,7 @@ const ViewDataset = ({
           </div>
           <div>
             {userInfo && accessType.type !== 'none' && (
-              <article className="border-b border-divider mb-3 last:border-b-0">
+              <article className="border-b border-divider last:border-b-0">
                 <Explore
                   dataproductId={dataset.id}
                   dataset={dataset}
