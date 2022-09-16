@@ -23,6 +23,7 @@ import DeleteModal from '../../../../components/lib/deleteModal'
 import Dataset from '../../../../components/dataproducts/dataset/dataset'
 import { AddCircle } from '@navikt/ds-icons'
 import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
+import { truncate } from '../../../../lib/stringUtils'
 
 interface DataproductProps {
   id: string
@@ -96,7 +97,7 @@ const Dataproduct = (props: DataproductProps) => {
 
   product.datasets.forEach((dataset) => {
     menuItems.push({
-      title: `${dataset.name} (${dataset.datasource.type})`,
+      title: `${truncate(dataset.name, 120)}`,
       slug: dataset.id,
       component: (
         <Dataset

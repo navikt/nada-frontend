@@ -42,7 +42,7 @@ const DatasetMetadata = ({ datasource }: DataproductTableSchemaProps) => {
       <>
         {entries.map(({ k, v, copy }, idx) => (
           <div className="mb-1 items-center flex gap-1" key={idx}>
-            <span className="font-bold text-xs">{k}:</span> {v}{' '}
+            <span className="text-s">{k}:</span> {v}{' '}
             {copy && <Copy text={v.toString()} />}
           </div>
         ))}

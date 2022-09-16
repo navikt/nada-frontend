@@ -30,6 +30,7 @@
     "@navikt/ds-react": "^0.19.27",
     "@navikt/ds-react-internal": "^0.14.10",
     "@navikt/ds-tailwind": "^0.2.9",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "@next/bundle-analyzer": "^12.0.4",
     "@types/marked": "^4.0.1",
     "@uiw/react-md-editor": "^3.6.5",
