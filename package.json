@@ -73,7 +73,7 @@
     "@graphql-codegen/typescript-react-apollo": "3.1.6",
     "@types/amplitude-js": "^8.16.2",
     "@types/cookie": "^0.5.1",
-    "@types/react": "17.0.30",
+    "@types/react": "17.0.50",
     "@types/react-lines-ellipsis": "^0.15.1",
     "@types/react-tag-autocomplete": "^6.1.1",
     "@types/styled-components": "^5.1.26",
