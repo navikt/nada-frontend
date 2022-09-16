@@ -66,13 +66,9 @@ export const MetadataTable = ({
                 {!!keywords && (
                   <>
                     {keywords.map((k, i) => (
-                      <Link key={i} href={`/search?keywords=${k}`}>
-                        <a>
-                          <KeywordPill key={k} keyword={k}>
+                        <KeywordPill key={k} keyword={k}>
                             {k}
-                          </KeywordPill>
-                        </a>
-                      </Link>
+                        </KeywordPill>
                     ))}
                   </>
                 )}
