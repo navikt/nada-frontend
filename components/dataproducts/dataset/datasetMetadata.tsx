@@ -3,12 +3,14 @@ import * as React from 'react'
 import humanizeDate from '../../../lib/humanizeDate'
 import Copy from '../../lib/copy'
 import { Heading } from '@navikt/ds-react'
+import Dataset from './dataset'
 
 interface DataproductTableSchemaProps {
-  datasource: DatasetQuery['dataset']['datasource']
+  dataset: DatasetQuery['dataset']
 }
 
-const DatasetMetadata = ({ datasource }: DataproductTableSchemaProps) => {
+const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
+  const datasource = dataset.datasource
   const schema = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
@@ -22,6 +24,7 @@ const DatasetMetadata = ({ datasource }: DataproductTableSchemaProps) => {
     { k: 'Tabell', v: datasource.table },
     { k: 'Tabelltype', v: datasource.tableType.toUpperCase() },
     { k: 'Opprettet', v: humanizeDate(datasource.created) },
+    { k: 'Link til kildekode', v: dataset.repo || 'Ukjent' },
   ]
 
   datasource.expires &&
