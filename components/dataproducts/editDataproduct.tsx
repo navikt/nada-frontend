@@ -63,13 +63,14 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   }
 
   return (
-    <>
+    <div className="w-[46rem]">
       <Heading level="1" size="large" spacing>
         Endre dataprodukt
       </Heading>
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
         <TextField
-          style={{ width: '350px', display: 'block' }}
+          className='w-full'
+          style={{display: 'block' }}
           id="name"
           label="Navn"
           {...register('name')}
@@ -88,7 +89,8 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           setTeamID={setTeamID}
         />
         <TextField
-          style={{ width: '350px', display: 'block' }}
+          className='w-full'
+          style={{ display: 'block' }}
           id="teamContact"
           label="Ønsket kontaktpunkt for dataproduktet"
           {...register('teamContact')}
@@ -107,7 +109,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           <Button type="submit">Lagre</Button>
         </div>
       </form>
-    </>
+    </div>
   )
 }
 export default EditDataproduct

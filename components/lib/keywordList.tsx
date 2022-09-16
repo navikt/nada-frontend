@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import stringToColors from '../../lib/stringToColor'
 import { Tag } from '@navikt/ds-react'
+import { stringToColors } from '../../lib/stringUtils'
 
 export const KeywordBox = styled.div`
   display: flex;

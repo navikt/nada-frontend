@@ -160,7 +160,7 @@ export const NewDataproductForm = () => {
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 w-[46rem]">
       <Heading level="1" size="large">
         Legg til dataprodukt
       </Heading>
@@ -170,7 +170,7 @@ export const NewDataproductForm = () => {
       >
         {backendError && <ErrorMessage error={backendError} />}
         <TextField
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
           label="Navn på dataprodukt"
           {...register('name')}
           error={errors.name?.message}
@@ -181,7 +181,7 @@ export const NewDataproductForm = () => {
           control={control}
         />
         <Select
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
           label="Velg gruppe fra GCP"
           {...register('team')}
           error={errors.team?.message}
@@ -216,15 +216,20 @@ export const NewDataproductForm = () => {
           label="Ønsket kontaktpunkt for dataproduktet"
           {...register('teamContact')}
           error={errors.teamContact?.message}
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
         />
         <Divider />
-        <Heading level="2" size="medium">
-          Legg til et datasett (Flere datasett kan legges til etter lagring)
-        </Heading>
+        <div>
+          <Heading level="2" size="medium">
+            Legg til et datasett
+          </Heading>
+          <span className="italic text-[#555]">
+            Flere datasett kan legges til etter lagring{' '}
+          </span>
+        </div>
         <TextField
           label="Navn på datasett"
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
           {...register('datasetName')}
           error={errors.datasetName?.message}
         />
@@ -235,7 +240,7 @@ export const NewDataproductForm = () => {
         />
         <TextField
           label="Link til kildekode"
-          className="w-full 2xl:w-[32rem]"
+          className="w-full"
           {...register('sourceCodeURL')}
           error={errors.sourceCodeURL?.message}
         />

@@ -16,7 +16,7 @@ const stringBorderColors = [
   'border-gray-300',
 ]
 
-const stringToColors = (str: string): [string, string] => {
+export const stringToColors = (str: string): [string, string] => {
   let hash = 0
   //make sure same keyword get same color
   let trimed = str.replace(/\s/g, '').toLocaleLowerCase()
@@ -27,4 +27,4 @@ const stringToColors = (str: string): [string, string] => {
   return [stringBgColors[colorIndex], stringBorderColors[colorIndex]]
 }
 
-export default stringToColors
+export const truncate = (str: string, length: number) => str.substring(0, Math.min(str.length, length)) + (str.length > length? "..." : "")
