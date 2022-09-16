@@ -138,3 +138,7 @@ a:hover {
 * {
   box-sizing: border-box;
 }
+
+.js-plotly-plot .plotly .modebar .modebar-group {
+    display: flex;
+}
