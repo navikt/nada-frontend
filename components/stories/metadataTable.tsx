@@ -2,7 +2,7 @@ import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
 import { StoryQuery } from '../../lib/schema/graphql'
-import Link from 'next/link'
+import { Link } from '@navikt/ds-react'
 import { KeywordPill } from '../lib/keywordList'
 
 interface StoryProps {
@@ -30,13 +30,13 @@ export const MetadataTable = ({
               <h2 className="text-lg font-bold">Eier</h2>
               <div className="text-medium">
                 {owner?.teamkatalogenURL ? (
-                  <a
+                  <Link
                     href={owner.teamkatalogenURL}
                     target="_blank"
                     rel="noreferrer"
                   >
                     {owner.group.split('@')[0]} <ExternalLink />
-                  </a>
+                  </Link>
                 ) : (
                   owner?.group.split('@')[0]
                 )}
