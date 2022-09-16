@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { useController, UseControllerProps } from 'react-hook-form'
+import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 import Link from 'next/link'
 import { Loader } from '@navikt/ds-react'
 
@@ -12,7 +12,7 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ),
 })
 
-type DescriptionEditorProps<T> = { label: string } & UseControllerProps<T>
+type DescriptionEditorProps<T extends FieldValues> = { label: string } & UseControllerProps<T>
 
 export const DescriptionEditor = <FV extends Record<string, any>>({
   name,
