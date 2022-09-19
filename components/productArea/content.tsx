@@ -10,7 +10,6 @@ interface ProductAreaContentProps {
 }
 
 const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
-    console.log("rendering")
     return (
         <Tabs
             value={currentTab}
