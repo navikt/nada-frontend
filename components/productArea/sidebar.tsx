@@ -3,7 +3,7 @@ import { PAItems } from "../../pages/productArea/[id]";
 
 interface ProductAreaSidebarProps {
     productAreaItems: PAItems
-    setCurrentItem: React.Dispatch<React.SetStateAction<number>>
+    setCurrentItem: (newCurrent: number) => void
     currentItem: number
 }
 

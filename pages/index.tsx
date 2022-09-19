@@ -16,7 +16,7 @@ import { USER_INFO } from '../lib/queries/userInfo/userInfo'
 import StoryLogo from '../components/lib/icons/storyLogo'
 import MetabaseLogo from '../components/lib/icons/metabaseLogo'
 import Link from 'next/link'
-import ProductAreaView from '../components/productArea/productAreaView'
+import ProductAreaLinks from '../components/productArea/productAreaLinks'
 import DataproductLogo from '../components/lib/icons/dataproductLogo'
 
 const SEARCH_LIMIT = 6
@@ -33,7 +33,7 @@ const LandingPage = () => {
 
     return (
         <>
-            <ProductAreaView/>
+            <ProductAreaLinks/>
             <div className="flex flex-col items-center justify-center gap-20 mt-48">
                 <Head>
                     <title>nav data</title>

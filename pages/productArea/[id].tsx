@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
 import ProductAreaContent from "../../components/productArea/content";
+import ProductAreaView from "../../components/productArea/productAreaView";
 import ProductAreaSidebar from "../../components/productArea/sidebar";
 import { ProductAreaQuery, useProductAreaQuery } from "../../lib/schema/graphql";
 
-interface PAItem {
+export interface PAItem {
     name: string,
     dashboardURL?: string,
     dataproducts: {
@@ -69,8 +70,6 @@ interface ProductAreaProps {
 }
 
 const ProductArea = ({id}: ProductAreaProps) => {
-    const [currentItem, setCurrentItem] = useState(0)
-
     const productAreaQuery = useProductAreaQuery({
         variables: {
             id
@@ -82,12 +81,8 @@ const ProductArea = ({id}: ProductAreaProps) => {
 
     const productArea = productAreaQuery.data.productArea
     const paItems = createPAItems(productArea)
-    return (
-        <div className="flex flex-row h-full flex-grow gap-3 pt-8">
-            <ProductAreaSidebar productAreaItems={paItems} setCurrentItem={setCurrentItem} currentItem={currentItem} />
-            <ProductAreaContent productAreaItems={paItems} currentItem={currentItem} />
-        </div>
-    )
+
+    return <ProductAreaView paItems={paItems}/>
 }
 
 const ProductAreaPage = () => {

@@ -1,22 +1,25 @@
 import { Tabs } from "@navikt/ds-react";
-import { PAItems } from "../../pages/productArea/[id]";
+import { useState } from "react";
+import { PAItem, PAItems } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 
 interface ProductAreaContentProps {
-    currentItem: number
-    productAreaItems: PAItems
+    currentItem: PAItem
+    currentTab: string
+    setCurrentTab: React.Dispatch<React.SetStateAction<string>>
 }
 
-const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaContentProps) => {
-    const item = productAreaItems[currentItem]
+const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
+    console.log("rendering")
     return (
         <Tabs
-            defaultValue={item.dashboardURL ? "dashboard" : "stories"}
+            value={currentTab}
+            onChange={setCurrentTab}
             size="medium"
             className="w-full pt-8"
         >
             <Tabs.List>
-                {item.dashboardURL && <Tabs.Tab
+                {currentItem.dashboardURL && <Tabs.Tab
                     value="dashboard"
                     label="Dashbord"
                 />}
@@ -29,12 +32,12 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                     label="Produkter"
                 />
             </Tabs.List>
-            {item.dashboardURL && <Tabs.Panel
+            {currentItem.dashboardURL && <Tabs.Panel
                 value="dashboard"
                 className="h-full w-full p-8"
             >
                 <iframe
-                    src={item.dashboardURL}
+                    src={currentItem.dashboardURL}
                     width="100%"
                     height="1200"
                 />
@@ -44,7 +47,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                 className="h-full w-full p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {item.stories && item.stories.map((s: any, idx: number) => (
+                    {currentItem.stories && currentItem.stories.map((s: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={s.owner.group}
@@ -54,7 +57,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                             type="story"
                         />
                     ))}
-                    {item.stories.length == 0 && "Ingen fortellinger"}
+                    {currentItem.stories.length == 0 && "Ingen fortellinger"}
                 </div>
             </Tabs.Panel>
             <Tabs.Panel
@@ -62,7 +65,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                 className="h-full w-full p-8"
             >
                 <div className="flex flex-col gap-2 ">
-                    {item.dataproducts && item.dataproducts.map((d: any, idx: number) => (
+                    {currentItem.dataproducts && currentItem.dataproducts.map((d: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={d.owner.group}
@@ -71,7 +74,7 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                             link={`/dataproduct/${d.id}/${d.slug}`}
                         />
                     ))}
-                    {item.dataproducts.length == 0 && "Ingen dataprodukter"}
+                    {currentItem.dataproducts.length == 0 && "Ingen dataprodukter"}
                 </div>
             </Tabs.Panel>
         </Tabs>
