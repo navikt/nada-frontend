@@ -42,7 +42,7 @@
     "date-fns": "^2.29.3",
     "deepmerge": "^4.2.2",
     "framer-motion": "^6.5.1",
-    "graphql": "^15.8.0",
+    "graphql": "^16.6.0",
     "marked": "^4.1.0",
     "moment": "^2.29.4",
     "next": "^12.3.0",
