@@ -11,15 +11,15 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
     const item = productAreaItems[currentItem]
     return (
         <Tabs
-            defaultValue="stories"
+            defaultValue={item.dashboardURL ? "dashboard" : "stories"}
             size="medium"
             className="w-full pt-8"
         >
             <Tabs.List>
-                {/* <Tabs.Tab
+                {item.dashboardURL && <Tabs.Tab
                     value="dashboard"
-                    label="Dashboard"
-                /> */}
+                    label="Dashbord"
+                />}
                 <Tabs.Tab
                     value="stories"
                     label="Fortellinger"
@@ -29,16 +29,16 @@ const ProductAreaContent = ({ currentItem, productAreaItems }: ProductAreaConten
                     label="Produkter"
                 />
             </Tabs.List>
-            {/* <Tabs.Panel
+            {item.dashboardURL && <Tabs.Panel
                 value="dashboard"
                 className="h-full w-full p-8"
             >
                 <iframe
-                    src="https://metabase.dev.intern.nav.no/public/dashboard/fd4fc319-7ac3-4eca-9957-b1751da590f9"
+                    src={item.dashboardURL}
                     width="100%"
                     height="1200"
                 />
-            </Tabs.Panel> */}
+            </Tabs.Panel>}
             <Tabs.Panel
                 value="stories"
                 className="h-full w-full p-8"

@@ -8,6 +8,7 @@ export const GET_PRODUCT_AREA = gql`
       teams {
         id
         name
+        dashboardURL
         dataproducts {
           id
           name
@@ -35,6 +36,7 @@ export const GET_PRODUCT_AREA = gql`
             }
         }
       }
+      dashboardURL
       dataproducts{
         id
         name

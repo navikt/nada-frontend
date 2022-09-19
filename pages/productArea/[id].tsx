@@ -8,6 +8,7 @@ import { ProductAreaQuery, useProductAreaQuery } from "../../lib/schema/graphql"
 
 interface PAItem {
     name: string,
+    dashboardURL?: string,
     dataproducts: {
         __typename?: 'Dataproduct';
         id: string;
@@ -45,6 +46,7 @@ const createPAItems = (productArea: ProductAreaQuery["productArea"]) => {
     let items = []
     items.push({
         name: productArea.name,
+        dashboardURL: productArea.dashboardURL,
         dataproducts: productArea.dataproducts,
         stories: productArea.stories,
     })
@@ -53,6 +55,7 @@ const createPAItems = (productArea: ProductAreaQuery["productArea"]) => {
     }).forEach((t) => {
         items.push({
             name: t.name,
+            dashboardURL: t.dashboardURL,
             dataproducts: t.dataproducts,
             stories: t.stories,
         })
