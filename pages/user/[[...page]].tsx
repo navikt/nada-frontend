@@ -1,13 +1,9 @@
 import * as React from 'react'
 import Head from 'next/head'
 import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import Box from '@mui/material/Box'
 import { useRouter } from 'next/router'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
-import TabPanel, { TabPanelType } from '../../components/lib/tabPanel'
 import SubjectHeader from '../../components/lib/subjectHeader'
 import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
@@ -32,12 +28,32 @@ export const UserPages = () => {
     component: any
   }> = [
     {
-      title: 'Mine produkter',
+      title: 'Mine dataprodukter',
       slug: 'products',
       component: (
         <>
           <SubjectHeader>Mine produkter</SubjectHeader>
           <ResultList dataproducts={data.userInfo.dataproducts} />
+        </>
+      ),
+    },
+    {
+      title: 'Mine fortellinger',
+      slug: 'stories',
+      component: (
+        <>
+          <SubjectHeader>Mine fortellinger</SubjectHeader>
+          <ResultList stories={data.userInfo.stories} />
+        </>
+      ),
+    },
+    {
+      title: 'Mine tilganger',
+      slug: 'access',
+      component: (
+        <>
+          <SubjectHeader>Mine tilganger</SubjectHeader>
+          <ResultList dataproducts={data.userInfo.accessable} />
         </>
       ),
     },
@@ -53,78 +69,47 @@ export const UserPages = () => {
         </>
       ),
     },
-    {
-      title: 'Mine tilganger',
-      slug: 'access',
-      component: (
-        <>
-          <SubjectHeader>Mine tilganger</SubjectHeader>
-          <ResultList dataproducts={data.userInfo.accessable} />
-        </>
-      ),
-    },
-    {
-      title: 'Mine fortellinger',
-      slug: 'stories',
-      component: (
-        <>
-          <SubjectHeader>Mine fortellinger</SubjectHeader>
-          <ResultList stories={data.userInfo.stories} />
-        </>
-      ),
-    },
   ]
 
   const currentPage = menuItems
     .map((e) => e.slug)
     .indexOf(router.query.page?.[0] ?? 'profile')
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    router.push(`/user/${menuItems[newValue].slug}`)
+  const handleChange = (slug: string) => {
+    router.push(`/user/${slug}`)
   }
 
   return (
-    <div>
+    <div className="flex flex-row h-full flex-grow pt-8">
       <Head>
         <title>Brukerside</title>
       </Head>
-
-      <Box
-        sx={{
-          flexGrow: 1,
-          bgcolor: 'background.paper',
-          display: 'flex',
-          height: '100%',
-        }}
-      >
-        <Tabs
-          orientation="vertical"
-          variant="fullWidth"
-          value={currentPage}
-          onChange={handleChange}
-          aria-label="User profile menu"
-          sx={{
-            borderRight: 1,
-            borderColor: 'divider',
-            alignItems: 'right',
-            minWidth: '180px',
-          }}
-        >
-          {menuItems.map((i, idx) => (
-            <Tab key={idx} label={i.title} />
-          ))}
-        </Tabs>
-        {menuItems.map((i, idx) => (
-          <TabPanel
-            key={idx}
-            value={currentPage}
-            index={idx}
-            type={TabPanelType.vertical}
-          >
-            {i.component}
-          </TabPanel>
-        ))}
-      </Box>
+      <div className="flex flex-col items-stretch justify-between pt-8 w-64">
+        <div className="flex w-64 flex-col gap-2">
+          {menuItems.map(({ title, slug }, idx) =>
+            currentPage == idx ? (
+              <p
+                className="border-l-[6px] border-l-link px-1 font-semibold py-1"
+                key={idx}
+              >
+                {title}
+              </p>
+            ) : (
+              <a
+                className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
+                href="#"
+                key={idx}
+                onClick={() => handleChange(slug)}
+              >
+                {title}
+              </a>
+            )
+          )}
+        </div>
+      </div>
+      <div className="w-full">
+        {menuItems[currentPage].component}
+      </div>
     </div>
   )
 }
