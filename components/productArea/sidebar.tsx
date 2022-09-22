@@ -13,7 +13,7 @@ const ProductAreaSidebar = ({ productAreaItems, setCurrentItem, currentItem }: P
   const style = (isCurrent: boolean) => `border-l-[6px] py-1 px-2 hover:cursor-default ${isCurrent ? 'border-l-link' : 'border-l-transparent'}`
   return (
     <div className="flex w-64 flex-col gap-2">
-        {productAreaItems.map(( d: any, idx: number) => true
+        {productAreaItems.map(( d: any, idx: number) => d.stories.length || d.dataproducts.length
           ? <div className={style(currentItem == idx)}>
               <a className="font-semibold no-underline hover:underline" href="#" key={idx} onClick={() => setCurrentItem(idx)}>{d.name}</a>
               <div className="flex justify-between w-24">
