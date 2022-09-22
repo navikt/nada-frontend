@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Link, Loader } from '@navikt/ds-react'
 import { MappingService } from '../../lib/schema/graphql'
 import { ExternalLink } from '@navikt/ds-icons'
+import { useState } from 'react'
 
 export enum ItemType {
   metabase = 1,
@@ -26,10 +27,17 @@ export const ExploreLink = ({
   mappings,
 }: ExploreLinkProps) => {
   const addToMetabase = !mappings?.includes(MappingService.Metabase)
-  const loading = mappings?.includes(MappingService.Metabase) && !url
+  const [loading, setLoading] = useState(mappings?.includes(MappingService.Metabase) && !url)
   const handleDelete = (e: any) => {
     e.preventDefault()
     if (remove) remove()
+  }
+
+  const handleAdd = () => {
+    if (add) {
+      setLoading(true)
+      add()
+    }
   }
 
   if (url) {
@@ -88,7 +96,7 @@ export const ExploreLink = ({
         <Link
           className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
           href="#"
-          onClick={add}
+          onClick={handleAdd}
         >
           Legg til i Metabase
         </Link>
