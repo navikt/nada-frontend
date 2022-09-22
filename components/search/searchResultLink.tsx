@@ -22,17 +22,13 @@ export const SearchResultLink = ({
   description,
 }: SearchResultProps) => {
   return (
-    <Link href={link} className="nada-search-result max-w-[47rem]">
+    <Link href={link} className='nada-search-result max-w-[47rem]'>
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
-          <div className="h-[42px] w-[42px]">
-            {type === 'story' ? <StoryLogo /> : <DataproductLogo />}
-          </div>
           <div>
             <Heading className="text-link" level="2" size="medium">
               {name}
             </Heading>
-            <p>eier: {group}</p>
           </div>
         </div>
 
@@ -44,19 +40,20 @@ export const SearchResultLink = ({
                 `<i><b>$1</b></i>`
               ),
             }}
-            style={{ margin: '10px 16px 0' }}
             className="h-18 overflow-y-hidden line-clamp-3"
           />
         )}
-
-        <KeywordBox className="place-self-end">
-          {keywords &&
-            keywords.map((k, i) => (
-              <KeywordPill key={i} keyword={k} compact={true}>
-                {k}
-              </KeywordPill>
-            ))}
-        </KeywordBox>
+        <div className="flex flex-row w-full justify-between">
+          <p>eier: {group}</p>
+          <KeywordBox>
+            {keywords &&
+              keywords.map((k, i) => (
+                <KeywordPill key={i} keyword={k} compact={true}>
+                  {k}
+                </KeywordPill>
+              ))}
+          </KeywordBox>
+        </div>
       </div>
     </Link>
   )

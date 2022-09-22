@@ -3,21 +3,14 @@ import {
   Exact,
   SearchContentWithOptionsQuery,
   SearchOptions,
-  SubjectType,
 } from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
-import styled from 'styled-components'
+import { Tabs } from '@navikt/ds-react'
+import React from 'react'
 
-const Results = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  a {
-    text-decoration: none;
-  }
-`
+const Results = ({children}: {children: React.ReactNode}) => <div className="results">{children}</div>
 
 type ResultListInterface = {
   search?: QueryResult<
@@ -38,12 +31,14 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
+  defaultType?: string
 }
 
 const ResultList = ({
   search,
   dataproducts,
   stories,
+  defaultType
 }: ResultListInterface) => {
   if (dataproducts) {
     return (
@@ -65,47 +60,47 @@ const ResultList = ({
     const { data, loading, error } = search
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
+
+    const dataproducts = data.search.filter((d) => d.result.__typename === 'Dataproduct')
+    const datastories = data.search.filter((d) => d.result.__typename === 'Story')
+
     return (
-      <div>
-        <p>
-          {' '}
-          {data.search.length > 0
-            ? `${data.search.length} resultater`
-            : 'ingen resultater'}
-        </p>
-
         <Results>
-          {data.search.map((d, idx) => {
-            if (d.result.__typename === 'Dataproduct') {
-              return (
-                <SearchResultLink
-                  key={idx}
-                  group={d.result.owner.group}
-                  name={d.result.name}
-                  keywords={d.result.keywords}
-                  description={d.result.description}
-                  link={`/dataproduct/${d.result.id}/${d.result.slug}`}
-                />
-              )
-            }
-
-            if (d.result.__typename === 'Story') {
-              console.log(d.result.keywords)
-              return (
-                <SearchResultLink
-                  key={idx}
-                  group={d.result.group!.group}
-                  name={d.result.name}
-                  type={'story'}
-                  keywords={d.result.keywords}
-                  description={d.excerpt}
-                  link={`/story/${d.result.id}`}
-                />
-              )
-            }
-          })}
+          <Tabs defaultValue={defaultType ? defaultType : 'story'} size='medium'>
+            <Tabs.List>
+              <Tabs.Tab value='story' label={`Fortellinger (${datastories.length})`} />
+              <Tabs.Tab value='dataproduct' label={`Produkter (${dataproducts.length})`} />
+            </Tabs.List>
+            <Tabs.Panel className="flex flex-col pt-4 gap-4" value='story'>
+              {datastories.map((d, idx) => 
+                d.result.__typename === 'Story' &&
+                  <SearchResultLink
+                    key={idx}
+                    group={d.result.group!.group}
+                    name={d.result.name}
+                    type={'story'}
+                    keywords={d.result.keywords}
+                    description={d.excerpt}
+                    link={`/story/${d.result.id}`}
+                  />
+              )}
+            </Tabs.Panel>
+            <Tabs.Panel className="flex flex-col pt-4 gap-4" value='dataproduct'>
+              {dataproducts.map((d, idx) => 
+                d.result.__typename === 'Dataproduct' &&
+                  <SearchResultLink
+                    key={idx}
+                    group={d.result.owner.group}
+                    name={d.result.name}
+                    keywords={d.result.keywords}
+                    description={d.result.description}
+                    link={`/dataproduct/${d.result.id}/${d.result.slug}`}
+                  />
+              )}
+            </Tabs.Panel>
+          </Tabs>
+          {data.search.length == 0 && "ingen resultater"}
         </Results>
-      </div>
     )
   }
   if (stories) {
