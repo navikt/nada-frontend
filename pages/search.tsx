@@ -66,8 +66,7 @@ const Search = () => {
   })
 
   useEffect(() => {
-    console.log(search)
-    if(!search.loading){
+    if(!search.loading && search.data){
       const eventProperties = {
         ...filters
       }
