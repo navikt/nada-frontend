@@ -2,8 +2,9 @@ import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import humanizeDate from '../../../lib/humanizeDate'
 import Copy from '../../lib/copy'
-import { Heading } from '@navikt/ds-react'
+import { Heading, Link } from '@navikt/ds-react'
 import Dataset from './dataset'
+import { ExternalLink } from '@navikt/ds-icons'
 
 interface DataproductTableSchemaProps {
   dataset: DatasetQuery['dataset']
@@ -24,7 +25,16 @@ const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
     { k: 'Tabell', v: datasource.table },
     { k: 'Tabelltype', v: datasource.tableType.toUpperCase() },
     { k: 'Opprettet', v: humanizeDate(datasource.created) },
-    { k: 'Link til kildekode', v: dataset.repo ? <Link target="_blank" rel="norefferer" href={dataset.repo}>{dataset.repo} <ExternalLink /></Link> : '' },
+    {
+      k: 'Link til kildekode',
+      v: dataset.repo ? (
+        <Link target="_blank" rel="norefferer" href={dataset.repo}>
+          {dataset.repo} <ExternalLink />
+        </Link>
+      ) : (
+        ''
+      ),
+    },
   ]
 
   datasource.expires &&
@@ -43,12 +53,15 @@ const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
         Metadata
       </Heading>
       <>
-        {entries.map(({ k, v, copy }, idx) => (
-          <div className="mb-1 items-center flex gap-1" key={idx}>
-            <span className="text-s">{k}:</span> {v}{' '}
-            {copy && <Copy text={v.toString()} />}
-          </div>
-        ))}
+        {entries.map(
+          ({ k, v, copy }, idx) =>
+            v && (
+              <div className="mb-1 items-center flex gap-1" key={idx}>
+                <span className="text-s">{k}:</span> {v}{' '}
+                {copy && <Copy text={v.toString()} />}
+              </div>
+            )
+        )}
       </>
     </div>
   )
