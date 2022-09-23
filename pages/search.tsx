@@ -60,16 +60,19 @@ const Search = () => {
     }
   }
 
-  useEffect(() => {
-    const eventProperties = {
-      ...filters
-    }
-    amplitudeLog('søk', eventProperties)
-  })
-
   const search = useSearchContentWithOptionsQuery({
     variables: { options: { limit: 100, ...filters } },
     fetchPolicy: 'network-only',
+  })
+
+  useEffect(() => {
+    console.log(search)
+    if(!search.loading){
+      const eventProperties = {
+        ...filters
+      }
+      amplitudeLog('søk', eventProperties)
+    }
   })
 
   const updateQuery = async (
