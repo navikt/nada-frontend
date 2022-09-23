@@ -1,5 +1,6 @@
 import { WarningColored, SuccessColored } from '@navikt/ds-icons'
 import { Alert, Heading, Link, Modal } from '@navikt/ds-react'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -8,6 +9,7 @@ import {
   DatasetQuery,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
+import { backendHost } from '../../header/user'
 import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import KeywordPill from '../../lib/keywordList'
 import DatasetAccess from '../access/datasetAccess'
@@ -43,7 +45,7 @@ const DatasetAlert = ({
     <Alert
       variant={variant}
       size="small"
-      className={`${narrow && 'w-fit'} mb-3 -ml-4`}
+      className={`${narrow && 'w-fit'} -ml-4`}
     >
       {children}
     </Alert>
@@ -58,6 +60,7 @@ const ViewDataset = ({
   isOwner,
   setEdit,
 }: ViewDatasetProps) => {
+  const router = useRouter()
   const [accessRequested, setAccessRequested] = useState(false)
   const [showNewAccess, setShowNewAccess] = useState(false)
 
@@ -85,30 +88,31 @@ const ViewDataset = ({
           </Modal.Content>
         </Modal>
       </div>
-      <div className="flex flex-col gap-8 pt-8 pr-8">
-        {accessType.type === 'utlogget' && (
-          <DatasetAlert variant="info">Du er ikke innlogget</DatasetAlert>
-        )}
-        {accessType.type === 'none' && (
-          <DatasetAlert variant="info">
-            Du har ikke tilgang til datasettet.{' '}
-            <a href="#" onClick={() => setAccessRequested(true)}>
-              Søk om tilgang
-            </a>
-          </DatasetAlert>
-        )}
-        <div className="flex flex-col mb-3">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-4 mb-2">
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          {accessType.type === 'utlogget' && (
+            <DatasetAlert variant="info">Du er ikke innlogget. <Link href={
+              `${backendHost()}/api/login?redirect_uri=${encodeURIComponent(router.asPath)}`}>
+                Logg inn
+              </Link>
+            </DatasetAlert>
+          )}
+          {accessType.type === 'none' && (
+            <DatasetAlert variant="info">
+              Du har ikke tilgang til datasettet.{' '}
+              <a href="#" onClick={() => setAccessRequested(true)}>
+                Søk om tilgang
+              </a>
+            </DatasetAlert>
+          )}
+          <div>
+            <div className="flex items-center">
               <Heading
                 className="inline-flex items-center gap-3"
                 level="2"
                 size="large"
               >
-                <div className="h-[42px] w-[42px]">
-                  <BigQueryLogo />
-                </div>
-                {dataset.name}
+                {dataset.name} (BigQuery)
               </Heading>
               {isOwner && (
                 <DatasetOwnerMenu
@@ -126,6 +130,7 @@ const ViewDataset = ({
                 </KeywordPill>
               ))}
             </div>
+          </div>
             {dataset.pii ? (
               <p className="flex flex-row gap-2 items-center">
                 <WarningColored />
@@ -139,7 +144,6 @@ const ViewDataset = ({
                 </span>
               </p>
             )}
-          </div>
           <div>
             {userInfo && accessType.type !== 'none' && (
               <article className="border-b border-divider last:border-b-0">
@@ -153,10 +157,10 @@ const ViewDataset = ({
           </div>
         </div>
         {isOwner && 
-        <>
+        <div className="flex flex-col gap-2">
             <DatasetAccess id={dataset.id} access={dataset.access} />
             <Link className="cursor-pointer w-fit" onClick={() => {setShowNewAccess(true)}}>Legg til tilgang</Link>
-        </>
+        </div>
         }
         {dataset.description && (
           <section className="mb-3">

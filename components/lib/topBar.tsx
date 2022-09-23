@@ -3,6 +3,7 @@ import { FileContent } from '@navikt/ds-icons'
 import * as React from 'react'
 import StoryLogo from './icons/storyLogo'
 import DataproductLogo from './icons/dataproductLogo'
+import { Heading } from '@navikt/ds-react'
 
 export const Name = styled.h1`
   margin: 0;
@@ -41,12 +42,7 @@ const TopBar = ({ name, type, children }: TopBarProps) => {
   return (
     <div className="flex flex-col flex-wrap text-text p-4 gap-2 border-b border-border-inverted">
       <span className="flex gap-5 items-center">
-        <div className="h-[42px] w-[42px]">
-          {type === 'Story' && <StoryLogo />}
-          {type === 'Dataproduct' && <DataproductLogo />}
-          {type === 'AccessRequest' && <FileContent />}
-        </div>
-        <h1 className="m-0 font-light pr-3">{name}</h1>
+        <Heading level="1" size="xlarge">{name}</Heading>
       </span>
       {children}
     </div>

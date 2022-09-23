@@ -3,14 +3,15 @@ import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Divider, Dropdown, Header } from '@navikt/ds-react-internal'
 
+
+export const backendHost = () => {
+  return process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
+}
+
 export default function User() {
   const userInfo = useContext(UserState)
 
   const router = useRouter()
-
-  const backendHost = () => {
-    return process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
-  }
 
   return userInfo ? (
     <Dropdown>

@@ -36,7 +36,7 @@ const DatasetMetadata = ({ datasource }: DataproductTableSchemaProps) => {
 
   return (
     <div className="mb-3">
-      <Heading spacing level="3" size="small">
+      <Heading level="3" size="small">
         Metadata
       </Heading>
       <>
