@@ -24,7 +24,7 @@ const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
     { k: 'Tabell', v: datasource.table },
     { k: 'Tabelltype', v: datasource.tableType.toUpperCase() },
     { k: 'Opprettet', v: humanizeDate(datasource.created) },
-    { k: 'Link til kildekode', v: dataset.repo || 'Ukjent' },
+    { k: 'Link til kildekode', v: dataset.repo ? <Link target="_blank" rel="norefferer" href={dataset.repo}>{dataset.repo} <ExternalLink /></Link> : '' },
   ]
 
   datasource.expires &&
