@@ -42,14 +42,14 @@ export const DataproductSidebar = ({
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
             <p
-              className="border-l-[6px] border-l-link px-1 font-semibold py-1"
+              className="border-l-8 border-l-link py-1 px-2 font-semibold"
               key={idx}
             >
               {title}
             </p>
           ) : (
             <a
-              className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
+              className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
               href="#"
               key={idx}
               onClick={(e) => handleChange(e, slug)}
