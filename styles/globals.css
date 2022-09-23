@@ -6,6 +6,14 @@
   @apply hover:underline selection:underline;
 }
 
+.results {
+  @apply flex flex-col gap-5
+}
+
+.results > div > div > a {
+  @apply no-underline
+}
+
 h1 {
     @apply font-bold text-[2em]
 }

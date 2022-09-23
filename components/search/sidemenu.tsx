@@ -51,10 +51,6 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
   }
   const i18n = (key: SearchType | MappingService) => {
     switch (key) {
-      case SearchType.Dataproduct:
-        return 'Dataprodukt'
-      case SearchType.Story:
-        return 'Datafortelling'
       case MappingService.Metabase:
         return 'Metabase'
     }
@@ -84,29 +80,6 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
           sx={{ width: '100%', marginBottom: '10px' }}
         />
       </form>
-      <FormControl
-        component="fieldset"
-        variant="standard"
-        focused={false}
-        sx={{ width: '100%' }}
-      >
-        <FormLabel component="legend">Type</FormLabel>
-        <FormGroup>
-          {Object.values(SearchType).map((key) => (
-            <FormControlLabel
-              key={key}
-              control={
-                <Checkbox
-                  checked={filters.types.includes(key)}
-                  onChange={(e) => handleChange(e, 'types')}
-                  name={key}
-                />
-              }
-              label={i18n(key)}
-            />
-          ))}
-        </FormGroup>
-      </FormControl>
       <FormControl component="fieldset" variant="standard">
         <FormLabel component="legend" focused={false}>
           Integrasjoner

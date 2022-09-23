@@ -13,7 +13,7 @@ const ProductAreaLinks = () => {
 
     return (
         <div className="flex flex-row flex-wrap">
-            {productAreas.filter(pa => pa.stories.length > 0 || pa.dataproducts.length > 0 ).map((pa) => (
+            {productAreas.map((pa) => (
                 <div key={pa.id} className="py-2">
                     <Link href={`/productArea/${pa.id}`} className="nada-search-result max-w-[47rem] align-top">
                         <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-3">

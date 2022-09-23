@@ -54,7 +54,7 @@ const Search = () => {
     filters = {
       groups: arrayify(router.query.groups),
       keywords: arrayify(router.query.keywords),
-      types: arrayify(router.query.types) as SearchType[],
+      types: [],
       services: arrayify(router.query.services) as MappingService[],
       text: (router.query.text && router.query.text.toString()) || '',
     }
@@ -105,6 +105,12 @@ const Search = () => {
     return baseUrl + '?' + queryString.toString()
   }
 
+  const preferredType = router.query.types?.length 
+    ? typeof router.query.types === "string" 
+      ? router.query.types 
+      : router.query.types[0]
+    : "story"
+
   return (
     <>
       <Head>
@@ -118,7 +124,7 @@ const Search = () => {
         </div>
         <div className="flex-grow">
           <Filters filters={filters} updateQuery={updateQuery} />
-          <ResultList search={search} />
+          <ResultList search={search} defaultType={preferredType} />
         </div>
       </div>
     </>

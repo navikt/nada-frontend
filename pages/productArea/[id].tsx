@@ -1,10 +1,7 @@
 import { ErrorMessage, Loader } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useState } from "react";
-import ProductAreaContent from "../../components/productArea/content";
 import ProductAreaView from "../../components/productArea/productAreaView";
-import ProductAreaSidebar from "../../components/productArea/sidebar";
 import amplitudeLog from "../../lib/amplitude";
 import { ProductAreaQuery, useProductAreaQuery } from "../../lib/schema/graphql";
 
