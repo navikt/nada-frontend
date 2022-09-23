@@ -9,6 +9,8 @@ import {
   useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
 import ResultList from '../components/search/resultList'
+import amplitudeLog from '../lib/amplitude'
+import { useEffect } from 'react'
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -57,6 +59,13 @@ const Search = () => {
       text: (router.query.text && router.query.text.toString()) || '',
     }
   }
+
+  useEffect(() => {
+    const eventProperties = {
+      ...filters
+    }
+    amplitudeLog('søk', eventProperties)
+  })
 
   const search = useSearchContentWithOptionsQuery({
     variables: { options: { limit: 100, ...filters } },

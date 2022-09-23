@@ -1,10 +1,11 @@
 import { ErrorMessage, Loader } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import ProductAreaContent from "../../components/productArea/content";
 import ProductAreaView from "../../components/productArea/productAreaView";
 import ProductAreaSidebar from "../../components/productArea/sidebar";
+import amplitudeLog from "../../lib/amplitude";
 import { ProductAreaQuery, useProductAreaQuery } from "../../lib/schema/graphql";
 
 export interface PAItem {
@@ -82,6 +83,14 @@ const ProductArea = ({id}: ProductAreaProps) => {
     const productArea = productAreaQuery.data.productArea
     const paItems = createPAItems(productArea)
 
+    useEffect(() => {
+        const eventProperties = {
+          sidetittel: 'poside',
+          title: productAreaQuery.data?.productArea?.name,
+        }
+        amplitudeLog('sidevisning', eventProperties)
+      })
+      
     return <ProductAreaView paItems={paItems}/>
 }
 
