@@ -9,6 +9,8 @@ import {
   useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
 import ResultList from '../components/search/resultList'
+import amplitudeLog from '../lib/amplitude'
+import { useEffect } from 'react'
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -61,6 +63,15 @@ const Search = () => {
   const search = useSearchContentWithOptionsQuery({
     variables: { options: { limit: 100, ...filters } },
     fetchPolicy: 'network-only',
+  })
+
+  useEffect(() => {
+    if(!search.loading && search.data){
+      const eventProperties = {
+        ...filters
+      }
+      amplitudeLog('søk', eventProperties)
+    }
   })
 
   const updateQuery = async (

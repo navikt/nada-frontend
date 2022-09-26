@@ -67,8 +67,10 @@ const Dataproduct = (props: DataproductProps) => {
   const onDelete = async () => {
     try {
       await deleteDataproduct()
+      amplitudeLog('slett dataprodukt', {name: productQuery.data?.dataproduct.name})
       await router.push('/')
     } catch (e: any) {
+      amplitudeLog('slett dataprodukt feilet', {name: productQuery.data?.dataproduct.name})
       setDeleteError(e.toString())
     }
   }

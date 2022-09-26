@@ -31,11 +31,13 @@ const StoryPage = () => {
   const [deleteError, setDeleteError] = useState('')
 
   React.useEffect(() => {
-    const eventProperties = {
-      sidetittel: 'datafortelling',
-      title: query.data?.story.name,
+    if(!query.loading && query.data){
+      const eventProperties = {
+        sidetittel: 'datafortelling',
+        title: query.data?.story.name,
+      }
+      amplitudeLog('sidevisning', eventProperties)
     }
-    amplitudeLog('sidevisning', eventProperties)
   })
 
   if (query.error) return <ErrorMessage error={query.error} />
