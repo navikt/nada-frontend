@@ -172,7 +172,7 @@ const ViewDataset = ({
             </ReactMarkdown>
           </section>
         )}
-        <DatasetMetadata datasource={dataset.datasource} />
+        <DatasetMetadata dataset={dataset} />
         <DatasetTableSchema datasource={dataset.datasource} />
       </div>
     </>
