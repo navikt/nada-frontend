@@ -24,11 +24,11 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 />}
                 <Tabs.Tab
                     value="stories"
-                    label="Fortellinger"
+                    label={`Fortellinger (${currentItem.stories.length})`}
                 />
                 <Tabs.Tab
                     value="products"
-                    label="Produkter"
+                    label={`Produkter (${currentItem.dataproducts.length})`}
                 />
             </Tabs.List>
             {currentItem.dashboardURL && <Tabs.Panel
@@ -45,12 +45,13 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 value="stories"
                 className="h-full w-full p-8"
             >
-                <div className="flex flex-col gap-2 ">
+                <div className="flex flex-col gap-2">
                     {currentItem.stories && currentItem.stories.map((s: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={s.owner.group}
                             name={s.name}
+                            description={s.description}
                             keywords={s.keywords}
                             link={`/story/${s.id}`}
                             type="story"
@@ -63,13 +64,14 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 value="products"
                 className="h-full w-full p-8"
             >
-                <div className="flex flex-col gap-2 ">
+                <div className="flex flex-col gap-2">
                     {currentItem.dataproducts && currentItem.dataproducts.map((d: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={d.owner.group}
                             name={d.name}
                             keywords={d.keywords}
+                            description={d.description}
                             link={`/dataproduct/${d.id}/${d.slug}`}
                         />
                     ))}

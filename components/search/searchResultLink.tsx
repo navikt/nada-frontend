@@ -1,8 +1,6 @@
 import { KeywordPill, KeywordBox } from '../lib/keywordList'
-import StoryLogo from '../lib/icons/storyLogo'
 import * as React from 'react'
 import { Heading, Link } from '@navikt/ds-react'
-import DataproductLogo from '../lib/icons/dataproductLogo'
 
 export interface SearchResultProps {
   link: string
