@@ -14,10 +14,12 @@ export const Description = ({
 }) => {
     const router = useRouter()
 
-    return (<div className="rounded-xl text-justify mt-8">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {markdown || '*ingen beskrivelse*'}
-        </ReactMarkdown>
+    return (<div className="rounded-xl text-justify mt-8 flex flex-col gap-4">
+        <div>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {markdown || '*ingen beskrivelse*'}
+            </ReactMarkdown>
+        </div>
         {!!keywords.length && (
             <div className="flex flex-row gap-1 flex-wrap my-2">
                 {keywords.map((k, i) => (
