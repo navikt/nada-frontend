@@ -61,7 +61,7 @@ const Search = () => {
   }
 
   const search = useSearchContentWithOptionsQuery({
-    variables: { options: { limit: 100, ...filters } },
+    variables: { options: { limit: 1000, ...filters } },
     fetchPolicy: 'network-only',
   })
 

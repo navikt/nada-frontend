@@ -31,28 +31,31 @@ export const SearchResultLink = ({
             </Heading>
           </div>
         </div>
-
-        {description && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: description.replace(
-                /\(\(START\)\)(.*?)\(\(STOP\)\)/g,
-                `<i><b>$1</b></i>`
-              ),
-            }}
-            className="h-18 overflow-y-hidden line-clamp-3"
-          />
-        )}
-        <div className="flex flex-row w-full justify-between">
-          <p>eier: {group}</p>
-          <KeywordBox>
-            {keywords &&
-              keywords.map((k, i) => (
-                <KeywordPill key={i} keyword={k} compact={true}>
-                  {k}
-                </KeywordPill>
-              ))}
-          </KeywordBox>
+        <div className="flex flex-col gap-4">
+          {description && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: description.replace(
+                  /\(\(START\)\)(.*?)\(\(STOP\)\)/g,
+                  `<i><b>$1</b></i>`
+                ),
+              }}
+              className="overflow-y-hidden line-clamp-3"
+            />
+          )}
+          <div className="flex flex-row w-full justify-between">
+            <p>eier: {group}</p>
+            <div className="max-w-sm">
+              <KeywordBox>
+                {keywords &&
+                  keywords.map((k, i) => (
+                    <KeywordPill key={i} keyword={k} compact={true}>
+                      {k}
+                    </KeywordPill>
+                  ))}
+              </KeywordBox>
+            </div>
+          </div>
         </div>
       </div>
     </Link>
