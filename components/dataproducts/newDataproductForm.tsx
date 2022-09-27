@@ -25,7 +25,7 @@ import DatasetSourceForm from './dataset/datasetSourceForm'
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
-  team: yup.string().required('Velg et eierteam for produktet'),
+  team: yup.string().required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
   teamkatalogenURL: yup.string(),
   teamContact: yup.string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
@@ -37,7 +37,7 @@ const schema = yup.object().shape({
     table: yup.string().required(),
   }),
   keywords: yup.array().of(yup.string()),
-  pii: yup.boolean().required(),
+  pii: yup.boolean().required('Du må velge om datasettet inneholder personidentifiserende informasjon'),
 })
 
 interface BigQueryFields {
@@ -168,7 +168,6 @@ export const NewDataproductForm = () => {
         className="pt-12 flex flex-col gap-10"
         onSubmit={handleSubmit(onSubmit, onError)}
       >
-        {backendError && <ErrorMessage error={backendError} />}
         <TextField
           className="w-full"
           label="Navn på dataprodukt"
@@ -275,6 +274,7 @@ export const NewDataproductForm = () => {
             </RadioGroup>
           )}
         />
+        {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>
             Avbryt

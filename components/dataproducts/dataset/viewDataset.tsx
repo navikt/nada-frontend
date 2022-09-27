@@ -163,8 +163,8 @@ const ViewDataset = ({
         </div>
         }
         {dataset.description && (
-          <section className="mb-3">
-            <Heading level="3" size="small" spacing>
+          <section>
+            <Heading level="3" size="small">
               Beskrivelse
             </Heading>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
