@@ -20,7 +20,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             <Tabs.List>
                 {currentItem.dashboardURL && <Tabs.Tab
                     value="dashboard"
-                    label="Dashbord"
+                    label={currentItem.name}
                 />}
                 <Tabs.Tab
                     value="stories"
