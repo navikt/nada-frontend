@@ -24,7 +24,7 @@ export const SearchResultLink = ({
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
           <div>
-            <Heading className="text-link" level="2" size="medium">
+            <Heading className="text-link" level="2" size="small">
               {name}
             </Heading>
           </div>
