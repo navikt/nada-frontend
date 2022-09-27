@@ -7,7 +7,7 @@ const ProductAreaLinks = () => {
     const productAreasQuery = useProductAreasQuery()
 
     if (productAreasQuery.error) return <ErrorMessage error={productAreasQuery.error} />
-    if (productAreasQuery.loading || !productAreasQuery.data?.productAreas) return <LoaderSpinner />
+    if (productAreasQuery.loading || !productAreasQuery.data?.productAreas) return <></>
 
     const productAreas = productAreasQuery.data.productAreas
 
