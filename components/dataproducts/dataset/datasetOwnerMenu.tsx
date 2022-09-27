@@ -64,7 +64,6 @@ const DatasetOwnerMenu = ({
         value={{ isOpen, setIsOpen, anchorEl, setAnchorEl }}
       >
         <Button
-          className="min-w-min p-0 rounded-full"
           variant="tertiary"
           onClick={handleMenuButtonClick}
         >
