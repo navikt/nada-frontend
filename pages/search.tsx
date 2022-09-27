@@ -54,7 +54,7 @@ const Search = () => {
     filters = {
       groups: arrayify(router.query.groups),
       keywords: arrayify(router.query.keywords),
-      types: [],
+      types: ['dataproduct', 'story'] as SearchType[],
       services: arrayify(router.query.services) as MappingService[],
       text: (router.query.text && router.query.text.toString()) || '',
     }
