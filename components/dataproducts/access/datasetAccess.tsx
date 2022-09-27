@@ -323,7 +323,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
   const accesses = productAccess(access)
 
   return (
-    <div className="flex flex-col gap-8 w-full 2xl:w-[65rem]">
+    <div className="flex flex-col gap-8 w-full 2xl:w-[60rem]">
       {formError && <Alert variant={'error'}>{formError}</Alert>}
       <div>
         <Heading level="2" size="small">
@@ -348,12 +348,12 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                   <Table.DataCell className="w-36">
                     {r.subjectType}
                   </Table.DataCell>
-                  <Table.DataCell className="w-52">
+                  <Table.DataCell className="w-48">
                     {r.expires
                       ? humanizeDateAccessForm(r.expires)
                       : 'For alltid'}
                   </Table.DataCell>
-                  <Table.DataCell className="w-52">
+                  <Table.DataCell className="w-48">
                     {r.polly?.url ? (
                       <Link target="_blank" rel="norefferer" href={r.polly.url}>
                         Åpne behandling
@@ -363,7 +363,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                       'Ingen behandling'
                     )}
                   </Table.DataCell>
-                  <Table.DataCell className="w-48" align="right">
+                  <Table.DataCell className="w-[150px]" align="right">
                     <AccessRequestModal
                       requestID={r.id}
                       actionApprove={approveRequest}
@@ -401,12 +401,12 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                   <Table.DataCell className="w-36">
                     {a.access.subject.split(':')[0]}
                   </Table.DataCell>
-                  <Table.DataCell className="w-52">
+                  <Table.DataCell className="w-48">
                     {a.access.expires
                       ? humanizeDateAccessForm(a.access.expires)
                       : 'For alltid'}
                   </Table.DataCell>
-                  <Table.DataCell className="w-52">
+                  <Table.DataCell className="w-48">
                     {a.access?.accessRequest?.polly ? (
                       <Link
                         target="_blank"
@@ -420,7 +420,7 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
                       'Ingen behandling'
                     )}
                   </Table.DataCell>
-                  <Table.DataCell className="w-48" align="right">
+                  <Table.DataCell className="w-[207px]" align="right">
                     <AccessModal accessEntry={a} action={removeAccess} />
                   </Table.DataCell>
                 </Table.Row>

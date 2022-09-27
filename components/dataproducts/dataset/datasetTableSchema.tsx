@@ -31,7 +31,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
               <TableCell>Name</TableCell>
               <TableCell align="right">Mode</TableCell>
               <TableCell align="right">Type</TableCell>
-              <TableCell align="right">Description</TableCell>
+              <TableCell>Description</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -45,7 +45,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
                 </TableCell>
                 <TableCell align="right">{row.mode}</TableCell>
                 <TableCell align="right">{row.type}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
+                <TableCell>{row.description}</TableCell>
               </TableRow>
             ))}
           </TableBody>

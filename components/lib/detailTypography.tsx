@@ -14,7 +14,7 @@ export const Description = ({
 }) => {
     const router = useRouter()
 
-    return (<div className="rounded-xl text-justify mt-8 flex flex-col gap-4">
+    return (<div className="rounded-xl text-justify mt-8 flex flex-col gap-4 max-w-4xl">
         <div>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {markdown || '*ingen beskrivelse*'}

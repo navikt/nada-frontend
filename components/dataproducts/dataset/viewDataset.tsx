@@ -167,9 +167,11 @@ const ViewDataset = ({
             <Heading level="3" size="small">
               Beskrivelse
             </Heading>
+            <div className="max-w-[60rem]">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {dataset.description}
             </ReactMarkdown>
+            </div>
           </section>
         )}
         <DatasetMetadata dataset={dataset} />
