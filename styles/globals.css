@@ -63,7 +63,7 @@ h6 {
 }
 
 .select__menu-list {
-  @apply max-h-44;
+  @apply max-h-28 !important;
 }
 
 .select__dropdown-indicator,
@@ -114,6 +114,11 @@ h6 {
 
 .nada-search-result:focus > div > div {
   @apply text-white
+}
+
+.ds-datepicker__kalenderPortal {
+  top: unset !important;
+  bottom: calc(100% + 2px) !important;
 }
 
 html,
