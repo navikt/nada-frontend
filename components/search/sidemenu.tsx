@@ -67,13 +67,6 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
           sx={{ width: '100%', marginBottom: '10px' }}
         />
       </form>
-      <FormControl component="fieldset" variant="standard">
-        {!!Object.values(MappingService).length && (
-          <FormLabel component="legend" focused={false}>
-            Integrasjoner
-          </FormLabel>
-        )}
-      </FormControl>
       <Autocomplete
         sx={{ marginTop: '10px' }}
         clearIcon={false}
