@@ -120,7 +120,6 @@ const DatasetOwnerMenu = ({
         onConfirm={onDelete}
       ></DeleteModal>
       <MoveModal
-        error={moveError}
         open={showMove}
         onCancel={() => setShowMove(false)}
         onConfirm={onMove}
