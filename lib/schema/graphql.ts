@@ -248,6 +248,7 @@ export type Keyword = {
 
 /** MappingService defines all possible service types that a dataset can be exposed to. */
 export enum MappingService {
+  Metabase
 }
 
 export type Mutation = {
