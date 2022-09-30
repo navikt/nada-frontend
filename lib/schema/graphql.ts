@@ -248,7 +248,6 @@ export type Keyword = {
 
 /** MappingService defines all possible service types that a dataset can be exposed to. */
 export enum MappingService {
-  Metabase = 'metabase'
 }
 
 export type Mutation = {
@@ -1043,6 +1042,8 @@ export type UpdateDataproduct = {
 
 /** UpdateDataset contains metadata for updating a dataset */
 export type UpdateDataset = {
+  /** ID of the dataproduct that owns this dataset, the current dataproduct will not change if the field is null */
+  dataproductID?: InputMaybe<Scalars['ID']>;
   /** description of the dataset */
   description?: InputMaybe<Scalars['String']>;
   /** keywords for the dataset used as tags. */

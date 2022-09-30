@@ -84,15 +84,23 @@ const ViewDataset = ({
           className="w-full md:w-1/3 px-8"
         >
           <Modal.Content className="h-full">
-            <NewDatasetAccess dataset={dataset} setShowNewAccess={setShowNewAccess}/>
+            <NewDatasetAccess
+              dataset={dataset}
+              setShowNewAccess={setShowNewAccess}
+            />
           </Modal.Content>
         </Modal>
       </div>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           {accessType.type === 'utlogget' && (
-            <DatasetAlert variant="info">Du er ikke innlogget. <Link href={
-              `${backendHost()}/api/login?redirect_uri=${encodeURIComponent(router.asPath)}`}>
+            <DatasetAlert variant="info">
+              Du er ikke innlogget.{' '}
+              <Link
+                href={`${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+                  router.asPath
+                )}`}
+              >
                 Logg inn
               </Link>
             </DatasetAlert>
@@ -117,9 +125,8 @@ const ViewDataset = ({
               {isOwner && (
                 <DatasetOwnerMenu
                   setEdit={setEdit}
-                  datasetName={dataset.name}
-                  datasetId={dataset.id}
                   dataproduct={dataproduct}
+                  dataset={dataset}
                 />
               )}
             </div>
@@ -131,19 +138,19 @@ const ViewDataset = ({
               ))}
             </div>
           </div>
-            {dataset.pii ? (
-              <p className="flex flex-row gap-2 items-center">
-                <WarningColored />
-                <span>Inneholder persondata</span>
-              </p>
-            ) : (
-              <p className="flex flex-row gap-2 items-center">
-                <SuccessColored />
-                <span>
-                  Inneholder <b>ikke</b> persondata
-                </span>
-              </p>
-            )}
+          {dataset.pii ? (
+            <p className="flex flex-row gap-2 items-center">
+              <WarningColored />
+              <span>Inneholder persondata</span>
+            </p>
+          ) : (
+            <p className="flex flex-row gap-2 items-center">
+              <SuccessColored />
+              <span>
+                Inneholder <b>ikke</b> persondata
+              </span>
+            </p>
+          )}
           <div>
             {userInfo && accessType.type !== 'none' && (
               <article className="border-b border-divider last:border-b-0">
@@ -156,21 +163,28 @@ const ViewDataset = ({
             )}
           </div>
         </div>
-        {isOwner && 
-        <div className="flex flex-col gap-2">
+        {isOwner && (
+          <div className="flex flex-col gap-2">
             <DatasetAccess id={dataset.id} access={dataset.access} />
-            <Link className="cursor-pointer w-fit" onClick={() => {setShowNewAccess(true)}}>Legg til tilgang</Link>
-        </div>
-        }
+            <Link
+              className="cursor-pointer w-fit"
+              onClick={() => {
+                setShowNewAccess(true)
+              }}
+            >
+              Legg til tilgang
+            </Link>
+          </div>
+        )}
         {dataset.description && (
           <section>
             <Heading level="3" size="small">
               Beskrivelse
             </Heading>
             <div className="max-w-[60rem]">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {dataset.description}
-            </ReactMarkdown>
+              </ReactMarkdown>
             </div>
           </section>
         )}

@@ -33,6 +33,7 @@ const FilterPill = styled.span<{ all?: boolean }>`
     vertical-align: middle;
     font-size: 0.75em;
     margin: 0 2px 0 5px;
+    display:inline-block;
   }
 `
 

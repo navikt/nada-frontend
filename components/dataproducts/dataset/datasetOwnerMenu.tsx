@@ -7,26 +7,32 @@ import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import {
   DataproductQuery,
   useDeleteDatasetMutation,
+  useSearchContentWithOptionsQuery,
+  SearchContentWithOptionsQuery,
+  SearchType,
+  useUpdateDatasetMutation,
+  DatasetQuery,
 } from '../../../lib/schema/graphql'
 import DeleteModal from '../../lib/deleteModal'
+import MoveModal from '../../lib/MoveModal'
 
 interface IDatasetOwnerMenuProps {
-  datasetName: string
-  datasetId: string
+  dataset: DatasetQuery['dataset']
   dataproduct: DataproductQuery['dataproduct']
   setEdit: (value: boolean) => void
 }
 
 const DatasetOwnerMenu = ({
-  datasetName,
-  datasetId,
+  dataset,
   dataproduct,
   setEdit,
 }: IDatasetOwnerMenuProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const [showDelete, setShowDelete] = useState(false)
+  const [showMove, setShowMove] = useState(false)
   const [deleteError, setDeleteError] = useState('')
+  const [moveError, setMoveError] = useState('')
   const router = useRouter()
 
   const handleMenuButtonClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -35,7 +41,7 @@ const DatasetOwnerMenu = ({
   }
 
   const [deleteDataset] = useDeleteDatasetMutation({
-    variables: { id: datasetId },
+    variables: { id: dataset?.id },
     awaitRefetchQueries: true,
     refetchQueries: [
       {
@@ -57,6 +63,27 @@ const DatasetOwnerMenu = ({
       setDeleteError(e.toString())
     }
   }
+  const [updateDataset] = useUpdateDatasetMutation()
+
+  const onMove = async (dataproductID: string)=>{
+    console.log(dataset)
+    await updateDataset({
+      variables: {
+        id: dataset?.id,
+        input: {
+          description: dataset?.description,
+          keywords: dataset?.keywords,
+          repo: dataset?.repo,
+          name: dataset?.name,
+          pii: dataset?.pii,
+          dataproductID: dataproductID,
+        }
+      }
+    })
+    await router.push(
+      `/dataproduct/${dataproduct?.id}/${dataproduct?.slug}/info`
+    )
+  }
 
   return (
     <>
@@ -64,6 +91,7 @@ const DatasetOwnerMenu = ({
         value={{ isOpen, setIsOpen, anchorEl, setAnchorEl }}
       >
         <Button
+          className="min-w-min p-0 rounded-full"
           variant="tertiary"
           onClick={handleMenuButtonClick}
         >
@@ -74,6 +102,9 @@ const DatasetOwnerMenu = ({
             <Dropdown.Menu.GroupedList.Item onClick={() => setEdit(true)}>
               Endre datasett
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item onClick={() => setShowMove(true)}>
+              Flytt datasett
+            </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item onClick={() => setShowDelete(true)}>
               Slett datasett
             </Dropdown.Menu.GroupedList.Item>
@@ -81,13 +112,21 @@ const DatasetOwnerMenu = ({
         </Dropdown.Menu>
       </DropdownContext.Provider>
       <DeleteModal
-        name={datasetName}
+        name={dataset?.name}
         resource="datasett"
         error={deleteError}
         open={showDelete}
         onCancel={() => setShowDelete(false)}
         onConfirm={onDelete}
       ></DeleteModal>
+      <MoveModal
+        error={moveError}
+        open={showMove}
+        onCancel={() => setShowMove(false)}
+        onConfirm={onMove}
+        group={dataproduct.owner.group}
+        currentDataproductID={dataproduct.id}
+      ></MoveModal>
     </>
   )
 }

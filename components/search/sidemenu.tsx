@@ -43,19 +43,6 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
     }
   }
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    key: string
-  ) => {
-    updateQuery(key, event.target.name)
-  }
-  const i18n = (key: SearchType | MappingService) => {
-    switch (key) {
-      case MappingService.Metabase:
-        return 'Metabase'
-    }
-  }
-
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -81,24 +68,11 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
         />
       </form>
       <FormControl component="fieldset" variant="standard">
-        <FormLabel component="legend" focused={false}>
-          Integrasjoner
-        </FormLabel>
-        <FormGroup>
-          {Object.values(MappingService).map((key) => (
-            <FormControlLabel
-              key={key}
-              control={
-                <Checkbox
-                  checked={filters.services.includes(key)}
-                  onChange={(e) => handleChange(e, 'services')}
-                  name={key}
-                />
-              }
-              label={i18n(key)}
-            />
-          ))}
-        </FormGroup>
+        {!!Object.values(MappingService).length && (
+          <FormLabel component="legend" focused={false}>
+            Integrasjoner
+          </FormLabel>
+        )}
       </FormControl>
       <Autocomplete
         sx={{ marginTop: '10px' }}
