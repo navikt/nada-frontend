@@ -1,14 +1,9 @@
-import styled from 'styled-components'
 import { Tag } from '@navikt/ds-react'
 import { stringToColors } from '../../lib/stringUtils'
+import React from 'react'
 
-export const KeywordBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-`
+
+export const KeywordBox = ({children}: {children: React.ReactNode}) => <div className="flex flex-row gap-1 flex-wrap justify-end">{children}</div>
 
 interface keywordPillProps {
   keyword: string

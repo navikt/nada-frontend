@@ -38,7 +38,7 @@ export const SearchResultLink = ({
             </ReactMarkdown>
           )}
           <div className="flex flex-row w-full justify-between">
-            <p>eier: {group}</p>
+            <p className="place-self-end">eier: {group}</p>
             <div className="max-w-sm">
               <KeywordBox>
                 {keywords &&
