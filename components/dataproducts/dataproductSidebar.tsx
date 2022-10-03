@@ -37,7 +37,7 @@ export const DataproductSidebar = ({
   }
 
   return (
-    <div className="flex flex-col items-stretch justify-between pt-8 w-64">
+    <div className="flex flex-col text-base items-stretch justify-between pt-8 w-64">
       <div className="flex w-64 flex-col gap-2">
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
