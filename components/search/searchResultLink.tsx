@@ -1,6 +1,8 @@
 import { KeywordPill, KeywordBox } from '../lib/keywordList'
 import * as React from 'react'
 import { Heading, Link } from '@navikt/ds-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export interface SearchResultProps {
   link: string
@@ -31,15 +33,9 @@ export const SearchResultLink = ({
         </div>
         <div className="flex flex-col gap-4">
           {description && (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: description.replace(
-                  /\(\(START\)\)(.*?)\(\(STOP\)\)/g,
-                  `<i><b>$1</b></i>`
-                ),
-              }}
-              className="overflow-y-hidden line-clamp-3"
-            />
+            <ReactMarkdown remarkPlugins={[remarkGfm]} disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5']} unwrapDisallowed={true}>
+              {description.split(/\r?\n/).slice(0, 4).join('\n')}
+            </ReactMarkdown>
           )}
           <div className="flex flex-row w-full justify-between">
             <p>eier: {group}</p>
