@@ -81,14 +81,12 @@ export const ExploreLink = ({
   if (isOwner) {
     if (loading) {
       return (
-        <Link
-          className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
-          href="#"
-          onClick={add}
+        <p
+          className="border-l-8 border-border-inverted py-1 px-4 flex flex-row gap-2 w-fit text-text-muted"
         >
           Legger til i Metabase
           <Loader transparent size="small" />
-        </Link>
+        </p>
       )
     }
     if (addToMetabase) {
