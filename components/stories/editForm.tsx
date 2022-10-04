@@ -1,5 +1,4 @@
 import { Fieldset } from '@navikt/ds-react'
-import styled from 'styled-components'
 import {
   StoryQuery,
   useUpdateStoryMetadataMutation,
@@ -12,21 +11,6 @@ import KeywordsInput from '../lib/KeywordsInput'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { StoryDocument } from '../../lib/schema/graphql'
 import { useState } from 'react'
-
-const Container = styled.div`
-  width: 768px;
-  margin: 0 auto;
-  margin-top: 40px;
-`
-
-const DataproductBox = styled.div`
-  border-radius: 5px;
-  border: 1px solid black;
-`
-
-const DataproductBody = styled.div`
-  padding: 1em 1em 2em 1em;
-`
 
 interface SaveFormProps {
   story: StoryQuery['story']
@@ -93,10 +77,9 @@ function EditForm({ story }: SaveFormProps) {
   }
 
   return (
-    <Container>
-      <DataproductBox>
+    <div className="max-w-3xl">
         <TopBar name={`Lagre ${story.name}`} type={story.__typename} />
-        <DataproductBody>
+        <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
               <TeamkatalogenSelector
@@ -117,9 +100,8 @@ function EditForm({ story }: SaveFormProps) {
               />
             </Fieldset>
           </form>
-        </DataproductBody>
-      </DataproductBox>
-    </Container>
+        </div>
+    </div>
   )
 }
 

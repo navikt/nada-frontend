@@ -4,7 +4,6 @@ import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
-import SubjectHeader from '../../components/lib/subjectHeader'
 import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
 
@@ -31,42 +30,42 @@ export const UserPages = () => {
       title: 'Mine dataprodukter',
       slug: 'products',
       component: (
-        <>
-          <SubjectHeader>Mine produkter</SubjectHeader>
+        <div className="grid gap-4">
+          <h2>Mine produkter</h2>
           <ResultList dataproducts={data.userInfo.dataproducts} />
-        </>
+        </div>
       ),
     },
     {
       title: 'Mine fortellinger',
       slug: 'stories',
       component: (
-        <>
-          <SubjectHeader>Mine fortellinger</SubjectHeader>
+        <div className="grid gap-4">
+          <h2>Mine fortellinger</h2>
           <ResultList stories={data.userInfo.stories} />
-        </>
+        </div>
       ),
     },
     {
       title: 'Mine tilganger',
       slug: 'access',
       component: (
-        <>
-          <SubjectHeader>Mine tilganger</SubjectHeader>
+        <div className="grid gap-4">
+          <h2>Mine tilganger</h2>
           <ResultList dataproducts={data.userInfo.accessable} />
-        </>
+        </div>
       ),
     },
     {
       title: 'Mine tilgangssøknader',
       slug: 'requests',
       component: (
-        <>
-          <SubjectHeader>Mine tilgangssøknader</SubjectHeader>
+        <div className="grid gap-4">
+          <h2>Mine tilgangssøknader</h2>
           <AccessRequestsListForUser
             accessRequests={data.userInfo.accessRequests}
           />
-        </>
+        </div>
       ),
     },
   ]

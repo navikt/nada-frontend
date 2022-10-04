@@ -125,6 +125,14 @@ h6 {
   bottom: calc(100% + 2px) !important;
 }
 
+.children-fullwidth > * {
+  @apply w-full
+}
+
+.svg-scale:hover > svg {
+  @apply scale-125
+}
+
 html,
 body {
   padding: 0;

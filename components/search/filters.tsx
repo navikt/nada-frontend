@@ -1,41 +1,23 @@
 import * as React from 'react'
-import styled from 'styled-components'
 import { Close } from '@navikt/ds-icons'
 import { emailToValue, FilterTypes } from '../../pages/search'
 
-const FilterRow = styled.div`
-  display: flex;
-  margin-bottom: 30px;
-`
-const FilterPill = styled.span<{ all?: boolean }>`
-  cursor: pointer;
-  font-size: 0.75em;
-  background: ${(props) =>
-    props.all ? 'var(--navds-button-color-primary-background)' : '#d4d4d4'};
-  ${(props) =>
-    props.all ? 'color: var(--navds-button-color-primary-text)' : ''};
-  border-radius: ${(props) => (props.all ? '2px' : '20px')};
-  ${(props) =>
-    props.all ? 'color: var(--navds-button-color-primary-text)' : ''};
-  padding: 5px 5px 5px 10px;
-  margin-right: 10px;
-  :hover {
-    background: ${(props) =>
-      props.all
-        ? 'var(--navds-button-color-primary-background-hover)'
-        : '#c5c5c5'};
-    > svg {
-      transform: scale(1.4);
-      color: ${(props) => (props.all ? '#fff' : 'red')};
-    }
-  }
-  > svg {
-    vertical-align: middle;
-    font-size: 0.75em;
-    margin: 0 2px 0 5px;
-    display:inline-block;
-  }
-`
+const FilterRow = ({children}: {children: React.ReactNode}) => {
+  return <div className="flex gap-2">
+    {children}
+  </div>
+}
+
+const FilterPill = ({all, children, onClick}: {all?: boolean, children: React.ReactNode, onClick: () => void}) => {
+  return <span 
+    onClick={onClick} 
+    className={`svg-scale flex items-center gap-1 cursor-pointer text-xs p-2
+      ${all ? 'bg-interaction-primary text-text-inverted rounded-sm' : 'bg-gray-100 rounded-3xl'}
+      ${all ? 'hover:bg-interaction-primary-hover' : 'hover:bg-gray-300'}`}>
+      {children}
+    </span>
+}
+
 
 interface filterProps {
   updateQuery: (key: string, value: string, clear?: boolean) => void
