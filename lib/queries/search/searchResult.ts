@@ -14,6 +14,9 @@ export const SEARCH_CONTENT = gql`
           lastModified
           keywords
           slug
+          datasets{
+            name
+          }
           owner {
             group
             teamkatalogenURL

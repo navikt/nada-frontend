@@ -11,6 +11,9 @@ export interface SearchResultProps {
   keywords?: string[]
   type?: string
   description?: string
+  datasets?: {
+    name: string
+  }[]
 }
 
 export const SearchResultLink = ({
@@ -20,6 +23,7 @@ export const SearchResultLink = ({
   keywords,
   type,
   description,
+  datasets,
 }: SearchResultProps) => {
   return (
     <Link href={link} className='nada-search-result max-w-[47rem]'>
@@ -37,6 +41,11 @@ export const SearchResultLink = ({
               {description.split(/\r?\n/).slice(0, 4).join('\n')}
             </ReactMarkdown>
           )}
+          {datasets && !!datasets.length && <div>
+            {
+              datasets.map(ds=> <p>{ds.name}</p>)
+            }
+          </div>}
           <div className="flex flex-row w-full justify-between">
             <p className="place-self-end">eier: {group}</p>
             <div className="max-w-sm">
