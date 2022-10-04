@@ -1,9 +1,10 @@
 import { ApolloError } from '@apollo/client'
-import { ErrorMessage, Heading } from '@navikt/ds-react'
+import { Heading } from '@navikt/ds-react'
 import * as React from 'react'
 import humanizeDate from '../../../../lib/humanizeDate'
 import { DatasetQuery } from '../../../../lib/schema/datasetQuery'
 import { AccessRequestsForDatasetQuery } from '../../../../lib/schema/graphql'
+import ErrorMessage from '../../../lib/error'
 import LoaderSpinner from '../../../lib/spinner'
 
 interface AccessProps {

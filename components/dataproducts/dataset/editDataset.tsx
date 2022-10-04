@@ -1,5 +1,5 @@
-import { ErrorMessage } from "@navikt/ds-react"
 import { useDatasetQuery } from "../../../lib/schema/graphql"
+import ErrorMessage from "../../lib/error"
 import LoaderSpinner from "../../lib/spinner"
 import EditDatasetForm from "./editDatasetForm"
 

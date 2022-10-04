@@ -1,7 +1,7 @@
 import { Bandage } from "@navikt/ds-icons";
-import { ErrorMessage, Link } from "@navikt/ds-react";
+import { Link } from "@navikt/ds-react";
 import { useProductAreasQuery } from "../../lib/schema/graphql";
-import LoaderSpinner from "../lib/spinner";
+import ErrorMessage from "../lib/error";
 
 const ProductAreaLinks = () => {
     const productAreasQuery = useProductAreasQuery()

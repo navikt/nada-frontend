@@ -1,7 +1,7 @@
 import React, { MouseEvent, useContext } from 'react'
 import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
-import { Divider, Dropdown, Header } from '@navikt/ds-react-internal'
+import { Dropdown, Header } from '@navikt/ds-react-internal'
 
 
 export const backendHost = () => {
@@ -61,7 +61,7 @@ export default function User() {
             </a>
           </Dropdown.Menu.GroupedList.Item>
         </Dropdown.Menu.GroupedList>
-        <Divider />
+        <Dropdown.Menu.Divider />
         <Dropdown.Menu.GroupedList>
           <Dropdown.Menu.GroupedList.Item>
             <a className={'text-base'} href={`${backendHost()}/api/logout`}>

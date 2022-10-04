@@ -5,7 +5,6 @@ import {
   Panel,
   BodyLong,
   Modal,
-  ErrorMessage,
 } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import humanizeDate from '../../lib/humanizeDate'
@@ -15,6 +14,7 @@ import {
   useDeleteAccessRequestMutation,
 } from '../../lib/schema/graphql'
 import UpdateAccessRequest from '../dataproducts/accessRequest/updateAccessRequest'
+import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 
 interface AccessRequests {

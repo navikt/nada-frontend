@@ -2,19 +2,16 @@ import * as React from 'react'
 import {
   Modal,
   Button,
-  Alert,
   Heading,
   Select,
-  ErrorMessage,
 } from '@navikt/ds-react'
 import {
-  Exact,
-  SearchContentWithOptionsQuery,
   SearchType,
   useSearchContentWithOptionsQuery,
 } from '../../lib/schema/graphql'
 import LoaderSpinner from './spinner'
 import { useState } from 'react'
+import ErrorMessage from './error'
 
 interface MoveModalProps {
   open: boolean
