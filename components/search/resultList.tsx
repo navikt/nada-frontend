@@ -95,6 +95,7 @@ const ResultList = ({
                     keywords={d.result.keywords}
                     description={d.result.description}
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
+                    datasets={d.result.datasets}
                   />
               )}
             </Tabs.Panel>
