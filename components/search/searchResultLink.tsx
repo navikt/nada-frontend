@@ -26,7 +26,7 @@ export const SearchResultLink = ({
   datasets,
 }: SearchResultProps) => {
   return (
-    <Link href={link} className='nada-search-result max-w-[47rem]'>
+    <Link href={link} className="nada-search-result max-w-[47rem]">
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
           <div>
@@ -37,15 +37,21 @@ export const SearchResultLink = ({
         </div>
         <div className="flex flex-col gap-4">
           {description && (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5']} unwrapDisallowed={true}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5']}
+              unwrapDisallowed={true}
+            >
               {description.split(/\r?\n/).slice(0, 4).join('\n')}
             </ReactMarkdown>
           )}
-          {datasets && !!datasets.length && <div>
-            {
-              datasets.map(ds=> <p>{ds.name}</p>)
-            }
-          </div>}
+          {datasets && !!datasets.length && (
+            <div>
+              {datasets.map((ds, index) => (
+                <p key={index}>{ds.name}</p>
+              ))}
+            </div>
+          )}
           <div className="flex flex-row w-full justify-between">
             <p className="place-self-end">eier: {group}</p>
             <div className="max-w-sm">
