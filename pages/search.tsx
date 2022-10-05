@@ -10,13 +10,12 @@ import {
 } from '../lib/schema/graphql'
 import ResultList from '../components/search/resultList'
 import amplitudeLog from '../lib/amplitude'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export type FilterTypes = {
   [key: string]: string[] | string
   groups: string[]
   keywords: string[]
-  types: SearchType[]
   services: MappingService[]
   text: string
 }
@@ -39,40 +38,64 @@ const Search = () => {
   let emptyFilters: FilterTypes = {
     groups: [],
     keywords: [],
-    types: [],
     services: [],
     text: '',
   }
   let filters: FilterTypes = {
     groups: [],
     keywords: [],
-    types: [],
     services: [],
     text: '',
   }
+
+  const [preferredType, setPreferredType] = useState('')
+
   if (router.isReady) {
     filters = {
       groups: arrayify(router.query.groups),
       keywords: arrayify(router.query.keywords),
-      types: ['dataproduct', 'story'] as SearchType[],
       services: arrayify(router.query.services) as MappingService[],
       text: (router.query.text && router.query.text.toString()) || '',
     }
   }
 
   const search = useSearchContentWithOptionsQuery({
-    variables: { options: { limit: 1000, ...filters } },
+    variables: {
+      options: {
+        limit: 1000,
+        types: ['dataproduct', 'story'] as SearchType[],
+        ...filters,
+      },
+    },
     fetchPolicy: 'network-only',
   })
 
+  const updateUrlWithoutRefresh = () => {
+    router.push(
+      {
+        pathname: baseUrl,
+        query: { ...filters, preferredType: preferredType },
+      },
+      undefined,
+      { shallow: true }
+    )
+  }
+
   useEffect(() => {
-    if(!search.loading && search.data){
+    if(!preferredType){
+      setPreferredType(router.query.preferredType as string)
+    }
+    if (!search.loading && search.data) {
       const eventProperties = {
-        ...filters
+        ...filters,
       }
       amplitudeLog('søk', eventProperties)
     }
   })
+
+  useEffect(()=>{
+    updateUrlWithoutRefresh()
+  }, [preferredType])
 
   const updateQuery = async (
     key: string,
@@ -95,23 +118,18 @@ const Search = () => {
         }
       }
     }
-    await router.push(buildQueryString(key))
+    await router.push(buildQueryString())
   }
 
-  const buildQueryString = (key: string) => {
+  const buildQueryString = () => {
     const queryString = new URLSearchParams()
-    for (key in filters) {
-      if (filters[key].length > 0)
+    for (var key in filters) {
+      if (key != 'types' && filters[key].length > 0)
         queryString.append(key, filters[key].toString())
     }
+    queryString.append("preferredType", preferredType)
     return baseUrl + '?' + queryString.toString()
   }
-
-  const preferredType = router.query.types?.length 
-    ? typeof router.query.types === "string" 
-      ? router.query.types 
-      : router.query.types[0]
-    : "story"
 
   return (
     <>
@@ -126,7 +144,11 @@ const Search = () => {
         </div>
         <div className="flex-grow">
           <Filters filters={filters} updateQuery={updateQuery} />
-          <ResultList search={search} defaultType={preferredType} />
+          <ResultList
+            search={search}
+            preferredType={preferredType}
+            setPreferredType={setPreferredType}
+          />
         </div>
       </div>
     </>

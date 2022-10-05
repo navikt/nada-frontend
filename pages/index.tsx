@@ -46,7 +46,7 @@ const LandingPage = () => {
                 />
 
                 <div className="flex flex-row flex-wrap content-center gap-18">
-                    <Link href="/search?types=dataproduct">
+                    <Link href="/search?preferredType=dataproduct">
                         <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
                             <div className="h-36 w-36 flex flex-col items-center justify-center">
                                 <div className="h-[50px] w-[50px] text-link">
@@ -56,7 +56,7 @@ const LandingPage = () => {
                             </div>
                         </a>
                     </Link>
-                    <Link href="/search?types=story">
+                    <Link href="/search?preferredType=story">
                         <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
                             <div className="h-36 w-36 flex flex-col items-center justify-center">
                                 <div className="h-[50px] w-[50px] text-link">

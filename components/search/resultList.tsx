@@ -10,7 +10,9 @@ import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
 import React from 'react'
 
-const Results = ({children}: {children: React.ReactNode}) => <div className="results">{children}</div>
+const Results = ({ children }: { children: React.ReactNode }) => (
+  <div className="results">{children}</div>
+)
 
 type ResultListInterface = {
   search?: QueryResult<
@@ -31,14 +33,16 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
-  defaultType?: string
+  preferredType: string
+  setPreferredType: (v: string) => void
 }
 
 const ResultList = ({
   search,
   dataproducts,
   stories,
-  defaultType
+  preferredType,
+  setPreferredType,
 }: ResultListInterface) => {
   if (dataproducts) {
     return (
@@ -61,19 +65,39 @@ const ResultList = ({
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
 
-    const dataproducts = data.search.filter((d) => d.result.__typename === 'Dataproduct')
-    const datastories = data.search.filter((d) => d.result.__typename === 'Story')
+    const dataproducts = data.search.filter(
+      (d) => d.result.__typename === 'Dataproduct'
+    )
+    const datastories = data.search.filter(
+      (d) => d.result.__typename === 'Story'
+    )
+
+    if (!preferredType) {
+      const validType = dataproducts.length > 0 ? 'dataproduct' : 'story'
+      setPreferredType(validType)
+    }
 
     return (
-        <Results>
-          <Tabs defaultValue={defaultType ? defaultType : 'story'} size='medium'>
-            <Tabs.List>
-              <Tabs.Tab value='story' label={`Fortellinger (${datastories.length})`} />
-              <Tabs.Tab value='dataproduct' label={`Produkter (${dataproducts.length})`} />
-            </Tabs.List>
-            <Tabs.Panel className="flex flex-col pt-4 gap-4" value='story'>
-              {datastories.map((d, idx) => 
-                d.result.__typename === 'Story' &&
+      <Results>
+        <Tabs
+          defaultValue={preferredType}
+          size="medium"
+          onChange={(focused) => setPreferredType(focused)}
+        >
+          <Tabs.List>
+            <Tabs.Tab
+              value="story"
+              label={`Fortellinger (${datastories.length})`}
+            />
+            <Tabs.Tab
+              value="dataproduct"
+              label={`Produkter (${dataproducts.length})`}
+            />
+          </Tabs.List>
+          <Tabs.Panel className="flex flex-col pt-4 gap-4" value="story">
+            {datastories.map(
+              (d, idx) =>
+                d.result.__typename === 'Story' && (
                   <SearchResultLink
                     key={idx}
                     group={d.result.group!.group}
@@ -83,11 +107,13 @@ const ResultList = ({
                     description={d.excerpt}
                     link={`/story/${d.result.id}`}
                   />
-              )}
-            </Tabs.Panel>
-            <Tabs.Panel className="flex flex-col pt-4 gap-4" value='dataproduct'>
-              {dataproducts.map((d, idx) => 
-                d.result.__typename === 'Dataproduct' &&
+                )
+            )}
+          </Tabs.Panel>
+          <Tabs.Panel className="flex flex-col pt-4 gap-4" value="dataproduct">
+            {dataproducts.map(
+              (d, idx) =>
+                d.result.__typename === 'Dataproduct' && (
                   <SearchResultLink
                     key={idx}
                     group={d.result.owner.group}
@@ -97,11 +123,12 @@ const ResultList = ({
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                     datasets={d.result.datasets}
                   />
-              )}
-            </Tabs.Panel>
-          </Tabs>
-          {data.search.length == 0 && "ingen resultater"}
-        </Results>
+                )
+            )}
+          </Tabs.Panel>
+        </Tabs>
+        {data.search.length == 0 && 'ingen resultater'}
+      </Results>
     )
   }
   if (stories) {
