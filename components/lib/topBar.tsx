@@ -1,36 +1,6 @@
-import styled from 'styled-components'
-import { FileContent } from '@navikt/ds-icons'
 import * as React from 'react'
-import StoryLogo from './icons/storyLogo'
-import DataproductLogo from './icons/dataproductLogo'
 import { Heading } from '@navikt/ds-react'
 
-export const Name = styled.h1`
-  margin: 0;
-  font-weight: 300;
-  padding-right: 10px;
-`
-
-export const TopBarActions = styled.div`
-  margin-left: 62px;
-  display: flex;
-  gap: 2rem;
-  a {
-    border-left: 1px solid #aaa;
-    padding-right: 10px;
-    padding-left: 10px;
-    //margin-right: 10px;
-    cursor: pointer;
-
-    &:first-child {
-      border-left: none;
-      padding-left: 0px;
-    }
-    &:last-child {
-      padding-right: 0px;
-    }
-  }
-`
 
 interface TopBarProps {
   children?: React.ReactNode

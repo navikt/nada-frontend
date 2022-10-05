@@ -10,7 +10,6 @@ import {
 import {
   Alert,
   Button,
-  ErrorMessage,
   Heading,
   Link,
   Modal,
@@ -22,6 +21,7 @@ import LoaderSpinner from '../../lib/spinner'
 import { ExternalLink } from '@navikt/ds-icons'
 import { GET_ACCESS_REQUESTS_FOR_DATASET } from '../../../lib/queries/accessRequest/accessRequestsForDataset'
 import { nb } from 'date-fns/locale'
+import ErrorMessage from '../../lib/error'
 
 interface AccessEntry {
   subject: string

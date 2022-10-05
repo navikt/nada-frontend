@@ -87,15 +87,13 @@ const DatasetOwnerMenu = ({
 
   return (
     <>
-      <DropdownContext.Provider
-        value={{ isOpen, setIsOpen, anchorEl, setAnchorEl }}
-      >
+      <Dropdown>
         <Button
-          className="min-w-min p-0 rounded-full"
+          as={Dropdown.Toggle}
+          className="p-0 w-8 h-8"
           variant="tertiary"
-          onClick={handleMenuButtonClick}
         >
-          <EllipsisCircleH />
+          <EllipsisCircleH className="w-6 h-6" />
         </Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
@@ -110,7 +108,7 @@ const DatasetOwnerMenu = ({
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
-      </DropdownContext.Provider>
+      </Dropdown>
       <DeleteModal
         name={dataset?.name}
         resource="datasett"

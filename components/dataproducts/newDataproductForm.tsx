@@ -17,7 +17,6 @@ import {
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
-import { Divider } from '@navikt/ds-react-internal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
@@ -217,7 +216,7 @@ export const NewDataproductForm = () => {
           error={errors.teamContact?.message}
           className="w-full"
         />
-        <Divider />
+        <hr className="border-border-inverted" />
         <div>
           <Heading level="2" size="medium">
             Legg til et datasett

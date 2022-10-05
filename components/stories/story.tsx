@@ -1,12 +1,10 @@
-import styled from 'styled-components'
 import { InView } from 'react-intersection-observer'
 import { StoryQuery } from '../../lib/schema/graphql'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Header from './header'
-
 import LoaderSpinner from '../lib/spinner'
-import TopBar, { TopBarActions } from '../lib/topBar'
+import TopBar from '../lib/topBar'
 import * as React from 'react'
 import Link from 'next/link'
 import { Dispatch, SetStateAction } from 'react'
@@ -14,18 +12,6 @@ import { navRod } from '../../styles/constants'
 import VegaView from './vegaView'
 import { MetadataTable } from './metadataTable'
 import dynamic from 'next/dynamic'
-
-const StoryDiv = styled.div`
-  flex-wrap: wrap;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 0 1em;
-  > * {
-    width: 100%;
-  }
-`
 
 interface StoryProps {
   isOwner?: boolean
@@ -49,18 +35,20 @@ export function Story({
     <>
       <TopBar type={'Story'} name={story.name}>
         {!draft && isOwner && (
-          <TopBarActions>
-            <Link href={`/story/${story.id}/edit`}>
-              <a>Endre</a>
+          <div>
+            <Link 
+              href={`/story/${story.id}/edit`}>
+              <a className="pr-2">Endre</a>
             </Link>
-            <a onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
+            <a className="border-l-[1px] border-border px-2" onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
             <a
+              className="border-l-[1px] border-border px-2"
               onClick={() => setShowDelete && setShowDelete(true)}
               style={{ color: navRod }}
             >
               Slett
             </a>
-          </TopBarActions>
+          </div>
         )}
       </TopBar>
 
@@ -70,7 +58,7 @@ export function Story({
         owner={story.owner}
         keywords={story.keywords}
       />
-      <StoryDiv>
+      <div className="children-fullwidth flex flex-wrap flex-row justify-between gap-5 py-4">
         {views.map((view, id) => {
           if (view.__typename === 'StoryViewHeader') {
             return <Header key={id} text={view.content} size={view.level} />
@@ -118,7 +106,7 @@ export function Story({
             )
           }
         })}
-      </StoryDiv>
+      </div>
     </>
   )
 }

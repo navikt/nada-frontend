@@ -1,6 +1,7 @@
-import { ErrorMessage, Loader } from '@navikt/ds-react'
+import { Loader } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
+import ErrorMessage from '../../components/lib/error'
 import ProductAreaView from '../../components/productArea/productAreaView'
 import amplitudeLog from '../../lib/amplitude'
 import { ProductAreaQuery, useProductAreaQuery } from '../../lib/schema/graphql'

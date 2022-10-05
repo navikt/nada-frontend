@@ -14,8 +14,8 @@ export const SubjectHeader = ({
   return (
     <h2
       className={`${
-        centered && 'mx-auto'
-      } pb-0 mt-0 mb-1 text-text font-medium text-xs`}
+        centered ? 'mx-auto ' : ''
+      }pb-0 mt-0 mb-1 text-text font-medium text-xs`}
     >
       {children}
     </h2>
