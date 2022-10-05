@@ -33,7 +33,7 @@ export const UserPages = () => {
       component: (
         <>
           <SubjectHeader>Mine produkter</SubjectHeader>
-          <ResultList dataproducts={data.userInfo.dataproducts} />
+          <ResultList dataproducts={data.userInfo.dataproducts}/>
         </>
       ),
     },

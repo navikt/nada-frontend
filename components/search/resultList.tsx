@@ -33,8 +33,8 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
-  preferredType: string
-  setPreferredType: (v: string) => void
+  preferredType?: string
+  setPreferredType?: (v: string) => void
 }
 
 const ResultList = ({
@@ -74,7 +74,7 @@ const ResultList = ({
 
     if (!preferredType) {
       const validType = dataproducts.length > 0 ? 'dataproduct' : 'story'
-      setPreferredType(validType)
+      setPreferredType?.(validType)
     }
 
     return (
@@ -82,7 +82,7 @@ const ResultList = ({
         <Tabs
           defaultValue={preferredType}
           size="medium"
-          onChange={(focused) => setPreferredType(focused)}
+          onChange={(focused) => setPreferredType?.(focused)}
         >
           <Tabs.List>
             <Tabs.Tab
