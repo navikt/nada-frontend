@@ -71,17 +71,12 @@ const ResultList = ({
     const datastories = data.search.filter(
       (d) => d.result.__typename === 'Story'
     )
-
-    if (!preferredType) {
-      const validType = dataproducts.length > 0 ? 'dataproduct' : 'story'
-      setPreferredType?.(validType)
-    }
-
     return (
       <Results>
         <Tabs
           defaultValue={preferredType}
           size="medium"
+          value = {preferredType}
           onChange={(focused) => setPreferredType?.(focused)}
         >
           <Tabs.List>

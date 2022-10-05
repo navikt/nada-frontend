@@ -82,18 +82,27 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if(!preferredType){
-      setPreferredType(router.query.preferredType as string)
-    }
     if (!search.loading && search.data) {
       const eventProperties = {
         ...filters,
       }
       amplitudeLog('søk', eventProperties)
+      if (!preferredType) {
+        const validType = search.data.search.find(
+          (it) => it.result.__typename === 'Dataproduct'
+        )
+          ? 'dataproduct'
+          : 'story'
+        setPreferredType(validType)
+      }
+    } else {
+      if (!preferredType) {
+        setPreferredType(router.query.preferredType as string)
+      }
     }
   })
 
-  useEffect(()=>{
+  useEffect(() => {
     updateUrlWithoutRefresh()
   }, [preferredType])
 
@@ -127,7 +136,7 @@ const Search = () => {
       if (key != 'types' && filters[key].length > 0)
         queryString.append(key, filters[key].toString())
     }
-    queryString.append("preferredType", preferredType)
+    queryString.append('preferredType', preferredType)
     return baseUrl + '?' + queryString.toString()
   }
 
