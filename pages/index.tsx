@@ -46,7 +46,7 @@ const LandingPage = () => {
                 <form
                     className="col-span-2"
                     role="search" 
-                    onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm } })}>
+                    onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
                     <Search
                         label="Search for dataproducts or datasets"
                         onChange={(text) =>
