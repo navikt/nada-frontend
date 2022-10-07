@@ -12,15 +12,15 @@ const ProductAreaLinks = () => {
     const productAreas = productAreasQuery.data.productAreas
 
     return (
-        <div className="flex flex-row flex-wrap border border-border-muted bg-white rounded-lg w-96 p-4">
+        <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[32rem] h-fit p-4">
             <Heading level="2" size="medium">Utforsk områder</Heading>
             <p>Er du nysgjerrig på hva de ulike områdene i NAV gjør? Her kan du utforske dataprodukter og fortellinger områdene har publisert.</p>
             <p>Foreløpig viser vi kun en pilot.</p>
                             
             {productAreas.map((pa) => (
                 <div key={pa.id} className="py-2">
-                    <Link href={`/productArea/${pa.id}`} className="nada-product-area-link  max-w-[47rem] align-top">
-                        <div className="flex flex-col  w-full px-4 py-3">
+                    <Link href={`/productArea/${pa.id}`} className="nada-product-area-link max-w-[47rem] align-top">
+                        <div className="flex flex-col w-full px-4 py-3">
                             <div className="flex flex-row gap-2">
                                 <Bandage />
                                 <div className="whitespace-nowrap">{pa.name}</div>

@@ -41,7 +41,7 @@ const LandingPage = () => {
                     <title>nav data</title>
                 </Head>
                 <FrontPageLogo />
-                <div className="grid grid-cols-2 gap-4 md:w-5/12">
+                <div className="grid grid-cols-2 gap-4 w-full md:w-[32rem]">
                     <form
                         className="col-span-2 select-none"
                         role="search" 
@@ -75,7 +75,7 @@ const LandingPage = () => {
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate h-96 items-center justify-center flex ">
+            <div className="bg-component-background-alternate h-[30rem] pt-8 md:pt-0 md:h-96 md:items-center justify-center flex ">
                 <ProductAreaLinks/>
             </div>
         </div>
