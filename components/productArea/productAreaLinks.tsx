@@ -19,7 +19,7 @@ const ProductAreaLinks = () => {
                             
             {productAreas.map((pa) => (
                 <div key={pa.id} className="py-2">
-                    <Link href={`/productArea/${pa.id}`} className="nada-search-result max-w-[47rem] align-top">
+                    <Link href={`/productArea/${pa.id}`} className="nada-product-area-link  max-w-[47rem] align-top">
                         <div className="flex flex-col  w-full px-4 py-3">
                             <div className="flex flex-row gap-2">
                                 <Bandage />

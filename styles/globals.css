@@ -100,11 +100,31 @@ h6 {
   @apply w-full !important
 }
 
-.nada-search-result {
+.nada-product-area-link {
   @apply no-underline !important
 }
 
-.nada-search-result:hover > div > div > div {
+.nada-product-area-link:hover > div > div > div {
+  @apply text-link underline
+}
+
+.nada-product-area-link:focus > div > div > div {
+  @apply text-white
+}
+
+.nada-product-area-link:focus > div > p {
+  @apply text-white
+}
+
+.nada-product-area-link > div > p {
+  @apply text-text
+}
+
+.nada-search-result {
+  @apply no-underline text-text !important
+}
+
+.nada-search-result:hover > div > div > div > h2 {
   @apply text-link underline
 }
 
@@ -114,10 +134,6 @@ h6 {
 
 .nada-search-result:focus > div > p {
   @apply text-white
-}
-
-.nada-search-result > div > p {
-  @apply text-text
 }
 
 .ds-datepicker__kalenderPortal {
