@@ -36,28 +36,28 @@ const LandingPage = () => {
 
     return (
         <div className="w-screen min-h-[calc(100vh-3rem)] flex flex-col justify-between">
-            <div className="flex flex-col items-center justify-center gap-20 mt-48">
+            <div className="flex flex-col items-center justify-center gap-20 mt-8 md:mt-48 w-11/12 self-center">
                 <Head>
                     <title>nav data</title>
                 </Head>
                 <FrontPageLogo />
-                <div className="grid grid-cols-2 gap-4 max-w-lg">
-                <form
-                    className="col-span-2 select-none"
-                    role="search" 
-                    onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
-                    <Search
-                        label="Søk etter dataprodukter eller fortellinger"
-                        onChange={(text) =>
-                            setSearchTime(text)
-                        }
-                    />
-                </form>
+                <div className="grid grid-cols-2 gap-4 md:w-5/12">
+                    <form
+                        className="col-span-2 select-none"
+                        role="search" 
+                        onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
+                        <Search
+                            label="Søk etter dataprodukter eller fortellinger"
+                            onChange={(text) =>
+                                setSearchTime(text)
+                            }
+                        />
+                    </form>
                     <Link href="/search?preferredType=story">
                         <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
-                            <div className="w-72 flex flex-row items-center gap-4">
+                            <div className="w-1/2 flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
-                                    <StoryLogo className="h-6 w-6 m-4" />
+                                    <StoryLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
                                 </div>
                                 <p>Fortellinger</p>
                             </div>
@@ -65,9 +65,9 @@ const LandingPage = () => {
                     </Link>
                     <Link href="/search?preferredType=dataproduct">
                         <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
-                            <div className="w-72 flex flex-row items-center gap-4">
+                            <div className="w-1/2 flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
-                                    <DataproductLogo className="h-6 w-6 m-4" />
+                                    <DataproductLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
                                 </div>
                                 <p>Produkter</p>
                             </div>
