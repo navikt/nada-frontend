@@ -21,6 +21,7 @@ export const UserPages = () => {
     )
   console.log(data.userInfo)
 
+
   const menuItems: Array<{
     title: string
     slug: string
@@ -32,7 +33,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine produkter</h2>
-          <ResultList dataproducts={data.userInfo.dataproducts} />
+          <ResultList dataproducts={data.userInfo.dataproducts} updateQuery={(key: string, value: string) => {}} />
         </div>
       ),
     },
@@ -42,7 +43,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine fortellinger</h2>
-          <ResultList stories={data.userInfo.stories} />
+          <ResultList stories={data.userInfo.stories} updateQuery={(key: string, value: string) => {}} />
         </div>
       ),
     },
@@ -52,7 +53,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine tilganger</h2>
-          <ResultList dataproducts={data.userInfo.accessable} />
+          <ResultList dataproducts={data.userInfo.accessable} updateQuery={(key: string, value: string) => {}} />
         </div>
       ),
     },

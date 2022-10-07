@@ -44,43 +44,29 @@ const ResultList = ({
   preferredType,
   updateQuery,
 }: ResultListInterface) => {
-  if (dataproducts) {
-    return (
-      <Results>
-        {dataproducts.map((d, idx) => (
-          <SearchResultLink
-            key={idx}
-            group={d.owner.group}
-            name={d.name}
-            keywords={d.keywords}
-            link={`/dataproduct/${d.id}/${d.slug}`}
-          />
-        ))}
-      </Results>
-    )
-  }
+  useEffect(() => {
+    if (search?.data?.search.filter(
+      (d) => d.result.__typename === 'Dataproduct'
+    ).length == 0) {
+      updateQuery("preferredType", "story")
+    } else if (search?.data?.search.filter(
+      (d) => d.result.__typename === 'Story'
+    ).length == 0) {
+      updateQuery("preferredType", "dataproduct")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search])
 
   if (search) {
     const { data, loading, error } = search
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
-
     const dataproducts = data.search.filter(
       (d) => d.result.__typename === 'Dataproduct'
     )
     const datastories = data.search.filter(
       (d) => d.result.__typename === 'Story'
     )
-
-    useEffect(() => {
-      if (dataproducts.length == 0) {
-        updateQuery("preferredType", "story")
-      } else if (datastories.length == 0) {
-        updateQuery("preferredType", "dataproduct")
-      }
-    }, [])
-    
-
     return (
       <Results>
         <Tabs
@@ -133,6 +119,21 @@ const ResultList = ({
           </Tabs.Panel>
         </Tabs>
         {data.search.length == 0 && 'ingen resultater'}
+      </Results>
+    )
+  }
+  if (dataproducts) {
+    return (
+      <Results>
+        {dataproducts.map((d, idx) => (
+          <SearchResultLink
+            key={idx}
+            group={d.owner.group}
+            name={d.name}
+            keywords={d.keywords}
+            link={`/dataproduct/${d.id}/${d.slug}`}
+          />
+        ))}
       </Results>
     )
   }
