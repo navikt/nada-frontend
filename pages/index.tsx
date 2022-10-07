@@ -43,7 +43,7 @@ const LandingPage = () => {
                 <FrontPageLogo />
                 <div className="grid grid-cols-2 gap-4 max-w-lg">
                 <form
-                    className="col-span-2"
+                    className="col-span-2 select-none"
                     role="search" 
                     onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
                     <Search
