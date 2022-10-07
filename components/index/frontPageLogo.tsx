@@ -1,6 +1,9 @@
+import { Heading } from "@navikt/ds-react";
+
 export const FrontPageLogo = () => (
-  <picture className="block w-[80vw] max-w-md my-0 mx-auto">
-        <source srcSet="/navdata-logo.svg" type="image/svg" />
-        <img src="/navdata-logo.svg" alt="nav data logo" />
-  </picture>
+  <div className="flex items-center gap-2">
+    <div className="nada-slash h-18 w-[2.125rem]" />
+    <Heading level="1" size="xlarge" className="text-[5.5rem] pb-2 font-extrabold">nav data</Heading>
+    <div className="h-18 w-18 nada-logo" />
+  </div>
 )

@@ -149,13 +149,18 @@ h6 {
   @apply scale-125
 }
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+.nada-logo {
+  background-image: url("/favicon.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
+
+.nada-slash {
+  background-image: url("/slash.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 
 ol {
     list-style-type: decimal;
