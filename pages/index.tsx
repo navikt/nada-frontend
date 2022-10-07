@@ -9,7 +9,7 @@ import {
 } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
 import { USER_INFO } from '../lib/queries/userInfo/userInfo'
@@ -18,11 +18,14 @@ import MetabaseLogo from '../components/lib/icons/metabaseLogo'
 import Link from 'next/link'
 import ProductAreaLinks from '../components/productArea/productAreaLinks'
 import DataproductLogo from '../components/lib/icons/dataproductLogo'
+import { Search } from '@navikt/ds-react'
 
 const SEARCH_LIMIT = 6
 
 const LandingPage = () => {
     const router = useRouter()
+
+    const [searchTerm, setSearchTime] = useState('')
 
     useEffect(() => {
         const eventProperties = {
@@ -39,46 +42,38 @@ const LandingPage = () => {
                     <title>nav data</title>
                 </Head>
                 <FrontPageLogo />
-                <SearchBox
-                    onSearch={(text) =>
-                        router.push({ pathname: '/search', query: { text } })
-                    }
-                />
-
-                <div className="flex flex-row flex-wrap content-center gap-18">
-                    <Link href="/search?preferredType=dataproduct">
-                        <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
-                            <div className="h-36 w-36 flex flex-col items-center justify-center">
-                                <div className="h-[50px] w-[50px] text-link">
-                                    <DataproductLogo />
-                                </div>
-                                <p>Produkter</p>
-                            </div>
-                        </a>
-                    </Link>
+                <div className="grid grid-cols-2 gap-4 max-w-lg">
+                <form
+                    className="col-span-2"
+                    role="search" 
+                    onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm } })}>
+                    <Search
+                        label="Search for dataproducts or datasets"
+                        onChange={(text) =>
+                            setSearchTime(text)
+                        }
+                    />
+                </form>
                     <Link href="/search?preferredType=story">
                         <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
-                            <div className="h-36 w-36 flex flex-col items-center justify-center">
-                                <div className="h-[50px] w-[50px] text-link">
-                                    <StoryLogo />
+                            <div className="w-72 flex flex-row items-center gap-4">
+                                <div className="text-deepblue-500 bg-deepblue-50">
+                                    <StoryLogo className="h-6 w-6 m-4" />
                                 </div>
                                 <p>Fortellinger</p>
                             </div>
                         </a>
                     </Link>
-                    <a
-                        href="https://metabase.intern.nav.no"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg"
-                    >
-                        <div className="h-36 w-36 flex flex-col items-center justify-center">
-                            <div className="h-[50px] w-[50px]">
-                                <MetabaseLogo />
+                    <Link href="/search?preferredType=dataproduct">
+                        <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
+                            <div className="w-72 flex flex-row items-center gap-4">
+                                <div className="text-deepblue-500 bg-deepblue-50">
+                                    <DataproductLogo className="h-6 w-6 m-4" />
+                                </div>
+                                <p>Produkter</p>
                             </div>
-                            <p>Metabase</p>
-                        </div>
-                    </a>
+                        </a>
+                    </Link>
                 </div>
             </div>
         </>

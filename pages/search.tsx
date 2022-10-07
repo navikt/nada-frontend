@@ -18,6 +18,7 @@ export type FilterTypes = {
   keywords: string[]
   services: MappingService[]
   text: string
+  preferredType: string
 }
 
 const arrayify = (query: string | string[] | undefined) => {
@@ -40,23 +41,14 @@ const Search = () => {
     keywords: [],
     services: [],
     text: '',
+    preferredType: 'story',
   }
   let filters: FilterTypes = {
-    groups: [],
-    keywords: [],
-    services: [],
-    text: '',
-  }
-
-  const [preferredType, setPreferredType] = useState('')
-
-  if (router.isReady) {
-    filters = {
-      groups: arrayify(router.query.groups),
-      keywords: arrayify(router.query.keywords),
-      services: arrayify(router.query.services) as MappingService[],
-      text: (router.query.text && router.query.text.toString()) || '',
-    }
+    groups: arrayify(router.query.groups),
+    keywords: arrayify(router.query.keywords),
+    services: arrayify(router.query.services) as MappingService[],
+    text: (router.query.text && router.query.text.toString()) || '',
+    preferredType: router.query.preferredType?.toString() || ''
   }
 
   const search = useSearchContentWithOptionsQuery({
@@ -64,47 +56,14 @@ const Search = () => {
       options: {
         limit: 1000,
         types: ['dataproduct', 'story'] as SearchType[],
-        ...filters,
+        groups: filters.groups,
+        keywords: filters.keywords,
+        services: filters.services,
+        text: filters.text
       },
     },
     fetchPolicy: 'network-only',
   })
-
-  const updateUrlWithoutRefresh = () => {
-    router.push(
-      {
-        pathname: baseUrl,
-        query: { ...filters, preferredType: preferredType },
-      },
-      undefined,
-      { shallow: true }
-    )
-  }
-
-  useEffect(() => {
-    if (!search.loading && search.data) {
-      const eventProperties = {
-        ...filters,
-      }
-      amplitudeLog('søk', eventProperties)
-      if (!preferredType) {
-        const validType = search.data.search.find(
-          (it) => it.result.__typename === 'Dataproduct'
-        )
-          ? 'dataproduct'
-          : 'story'
-        setPreferredType(validType)
-      }
-    } else {
-      if (!preferredType) {
-        setPreferredType(router.query.preferredType as string)
-      }
-    }
-  })
-
-  useEffect(() => {
-    updateUrlWithoutRefresh()
-  }, [preferredType])
 
   const updateQuery = async (
     key: string,
@@ -116,6 +75,9 @@ const Search = () => {
     } else {
       if (key === 'text') {
         filters['text'] = value as string
+      }
+      else if (key === 'preferredType') {
+        filters['preferredType'] = value as string
       } else {
         const values = filters[key] as string[]
         if (values.length > 0 && values.includes(value.toString())) {
@@ -136,7 +98,6 @@ const Search = () => {
       if (key != 'types' && filters[key].length > 0)
         queryString.append(key, filters[key].toString())
     }
-    queryString.append('preferredType', preferredType)
     return baseUrl + '?' + queryString.toString()
   }
 
@@ -155,8 +116,8 @@ const Search = () => {
           <Filters filters={filters} updateQuery={updateQuery} />
           <ResultList
             search={search}
-            preferredType={preferredType}
-            setPreferredType={setPreferredType}
+            preferredType={filters.preferredType}
+            updateQuery={updateQuery}
           />
         </div>
       </div>

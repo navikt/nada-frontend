@@ -8,7 +8,7 @@ import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -34,7 +34,7 @@ type ResultListInterface = {
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
   preferredType?: string
-  setPreferredType?: (v: string) => void
+  updateQuery: (key: string, value: string, clear?: boolean) => void
 }
 
 const ResultList = ({
@@ -42,7 +42,7 @@ const ResultList = ({
   dataproducts,
   stories,
   preferredType,
-  setPreferredType,
+  updateQuery,
 }: ResultListInterface) => {
   if (dataproducts) {
     return (
@@ -71,13 +71,23 @@ const ResultList = ({
     const datastories = data.search.filter(
       (d) => d.result.__typename === 'Story'
     )
+
+    useEffect(() => {
+      if (dataproducts.length == 0) {
+        updateQuery("preferredType", "story")
+      } else if (datastories.length == 0) {
+        updateQuery("preferredType", "dataproduct")
+      }
+    }, [])
+    
+
     return (
       <Results>
         <Tabs
           defaultValue={preferredType}
           size="medium"
           value = {preferredType}
-          onChange={(focused) => setPreferredType?.(focused)}
+          onChange={(focused) => updateQuery("preferredType", focused)}
         >
           <Tabs.List>
             <Tabs.Tab
