@@ -47,7 +47,7 @@ const LandingPage = () => {
                     role="search" 
                     onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
                     <Search
-                        label="Search for dataproducts or datasets"
+                        label="Søk etter dataprodukter eller fortellinger"
                         onChange={(text) =>
                             setSearchTime(text)
                         }
