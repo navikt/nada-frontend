@@ -10,6 +10,7 @@ import {
 } from '../lib/schema/graphql'
 import ResultList from '../components/search/resultList'
 import amplitudeLog from '../lib/amplitude'
+import InnerContainer from '../components/lib/innerContainer'
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -103,7 +104,7 @@ const Search = () => {
   }
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>Kategorier</title>
       </Head>
@@ -122,7 +123,7 @@ const Search = () => {
           />
         </div>
       </div>
-    </>
+    </InnerContainer>
   )
 }
 

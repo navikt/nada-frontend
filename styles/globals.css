@@ -101,23 +101,23 @@ h6 {
 }
 
 .nada-search-result {
-  @apply no-underline !important;
+  @apply no-underline !important
 }
 
-.nada-search-result > div {
-  @apply text-text;
+.nada-search-result:hover > div > div > div {
+  @apply text-link underline
 }
 
-.nada-search-result:hover > div > div > div > h2 {
-  @apply text-link underline hover:no-underline;
-}
-
-.nada-search-result:focus > div > div > div > h2 {
+.nada-search-result:focus > div > div > div {
   @apply text-white
 }
 
-.nada-search-result:focus > div > div {
+.nada-search-result:focus > div > p {
   @apply text-white
+}
+
+.nada-search-result > div > p {
+  @apply text-text
 }
 
 .ds-datepicker__kalenderPortal {

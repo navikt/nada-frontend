@@ -8,7 +8,6 @@ import TopBar from '../lib/topBar'
 import * as React from 'react'
 import Link from 'next/link'
 import { Dispatch, SetStateAction } from 'react'
-import { navRod } from '../../styles/constants'
 import VegaView from './vegaView'
 import { MetadataTable } from './metadataTable'
 import dynamic from 'next/dynamic'
@@ -42,9 +41,8 @@ export function Story({
             </Link>
             <a className="border-l-[1px] border-border px-2" onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
             <a
-              className="border-l-[1px] border-border px-2"
+              className="border-l-[1px] border-border px-2 text-nav-red"
               onClick={() => setShowDelete && setShowDelete(true)}
-              style={{ color: navRod }}
             >
               Slett
             </a>

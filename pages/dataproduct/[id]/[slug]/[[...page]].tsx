@@ -24,6 +24,7 @@ import Dataset from '../../../../components/dataproducts/dataset/dataset'
 import { AddCircle } from '@navikt/ds-icons'
 import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
 import { truncate } from '../../../../lib/stringUtils'
+import InnerContainer from '../../../../components/lib/innerContainer'
 
 interface DataproductProps {
   id: string
@@ -130,7 +131,7 @@ const Dataproduct = (props: DataproductProps) => {
     .indexOf(router.query.page?.[0] ?? 'info')
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>{product.name}</title>
       </Head>
@@ -177,7 +178,7 @@ const Dataproduct = (props: DataproductProps) => {
           />
         </div>
       </div>
-    </>
+    </InnerContainer>
   )
 }
 

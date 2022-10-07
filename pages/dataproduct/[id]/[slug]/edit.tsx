@@ -17,6 +17,7 @@ import TopBar from '../../../../components/lib/topBar'
 import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
 import { useRouter } from 'next/router'
+import InnerContainer from '../../../../components/lib/innerContainer'
 
 interface DataproductProps {
   id: string
@@ -68,7 +69,7 @@ const DataproductEdit = (props: DataproductProps) => {
   }
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>{data.dataproduct.name}</title>
       </Head>
@@ -95,7 +96,7 @@ const DataproductEdit = (props: DataproductProps) => {
         error={deleteError}
         resource="dataprodukt"
       />
-    </>
+    </InnerContainer>
   )
 }
 

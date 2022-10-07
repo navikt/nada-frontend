@@ -35,7 +35,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
           <User />
         </div>
       </Header>
-      <main className="w-[95vw] md:w-[80vw] flex flex-col grow self-center">
+      <main className="w-screen flex flex-col items-center">
         {children}
       </main>
     </div>

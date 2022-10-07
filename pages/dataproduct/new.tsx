@@ -7,6 +7,7 @@ import {
 } from '../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../lib/apollo'
+import InnerContainer from '../../components/lib/innerContainer'
 
 const NewDataproduct = () => {
   const userInfo = useUserInfoDetailsQuery()
@@ -20,12 +21,12 @@ const NewDataproduct = () => {
     )
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>nytt dataprodukt</title>
       </Head>
       <NewDataproductForm />
-    </>
+    </InnerContainer>
   )
 }
 

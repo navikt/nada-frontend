@@ -2,6 +2,7 @@ import { Loader } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import ErrorMessage from '../../components/lib/error'
+import InnerContainer from '../../components/lib/innerContainer'
 import ProductAreaView from '../../components/productArea/productAreaView'
 import amplitudeLog from '../../lib/amplitude'
 import { ProductAreaQuery, useProductAreaQuery } from '../../lib/schema/graphql'
@@ -107,7 +108,9 @@ const ProductAreaPage = () => {
 
   if (!router.isReady) return <Loader />
 
-  return <ProductArea id={router.query.id as string} />
+  return <InnerContainer>
+    <ProductArea id={router.query.id as string} />
+    </InnerContainer>
 }
 
 export default ProductAreaPage

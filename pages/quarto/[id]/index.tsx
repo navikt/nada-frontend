@@ -4,6 +4,7 @@ import ErrorMessage from "../../../components/lib/error";
 import LoaderSpinner from "../../../components/lib/spinner";
 import * as React from "react";
 import InnerHTML from 'dangerously-set-html-content'
+import InnerContainer from "../../../components/lib/innerContainer";
 
 const QuartoPage = () => {
     const router = useRouter()
@@ -16,7 +17,9 @@ const QuartoPage = () => {
 
     const quarto = query.data.quarto.content
 
-    return <InnerHTML html={quarto} />
+    return <InnerContainer>
+        <InnerHTML html={quarto} />
+        </InnerContainer>
 }
 
 export default QuartoPage

@@ -35,8 +35,7 @@ const LandingPage = () => {
     }, [])
 
     return (
-        <>
-            <ProductAreaLinks/>
+        <div className="w-screen min-h-[calc(100vh-3rem)] flex flex-col justify-between">
             <div className="flex flex-col items-center justify-center gap-20 mt-48">
                 <Head>
                     <title>nav data</title>
@@ -76,7 +75,10 @@ const LandingPage = () => {
                     </Link>
                 </div>
             </div>
-        </>
+            <div className="bg-component-background-alternate h-96 items-center justify-center flex ">
+                <ProductAreaLinks/>
+            </div>
+        </div>
     )
 }
 

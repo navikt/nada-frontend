@@ -6,6 +6,7 @@ import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
+import InnerContainer from '../../components/lib/innerContainer'
 
 export const UserPages = () => {
   const router = useRouter()
@@ -80,37 +81,39 @@ export const UserPages = () => {
   }
 
   return (
-    <div className="flex flex-row h-full flex-grow pt-8">
-      <Head>
-        <title>Brukerside</title>
-      </Head>
-      <div className="flex flex-col items-stretch justify-between pt-8 w-64">
-        <div className="flex w-64 flex-col gap-2">
-          {menuItems.map(({ title, slug }, idx) =>
-            currentPage == idx ? (
-              <p
-                className="border-l-[6px] border-l-link px-1 font-semibold py-1"
-                key={idx}
-              >
-                {title}
-              </p>
-            ) : (
-              <a
-                className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
-                href="#"
-                key={idx}
-                onClick={() => handleChange(slug)}
-              >
-                {title}
-              </a>
-            )
-          )}
+    <InnerContainer>
+      <div className="flex flex-row h-full flex-grow pt-8">
+        <Head>
+          <title>Brukerside</title>
+        </Head>
+        <div className="flex flex-col items-stretch justify-between pt-8 w-64">
+          <div className="flex w-64 flex-col gap-2">
+            {menuItems.map(({ title, slug }, idx) =>
+              currentPage == idx ? (
+                <p
+                  className="border-l-[6px] border-l-link px-1 font-semibold py-1"
+                  key={idx}
+                >
+                  {title}
+                </p>
+              ) : (
+                <a
+                  className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
+                  href="#"
+                  key={idx}
+                  onClick={() => handleChange(slug)}
+                >
+                  {title}
+                </a>
+              )
+            )}
+          </div>
+        </div>
+        <div className="w-full">
+          {menuItems[currentPage].component}
         </div>
       </div>
-      <div className="w-full">
-        {menuItems[currentPage].component}
-      </div>
-    </div>
+    </InnerContainer>
   )
 }
 

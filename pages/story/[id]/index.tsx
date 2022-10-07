@@ -14,6 +14,7 @@ import TokenModal from '../../../components/lib/tokenModal'
 import { useContext, useState } from 'react'
 import { UserState } from '../../../lib/context'
 import amplitudeLog from '../../../lib/amplitude'
+import InnerContainer from '../../../components/lib/innerContainer'
 
 const StoryPage = () => {
   const router = useRouter()
@@ -57,7 +58,7 @@ const StoryPage = () => {
   }
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>{story.name}</title>
       </Head>
@@ -82,7 +83,7 @@ const StoryPage = () => {
         onCancel={() => setShowToken(false)}
         id={story.id}
       />
-    </>
+    </InnerContainer>
   )
 }
 

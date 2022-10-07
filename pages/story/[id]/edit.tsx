@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import EditForm from '../../../components/stories/editForm'
 import ErrorMessage from '../../../components/lib/error'
 import LoaderSpinner from '../../../components/lib/spinner'
+import InnerContainer from '../../../components/lib/innerContainer'
 
 const StoryDraft = () => {
   const router = useRouter()
@@ -17,12 +18,12 @@ const StoryDraft = () => {
   const story = data.story
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>Lagre {story.name}</title>
       </Head>
       <EditForm story={story} />
-    </>
+    </InnerContainer>
   )
 }
 

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { DraftToolbar } from '../../../../components/stories/draftToolbar'
 import ErrorMessage from '../../../../components/lib/error'
 import LoaderSpinner from '../../../../components/lib/spinner'
+import InnerContainer from '../../../../components/lib/innerContainer'
 
 const StoryDraft = () => {
   const router = useRouter()
@@ -20,7 +21,7 @@ const StoryDraft = () => {
   const story = data.story
 
   return (
-    <>
+    <InnerContainer>
       <Head>
         <title>Kladd - {story.name}</title>
       </Head>
@@ -30,7 +31,7 @@ const StoryDraft = () => {
       <div className="mt-12 flex gap-5 flex-col">
         <Story story={story} draft={true} />
       </div>
-    </>
+    </InnerContainer>
   )
 }
 
