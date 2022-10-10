@@ -331,13 +331,15 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
         </Heading>
         {datasetAccessRequests.length > 0 ? (
           <Table>
-            <Table.Row>
-              <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
-              <Table.HeaderCell>Brukertype</Table.HeaderCell>
-              <Table.HeaderCell>Tilgang</Table.HeaderCell>
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-            </Table.Row>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
+                <Table.HeaderCell>Brukertype</Table.HeaderCell>
+                <Table.HeaderCell>Tilgang</Table.HeaderCell>
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Header>
             {datasetAccessRequests.map((r, i) => (
               <>
                 <Table.Row
@@ -384,13 +386,15 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
         </Heading>
         {accesses.length > 0 ? (
           <Table>
-            <Table.Row className="border-none border-transparent">
-              <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
-              <Table.HeaderCell>Brukertype</Table.HeaderCell>
-              <Table.HeaderCell>Tilgang</Table.HeaderCell>
-              <Table.HeaderCell />
-              <Table.HeaderCell />
-            </Table.Row>
+            <Table.Header>
+              <Table.Row className="border-none border-transparent">
+                <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
+                <Table.HeaderCell>Brukertype</Table.HeaderCell>
+                <Table.HeaderCell>Tilgang</Table.HeaderCell>
+                <Table.HeaderCell />
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Header>
             {accesses.map((a, i) => (
               <>
                 <Table.Row

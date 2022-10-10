@@ -1,18 +1,11 @@
 import * as React from 'react'
 import { FormEvent, useState } from 'react'
 import {
-  MappingService,
-  SearchType,
   useGroupStatsQuery,
   useKeywordsQuery,
 } from '../../lib/schema/graphql'
 import { Close } from '@navikt/ds-icons'
 import { emailToValue, FilterTypes } from '../../pages/search'
-import FormLabel from '@mui/material/FormLabel'
-import FormControl from '@mui/material/FormControl'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import { Autocomplete, IconButton, TextField } from '@mui/material'
 
 interface SideMenuProps {

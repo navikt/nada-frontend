@@ -15,13 +15,13 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
-      <Table className="w-full 2xl:w-[60rem]">
+      <Table className="w-full 2xl:w-[60rem]" size="small">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Name</Table.ColumnHeader>
-            <Table.ColumnHeader align="right">Mode</Table.ColumnHeader>
-            <Table.ColumnHeader align="right">Type</Table.ColumnHeader>
-            <Table.ColumnHeader>Description</Table.ColumnHeader>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>Mode</Table.HeaderCell>
+            <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Description</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -29,11 +29,9 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
             <Table.Row
               key={row.name}
             >
-              <Table.DataCell>
-                {row.name}
-              </Table.DataCell>
-              <Table.DataCell align="right">{row.mode}</Table.DataCell>
-              <Table.DataCell align="right">{row.type}</Table.DataCell>
+              <Table.DataCell>{row.name}</Table.DataCell>
+              <Table.DataCell>{row.mode}</Table.DataCell>
+              <Table.DataCell>{row.type}</Table.DataCell>
               <Table.DataCell>{row.description}</Table.DataCell>
             </Table.Row>
           ))}
