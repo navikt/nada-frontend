@@ -1,15 +1,6 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material'
 import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { Heading } from '@navikt/ds-react'
+import { Heading, Table } from '@navikt/ds-react'
 
 interface DataproductTableSchemaProps {
   datasource: DatasetQuery['dataset']['datasource']
@@ -24,33 +15,30 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Mode</TableCell>
-              <TableCell align="right">Type</TableCell>
-              <TableCell>Description</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {schema.map((row: any) => (
-              <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.mode}</TableCell>
-                <TableCell align="right">{row.type}</TableCell>
-                <TableCell>{row.description}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Table className="w-full 2xl:w-[60rem]">
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>Name</Table.ColumnHeader>
+            <Table.ColumnHeader align="right">Mode</Table.ColumnHeader>
+            <Table.ColumnHeader align="right">Type</Table.ColumnHeader>
+            <Table.ColumnHeader>Description</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {schema.map((row: any) => (
+            <Table.Row
+              key={row.name}
+            >
+              <Table.DataCell>
+                {row.name}
+              </Table.DataCell>
+              <Table.DataCell align="right">{row.mode}</Table.DataCell>
+              <Table.DataCell align="right">{row.type}</Table.DataCell>
+              <Table.DataCell>{row.description}</Table.DataCell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </div>
   )
 }
