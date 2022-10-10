@@ -11,6 +11,7 @@ import {
 import ResultList from '../components/search/resultList'
 import amplitudeLog from '../lib/amplitude'
 import InnerContainer from '../components/lib/innerContainer'
+import { Heading } from '@navikt/ds-react'
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -106,21 +107,24 @@ const Search = () => {
   return (
     <InnerContainer>
       <Head>
-        <title>Kategorier</title>
+        <title>Søkeresultater</title>
       </Head>
-      <div className="flex mt-[100px]">
-        <div className="flex-shrink-0 w-[300px] pr-7">
-          {router.isReady && (
-            <SideMenu filters={filters} updateQuery={updateQuery} />
-          )}
-        </div>
-        <div className="flex-grow">
-          <Filters filters={filters} updateQuery={updateQuery} />
-          <ResultList
-            search={search}
-            preferredType={filters.preferredType}
-            updateQuery={updateQuery}
-          />
+      <div className="grid gap-4 m-4">
+        <Heading level="1" size="large">Søkeresultater</Heading>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-shrink-0 md:w-[300px] md:mt-16">
+            {router.isReady && (
+              <SideMenu filters={filters} updateQuery={updateQuery} />
+            )}
+          </div>
+          <div className="flex-grow">
+            <Filters filters={filters} updateQuery={updateQuery} />
+            <ResultList
+              search={search}
+              preferredType={filters.preferredType}
+              updateQuery={updateQuery}
+            />
+          </div>
         </div>
       </div>
     </InnerContainer>
