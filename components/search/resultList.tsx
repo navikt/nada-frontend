@@ -70,7 +70,6 @@ const ResultList = ({
     return (
       <Results>
         <Tabs
-          className="flex flex-col gap-4"
           defaultValue={preferredType}
           size="medium"
           value = {preferredType}
@@ -86,7 +85,7 @@ const ResultList = ({
               label={`Produkter (${dataproducts.length})`}
             />
           </Tabs.List>
-          <Tabs.Panel className="flex flex-col gap-4 disabled:hidden" value="story">
+          <Tabs.Panel className="flex flex-col pt-4 gap-4" value="story">
             {datastories.map(
               (d, idx) =>
                 d.result.__typename === 'Story' && (
@@ -102,7 +101,7 @@ const ResultList = ({
                 )
             )}
           </Tabs.Panel>
-          <Tabs.Panel className="flex flex-col gap-4 disabled:hidden" value="dataproduct">
+          <Tabs.Panel className="flex flex-col gap-4" value="dataproduct">
             {dataproducts.map(
               (d, idx) =>
                 d.result.__typename === 'Dataproduct' && (
