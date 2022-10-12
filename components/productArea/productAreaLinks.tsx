@@ -16,7 +16,7 @@ const ProductAreaLinks = () => {
             <Heading level="2" size="medium">Utforsk områder</Heading>
             <p>Er du nysgjerrig på hva de ulike områdene i NAV gjør? Her kan du utforske dataprodukter og fortellinger områdene har publisert.</p>
             <p>Foreløpig viser vi kun en pilot for {productAreas.map((pa) => (
-                <Link href={`/productArea/${pa.id}`}>{pa.name}</Link>
+                <Link key={pa.id} href={`/productArea/${pa.id}`}>{pa.name}</Link>
                 ))}
             </p>
         </div>
