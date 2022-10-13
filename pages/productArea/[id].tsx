@@ -107,10 +107,9 @@ const ProductArea = ({ id, productAreas }: ProductAreaProps) => {
 
 const ProductAreaPage = () => {
   const router = useRouter()
+  const productAreasQuery = useProductAreasQuery()
 
   if (!router.isReady) return <Loader />
-
-  const productAreasQuery = useProductAreasQuery()
 
   if (productAreasQuery.error)
     return <ErrorMessage error={productAreasQuery.error} />
