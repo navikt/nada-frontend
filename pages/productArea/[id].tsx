@@ -5,7 +5,7 @@ import ErrorMessage from '../../components/lib/error'
 import InnerContainer from '../../components/lib/innerContainer'
 import ProductAreaView from '../../components/productArea/productAreaView'
 import amplitudeLog from '../../lib/amplitude'
-import { ProductAreaQuery, useProductAreaQuery } from '../../lib/schema/graphql'
+import { ProductAreaQuery, ProductAreasQuery, useProductAreaQuery, useProductAreasQuery } from '../../lib/schema/graphql'
 
 export interface PAItem {
   name: string
@@ -74,14 +74,16 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
 
 interface ProductAreaProps {
   id: string
+  productAreas: ProductAreasQuery['productAreas']
 }
 
-const ProductArea = ({ id }: ProductAreaProps) => {
+const ProductArea = ({ id, productAreas }: ProductAreaProps) => {
   const productAreaQuery = useProductAreaQuery({
     variables: {
       id,
     },
   })
+
   useEffect(() => {
     if(!productAreaQuery.loading && productAreaQuery.data){
         const eventProperties = {
@@ -100,16 +102,26 @@ const ProductArea = ({ id }: ProductAreaProps) => {
   const productArea = productAreaQuery.data.productArea
   const paItems = createPAItems(productArea)
 
-  return <ProductAreaView paItems={paItems} />
+  return <ProductAreaView paItems={paItems} productAreas={productAreas}/>
 }
 
 const ProductAreaPage = () => {
   const router = useRouter()
+  const productAreasQuery = useProductAreasQuery()
 
   if (!router.isReady) return <Loader />
 
+  if (productAreasQuery.error)
+    return <ErrorMessage error={productAreasQuery.error} />
+  if (
+    productAreasQuery.loading ||
+    !productAreasQuery.data?.productAreas ||
+    !productAreasQuery.data.productAreas.length
+  )
+    return <></>
+
   return <InnerContainer>
-    <ProductArea id={router.query.id as string} />
+    <ProductArea id={router.query.id as string} productAreas={productAreasQuery.data.productAreas}/>
     </InnerContainer>
 }
 
