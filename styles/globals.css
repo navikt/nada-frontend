@@ -161,6 +161,11 @@ h6 {
   background-size: contain;
 }
 
+.expore-areas-icon {
+  background-image: url("/explore-areas.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 
 ol {
     list-style-type: decimal;
