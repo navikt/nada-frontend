@@ -25,15 +25,19 @@ const ProductAreaSidebar = ({
       isCurrent ? 'border-l-link' : 'border-l-transparent'
     }`
   return (
-    <div className='pl-[1.5rem] pr-[2rem] w-96 pt-8'>
+    <div className="pl-[1.5rem] pr-[2rem] w-96 pt-8">
       <Select
         className="w-full mb-[1rem]"
         label=""
         onChange={(e) => selectProductArea(e.target.value)}
-        value = {productAreas.find(it=> it.name == productAreaItems[0].name)?.id}
+        value={
+          productAreas.find((it) => it.name == productAreaItems[0].name)?.id
+        }
       >
-        {productAreas.map((it) => (
-          <option value={it.id}>{it.name}</option>
+        {productAreas.map((it, index) => (
+          <option key={index} value={it.id}>
+            {it.name}
+          </option>
         ))}
       </Select>
       <div className="flex text-base w-full flex-col gap-2">
