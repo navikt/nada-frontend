@@ -27,7 +27,7 @@ const ProductAreaSidebar = ({
 
   const relevantProductAreas= productAreas.filter(it=>it.areaType=== "PRODUCT_AREA" || it.areaType=== "PROJECT")
   return (
-    <div className="pl-[1.5rem] pr-[2rem] w-96 pt-8">
+    <div className="pr-[2rem] w-96 pt-8">
       <Select
         className="w-full mb-[1rem]"
         label=""
