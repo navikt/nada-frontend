@@ -34,11 +34,8 @@ const ProductAreaLinks = () => {
             Utforsk områder
           </Link>
         </Heading>
-        <p>
-          Er du nysgjerrig på hva de ulike områdene i NAV gjør? Her kan du
-          utforske dataprodukter og fortellinger områdene har publisert.
-        </p>
-        <p>Foreløpig viser vi kun en pilot med Produktområde Helse.</p>
+        <p>Er du nysgjerrig på hva de ulike områdene i NAV gjør?
+          Her kan du utforske dataprodukter og fortellinger noen av områdene har publisert.</p>
       </div>
     </div>
   )
