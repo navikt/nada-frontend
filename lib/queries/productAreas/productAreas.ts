@@ -5,6 +5,7 @@ export const GET_PRODUCT_AREAS = gql`
     productAreas {
       id
       name
+      areaType
       dataproducts{
         id
         name

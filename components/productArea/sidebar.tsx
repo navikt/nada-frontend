@@ -24,6 +24,8 @@ const ProductAreaSidebar = ({
     `border-l-[6px] py-1 px-2 hover:cursor-default ${
       isCurrent ? 'border-l-link' : 'border-l-transparent'
     }`
+
+  const relevantProductAreas= productAreas.filter(it=>it.areaType=== "PRODUCT_AREA" || it.areaType=== "PROJECT")
   return (
     <div className="pl-[1.5rem] pr-[2rem] w-96 pt-8">
       <Select
@@ -31,10 +33,10 @@ const ProductAreaSidebar = ({
         label=""
         onChange={(e) => selectProductArea(e.target.value)}
         value={
-          productAreas.find((it) => it.name == productAreaItems[0].name)?.id
+          relevantProductAreas.find((it) => it.name == productAreaItems[0].name)?.id
         }
       >
-        {productAreas.map((it, index) => (
+        {relevantProductAreas.map((it, index) => (
           <option key={index} value={it.id}>
             {it.name}
           </option>

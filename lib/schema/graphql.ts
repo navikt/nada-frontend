@@ -612,6 +612,8 @@ export type PollyInput = {
 
 export type ProductArea = {
   __typename?: 'ProductArea';
+  /** areaType is the type of the product area, which is defined by teamkatalogen */
+  areaType: Scalars['String'];
   /** dashboardURL is the url to the product area dashboard. */
   dashboardURL: Scalars['String'];
   /** dataproducts is the dataproducts owned by the product area. */
@@ -1287,7 +1289,7 @@ export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> }> };
 
 export type QuartoQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2594,6 +2596,7 @@ export const ProductAreasDocument = gql`
   productAreas {
     id
     name
+    areaType
     dataproducts {
       id
       name
