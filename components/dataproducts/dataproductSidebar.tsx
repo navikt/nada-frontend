@@ -36,6 +36,12 @@ export const DataproductSidebar = ({
       : `https://slack.com/app_redirect?channel=${teamContact}`
   }
 
+  const truncate = (teamContact: string) => {
+    return teamContact.length > 25
+      ? teamContact.substring(0, 25) + "..."
+      : teamContact
+  }
+
   return (
     <div className="flex flex-col text-base items-stretch justify-between pt-8 w-64">
       <div className="flex w-64 flex-col gap-2">
@@ -88,8 +94,10 @@ export const DataproductSidebar = ({
               href={makeTeamContactHref(product.owner.teamContact)}
               target="_blank"
               rel="noreferrer"
+              aria-label={product.owner.teamContact}
+              title={product.owner.teamContact}
             >
-              {product.owner.teamContact} <ExternalLink />
+              {truncate(product.owner.teamContact)} <ExternalLink />
             </Link>
           ) : (
             'Ukjent'
