@@ -27,7 +27,7 @@ export const DescriptionEditor = <FV extends Record<string, any>>({
   })
 
   return (
-    <div>
+    <div data-color-mode="light">
       <div className="flex flex-col">
         <label
           style={{ display: 'inline' }}
