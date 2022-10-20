@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FieldValues, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
 import KeywordsInput from '../lib/KeywordsInput'
@@ -20,6 +20,48 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
+
+const prefilledDataproductDescription = 
+`*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
+I søket vil den første delen av beskrivelsen inkluderes i visningen.*
+
+**Kontekst**  
+*Hva er lurt å få med som forklarer hva dataproduktet består av og hvor det kommer fra? 
+Hvordan samles data inn? Hvilke kilder er brukt? Hvordan ser populasjonen ut? 
+Er dataene stabile over tid eller finnes det kjente strukturelle brudd? 
+Hva er det du lurer på når du utforsker andres dataprodukter?*
+
+**Hvorfor dataproduktet er interessant**  
+*Hvem kan komme til å bruke dataproduktet til hva?  
+Om dere allerede vet et case dataene skal brukes til, er det veldig nyttig med en beskrivelse.*`
+
+export const prefilledDatasetDescription =
+`*En kort beskrivelse av datasettet*
+
+**Kontekst**  
+*Hvordan skiller dette datasettet seg fra de andre datasettene i produktet? Hva brukes datasettet til?*
+
+**Spesielle forhold**  
+*Er det taushetsbelagt informasjon i datasettet, 
+f. eks. børssensitiv informasjon som ikke må deles før et angitt tidspunkt? 
+Inneholder datasettet informasjon om personer med fortrolig eller strengt fortrolig adresse? 
+Er det andre ting eller forutsetninger i datasettet man bør være oppmerksom på, så er det lurt å skrive det ned*
+
+**Ofte stilte spørsmål**  
+*Er det noen spørsmål som går igjen, så kan du svare på dem en gang for alle - og kanskje slippe unna litt mas*`
+
+const defaultValues: FieldValues = {
+  name: null,
+  description: prefilledDataproductDescription,
+  team: "",
+  teamContact: null,
+  datasetName: null,
+  datasetDescription: prefilledDatasetDescription,
+  sourceCodeURL: null,
+  bigQuery: null,
+  keywords: [] as string[],
+  pii: null,
+}
 
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
@@ -70,6 +112,7 @@ export const NewDataproductForm = () => {
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
       resolver: yupResolver(schema),
+      defaultValues: defaultValues,
     })
 
   const { errors } = formState

@@ -1,17 +1,25 @@
 import { useMutation } from '@apollo/client'
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { DataproductQuery } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import KeywordsInput from '../../lib/KeywordsInput'
+import { prefilledDatasetDescription } from '../newDataproductForm'
 import DatasetSourceForm from './datasetSourceForm'
 
 interface NewDatasetFormProps {
   dataproduct: DataproductQuery
+}
+
+const defaultValues: FieldValues ={
+  name: null,
+  description: prefilledDatasetDescription,
+  bigquery: null,
+  pii: null,
 }
 
 const schema = yup.object().shape({
@@ -40,8 +48,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: defaultValues
   })
-
   const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
