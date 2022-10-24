@@ -258,7 +258,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
     datasetAccessRequestsQuery.loading ||
     !datasetAccessRequestsQuery.data?.accessRequestsForDataset
   )
-    return <LoaderSpinner />
+    return <div/>
 
   const datasetAccessRequests =
     datasetAccessRequestsQuery.data?.accessRequestsForDataset
@@ -269,7 +269,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
     datasetAccessQuery.loading ||
     !datasetAccessQuery.data?.dataset.access
   )
-    return <LoaderSpinner />
+    return <div/>
 
   const access = datasetAccessQuery.data.dataset.access
 
