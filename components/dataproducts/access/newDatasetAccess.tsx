@@ -5,7 +5,6 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Datepicker } from "@navikt/ds-datepicker";
 import { GET_DATASET } from "../../../lib/queries/dataset/dataset";
-import { GET_DATAPRODUCT } from "../../../lib/queries/dataproduct/dataproduct";
 
 interface NewDatasetAccessProps {
     dataset: DatasetQuery["dataset"]
@@ -70,9 +69,9 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
             },
             refetchQueries: [
                 {
-                    query: GET_DATAPRODUCT,
+                    query: GET_DATASET,
                     variables: {
-                        id: dataset.dataproductID,
+                        id: dataset.id,
                     },
                 },
             ]

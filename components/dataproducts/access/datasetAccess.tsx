@@ -6,6 +6,7 @@ import {
   useAccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
   useDenyAccessRequestMutation,
+  useDatasetAccessQuery,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
@@ -121,7 +122,6 @@ interface a2 {
 interface AccessListProps {
   id: string
   dataproductID: string
-  access: access[]
 }
 
 interface AccessModalProps {
@@ -237,26 +237,41 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
   )
 }
 
-const DatasetAccess = ({ id, dataproductID, access }: AccessListProps) => {
+const DatasetAccess = ({ id }: AccessListProps) => {
   const [formError, setFormError] = useState('')
   const [revokeAccess] = useRevokeAccessMutation()
   const [approveAccessRequest] = useApproveAccessRequestMutation()
   const [denyAccessRequest] = useDenyAccessRequestMutation()
-  const datasetAccessQuery = useAccessRequestsForDatasetQuery({
+  const datasetAccessRequestsQuery = useAccessRequestsForDatasetQuery({
     variables: { datasetID: id },
     ssr: true,
   })
+
+  const datasetAccessQuery = useDatasetAccessQuery({
+    variables: { id },
+    ssr: true,
+  })
+
+  if (datasetAccessRequestsQuery.error)
+    return <ErrorMessage error={datasetAccessRequestsQuery.error} />
+  if (
+    datasetAccessRequestsQuery.loading ||
+    !datasetAccessRequestsQuery.data?.accessRequestsForDataset
+  )
+    return <LoaderSpinner />
+
+  const datasetAccessRequests =
+    datasetAccessRequestsQuery.data?.accessRequestsForDataset
 
   if (datasetAccessQuery.error)
     return <ErrorMessage error={datasetAccessQuery.error} />
   if (
     datasetAccessQuery.loading ||
-    !datasetAccessQuery.data?.accessRequestsForDataset
+    !datasetAccessQuery.data?.dataset.access
   )
     return <LoaderSpinner />
 
-  const datasetAccessRequests =
-    datasetAccessQuery.data?.accessRequestsForDataset
+  const access = datasetAccessQuery.data.dataset.access
 
   const approveRequest = async (requestID: string) => {
     try {
@@ -308,9 +323,9 @@ const DatasetAccess = ({ id, dataproductID, access }: AccessListProps) => {
         variables: { id: a.id },
         refetchQueries: [
           {
-            query: GET_DATAPRODUCT,
+            query: GET_DATASET_ACCESS,
             variables: {
-              id: dataproductID,
+              id,
             },
           },
         ],
