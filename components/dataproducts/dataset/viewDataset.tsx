@@ -10,7 +10,6 @@ import {
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { backendHost } from '../../header/user'
-import BigQueryLogo from '../../lib/icons/bigQueryLogo'
 import KeywordPill from '../../lib/keywordList'
 import DatasetAccess from '../access/datasetAccess'
 import NewDatasetAccess from '../access/newDatasetAccess'
@@ -165,7 +164,7 @@ const ViewDataset = ({
         </div>
         {isOwner && (
           <div className="flex flex-col gap-2">
-            <DatasetAccess id={dataset.id} access={dataset.access} />
+            <DatasetAccess id={dataset.id} />
             <Link
               className="cursor-pointer w-fit"
               onClick={() => {

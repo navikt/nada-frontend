@@ -6,6 +6,7 @@ import {
   useAccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
   useDenyAccessRequestMutation,
+  useDatasetAccessQuery,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
@@ -17,7 +18,6 @@ import {
   Textarea,
 } from '@navikt/ds-react'
 import { GET_DATASET_ACCESS } from '../../../lib/queries/access/datasetAccess'
-import LoaderSpinner from '../../lib/spinner'
 import { ExternalLink } from '@navikt/ds-icons'
 import { GET_ACCESS_REQUESTS_FOR_DATASET } from '../../../lib/queries/accessRequest/accessRequestsForDataset'
 import { nb } from 'date-fns/locale'
@@ -119,7 +119,6 @@ interface a2 {
 
 interface AccessListProps {
   id: string
-  access: access[]
 }
 
 interface AccessModalProps {
@@ -235,26 +234,41 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
   )
 }
 
-const DatasetAccess = ({ id, access }: AccessListProps) => {
+const DatasetAccess = ({ id }: AccessListProps) => {
   const [formError, setFormError] = useState('')
   const [revokeAccess] = useRevokeAccessMutation()
   const [approveAccessRequest] = useApproveAccessRequestMutation()
   const [denyAccessRequest] = useDenyAccessRequestMutation()
-  const datasetAccessQuery = useAccessRequestsForDatasetQuery({
+  const datasetAccessRequestsQuery = useAccessRequestsForDatasetQuery({
     variables: { datasetID: id },
     ssr: true,
   })
+
+  const datasetAccessQuery = useDatasetAccessQuery({
+    variables: { id },
+    ssr: true,
+  })
+
+  if (datasetAccessRequestsQuery.error)
+    return <ErrorMessage error={datasetAccessRequestsQuery.error} />
+  if (
+    datasetAccessRequestsQuery.loading ||
+    !datasetAccessRequestsQuery.data?.accessRequestsForDataset
+  )
+    return <div/>
+
+  const datasetAccessRequests =
+    datasetAccessRequestsQuery.data?.accessRequestsForDataset
 
   if (datasetAccessQuery.error)
     return <ErrorMessage error={datasetAccessQuery.error} />
   if (
     datasetAccessQuery.loading ||
-    !datasetAccessQuery.data?.accessRequestsForDataset
+    !datasetAccessQuery.data?.dataset.access
   )
-    return <LoaderSpinner />
+    return <div/>
 
-  const datasetAccessRequests =
-    datasetAccessQuery.data?.accessRequestsForDataset
+  const access = datasetAccessQuery.data.dataset.access
 
   const approveRequest = async (requestID: string) => {
     try {
