@@ -22,6 +22,7 @@ import { ExternalLink } from '@navikt/ds-icons'
 import { GET_ACCESS_REQUESTS_FOR_DATASET } from '../../../lib/queries/accessRequest/accessRequestsForDataset'
 import { nb } from 'date-fns/locale'
 import ErrorMessage from '../../lib/error'
+import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 
 interface AccessEntry {
   subject: string
@@ -119,6 +120,7 @@ interface a2 {
 
 interface AccessListProps {
   id: string
+  dataproductID: string
   access: access[]
 }
 
@@ -235,7 +237,7 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
   )
 }
 
-const DatasetAccess = ({ id, access }: AccessListProps) => {
+const DatasetAccess = ({ id, dataproductID, access }: AccessListProps) => {
   const [formError, setFormError] = useState('')
   const [revokeAccess] = useRevokeAccessMutation()
   const [approveAccessRequest] = useApproveAccessRequestMutation()
@@ -306,9 +308,9 @@ const DatasetAccess = ({ id, access }: AccessListProps) => {
         variables: { id: a.id },
         refetchQueries: [
           {
-            query: GET_DATASET_ACCESS,
+            query: GET_DATAPRODUCT,
             variables: {
-              id,
+              id: dataproductID,
             },
           },
         ],
