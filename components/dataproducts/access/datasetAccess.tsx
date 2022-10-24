@@ -18,12 +18,10 @@ import {
   Textarea,
 } from '@navikt/ds-react'
 import { GET_DATASET_ACCESS } from '../../../lib/queries/access/datasetAccess'
-import LoaderSpinner from '../../lib/spinner'
 import { ExternalLink } from '@navikt/ds-icons'
 import { GET_ACCESS_REQUESTS_FOR_DATASET } from '../../../lib/queries/accessRequest/accessRequestsForDataset'
 import { nb } from 'date-fns/locale'
 import ErrorMessage from '../../lib/error'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 
 interface AccessEntry {
   subject: string
@@ -121,7 +119,6 @@ interface a2 {
 
 interface AccessListProps {
   id: string
-  dataproductID: string
 }
 
 interface AccessModalProps {

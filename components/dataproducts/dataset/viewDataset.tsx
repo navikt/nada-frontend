@@ -164,7 +164,7 @@ const ViewDataset = ({
         </div>
         {isOwner && (
           <div className="flex flex-col gap-2">
-            <DatasetAccess dataproductID={dataproduct.id} id={dataset.id} />
+            <DatasetAccess id={dataset.id} />
             <Link
               className="cursor-pointer w-fit"
               onClick={() => {
