@@ -25,7 +25,7 @@ const SEARCH_LIMIT = 6
 const LandingPage = () => {
     const router = useRouter()
 
-    const [searchTerm, setSearchTime] = useState('')
+    const [searchTerm, setSearchTerm] = useState('')
 
     useEffect(() => {
         const eventProperties = {
@@ -49,7 +49,7 @@ const LandingPage = () => {
                         <Search
                             label="Søk etter dataprodukter eller fortellinger"
                             onChange={(text) =>
-                                setSearchTime(text)
+                                setSearchTerm(text)
                             }
                         />
                     </form>
