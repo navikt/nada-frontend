@@ -36,22 +36,28 @@ export const TeamkatalogenSelector = ({
   const updateTeamkatalogInfo = (url: string) => {
     const team = teams?.find((it) => it.url == url)
     if (team) {
-        setProductAreaID?.(team.productAreaID)
-        setTeamID?.(team.teamID)
-    } 
+      setProductAreaID?.(team.productAreaID)
+      setTeamID?.(team.teamID)
+    }
   }
 
   if (!teams) return <LoaderSpinner />
- 
+
   return (
     <Select
       className="w-full"
       label="Team i Teamkatalogen"
-      {...register('teamkatalogenURL', { onChange: (e: any) => updateTeamkatalogInfo(e.target.value) })}
+      {...register('teamkatalogenURL', {
+        onChange: (e: any) => updateTeamkatalogInfo(e.target.value),
+      })}
       error={errors.teamkatalogenURL?.message}
     >
-      {!error && teams.length> 0 && <option value="">Velg team</option>}
-      {error && <option value="TeamkatalogenError">"Kan ikke hente teamene, men du kan registrere senere</option>}
+      {!error && teams.length > 0 && <option value="">Velg team</option>}
+      {error && (
+        <option value="TeamkatalogenError">
+          Kan ikke hente teamene, men du kan registrere senere
+        </option>
+      )}
       {!error && teams.length === 0 && <option value="NA">Ingen team</option>}
       {teams.map((team) => (
         <option value={team.url} key={team.name}>
