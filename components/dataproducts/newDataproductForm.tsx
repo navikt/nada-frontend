@@ -25,7 +25,7 @@ const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
   team: yup.string().required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
-  teamkatalogenURL: yup.string(),
+  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
   teamContact: yup.string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
@@ -158,6 +158,8 @@ export const NewDataproductForm = () => {
     })
   }
 
+  console.log(errors)
+
   return (
     <div className="mt-8 w-[46rem]">
       <Heading level="1" size="large">
@@ -204,7 +206,7 @@ export const NewDataproductForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          team={team}
+          gcpGroup={team}
           register={register}
           errors={errors}
           setProductAreaID={setProductAreaID}

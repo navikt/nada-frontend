@@ -141,7 +141,7 @@ function SaveForm({ story }: SaveFormProps) {
               </Select>
               {group && (
                 <TeamkatalogenSelector
-                  team={group}
+                  gcpGroup={group}
                   register={register}
                   errors={errors}
                   setProductAreaID={setProductAreaID}
