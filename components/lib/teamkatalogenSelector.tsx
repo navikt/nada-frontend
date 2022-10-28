@@ -44,9 +44,7 @@ export const TeamkatalogenSelector = ({
     }
   }
 
-  useEffect(() => {
-    updateTeamkatalogInfo(teamkatalogenURL)
-  })
+  updateTeamkatalogInfo(teamkatalogenURL)
 
   if (!teams) return <LoaderSpinner />
 
