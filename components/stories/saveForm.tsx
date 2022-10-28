@@ -143,6 +143,7 @@ function SaveForm({ story }: SaveFormProps) {
                 <TeamkatalogenSelector
                   gcpGroup={group}
                   register={register}
+                  watch={watch}
                   errors={errors}
                   setProductAreaID={setProductAreaID}
                   setTeamID={setTeamID}

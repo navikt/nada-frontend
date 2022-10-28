@@ -85,6 +85,7 @@ function EditForm({ story }: SaveFormProps) {
               <TeamkatalogenSelector
                 gcpGroup={story.owner.group}
                 register={register}
+                watch={watch}
                 errors={errors}
                 setProductAreaID={setProductAreaID}
                 setTeamID={setTeamID}

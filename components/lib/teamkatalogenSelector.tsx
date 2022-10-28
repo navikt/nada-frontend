@@ -3,11 +3,12 @@ import { Label, Select, TextField } from '@navikt/ds-react'
 import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
 import ErrorMessage from './error'
 import LoaderSpinner from './spinner'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 
 type TeamkatalogenSelectorProps = {
   gcpGroup?: string
   register: any
+  watch: any
   errors: any
   setProductAreaID?: Dispatch<SetStateAction<string>>
   setTeamID?: Dispatch<SetStateAction<string>>
@@ -23,6 +24,7 @@ export interface Team {
 export const TeamkatalogenSelector = ({
   gcpGroup,
   register,
+  watch,
   errors,
   setProductAreaID,
   setTeamID,
@@ -32,6 +34,7 @@ export const TeamkatalogenSelector = ({
   })
 
   let teams = !error ? data?.teamkatalogen : []
+  const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
     const team = teams?.find((it) => it.url == url)
@@ -41,15 +44,17 @@ export const TeamkatalogenSelector = ({
     }
   }
 
+  useEffect(() => {
+    updateTeamkatalogInfo(teamkatalogenURL)
+  })
+
   if (!teams) return <LoaderSpinner />
 
   return (
     <Select
       className="w-full"
       label="Team i Teamkatalogen"
-      {...register('teamkatalogenURL', {
-        onChange: (e: any) => updateTeamkatalogInfo(e.target.value),
-      })}
+      {...register('teamkatalogenURL')}
       error={errors.teamkatalogenURL?.message}
     >
       {!error && teams.length > 0 && <option value="">Velg team</option>}
