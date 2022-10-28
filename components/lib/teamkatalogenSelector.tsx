@@ -37,8 +37,11 @@ export const TeamkatalogenSelector = ({
   const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
+    console.log(url)
     const team = teams?.find((it) => it.url == url)
     if (team) {
+      console.log(team.productAreaID)
+      console.log(team.teamID)
       setProductAreaID?.(team.productAreaID)
       setTeamID?.(team.teamID)
     }
