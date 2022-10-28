@@ -11,6 +11,8 @@ import KeywordsInput from '../lib/KeywordsInput'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { StoryDocument } from '../../lib/schema/graphql'
 import { useState } from 'react'
+import { editStoryValidation } from '../../lib/schema/yupValidations'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 interface SaveFormProps {
   story: StoryQuery['story']
@@ -19,6 +21,7 @@ interface SaveFormProps {
 function EditForm({ story }: SaveFormProps) {
   const router = useRouter()
   const { register, handleSubmit, formState, watch, setValue } = useForm({
+    resolver: yupResolver(editStoryValidation),
     defaultValues: {
       keywords: story.keywords,
       teamkatalogenURL: story.owner.teamkatalogenURL,
