@@ -43,8 +43,6 @@ export const TeamkatalogenSelector = ({
 
   if (!teams) return <LoaderSpinner />
  
-  console.log(!error && teams.length=== 0)
-  console.log(error)
   return (
     <Select
       className="w-full"
