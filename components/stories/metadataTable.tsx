@@ -20,6 +20,7 @@ export const MetadataTable = ({
   keywords,
   children,
 }: StoryProps) => {
+  console.log(owner)
   return (
     <div className="h-fit min-w-[250px] text-medium border-t border-border mx-5">
       <ul className="pl-0 mt-0">
@@ -29,7 +30,7 @@ export const MetadataTable = ({
             <li className="inline-block pr-5 text-gray-800">
               <h2 className="text-lg font-bold">Eier</h2>
               <div className="text-medium">
-                {owner?.teamkatalogenURL ? (
+                {owner?.teamID && owner?.teamkatalogenURL ? (
                   <Link
                     href={owner.teamkatalogenURL}
                     target="_blank"

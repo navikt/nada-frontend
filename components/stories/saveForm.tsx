@@ -116,7 +116,9 @@ function SaveForm({ story }: SaveFormProps) {
               <Select
                 className="w-full 2xl:w-[32rem]"
                 label="Velg gruppe fra GCP"
-                {...register('group')}
+                {...register('group', {
+                  onChange: () => setValue('teamkatalogenURL', ''),
+                })}
                 error={errors.group?.message}
               >
                 <option value="">Velg gruppe</option>

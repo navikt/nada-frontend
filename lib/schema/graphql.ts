@@ -1345,7 +1345,7 @@ export type StoryQueryVariables = Exact<{
 }>;
 
 
-export type StoryQuery = { __typename?: 'Query', story: { __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, productAreaID?: string | null }, views: Array<{ __typename: 'StoryViewHeader', content: string, level: number, id: string } | { __typename: 'StoryViewMarkdown', content: string, id: string } | { __typename: 'StoryViewPlotly', id: string } | { __typename: 'StoryViewVega', id: string }> } };
+export type StoryQuery = { __typename?: 'Query', story: { __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null }, views: Array<{ __typename: 'StoryViewHeader', content: string, level: number, id: string } | { __typename: 'StoryViewMarkdown', content: string, id: string } | { __typename: 'StoryViewPlotly', id: string } | { __typename: 'StoryViewVega', id: string }> } };
 
 export type StoryTokenQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2965,6 +2965,7 @@ export const StoryDocument = gql`
       group
       teamkatalogenURL
       productAreaID
+      teamID
     }
     views {
       id

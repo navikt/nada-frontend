@@ -12,6 +12,7 @@ export const GET_STORY = gql`
         group
         teamkatalogenURL
         productAreaID
+        teamID
       }
       views {
         id
