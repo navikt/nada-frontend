@@ -158,8 +158,6 @@ export const NewDataproductForm = () => {
     })
   }
 
-  console.log(errors)
-
   return (
     <div className="mt-8 w-[46rem]">
       <Heading level="1" size="large">
