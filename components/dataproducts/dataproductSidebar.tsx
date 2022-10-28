@@ -75,7 +75,7 @@ export const DataproductSidebar = ({
         </Subject>
         <SubjectHeader>Eier</SubjectHeader>
         <Subject>
-          {product.owner?.teamkatalogenURL ? (
+          {product.owner?.teamID && product.owner.teamkatalogenURL? (
             <Link
               href={product.owner.teamkatalogenURL}
               target="_blank"

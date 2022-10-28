@@ -11,8 +11,8 @@ export const updateDataproductValidation = yup.object().shape({
   description: yup.string(),
   slug: yup.string(),
   repo: yup.string(),
-  teamkatalogenURL: yup.string().url().nullable(),
   teamContact: yup.string(),
+  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
 })
 
 export const newDataproductValidation = updateDataproductValidation.concat(
@@ -29,4 +29,9 @@ export const owner = yup.object().shape({
 
 export const storyValidation = yup.object().shape({
   group: yup.string().required('trenger teamnavn'),
+  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
+})
+
+export const editStoryValidation = yup.object().shape({
+  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
 })

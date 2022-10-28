@@ -66,8 +66,10 @@ const defaultValues: FieldValues = {
 const schema = yup.object().shape({
   name: yup.string().required('Du må fylle inn navn'),
   description: yup.string(),
-  team: yup.string().required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
-  teamkatalogenURL: yup.string(),
+  team: yup
+    .string()
+    .required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
+  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
   teamContact: yup.string(),
   datasetName: yup.string().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
@@ -78,7 +80,11 @@ const schema = yup.object().shape({
     table: yup.string().required(),
   }),
   keywords: yup.array().of(yup.string()),
-  pii: yup.boolean().required('Du må velge om datasettet inneholder personidentifiserende informasjon'),
+  pii: yup
+    .boolean()
+    .required(
+      'Du må velge om datasettet inneholder personidentifiserende informasjon'
+    ),
 })
 
 interface BigQueryFields {
@@ -224,7 +230,9 @@ export const NewDataproductForm = () => {
         <Select
           className="w-full"
           label="Velg gruppe fra GCP"
-          {...register('team')}
+          {...register('team', {
+            onChange: () => setValue('teamkatalogenURL', ''),
+          })}
           error={errors.team?.message}
         >
           <option value="">Velg gruppe</option>
@@ -247,8 +255,9 @@ export const NewDataproductForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          team={team}
+          gcpGroup={team}
           register={register}
+          watch={watch}
           errors={errors}
           setProductAreaID={setProductAreaID}
           setTeamID={setTeamID}

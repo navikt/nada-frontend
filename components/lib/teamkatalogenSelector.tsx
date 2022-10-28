@@ -3,11 +3,12 @@ import { Label, Select, TextField } from '@navikt/ds-react'
 import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
 import ErrorMessage from './error'
 import LoaderSpinner from './spinner'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 
 type TeamkatalogenSelectorProps = {
-  team?: string
+  gcpGroup?: string
   register: any
+  watch: any
   errors: any
   setProductAreaID?: Dispatch<SetStateAction<string>>
   setTeamID?: Dispatch<SetStateAction<string>>
@@ -21,30 +22,27 @@ export interface Team {
 }
 
 export const TeamkatalogenSelector = ({
-  team,
+  gcpGroup,
   register,
+  watch,
   errors,
   setProductAreaID,
   setTeamID,
 }: TeamkatalogenSelectorProps) => {
   const { data, error } = useTeamkatalogenQuery({
-    variables: { q: team === undefined ? '' : team.split('@')[0] },
+    variables: { q: gcpGroup === undefined ? '' : gcpGroup.split('@')[0] },
   })
 
-  let teams: Team[]
-  if (error) {
-    teams = []
-  } else {
-    teams = data?.teamkatalogen || []
-  }
+  let teams = !error ? data?.teamkatalogen : []
+  const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
-    const team = teams.find((it) => it.url == url)
-    if (team) {
-        setProductAreaID?.(team.productAreaID)
-        setTeamID?.(team.teamID)
-    } 
+    const team = teams?.find((it) => it.url == url)
+    setProductAreaID?.(team ? team.productAreaID : '')
+    setTeamID?.(team ? team.teamID : '')
   }
+
+  updateTeamkatalogInfo(teamkatalogenURL)
 
   if (!teams) return <LoaderSpinner />
 
@@ -52,10 +50,16 @@ export const TeamkatalogenSelector = ({
     <Select
       className="w-full"
       label="Team i Teamkatalogen"
-      {...register('teamkatalogenURL', { onChange: (e: any) => updateTeamkatalogInfo(e.target.value) })}
-      error={errors.owner?.group?.message}
+      {...register('teamkatalogenURL')}
+      error={errors.teamkatalogenURL?.message}
     >
-      <option value="">Velg team</option>
+      {<option value="">Velg team</option>}
+      {error && (
+        <option value="TeamkatalogenError">
+          Kan ikke hente teamene, men du kan registrere senere
+        </option>
+      )}
+      {!error && teams.length === 0 && <option value="NA">Ingen team</option>}
       {teams.map((team) => (
         <option value={team.url} key={team.name}>
           {team.name}

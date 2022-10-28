@@ -82,8 +82,9 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           control={control}
         />
         <TeamkatalogenSelector
-          team={product.owner.group}
+          gcpGroup={product.owner.group}
           register={register}
+          watch={watch}
           errors={errors}
           setProductAreaID={setProductAreaID}
           setTeamID={setTeamID}
