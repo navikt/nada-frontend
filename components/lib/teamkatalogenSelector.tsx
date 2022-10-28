@@ -57,7 +57,7 @@ export const TeamkatalogenSelector = ({
       {...register('teamkatalogenURL')}
       error={errors.teamkatalogenURL?.message}
     >
-      {!error && teams.length > 0 && <option value="">Velg team</option>}
+      {<option value="">Velg team</option>}
       {error && (
         <option value="TeamkatalogenError">
           Kan ikke hente teamene, men du kan registrere senere
