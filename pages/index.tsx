@@ -31,7 +31,7 @@ const LandingPage = () => {
         const eventProperties = {
             sidetittel: 'hovedside',
         }
-        amplitudeLog('hovedside', eventProperties)
+        amplitudeLog('sidevisning', eventProperties)
     }, [])
 
     return (

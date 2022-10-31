@@ -7,8 +7,12 @@ const amplitudeLog = (
   onFinished?: onFinishedType
 ) => {
   if (!window) return
+  if (!(document.domain === "data.intern.nav.no")) {
+    console.log("Not in prod. Not sending event:", name, eventProperties)
+    return
+  }
   const AmplitudeConfig = {
-    apiEndpoint: 'amplitude.nav.no/collect-auto',
+    apiEndpoint: 'amplitude.nav.no/collect',
     saveEvents: false,
     includeUtm: true,
     includeReferrer: true,
@@ -16,7 +20,7 @@ const amplitudeLog = (
   }
   if (!amplitudeInstance) {
     amplitudeInstance = amplitude.getInstance()
-    amplitudeInstance.init('default', undefined, AmplitudeConfig)
+    amplitudeInstance.init('2327f913e286c0ca58a41c523b3b5d09', undefined, AmplitudeConfig)
   }
   amplitudeInstance.logEvent(name, eventProperties, onFinished)
 }
