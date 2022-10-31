@@ -12,7 +12,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "^3.6.9",
+    "@apollo/client": "^3.7.1",
     "@apollo/react-ssr": "^4.0.0",
     "@fontsource/source-sans-pro": "^4.5.11",
     "@hookform/resolvers": "2.9.8",
