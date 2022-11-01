@@ -47,19 +47,19 @@ h6 {
 }
 
 .select__control {
-  @apply border-border hover:border-focus min-h-[48px];
+  @apply border-border hover:border-focus min-h-[48px] !important;
 }
 
 .select__option {
-  @apply hover:bg-focus hover:text-text-inverted;
+  @apply hover:bg-focus hover:text-text-inverted !important;
 }
 
 .select__option--is-focused {
-  @apply bg-focus text-text-inverted;
+  @apply bg-focus text-text-inverted !important;
 }
 
 .select__control--is-focused {
-  @apply border-focus border-2 hover:border-focus;
+  @apply border-focus border-2 hover:border-focus !important;
 }
 
 .select__menu-list {
@@ -68,7 +68,7 @@ h6 {
 
 .select__dropdown-indicator,
 .select__indicator-separator {
-  @apply hidden;
+  @apply hidden !important;
 }
 
 .MuiTreeItem-label {
