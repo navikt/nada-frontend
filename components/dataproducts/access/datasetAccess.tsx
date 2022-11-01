@@ -144,7 +144,7 @@ const AccessRequestModal = ({
         open={open}
         aria-label="Avslå søknad"
         onClose={() => setOpen(false)}
-        className="w-full md:w-1/3 px-8 h-[20rem]"
+        className="max-w-full md:max-w-3xl px-8 h-[20rem]"
       >
         <Modal.Content className="h-full">
           <div className="flex flex-col gap-8">
@@ -195,7 +195,7 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
         open={open}
         aria-label="Fjerne tilgang"
         onClose={() => setOpen(false)}
-        className="w-full md:w-1/3 px-8 h-[12rem]"
+        className="max-w-full md:max-w-3xl px-8 h-[12rem]"
       >
         <Modal.Content className="h-full">
           <div className="flex flex-col gap-8">

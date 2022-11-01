@@ -70,7 +70,7 @@ const ViewDataset = ({
           open={accessRequested}
           aria-label="Søk om tilgang til datasettet"
           onClose={() => setAccessRequested(false)}
-          className="w-full md:w-1/3 px-8 h-[46rem]"
+          className="max-w-full md:max-w-3xl px-8 h-[46rem]"
         >
           <Modal.Content className="h-full">
             <NewAccessRequestForm dataset={dataset} />
@@ -80,7 +80,7 @@ const ViewDataset = ({
           open={showNewAccess}
           aria-label="Legg til tilgang til datasettet"
           onClose={() => setShowNewAccess(false)}
-          className="w-full md:w-1/3 px-8"
+          className="max-w-full md:max-w-3xl px-8"
         >
           <Modal.Content className="h-full">
             <NewDatasetAccess
