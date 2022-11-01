@@ -5,6 +5,8 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Datepicker } from "@navikt/ds-datepicker";
 import { GET_DATASET } from "../../../lib/queries/dataset/dataset";
+import { FormEvent, useState } from "react";
+import ErrorMessage from "../../lib/error";
 
 interface NewDatasetAccessProps {
     dataset: DatasetQuery["dataset"]
@@ -41,6 +43,7 @@ const schema = yup
 
 const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) => {
     const [grantAccess] = useGrantAccessMutation()
+    const [error, setError] = useState<Error | null>(null)
     const {
         register,
         handleSubmit,
@@ -59,6 +62,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
     const onSubmitForm = async (requestData: any) => {
         requestData.datasetID = dataset.id
         await grantAccess({
+            onError: setError,
             variables: {
                 input: {
                     datasetID: dataset.id,
@@ -75,7 +79,8 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                     },
                 },
             ]
-        }).then(() => {setShowNewAccess(false)}) 
+        }).then((a) => {!a.errors && setShowNewAccess(false)}) 
+
     }
 
     return (
@@ -150,6 +155,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
             )}
           />
         </div>
+        { error && <ErrorMessage error={error} /> }
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"

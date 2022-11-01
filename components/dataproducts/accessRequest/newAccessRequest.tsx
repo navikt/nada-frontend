@@ -3,7 +3,7 @@ import {
   useCreateAccessRequestMutation,
   useDataproductQuery,
 } from '../../../lib/schema/graphql'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import AccessRequestForm from './accessRequestForm'
 import { AccessRequestFormInput } from './accessRequestForm'
 import { useRouter } from 'next/router'
@@ -18,39 +18,37 @@ interface NewAccessRequestFormProps {
 
 const NewAccessRequestForm = ({ dataset }: NewAccessRequestFormProps) => {
   const [createAccessRequest] = useCreateAccessRequestMutation()
+  const [error, setError] = useState<Error | null>(null)
   const router = useRouter()
 
   const userInfo = useContext(UserState)
 
-  const { data, error, loading } = useDataproductQuery({
+  const dp = useDataproductQuery({
     variables: {
       id: dataset.dataproductID,
     },
   })
 
-  if (error) return <ErrorMessage error={error} />
-  if (loading || !data) return <LoaderSpinner />
+  if (dp.error) return <ErrorMessage error={dp.error} />
+  if (dp.loading || !dp.data) return <LoaderSpinner />
 
   const onSubmit = async (requestData: AccessRequestFormInput) => {
     const accessRequest: NewAccessRequest = {
       ...requestData,
     }
     await createAccessRequest({
+      onError: setError,
       variables: {
         input: accessRequest,
       },
       refetchQueries: ['userInfoDetails'],
     }).then(() => {
-      router.push(`/dataproduct/${data.dataproduct.id}/${dataset.id}`)
+      router.push(`/dataproduct/${dp?.data?.dataproduct.id}/${dataset.id}`)
     })
   }
 
-  const isOwner = (
-    userInfo?.groups.map((g) => g.email).concat([userInfo?.email]) || []
-  ).includes(data.dataproduct.owner.group)
-
   return (
-    <AccessRequestForm dataset={dataset} isEdit={false} onSubmit={onSubmit} />
+    <AccessRequestForm dataset={dataset} isEdit={false} onSubmit={onSubmit} error={error} />
   )
 }
 

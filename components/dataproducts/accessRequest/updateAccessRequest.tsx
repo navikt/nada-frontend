@@ -5,6 +5,7 @@ import {
 import * as React from 'react'
 import AccessRequestForm, { AccessRequestFormInput } from './accessRequestForm'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
+import { useState } from 'react'
 
 interface UpdateAccessRequestFormProps {
   updateAccessRequestData: AccessRequest
@@ -18,12 +19,14 @@ const UpdateAccessRequest = ({
   setModal,
 }: UpdateAccessRequestFormProps) => {
   const [updateAccessRequest] = useUpdateAccessRequestMutation()
+  const [error, setError] = useState<Error | null>(null)
   const accessRequest: AccessRequestFormInput = {
     ...updateAccessRequestData,
   }
 
   const onSubmit = async (requestData: AccessRequestFormInput) => {
     updateAccessRequest({
+      onError: setError,
       variables: {
         input: {
           id: updateAccessRequestData.id,
@@ -44,6 +47,7 @@ const UpdateAccessRequest = ({
       accessRequest={accessRequest}
       isEdit={true}
       onSubmit={onSubmit}
+      error={error}
     />
   )
 }

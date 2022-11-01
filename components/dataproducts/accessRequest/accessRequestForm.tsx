@@ -15,6 +15,7 @@ import {
 } from '../../../lib/schema/graphql'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { UserState } from '../../../lib/context'
+import ErrorMessage from '../../lib/error';
 
 const schema = yup
   .object({
@@ -54,6 +55,7 @@ interface AccessRequestFormProps {
   dataset: DatasetQuery
   isEdit: boolean
   onSubmit: (requestData: AccessRequestFormInput) => void
+  error: Error | null
 }
 
 interface AccessRequestFields {
@@ -68,6 +70,7 @@ const AccessRequestFormV2 = ({
   dataset,
   isEdit,
   onSubmit,
+  error,
 }: AccessRequestFormProps) => {
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
@@ -239,6 +242,7 @@ const AccessRequestFormV2 = ({
             />
           </div>
         </div>
+        { error && <ErrorMessage error={error} /> }
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
