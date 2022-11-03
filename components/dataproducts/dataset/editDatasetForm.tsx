@@ -163,12 +163,6 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
             bigquery.projectID + '.' + bigquery.dataset + '.' + bigquery.table
           }
         />
-        <KeywordsInput
-          onAdd={onAddKeyword}
-          onDelete={onDeleteKeyword}
-          keywords={keywords || []}
-          error={errors.keywords?.[0]?.message}
-        />
         <TagsSelector
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}

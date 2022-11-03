@@ -304,11 +304,6 @@ export const NewDataproductForm = () => {
           errors={errors}
           setValue={setValue}
         />
-        <KeywordsInput
-          onAdd={onAddKeyword}
-          onDelete={onDeleteKeyword}
-          keywords={keywords || []}
-        />
         <TagsSelector
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
