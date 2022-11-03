@@ -1,5 +1,5 @@
 import { Tag } from '@navikt/ds-react'
-import { stringToColors } from '../../lib/stringUtils'
+import { stringToColorClasses } from '../../lib/stringUtils'
 import React from 'react'
 
 
@@ -21,7 +21,7 @@ export const KeywordPill = ({
   onClick,
   remove,
 }: keywordPillProps) => {
-  const [bgColor, borderColor] = stringToColors(keyword)
+  const [bgColor, borderColor] = stringToColorClasses(keyword)
   return (
     <Tag
       variant="info"

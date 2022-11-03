@@ -20,6 +20,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
+import TagsSelector from '../lib/tagsSelector'
 
 const prefilledDataproductDescription = 
 `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
@@ -124,14 +125,15 @@ export const NewDataproductForm = () => {
   const { errors } = formState
   const keywords = watch('keywords')
 
-  const onDeleteKeyword = (keyword: string) => {
+  const onDeleteKeyword = (keyword: string | undefined) => {
+    console.log(keyword)
     setValue(
       'keywords',
       keywords.filter((k: string) => k !== keyword)
     )
   }
 
-  const onAddKeyword = (keyword: string) => {
+  const onAddKeyword = (keyword: string | undefined) => {
     keywords
       ? setValue('keywords', [...keywords, keyword])
       : setValue('keywords', [keyword])
@@ -306,6 +308,11 @@ export const NewDataproductForm = () => {
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
           keywords={keywords || []}
+        />
+        <TagsSelector
+          onAdd={onAddKeyword}
+          onDelete={onDeleteKeyword}
+          tags={keywords || []}
         />
         <Controller
           name="pii"
