@@ -71,7 +71,7 @@ const useBuildTagOptionsList = () => {
   }
   console.log(tagsMap)
   return Array.from(tagsMap.entries())
-    .sort((l, r) => l[1] - r[1])
+    .sort((l, r) => r[1] - l[1])
     .map((it) => it[0])
 }
 
