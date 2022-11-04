@@ -43,7 +43,7 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
 
   const allTeams = allTeamResult.data.teamkatalogen
 
-  if (!relevantTeamResult.data) {
+  if (!relevantTeamResult.data || !gcpGroup) {
     return {
       teams: allTeams,
     }
@@ -83,6 +83,7 @@ export const TeamkatalogenSelector = ({
 
   if (!teams) return <LoaderSpinner />
 
+  console.log(teams)
   return (
     <Select
       className="w-full"
@@ -96,7 +97,7 @@ export const TeamkatalogenSelector = ({
           Kan ikke hente teamene, men du kan registrere senere
         </option>
       )}
-      {!error && teams.length === 0 && <option value="NA">Ingen team</option>}
+      {<option value="NA">Ingen team</option>}
       {teams.map((team) => (
         <option value={team.url} key={team.name}>
           {team.name}
