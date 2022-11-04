@@ -43,15 +43,19 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
 
   const allTeams = allTeamResult.data.teamkatalogen
 
-  if (!relevantTeamResult.data || !gcpGroup) {
-    return {
-      teams: allTeams,
-    }
-  }
+  let relevantTeams = relevantTeamResult.data?.teamkatalogen
 
-  const relevantTeams = relevantTeamResult.data.teamkatalogen
+  if (!relevantTeams || !gcpGroup || relevantTeams.length == 0) {
+    relevantTeams= [{
+      name: "Ingen team",
+      url: "NA",
+      productAreaID: "",
+      teamID: "",
+    }]
+  }
+  
   const sortedTeams = relevantTeams.concat(
-    allTeams.filter((it) => !relevantTeams.find((t) => t.teamID == it.teamID))
+    allTeams.filter((it) => !relevantTeams?.find((t) => t.teamID == it.teamID))
   )
   console.log(relevantTeams)
   console.log(allTeams)
@@ -97,7 +101,6 @@ export const TeamkatalogenSelector = ({
           Kan ikke hente teamene, men du kan registrere senere
         </option>
       )}
-      {<option value="NA">Ingen team</option>}
       {teams.map((team) => (
         <option value={team.url} key={team.name}>
           {team.name}
