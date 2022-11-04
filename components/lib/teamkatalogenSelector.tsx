@@ -35,34 +35,19 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
     }
   }
 
-  if (!allTeamResult.data) {
-    return {
-      teams: undefined,
-    }
-  }
-
-  const allTeams = allTeamResult.data.teamkatalogen
-
-  let relevantTeams = relevantTeamResult.data?.teamkatalogen
-
-  if (!relevantTeams || !gcpGroup || relevantTeams.length == 0) {
-    relevantTeams= [{
-      name: "Ingen team",
-      url: "NA",
-      productAreaID: "",
-      teamID: "",
-    }]
-  }
-  
-  const sortedTeams = relevantTeams.concat(
-    allTeams.filter((it) => !relevantTeams?.find((t) => t.teamID == it.teamID)).slice(0,100)
+  const relevantTeams = relevantTeamResult.data?.teamkatalogen
+  const allTeams = allTeamResult.data?.teamkatalogen
+  const otherTeams = allTeamResult.data?.teamkatalogen.filter(
+    (it) => !relevantTeams || !relevantTeams.find((t) => t.teamID == it.teamID)
   )
+
   console.log(relevantTeams)
   console.log(allTeams)
-  console.log(sortedTeams)
 
   return {
-    teams: sortedTeams,
+    relevantTeams: relevantTeams,
+    otherTeams: otherTeams,
+    allTeams: allTeams,
   }
 }
 
@@ -74,20 +59,23 @@ export const TeamkatalogenSelector = ({
   setProductAreaID,
   setTeamID,
 }: TeamkatalogenSelectorProps) => {
-  const { teams, error } = useBuildTeamList(gcpGroup)
+  const { relevantTeams, otherTeams, allTeams, error } =
+    useBuildTeamList(gcpGroup)
   const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
-    const team = teams?.find((it) => it.url == url)
+    const team = allTeams?.find((it) => it.url == url)
     setProductAreaID?.(team ? team.productAreaID : '')
     setTeamID?.(team ? team.teamID : '')
   }
 
   updateTeamkatalogInfo(teamkatalogenURL)
 
-  if (!teams) return <LoaderSpinner />
+  if (!allTeams) return <LoaderSpinner />
 
-  console.log(teams)
+  console.log(relevantTeams)
+  console.log(otherTeams)
+  console.log(allTeams)
   return (
     <Select
       className="w-full"
@@ -101,7 +89,17 @@ export const TeamkatalogenSelector = ({
           Kan ikke hente teamene, men du kan registrere senere
         </option>
       )}
-      {teams.map((team) => (
+      {(!relevantTeams || relevantTeams.length == 0) && (
+        <option value="NA" key="Ingen team">
+          Ingen team
+        </option>
+      )}
+      {relevantTeams?.map((team) => (
+        <option value={team.url} key={team.name}>
+          {team.name}
+        </option>
+      ))}
+      {otherTeams?.map((team) => (
         <option value={team.url} key={team.name}>
           {team.name}
         </option>
