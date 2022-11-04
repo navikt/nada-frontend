@@ -55,7 +55,7 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
   }
   
   const sortedTeams = relevantTeams.concat(
-    allTeams.filter((it) => !relevantTeams?.find((t) => t.teamID == it.teamID))
+    allTeams.filter((it) => !relevantTeams?.find((t) => t.teamID == it.teamID)).slice(0,100)
   )
   console.log(relevantTeams)
   console.log(allTeams)
