@@ -21,6 +21,46 @@ export interface Team {
   teamID: string
 }
 
+const useBuildTeamList = (gcpGroup: string | undefined) => {
+  const allTeamResult = useTeamkatalogenQuery({
+    variables: { q: '' },
+  })
+  const relevantTeamResult = useTeamkatalogenQuery({
+    variables: { q: gcpGroup?.split('@')[0] || '' },
+  })
+
+  if (allTeamResult.error || relevantTeamResult.error) {
+    return {
+      error: true,
+    }
+  }
+
+  if (!allTeamResult.data) {
+    return {
+      teams: undefined,
+    }
+  }
+
+  const teams = allTeamResult.data.teamkatalogen
+
+  if (!relevantTeamResult.data) {
+    return {
+      teams: teams,
+    }
+  }
+
+  return {
+    teams: relevantTeamResult.data.teamkatalogen.concat(
+      teams.filter(
+        (it) =>
+          !relevantTeamResult.data?.teamkatalogen.find(
+            (t) => t.teamID == it.teamID
+          )
+      )
+    ),
+  }
+}
+
 export const TeamkatalogenSelector = ({
   gcpGroup,
   register,
@@ -29,11 +69,7 @@ export const TeamkatalogenSelector = ({
   setProductAreaID,
   setTeamID,
 }: TeamkatalogenSelectorProps) => {
-  const { data, error } = useTeamkatalogenQuery({
-    variables: { q: gcpGroup === undefined ? '' : gcpGroup.split('@')[0] },
-  })
-
-  let teams = !error ? data?.teamkatalogen : []
+  const { teams, error } = useBuildTeamList(gcpGroup)
   const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
