@@ -41,23 +41,24 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
     }
   }
 
-  const teams = allTeamResult.data.teamkatalogen
+  const allTeams = allTeamResult.data.teamkatalogen
 
   if (!relevantTeamResult.data) {
     return {
-      teams: teams,
+      teams: allTeams,
     }
   }
 
+  const relevantTeams = relevantTeamResult.data.teamkatalogen
+  const sortedTeams = relevantTeams.concat(
+    allTeams.filter((it) => !relevantTeams.find((t) => t.teamID == it.teamID))
+  )
+  console.log(relevantTeams)
+  console.log(allTeams)
+  console.log(sortedTeams)
+
   return {
-    teams: relevantTeamResult.data.teamkatalogen.concat(
-      teams.filter(
-        (it) =>
-          !relevantTeamResult.data?.teamkatalogen.find(
-            (t) => t.teamID == it.teamID
-          )
-      )
-    ),
+    teams: sortedTeams,
   }
 }
 
