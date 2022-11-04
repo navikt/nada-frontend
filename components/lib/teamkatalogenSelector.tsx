@@ -35,14 +35,11 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
     }
   }
 
-  const relevantTeams = relevantTeamResult.data?.teamkatalogen
+  const relevantTeams = gcpGroup? relevantTeamResult.data?.teamkatalogen: undefined
   const allTeams = allTeamResult.data?.teamkatalogen
   const otherTeams = allTeamResult.data?.teamkatalogen.filter(
     (it) => !relevantTeams || !relevantTeams.find((t) => t.teamID == it.teamID)
   )
-
-  console.log(relevantTeams)
-  console.log(allTeams)
 
   return {
     relevantTeams: relevantTeams,
