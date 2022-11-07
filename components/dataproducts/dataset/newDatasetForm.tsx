@@ -8,6 +8,7 @@ import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { DataproductQuery } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import KeywordsInput from '../../lib/KeywordsInput'
+import TagsSelector from '../../lib/tagsSelector'
 import { prefilledDatasetDescription } from '../newDataproductForm'
 import DatasetSourceForm from './datasetSourceForm'
 
@@ -131,6 +132,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           onDelete={onDeleteKeyword}
           keywords={keywords || []}
         />
+        <TagsSelector onAdd={function (value: string): void {
+          throw new Error('Function not implemented.')
+        } } onDelete={function (value: string): void {
+          throw new Error('Function not implemented.')
+        } } tags={[]} />
         <Controller
           name="pii"
           control={control}

@@ -17,7 +17,6 @@ import {
 } from '../../../lib/schema/graphql'
 import { GET_DATASET } from '../../../lib/queries/dataset/dataset'
 import DescriptionEditor from '../../lib/DescriptionEditor'
-import KeywordsInput from '../../lib/KeywordsInput'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import TagsSelector from '../../lib/tagsSelector';
 
