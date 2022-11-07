@@ -63,13 +63,11 @@ const useBuildTagOptionsList = () => {
       ?.flatMap((it) => it.keywords)
       .map((it) => [it, 100000])
   )
-  console.log(tagsMap)
   if (!error) {
     data?.keywords.forEach((it) =>
       tagsMap.set(it.keyword, it.count + (tagsMap.get(it.keyword) || 0))
     )
   }
-  console.log(tagsMap)
   return Array.from(tagsMap.entries())
     .sort((l, r) => r[1] - l[1])
     .map((it) => it[0])
@@ -79,7 +77,6 @@ export const TagsSelector = ({onAdd, onDelete, tags}: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
 
   const onChangeInput = (_: any, actionMeta: ActionMeta<TagOption>)=> {
-    console.log(actionMeta)
     switch(actionMeta.action){
       case 'pop-value':
       case 'remove-value':

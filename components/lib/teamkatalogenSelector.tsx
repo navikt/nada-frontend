@@ -70,9 +70,6 @@ export const TeamkatalogenSelector = ({
 
   if (!allTeams) return <LoaderSpinner />
 
-  console.log(relevantTeams)
-  console.log(otherTeams)
-  console.log(allTeams)
   return (
     <Select
       className="w-full"

@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
-import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
@@ -126,7 +125,6 @@ export const NewDataproductForm = () => {
   const keywords = watch('keywords')
 
   const onDeleteKeyword = (keyword: string | undefined) => {
-    console.log(keyword)
     setValue(
       'keywords',
       keywords.filter((k: string) => k !== keyword)
