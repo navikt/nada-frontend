@@ -80,13 +80,13 @@ export const TeamkatalogenSelector = ({
       {...register('teamkatalogenURL')}
       error={errors.teamkatalogenURL?.message}
     >
-      {<option value="">Velg team</option>}
+      {!error && <option value="">Velg team</option>}
       {error && (
         <option value="TeamkatalogenError">
           Kan ikke hente teamene, men du kan registrere senere
         </option>
       )}
-      {(!relevantTeams || relevantTeams.length == 0) && (
+      {!error && (!relevantTeams || relevantTeams.length == 0) && (
         <option value="NA" key="Ingen team">
           Ingen team
         </option>
