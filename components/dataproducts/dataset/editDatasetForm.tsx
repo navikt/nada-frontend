@@ -14,6 +14,7 @@ import {
   DatasetQuery,
   useUpdateDatasetMutation,
   UpdateDataset,
+  PiiLevel,
 } from '../../../lib/schema/graphql'
 import { GET_DATASET } from '../../../lib/queries/dataset/dataset'
 import DescriptionEditor from '../../lib/DescriptionEditor'
@@ -29,7 +30,7 @@ interface EditDatasetFormFields {
   name: string
   description: string
   repo: string
-  pii: boolean
+  pii: PiiLevel
   bigquery: {
     projectID: string
     dataset: string
@@ -94,7 +95,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
     const payload: UpdateDataset = {
       name: requestData.name,
       description: requestData.description,
-      pii: requestData.pii,
+      pii: requestData.pii ? PiiLevel.Sensitive : PiiLevel.None,
       repo: requestData.repo,
       keywords: requestData.keywords,
     }

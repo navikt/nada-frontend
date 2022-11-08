@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm'
 import {
   DataproductQuery,
   DatasetQuery,
+  PiiLevel,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { backendHost } from '../../header/user'
@@ -137,7 +138,7 @@ const ViewDataset = ({
               ))}
             </div>
           </div>
-          {dataset.pii ? (
+          {dataset.pii === PiiLevel.Sensitive ? (
             <p className="flex flex-row gap-2 items-center">
               <WarningColored />
               <span>Inneholder persondata</span>

@@ -1,4 +1,4 @@
-import { BigQueryType, MappingService } from './graphql'
+import { BigQueryType, MappingService, PiiLevel } from './graphql'
 
 export interface DatasetQuery {
   __typename?: 'Dataset'
@@ -9,7 +9,7 @@ export interface DatasetQuery {
   name: string
   keywords: Array<string>
   mappings: Array<MappingService>
-  pii: boolean
+  pii: PiiLevel
   repo?: string | null | undefined
   slug: string
   access: Array<{
