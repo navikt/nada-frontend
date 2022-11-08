@@ -63,7 +63,7 @@ const ViewDataset = ({
   const router = useRouter()
   const [accessRequested, setAccessRequested] = useState(false)
   const [showNewAccess, setShowNewAccess] = useState(false)
-  const [showAnonymisation, setShowAnonymisation] = useState(true)
+  const [showAnonymisation, setShowAnonymisation] = useState(false)
   return (
     <>
       <div className="flex">
@@ -154,19 +154,28 @@ const ViewDataset = ({
               ))}
             </div>
           </div>
-          {dataset.pii === PiiLevel.Sensitive ? (
+          {dataset.pii === PiiLevel.Sensitive &&
             <p className="flex flex-row gap-2 items-center">
               <WarningColored />
-              <span>Inneholder persondata</span>
+              <span>Inneholder personopplysninger</span>
             </p>
-          ) : (
+          }
+          {dataset.pii === PiiLevel.None &&
             <p className="flex flex-row gap-2 items-center">
               <SuccessColored />
               <span>
-                Inneholder <b>ikke</b> persondata
+                Inneholder <b>ikke</b> personopplysninger
               </span>
             </p>
-          )}
+          }
+          {dataset.pii === PiiLevel.Anonymised &&
+            <p className="flex flex-row gap-2 items-center">
+              <WarningColored />
+              <span>
+                Inneholder personopplysninger som er anonymisert (<a href="#" onClick={() => setShowAnonymisation(true)}>metodebeskrivelse for anonymisering</a>)
+              </span>
+            </p>
+          }
           <div>
             {userInfo && accessType.type !== 'none' && (
               <article className="border-b border-divider last:border-b-0">
