@@ -14,6 +14,7 @@ export const GET_DATASET = gql`
       pii
       keywords
       mappings
+      anonymisation_description
       services {
         metabase
       }
