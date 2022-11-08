@@ -161,6 +161,8 @@ export type Dataset = {
   __typename?: 'Dataset';
   /** access contains list of users, groups and service accounts which have access to the dataset */
   access: Array<Access>;
+  /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
+  anonymisation_description?: Maybe<Scalars['String']>;
   /** created is the timestamp for when the dataset was created */
   created: Scalars['Time'];
   /** dataproduct is the dataproduct containing the dataset */
@@ -507,6 +509,8 @@ export type NewDataproduct = {
 
 /** NewDataset contains metadata for creating a new dataset */
 export type NewDataset = {
+  /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
+  anonymisation_description?: InputMaybe<Scalars['String']>;
   /** bigquery contains metadata for the bigquery datasource added to the dataset. */
   bigquery: NewBigQuery;
   /** dataproductID is the id of the dataproduct containing the dataset */
@@ -527,6 +531,8 @@ export type NewDataset = {
 
 /** NewDatasetForNewDataproduct contains metadata for creating a new dataset for a new dataproduct */
 export type NewDatasetForNewDataproduct = {
+  /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
+  anonymisation_description?: InputMaybe<Scalars['String']>;
   /** bigquery contains metadata for the bigquery datasource added to the dataset. */
   bigquery: NewBigQuery;
   /** description of the dataset */
@@ -1052,6 +1058,8 @@ export type UpdateDataproduct = {
 
 /** UpdateDataset contains metadata for updating a dataset */
 export type UpdateDataset = {
+  /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
+  anonymisation_description?: InputMaybe<Scalars['String']>;
   /** ID of the dataproduct that owns this dataset, the current dataproduct will not change if the field is null */
   dataproductID?: InputMaybe<Scalars['ID']>;
   /** description of the dataset */
@@ -1257,7 +1265,7 @@ export type DatasetQueryVariables = Exact<{
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2290,6 +2298,7 @@ export const DatasetDocument = gql`
     pii
     keywords
     mappings
+    anonymisation_description
     services {
       metabase
     }
