@@ -15,7 +15,7 @@ interface NewDatasetFormProps {
   dataproduct: DataproductQuery
 }
 
-const defaultValues: FieldValues ={
+const defaultValues: FieldValues = {
   name: null,
   description: prefilledDatasetDescription,
   bigquery: null,
@@ -48,7 +48,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues
+    defaultValues: defaultValues,
   })
   const onDeleteKeyword = (keyword: string) => {
     setValue(
@@ -129,10 +129,10 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           setValue={setValue}
         />
         <TagsSelector
-           onAdd={onAddKeyword}
-           onDelete={onDeleteKeyword}
-           tags={keywords || []}
-         />
+          onAdd={onAddKeyword}
+          onDelete={onDeleteKeyword}
+          tags={keywords || []}
+        />
         <Controller
           name="pii"
           control={control}
