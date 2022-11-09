@@ -3,7 +3,7 @@ import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
 import { StoryQuery } from '../../lib/schema/graphql'
 import { Link } from '@navikt/ds-react'
-import { KeywordPill } from '../lib/keywordList'
+import { TagPill } from '../lib/tagPill'
 
 interface StoryProps {
   children?: React.ReactNode
@@ -67,9 +67,9 @@ export const MetadataTable = ({
                 {!!keywords && (
                   <>
                     {keywords.map((k, i) => (
-                        <KeywordPill key={k} keyword={k}>
+                        <TagPill key={k} keyword={k}>
                             {k}
-                        </KeywordPill>
+                        </TagPill>
                     ))}
                   </>
                 )}

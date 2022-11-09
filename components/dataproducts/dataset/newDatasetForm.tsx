@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { DataproductQuery, PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
-import KeywordsInput from '../../lib/KeywordsInput'
+import TagsSelector from '../../lib/tagsSelector'
 import { prefilledDatasetDescription } from '../newDataproductForm'
 import DatasetSourceForm from './datasetSourceForm'
 
@@ -15,7 +15,7 @@ interface NewDatasetFormProps {
   dataproduct: DataproductQuery
 }
 
-const defaultValues: FieldValues ={
+const defaultValues: FieldValues = {
   name: null,
   description: prefilledDatasetDescription,
   bigquery: null,
@@ -48,7 +48,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues
+    defaultValues: defaultValues,
   })
   const onDeleteKeyword = (keyword: string) => {
     setValue(
@@ -128,10 +128,10 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           errors={errors}
           setValue={setValue}
         />
-        <KeywordsInput
+        <TagsSelector
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
-          keywords={keywords || []}
+          tags={keywords || []}
         />
         <Controller
           name="pii"

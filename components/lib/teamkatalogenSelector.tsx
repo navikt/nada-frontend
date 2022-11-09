@@ -21,6 +21,33 @@ export interface Team {
   teamID: string
 }
 
+const useBuildTeamList = (gcpGroup: string | undefined) => {
+  const allTeamResult = useTeamkatalogenQuery({
+    variables: { q: '' },
+  })
+  const relevantTeamResult = useTeamkatalogenQuery({
+    variables: { q: gcpGroup?.split('@')[0] || '' },
+  })
+
+  if (allTeamResult.error || relevantTeamResult.error) {
+    return {
+      error: true,
+    }
+  }
+
+  const relevantTeams = gcpGroup? relevantTeamResult.data?.teamkatalogen: undefined
+  const allTeams = allTeamResult.data?.teamkatalogen
+  const otherTeams = allTeamResult.data?.teamkatalogen.filter(
+    (it) => !relevantTeams || !relevantTeams.find((t) => t.teamID == it.teamID)
+  )
+
+  return {
+    relevantTeams: relevantTeams,
+    otherTeams: otherTeams,
+    allTeams: allTeams,
+  }
+}
+
 export const TeamkatalogenSelector = ({
   gcpGroup,
   register,
@@ -29,22 +56,19 @@ export const TeamkatalogenSelector = ({
   setProductAreaID,
   setTeamID,
 }: TeamkatalogenSelectorProps) => {
-  const { data, error } = useTeamkatalogenQuery({
-    variables: { q: gcpGroup === undefined ? '' : gcpGroup.split('@')[0] },
-  })
-
-  let teams = !error ? data?.teamkatalogen : []
+  const { relevantTeams, otherTeams, allTeams, error } =
+    useBuildTeamList(gcpGroup)
   const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
-    const team = teams?.find((it) => it.url == url)
+    const team = allTeams?.find((it) => it.url == url)
     setProductAreaID?.(team ? team.productAreaID : '')
     setTeamID?.(team ? team.teamID : '')
   }
 
   updateTeamkatalogInfo(teamkatalogenURL)
 
-  if (!teams) return <LoaderSpinner />
+  if (!allTeams) return <LoaderSpinner />
 
   return (
     <Select
@@ -53,14 +77,23 @@ export const TeamkatalogenSelector = ({
       {...register('teamkatalogenURL')}
       error={errors.teamkatalogenURL?.message}
     >
-      {<option value="">Velg team</option>}
+      {!error && <option value="">Velg team</option>}
       {error && (
         <option value="TeamkatalogenError">
           Kan ikke hente teamene, men du kan registrere senere
         </option>
       )}
-      {!error && teams.length === 0 && <option value="NA">Ingen team</option>}
-      {teams.map((team) => (
+      {!error && (!relevantTeams || relevantTeams.length == 0) && (
+        <option value="NA" key="Ingen team">
+          Ingen team
+        </option>
+      )}
+      {relevantTeams?.map((team) => (
+        <option value={team.url} key={team.name}>
+          {team.name}
+        </option>
+      ))}
+      {otherTeams?.map((team) => (
         <option value={team.url} key={team.name}>
           {team.name}
         </option>

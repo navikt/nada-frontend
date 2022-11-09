@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
-import KeywordsInput from '../lib/KeywordsInput'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
@@ -20,10 +19,10 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
+import TagsSelector from '../lib/tagsSelector'
 import { PiiLevel } from '../../lib/schema/graphql'
 
-const prefilledDataproductDescription = 
-`*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
+const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
 
 **Kontekst**  
@@ -36,8 +35,7 @@ Hva er det du lurer på når du utforsker andres dataprodukter?*
 *Hvem kan komme til å bruke dataproduktet til hva?  
 Om dere allerede vet et case dataene skal brukes til, er det veldig nyttig med en beskrivelse.*`
 
-export const prefilledDatasetDescription =
-`*En kort beskrivelse av datasettet*
+export const prefilledDatasetDescription = `*En kort beskrivelse av datasettet*
 
 **Kontekst**  
 *Hvordan skiller dette datasettet seg fra de andre datasettene i produktet? Hva brukes datasettet til?*
@@ -54,7 +52,7 @@ Er det andre ting eller forutsetninger i datasettet man bør være oppmerksom p�
 const defaultValues: FieldValues = {
   name: null,
   description: prefilledDataproductDescription,
-  team: "",
+  team: '',
   teamContact: null,
   datasetName: null,
   datasetDescription: prefilledDatasetDescription,
@@ -304,10 +302,10 @@ export const NewDataproductForm = () => {
           errors={errors}
           setValue={setValue}
         />
-        <KeywordsInput
+        <TagsSelector
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
-          keywords={keywords || []}
+          tags={keywords || []}
         />
         <Controller
           name="pii"

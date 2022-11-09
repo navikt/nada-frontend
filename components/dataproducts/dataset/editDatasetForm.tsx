@@ -18,8 +18,8 @@ import {
 } from '../../../lib/schema/graphql'
 import { GET_DATASET } from '../../../lib/queries/dataset/dataset'
 import DescriptionEditor from '../../lib/DescriptionEditor'
-import KeywordsInput from '../../lib/KeywordsInput'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
+import TagsSelector from '../../lib/tagsSelector';
 
 interface EditDatasetFormProps {
   dataset: DatasetQuery["dataset"]
@@ -163,11 +163,10 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
             bigquery.projectID + '.' + bigquery.dataset + '.' + bigquery.table
           }
         />
-        <KeywordsInput
+        <TagsSelector
           onAdd={onAddKeyword}
           onDelete={onDeleteKeyword}
-          keywords={keywords || []}
-          error={errors.keywords?.[0]?.message}
+          tags={keywords || []}
         />
         <Controller
           name="pii"

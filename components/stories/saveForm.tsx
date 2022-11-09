@@ -12,9 +12,9 @@ import { useRouter } from 'next/router'
 import { useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { storyValidation } from '../../lib/schema/yupValidations'
-import KeywordsInput from '../lib/KeywordsInput'
 import { useContext, useEffect, useState } from 'react'
 import { UserState } from '../../lib/context'
+import TagsSelector from '../lib/tagsSelector'
 
 interface SaveFormProps {
   story: StoryQuery['story']
@@ -152,11 +152,10 @@ function SaveForm({ story }: SaveFormProps) {
                 />
               )}
               <StorySelector register={register} group={group} />
-              <KeywordsInput
+              <TagsSelector
                 onAdd={onAdd}
                 onDelete={onDelete}
-                keywords={keywords || []}
-                error={errors.keywords?.[0]?.message}
+                tags={keywords || []}
               />
               <RightJustifiedSubmitButton
                 onCancel={() => router.push(`/story/draft/${story.id}`)}

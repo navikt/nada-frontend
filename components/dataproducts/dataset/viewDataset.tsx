@@ -11,7 +11,7 @@ import {
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { backendHost } from '../../header/user'
-import KeywordPill from '../../lib/keywordList'
+import TagPill from '../../lib/tagPill'
 import DatasetAccess from '../access/datasetAccess'
 import NewDatasetAccess from '../access/newDatasetAccess'
 import NewAccessRequestForm from '../accessRequest/newAccessRequest'
@@ -148,9 +148,9 @@ const ViewDataset = ({
             </div>
             <div className="flex flex-row gap-1 flex-wrap">
               {dataset.keywords.map((keyword, idx) => (
-                <KeywordPill key={idx} keyword={keyword}>
+                <TagPill key={idx} keyword={keyword}>
                   {keyword}
-                </KeywordPill>
+                </TagPill>
               ))}
             </div>
           </div>

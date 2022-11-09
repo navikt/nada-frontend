@@ -7,12 +7,12 @@ import TopBar from '../lib/topBar'
 import RightJustifiedSubmitButton from '../widgets/formSubmit'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import KeywordsInput from '../lib/KeywordsInput'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { StoryDocument } from '../../lib/schema/graphql'
 import { useState } from 'react'
 import { editStoryValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup'
+import TagsSelector from '../lib/tagsSelector'
 
 interface SaveFormProps {
   story: StoryQuery['story']
@@ -93,11 +93,10 @@ function EditForm({ story }: SaveFormProps) {
                 setProductAreaID={setProductAreaID}
                 setTeamID={setTeamID}
               />
-              <KeywordsInput
-                onAdd={onAdd}
-                onDelete={onDelete}
-                keywords={keywords || []}
-                error={errors.keywords?.[0]?.message}
+              <TagsSelector 
+                onAdd= {onAdd}
+                onDelete= {onDelete}
+                tags = {keywords || []}
               />
               <RightJustifiedSubmitButton
                 onCancel={() => router.push(`/story/${story.id}`)}

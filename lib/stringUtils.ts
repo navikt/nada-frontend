@@ -16,7 +16,22 @@ const stringBorderColors = [
   'border-gray-300',
 ]
 
-export const stringToColors = (str: string): [string, string] => {
+const colorClassMap = new Map([
+  ['bg-limegreen-100', '#ecfccb'],
+  ['bg-green-100', '#dcfce7'],
+  ['bg-orange-100', '#ffedd5'],
+  ['bg-deepblue-100', '#dbeafe'],
+  ['bg-purple-100', '#f3e8ff'],
+  ['bg-gray-100', '#f3f4f6'],
+  ['border-limegreen-300', '#bef264'],
+  ['border-green-300', '#86efac'],
+  ['border-orange-300', '#fdba74'],
+  ['border-deepblue-300', '#93c5fd'],
+  ['border-purple-300', '#d8b4fe'],
+  ['border-gray-300', '#d1d5db'],
+])
+
+export const stringToColorClasses = (str: string): [string, string] => {
   let hash = 0
   //make sure same keyword get same color
   let trimed = str.replace(/\s/g, '').toLocaleLowerCase()
@@ -27,4 +42,9 @@ export const stringToColors = (str: string): [string, string] => {
   return [stringBgColors[colorIndex], stringBorderColors[colorIndex]]
 }
 
-export const truncate = (str: string, length: number) => str.substring(0, Math.min(str.length, length)) + (str.length > length? "..." : "")
+export const stringToColors = (str: string): [string, string] =>
+  stringToColorClasses(str).map((it) => colorClassMap.get(it)) as [string, string]
+
+export const truncate = (str: string, length: number) =>
+  str.substring(0, Math.min(str.length, length)) +
+  (str.length > length ? '...' : '')
