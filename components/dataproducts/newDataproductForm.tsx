@@ -22,8 +22,7 @@ import DatasetSourceForm from './dataset/datasetSourceForm'
 import TagsSelector from '../lib/tagsSelector'
 import { PiiLevel } from '../../lib/schema/graphql'
 
-const prefilledDataproductDescription = 
-`*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
+const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
 
 **Kontekst**  
@@ -36,8 +35,7 @@ Hva er det du lurer på når du utforsker andres dataprodukter?*
 *Hvem kan komme til å bruke dataproduktet til hva?  
 Om dere allerede vet et case dataene skal brukes til, er det veldig nyttig med en beskrivelse.*`
 
-export const prefilledDatasetDescription =
-`*En kort beskrivelse av datasettet*
+export const prefilledDatasetDescription = `*En kort beskrivelse av datasettet*
 
 **Kontekst**  
 *Hvordan skiller dette datasettet seg fra de andre datasettene i produktet? Hva brukes datasettet til?*
@@ -54,7 +52,7 @@ Er det andre ting eller forutsetninger i datasettet man bør være oppmerksom p�
 const defaultValues: FieldValues = {
   name: null,
   description: prefilledDataproductDescription,
-  team: "",
+  team: '',
   teamContact: null,
   datasetName: null,
   datasetDescription: prefilledDatasetDescription,
@@ -125,14 +123,14 @@ export const NewDataproductForm = () => {
   const { errors } = formState
   const keywords = watch('keywords')
 
-  const onDeleteKeyword = (keyword: string | undefined) => {
+  const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
       keywords.filter((k: string) => k !== keyword)
     )
   }
 
-  const onAddKeyword = (keyword: string | undefined) => {
+  const onAddKeyword = (keyword: string) => {
     keywords
       ? setValue('keywords', [...keywords, keyword])
       : setValue('keywords', [keyword])
