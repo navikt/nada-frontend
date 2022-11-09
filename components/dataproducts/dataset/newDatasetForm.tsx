@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
-import { DataproductQuery } from '../../../lib/schema/graphql'
+import { DataproductQuery, PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector'
 import { prefilledDatasetDescription } from '../newDataproductForm'
@@ -78,6 +78,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
 
   const onSubmitForm = async (requestData: any) => {
     requestData.dataproductID = dataproduct.dataproduct.id
+    const pii = requestData.pii ? PiiLevel.Sensitive : PiiLevel.None
+    requestData.pii = pii
     try {
       await createDataset({
         variables: { input: requestData },

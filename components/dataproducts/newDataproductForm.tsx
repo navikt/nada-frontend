@@ -20,6 +20,7 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
 import TagsSelector from '../lib/tagsSelector'
+import { PiiLevel } from '../../lib/schema/graphql'
 
 const prefilledDataproductDescription = 
 `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
@@ -104,7 +105,7 @@ export interface NewDataproductFields {
   sourceCodeURL: string
   bigquery: BigQueryFields
   keywords: string[]
-  pii: boolean
+  pii: PiiLevel
   productAreaID: string
   teamID: string
 }
@@ -158,7 +159,7 @@ export const NewDataproductForm = () => {
                 repo: valueOrNull(data.sourceCodeURL),
                 bigquery: data.bigquery,
                 keywords: data.keywords,
-                pii: data.pii,
+                pii: data.pii ? PiiLevel.Sensitive : PiiLevel.None,
               },
             ],
           },
@@ -264,6 +265,7 @@ export const NewDataproductForm = () => {
         />
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
+          description="Kontaktpunktet kan være enten navnet på en slack-kanal (uten #) eller en e-post."
           {...register('teamContact')}
           error={errors.teamContact?.message}
           className="w-full"
