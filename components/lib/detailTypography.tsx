@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import * as React from 'react'
 import remarkGfm from 'remark-gfm'
-import KeywordPill from './keywordList'
+import TagPill from './tagPill'
 import { Link } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 
@@ -23,9 +23,9 @@ export const Description = ({
         {!!keywords.length && (
             <div className="flex flex-row gap-1 flex-wrap my-2">
                 {keywords.map((k, i) => (
-                    <KeywordPill key={k} keyword={k} onClick={() => { router.push(`/search?keywords=${k}`) }}>
+                    <TagPill key={k} keyword={k} onClick={() => { router.push(`/search?keywords=${k}`) }}>
                         {k}
-                    </KeywordPill>
+                    </TagPill>
                 ))}
             </div>
         )}

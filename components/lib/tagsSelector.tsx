@@ -1,20 +1,14 @@
+import { Close } from '@navikt/ds-icons'
+import { Label } from '@navikt/ds-react'
 import * as React from 'react'
-import { Label, Select, TextField } from '@navikt/ds-react'
-import {
-  useKeywordsQuery,
-  useTeamkatalogenQuery,
-} from '../../lib/schema/graphql'
-import ErrorMessage from './error'
-import LoaderSpinner from './spinner'
-import { Dispatch, SetStateAction, useContext, useEffect } from 'react'
-import { Dropdown } from '@navikt/ds-react-internal'
-import CreatableSelect from 'react-select/creatable'
-import { CONTINUOUS_DOMAIN_SCALES } from 'vega-lite/build/src/scale'
-import classNames from 'classnames'
+import { useContext } from 'react'
 import { ActionMeta, StylesConfig, ThemeConfig } from 'react-select'
-import { stringToColorClasses, stringToColors } from '../../lib/stringUtils'
-import cl from 'clsx'
+import CreatableSelect from 'react-select/creatable'
 import { UserState } from '../../lib/context'
+import {
+  useKeywordsQuery
+} from '../../lib/schema/graphql'
+import TagPill from './tagPill'
 
 export interface TagsSelectorProps {
   onAdd: (value: string) => void
@@ -34,9 +28,21 @@ const styles: StylesConfig<TagOption, true> = {
   }),
   multiValue: (styles, { data }) => ({
     ...styles,
-    color: stringToColors(data.value)[1],
-    backgroundColor: stringToColors(data.value)[0],
-    border: '1px solid',
+    padding: '0 0 0 0 !important',
+    margin: '0 0 0 0 !important',
+    width: '0px',
+  }),
+  multiValueLabel: (styles, { data }) => ({
+    ...styles,
+    padding: '0 0 0 0 !important',
+    margin: '0 0 0 0 !important',
+    width: '0px',
+  }),
+  multiValueRemove: (styles, { data }) => ({
+    ...styles,
+    padding: '0 0 0 0 !important',
+    margin: '0 0 0 0 !important',
+    width: '0px',
   }),
 }
 
@@ -73,14 +79,16 @@ const useBuildTagOptionsList = () => {
     .map((it) => it[0])
 }
 
-export const TagsSelector = ({onAdd, onDelete, tags}: TagsSelectorProps) => {
+export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
 
-  const onChangeInput = (_: any, actionMeta: ActionMeta<TagOption>)=> {
-    switch(actionMeta.action){
+  const onChangeInput = (_: any, actionMeta: ActionMeta<TagOption>) => {
+    switch (actionMeta.action) {
       case 'pop-value':
       case 'remove-value':
-        onDelete(actionMeta.removedValue.value)
+        if (actionMeta.removedValue) {
+          onDelete(actionMeta.removedValue.value)
+        }
         break
       case 'select-option':
       case 'create-option':
@@ -96,12 +104,25 @@ export const TagsSelector = ({onAdd, onDelete, tags}: TagsSelectorProps) => {
       <Label
         htmlFor={'0'}
         size={'medium'}
-        className={cl('navds-form-field__label', {
-          'navds-sr-only': false,
-        })}
+        className={'navds-text-field__label navds-label'}
       >
         Nøkkelord
       </Label>
+        <div className="flex flex-row gap-1 flex-wrap w-full mt-1 mb-1">
+          {tags && tags.map((k, i) => {
+            return (
+              <TagPill
+                key={i}
+                keyword={k}
+                onClick={() => onDelete(k)}
+                remove={true}
+                horizontal={true}
+              >
+                {k}
+              </TagPill>
+            )
+          })}
+        </div>
       <CreatableSelect
         isMulti
         options={tagOptions.map((it) => ({
@@ -110,11 +131,12 @@ export const TagsSelector = ({onAdd, onDelete, tags}: TagsSelectorProps) => {
         }))}
         styles={styles}
         theme={theme}
+        closeMenuOnSelect={false}
         placeholder="Legg til nøkkelord"
         onChange={onChangeInput}
-        defaultValue= {tags.map(it=> ({
-          value:it,
-          label:it,
+        value={tags.map((it) => ({
+          value: it,
+          label: it,
         }))}
         isClearable={false}
       />

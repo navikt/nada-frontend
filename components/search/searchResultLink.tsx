@@ -1,4 +1,4 @@
-import { KeywordPill, KeywordBox } from '../lib/keywordList'
+import { TagPill, KeywordBox } from '../lib/tagPill'
 import * as React from 'react'
 import { Heading, Link } from '@navikt/ds-react'
 import ReactMarkdown from 'react-markdown'
@@ -58,9 +58,9 @@ export const SearchResultLink = ({
               <KeywordBox>
                 {keywords &&
                   keywords.map((k, i) => (
-                    <KeywordPill key={i} keyword={k} compact={true}>
+                    <TagPill key={i} keyword={k} compact={true}>
                       {k}
-                    </KeywordPill>
+                    </TagPill>
                   ))}
               </KeywordBox>
             </div>
