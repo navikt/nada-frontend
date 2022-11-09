@@ -12,6 +12,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Textarea,
   TextField,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
@@ -85,6 +86,7 @@ const schema = yup.object().shape({
     .required(
       'Du må velge om datasettet inneholder personopplysninger'
     ),
+  anonymisation_description: yup.string()
 })
 
 interface BigQueryFields {
@@ -107,6 +109,7 @@ export interface NewDataproductFields {
   pii: PiiLevel
   productAreaID: string
   teamID: string
+  anonymisation_description?: string | null
 }
 
 export const NewDataproductForm = () => {
@@ -115,7 +118,7 @@ export const NewDataproductForm = () => {
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
 
-  const { register, handleSubmit, watch, formState, setValue, control } =
+  const { register, handleSubmit, watch, formState, setValue, getValues, control } =
     useForm({
       resolver: yupResolver(schema),
       defaultValues: defaultValues,
@@ -162,7 +165,8 @@ export const NewDataproductForm = () => {
                     ? PiiLevel.Sensitive
                     : data.pii === "anonymised"
                         ? PiiLevel.Anonymised
-                        : PiiLevel.None
+                        : PiiLevel.None,
+                anonymisation_description: valueOrNull(data.anonymisation_description),
               },
             ],
           },
@@ -327,7 +331,13 @@ export const NewDataproductForm = () => {
               <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              Her rapporterer du anonymiseringsmetode
+              {getValues("pii") === "anonymised" && 
+                <Textarea 
+                  placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
+                  label="Metodebeskrivelse" 
+                  {...register("anonymisation_description")}
+                />
+              }
               <Radio value={"none"}>
                 Nei, inneholder ikke personopplysninger
               </Radio>

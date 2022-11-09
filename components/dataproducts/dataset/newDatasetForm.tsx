@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -20,6 +20,7 @@ const defaultValues: FieldValues = {
   description: prefilledDatasetDescription,
   bigquery: null,
   pii: null,
+  anonymisation_description: null,
 }
 
 const schema = yup.object().shape({
@@ -31,10 +32,12 @@ const schema = yup.object().shape({
     table: yup.string().required(),
   }),
   pii: yup
-    .bool()
+    .string()
+    .oneOf(["sensitive", "anonymised", "none"])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
     ),
+    anonymisation_description: yup.string(),
 })
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -45,6 +48,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     control,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -78,7 +82,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
 
   const onSubmitForm = async (requestData: any) => {
     requestData.dataproductID = dataproduct.dataproduct.id
-    const pii = requestData.pii ? PiiLevel.Sensitive : PiiLevel.None
+    const pii = requestData.pii === "sensitive"
+      ? PiiLevel.Sensitive
+      : requestData.pii === "anonymised"
+        ? PiiLevel.Anonymised
+        : PiiLevel.None
     requestData.pii = pii
     try {
       await createDataset({
@@ -142,11 +150,21 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
               legend="Inneholder datasettet personidentifiserende informasjon?"
               error={errors?.pii?.message}
             >
-              <Radio value={true}>
-                Ja, inneholder personidentifiserende informasjon
+              <Radio value={"sensitive"}>
+                Ja, inneholder personopplysninger
               </Radio>
-              <Radio value={false}>
-                Nei, inneholder ikke personidentifiserende informasjon
+              <Radio value={"anonymised"}>
+                Det er benyttet metoder for å anonymisere personopplysningene
+              </Radio>
+              {getValues("pii") === "anonymised" && 
+                <Textarea 
+                  placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
+                  label="Metodebeskrivelse" 
+                  {...register("anonymisation_description")}
+                />
+              }
+              <Radio value={"none"}>
+                Nei, inneholder ikke personopplysninger
               </Radio>
             </RadioGroup>
           )}

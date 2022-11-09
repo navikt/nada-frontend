@@ -4,6 +4,7 @@ import {
   Heading,
   Radio,
   RadioGroup,
+  Textarea,
   TextField,
 } from '@navikt/ds-react'
 import { Controller, useForm } from 'react-hook-form'
@@ -30,13 +31,14 @@ interface EditDatasetFormFields {
   name: string
   description: string
   repo: string
-  pii: PiiLevel
+  pii: string
   bigquery: {
     projectID: string
     dataset: string
     table: string
   }
   keywords: string[]
+  anonymisation_description: string | null | undefined
 }
 
 const schema = yup.object().shape({
@@ -44,7 +46,8 @@ const schema = yup.object().shape({
   description: yup.string(),
   repo: yup.string(),
   pii: yup
-    .bool()
+    .string()
+    .oneOf(["sensitive", "anonymised", "none"])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
     ),
@@ -53,19 +56,20 @@ const schema = yup.object().shape({
     projectID: yup.string().required(),
     table: yup.string().required(),
   }),
+  anonymisation_description: yup.string(),
 })
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   const [backendError, setBackendError] = useState()
   const [updateDataset] = useUpdateDatasetMutation()
 
-  const { register, handleSubmit, watch, formState, setValue, control } =
+  const { register, handleSubmit, watch, formState, setValue, getValues, control } =
     useForm({
       resolver: yupResolver(schema),
       defaultValues: {
         name: dataset.name,
         description: dataset.description || '',
-        pii: dataset.pii,
+        pii: dataset.pii.toString(),
         repo: dataset.repo || '',
         keywords: dataset.keywords,
         bigquery: {
@@ -73,6 +77,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           dataset: dataset.datasource.dataset,
           table: dataset.datasource.table,
         },
+        anonymisation_description: dataset.anonymisation_description,
       },
     })
 
@@ -95,9 +100,14 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
     const payload: UpdateDataset = {
       name: requestData.name,
       description: requestData.description,
-      pii: requestData.pii ? PiiLevel.Sensitive : PiiLevel.None,
+      pii: requestData.pii === "sensitive"
+        ? PiiLevel.Sensitive
+        : requestData.pii === "anonymised"
+          ? PiiLevel.Anonymised
+          : PiiLevel.None,
       repo: requestData.repo,
       keywords: requestData.keywords,
+      anonymisation_description: requestData.anonymisation_description,
     }
     updateDataset({
       variables: { id: dataset.id, input: payload },
@@ -177,11 +187,21 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
               legend="Inneholder datasettet personidentifiserende informasjon?"
               error={errors?.pii?.message}
             >
-              <Radio value={true}>
-                Ja, inneholder personidentifiserende informasjon
+              <Radio value={"sensitive"}>
+                Ja, inneholder personopplysninger
               </Radio>
-              <Radio value={false}>
-                Nei, inneholder ikke personidentifiserende informasjon
+              <Radio value={"anonymised"}>
+                Det er benyttet metoder for å anonymisere personopplysningene
+              </Radio>
+              {getValues("pii") === "anonymised" && 
+                <Textarea 
+                  placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
+                  label="Metodebeskrivelse" 
+                  {...register("anonymisation_description")}
+                />
+              }
+              <Radio value={"none"}>
+                Nei, inneholder ikke personopplysninger
               </Radio>
             </RadioGroup>
           )}
