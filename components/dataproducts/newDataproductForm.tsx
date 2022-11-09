@@ -80,9 +80,10 @@ const schema = yup.object().shape({
   }),
   keywords: yup.array().of(yup.string()),
   pii: yup
-    .boolean()
+    .string()
+      .oneOf(["sensitive", "anonymised", "none"])
     .required(
-      'Du må velge om datasettet inneholder personidentifiserende informasjon'
+      'Du må velge om datasettet inneholder personopplysninger'
     ),
 })
 
@@ -157,7 +158,11 @@ export const NewDataproductForm = () => {
                 repo: valueOrNull(data.sourceCodeURL),
                 bigquery: data.bigquery,
                 keywords: data.keywords,
-                pii: data.pii ? PiiLevel.Sensitive : PiiLevel.None,
+                pii: data.pii === "sensitive"
+                    ? PiiLevel.Sensitive
+                    : data.pii === "anonymised"
+                        ? PiiLevel.Anonymised
+                        : PiiLevel.None
               },
             ],
           },
@@ -316,13 +321,18 @@ export const NewDataproductForm = () => {
               legend="Inneholder datasettet personidentifiserende informasjon?"
               error={errors?.pii?.message}
             >
-              <Radio value={true}>
-                Ja, inneholder personidentifiserende informasjon
+              <Radio value={"sensitive"}>
+                Ja, inneholder personopplysninger
               </Radio>
-              <Radio value={false}>
-                Nei, inneholder ikke personidentifiserende informasjon
+              <Radio value={"anonymised"}>
+                Det er benyttet metoder for å anonymisere personopplysningene
+              </Radio>
+              Her rapporterer du anonymiseringsmetode
+              <Radio value={"none"}>
+                Nei, inneholder ikke personopplysninger
               </Radio>
             </RadioGroup>
+
           )}
         />
         {backendError && <ErrorMessage error={backendError} />}
