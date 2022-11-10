@@ -59,7 +59,7 @@ const schema = yup.object().shape({
   }),
   anonymisation_description: yup.string().nullable().when("pii", {
     is: "anonymised",
-    then: yup.string().nullable().required().min(1, 'Du må beskrive hvordan datasettet har blitt anonymisert')
+    then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
 })
 
