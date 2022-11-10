@@ -24,7 +24,7 @@ const defaultValues: FieldValues = {
 }
 
 const schema = yup.object().shape({
-  name: yup.string().required('Du må fylle inn navn'),
+  name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
   bigquery: yup.object({
     dataset: yup.string().required(),
@@ -33,11 +33,15 @@ const schema = yup.object().shape({
   }),
   pii: yup
     .string()
+    .nullable()
     .oneOf(["sensitive", "anonymised", "none"])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
     ),
-    anonymisation_description: yup.string(),
+  anonymisation_description: yup.string().nullable().when("pii", {
+    is: "anonymised",
+    then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
+  }),
 })
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -156,13 +160,14 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
               <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              {getValues("pii") === "anonymised" && 
-                <Textarea 
-                  placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                  label="Metodebeskrivelse" 
-                  {...register("anonymisation_description")}
-                />
-              }
+              <Textarea 
+                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
+                label="Metodebeskrivelse" 
+                aria-hidden={getValues("pii") !== "anonymised"}
+                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
+                error={errors?.anonymisation_description?.message}
+                {...register("anonymisation_description")}
+              />
               <Radio value={"none"}>
                 Nei, inneholder ikke personopplysninger
               </Radio>

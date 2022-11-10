@@ -64,16 +64,16 @@ const defaultValues: FieldValues = {
 }
 
 const schema = yup.object().shape({
-  name: yup.string().required('Du må fylle inn navn'),
+  name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
   team: yup
     .string()
     .required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
   teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
-  teamContact: yup.string(),
-  datasetName: yup.string().required('Du må fylle inn navn'),
+  teamContact: yup.string().nullable(),
+  datasetName: yup.string().nullable().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
-  sourceCodeURL: yup.string().url('Link må være en gyldig URL'),
+  sourceCodeURL: yup.string().nullable().url('Link må være en gyldig URL'),
   bigquery: yup.object({
     dataset: yup.string().required(),
     projectID: yup.string().required(),
@@ -82,11 +82,15 @@ const schema = yup.object().shape({
   keywords: yup.array().of(yup.string()),
   pii: yup
     .string()
-      .oneOf(["sensitive", "anonymised", "none"])
+    .nullable()
+    .oneOf(["sensitive", "anonymised", "none"])
     .required(
       'Du må velge om datasettet inneholder personopplysninger'
     ),
-  anonymisation_description: yup.string()
+    anonymisation_description: yup.string().nullable().when("pii", {
+      is: "anonymised",
+      then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
+    }),
 })
 
 interface BigQueryFields {
@@ -331,13 +335,14 @@ export const NewDataproductForm = () => {
               <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              {getValues("pii") === "anonymised" && 
-                <Textarea 
-                  placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                  label="Metodebeskrivelse" 
-                  {...register("anonymisation_description")}
-                />
-              }
+              <Textarea 
+                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
+                label="Metodebeskrivelse" 
+                aria-hidden={getValues("pii") !== "anonymised"}
+                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
+                error={errors?.anonymisation_description?.message}
+                {...register("anonymisation_description")}
+              />
               <Radio value={"none"}>
                 Nei, inneholder ikke personopplysninger
               </Radio>

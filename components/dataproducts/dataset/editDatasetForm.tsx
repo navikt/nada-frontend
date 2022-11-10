@@ -42,11 +42,12 @@ interface EditDatasetFormFields {
 }
 
 const schema = yup.object().shape({
-  name: yup.string().required('Du må fylle inn navn'),
+  name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
-  repo: yup.string(),
+  repo: yup.string().nullable(),
   pii: yup
     .string()
+    .nullable()
     .oneOf(["sensitive", "anonymised", "none"])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
@@ -56,7 +57,10 @@ const schema = yup.object().shape({
     projectID: yup.string().required(),
     table: yup.string().required(),
   }),
-  anonymisation_description: yup.string(),
+  anonymisation_description: yup.string().nullable().when("pii", {
+    is: "anonymised",
+    then: yup.string().nullable().required().min(1, 'Du må beskrive hvordan datasettet har blitt anonymisert')
+  }),
 })
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
@@ -193,13 +197,14 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
               <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              {getValues("pii") === "anonymised" && 
-                <Textarea 
-                  placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                  label="Metodebeskrivelse" 
-                  {...register("anonymisation_description")}
-                />
-              }
+              <Textarea 
+                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
+                label="Metodebeskrivelse" 
+                aria-hidden={getValues("pii") !== "anonymised"}
+                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
+                error={errors?.anonymisation_description?.message}
+                {...register("anonymisation_description")}
+              />
               <Radio value={"none"}>
                 Nei, inneholder ikke personopplysninger
               </Radio>
