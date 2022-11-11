@@ -8,7 +8,7 @@ import { Heading, Select, Table } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
 import { useEffect } from 'react'
 import { ApolloError } from '@apollo/client'
-import { ColumnType, TagType } from './useColumnTags'
+import { ColumnType, DEFAULT_COLUMN_TAG, TagType } from './useColumnTags'
 
 interface AnnotateDatasetTableProps {
   loading: boolean
@@ -63,7 +63,7 @@ const AnnotateDatasetTable = ({
                   value={
                     tags && tags.has(row.name)
                       ? tags.get(row.name)
-                      : 'PII_DirekteIdentifiserende'
+                      : DEFAULT_COLUMN_TAG
                   }
                   onChange={(e) => annotateColumn(row.name, e.target.value as TagType)}
                 >
