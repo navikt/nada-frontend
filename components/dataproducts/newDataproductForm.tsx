@@ -20,7 +20,10 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
 import TagsSelector from '../lib/tagsSelector'
-import { PiiLevel } from '../../lib/schema/graphql'
+import { PiiLevel, useGcpGetColumnsQuery } from '../../lib/schema/graphql'
+import DatasetTableSchema from './dataset/datasetTableSchema'
+import AnnotateDatasetTable from './dataset/annotateDatasetTable'
+import { useColumnTags } from './dataset/useColumnTags'
 
 const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
@@ -80,7 +83,7 @@ const schema = yup.object().shape({
   }),
   keywords: yup.array().of(yup.string()),
   pii: yup
-    .boolean()
+    .number()
     .required(
       'Du må velge om datasettet inneholder personidentifiserende informasjon'
     ),
@@ -120,6 +123,18 @@ export const NewDataproductForm = () => {
       defaultValues: defaultValues,
     })
 
+  const projectID = watch('bigquery.projectID')
+  const datasetID = watch('bigquery.dataset')
+  const tableID = watch('bigquery.table')
+
+  const {
+    columns,
+    loading: loadingColumns,
+    error: columnsError,
+    tags,
+    annotateColumn,
+  } = useColumnTags(projectID, datasetID, tableID)
+
   const { errors } = formState
   const keywords = watch('keywords')
 
@@ -139,6 +154,7 @@ export const NewDataproductForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
   const onSubmit = async (data: any) => {
+    console.log(tags)
     try {
       await createDataproduct({
         variables: {
@@ -206,6 +222,7 @@ export const NewDataproductForm = () => {
     })
   }
 
+  const pii = watch('pii')
   return (
     <div className="mt-8 w-[46rem]">
       <Heading level="1" size="large">
@@ -313,15 +330,23 @@ export const NewDataproductForm = () => {
           render={({ field }) => (
             <RadioGroup
               {...field}
-              legend="Inneholder datasettet personidentifiserende informasjon?"
+              legend="Inneholder datasettet personopplysninger?"
               error={errors?.pii?.message}
             >
-              <Radio value={true}>
-                Ja, inneholder personidentifiserende informasjon
+              <Radio value={1}>Ja, inneholder personopplysninger</Radio>
+              {pii == 1 && projectID && datasetID && tableID && (
+                <AnnotateDatasetTable
+                  loading={loadingColumns}
+                  error ={columnsError}
+                  columns={columns}
+                  tags={tags}
+                  annotateColumn={annotateColumn}
+                />
+              )}
+              <Radio value={2}>
+                Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              <Radio value={false}>
-                Nei, inneholder ikke personidentifiserende informasjon
-              </Radio>
+              <Radio value={0}>Nei, inneholder ikke personopplysninger</Radio>
             </RadioGroup>
           )}
         />

@@ -96,6 +96,19 @@ export type BigQuery = {
   tableType: BigQueryType;
 };
 
+/** BigQueryColumn contains information about a BigQuery column. */
+export type BigQueryColumn = {
+  __typename?: 'BigQueryColumn';
+  /** description defined on the bigquery column. */
+  description: Scalars['String'];
+  /** mode of the bigquery column. */
+  mode: Scalars['String'];
+  /** name of the BigQuery column. */
+  name: Scalars['String'];
+  /** type of the BigQuery column. */
+  type: BigQueryType;
+};
+
 export type BigQuerySource = {
   __typename?: 'BigQuerySource';
   /** dataset is the name of the BigQuery dataset. */
@@ -673,6 +686,12 @@ export type Query = {
   datasetsInDataproduct: Array<Dataset>;
   gcpGetAllTablesInProject: Array<BigQuerySource>;
   /**
+   * gcpGetColumns returns all columns for a table.
+   *
+   * Requires authentication.
+   */
+  gcpGetColumns: Array<BigQueryColumn>;
+  /**
    * gcpGetDatasets returns all datasets for a given project.
    *
    * Requires authentication.
@@ -757,6 +776,13 @@ export type QueryDatasetsInDataproductArgs = {
 
 export type QueryGcpGetAllTablesInProjectArgs = {
   projectID: Scalars['String'];
+};
+
+
+export type QueryGcpGetColumnsArgs = {
+  datasetID: Scalars['String'];
+  projectID: Scalars['String'];
+  tableID: Scalars['String'];
 };
 
 
@@ -1215,6 +1241,15 @@ export type GcpGetAllTablesInProjectQueryVariables = Exact<{
 
 
 export type GcpGetAllTablesInProjectQuery = { __typename?: 'Query', gcpGetAllTablesInProject: Array<{ __typename?: 'BigQuerySource', table: string, dataset: string }> };
+
+export type GcpGetColumnsQueryVariables = Exact<{
+  projectID: Scalars['String'];
+  datasetID: Scalars['String'];
+  tableID: Scalars['String'];
+}>;
+
+
+export type GcpGetColumnsQuery = { __typename?: 'Query', gcpGetColumns: Array<{ __typename?: 'BigQueryColumn', name: string, type: BigQueryType, mode: string, description: string }> };
 
 export type GcpGetDatasetsQueryVariables = Exact<{
   projectID: Scalars['String'];
@@ -2079,6 +2114,46 @@ export function useGcpGetAllTablesInProjectLazyQuery(baseOptions?: Apollo.LazyQu
 export type GcpGetAllTablesInProjectQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectQuery>;
 export type GcpGetAllTablesInProjectLazyQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectLazyQuery>;
 export type GcpGetAllTablesInProjectQueryResult = Apollo.QueryResult<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>;
+export const GcpGetColumnsDocument = gql`
+    query gcpGetColumns($projectID: String!, $datasetID: String!, $tableID: String!) {
+  gcpGetColumns(projectID: $projectID, datasetID: $datasetID, tableID: $tableID) {
+    name
+    type
+    mode
+    description
+  }
+}
+    `;
+
+/**
+ * __useGcpGetColumnsQuery__
+ *
+ * To run a query within a React component, call `useGcpGetColumnsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGcpGetColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGcpGetColumnsQuery({
+ *   variables: {
+ *      projectID: // value for 'projectID'
+ *      datasetID: // value for 'datasetID'
+ *      tableID: // value for 'tableID'
+ *   },
+ * });
+ */
+export function useGcpGetColumnsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
+      }
+export function useGcpGetColumnsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
+        }
+export type GcpGetColumnsQueryHookResult = ReturnType<typeof useGcpGetColumnsQuery>;
+export type GcpGetColumnsLazyQueryHookResult = ReturnType<typeof useGcpGetColumnsLazyQuery>;
+export type GcpGetColumnsQueryResult = Apollo.QueryResult<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>;
 export const GcpGetDatasetsDocument = gql`
     query gcpGetDatasets($projectID: String!) {
   gcpGetDatasets(projectID: $projectID)
