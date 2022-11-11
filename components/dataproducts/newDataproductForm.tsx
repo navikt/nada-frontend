@@ -12,6 +12,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Textarea,
   TextField,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
@@ -66,16 +67,16 @@ const defaultValues: FieldValues = {
 }
 
 const schema = yup.object().shape({
-  name: yup.string().required('Du må fylle inn navn'),
+  name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
   team: yup
     .string()
     .required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
   teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
-  teamContact: yup.string(),
-  datasetName: yup.string().required('Du må fylle inn navn'),
+  teamContact: yup.string().nullable(),
+  datasetName: yup.string().nullable().required('Du må fylle inn navn'),
   datasetDescription: yup.string(),
-  sourceCodeURL: yup.string().url('Link må være en gyldig URL'),
+  sourceCodeURL: yup.string().nullable().url('Link må være en gyldig URL'),
   bigquery: yup.object({
     dataset: yup.string().required(),
     projectID: yup.string().required(),
@@ -83,10 +84,20 @@ const schema = yup.object().shape({
   }),
   keywords: yup.array().of(yup.string()),
   pii: yup
-    .number()
-    .required(
-      'Du må velge om datasettet inneholder personidentifiserende informasjon'
-    ),
+    .string()
+    .nullable()
+    .oneOf(['sensitive', 'anonymised', 'none'])
+    .required('Du må velge om datasettet inneholder personopplysninger'),
+  anonymisation_description: yup
+    .string()
+    .nullable()
+    .when('pii', {
+      is: 'anonymised',
+      then: yup
+        .string()
+        .nullable()
+        .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
+    }),
 })
 
 interface BigQueryFields {
@@ -109,6 +120,7 @@ export interface NewDataproductFields {
   pii: PiiLevel
   productAreaID: string
   teamID: string
+  anonymisation_description?: string | null
 }
 
 export const NewDataproductForm = () => {
@@ -117,11 +129,18 @@ export const NewDataproductForm = () => {
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
 
-  const { register, handleSubmit, watch, formState, setValue, control } =
-    useForm({
-      resolver: yupResolver(schema),
-      defaultValues: defaultValues,
-    })
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState,
+    setValue,
+    getValues,
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: defaultValues,
+  })
 
   const projectID = watch('bigquery.projectID')
   const datasetID = watch('bigquery.dataset')
@@ -173,7 +192,15 @@ export const NewDataproductForm = () => {
                 repo: valueOrNull(data.sourceCodeURL),
                 bigquery: data.bigquery,
                 keywords: data.keywords,
-                pii: data.pii ? PiiLevel.Sensitive : PiiLevel.None,
+                pii:
+                  data.pii === 'sensitive'
+                    ? PiiLevel.Sensitive
+                    : data.pii === 'anonymised'
+                    ? PiiLevel.Anonymised
+                    : PiiLevel.None,
+                anonymisation_description: valueOrNull(
+                  data.anonymisation_description
+                ),
               },
             ],
           },
@@ -333,20 +360,32 @@ export const NewDataproductForm = () => {
               legend="Inneholder datasettet personopplysninger?"
               error={errors?.pii?.message}
             >
-              <Radio value={1}>Ja, inneholder personopplysninger</Radio>
-              {pii == 1 && projectID && datasetID && tableID && (
+              <Radio value={'sensitive'}>
+                Ja, inneholder personopplysninger
+              </Radio>
+              {pii == 'sensitive' && projectID && datasetID && tableID && (
                 <AnnotateDatasetTable
                   loading={loadingColumns}
-                  error ={columnsError}
+                  error={columnsError}
                   columns={columns}
                   tags={tags}
                   annotateColumn={annotateColumn}
                 />
               )}
-              <Radio value={2}>
+              <Radio value={'anonymised'}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              <Radio value={0}>Nei, inneholder ikke personopplysninger</Radio>
+              <Textarea
+                placeholder="Beskriv kort hvordan opplysningene er anonymisert"
+                label="Metodebeskrivelse"
+                aria-hidden={getValues('pii') !== 'anonymised'}
+                className={getValues('pii') !== 'anonymised' ? 'hidden' : ''}
+                error={errors?.anonymisation_description?.message}
+                {...register('anonymisation_description')}
+              />
+              <Radio value={'none'}>
+                Nei, inneholder ikke personopplysninger
+              </Radio>
             </RadioGroup>
           )}
         />

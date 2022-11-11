@@ -42,8 +42,7 @@ export const useColumnTags = (
 
   var tableKey = buildTableKey(projectID, datasetID, tableID)
 
-  const initTagsMapForTable = () => {
-    var newTagsMap = new Map<string, Map<string, TagType> | undefined>(tagsMap)
+  const initDefaultTagsMapForTable = () => {
     if (
       projectID &&
       datasetID &&
@@ -53,6 +52,9 @@ export const useColumnTags = (
       !columnsQuery.loading &&
       columnsQuery.data
     ) {
+      var newTagsMap = new Map<string, Map<string, TagType> | undefined>(
+        tagsMap
+      )
       var tags = new Map<string, TagType>()
       columnsQuery.data.gcpGetColumns.forEach((it) =>
         tags.set(it.name, DEFAULT_COLUMN_TAG)
@@ -62,7 +64,7 @@ export const useColumnTags = (
     }
   }
 
-  initTagsMapForTable()
+  initDefaultTagsMapForTable()
 
   const annotateColumn = (column: string, tag: TagType) => {
     var newTagsMap = new Map<string, Map<string, TagType> | undefined>(
