@@ -59,6 +59,7 @@ const AnnotateDatasetTable = ({
               <Table.DataCell className="w-60">
                 <Select
                   className="w-full"
+                  size = "small"
                   label=""
                   value={
                     tags && tags.has(row.name)

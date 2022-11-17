@@ -73,6 +73,7 @@ export const GET_DATAPRODUCT = gql`
               mode
               type
             }
+            piiTags
           }
         }
       }

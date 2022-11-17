@@ -25,6 +25,7 @@ import { PiiLevel, useGcpGetColumnsQuery } from '../../lib/schema/graphql'
 import DatasetTableSchema from './dataset/datasetTableSchema'
 import AnnotateDatasetTable from './dataset/annotateDatasetTable'
 import { useColumnTags } from './dataset/useColumnTags'
+import { string } from 'prop-types'
 
 const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
@@ -190,7 +191,12 @@ export const NewDataproductForm = () => {
                 name: data.datasetName,
                 description: valueOrNull(data.datasetDescription),
                 repo: valueOrNull(data.sourceCodeURL),
-                bigquery: data.bigquery,
+                bigquery: {
+                  ...data.bigquery,
+                  piiTags: JSON.stringify(
+                    Object.fromEntries(tags || new Map<string, string>())
+                  ),
+                },
                 keywords: data.keywords,
                 pii:
                   data.pii === 'sensitive'

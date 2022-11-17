@@ -10,6 +10,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
   const schema = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
+  console.log(Object.entries(JSON.parse(datasource.piiTags || "{}")))
   return (
     <div className="mb-3">
       <Heading spacing level="3" size="small">
@@ -22,6 +23,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
             <Table.HeaderCell>Mode</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell>Personopplysning</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -33,6 +35,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
               <Table.DataCell>{row.mode}</Table.DataCell>
               <Table.DataCell>{row.type}</Table.DataCell>
               <Table.DataCell>{row.description}</Table.DataCell>
+              <Table.DataCell>{JSON.parse(datasource.piiTags || '{}')[row.name]}</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>

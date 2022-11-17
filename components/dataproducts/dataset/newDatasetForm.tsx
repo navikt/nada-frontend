@@ -98,8 +98,10 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     }
   )
 
+  console.log(tags)
   const onSubmitForm = async (requestData: any) => {
     requestData.dataproductID = dataproduct.dataproduct.id
+    requestData.bigquery.piiTags = JSON.stringify(Object.fromEntries(tags || new Map<string, string>()))
     const pii = requestData.pii === "sensitive"
       ? PiiLevel.Sensitive
       : requestData.pii === "anonymised"

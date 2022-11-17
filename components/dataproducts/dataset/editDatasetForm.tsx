@@ -123,6 +123,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       repo: requestData.repo,
       keywords: requestData.keywords,
       anonymisation_description: requestData.anonymisation_description,
+      piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),
     }
     updateDataset({
       variables: { id: dataset.id, input: payload },
