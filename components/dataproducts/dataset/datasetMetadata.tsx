@@ -20,8 +20,8 @@ const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
     v: string | JSX.Element
     copy?: boolean | undefined
   }> = [
-    { k: 'Prosjekt', v: datasource.projectID },
-    { k: 'Dataset', v: datasource.dataset },
+    { k: 'GCP-prosjekt', v: datasource.projectID },
+    { k: 'Datasett', v: datasource.dataset },
     { k: 'Tabell', v: datasource.table },
     { k: 'Tabelltype', v: datasource.tableType.toUpperCase() },
     { k: 'Opprettet', v: humanizeDate(datasource.created) },
