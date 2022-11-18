@@ -97,7 +97,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
     error: columnsError,
     tags,
     annotateColumn,
-  } = useColumnTags(bigquery.projectID, bigquery.dataset, bigquery.table)
+  } = useColumnTags(bigquery.projectID, bigquery.dataset, bigquery.table, dataset)
 
   const onDeleteKeyword = (keyword: string) => {
     setValue(
