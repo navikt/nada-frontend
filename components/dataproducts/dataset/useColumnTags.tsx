@@ -60,7 +60,7 @@ export const useColumnTags = (
       var tags = new Map<string, TagType>()
       var tagsFromQuery = JSON.parse(dataset?.datasource.piiTags || "{}")
       columnsQuery.data.gcpGetColumns.forEach((it) =>
-        tags.set(it.name, tagsFromQuery.get(it.name) || DEFAULT_COLUMN_TAG)
+        tags.set(it.name, tagsFromQuery[it.name] || DEFAULT_COLUMN_TAG)
       )
       newTagsMap.set(tableKey, tags)
       setTagsMap(newTagsMap)
