@@ -77,7 +77,7 @@ const AnnotateDatasetTable = ({
                   }
                 >
                   {piiTagValues.map((it) => (
-                    <option value={it}>{piiTagName(it)}</option>
+                    <option value={it} key={it}>{piiTagName(it)}</option>
                   ))}
                 </Select>
               </Table.DataCell>
