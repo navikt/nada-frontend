@@ -35,7 +35,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
               <Table.DataCell>{row.mode}</Table.DataCell>
               <Table.DataCell>{row.type}</Table.DataCell>
               <Table.DataCell>{row.description}</Table.DataCell>
-              <Table.DataCell>{datasource.piiTags? PIITagNames.get(JSON.parse(datasource.piiTags)): ''}</Table.DataCell>
+              <Table.DataCell>{PIITagNames.get(JSON.parse(datasource.piiTags || '{}')[row.name])}</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>
