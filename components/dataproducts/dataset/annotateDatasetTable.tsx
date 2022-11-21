@@ -8,7 +8,13 @@ import { Heading, Select, Table } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
 import { useEffect } from 'react'
 import { ApolloError } from '@apollo/client'
-import { ColumnType, DEFAULT_COLUMN_TAG, PIITagType } from './useColumnTags'
+import {
+  ColumnType,
+  DEFAULT_COLUMN_TAG,
+  piiTagName,
+  PIITagType,
+  piiTagValues,
+} from './useColumnTags'
 
 interface AnnotateDatasetTableProps {
   loading: boolean
@@ -59,22 +65,20 @@ const AnnotateDatasetTable = ({
               <Table.DataCell className="w-60">
                 <Select
                   className="w-full"
-                  size = "small"
+                  size="small"
                   label=""
                   value={
                     tags && tags.has(row.name)
                       ? tags.get(row.name)
                       : DEFAULT_COLUMN_TAG
                   }
-                  onChange={(e) => annotateColumn(row.name, e.target.value as PIITagType)}
+                  onChange={(e) =>
+                    annotateColumn(row.name, e.target.value as PIITagType)
+                  }
                 >
-                  <option value={'PII_DirekteIdentifiserende'}>
-                    Direkte identifiserende
-                  </option>
-                  <option value={'PII_SærligKategori'}>Særlig kategori</option>
-                  <option value={'PII_IkkeKlassifisert'}>
-                    Ikke klassifisert
-                  </option>
+                  {piiTagValues.map((it) => (
+                    <option value={it}>{piiTagName(it)}</option>
+                  ))}
                 </Select>
               </Table.DataCell>
             </Table.Row>
