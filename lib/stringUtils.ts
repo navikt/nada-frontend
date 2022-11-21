@@ -51,9 +51,3 @@ export const stringToColors = (str: string): [string, string] =>
 export const truncate = (str: string, length: number) =>
   str.substring(0, Math.min(str.length, length)) +
   (str.length > length ? '...' : '')
-
-export const spacingWords = (str: string) =>
-  str
-    .replace(/([A-Z]+)([A-Z][a-z])+/g, ' $1 $2')
-    .replace(/([A-Za-z][a-z])+/g, '$1 ')
-    .trim()

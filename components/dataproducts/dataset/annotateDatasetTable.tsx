@@ -1,19 +1,12 @@
-import {
-  DatasetQuery,
-  GcpGetColumnsQuery,
-  useGcpGetColumnsQuery,
-} from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { Heading, Select, Table } from '@navikt/ds-react'
+import { Select, Table } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
-import { useEffect } from 'react'
 import { ApolloError } from '@apollo/client'
 import {
   ColumnType,
   DEFAULT_COLUMN_TAG,
-  piiTagName,
+  PIITagNames,
   PIITagType,
-  piiTagValues,
 } from './useColumnTags'
 
 interface AnnotateDatasetTableProps {
@@ -76,8 +69,10 @@ const AnnotateDatasetTable = ({
                     annotateColumn(row.name, e.target.value as PIITagType)
                   }
                 >
-                  {piiTagValues.map((it) => (
-                    <option value={it} key={it}>{piiTagName(it)}</option>
+                  {Array.from(PIITagNames).map(([key, name]) => (
+                    <option value={key} key={key}>
+                      {name}
+                    </option>
                   ))}
                 </Select>
               </Table.DataCell>

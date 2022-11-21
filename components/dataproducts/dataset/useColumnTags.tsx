@@ -4,21 +4,17 @@ import {
   useGcpGetColumnsQuery,
   DatasetQuery,
 } from '../../../lib/schema/graphql'
-import { spacingWords } from '../../../lib/stringUtils'
 
 export type PIITagType =
   | 'PII_DirekteIdentifiserende'
   | 'PII_SærligKategori'
   | 'PII_IkkeKlassifisert'
 
-export const piiTagValues: PIITagType[] = [
-  'PII_DirekteIdentifiserende',
-  'PII_SærligKategori',
-  'PII_IkkeKlassifisert',
-]
-
-export const piiTagName = (tag: PIITagType) =>
-  tag ? spacingWords(tag.replace(/[A-Za-z0-9]*_/g, '')) : ''
+export const PIITagNames = new Map([
+  ['PII_DirekteIdentifiserende', 'Direkte Identifiserende'],
+  ['PII_SærligKategori', 'Særlig Kategori'],
+  ['PII_IkkeKlassifisert', 'Ikke Klassifisert'],
+])
 
 export const DEFAULT_COLUMN_TAG = 'PII_IkkeKlassifisert'
 
