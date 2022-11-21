@@ -8,14 +8,14 @@ import { Heading, Select, Table } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
 import { useEffect } from 'react'
 import { ApolloError } from '@apollo/client'
-import { ColumnType, DEFAULT_COLUMN_TAG, TagType } from './useColumnTags'
+import { ColumnType, DEFAULT_COLUMN_TAG, PIITagType } from './useColumnTags'
 
 interface AnnotateDatasetTableProps {
   loading: boolean
   error: ApolloError | undefined
   columns: ColumnType[] | undefined
-  tags: Map<string, TagType> | undefined
-  annotateColumn: (columnName: string, tag: TagType) => void
+  tags: Map<string, PIITagType> | undefined
+  annotateColumn: (columnName: string, tag: PIITagType) => void
 }
 
 const AnnotateDatasetTable = ({
@@ -66,7 +66,7 @@ const AnnotateDatasetTable = ({
                       ? tags.get(row.name)
                       : DEFAULT_COLUMN_TAG
                   }
-                  onChange={(e) => annotateColumn(row.name, e.target.value as TagType)}
+                  onChange={(e) => annotateColumn(row.name, e.target.value as PIITagType)}
                 >
                   <option value={'PII_DirekteIdentifiserende'}>
                     Direkte identifiserende

@@ -4,15 +4,19 @@ import {
   useGcpGetColumnsQuery,
   DatasetQuery,
 } from '../../../lib/schema/graphql'
+import { spacingWords } from '../../../lib/stringUtils'
 
-export type TagType =
+export type PIITagType =
   | 'PII_DirekteIdentifiserende'
   | 'PII_SærligKategori'
   | 'PII_IkkeKlassifisert'
 
+export const piiTagTypeToName = (tag: PIITagType) =>
+  spacingWords(tag.replace(/[A-Za-z0-9]._/g, ''))
+
 export const DEFAULT_COLUMN_TAG = 'PII_IkkeKlassifisert'
 
-type TagsMapType = Map<string, Map<string, TagType> | undefined>
+type TagsMapType = Map<string, Map<string, PIITagType> | undefined>
 
 const buildTableKey = (projectID: string, datasetID: string, tableID: string) =>
   `${projectID}.${datasetID}.${tableID}`
@@ -28,10 +32,10 @@ export const useColumnTags = (
   projectID: string,
   datasetID: string,
   tableID: string,
-  dataset?: DatasetQuery["dataset"],
+  dataset?: DatasetQuery['dataset']
 ) => {
   const [tagsMap, setTagsMap] = useState<TagsMapType>(
-    new Map<string, Map<string, TagType>>()
+    new Map<string, Map<string, PIITagType>>()
   )
 
   const columnsQuery = useGcpGetColumnsQuery({
@@ -54,11 +58,11 @@ export const useColumnTags = (
       !columnsQuery.loading &&
       columnsQuery.data
     ) {
-      var newTagsMap = new Map<string, Map<string, TagType> | undefined>(
+      var newTagsMap = new Map<string, Map<string, PIITagType> | undefined>(
         tagsMap
       )
-      var tags = new Map<string, TagType>()
-      var tagsFromQuery = JSON.parse(dataset?.datasource.piiTags || "{}")
+      var tags = new Map<string, PIITagType>()
+      var tagsFromQuery = JSON.parse(dataset?.datasource.piiTags || '{}')
       columnsQuery.data.gcpGetColumns.forEach((it) =>
         tags.set(it.name, tagsFromQuery[it.name] || DEFAULT_COLUMN_TAG)
       )
@@ -69,8 +73,8 @@ export const useColumnTags = (
 
   initDefaultTagsMapForTable()
 
-  const annotateColumn = (column: string, tag: TagType) => {
-    var newTagsMap = new Map<string, Map<string, TagType> | undefined>(
+  const annotateColumn = (column: string, tag: PIITagType) => {
+    var newTagsMap = new Map<string, Map<string, PIITagType> | undefined>(
       tagsMap.set(tableKey, tagsMap.get(tableKey)?.set(column, tag))
     )
     setTagsMap(newTagsMap)
