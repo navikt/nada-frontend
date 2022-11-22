@@ -18,7 +18,8 @@ import MetabaseLogo from '../components/lib/icons/metabaseLogo'
 import Link from 'next/link'
 import ProductAreaLinks from '../components/productArea/productAreaLinks'
 import DataproductLogo from '../components/lib/icons/dataproductLogo'
-import { Search } from '@navikt/ds-react'
+import {Heading, Search} from '@navikt/ds-react'
+import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
 
 const SEARCH_LIMIT = 6
 
@@ -75,8 +76,24 @@ const LandingPage = () => {
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate h-[30rem] pt-8 md:pt-0 md:h-96 md:items-center justify-center flex ">
+            <div className="bg-component-background-alternate h-[30rem] pt-8 md:pt-0 md:h-96 md:items-center justify-center flex gap-8">
                 <ProductAreaLinks/>
+                <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-row">
+                    <div className="mr-6">
+                        <LegalGuidanceIcon />
+                    </div>
+                    <div>
+                        <Heading level="2" size="medium">
+                            <Link
+                                href="https://docs.knada.io/spilleregler/spilleregler_juridisk/"
+                                className="underline"
+                            >
+                                Usikker på jus og data?
+                            </Link>
+                        </Heading>
+                        <p>For at folk skal være trygge rundt deling og bruk av data med personopplysninger, har vi forsøkt å svare på noen spørsmål.</p>
+                    </div>
+                </div>
             </div>
         </div>
     )
