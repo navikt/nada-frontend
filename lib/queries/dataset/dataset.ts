@@ -58,6 +58,7 @@ export const GET_DATASET = gql`
             mode
             type
           }
+          piiTags
         }
       }
     }

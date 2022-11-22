@@ -36,6 +36,7 @@ export interface DatasetQuery {
     expires?: any | null | undefined
     tableType: BigQueryType
     description: string
+    piiTags?: string | null
     type: 'BigQuery'
     schema: Array<{
       __typename?: 'TableColumn'

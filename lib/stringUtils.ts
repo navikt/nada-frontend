@@ -43,7 +43,10 @@ export const stringToColorClasses = (str: string): [string, string] => {
 }
 
 export const stringToColors = (str: string): [string, string] =>
-  stringToColorClasses(str).map((it) => colorClassMap.get(it)) as [string, string]
+  stringToColorClasses(str).map((it) => colorClassMap.get(it)) as [
+    string,
+    string
+  ]
 
 export const truncate = (str: string, length: number) =>
   str.substring(0, Math.min(str.length, length)) +

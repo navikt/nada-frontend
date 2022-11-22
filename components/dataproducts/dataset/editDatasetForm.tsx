@@ -21,6 +21,8 @@ import { GET_DATASET } from '../../../lib/queries/dataset/dataset'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import TagsSelector from '../../lib/tagsSelector';
+import { useColumnTags } from './useColumnTags';
+import AnnotateDatasetTable from './annotateDatasetTable';
 
 interface EditDatasetFormProps {
   dataset: DatasetQuery["dataset"]
@@ -87,6 +89,15 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
 
   const keywords = watch('keywords')
   const bigquery = watch('bigquery')
+  const pii = watch('pii')
+
+  const {
+    columns,
+    loading: loadingColumns,
+    error: columnsError,
+    tags,
+    annotateColumn,
+  } = useColumnTags(bigquery.projectID, bigquery.dataset, bigquery.table, dataset)
 
   const onDeleteKeyword = (keyword: string) => {
     setValue(
@@ -112,6 +123,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       repo: requestData.repo,
       keywords: requestData.keywords,
       anonymisation_description: requestData.anonymisation_description,
+      piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),
     }
     updateDataset({
       variables: { id: dataset.id, input: payload },
@@ -194,6 +206,15 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
               <Radio value={"sensitive"}>
                 Ja, inneholder personopplysninger
               </Radio>
+              {pii == 'sensitive' && bigquery.projectID && bigquery.dataset && bigquery.table && (
+                <AnnotateDatasetTable
+                  loading={loadingColumns}
+                  error={columnsError}
+                  columns={columns}
+                  tags={tags}
+                  annotateColumn={annotateColumn}
+                />
+              )}
               <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>

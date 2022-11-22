@@ -1,6 +1,7 @@
 import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { Heading, Table } from '@navikt/ds-react'
+import { PIITagNames } from './useColumnTags'
 
 interface DataproductTableSchemaProps {
   datasource: DatasetQuery['dataset']['datasource']
@@ -22,6 +23,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
             <Table.HeaderCell>Mode</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell>Personopplysning</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -33,6 +35,7 @@ const DatasetTableSchema = ({ datasource }: DataproductTableSchemaProps) => {
               <Table.DataCell>{row.mode}</Table.DataCell>
               <Table.DataCell>{row.type}</Table.DataCell>
               <Table.DataCell>{row.description}</Table.DataCell>
+              <Table.DataCell>{PIITagNames.get(JSON.parse(datasource.piiTags || '{}')[row.name])}</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>

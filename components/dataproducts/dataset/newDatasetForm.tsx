@@ -9,7 +9,9 @@ import { DataproductQuery, PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector'
 import { prefilledDatasetDescription } from '../newDataproductForm'
+import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
+import { useColumnTags } from './useColumnTags'
 
 interface NewDatasetFormProps {
   dataproduct: DataproductQuery
@@ -58,6 +60,18 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     resolver: yupResolver(schema),
     defaultValues: defaultValues,
   })
+  const projectID = watch('bigquery.projectID')
+  const datasetID = watch('bigquery.dataset')
+  const tableID = watch('bigquery.table')
+  const pii = watch('pii')
+  const {
+    columns,
+    loading: loadingColumns,
+    error: columnsError,
+    tags,
+    annotateColumn,
+  } = useColumnTags(projectID, datasetID, tableID)
+
   const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
@@ -86,6 +100,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
 
   const onSubmitForm = async (requestData: any) => {
     requestData.dataproductID = dataproduct.dataproduct.id
+    requestData.bigquery.piiTags = JSON.stringify(Object.fromEntries(tags || new Map<string, string>()))
     const pii = requestData.pii === "sensitive"
       ? PiiLevel.Sensitive
       : requestData.pii === "anonymised"
@@ -157,6 +172,15 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
               <Radio value={"sensitive"}>
                 Ja, inneholder personopplysninger
               </Radio>
+              {pii == 'sensitive' && projectID && datasetID && tableID && (
+                <AnnotateDatasetTable
+                  loading={loadingColumns}
+                  error={columnsError}
+                  columns={columns}
+                  tags={tags}
+                  annotateColumn={annotateColumn}
+                />
+              )}
               <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>

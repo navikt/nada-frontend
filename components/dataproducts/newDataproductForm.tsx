@@ -21,7 +21,11 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
 import TagsSelector from '../lib/tagsSelector'
-import { PiiLevel } from '../../lib/schema/graphql'
+import { PiiLevel, useGcpGetColumnsQuery } from '../../lib/schema/graphql'
+import DatasetTableSchema from './dataset/datasetTableSchema'
+import AnnotateDatasetTable from './dataset/annotateDatasetTable'
+import { useColumnTags } from './dataset/useColumnTags'
+import { string } from 'prop-types'
 
 const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
@@ -83,13 +87,17 @@ const schema = yup.object().shape({
   pii: yup
     .string()
     .nullable()
-    .oneOf(["sensitive", "anonymised", "none"])
-    .required(
-      'Du må velge om datasettet inneholder personopplysninger'
-    ),
-    anonymisation_description: yup.string().nullable().when("pii", {
-      is: "anonymised",
-      then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
+    .oneOf(['sensitive', 'anonymised', 'none'])
+    .required('Du må velge om datasettet inneholder personopplysninger'),
+  anonymisation_description: yup
+    .string()
+    .nullable()
+    .when('pii', {
+      is: 'anonymised',
+      then: yup
+        .string()
+        .nullable()
+        .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
     }),
 })
 
@@ -122,11 +130,30 @@ export const NewDataproductForm = () => {
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
 
-  const { register, handleSubmit, watch, formState, setValue, getValues, control } =
-    useForm({
-      resolver: yupResolver(schema),
-      defaultValues: defaultValues,
-    })
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState,
+    setValue,
+    getValues,
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: defaultValues,
+  })
+
+  const projectID = watch('bigquery.projectID')
+  const datasetID = watch('bigquery.dataset')
+  const tableID = watch('bigquery.table')
+
+  const {
+    columns,
+    loading: loadingColumns,
+    error: columnsError,
+    tags,
+    annotateColumn,
+  } = useColumnTags(projectID, datasetID, tableID)
 
   const { errors } = formState
   const keywords = watch('keywords')
@@ -147,6 +174,7 @@ export const NewDataproductForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
   const onSubmit = async (data: any) => {
+    console.log(tags)
     try {
       await createDataproduct({
         variables: {
@@ -163,14 +191,22 @@ export const NewDataproductForm = () => {
                 name: data.datasetName,
                 description: valueOrNull(data.datasetDescription),
                 repo: valueOrNull(data.sourceCodeURL),
-                bigquery: data.bigquery,
+                bigquery: {
+                  ...data.bigquery,
+                  piiTags: JSON.stringify(
+                    Object.fromEntries(tags || new Map<string, string>())
+                  ),
+                },
                 keywords: data.keywords,
-                pii: data.pii === "sensitive"
+                pii:
+                  data.pii === 'sensitive'
                     ? PiiLevel.Sensitive
-                    : data.pii === "anonymised"
-                        ? PiiLevel.Anonymised
-                        : PiiLevel.None,
-                anonymisation_description: valueOrNull(data.anonymisation_description),
+                    : data.pii === 'anonymised'
+                    ? PiiLevel.Anonymised
+                    : PiiLevel.None,
+                anonymisation_description: valueOrNull(
+                  data.anonymisation_description
+                ),
               },
             ],
           },
@@ -219,6 +255,7 @@ export const NewDataproductForm = () => {
     })
   }
 
+  const pii = watch('pii')
   return (
     <div className="mt-8 w-[46rem]">
       <Heading level="1" size="large">
@@ -326,28 +363,36 @@ export const NewDataproductForm = () => {
           render={({ field }) => (
             <RadioGroup
               {...field}
-              legend="Inneholder datasettet personidentifiserende informasjon?"
+              legend="Inneholder datasettet personopplysninger?"
               error={errors?.pii?.message}
             >
-              <Radio value={"sensitive"}>
+              <Radio value={'sensitive'}>
                 Ja, inneholder personopplysninger
               </Radio>
-              <Radio value={"anonymised"}>
+              {pii == 'sensitive' && projectID && datasetID && tableID && (
+                <AnnotateDatasetTable
+                  loading={loadingColumns}
+                  error={columnsError}
+                  columns={columns}
+                  tags={tags}
+                  annotateColumn={annotateColumn}
+                />
+              )}
+              <Radio value={'anonymised'}>
                 Det er benyttet metoder for å anonymisere personopplysningene
               </Radio>
-              <Textarea 
-                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                label="Metodebeskrivelse" 
-                aria-hidden={getValues("pii") !== "anonymised"}
-                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
+              <Textarea
+                placeholder="Beskriv kort hvordan opplysningene er anonymisert"
+                label="Metodebeskrivelse"
+                aria-hidden={getValues('pii') !== 'anonymised'}
+                className={getValues('pii') !== 'anonymised' ? 'hidden' : ''}
                 error={errors?.anonymisation_description?.message}
-                {...register("anonymisation_description")}
+                {...register('anonymisation_description')}
               />
-              <Radio value={"none"}>
+              <Radio value={'none'}>
                 Nei, inneholder ikke personopplysninger
               </Radio>
             </RadioGroup>
-
           )}
         />
         {backendError && <ErrorMessage error={backendError} />}
