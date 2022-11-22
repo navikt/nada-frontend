@@ -1,5 +1,5 @@
 import { WarningColored, SuccessColored } from '@navikt/ds-icons'
-import {Alert, BodyLong, Heading, Link, Modal} from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Link, Modal } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -91,19 +91,16 @@ const ViewDataset = ({
           </Modal.Content>
         </Modal>
         <Modal
-            open={showAnonymisation}
-            aria-label="Metodebeskrivelse for anonymisering"
-            onClose={() => setShowAnonymisation(false)}
-            className="max-w-full md:max-w-3xl px-8"
+          open={showAnonymisation}
+          aria-label="Metodebeskrivelse for anonymisering"
+          onClose={() => setShowAnonymisation(false)}
+          className="max-w-full md:max-w-3xl px-8"
         >
           <Modal.Content className="h-full">
             <Heading level="1" size="large" className="pb-8">
               Metodebeskrivelse
             </Heading>
-            <BodyLong spacing>
-              {dataset.anonymisation_description}
-            </BodyLong>
-
+            <BodyLong spacing>{dataset.anonymisation_description}</BodyLong>
           </Modal.Content>
         </Modal>
       </div>
@@ -154,28 +151,32 @@ const ViewDataset = ({
               ))}
             </div>
           </div>
-          {dataset.pii === PiiLevel.Sensitive &&
+          {dataset.pii === PiiLevel.Sensitive && (
             <p className="flex flex-row gap-2 items-center">
               <WarningColored />
               <span>Inneholder personopplysninger</span>
             </p>
-          }
-          {dataset.pii === PiiLevel.None &&
+          )}
+          {dataset.pii === PiiLevel.None && (
             <p className="flex flex-row gap-2 items-center">
               <SuccessColored />
               <span>
                 Inneholder <b>ikke</b> personopplysninger
               </span>
             </p>
-          }
-          {dataset.pii === PiiLevel.Anonymised &&
+          )}
+          {dataset.pii === PiiLevel.Anonymised && (
             <p className="flex flex-row gap-2 items-center">
               <WarningColored />
               <span>
-                Inneholder personopplysninger som er anonymisert (<a href="#" onClick={() => setShowAnonymisation(true)}>metodebeskrivelse for anonymisering</a>)
+                Inneholder personopplysninger som er anonymisert (
+                <a href="#" onClick={() => setShowAnonymisation(true)}>
+                  metodebeskrivelse for anonymisering
+                </a>
+                )
               </span>
             </p>
-          }
+          )}
           <div>
             {userInfo && accessType.type !== 'none' && (
               <article className="border-b border-divider last:border-b-0">
@@ -214,7 +215,10 @@ const ViewDataset = ({
           </section>
         )}
         <DatasetMetadata dataset={dataset} />
-        <DatasetTableSchema datasource={dataset.datasource} />
+        <DatasetTableSchema
+          datasource={dataset.datasource}
+          showPii={dataset.pii == PiiLevel.Sensitive}
+        />
       </div>
     </>
   )
