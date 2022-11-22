@@ -8,15 +8,15 @@ import {
 export type PIITagType =
   | 'PII_DirekteIdentifiserende'
   | 'PII_SærligKategori'
-  | 'PII_IkkeKlassifisert'
+  | 'PII_KanVæreIndirekteIdentifiserende'
 
 export const PIITagNames = new Map([
   ['PII_DirekteIdentifiserende', 'Direkte Identifiserende'],
   ['PII_SærligKategori', 'Særlig Kategori'],
-  ['PII_IkkeKlassifisert', 'Ikke Klassifisert'],
+  ['PII_KanVæreIndirekteIdentifiserende', 'Kan være indirekte identifiserende'],
 ])
 
-export const DEFAULT_COLUMN_TAG = 'PII_IkkeKlassifisert'
+export const DEFAULT_COLUMN_TAG = 'PII_KanVæreIndirekteIdentifiserende'
 
 type TagsMapType = Map<string, Map<string, PIITagType> | undefined>
 
