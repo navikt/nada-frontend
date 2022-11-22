@@ -16,6 +16,12 @@ export const PIITagNames = new Map([
   ['PII_KanVæreIndirekteIdentifiserende', 'Kan være indirekte identifiserende'],
 ])
 
+export const PIITagOptions = new Map([
+  ['PII_DirekteIdentifiserende', 'Direkte identifiserende'],
+  ['PII_SærligKategori', 'Særlig kategori'],
+  ['PII_KanVæreIndirekteIdentifiserende', 'Ikke klassifisert'],
+])
+
 export const DEFAULT_COLUMN_TAG = 'PII_KanVæreIndirekteIdentifiserende'
 
 type TagsMapType = Map<string, Map<string, PIITagType> | undefined>
@@ -68,7 +74,7 @@ export const useColumnTags = (
       columnsQuery.data.gcpGetColumns.forEach((it) =>
         tags.set(
           it.name,
-          (tagsFromQuery[it.name] &&
+          (!!tagsFromQuery[it.name] &&
             PIITagNames.has(tagsFromQuery[it.name]) &&
             tagsFromQuery[it.name]) ||
             DEFAULT_COLUMN_TAG

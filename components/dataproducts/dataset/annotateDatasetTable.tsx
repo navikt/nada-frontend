@@ -6,6 +6,7 @@ import {
   ColumnType,
   DEFAULT_COLUMN_TAG,
   PIITagNames,
+  PIITagOptions,
   PIITagType,
 } from './useColumnTags'
 
@@ -69,7 +70,7 @@ const AnnotateDatasetTable = ({
                     annotateColumn(row.name, e.target.value as PIITagType)
                   }
                 >
-                  {Array.from(PIITagNames).map(([key, name]) => (
+                  {Array.from(PIITagOptions).map(([key, name]) => (
                     <option value={key} key={key}>
                       {name}
                     </option>
