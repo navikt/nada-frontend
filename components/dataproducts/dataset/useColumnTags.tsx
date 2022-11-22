@@ -11,8 +11,8 @@ export type PIITagType =
   | 'PII_KanVæreIndirekteIdentifiserende'
 
 export const PIITagNames = new Map([
-  ['PII_DirekteIdentifiserende', 'Direkte Identifiserende'],
-  ['PII_SærligKategori', 'Særlig Kategori'],
+  ['PII_DirekteIdentifiserende', 'Direkte identifiserende'],
+  ['PII_SærligKategori', 'Særlig kategori'],
   ['PII_KanVæreIndirekteIdentifiserende', 'Kan være indirekte identifiserende'],
 ])
 
