@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Datepicker } from '@navikt/ds-datepicker'
-import { Button, Heading, Radio, RadioGroup, TextField } from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup, TextField, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -16,6 +15,12 @@ import {
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { UserState } from '../../../lib/context'
 import ErrorMessage from '../../lib/error';
+
+const tomorrow = () => {
+  const date = new Date()
+  date.setDate(date.getDate() + 1)
+  return date
+}
 
 const schema = yup
   .object({
@@ -62,7 +67,7 @@ interface AccessRequestFields {
   subject: string
   subjectType: SubjectType
   accessType: string
-  expires: string | undefined
+  expires: Date | undefined
 }
 
 const AccessRequestFormV2 = ({
@@ -82,6 +87,8 @@ const AccessRequestFormV2 = ({
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    getValues,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -91,10 +98,18 @@ const AccessRequestFormV2 = ({
         : SubjectType.User,
       accessType: !isEdit || accessRequest?.expires ? 'until' : 'eternal',
       expires: accessRequest?.expires
-        ? new Date(accessRequest.expires).toISOString().substr(0, 10)
+        ? accessRequest.expires
         : undefined,
     },
   })
+
+
+  const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+    defaultSelected: new Date(getValues("expires")),
+    fromDate: tomorrow(),
+    onDateChange: (d: Date | undefined) => setValue("expires", d ? d : undefined),
+  });
+
 
   const {
     data: searchData,
@@ -111,7 +126,7 @@ const AccessRequestFormV2 = ({
       subject: data.subject,
       subjectType: data.subjectType,
       polly: polly,
-      expires: data.accessType === 'eternal' || data.expires === undefined ? null : new Date(data.expires),
+      expires: data.accessType === 'eternal' || data.expires === undefined ? null : data.expires.toISOString(),
     }
     onSubmit(accessRequest)
   }
@@ -196,27 +211,9 @@ const AccessRequestFormV2 = ({
                 error={errors?.accessType?.message}
               >
                 <Radio value="until">Til dato</Radio>
-                <Controller
-                  name="expires"
-                  control={control}
-                  render={(datepickerProps) => (
-                    <div className="ml-8">
-                      <Datepicker
-                        {...datepickerProps.field}
-                        disabled={field.value === 'eternal'}
-                        inputLabel=""
-                        limitations={{
-                          minDate: new Date().toISOString(),
-                        }}
-                      />
-                      {errors?.expires && (
-                        <div className="navds-error-message navds-label">
-                          {errors.expires.message}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                />
+                <UNSAFE_DatePicker {...datepickerProps}>
+                  <UNSAFE_DatePicker.Input {...inputProps} label="" disabled={field.value === 'eternal'} />
+                </UNSAFE_DatePicker>
                 <Radio value="eternal">For alltid</Radio>
               </RadioGroup>
             )}

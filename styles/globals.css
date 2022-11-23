@@ -42,10 +42,6 @@ h6 {
   @apply hidden;
 }
 
-.ds-datepicker__kalenderknapp:disabled {
-  @apply border-gray-300 cursor-not-allowed;
-}
-
 .select__control {
   @apply border-border hover:border-focus min-h-[48px] !important;
 }
@@ -136,10 +132,6 @@ h6 {
   @apply text-white
 }
 
-.ds-datepicker__kalenderPortal {
-  top: unset !important;
-  bottom: calc(100% + 2px) !important;
-}
 
 .children-fullwidth > * {
   @apply w-full

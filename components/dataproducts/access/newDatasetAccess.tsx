@@ -1,11 +1,10 @@
-import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react";
+import { Button, Heading, Radio, RadioGroup, TextField, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
 import { DatasetQuery, SubjectType, useGrantAccessMutation } from "../../../lib/schema/graphql";
 import * as yup from 'yup'
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useFormState } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Datepicker } from "@navikt/ds-datepicker";
 import { GET_DATASET } from "../../../lib/queries/dataset/dataset";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import ErrorMessage from "../../lib/error";
 
 interface NewDatasetAccessProps {
@@ -49,15 +48,21 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
         handleSubmit,
         control,
         formState: { errors },
+        setValue
       } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
           subject: '',
           subjectType: SubjectType.User,
           accessType: 'until',
-          expires: undefined,
+          expires: '',
         },
       })
+
+    const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+      fromDate: tomorrow(),
+      onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
+    });
 
     const onSubmitForm = async (requestData: any) => {
         requestData.datasetID = dataset.id
@@ -134,22 +139,9 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                 error={errors?.accessType?.message}
               >
                 <Radio value="until">Til dato</Radio>
-                <Controller
-                  name="expires"
-                  control={control}
-                  render={(datepickerProps) => (
-                    <div className="ml-8">
-                      <Datepicker
-                        {...datepickerProps.field}
-                        disabled={field.value === 'eternal'}
-                        inputLabel=""
-                        limitations={{
-                          minDate: tomorrow().toISOString(),
-                        }}
-                      />
-                    </div>
-                  )}
-                />
+                <UNSAFE_DatePicker {...datepickerProps}>
+                  <UNSAFE_DatePicker.Input {...inputProps} label="" disabled={field.value === 'eternal'} />
+                </UNSAFE_DatePicker>
                 <Radio value="eternal">For alltid</Radio>
               </RadioGroup>
             )}
