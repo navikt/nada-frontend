@@ -36,7 +36,7 @@ const LandingPage = () => {
     }, [])
 
     return (
-        <div className="w-screen min-h-[calc(100vh-3rem)] flex flex-col justify-between gap-8">
+        <div className="w-screen min-h-[calc(100vh-6rem)] flex flex-col justify-between gap-8">
             <div className="flex flex-col items-center justify-center gap-20 mt-8 md:mt-48 w-11/12 self-center">
                 <Head>
                     <title>nav data</title>

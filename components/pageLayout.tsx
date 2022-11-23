@@ -57,7 +57,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="md:w-screen flex flex-col items-center">
         {children}
       </main>
-      <footer className="flex justify-center border-t border-border-inverted py-4 mt-auto">
+      <footer className="flex justify-center items-center border-t border-border-inverted min-h-[3rem] mt-auto">
       <a
         href="#"
         onClick={async () => await router.push('/about')}
