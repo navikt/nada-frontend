@@ -17,8 +17,11 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
       <Header className="flex flex-row justify-between">
         <div className='flex flex-row'>
         <Header.Title href="/">
-          <div className="cursor-pointer w-24 flex items-center mx-3">
-            <img src="/navdata-logo-white.svg" width={'100'} alt={'nav data'} />
+          <div className="cursor-pointer w-8 md:w-24 flex items-center md:mx-3">
+            <picture>
+              <source media="(min-width: 768px)" srcSet="/navdata-logo-white.svg" />
+              <img src="/favicon.svg" width="100" alt="nav data" />
+            </picture>
           </div>
         </Header.Title>
         <form
@@ -39,7 +42,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
           />
         </form>
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row min-w-fit">
           {userInfo && (
             <Header.Button
               className="border-transparent"
@@ -48,18 +51,20 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
               <AddCircle />
             </Header.Button>
           )}
-          <Header.Button
-            className={userInfo ? '' : 'border-transparent'}
-            onClick={async () => await router.push('/about')}
-          >
-            <Information />
-          </Header.Button>
           <User />
         </div>
       </Header>
-      <main className="w-screen flex flex-col items-center">
+      <main className="md:w-screen flex flex-col items-center">
         {children}
       </main>
+      <footer className="flex justify-center border-t border-border-inverted py-4 mt-auto">
+      <a
+        href="#"
+        onClick={async () => await router.push('/about')}
+      >
+        Om NAV Data
+      </a>
+      </footer>
     </div>
   )
 }

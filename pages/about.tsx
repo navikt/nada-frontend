@@ -8,7 +8,7 @@ const About = () => {
                 <title>About</title>
             </Head>
             <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'left', marginTop: '100px'}}>
-                <h1>Om NADA</h1>
+                <h1>Om NAV Data</h1>
                 <div style={{textAlign: 'left',  minWidth: '400px', maxWidth: '800px'}}>
                     <p>
                         NAV Data er NAVs markedsplass for deling av data og innsikt.<br/> Dette er stedet hvor vi ønsker
