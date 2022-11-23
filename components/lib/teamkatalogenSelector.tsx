@@ -41,6 +41,8 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
     (it) => !relevantTeams || !relevantTeams.find((t) => t.teamID == it.teamID)
   )
 
+  otherTeams?.sort((a, b) => a.name.localeCompare(b.name))
+
   return {
     relevantTeams: relevantTeams,
     otherTeams: otherTeams,
