@@ -76,7 +76,7 @@ const LandingPage = () => {
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate h-[30rem] pt-8 md:pt-0 md:h-96 items-center justify-center flex flex-col md:flex-row gap-8">
+            <div className="bg-component-background-alternate h-[30rem] py-8 md:py-0 md:h-96 items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
                 <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-row">
                     <div className="mr-6">
