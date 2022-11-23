@@ -36,15 +36,15 @@ const LandingPage = () => {
     }, [])
 
     return (
-        <div className="w-screen min-h-[calc(100vh-3rem)] flex flex-col justify-between">
+        <div className="w-screen min-h-[calc(100vh-3rem)] flex flex-col justify-between gap-8">
             <div className="flex flex-col items-center justify-center gap-20 mt-8 md:mt-48 w-11/12 self-center">
                 <Head>
                     <title>nav data</title>
                 </Head>
                 <FrontPageLogo />
-                <div className="grid grid-cols-2 gap-4 w-full md:w-[32rem]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:w-[32rem]">
                     <form
-                        className="col-span-2 select-none"
+                        className="col-span-1 md:col-span-2 select-none"
                         role="search" 
                         onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
                         <Search
@@ -76,7 +76,7 @@ const LandingPage = () => {
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate h-[30rem] pt-8 md:pt-0 md:h-96 md:items-center justify-center flex gap-8">
+            <div className="bg-component-background-alternate h-[30rem] pt-8 md:pt-0 md:h-96 items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
                 <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-row">
                     <div className="mr-6">
