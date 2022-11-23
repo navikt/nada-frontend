@@ -1,6 +1,5 @@
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
-import '@navikt/ds-datepicker/lib/index.css'
 import '../styles/globals.css'
 import '@navikt/ds-css'
 import '@navikt/ds-css-internal'
