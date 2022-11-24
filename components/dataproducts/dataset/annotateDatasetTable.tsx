@@ -9,6 +9,7 @@ import {
   PIITagOptions,
   PIITagType,
 } from './useColumnTags'
+import {PersonopplysningerDetaljert} from "./helptext";
 
 interface AnnotateDatasetTableProps {
   loading: boolean
@@ -38,7 +39,7 @@ const AnnotateDatasetTable = ({
 
   return (
     <div className="mb-3">
-      <p>Klassifiser personopplysningene</p>
+      <p className="flex gap-2 items-center mb-2">Klassifiser personopplysningene <PersonopplysningerDetaljert /></p>
       <Table className="w-[60rem]" size="small">
         <Table.Header>
           <Table.Row>

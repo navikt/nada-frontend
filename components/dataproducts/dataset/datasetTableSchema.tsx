@@ -2,6 +2,7 @@ import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { Heading, Table } from '@navikt/ds-react'
 import { PIITagNames } from './useColumnTags'
+import {PersonopplysningerDetaljert} from "./helptext";
 
 interface DatasetTableSchemaProps {
   datasource: DatasetQuery['dataset']['datasource']
@@ -27,7 +28,7 @@ const DatasetTableSchema = ({
             <Table.HeaderCell>Mode</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Description</Table.HeaderCell>
-            {showPii && <Table.HeaderCell>Personopplysning</Table.HeaderCell>}
+            {showPii && <Table.HeaderCell className="flex gap-2 items-center">Personopplysning <PersonopplysningerDetaljert /></Table.HeaderCell>}
           </Table.Row>
         </Table.Header>
         <Table.Body>

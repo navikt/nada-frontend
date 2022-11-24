@@ -19,6 +19,7 @@ import Explore from '../explore'
 import DatasetMetadata from './datasetMetadata'
 import DatasetOwnerMenu from './datasetOwnerMenu'
 import DatasetTableSchema from './datasetTableSchema'
+import {Personopplysninger, PersonopplysningerDetaljert} from './helptext'
 
 interface ViewDatasetProps {
   dataset: DatasetQuery['dataset']
@@ -155,6 +156,7 @@ const ViewDataset = ({
             <p className="flex flex-row gap-2 items-center">
               <WarningColored />
               <span>Inneholder personopplysninger</span>
+              <Personopplysninger />
             </p>
           )}
           {dataset.pii === PiiLevel.None && (

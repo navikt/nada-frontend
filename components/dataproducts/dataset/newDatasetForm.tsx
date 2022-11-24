@@ -12,6 +12,7 @@ import { prefilledDatasetDescription } from '../newDataproductForm'
 import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
 import { useColumnTags } from './useColumnTags'
+import {Personopplysninger} from "./helptext";
 
 interface NewDatasetFormProps {
   dataproduct: DataproductQuery
@@ -166,7 +167,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           render={({ field }) => (
             <RadioGroup
               {...field}
-              legend="Inneholder datasettet personidentifiserende informasjon?"
+              legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
               error={errors?.pii?.message}
             >
               <Radio value={"sensitive"}>

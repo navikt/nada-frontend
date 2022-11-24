@@ -26,6 +26,7 @@ import DatasetTableSchema from './dataset/datasetTableSchema'
 import AnnotateDatasetTable from './dataset/annotateDatasetTable'
 import { useColumnTags } from './dataset/useColumnTags'
 import { string } from 'prop-types'
+import {Personopplysninger} from "./dataset/helptext";
 
 const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
@@ -363,7 +364,7 @@ export const NewDataproductForm = () => {
           render={({ field }) => (
             <RadioGroup
               {...field}
-              legend="Inneholder datasettet personopplysninger?"
+              legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
               error={errors?.pii?.message}
             >
               <Radio value={'sensitive'}>
