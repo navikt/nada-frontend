@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, Loader } from '@navikt/ds-react'
+import { Button, Heading, Link, Loader, Modal, Textarea } from '@navikt/ds-react'
 import { MappingService } from '../../lib/schema/graphql'
 import { ExternalLink } from '@navikt/ds-icons'
 import { useState } from 'react'
@@ -10,15 +10,17 @@ export enum ItemType {
 }
 
 export interface ExploreLinkProps {
+  datasetID: string
   url?: string | null
   type: ItemType
   add?: () => void
-  remove?: () => void
+  remove?: (datasetID: string) => void
   isOwner?: boolean
   mappings?: MappingService[]
 }
 
 export const ExploreLink = ({
+  datasetID,
   url,
   type,
   add,
@@ -26,11 +28,13 @@ export const ExploreLink = ({
   isOwner,
   mappings,
 }: ExploreLinkProps) => {
+  const [showRemoveMapping, setShowRemoveMapping] = useState(false)
   const addToMetabase = !mappings?.includes(MappingService.Metabase)
   const [loading, setLoading] = useState(mappings?.includes(MappingService.Metabase) && !url)
   const handleDelete = (e: any) => {
     e.preventDefault()
-    if (remove) remove()
+    if (remove) remove(datasetID)
+    setShowRemoveMapping(false)
   }
 
   const handleAdd = () => {
@@ -65,13 +69,48 @@ export const ExploreLink = ({
             Åpne i Metabase <ExternalLink />
           </Link>
           {isOwner && (
-            <Link
-              className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
-              href="#"
-              onClick={handleDelete}
-            >
-              Fjern datasettet fra Metabase
-            </Link>
+            <>
+              <Modal
+                open={showRemoveMapping}
+                aria-label="Fjern metabase database"
+                onClose={() => setShowRemoveMapping(false)}
+                className="max-w-full md:max-w-3xl px-8 h-[20rem]"
+              >
+                <Modal.Content className="h-full">
+                  <div className="flex flex-col gap-8">
+                    <Heading level="1" size="medium">
+                    Er du sikker på at du vil fjerne datasettet fra metabase?
+                    </Heading>
+                    <div>
+                        Dette vil medføre at du sletter databasen, samlingen og tilgangsgruppene i metabase, samt service account i GCP.
+                    </div>
+                    <div className="flex flex-row gap-4">
+                      <Button
+                        onClick={handleDelete}
+                        variant="primary"
+                        size="small"
+                      >
+                        Fjern
+                      </Button>
+                      <Button
+                        onClick={() => setShowRemoveMapping(false)}
+                        variant="secondary"
+                        size="small"
+                      >
+                        Avbryt
+                      </Button>
+                    </div>
+                  </div>
+                </Modal.Content>
+              </Modal>
+                <Link
+                  className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
+                  href="#"
+                  onClick={() => setShowRemoveMapping(true)}
+                >
+                  Fjern datasettet fra Metabase
+                </Link>
+            </>
           )}
         </div>
       )

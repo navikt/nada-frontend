@@ -45,10 +45,10 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
     }
   }
 
-  const removeFromMetabase = async () => {
+  const removeFromMetabase = async (datasetID: string) => {
     try {
       await updateMapping({
-        variables: { datasetID: dataset.id, services: [] },
+        variables: { datasetID, services: [] },
         refetchQueries: ['Dataproduct'],
       })
     } catch (e: any) {
@@ -65,11 +65,13 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
     <>
       <div className="flex flex-col">
         <ExploreLink
+          datasetID={dataset.id}
           isOwner={isOwner}
           url={bigQueryUrl}
           type={ItemType.bigQuery}
         />
         <ExploreLink
+          datasetID={dataset.id}
           isOwner={isOwner}
           url={services.metabase}
           type={ItemType.metabase}
