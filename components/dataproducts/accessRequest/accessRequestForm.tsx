@@ -103,13 +103,11 @@ const AccessRequestFormV2 = ({
     },
   })
 
-
   const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
-    defaultSelected: new Date(getValues("expires")),
+    defaultSelected: accessRequest?.expires !== undefined ? new Date(getValues("expires")) : tomorrow(),
     fromDate: tomorrow(),
     onDateChange: (d: Date | undefined) => setValue("expires", d ? d : undefined),
   });
-
 
   const {
     data: searchData,
