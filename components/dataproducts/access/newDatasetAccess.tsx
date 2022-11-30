@@ -36,7 +36,12 @@ const schema = yup
       .oneOf(['eternal', 'until']),
     expires: yup
       .string()
-      .matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato'),
+      .nullable()
+      .when('accessType', {
+        is: 'until',
+        then: yup.string().nullable().matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato')
+      })
+      ,
   })
   .required()
 
