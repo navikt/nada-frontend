@@ -24,7 +24,7 @@ export function VegaView({ id, draft }: ResultsProps) {
   if (storyView.$schema?.includes('vega-lite')) {
     return (
       <VegaLite
-        style={{ width: '100%', height: '100%' }}
+      className="w-11/12"
         config={{
           autosize: { type: 'fit', contains: 'padding', resize: true },
           projection: { type: 'mercator' },
@@ -35,7 +35,7 @@ export function VegaView({ id, draft }: ResultsProps) {
   }
   return (
     <Vega
-      style={{ width: '100%', height: '100%' }}
+      className="w-11/12"
       spec={storyView}
       config={{ autosize: { type: 'fit', contains: 'padding', resize: true } }}
     />
