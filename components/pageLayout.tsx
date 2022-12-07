@@ -1,7 +1,6 @@
 import User from './header/user'
 import { useRouter } from 'next/router'
 import { Header } from '@navikt/ds-react-internal'
-import { AddCircle, Information, Link } from '@navikt/ds-icons'
 import React, { useContext, useState } from 'react'
 import { UserState } from '../lib/context'
 import { Search } from '@navikt/ds-react'

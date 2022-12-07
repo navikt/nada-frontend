@@ -1,8 +1,8 @@
-import React, { MouseEvent, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Dropdown, Header } from '@navikt/ds-react-internal'
-import { PeopleInCircle, System } from '@navikt/ds-icons'
+import { ExternalLink, People, System } from '@navikt/ds-icons'
 
 
 export const backendHost = () => {
@@ -13,7 +13,6 @@ export default function User() {
   const userInfo = useContext(UserState)
 
   const router = useRouter()
-  // onClick={async () => await router.push('/dataproduct/new')}
   return userInfo ? (
     <div className="flex flex-row min-w-fit">
       <Dropdown>
@@ -35,10 +34,14 @@ export default function User() {
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item>
             <a
-                className={'text-base'}
-                onClick={async () => await router.push('https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling')}
+                className='text-base flex gap-1 items-center'
+                onClick={async () => 
+                  await router.push(
+                    'https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling'
+                  )
+                }
               >
-                Legg til ny datafortelling
+                Legg til ny datafortelling (docs)
               </a>
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
@@ -93,7 +96,7 @@ export default function User() {
           {userInfo.name}
         </Header.Button>
         <Header.Button className="md:hidden w-[48px] flex justify-center" as={Dropdown.Toggle}>
-          <PeopleInCircle />
+          <People className="h-[21px] w-[21px]" />
         </Header.Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
