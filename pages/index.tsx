@@ -20,6 +20,7 @@ import ProductAreaLinks from '../components/productArea/productAreaLinks'
 import DataproductLogo from '../components/lib/icons/dataproductLogo'
 import {Heading, Search} from '@navikt/ds-react'
 import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
+import { Chevron } from '../components/lib/icons/chevron'
 
 const SEARCH_LIMIT = 6
 
@@ -55,28 +56,30 @@ const LandingPage = () => {
                         />
                     </form>
                     <Link href="/search?preferredType=story">
-                        <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
-                            <div className="w-1/2 flex flex-row items-center gap-2 md:gap-4">
+                        <a className="grid grid-cols-2 items-center no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg pr-4">
+                            <div className="flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
                                     <StoryLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
                                 </div>
                                 <p>Fortellinger</p>
                             </div>
+                            <Chevron className="justify-self-end md:hidden" />
                         </a>
                     </Link>
                     <Link href="/search?preferredType=dataproduct">
-                        <a className="no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg">
-                            <div className="w-1/2 flex flex-row items-center gap-2 md:gap-4">
+                        <a className="grid grid-cols-2 items-center no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg pr-4">
+                            <div className="flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
                                     <DataproductLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
                                 </div>
                                 <p>Produkter</p>
                             </div>
+                            <Chevron className="justify-self-end md:hidden" />
                         </a>
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate h-[30rem] py-8 md:py-0 md:h-96 items-center justify-center flex flex-col md:flex-row gap-8">
+            <div className="bg-component-background-alternate h-[40rem] py-8 md:py-0 md:h-96 items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
                 <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-col md:flex-row gap-4 md:gap-0">
                     <div className="mr-6">
