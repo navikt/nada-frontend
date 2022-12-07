@@ -14,13 +14,11 @@ import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
 import { USER_INFO } from '../lib/queries/userInfo/userInfo'
 import StoryLogo from '../components/lib/icons/storyLogo'
-import MetabaseLogo from '../components/lib/icons/metabaseLogo'
 import Link from 'next/link'
 import ProductAreaLinks from '../components/productArea/productAreaLinks'
 import DataproductLogo from '../components/lib/icons/dataproductLogo'
 import {Heading, Search} from '@navikt/ds-react'
 import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
-import { Chevron } from '../components/lib/icons/chevron'
 import { Next } from '@navikt/ds-icons'
 
 const SEARCH_LIMIT = 6

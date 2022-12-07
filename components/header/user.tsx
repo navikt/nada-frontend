@@ -2,6 +2,7 @@ import React, { MouseEvent, useContext } from 'react'
 import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Dropdown, Header } from '@navikt/ds-react-internal'
+import { PeopleInCircle } from '@navikt/ds-icons'
 
 
 export const backendHost = () => {
@@ -15,8 +16,11 @@ export default function User() {
 
   return userInfo ? (
     <Dropdown>
-      <Header.Button className="whitespace-nowrap" as={Dropdown.Toggle}>
+      <Header.Button className="whitespace-nowrap hidden md:block" as={Dropdown.Toggle}>
         {userInfo.name}
+      </Header.Button>
+      <Header.Button className="block md:hidden" as={Dropdown.Toggle}>
+        <PeopleInCircle />
       </Header.Button>
       <Dropdown.Menu className="w-fit">
         <Dropdown.Menu.GroupedList>
