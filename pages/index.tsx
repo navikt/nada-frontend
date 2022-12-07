@@ -21,6 +21,7 @@ import DataproductLogo from '../components/lib/icons/dataproductLogo'
 import {Heading, Search} from '@navikt/ds-react'
 import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
 import { Chevron } from '../components/lib/icons/chevron'
+import { Next } from '@navikt/ds-icons'
 
 const SEARCH_LIMIT = 6
 
@@ -63,7 +64,7 @@ const LandingPage = () => {
                                 </div>
                                 <p>Fortellinger</p>
                             </div>
-                            <Chevron className="justify-self-end md:hidden" />
+                            <Next className="justify-self-end md:hidden" />
                         </a>
                     </Link>
                     <Link href="/search?preferredType=dataproduct">
@@ -74,12 +75,12 @@ const LandingPage = () => {
                                 </div>
                                 <p>Produkter</p>
                             </div>
-                            <Chevron className="justify-self-end md:hidden" />
+                            <Next className="justify-self-end md:hidden" />
                         </a>
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate h-[40rem] py-8 md:py-0 md:h-96 items-center justify-center flex flex-col md:flex-row gap-8">
+            <div className="bg-component-background-alternate py-8 min-h-[24rem] items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
                 <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-col md:flex-row gap-4 md:gap-0">
                     <div className="mr-6">
