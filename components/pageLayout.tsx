@@ -43,27 +43,20 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
         </form>
         </div>
         <div className="flex flex-row min-w-fit">
-          {userInfo && (
-            <Header.Button
-              className="border-transparent"
-              onClick={async () => await router.push('/dataproduct/new')}
-            >
-              <AddCircle />
-            </Header.Button>
-          )}
           <User />
         </div>
       </Header>
       <main className="md:w-screen flex flex-col items-center">
         {children}
       </main>
-      <footer className="flex justify-center items-center border-t border-border-inverted min-h-[3rem] mt-auto">
+      <footer className="flex gap-4 justify-center items-center border-t border-border-inverted min-h-[3rem] mt-auto">
       <a
         href="#"
         onClick={async () => await router.push('/about')}
       >
         Om NAV Data
       </a>
+      <a href="https://docs.knada.io/">Docs</a>
       </footer>
     </div>
   )

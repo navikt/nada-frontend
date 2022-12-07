@@ -2,7 +2,7 @@ import React, { MouseEvent, useContext } from 'react'
 import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Dropdown, Header } from '@navikt/ds-react-internal'
-import { PeopleInCircle } from '@navikt/ds-icons'
+import { PeopleInCircle, System } from '@navikt/ds-icons'
 
 
 export const backendHost = () => {
@@ -13,81 +13,114 @@ export default function User() {
   const userInfo = useContext(UserState)
 
   const router = useRouter()
-
+  // onClick={async () => await router.push('/dataproduct/new')}
   return userInfo ? (
-    <Dropdown>
-      <Header.Button className="whitespace-nowrap hidden md:block" as={Dropdown.Toggle}>
-        {userInfo.name}
-      </Header.Button>
-      <Header.Button className="block md:hidden" as={Dropdown.Toggle}>
-        <PeopleInCircle />
-      </Header.Button>
-      <Dropdown.Menu className="w-fit">
-        <Dropdown.Menu.GroupedList>
+    <div className="flex flex-row min-w-fit">
+      <Dropdown>
+        <Header.Button
+          as={Dropdown.Toggle}
+          className="border-transparent w-[48px] flex justify-center"
+        >
+          <System />
+        </Header.Button>
+        <Dropdown.Menu>
+          <Dropdown.Menu.GroupedList>
           <Dropdown.Menu.GroupedList.Item>
+              <a
+                className={'text-base'}
+                onClick={async () => await router.push('/dataproduct/new')}
+              >
+                Legg til nytt dataprodukt
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item>
             <a
-              className={'text-base'}
-              onClick={() => {
-                router.push({ pathname: '/user/products' })
-              }}
-            >
-              Mine produkter
-            </a>
-          </Dropdown.Menu.GroupedList.Item>
-          <Dropdown.Menu.GroupedList.Item>
-            <a
-              className={'text-base'}
-              onClick={() => {
-                router.push({ pathname: '/user/stories' })
-              }}
-            >
-              Mine fortellinger
-            </a>
-          </Dropdown.Menu.GroupedList.Item>
-          <Dropdown.Menu.GroupedList.Item>
-            <a
-              className={'text-base'}
-              onClick={() => {
-                router.push({ pathname: '/user/requests' })
-              }}
-            >
-              Mine tilgangssøknader
-            </a>
-          </Dropdown.Menu.GroupedList.Item>
-          <Dropdown.Menu.GroupedList.Item>
-            <a
-              className={'text-base'}
-              onClick={() => {
-                router.push({ pathname: '/user/access' })
-              }}
-            >
-              Mine tilganger
-            </a>
-          </Dropdown.Menu.GroupedList.Item>
-        </Dropdown.Menu.GroupedList>
-        <Dropdown.Menu.Divider />
-        <Dropdown.Menu.GroupedList>
-          <Dropdown.Menu.GroupedList.Item>
-            <a className={'text-base'} href={`${backendHost()}/api/logout`}>
-              Logg ut
-            </a>
-          </Dropdown.Menu.GroupedList.Item>
-        </Dropdown.Menu.GroupedList>
-      </Dropdown.Menu>
-    </Dropdown>
+                className={'text-base'}
+                onClick={async () => await router.push('https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling')}
+              >
+                Legg til ny datafortelling
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+          </Dropdown.Menu.GroupedList>
+          <Dropdown.Menu.Divider />
+          <Dropdown.Menu.GroupedList>
+            <Dropdown.Menu.GroupedList.Item>
+              <a
+                className={'text-base'}
+                onClick={() => {
+                  router.push({ pathname: '/user/products' })
+                }}
+              >
+                Mine produkter
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item>
+              <a
+                className={'text-base'}
+                onClick={() => {
+                  router.push({ pathname: '/user/stories' })
+                }}
+              >
+                Mine fortellinger
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item>
+              <a
+                className={'text-base'}
+                onClick={() => {
+                  router.push({ pathname: '/user/requests' })
+                }}
+              >
+                Mine tilgangssøknader
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item>
+              <a
+                className={'text-base'}
+                onClick={() => {
+                  router.push({ pathname: '/user/access' })
+                }}
+              >
+                Mine tilganger
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+          </Dropdown.Menu.GroupedList>
+        </Dropdown.Menu>
+      </Dropdown>
+
+      <Dropdown>
+        <Header.Button className="whitespace-nowrap hidden md:block" as={Dropdown.Toggle}>
+          {userInfo.name}
+        </Header.Button>
+        <Header.Button className="md:hidden w-[48px] flex justify-center" as={Dropdown.Toggle}>
+          <PeopleInCircle />
+        </Header.Button>
+        <Dropdown.Menu>
+          <Dropdown.Menu.GroupedList>
+            <Dropdown.Menu.GroupedList.Item>
+              <a className={'text-base'} href={`${backendHost()}/api/logout`}>
+                Logg ut
+              </a>
+            </Dropdown.Menu.GroupedList.Item>
+          </Dropdown.Menu.GroupedList>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
   ) : (
-    <Header.Button
-      className={'h-full'}
-      onClick={async () =>
-        await router.push(
-          `${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
-            router.asPath
-          )}`
-        )
-      }
-      key="logg-inn"
-    >
-      Logg inn
-    </Header.Button>
+    <div className="flex flex-row min-w-fit">
+      <Header.Button
+        className={'h-full'}
+        onClick={async () =>
+          await router.push(
+            `${backendHost()}/api/login?redirect_uri=${encodeURIComponent(
+              router.asPath
+            )}`
+          )
+        }
+        key="logg-inn"
+      >
+        Logg inn
+      </Header.Button>
+    </div>
   )
 }
