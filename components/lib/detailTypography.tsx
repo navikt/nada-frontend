@@ -16,18 +16,18 @@ export const Description = ({
         router.push(`/dataproduct/${dataproduct.id}/${dataproduct.slug}/${newSlug}`)
       }
 
-    return (<div className="rounded-xl text-justify mt-8 flex flex-col gap-4 max-w-4xl">
+    return (<div className="mt-8 flex flex-col gap-4 max-w-4xl">
         <Accordion className="block md:hidden w-full">
             <Accordion.Item defaultOpen={true}>
                 <Accordion.Header>Beskrivelse</Accordion.Header>
                 <Accordion.Content>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown className="text-justify" remarkPlugins={[remarkGfm]}>
                         {dataproduct.description || '*ingen beskrivelse*'}
                     </ReactMarkdown>
                 </Accordion.Content>
             </Accordion.Item>
         </Accordion>
-        <ReactMarkdown className="hidden md:block" remarkPlugins={[remarkGfm]}>
+        <ReactMarkdown className="hidden md:block text-justify" remarkPlugins={[remarkGfm]}>
             {dataproduct.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
         {!!dataproduct.keywords.length && (
