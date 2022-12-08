@@ -1,4 +1,4 @@
-import { WarningColored, SuccessColored } from '@navikt/ds-icons'
+import { WarningColored, SuccessColored, Back } from '@navikt/ds-icons'
 import { Alert, BodyLong, Heading, Link, Modal } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -46,7 +46,7 @@ const DatasetAlert = ({
     <Alert
       variant={variant}
       size="small"
-      className={`${narrow && 'w-fit'} -ml-4`}
+      className={`${narrow && 'max-w-fit'} md:-ml-4`}
     >
       {children}
     </Alert>
@@ -65,9 +65,12 @@ const ViewDataset = ({
   const [accessRequested, setAccessRequested] = useState(false)
   const [showNewAccess, setShowNewAccess] = useState(false)
   const [showAnonymisation, setShowAnonymisation] = useState(false)
+  const handleChange = (newSlug: string) => {
+    router.push(`/dataproduct/${dataproduct.id}/${dataproduct.slug}/${newSlug}`)
+  }
   return (
     <>
-      <div className="flex">
+      <div>
         <Modal
           open={accessRequested}
           aria-label="Søk om tilgang til datasettet"
@@ -95,7 +98,7 @@ const ViewDataset = ({
           open={showAnonymisation}
           aria-label="Metodebeskrivelse for anonymisering"
           onClose={() => setShowAnonymisation(false)}
-          className="max-w-full md:max-w-3xl px-8"
+          className="max-w-full md:max-w-3xl md:px-8"
         >
           <Modal.Content className="h-full">
             <Heading level="1" size="large" className="pb-8">
@@ -128,7 +131,7 @@ const ViewDataset = ({
             </DatasetAlert>
           )}
           <div>
-            <div className="flex items-center">
+            <div className="flex md:items-center">
               <Heading
                 className="inline-flex items-center gap-3"
                 level="2"
@@ -144,6 +147,12 @@ const ViewDataset = ({
                 />
               )}
             </div>
+            <a className="flex md:hidden my-4 items-center" 
+              href="#" 
+              onClick={() => handleChange('info')}
+            >
+              <Back className="-mb-[2px]" />Tilbake til beskrivelse
+            </a>
             <div className="flex flex-row gap-1 flex-wrap">
               {dataset.keywords.map((keyword, idx) => (
                 <TagPill key={idx} keyword={keyword}>

@@ -17,38 +17,40 @@ const DatasetTableSchema = ({
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
   return (
-    <div className="mb-3">
+    <div>
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
-      <Table className="w-full 2xl:w-[60rem]" size="small">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Mode</Table.HeaderCell>
-            <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Description</Table.HeaderCell>
-            {showPii && <Table.HeaderCell className="flex gap-2 items-center">Personopplysning <PersonopplysningerDetaljert /></Table.HeaderCell>}
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {schema.map((row: any) => (
-            <Table.Row key={row.name}>
-              <Table.DataCell>{row.name}</Table.DataCell>
-              <Table.DataCell>{row.mode}</Table.DataCell>
-              <Table.DataCell>{row.type}</Table.DataCell>
-              <Table.DataCell>{row.description}</Table.DataCell>
-              {showPii && (
-                <Table.DataCell>
-                  {PIITagNames.get(
-                    JSON.parse(datasource.piiTags || '{}')[row.name]
-                  )}
-                </Table.DataCell>
-              )}
+      <div className="mb-3 w-[91vw] overflow-auto">
+        <Table className="w-fit 2xl:w-[60rem]" size="small">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Mode</Table.HeaderCell>
+              <Table.HeaderCell>Type</Table.HeaderCell>
+              <Table.HeaderCell>Description</Table.HeaderCell>
+              {showPii && <Table.HeaderCell><span className="flex gap-2 items-center">Personopplysning <PersonopplysningerDetaljert /></span></Table.HeaderCell>}
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+          </Table.Header>
+          <Table.Body>
+            {schema.map((row: any) => (
+              <Table.Row key={row.name}>
+                <Table.DataCell>{row.name}</Table.DataCell>
+                <Table.DataCell>{row.mode}</Table.DataCell>
+                <Table.DataCell>{row.type}</Table.DataCell>
+                <Table.DataCell>{row.description}</Table.DataCell>
+                {showPii && (
+                  <Table.DataCell>
+                    {PIITagNames.get(
+                      JSON.parse(datasource.piiTags || '{}')[row.name]
+                    )}
+                  </Table.DataCell>
+                )}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
     </div>
   )
 }

@@ -91,8 +91,7 @@ const Dataproduct = (props: DataproductProps) => {
       slug: 'info',
       component: (
         <Description
-          keywords={product.keywords}
-          markdown={product.description}
+          dataproduct={product}
         />
       ),
     },
@@ -157,7 +156,7 @@ const Dataproduct = (props: DataproductProps) => {
           menuItems={menuItems}
           currentPage={currentPage}
         />
-        <div className="pl-4 flex-grow border-l border-border-inverted">
+        <div className="md:pl-4 flex-grow md:border-l border-border-inverted">
           {menuItems.map((i, idx) => (
             <TabPanel
               key={idx}

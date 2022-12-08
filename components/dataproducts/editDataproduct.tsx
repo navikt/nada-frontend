@@ -63,8 +63,8 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   }
 
   return (
-    <div className="w-[46rem]">
-      <Heading level="1" size="large" spacing>
+    <div className="md:w-[46rem] md:px-4 py-4">
+      <Heading level="2" size="large" spacing>
         Endre dataprodukt
       </Heading>
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>

@@ -80,22 +80,22 @@ interface access {
   revoked?: any | null | undefined
   accessRequestID?: string | null | undefined
   accessRequest?:
+  | {
+    __typename?: 'AccessRequest'
+    id: string
+    polly?:
     | {
-        __typename?: 'AccessRequest'
-        id: string
-        polly?:
-          | {
-              __typename?: 'Polly'
-              id: string
-              name: string
-              externalID: string
-              url: string
-            }
-          | null
-          | undefined
-      }
+      __typename?: 'Polly'
+      id: string
+      name: string
+      externalID: string
+      url: string
+    }
     | null
     | undefined
+  }
+  | null
+  | undefined
 }
 
 interface a2 {
@@ -255,7 +255,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
     datasetAccessRequestsQuery.loading ||
     !datasetAccessRequestsQuery.data?.accessRequestsForDataset
   )
-    return <div/>
+    return <div />
 
   const datasetAccessRequests =
     datasetAccessRequestsQuery.data?.accessRequestsForDataset
@@ -266,7 +266,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
     datasetAccessQuery.loading ||
     !datasetAccessQuery.data?.dataset.access
   )
-    return <div/>
+    return <div />
 
   const access = datasetAccessQuery.data.dataset.access
 
@@ -343,111 +343,116 @@ const DatasetAccess = ({ id }: AccessListProps) => {
         <Heading level="2" size="small">
           Tilgangssøknader
         </Heading>
-        {datasetAccessRequests.length > 0 ? (
-          <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
-                <Table.HeaderCell>Brukertype</Table.HeaderCell>
-                <Table.HeaderCell>Tilgang</Table.HeaderCell>
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
-            {datasetAccessRequests.map((r, i) => (
-              <>
-                <Table.Row
-                  className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
-                  key={i + '-request'}
-                >
-                  <Table.DataCell className="w-72">{r.subject}</Table.DataCell>
-                  <Table.DataCell className="w-36">
-                    {r.subjectType}
-                  </Table.DataCell>
-                  <Table.DataCell className="w-48">
-                    {r.expires
-                      ? humanizeDateAccessForm(r.expires)
-                      : 'For alltid'}
-                  </Table.DataCell>
-                  <Table.DataCell className="w-48">
-                    {r.polly?.url ? (
-                      <Link target="_blank" rel="norefferer" href={r.polly.url}>
-                        Åpne behandling
-                        <ExternalLink />
-                      </Link>
-                    ) : (
-                      'Ingen behandling'
-                    )}
-                  </Table.DataCell>
-                  <Table.DataCell className="w-[150px]" align="right">
-                    <AccessRequestModal
-                      requestID={r.id}
-                      actionApprove={approveRequest}
-                      actionDeny={denyRequest}
-                    />
-                  </Table.DataCell>
+        <div className="mb-3 w-[91vw] overflow-auto">
+          {datasetAccessRequests.length > 0 ? (
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
+                  <Table.HeaderCell>Brukertype</Table.HeaderCell>
+                  <Table.HeaderCell>Tilgang</Table.HeaderCell>
+                  <Table.HeaderCell />
+                  <Table.HeaderCell />
                 </Table.Row>
-              </>
-            ))}
-          </Table>
-        ) : (
-          'Ingen tilgangssøknader'
-        )}
+              </Table.Header>
+              {datasetAccessRequests.map((r, i) => (
+                <>
+                  <Table.Row
+                    className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
+                    key={i + '-request'}
+                  >
+                    <Table.DataCell className="w-72">{r.subject}</Table.DataCell>
+                    <Table.DataCell className="w-36">
+                      {r.subjectType}
+                    </Table.DataCell>
+                    <Table.DataCell className="w-48">
+                      {r.expires
+                        ? humanizeDateAccessForm(r.expires)
+                        : 'For alltid'}
+                    </Table.DataCell>
+                    <Table.DataCell className="w-48">
+                      {r.polly?.url ? (
+                        <Link target="_blank" rel="norefferer" href={r.polly.url}>
+                          Åpne behandling
+                          <ExternalLink />
+                        </Link>
+                      ) : (
+                        'Ingen behandling'
+                      )}
+                    </Table.DataCell>
+                    <Table.DataCell className="w-[150px]" align="right">
+                      <AccessRequestModal
+                        requestID={r.id}
+                        actionApprove={approveRequest}
+                        actionDeny={denyRequest}
+                      />
+                    </Table.DataCell>
+                  </Table.Row>
+                </>
+              ))}
+            </Table>
+          ) : (
+            'Ingen tilgangssøknader'
+          )}
+        </div>
       </div>
       <div>
         <Heading level="2" size="small">
           Aktive tilganger
         </Heading>
-        {accesses.length > 0 ? (
-          <Table>
-            <Table.Header>
-              <Table.Row className="border-none border-transparent">
-                <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
-                <Table.HeaderCell>Brukertype</Table.HeaderCell>
-                <Table.HeaderCell>Tilgang</Table.HeaderCell>
-                <Table.HeaderCell />
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
-            {accesses.map((a, i) => (
-              <>
-                <Table.Row
-                  className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
-                  key={i + '-access'}
-                >
-                  <Table.DataCell className="w-72">{a.subject}</Table.DataCell>
-                  <Table.DataCell className="w-36">
-                    {a.access.subject.split(':')[0]}
-                  </Table.DataCell>
-                  <Table.DataCell className="w-48">
-                    {a.access.expires
-                      ? humanizeDateAccessForm(a.access.expires)
-                      : 'For alltid'}
-                  </Table.DataCell>
-                  <Table.DataCell className="w-48">
-                    {a.access?.accessRequest?.polly ? (
-                      <Link
-                        target="_blank"
-                        rel="norefferer"
-                        href={a.access?.accessRequest.polly.url}
-                      >
-                        Åpne behandling
-                        <ExternalLink />
-                      </Link>
-                    ) : (
-                      'Ingen behandling'
-                    )}
-                  </Table.DataCell>
-                  <Table.DataCell className="w-[207px]" align="right">
-                    <AccessModal accessEntry={a} action={removeAccess} />
-                  </Table.DataCell>
+        <div className="mb-3 w-[91vw] overflow-auto">
+
+          {accesses.length > 0 ? (
+            <Table>
+              <Table.Header>
+                <Table.Row className="border-none border-transparent">
+                  <Table.HeaderCell>Bruker/gruppe</Table.HeaderCell>
+                  <Table.HeaderCell>Brukertype</Table.HeaderCell>
+                  <Table.HeaderCell>Tilgang</Table.HeaderCell>
+                  <Table.HeaderCell />
+                  <Table.HeaderCell />
                 </Table.Row>
-              </>
-            ))}
-          </Table>
-        ) : (
-          'Ingen aktive tilganger'
-        )}
+              </Table.Header>
+              {accesses.map((a, i) => (
+                <>
+                  <Table.Row
+                    className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}
+                    key={i + '-access'}
+                  >
+                    <Table.DataCell className="w-72">{a.subject}</Table.DataCell>
+                    <Table.DataCell className="w-36">
+                      {a.access.subject.split(':')[0]}
+                    </Table.DataCell>
+                    <Table.DataCell className="w-48">
+                      {a.access.expires
+                        ? humanizeDateAccessForm(a.access.expires)
+                        : 'For alltid'}
+                    </Table.DataCell>
+                    <Table.DataCell className="w-48">
+                      {a.access?.accessRequest?.polly ? (
+                        <Link
+                          target="_blank"
+                          rel="norefferer"
+                          href={a.access?.accessRequest.polly.url}
+                        >
+                          Åpne behandling
+                          <ExternalLink />
+                        </Link>
+                      ) : (
+                        'Ingen behandling'
+                      )}
+                    </Table.DataCell>
+                    <Table.DataCell className="w-[207px]" align="right">
+                      <AccessModal accessEntry={a} action={removeAccess} />
+                    </Table.DataCell>
+                  </Table.Row>
+                </>
+              ))}
+            </Table>
+          ) : (
+            'Ingen aktive tilganger'
+          )}
+        </div>
       </div>
     </div>
   )

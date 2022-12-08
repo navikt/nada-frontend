@@ -43,7 +43,7 @@ export const DataproductSidebar = ({
   }
 
   return (
-    <div className="flex flex-col text-base items-stretch justify-between pt-8 w-64">
+    <div className="hidden md:block text-base pt-8 w-64">
       <div className="flex w-64 flex-col gap-2">
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
@@ -65,7 +65,7 @@ export const DataproductSidebar = ({
           )
         )}
       </div>
-      <div className="h-fit fixed w-64 text-base leading-4 pr-4 pb-0 bottom-0">
+      <div className="h-fit fixed w-64 text-base leading-4 pr-4 pb-0 bottom-8">
         <Subject>
           {isOwner && (
             <Alert variant="success" size="small">
