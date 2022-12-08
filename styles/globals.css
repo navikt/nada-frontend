@@ -133,7 +133,11 @@ h6 {
 }
 
 
-.children-fullwidth > * {
+.children-fullwidth > p {
+  @apply max-w-3xl
+}
+
+.children-fullwidth > div {
   @apply w-full
 }
 

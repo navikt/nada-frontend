@@ -56,7 +56,7 @@ export function Story({
         owner={story.owner}
         keywords={story.keywords}
       />
-      <div className="children-fullwidth flex flex-wrap flex-row justify-between gap-5 py-4">
+      <div className="children-fullwidth flex flex-col justify-between gap-5 py-4">
         {views.map((view, id) => {
           if (view.__typename === 'StoryViewHeader') {
             return <Header key={id} text={view.content} size={view.level} />
