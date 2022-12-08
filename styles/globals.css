@@ -133,7 +133,7 @@ h6 {
 }
 
 
-.children-fullwidth > p {
+.children-fullwidth > :not(div) {
   @apply max-w-3xl
 }
 
