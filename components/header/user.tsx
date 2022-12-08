@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Dropdown, Header } from '@navikt/ds-react-internal'
-import { ExternalLink, People, System } from '@navikt/ds-icons'
+import { ExternalLink, Hamburger, People, System } from '@navikt/ds-icons'
 
 
 export const backendHost = () => {
@@ -20,7 +20,7 @@ export default function User() {
           as={Dropdown.Toggle}
           className="border-transparent w-[48px] flex justify-center"
         >
-          <System />
+          <Hamburger />
         </Header.Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>

@@ -41,14 +41,16 @@ export const Description = ({
         )}
         <div className="block md:hidden">
             <Heading level="2" size="medium">Datasett</Heading>
-            {dataproduct.datasets.map((dataset, idx) => <a
-              className=""
-              href="#"
-              key={idx}
-              onClick={() => handleChange(dataset.id)}
-            >
-              {dataset.name}
-            </a>)}
+            <div className="flex flex-col gap-2">
+                {dataproduct.datasets.map((dataset, idx) => <a
+                  className=""
+                  href="#"
+                  key={idx}
+                  onClick={() => handleChange(dataset.id)}
+                >
+                  {dataset.name}
+                </a>)}
+            </div>
         </div>
     </div>)
 }
