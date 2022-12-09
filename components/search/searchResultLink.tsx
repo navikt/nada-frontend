@@ -30,16 +30,14 @@ export const SearchResultLink = ({
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
           <div>
-            <Heading className="text-link" level="2" size="small">
-              {name}
-            </Heading>
+            <Heading className="text-link" children={null} level="2" size="small" dangerouslySetInnerHTML={{ __html: name.replaceAll("_", "_<wbr>") }} />
           </div>
         </div>
         <div className="flex flex-col gap-4">
           {description && (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'code']}
+              disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre']}
               unwrapDisallowed={true}
             >
               {description.split(/\r?\n/).slice(0, 4).join('\n')}
