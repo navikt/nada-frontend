@@ -36,7 +36,7 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
       </div>
       {isEmail(input) && <EmailIcon />}
       {!!input && !isEmail(input) && loading && <LoaderIcon />}
-      {!loading && data.IsValidSlackChannel && <SlackLogo />}
+      {!loading && data && data.IsValidSlackChannel && <SlackLogo />}
       {!!input && !loading && !isEmail(input) && !data.IsValidSlackChannel && (
         <ErrorIcon />
       )}
