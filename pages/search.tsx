@@ -109,7 +109,7 @@ const Search = () => {
       <Head>
         <title>Søkeresultater</title>
       </Head>
-      <div className="grid gap-4 m-4">
+      <div className="grid gap-4 md:mx-4 my-4">
         <Heading level="1" size="large">Søkeresultater</Heading>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-shrink-0 md:w-[300px] md:mt-16">
