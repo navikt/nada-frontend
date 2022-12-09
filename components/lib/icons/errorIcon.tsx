@@ -10,8 +10,8 @@ export const ErrorIcon = () => (
       role="img"
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M21 4.385 13.385 12 21 19.615 19.615 21 12 13.385 4.385 21 3 19.615 10.615 12 3 4.385 4.385 3 12 10.615 19.615 3 21 4.385Z"
         fill="#C30000"
       ></path>
