@@ -122,7 +122,7 @@ const ViewDataset = ({
               </Link>
             </DatasetAlert>
           )}
-          {accessType.type === 'none' && (
+          {(
             <DatasetAlert variant="info">
               Du har ikke tilgang til datasettet.{' '}
               <a href="#" onClick={() => setAccessRequested(true)}>
