@@ -24,7 +24,7 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
 
   return (
     <div className="flex flex-row items-end">
-      <div className = "w-5/6">
+      <div className="w-5/6">
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
           description="Kontaktpunktet kan være enten navnet på en public slack-kanal (uten #) eller en e-post."
@@ -37,9 +37,11 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
       {isEmail(input) && <EmailIcon />}
       {!!input && !isEmail(input) && loading && <LoaderIcon />}
       {!loading && data && data.IsValidSlackChannel && <SlackLogo />}
-      {!!input && !loading && !isEmail(input) && !data.IsValidSlackChannel && (
-        <ErrorIcon />
-      )}
+      {!!input &&
+        !loading &&
+        !isEmail(input) &&
+        data &&
+        !data.IsValidSlackChannel && <ErrorIcon />}
     </div>
   )
 }
