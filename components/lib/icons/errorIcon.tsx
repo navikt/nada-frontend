@@ -1,5 +1,5 @@
 export const ErrorIcon = () => (
-  <div class = "w-12 h-12 flex items-center ml-4">
+  <div className = "w-12 h-12 flex items-center ml-4">
     <svg
       width="2em"
       height="2em"

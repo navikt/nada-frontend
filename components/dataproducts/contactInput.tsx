@@ -23,8 +23,8 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
   })
 
   return (
-    <div class="flex flex-row items-end">
-      <div class = "w-5/6">
+    <div className="flex flex-row items-end">
+      <div className = "w-5/6">
         <TextField
           label="Ønsket kontaktpunkt for dataproduktet"
           description="Kontaktpunktet kan være enten navnet på en public slack-kanal (uten #) eller en e-post."
