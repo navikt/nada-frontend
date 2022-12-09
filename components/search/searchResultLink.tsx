@@ -30,7 +30,11 @@ export const SearchResultLink = ({
       <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
         <div className="flex gap-4">
           <div>
-            <Heading className="text-link" children={null} level="2" size="small" dangerouslySetInnerHTML={{ __html: name.replaceAll("_", "_<wbr>") }} />
+            {
+              // have to ignore in order to use dangerouslySetInnerHTML :(
+              //@ts-ignore
+              <Heading className="text-link" level="2" size="small" dangerouslySetInnerHTML={{ __html: name.replaceAll("_", "_<wbr>") }} />
+            }
           </div>
         </div>
         <div className="flex flex-col gap-4">
