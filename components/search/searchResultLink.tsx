@@ -39,7 +39,7 @@ export const SearchResultLink = ({
           {description && (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5']}
+              disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'code']}
               unwrapDisallowed={true}
             >
               {description.split(/\r?\n/).slice(0, 4).join('\n')}
