@@ -94,6 +94,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           style={{ display: 'block' }}
           id="teamContact"
           label="Ønsket kontaktpunkt for dataproduktet"
+          description="Kontaktpunktet kan være enten navnet på en slack-kanal (uten #) eller en e-post."
           {...register('teamContact')}
           error={errors.teamContact?.message}
         />
