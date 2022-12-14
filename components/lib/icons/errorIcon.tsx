@@ -1,8 +1,8 @@
 export const ErrorIcon = () => (
-  <div className = "w-12 h-12 flex items-center ml-4">
+  <div className="w-8 h-8 flex items-center">
     <svg
-      width="2em"
-      height="2em"
+      width="1.2em"
+      height="1.2em"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -12,8 +12,8 @@ export const ErrorIcon = () => (
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M21 4.385 13.385 12 21 19.615 19.615 21 12 13.385 4.385 21 3 19.615 10.615 12 3 4.385 4.385 3 12 10.615 19.615 3 21 4.385Z"
-        fill="#C30000"
+        d="M12 0a1 1 0 0 1 .894.553l11 22A1 1 0 0 1 23 24H1a1 1 0 0 1-.894-1.447l11-22A1 1 0 0 1 12 0Zm-1 15V8h2v7h-2Zm2.5 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+        fill="#D57B00"
       ></path>
     </svg>
   </div>
