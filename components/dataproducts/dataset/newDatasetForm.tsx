@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup, Textarea, TextField, Checkbox } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -45,6 +45,7 @@ const schema = yup.object().shape({
     is: "anonymised",
     then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
+  grantAllUsers: yup.boolean().nullable()
 })
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -89,6 +90,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       : setValue('keywords', [keyword])
   }
 
+  const valueOrNull = (val: string) => (val == '' ? null : val)
+
   const [createDataset, { loading, error: backendError }] = useMutation(
     CREATE_DATASET,
     {
@@ -108,6 +111,9 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         ? PiiLevel.Anonymised
         : PiiLevel.None
     requestData.pii = pii
+    requestData.grantAllUsers = valueOrNull(
+        requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === undefined ? null : requestData.grantAllUsers
+    )
     try {
       await createDataset({
         variables: { input: requestData },
@@ -199,6 +205,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
             </RadioGroup>
           )}
         />
+        {[PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) &&
+            <Checkbox {...register('grantAllUsers')}>
+                Åpne datasett for alle i NAV
+            </Checkbox>
+        }
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
