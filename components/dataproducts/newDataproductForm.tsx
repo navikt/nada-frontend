@@ -258,7 +258,7 @@ export const NewDataproductForm = () => {
 
   const pii = watch('pii')
   return (
-    <div className="mt-8 w-[46rem]">
+    <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
         Legg til dataprodukt
       </Heading>

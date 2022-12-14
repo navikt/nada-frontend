@@ -38,7 +38,7 @@ const AnnotateDatasetTable = ({
   if (!columns) return <div>Ingen skjemainformasjon</div>
 
   return (
-    <div className="mb-3">
+    <div className="mb-3 w-[91vw] overflow-auto">
       <p className="flex gap-2 items-center mb-2">Klassifiser personopplysningene <PersonopplysningerDetaljert /></p>
       <Table className="w-[60rem]" size="small">
         <Table.Header>

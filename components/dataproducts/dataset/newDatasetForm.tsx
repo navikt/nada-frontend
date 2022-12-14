@@ -119,7 +119,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   }
 
   return (
-    <div className="pt-8 pr-8 w-[46rem]">
+    <div className="pt-8 pr-8 md:w-[46rem]">
       <Heading level="1" size="medium" spacing>
         Legg til datasett
       </Heading>
