@@ -1,6 +1,5 @@
-import { Back, Combifridge1, Next } from "@navikt/ds-icons"
+import { Back, Next } from "@navikt/ds-icons"
 import { Button, Heading, Modal } from "@navikt/ds-react"
-import Divider from "@navikt/ds-react-internal/esm/dropdown/Menu/Divider"
 import { useState } from "react"
 import { ProductAreasQuery } from "../../lib/schema/graphql"
 import { PAItems } from "../../pages/productArea/[id]"
@@ -31,7 +30,7 @@ const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem
         {!selected && <div className="flex flex-col mt-14 gap-2 mx-2">
             {productAreas.map((area, idx) => 
             <>
-                {idx != 0 && <Divider />}
+                {idx != 0 && <hr className="border-divider" />}
                 <a
                     href="#"
                     onClick={() => { setSelected(area.id); selectProductArea(area.id) }}
@@ -49,7 +48,7 @@ const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem
             <div className="flex flex-col gap-2 mt-14 mx-2">
                 {productAreaItems.map((d, idx) => d.stories.length || d.dataproducts.length ? (
                     <>
-                        {idx != 0 && <Divider />}
+                        {idx != 0 && <hr className="border-divider" />}
                         <a
                             href="#"
                             onClick={() => { setCurrentItem(idx); setOpen(false) }}
@@ -62,7 +61,7 @@ const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem
                     </>
                 ) : (
                     <>
-                        {idx != 0 && <Divider />}
+                        {idx != 0 && <hr className="border-divider" />}
                         <div className={`${idx == 0 ? "px-2" : "px-8"} flex h-10 w-full items-center justify-between`}>
                             <Heading level="2" size="medium" className="shrink font-normal">{d.name}</Heading>
                         </div>
