@@ -35,7 +35,7 @@ const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem
                     href="#"
                     onClick={() => { setSelected(area.id); selectProductArea(area.id) }}
                     key={idx}
-                    className="h-10 w-full px-2 flex items-center justify-between">
+                    className="w-full py-2 px-2 flex items-center justify-between">
                     <Heading level="2" size="medium">{area.name}</Heading>
                     <div>
                         <Next className="w-6 h-6" />
@@ -53,7 +53,7 @@ const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem
                             href="#"
                             onClick={() => { setCurrentItem(idx); setOpen(false) }}
                             key={idx}
-                            className={`${idx == 0 ? "px-2" : "px-8"} flex h-10 w-full items-center justify-between`}
+                            className={`${idx == 0 ? "px-2" : "px-8"} flex py-2 w-full items-center justify-between`}
                         >
                             <Heading level="2" size="medium" className="shrink">{d.name}</Heading>
                             
@@ -62,7 +62,7 @@ const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem
                 ) : (
                     <>
                         {idx != 0 && <hr className="border-divider" />}
-                        <div className={`${idx == 0 ? "px-2" : "px-8"} flex h-10 w-full items-center justify-between`}>
+                        <div className={`${idx == 0 ? "px-2" : "px-8"} flex py-2 w-full items-center justify-between`}>
                             <Heading level="2" size="medium" className="shrink font-normal">{d.name}</Heading>
                         </div>
                     </>
