@@ -15,6 +15,7 @@ import {
   Textarea,
   TextField,
   Checkbox,
+  CheckboxGroup,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
@@ -398,11 +399,11 @@ export const NewDataproductForm = () => {
             </RadioGroup>
           )}
         />
-        {[PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) &&
-            <Checkbox {...register('grantAllUsers')}>
-                Åpne datasett for alle i NAV
-            </Checkbox>
-        }
+        <CheckboxGroup legend='Åpne for alle i NAV'>
+          <Checkbox {...register('grantAllUsers')} disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
+                  Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder pii)"}
+          </Checkbox>
+        </CheckboxGroup>
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>

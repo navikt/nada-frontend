@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Heading, Radio, RadioGroup, Textarea, TextField, Checkbox } from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup, Textarea, TextField, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -205,11 +205,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
             </RadioGroup>
           )}
         />
-        {[PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) &&
-            <Checkbox {...register('grantAllUsers')}>
-                Åpne datasett for alle i NAV
-            </Checkbox>
-        }
+        <CheckboxGroup legend='Åpne for alle i NAV'>
+          <Checkbox {...register('grantAllUsers')} disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
+                  Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder pii)"}
+          </Checkbox>
+        </CheckboxGroup>
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
