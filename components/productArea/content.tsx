@@ -15,7 +15,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             value={currentTab}
             onChange={setCurrentTab}
             size="medium"
-            className="w-full pt-8"
+            className="w-full"
         >
             <Tabs.List>
                 {currentItem.dashboardURL && <Tabs.Tab
@@ -33,7 +33,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             </Tabs.List>
             {currentItem.dashboardURL && <Tabs.Panel
                 value="dashboard"
-                className="h-full w-full p-8"
+                className="h-full w-full py-4"
             >
                 <iframe
                     src={currentItem.dashboardURL}
@@ -43,7 +43,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             </Tabs.Panel>}
             <Tabs.Panel
                 value="stories"
-                className="h-full w-full p-8"
+                className="h-full w-full py-4"
             >
                 <div className="flex flex-col gap-2">
                     {currentItem.stories && currentItem.stories.map((s: any, idx: number) => (
@@ -62,7 +62,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             </Tabs.Panel>
             <Tabs.Panel
                 value="products"
-                className="h-full w-full p-8"
+                className="h-full w-full py-4"
             >
                 <div className="flex flex-col gap-2">
                     {currentItem.dataproducts && currentItem.dataproducts.map((d: any, idx: number) => (

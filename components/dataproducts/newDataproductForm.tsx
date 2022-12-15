@@ -14,6 +14,7 @@ import {
   Select,
   Textarea,
   TextField,
+  Checkbox,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
@@ -101,6 +102,7 @@ const schema = yup.object().shape({
         .nullable()
         .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
     }),
+    grantAllUsers: yup.boolean().nullable()
 })
 
 interface BigQueryFields {
@@ -208,6 +210,7 @@ export const NewDataproductForm = () => {
                 anonymisation_description: valueOrNull(
                   data.anonymisation_description
                 ),
+                grantAllUsers: valueOrNull(data.pii === PiiLevel.Sensitive || data.grantAllUsers === undefined ? null : data.grantAllUsers),
               },
             ],
           },
@@ -258,7 +261,7 @@ export const NewDataproductForm = () => {
 
   const pii = watch('pii')
   return (
-    <div className="mt-8 w-[46rem]">
+    <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
         Legg til dataprodukt
       </Heading>
@@ -395,6 +398,11 @@ export const NewDataproductForm = () => {
             </RadioGroup>
           )}
         />
+        {[PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) &&
+            <Checkbox {...register('grantAllUsers')}>
+                Åpne datasett for alle i NAV
+            </Checkbox>
+        }
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>

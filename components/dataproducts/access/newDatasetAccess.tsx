@@ -145,7 +145,12 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
               >
                 <Radio value="until">Til dato</Radio>
                 <UNSAFE_DatePicker {...datepickerProps}>
-                  <UNSAFE_DatePicker.Input {...inputProps} label="" disabled={field.value === 'eternal'} />
+                  <UNSAFE_DatePicker.Input 
+                    {...inputProps} 
+                    label="" 
+                    disabled={field.value === 'eternal'} 
+                    error={errors?.expires?.message} 
+                  />
                 </UNSAFE_DatePicker>
                 <Radio value="eternal">For alltid</Radio>
               </RadioGroup>

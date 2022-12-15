@@ -521,6 +521,8 @@ export type NewDataset = {
   dataproductID: Scalars['ID'];
   /** description of the dataset */
   description?: InputMaybe<Scalars['String']>;
+  /** grantAllUsers is a boolean indicating whether the dataset shall be made available for all users on creation */
+  grantAllUsers?: InputMaybe<Scalars['Boolean']>;
   /** keywords for the dataset used as tags. */
   keywords?: InputMaybe<Array<Scalars['String']>>;
   /** name of dataset */
@@ -541,6 +543,8 @@ export type NewDatasetForNewDataproduct = {
   bigquery: NewBigQuery;
   /** description of the dataset */
   description?: InputMaybe<Scalars['String']>;
+  /** grantAllUsers is a boolean indicating whether the dataset shall be made available for all users on creation */
+  grantAllUsers?: InputMaybe<Scalars['Boolean']>;
   /** keywords for the dataset used as tags. */
   keywords?: InputMaybe<Array<Scalars['String']>>;
   /** name of dataset */
@@ -664,8 +668,6 @@ export type Quarto = {
 
 export type Query = {
   __typename?: 'Query';
-  /** searches slack public channels to validate the channel name */
-  IsValidSlackChannel: Scalars['Boolean'];
   /** accessRequest returns one specific access request */
   accessRequest: AccessRequest;
   /** accessRequests returns all access requests for a dataset */
@@ -732,11 +734,6 @@ export type Query = {
   userInfo: UserInfo;
   /** version returns the API version. */
   version: Scalars['String'];
-};
-
-
-export type QueryIsValidSlackChannelArgs = {
-  name: Scalars['String'];
 };
 
 
@@ -1361,13 +1358,6 @@ export type SearchContentWithOptionsQueryVariables = Exact<{
 
 
 export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
-
-export type SlackQueryVariables = Exact<{
-  name: Scalars['String'];
-}>;
-
-
-export type SlackQuery = { __typename?: 'Query', IsValidSlackChannel: boolean };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2910,39 +2900,6 @@ export function useSearchContentWithOptionsLazyQuery(baseOptions?: Apollo.LazyQu
 export type SearchContentWithOptionsQueryHookResult = ReturnType<typeof useSearchContentWithOptionsQuery>;
 export type SearchContentWithOptionsLazyQueryHookResult = ReturnType<typeof useSearchContentWithOptionsLazyQuery>;
 export type SearchContentWithOptionsQueryResult = Apollo.QueryResult<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>;
-export const SlackDocument = gql`
-    query Slack($name: String!) {
-  IsValidSlackChannel(name: $name)
-}
-    `;
-
-/**
- * __useSlackQuery__
- *
- * To run a query within a React component, call `useSlackQuery` and pass it any options that fit your needs.
- * When your component renders, `useSlackQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSlackQuery({
- *   variables: {
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useSlackQuery(baseOptions: Apollo.QueryHookOptions<SlackQuery, SlackQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
-      }
-export function useSlackLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SlackQuery, SlackQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
-        }
-export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
-export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
-export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
 export const DeleteStoryDocument = gql`
     mutation deleteStory($id: ID!) {
   deleteStory(id: $id)
