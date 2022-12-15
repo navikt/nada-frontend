@@ -12,6 +12,7 @@ import {
 import DescriptionEditor from '../lib/DescriptionEditor'
 import { useRouter } from 'next/router'
 import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
+import { ContactInput } from './contactInput';
 
 interface EditDatacollectionFormProps {
   product: DataproductQuery['dataproduct']
@@ -89,15 +90,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           setProductAreaID={setProductAreaID}
           setTeamID={setTeamID}
         />
-        <TextField
-          className='w-full'
-          style={{ display: 'block' }}
-          id="teamContact"
-          label="Ønsket kontaktpunkt for dataproduktet"
-          description="Kontaktpunktet kan være enten navnet på en slack-kanal (uten #) eller en e-post."
-          {...register('teamContact')}
-          error={errors.teamContact?.message}
-        />
+        <ContactInput register = {register} formState = {formState}/>
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"

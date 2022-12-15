@@ -19,7 +19,7 @@ import Explore from '../explore'
 import DatasetMetadata from './datasetMetadata'
 import DatasetOwnerMenu from './datasetOwnerMenu'
 import DatasetTableSchema from './datasetTableSchema'
-import {Personopplysninger, PersonopplysningerDetaljert} from './helptext'
+import { Personopplysninger, PersonopplysningerDetaljert } from './helptext'
 
 interface ViewDatasetProps {
   dataset: DatasetQuery['dataset']
@@ -147,11 +147,13 @@ const ViewDataset = ({
                 />
               )}
             </div>
-            <a className="flex md:hidden my-4 items-center" 
-              href="#" 
+            <a
+              className="flex md:hidden my-4 items-center"
+              href="#"
               onClick={() => handleChange('info')}
             >
-              <Back className="-mb-[2px]" />Tilbake til beskrivelse
+              <Back className="-mb-[2px]" />
+              Tilbake til beskrivelse
             </a>
             <div className="flex flex-row gap-1 flex-wrap">
               {dataset.keywords.map((keyword, idx) => (

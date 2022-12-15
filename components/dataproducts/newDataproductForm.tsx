@@ -28,7 +28,8 @@ import DatasetTableSchema from './dataset/datasetTableSchema'
 import AnnotateDatasetTable from './dataset/annotateDatasetTable'
 import { useColumnTags } from './dataset/useColumnTags'
 import { string } from 'prop-types'
-import {Personopplysninger} from "./dataset/helptext";
+import { Personopplysninger } from './dataset/helptext'
+import { ContactInput } from './contactInput'
 
 const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
 I søket vil den første delen av beskrivelsen inkluderes i visningen.*
@@ -315,13 +316,7 @@ export const NewDataproductForm = () => {
           setProductAreaID={setProductAreaID}
           setTeamID={setTeamID}
         />
-        <TextField
-          label="Ønsket kontaktpunkt for dataproduktet"
-          description="Kontaktpunktet kan være enten navnet på en slack-kanal (uten #) eller en e-post."
-          {...register('teamContact')}
-          error={errors.teamContact?.message}
-          className="w-full"
-        />
+        <ContactInput register={register} formState={formState} />
         <hr className="border-border-inverted" />
         <div>
           <Heading level="2" size="medium">
@@ -367,7 +362,12 @@ export const NewDataproductForm = () => {
           render={({ field }) => (
             <RadioGroup
               {...field}
-              legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
+              legend={
+                <p className="flex gap-2 items-center">
+                  Inneholder datasettet personopplysninger?{' '}
+                  <Personopplysninger />
+                </p>
+              }
               error={errors?.pii?.message}
             >
               <Radio value={'sensitive'}>
