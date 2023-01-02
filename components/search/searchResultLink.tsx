@@ -50,7 +50,7 @@ export const SearchResultLink = ({
           {datasets && !!datasets.length && (
             <div>
               {datasets.map((ds, index) => (
-                <p key={index}>{ds.name}</p>
+                <p key={index} dangerouslySetInnerHTML={{ __html: ds.name.replaceAll("_", "_<wbr>")}} />
               ))}
             </div>
           )}
