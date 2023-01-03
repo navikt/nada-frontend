@@ -59,9 +59,8 @@ export const DataproductSidebar = ({
               href="#"
               key={idx}
               onClick={(e) => handleChange(e, slug)}
-            >
-              {title}
-            </a>
+              dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>") }}
+            />
           )
         )}
       </div>
