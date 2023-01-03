@@ -54,13 +54,23 @@ export const DataproductSidebar = ({
               {title}
             </p>
           ) : (
-            <a
+            // title might be a ReactNode (legg til datasett, lol), and we can't run .replace() on such an element
+            typeof title === "string" 
+            ? <a
               className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
               href="#"
               key={idx}
               onClick={(e) => handleChange(e, slug)}
-              dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>") }}
+              dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>")}}
             />
+            : <a
+              className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
+              href="#"
+              key={idx}
+              onClick={(e) => handleChange(e, slug)}
+            >
+              {title}
+            </a>
           )
         )}
       </div>
