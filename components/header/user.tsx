@@ -24,68 +24,56 @@ export default function User() {
         </Header.Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
-          <Dropdown.Menu.GroupedList.Item>
-              <a
-                className={'text-base'}
-                onClick={async () => await router.push('/dataproduct/new')}
-              >
-                Legg til nytt dataprodukt
-              </a>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={async () => await router.push('/dataproduct/new')}
+            >
+              Legg til nytt dataprodukt
             </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item>
-            <a
-                className='text-base flex gap-1 items-center'
-                onClick={async () => 
-                  await router.push(
-                    'https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling'
-                  )
-                }
-              >
-                Legg til ny datafortelling (docs)
-              </a>
+            <Dropdown.Menu.GroupedList.Item
+              className='text-base flex gap-1 items-center'
+              onClick={async () =>
+                await router.push(
+                  'https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling'
+                )
+              }
+            >
+              Legg til ny datafortelling (docs)
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
           <Dropdown.Menu.Divider />
           <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Item>
-              <a
-                className={'text-base'}
-                onClick={() => {
-                  router.push({ pathname: '/user/products' })
-                }}
-              >
-                Mine produkter
-              </a>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/products' })
+              }}
+            >
+              Mine produkter
             </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item>
-              <a
-                className={'text-base'}
-                onClick={() => {
-                  router.push({ pathname: '/user/stories' })
-                }}
-              >
-                Mine fortellinger
-              </a>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/stories' })
+              }}
+            >
+              Mine fortellinger
             </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item>
-              <a
-                className={'text-base'}
-                onClick={() => {
-                  router.push({ pathname: '/user/requests' })
-                }}
-              >
-                Mine tilgangssøknader
-              </a>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/requests' })
+              }}
+            >
+              Mine tilgangssøknader
             </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item>
-              <a
-                className={'text-base'}
-                onClick={() => {
-                  router.push({ pathname: '/user/access' })
-                }}
-              >
-                Mine tilganger
-              </a>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/access' })
+              }}
+            >
+              Mine tilganger
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
@@ -100,10 +88,8 @@ export default function User() {
         </Header.Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Item>
-              <a className={'text-base'} href={`${backendHost()}/api/logout`}>
+            <Dropdown.Menu.GroupedList.Item as="a" className={'text-base'} href={`${backendHost()}/api/logout`}>
                 Logg ut
-              </a>
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
         </Dropdown.Menu>
