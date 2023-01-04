@@ -66,7 +66,7 @@ const ProductAreaSidebar = ({
               </div>
             </div>
           ) : (
-            <div key={idx} className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`} key={idx}>
+            <div key={idx} className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`}>
               <p className="font-semibold">{d.name}</p>
               <div className="flex justify-between w-24">
                 <span className="flex gap-2 items-center">
