@@ -8,7 +8,6 @@ import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { DataproductQuery, PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector'
-import { prefilledDatasetDescription } from '../newDataproductForm'
 import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
 import { useColumnTags } from './useColumnTags'
@@ -20,7 +19,7 @@ interface NewDatasetFormProps {
 
 const defaultValues: FieldValues = {
   name: null,
-  description: prefilledDatasetDescription,
+  description: '',
   bigquery: null,
   pii: null,
   anonymisation_description: null,
@@ -140,7 +139,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         <DescriptionEditor
           {...register('description')}
           name="description"
-          label="Beskrivelse"
+          label="Beskrivelse av hva datasettet kan brukes til"
           control={control}
         />
         <TextField

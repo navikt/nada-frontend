@@ -9,7 +9,6 @@ import DescriptionEditor from '../lib/DescriptionEditor'
 import {
   Button,
   Heading,
-  HelpText,
   Radio,
   RadioGroup,
   Select,
@@ -28,40 +27,14 @@ import { useColumnTags } from './dataset/useColumnTags'
 import { Personopplysninger, TilgangsstyringHelpText } from './dataset/helptext'
 import { ContactInput } from './contactInput'
 
-const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
-I søket vil den første delen av beskrivelsen inkluderes i visningen.*
-
-**Kontekst**  
-*Hva er lurt å få med som forklarer hva dataproduktet består av og hvor det kommer fra? 
-Hvordan samles data inn? Hvilke kilder er brukt? Hvordan ser populasjonen ut? 
-Er dataene stabile over tid eller finnes det kjente strukturelle brudd? 
-Hva er det du lurer på når du utforsker andres dataprodukter?*
-
-**Hvorfor dataproduktet er interessant**  
-*Hvem kan komme til å bruke dataproduktet til hva?  
-Om dere allerede vet et case dataene skal brukes til, er det veldig nyttig med en beskrivelse.*`
-
-export const prefilledDatasetDescription = `*En kort beskrivelse av datasettet*
-
-**Kontekst**  
-*Hvordan skiller dette datasettet seg fra de andre datasettene i produktet? Hva brukes datasettet til?*
-
-**Spesielle forhold**  
-*Er det taushetsbelagt informasjon i datasettet, 
-f. eks. børssensitiv informasjon som ikke må deles før et angitt tidspunkt? 
-Inneholder datasettet informasjon om personer med fortrolig eller strengt fortrolig adresse? 
-Er det andre ting eller forutsetninger i datasettet man bør være oppmerksom på, så er det lurt å skrive det ned*
-
-**Ofte stilte spørsmål**  
-*Er det noen spørsmål som går igjen, så kan du svare på dem en gang for alle - og kanskje slippe unna litt mas*`
 
 const defaultValues: FieldValues = {
   name: null,
-  description: prefilledDataproductDescription,
+  description: '',
   team: '',
   teamContact: null,
   datasetName: null,
-  datasetDescription: prefilledDatasetDescription,
+  datasetDescription: '',
   sourceCodeURL: null,
   bigQuery: null,
   keywords: [] as string[],
@@ -275,7 +248,7 @@ export const NewDataproductForm = () => {
           error={errors.name?.message}
         />
         <DescriptionEditor
-          label="Beskrivelse"
+          label="Beskrivelse av hva dataproduktet kan brukes til"
           name="description"
           control={control}
         />
@@ -331,7 +304,7 @@ export const NewDataproductForm = () => {
           error={errors.datasetName?.message}
         />
         <DescriptionEditor
-          label="Beskrivelse"
+          label="Beskrivelse av hva datasettet kan brukes til"
           name="datasetDescription"
           control={control}
         />

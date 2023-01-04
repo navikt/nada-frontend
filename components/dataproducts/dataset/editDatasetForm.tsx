@@ -156,7 +156,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   }
 
   return (
-    <div className="block pt-8 pr-8">
+    <div className="block pt-8 pr-8 md:w-[46rem]">
       <Heading level="1" size="medium" spacing>
         Endre datasett
       </Heading>
@@ -173,7 +173,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
         <DescriptionEditor
           {...register('description')}
           name="description"
-          label="Beskrivelse"
+          label="Beskrivelse av hva datasettet kan brukes til"
           control={control}
         />
         <TextField
