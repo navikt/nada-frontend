@@ -41,11 +41,10 @@ const ProductAreaSidebar = ({
       <div className="flex text-base w-full flex-col gap-2">
         {productAreaItems.map((d: any, idx: number) =>
           d.stories.length || d.dataproducts.length ? (
-            <div className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`}>
+            <div key={idx} className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`}>
               <a
                 className="font-semibold no-underline hover:underline"
                 href="#"
-                key={idx}
                 onClick={() => setCurrentItem(idx)}
               >
                 {d.name}
@@ -67,7 +66,7 @@ const ProductAreaSidebar = ({
               </div>
             </div>
           ) : (
-            <div className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`} key={idx}>
+            <div key={idx} className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`} key={idx}>
               <p className="font-semibold">{d.name}</p>
               <div className="flex justify-between w-24">
                 <span className="flex gap-2 items-center">
