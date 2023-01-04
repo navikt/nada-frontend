@@ -39,9 +39,9 @@ export function Story({
               href={`/story/${story.id}/edit`}>
               <a className="pr-2">Endre</a>
             </Link>
-            <a className="border-l-[1px] border-border px-2" onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
+            <a className="border-l-[1px] border-border-strong px-2" onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
             <a
-              className="border-l-[1px] border-border px-2 text-nav-red"
+              className="border-l-[1px] border-border-strong px-2 text-nav-red"
               onClick={() => setShowDelete && setShowDelete(true)}
             >
               Slett

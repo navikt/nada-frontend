@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { Label, Select, TextField } from '@navikt/ds-react'
+import { Select } from '@navikt/ds-react'
 import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
-import ErrorMessage from './error'
 import LoaderSpinner from './spinner'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 type TeamkatalogenSelectorProps = {
   gcpGroup?: string

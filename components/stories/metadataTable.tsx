@@ -22,7 +22,7 @@ export const MetadataTable = ({
 }: StoryProps) => {
   console.log(owner)
   return (
-    <div className="h-fit min-w-[250px] text-medium border-t border-border mx-5">
+    <div className="h-fit min-w-[250px] text-medium border-t border-border-strong mx-5">
       <ul className="pl-0 mt-0">
         {children}
         {owner?.group && (

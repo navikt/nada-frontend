@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Dropdown, Header } from '@navikt/ds-react-internal'
-import { ExternalLink, Hamburger, People, System } from '@navikt/ds-icons'
+import { Hamburger, People } from '@navikt/ds-icons'
 
 
 export const backendHost = () => {

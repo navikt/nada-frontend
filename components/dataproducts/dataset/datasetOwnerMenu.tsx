@@ -1,15 +1,12 @@
 import { EllipsisCircleH } from '@navikt/ds-icons'
 import { Button } from '@navikt/ds-react'
-import { Dropdown, DropdownContext } from '@navikt/ds-react-internal'
+import { Dropdown } from '@navikt/ds-react-internal'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import {
   DataproductQuery,
   useDeleteDatasetMutation,
-  useSearchContentWithOptionsQuery,
-  SearchContentWithOptionsQuery,
-  SearchType,
   useUpdateDatasetMutation,
   DatasetQuery,
 } from '../../../lib/schema/graphql'
@@ -27,18 +24,11 @@ const DatasetOwnerMenu = ({
   dataproduct,
   setEdit,
 }: IDatasetOwnerMenuProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const [showDelete, setShowDelete] = useState(false)
   const [showMove, setShowMove] = useState(false)
   const [deleteError, setDeleteError] = useState('')
-  const [moveError, setMoveError] = useState('')
   const router = useRouter()
 
-  const handleMenuButtonClick = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(e.currentTarget)
-    setIsOpen(!isOpen)
-  }
 
   const [deleteDataset] = useDeleteDatasetMutation({
     variables: { id: dataset?.id },

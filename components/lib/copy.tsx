@@ -27,7 +27,7 @@ const Copy = ({ text }: CopyProps) => {
   return (
     <div className="inline relative">
       <CopyIcon
-        className="text-interaction-primary cursor-pointer hover:text-interaction-primary-hover hover:h-4"
+        className="text-surface-action cursor-pointer hover:text-surface-action-hover hover:h-4"
         onClick={(e) => copyToClipboard(e, text)}
       />
       {copied && (

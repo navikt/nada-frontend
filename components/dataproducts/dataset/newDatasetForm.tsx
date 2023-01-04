@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Heading, Radio, RadioGroup, Textarea, TextField, Checkbox, CheckboxGroup } from '@navikt/ds-react'
+import { Button, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -90,7 +90,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       : setValue('keywords', [keyword])
   }
 
-  const [createDataset, { loading, error: backendError }] = useMutation(
+  const [createDataset, {}] = useMutation(
     CREATE_DATASET,
     {
       onCompleted: (data) =>
@@ -133,7 +133,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           {...register('name')}
           className="w-full"
           label="Skriv inn navn"
-          error={errors?.name?.message}
+          error={errors?.name?.message?.toString()}
           size="medium"
         />
         <DescriptionEditor
@@ -148,7 +148,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           className="w-full"
           id="repo"
           label="Link til kildekode"
-          error={errors.repo?.message}
+          error={errors.repo?.message?.toString()}
         />
         <DatasetSourceForm
           label="Velg tabell eller view"
@@ -170,7 +170,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
             <RadioGroup
               {...field}
               legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
-              error={errors?.pii?.message}
+              error={errors?.pii?.message?.toString()}
             >
               <Radio value={"sensitive"}>
                 Ja, inneholder personopplysninger
@@ -192,7 +192,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
                 label="Metodebeskrivelse" 
                 aria-hidden={getValues("pii") !== "anonymised"}
                 className={getValues("pii") !== "anonymised" ? "hidden" : ""}
-                error={errors?.anonymisation_description?.message}
+                error={errors?.anonymisation_description?.message?.toString()}
                 {...register("anonymisation_description")}
               />
               <Radio value={"none"}>

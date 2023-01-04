@@ -57,7 +57,7 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
           label="Ønsket kontaktpunkt for dataproduktet"
           description="Kontaktpunktet kan være enten navnet på en public slack-kanal (uten #) eller en e-post."
           {...register('teamContact')}
-          error={errors.teamContact?.message}
+          error={errors.teamContact?.message?.toString()}
           className="w-full"
           onBlur={(e) => setInput(e.target.value)}
         />

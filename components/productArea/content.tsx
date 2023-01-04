@@ -1,6 +1,5 @@
 import { Tabs } from "@navikt/ds-react";
-import { useState } from "react";
-import { PAItem, PAItems } from "../../pages/productArea/[id]";
+import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 
 interface ProductAreaContentProps {

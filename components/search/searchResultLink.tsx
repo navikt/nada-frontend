@@ -27,13 +27,13 @@ export const SearchResultLink = ({
 }: SearchResultProps) => {
   return (
     <Link href={link} className="nada-search-result max-w-[47rem]">
-      <div className="flex flex-col border w-full border-border-inverted rounded px-4 py-2">
+      <div className="flex flex-col border w-full border-border-on-inverted rounded px-4 py-2">
         <div className="flex gap-4">
           <div>
             {
               // have to ignore in order to use dangerouslySetInnerHTML :(
               //@ts-ignore
-              <Heading className="text-link" level="2" size="small" dangerouslySetInnerHTML={{ __html: name.replaceAll("_", "_<wbr>") }} />
+              <Heading className="text-text-action" level="2" size="small" dangerouslySetInnerHTML={{ __html: name.replaceAll("_", "_<wbr>") }} />
             }
           </div>
         </div>

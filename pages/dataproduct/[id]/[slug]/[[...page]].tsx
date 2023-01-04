@@ -138,7 +138,7 @@ const Dataproduct = (props: DataproductProps) => {
         {isOwner && (
           <div className="flex gap-2">
             <a
-              className="pr-2 border-r border-border"
+              className="pr-2 border-r border-border-strong"
               href={`/dataproduct/${product.id}/${product.slug}/edit`}
             >
               Endre dataprodukt
@@ -156,7 +156,7 @@ const Dataproduct = (props: DataproductProps) => {
           menuItems={menuItems}
           currentPage={currentPage}
         />
-        <div className="md:pl-4 flex-grow md:border-l border-border-inverted">
+        <div className="md:pl-4 flex-grow md:border-l border-border-on-inverted">
           {menuItems.map((i, idx) => (
             <TabPanel
               key={idx}

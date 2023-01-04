@@ -5,7 +5,6 @@ import { ApolloError } from '@apollo/client'
 import {
   ColumnType,
   DEFAULT_COLUMN_TAG,
-  PIITagNames,
   PIITagOptions,
   PIITagType,
 } from './useColumnTags'

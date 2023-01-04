@@ -19,7 +19,7 @@ import Explore from '../explore'
 import DatasetMetadata from './datasetMetadata'
 import DatasetOwnerMenu from './datasetOwnerMenu'
 import DatasetTableSchema from './datasetTableSchema'
-import { Personopplysninger, PersonopplysningerDetaljert } from './helptext'
+import { Personopplysninger } from './helptext'
 
 interface ViewDatasetProps {
   dataset: DatasetQuery['dataset']
@@ -192,7 +192,7 @@ const ViewDataset = ({
           )}
           <div>
             {userInfo && accessType.type !== 'none' && (
-              <article className="border-b border-divider last:border-b-0">
+              <article className="border-b border-border-divider last:border-b-0">
                 <Explore
                   dataproductId={dataset.id}
                   dataset={dataset}

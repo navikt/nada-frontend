@@ -245,7 +245,7 @@ export const NewDataproductForm = () => {
           className="w-full"
           label="Navn på dataprodukt"
           {...register('name')}
-          error={errors.name?.message}
+          error={errors.name?.message?.toString()}
         />
         <DescriptionEditor
           label="Beskrivelse av hva dataproduktet kan brukes til"
@@ -258,7 +258,7 @@ export const NewDataproductForm = () => {
           {...register('team', {
             onChange: () => setValue('teamkatalogenURL', ''),
           })}
-          error={errors.team?.message}
+          error={errors.team?.message?.toString()}
         >
           <option value="">Velg gruppe</option>
           {[
@@ -288,7 +288,7 @@ export const NewDataproductForm = () => {
           setTeamID={setTeamID}
         />
         <ContactInput register={register} formState={formState} />
-        <hr className="border-border-inverted" />
+        <hr className="border-border-on-inverted" />
         <div>
           <Heading level="2" size="medium">
             Legg til et datasett
@@ -301,7 +301,7 @@ export const NewDataproductForm = () => {
           label="Navn på datasett"
           className="w-full"
           {...register('datasetName')}
-          error={errors.datasetName?.message}
+          error={errors.datasetName?.message?.toString()}
         />
         <DescriptionEditor
           label="Beskrivelse av hva datasettet kan brukes til"
@@ -312,7 +312,7 @@ export const NewDataproductForm = () => {
           label="Link til kildekode"
           className="w-full"
           {...register('sourceCodeURL')}
-          error={errors.sourceCodeURL?.message}
+          error={errors.sourceCodeURL?.message?.toString()}
         />
         <DatasetSourceForm
           label="Velg tabell eller view fra GCP"
@@ -339,7 +339,7 @@ export const NewDataproductForm = () => {
                   <Personopplysninger />
                 </p>
               }
-              error={errors?.pii?.message}
+              error={errors?.pii?.message?.toString()}
             >
               <Radio value={'sensitive'}>
                 Ja, inneholder personopplysninger
@@ -361,7 +361,7 @@ export const NewDataproductForm = () => {
                 label="Metodebeskrivelse"
                 aria-hidden={getValues('pii') !== 'anonymised'}
                 className={getValues('pii') !== 'anonymised' ? 'hidden' : ''}
-                error={errors?.anonymisation_description?.message}
+                error={errors?.anonymisation_description?.message?.toString()}
                 {...register('anonymisation_description')}
               />
               <Radio value={'none'}>

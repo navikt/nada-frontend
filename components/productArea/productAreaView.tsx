@@ -1,4 +1,4 @@
-import { Filter, Filter2, Filter2Filled, List, System } from '@navikt/ds-icons'
+import { System } from '@navikt/ds-icons'
 import { Heading } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

@@ -1,13 +1,11 @@
 import User from './header/user'
 import { useRouter } from 'next/router'
 import { Header } from '@navikt/ds-react-internal'
-import React, { useContext, useState } from 'react'
-import { UserState } from '../lib/context'
+import React, { useState } from 'react'
 import { Search } from '@navikt/ds-react'
 
 export const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
-  const userInfo = useContext(UserState)
   const [searchTerm, setSearchTerm] = useState('')
 
 
@@ -48,7 +46,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="md:w-screen flex flex-col items-center">
         {children}
       </main>
-      <footer className="flex gap-4 justify-center items-center border-t border-border-inverted min-h-[3rem] mt-auto">
+      <footer className="flex gap-4 justify-center items-center border-t border-border-on-inverted min-h-[3rem] mt-auto">
       <a
         href="#"
         onClick={async () => await router.push('/about')}

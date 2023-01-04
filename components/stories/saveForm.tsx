@@ -108,7 +108,7 @@ function SaveForm({ story }: SaveFormProps) {
 
   return (
     <div className="w-[48rem] my-0 mx-auto mt-10">
-      <div className="border border-border rounded">
+      <div className="border border-border-strong rounded">
         <TopBar name={`Lagre ${story.name}`} type={story.__typename} />
         <div className="p-1">
           <form onSubmit={handleSubmit(onSubmit)}>

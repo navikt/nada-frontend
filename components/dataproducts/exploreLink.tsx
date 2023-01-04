@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, Heading, Link, Loader, Modal, Textarea } from '@navikt/ds-react'
+import { Button, Heading, Link, Loader, Modal } from '@navikt/ds-react'
 import { MappingService } from '../../lib/schema/graphql'
 import { ExternalLink } from '@navikt/ds-icons'
 import { useState } from 'react'
@@ -48,7 +48,7 @@ export const ExploreLink = ({
     if (type === ItemType.bigQuery) {
       return (
         <Link
-          className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
+          className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit"
           target="_blank"
           rel="norefferer"
           href={url}
@@ -61,7 +61,7 @@ export const ExploreLink = ({
       return (
         <div className="flex flex-col">
           <Link
-            className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
+            className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit"
             target="_blank"
             rel="norefferer"
             href={url}
@@ -104,7 +104,7 @@ export const ExploreLink = ({
                 </Modal.Content>
               </Modal>
                 <Link
-                  className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
+                  className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit"
                   href="#"
                   onClick={() => setShowRemoveMapping(true)}
                 >
@@ -121,7 +121,7 @@ export const ExploreLink = ({
     if (loading) {
       return (
         <p
-          className="border-l-8 border-border-inverted py-1 px-4 flex flex-row gap-2 w-fit text-text-muted"
+          className="border-l-8 border-border-on-inverted py-1 px-4 flex flex-row gap-2 w-fit text-text-subtle"
         >
           Legger til i Metabase
           <Loader transparent size="small" />
@@ -131,7 +131,7 @@ export const ExploreLink = ({
     if (addToMetabase) {
       return (
         <Link
-          className="border-l-8 border-border-inverted pl-4 py-1 pr-4 w-fit"
+          className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit"
           href="#"
           onClick={handleAdd}
         >

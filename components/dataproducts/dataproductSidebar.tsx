@@ -48,7 +48,7 @@ export const DataproductSidebar = ({
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
             <p
-              className="border-l-8 border-l-link py-1 px-2 font-semibold"
+              className="border-l-8 border-l-border-on-inverted py-1 px-2 font-semibold"
               key={idx}
             >
               {title}

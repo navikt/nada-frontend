@@ -1,4 +1,3 @@
-import SearchBox from '../components/index/searchField'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../lib/apollo'
 import {
@@ -55,7 +54,7 @@ const LandingPage = () => {
                         />
                     </form>
                     <Link href="/search?preferredType=story">
-                        <a className="grid grid-cols-2 items-center no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg pr-4">
+                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
                             <div className="flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
                                     <StoryLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
@@ -66,7 +65,7 @@ const LandingPage = () => {
                         </a>
                     </Link>
                     <Link href="/search?preferredType=dataproduct">
-                        <a className="grid grid-cols-2 items-center no-underline text-text border-2 border-border-inverted rounded shadow-sm shadow-border-inverted transition-all hover:shadow-lg pr-4">
+                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
                             <div className="flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
                                     <DataproductLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
@@ -78,9 +77,9 @@ const LandingPage = () => {
                     </Link>
                 </div>
             </div>
-            <div className="bg-component-background-alternate py-8 min-h-[24rem] items-center justify-center flex flex-col md:flex-row gap-8">
+            <div className="bg-surface-subtle py-8 min-h-[24rem] items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
-                <div className="border border-border-muted bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-col md:flex-row gap-4 md:gap-0">
+                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-col md:flex-row gap-4 md:gap-0">
                     <div className="mr-6">
                         <LegalGuidanceIcon />
                     </div>

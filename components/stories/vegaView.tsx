@@ -1,8 +1,6 @@
 import { StoryViewVega, useVegaViewQuery } from '../../lib/schema/graphql'
-import VisualizationSpec, { VegaLite, Vega } from 'react-vega'
+import { VegaLite, Vega } from 'react-vega'
 
-//@ts-ignore
-import Plot from 'react-plotly.js'
 import LoaderSpinner from '../lib/spinner'
 import ErrorMessage from '../lib/error'
 

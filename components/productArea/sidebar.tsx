@@ -20,11 +20,6 @@ const ProductAreaSidebar = ({
   productAreas,
   selectProductArea,
 }: ProductAreaSidebarProps) => {
-  const style = (isCurrent: boolean) =>
-    `border-l-[6px] py-1 px-2 hover:cursor-default ${
-      isCurrent ? 'border-l-link' : 'border-l-transparent'
-    }`
-
   const relevantProductAreas= productAreas.filter(it=>it.areaType=== "PRODUCT_AREA" || it.areaType=== "PROJECT")
   .sort((l, r)=> l.name < r.name? -1: 1)
   return (
@@ -46,7 +41,7 @@ const ProductAreaSidebar = ({
       <div className="flex text-base w-full flex-col gap-2">
         {productAreaItems.map((d: any, idx: number) =>
           d.stories.length || d.dataproducts.length ? (
-            <div className={style(currentItem == idx)}>
+            <div className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`}>
               <a
                 className="font-semibold no-underline hover:underline"
                 href="#"
@@ -59,12 +54,12 @@ const ProductAreaSidebar = ({
                 <span className="flex gap-2 items-center">
                   <Data
                     aria-label="datafortellinger"
-                    className="text-text-muted"
+                    className="text-text-subtle"
                   />{' '}
                   {d.stories.length}
                 </span>
                 <span className="flex gap-2 items-center">
-                  <div className="h-[18px] w-[18px] text-text-muted">
+                  <div className="h-[18px] w-[18px] text-text-subtle">
                     <DataproductLogo />
                   </div>{' '}
                   {d.dataproducts.length}
@@ -72,18 +67,18 @@ const ProductAreaSidebar = ({
               </div>
             </div>
           ) : (
-            <div className={style(currentItem == idx)} key={idx}>
+            <div className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`} key={idx}>
               <p className="font-semibold">{d.name}</p>
               <div className="flex justify-between w-24">
                 <span className="flex gap-2 items-center">
                   <Data
                     aria-label="datafortellinger"
-                    className="text-text-muted"
+                    className="text-text-subtle"
                   />{' '}
                   {d.stories.length}
                 </span>
                 <span className="flex gap-2 items-center">
-                  <div className="h-[18px] w-[18px] text-text-muted">
+                  <div className="h-[18px] w-[18px] text-text-subtle">
                     <DataproductLogo />
                   </div>{' '}
                   {d.dataproducts.length}

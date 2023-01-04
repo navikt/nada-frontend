@@ -6,7 +6,7 @@ interface errorMessageProps {
 
 export const ErrorMessage = ({ error }: errorMessageProps) => {
   return (
-    <div className="bg-feedback-danger-background rounded px-1 py-2 h-fit">
+    <div className="bg-surface-danger-subtle rounded px-1 py-2 h-fit">
       <div className="flex items-center text-base gap-1">
         <ErrorFilled />
         Feil

@@ -3,9 +3,8 @@ import { useState } from 'react'
 import {
   AccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
-  useDenyAccessRequestMutation,
 } from '../../../lib/schema/graphql'
-import { Alert, Button, Table, TextField } from '@navikt/ds-react'
+import { Alert, Button, Table } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 
 interface AccessListProps {
@@ -13,12 +12,9 @@ interface AccessListProps {
 }
 
 const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
-  const router = useRouter()
   const access = accessQuery?.accessRequestsForDataset
   const [approveAccessRequest] = useApproveAccessRequestMutation()
-  const [denyAccessRequest] = useDenyAccessRequestMutation()
   const [isDenying, setIsDenying] = useState<Array<string>>([])
-  const [denyReason, setDenyReason] = useState('')
 
   const [formError, setFormError] = useState('')
   if (access?.length === 0) {
@@ -36,32 +32,10 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
     }
   }
 
-  const onDenyAccessRequest = async (id: string) => {
-    const index = isDenying.indexOf(id)
-    if (index >= 0) {
-      const newDenyState = [...isDenying]
-      newDenyState.splice(index, 1)
-      setIsDenying(newDenyState)
-    }
-    try {
-      await denyAccessRequest({
-        variables: { id, reason: denyReason },
-        refetchQueries: ['accessRequestsForDataproduct'],
-      })
-    } catch (e: any) {
-      setFormError(e.message)
-    }
-    setDenyReason('')
-  }
-
   const onDeny = (id: string) => {
     const newDenyState = [...isDenying]
     newDenyState.push(id)
     setIsDenying(newDenyState)
-  }
-
-  const onViewRequest = async (id: string) => {
-    router.push(`/request/${id}/view`)
   }
 
   return (

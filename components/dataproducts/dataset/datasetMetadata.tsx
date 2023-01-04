@@ -3,7 +3,6 @@ import * as React from 'react'
 import humanizeDate from '../../../lib/humanizeDate'
 import Copy from '../../lib/copy'
 import { Heading, Link } from '@navikt/ds-react'
-import Dataset from './dataset'
 import { ExternalLink } from '@navikt/ds-icons'
 
 interface DataproductTableSchemaProps {
@@ -57,7 +56,7 @@ const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
           ({ k, v, copy }, idx) =>
             v && (
               <div className="mb-1 items-center flex gap-1" key={idx}>
-                <span className="text-s">{k}:</span> {v}{' '}
+                <span className="text-small">{k}:</span> {v}{' '}
                 {copy && <Copy text={v.toString()} />}
               </div>
             )

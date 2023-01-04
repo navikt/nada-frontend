@@ -3,14 +3,13 @@ import {
   useCreateAccessRequestMutation,
   useDataproductQuery,
 } from '../../../lib/schema/graphql'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import AccessRequestForm from './accessRequestForm'
 import { AccessRequestFormInput } from './accessRequestForm'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
-import { UserState } from '../../../lib/context'
 
 interface NewAccessRequestFormProps {
   dataset: DatasetQuery
@@ -20,8 +19,6 @@ const NewAccessRequestForm = ({ dataset }: NewAccessRequestFormProps) => {
   const [createAccessRequest] = useCreateAccessRequestMutation()
   const [error, setError] = useState<Error | null>(null)
   const router = useRouter()
-
-  const userInfo = useContext(UserState)
 
   const dp = useDataproductQuery({
     variables: {

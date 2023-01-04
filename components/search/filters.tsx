@@ -12,7 +12,7 @@ const FilterPill = ({all, children, onClick}: {all?: boolean, children: React.Re
   return <span 
     onClick={onClick} 
     className={`svg-scale flex items-center gap-1 cursor-pointer text-xs p-2
-      ${all ? 'bg-interaction-primary text-text-inverted rounded-sm' : 'bg-gray-100 rounded-3xl'}
+      ${all ? 'bg-interaction-primary text-text-on-inverted rounded-sm' : 'bg-gray-100 rounded-3xl'}
       ${all ? 'hover:bg-interaction-primary-hover' : 'hover:bg-gray-300'}`}>
       {children}
     </span>

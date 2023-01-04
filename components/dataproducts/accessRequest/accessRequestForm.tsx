@@ -218,7 +218,7 @@ const AccessRequestFormV2 = ({
                     {...inputProps} 
                     label="" 
                     disabled={field.value === 'eternal'} 
-                    error={errors?.expires?.message} 
+                    error={errors?.expires?.message?.toString()} 
                   />
                 </UNSAFE_DatePicker>
                 <Radio value="eternal">For alltid</Radio>

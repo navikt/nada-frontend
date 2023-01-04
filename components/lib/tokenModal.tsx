@@ -22,7 +22,7 @@ export const TokenModal = ({ id, open, onCancel }: tokenModalProps) => {
           {token.error && <ErrorMessage error={token.error} />}
           {token.loading || (!token.data && <LoaderSpinner />)}
           {token.data && (
-            <span className="border flex border-border rounded-md p-4 bg-[#f0f0f0]">
+            <span className="border flex border-border-strong rounded-md p-4 bg-[#f0f0f0]">
               {updateLink}
               <Copy text={updateLink} />
             </span>
