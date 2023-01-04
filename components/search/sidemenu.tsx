@@ -61,7 +61,7 @@ const SideMenu = ({ updateQuery, filters }: SideMenuProps) => {
         />
       </form>
       <Autocomplete
-        sx={{ marginTop: '10px' }}
+        className="mt-3"
         clearIcon={false}
         value={{ label: '', type: '', data: '' }}
         options={unselectedGroups
