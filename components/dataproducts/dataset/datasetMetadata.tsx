@@ -56,7 +56,7 @@ const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
           ({ k, v, copy }, idx) =>
             v && (
               <div className="mb-1 items-center flex gap-1" key={idx}>
-                <span className="text-small">{k}:</span> {v}{' '}
+                <span>{k}:</span> {v}{' '}
                 {copy && <Copy text={v.toString()} />}
               </div>
             )
