@@ -343,7 +343,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
         <Heading level="2" size="small">
           Tilgangssøknader
         </Heading>
-        <div className="mb-3 w-[91vw] overflow-auto">
+        <div className="mb-3 w-[91vw] md:w-auto overflow-auto">
           {datasetAccessRequests.length > 0 ? (
             <Table>
               <Table.Header>
@@ -400,7 +400,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
         <Heading level="2" size="small">
           Aktive tilganger
         </Heading>
-        <div className="mb-3 w-[91vw] overflow-auto">
+        <div className="mb-3 w-[91vw] md:w-auto overflow-auto">
 
           {accesses.length > 0 ? (
             <Table>
