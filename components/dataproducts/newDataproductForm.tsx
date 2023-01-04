@@ -4,18 +4,17 @@ import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
-import TeamkatalogenSelector, { Team } from '../lib/teamkatalogenSelector'
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import {
   Button,
   Heading,
+  HelpText,
   Radio,
   RadioGroup,
   Select,
   Textarea,
   TextField,
-  Checkbox,
-  CheckboxGroup,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
@@ -23,12 +22,10 @@ import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import DatasetSourceForm from './dataset/datasetSourceForm'
 import TagsSelector from '../lib/tagsSelector'
-import { PiiLevel, useGcpGetColumnsQuery } from '../../lib/schema/graphql'
-import DatasetTableSchema from './dataset/datasetTableSchema'
+import { PiiLevel } from '../../lib/schema/graphql'
 import AnnotateDatasetTable from './dataset/annotateDatasetTable'
 import { useColumnTags } from './dataset/useColumnTags'
-import { string } from 'prop-types'
-import { Personopplysninger } from './dataset/helptext'
+import { Personopplysninger, TilgangsstyringHelpText } from './dataset/helptext'
 import { ContactInput } from './contactInput'
 
 const prefilledDataproductDescription = `*Relevante beskrivelser gjør at folk lettere forstår dataene slik at de raskt kan utforske dem. 
@@ -69,6 +66,7 @@ const defaultValues: FieldValues = {
   bigQuery: null,
   keywords: [] as string[],
   pii: null,
+  grantAllUsers: 'dontGrantAllUsers'
 }
 
 const schema = yup.object().shape({
@@ -103,7 +101,7 @@ const schema = yup.object().shape({
         .nullable()
         .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
     }),
-    grantAllUsers: yup.boolean().nullable()
+    grantAllUsers: yup.string().nullable()
 })
 
 interface BigQueryFields {
@@ -211,7 +209,7 @@ export const NewDataproductForm = () => {
                 anonymisation_description: valueOrNull(
                   data.anonymisation_description
                 ),
-                grantAllUsers: valueOrNull(data.pii === PiiLevel.Sensitive || data.grantAllUsers === undefined ? null : data.grantAllUsers),
+                grantAllUsers: data.pii === PiiLevel.Sensitive || data.grantAllUsers === '' ? null : data.grantAllUsers === 'grantAllUsers',
               },
             ],
           },
@@ -399,11 +397,19 @@ export const NewDataproductForm = () => {
             </RadioGroup>
           )}
         />
-        <CheckboxGroup legend='Åpne for alle i NAV'>
-          <Checkbox {...register('grantAllUsers')} disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
-                  Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder pii)"}
-          </Checkbox>
-        </CheckboxGroup>
+        <Controller name="grantAllUsers" control={control} render={({ field }) => (
+          <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
+              Tilgangsstyring
+              <TilgangsstyringHelpText />
+            </p>
+            }>
+            <Radio value="dontGrantAllUsers">Brukere må søke om tilgang til datasettet</Radio>
+            <Radio value="grantAllUsers" disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
+              Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder personopplysninger)"}
+            </Radio>
+          </RadioGroup>
+          )}
+        />
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>

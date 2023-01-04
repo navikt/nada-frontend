@@ -30,4 +30,11 @@ const PersonopplysningerDetaljert = () => {
     );
 };
 
-export {Personopplysninger, PersonopplysningerDetaljert}
+const TilgangsstyringHelpText = () => {
+    return <HelpText title="Hva betyr det å gi tilgang til alle i NAV?">
+        <p className="mb-2">Det å gi tilgang til alle i NAV betyr at man ikke trenger å søke om tilgang for å lese datasettet fra BigQuery og i Metabase.</p>
+        <p>Det er mulig å gjøre det om senere. Du vil kunne se gruppen som omfavner hele NAV i oversikten over aktive tilganger i datasettet ditt, og du har mulighet til å fjerne denne tilgangen.</p>
+    </HelpText>
+}
+
+export {Personopplysninger, PersonopplysningerDetaljert, TilgangsstyringHelpText}

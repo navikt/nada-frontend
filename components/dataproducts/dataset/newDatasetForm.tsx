@@ -12,7 +12,7 @@ import { prefilledDatasetDescription } from '../newDataproductForm'
 import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
 import { useColumnTags } from './useColumnTags'
-import {Personopplysninger} from "./helptext";
+import {Personopplysninger, TilgangsstyringHelpText} from "./helptext";
 
 interface NewDatasetFormProps {
   dataproduct: DataproductQuery
@@ -24,6 +24,7 @@ const defaultValues: FieldValues = {
   bigquery: null,
   pii: null,
   anonymisation_description: null,
+  grantAllUsers: 'dontGrantAllUsers'
 }
 
 const schema = yup.object().shape({
@@ -45,7 +46,7 @@ const schema = yup.object().shape({
     is: "anonymised",
     then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
-  grantAllUsers: yup.boolean().nullable()
+  grantAllUsers: yup.string().nullable()
 })
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -90,8 +91,6 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       : setValue('keywords', [keyword])
   }
 
-  const valueOrNull = (val: string) => (val == '' ? null : val)
-
   const [createDataset, { loading, error: backendError }] = useMutation(
     CREATE_DATASET,
     {
@@ -111,9 +110,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         ? PiiLevel.Anonymised
         : PiiLevel.None
     requestData.pii = pii
-    requestData.grantAllUsers = valueOrNull(
-        requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === undefined ? null : requestData.grantAllUsers
-    )
+    requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
     try {
       await createDataset({
         variables: { input: requestData },
@@ -205,11 +202,19 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
             </RadioGroup>
           )}
         />
-        <CheckboxGroup legend='Åpne for alle i NAV'>
-          <Checkbox {...register('grantAllUsers')} disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
-                  Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder pii)"}
-          </Checkbox>
-        </CheckboxGroup>
+        <Controller name="grantAllUsers" control={control} render={({ field }) => (
+          <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
+              Tilgangsstyring
+              <TilgangsstyringHelpText />
+            </p>
+            }>
+            <Radio value="dontGrantAllUsers">Brukere må søke om tilgang til datasettet</Radio>
+            <Radio value="grantAllUsers" disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
+              Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder personopplysninger)"}
+            </Radio>
+          </RadioGroup>
+          )}
+        />
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
