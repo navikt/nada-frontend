@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { CoApplicant, Table } from '@navikt/ds-icons'
 import { ProductAreasQuery, TeamkatalogenQuery} from '../../lib/schema/graphql'
+import humanizeDate from '../../lib/humanizeDate'
 
 export interface SearchResultProps {
   link: string
@@ -17,6 +18,9 @@ export interface SearchResultProps {
   description?: string
   datasets?: {
     name: string
+    datasource: {
+      lastModified: string,
+    }
   }[]
   teamkatalogen?: TeamkatalogenQuery,
   productAreas?: ProductAreasQuery
@@ -65,7 +69,7 @@ export const SearchResultLink = ({
               {datasets.map((ds, index) => (
                 <div key={index}>
                   <p dangerouslySetInnerHTML={{ __html: ds.name.replaceAll("_", "_<wbr>")}} />
-                  {/*<Detail className="flex gap-2 items-center text-text-subtle">Sist oppdatert: {humanizeDate(ds.lastModified)}</Detail>*/}
+                  <Detail className="text-text-subtle">Sist oppdatert: {humanizeDate(ds.datasource.lastModified)}</Detail>
                 </div>
               ))}
               </div>

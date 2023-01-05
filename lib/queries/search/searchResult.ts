@@ -16,6 +16,12 @@ export const SEARCH_CONTENT = gql`
           slug
           datasets{
             name
+            datasource {
+              type: __typename
+              ... on BigQuery {
+                lastModified
+              }
+            }
           }
           owner {
             group
