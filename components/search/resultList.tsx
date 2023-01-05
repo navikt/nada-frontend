@@ -46,10 +46,6 @@ const ResultList = ({
   preferredType,
   updateQuery,
 }: ResultListInterface) => {
-  const tk = useTeamkatalogenQuery({
-    variables: { q: '' },
-  })
-  const po = useProductAreasQuery()
   useEffect(() => {
     if (search?.data?.search.filter(
       (d) => d.result.__typename === 'Dataproduct'
@@ -62,6 +58,11 @@ const ResultList = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
+
+  const tk = useTeamkatalogenQuery({
+    variables: { q: '' },
+  })
+  const po = useProductAreasQuery()
 
   if (search) {
     const { data, loading, error } = search

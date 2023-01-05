@@ -31,9 +31,7 @@ export const SearchResultLink = ({
   teamkatalogen,
   productAreas,
 }: SearchResultProps) => {
-
   const tk = teamkatalogen?.teamkatalogen.find((it) => it.url == group?.teamkatalogenURL)
-  console.log(teamkatalogen)
   const po = productAreas?.productAreas.find((it) => it.id == tk?.productAreaID)
   const owner = tk?.name || group?.group
 
@@ -67,7 +65,7 @@ export const SearchResultLink = ({
               {datasets.map((ds, index) => (
                 <div key={index}>
                   <p dangerouslySetInnerHTML={{ __html: ds.name.replaceAll("_", "_<wbr>")}} />
-                  {/*<Detail className="flex gap-2 items-center text-text-subtle">Sist oppdatert: en dag</Detail>*/}
+                  {/*<Detail className="flex gap-2 items-center text-text-subtle">Sist oppdatert: {humanizeDate(ds.lastModified)}</Detail>*/}
                 </div>
               ))}
               </div>
