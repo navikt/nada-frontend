@@ -3,6 +3,8 @@ import {
   Exact,
   SearchContentWithOptionsQuery,
   SearchOptions,
+  useProductAreasQuery,
+  useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
@@ -59,6 +61,11 @@ const ResultList = ({
 
   if (search) {
     const { data, loading, error } = search
+    const tk = useTeamkatalogenQuery({
+      variables: { q: '' },
+    })
+    const po = useProductAreasQuery()
+
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
     const dataproducts = data.search.filter(
@@ -91,12 +98,14 @@ const ResultList = ({
                 d.result.__typename === 'Story' && (
                   <SearchResultLink
                     key={idx}
-                    group={d.result.group!.group}
+                    group={d.result.group!}
                     name={d.result.name}
                     type={'story'}
                     keywords={d.result.keywords}
                     description={d.excerpt}
                     link={`/story/${d.result.id}`}
+                    teamkatalogen={tk.data}
+                    productAreas={po.data}
                   />
                 )
             )}
@@ -107,12 +116,14 @@ const ResultList = ({
                 d.result.__typename === 'Dataproduct' && (
                   <SearchResultLink
                     key={idx}
-                    group={d.result.owner.group}
+                    group={d.result.owner}
                     name={d.result.name}
                     keywords={d.result.keywords}
                     description={d.result.description}
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                     datasets={d.result.datasets}
+                    teamkatalogen={tk.data}
+                    productAreas={po.data}
                   />
                 )
             )}
@@ -128,7 +139,7 @@ const ResultList = ({
         {dataproducts.map((d, idx) => (
           <SearchResultLink
             key={idx}
-            group={d.owner.group}
+            group={d.owner}
             name={d.name}
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
@@ -143,7 +154,7 @@ const ResultList = ({
         {stories.map((s, idx) => (
           <SearchResultLink
             key={idx}
-            group={s.owner?.group}
+            group={s.owner}
             name={s.name}
             link={`/story/${s.id}`}
           />

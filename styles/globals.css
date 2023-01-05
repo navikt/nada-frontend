@@ -117,21 +117,12 @@ h6 {
 }
 
 .nada-search-result {
-  @apply no-underline text-text-default !important
+  @apply shadow shadow-border-divider md:shadow-none border-4 border-transparent no-underline text-text-default hover:bg-gray-100 hover:shadow hover:shadow-border-divider rounded-lg focus:bg-gray-100 active:bg-gray-100 focus:border-text-action-on-action-subtle active:border-text-action-on-action-subtle focus:text-text-default active:text-text-default !important
 }
 
 .nada-search-result:hover > div > div > div > h2 {
   @apply text-text-action underline
 }
-
-.nada-search-result:focus > div > div > div {
-  @apply text-white
-}
-
-.nada-search-result:focus > div > p {
-  @apply text-white
-}
-
 
 .children-fullwidth > :not(div) {
   @apply max-w-3xl
