@@ -47,12 +47,16 @@ export const DataproductSidebar = ({
       <div className="flex w-64 flex-col gap-2">
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
-            <p
+            typeof title === "string" 
+            ? <p
               className="border-l-8 border-l-border-on-inverted py-1 px-2 font-semibold"
               key={idx}
-            >
-              {title}
-            </p>
+              dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>")}}
+            />
+            : <p
+              className="border-l-8 border-l-border-on-inverted py-1 px-2 font-semibold"
+              key={idx}
+            >{title}</p>
           ) : (
             // title might be a ReactNode (legg til datasett, lol), and we can't run .replace() on such an element
             typeof title === "string" 
