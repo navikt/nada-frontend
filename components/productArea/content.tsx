@@ -1,6 +1,7 @@
 import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
+import { useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
 
 interface ProductAreaContentProps {
     currentItem: PAItem
@@ -9,6 +10,10 @@ interface ProductAreaContentProps {
 }
 
 const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
+    const tk = useTeamkatalogenQuery({
+        variables: { q: '' },
+    })
+    const po = useProductAreasQuery()
     return (
         <Tabs
             value={currentTab}
@@ -48,12 +53,14 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                     {currentItem.stories && currentItem.stories.map((s: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
-                            group={s.owner.group}
+                            group={s.owner}
                             name={s.name}
                             description={s.excerpt}
                             keywords={s.keywords}
                             link={`/story/${s.id}`}
                             type="story"
+                            teamkatalogen={tk.data}
+                            productAreas={po.data}
                         />
                     ))}
                     {currentItem.stories.length == 0 && "Ingen fortellinger"}
@@ -67,11 +74,13 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                     {currentItem.dataproducts && currentItem.dataproducts.map((d: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
-                            group={d.owner.group}
+                            group={d.owner}
                             name={d.name}
                             keywords={d.keywords}
                             description={d.description}
                             link={`/dataproduct/${d.id}/${d.slug}`}
+                            teamkatalogen={tk.data}
+                            productAreas={po.data}
                         />
                     ))}
                     {currentItem.dataproducts.length == 0 && "Ingen dataprodukter"}
