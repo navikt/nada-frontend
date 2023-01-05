@@ -65,8 +65,8 @@ export const SearchResultLink = ({
               <Heading size="xsmall" level="3" className="flex items-center gap-2"><Table /> Datasett</Heading>
               <div className='ml-[1.6rem] flex flex-col gap-2'>
               {datasets.map((ds, index) => (
-                <div>
-                  <p key={index} dangerouslySetInnerHTML={{ __html: ds.name.replaceAll("_", "_<wbr>")}} />
+                <div key={index}>
+                  <p dangerouslySetInnerHTML={{ __html: ds.name.replaceAll("_", "_<wbr>")}} />
                   {/*<Detail className="flex gap-2 items-center text-text-subtle">Sist oppdatert: en dag</Detail>*/}
                 </div>
               ))}

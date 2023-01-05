@@ -46,6 +46,10 @@ const ResultList = ({
   preferredType,
   updateQuery,
 }: ResultListInterface) => {
+  const tk = useTeamkatalogenQuery({
+    variables: { q: '' },
+  })
+  const po = useProductAreasQuery()
   useEffect(() => {
     if (search?.data?.search.filter(
       (d) => d.result.__typename === 'Dataproduct'
@@ -61,10 +65,6 @@ const ResultList = ({
 
   if (search) {
     const { data, loading, error } = search
-    const tk = useTeamkatalogenQuery({
-      variables: { q: '' },
-    })
-    const po = useProductAreasQuery()
 
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
@@ -143,6 +143,8 @@ const ResultList = ({
             name={d.name}
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
+            teamkatalogen={tk.data}
+            productAreas={po.data}
           />
         ))}
       </Results>
@@ -157,6 +159,8 @@ const ResultList = ({
             group={s.owner}
             name={s.name}
             link={`/story/${s.id}`}
+            teamkatalogen={tk.data}
+            productAreas={po.data}
           />
         ))}
       </Results>
