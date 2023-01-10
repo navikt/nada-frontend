@@ -45,7 +45,10 @@ const LandingPage = () => {
                     <form
                         className="col-span-1 md:col-span-2 select-none"
                         role="search" 
-                        onSubmit={() => router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })}>
+                        onSubmit={e =>{
+                            e.preventDefault()
+                            router.push({ pathname: '/search', query: { text: searchTerm, preferredType: 'story' } })
+                        }}>
                         <Search
                             label="Søk etter dataprodukter eller fortellinger"
                             onChange={(text) =>
