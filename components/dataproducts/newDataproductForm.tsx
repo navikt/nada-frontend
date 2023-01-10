@@ -26,6 +26,7 @@ import AnnotateDatasetTable from './dataset/annotateDatasetTable'
 import { useColumnTags } from './dataset/useColumnTags'
 import { Personopplysninger, TilgangsstyringHelpText } from './dataset/helptext'
 import { ContactInput } from './contactInput'
+import { Checkbox } from '@navikt/ds-react'
 
 
 const defaultValues: FieldValues = {
@@ -308,6 +309,7 @@ export const NewDataproductForm = () => {
           name="datasetDescription"
           control={control}
         />
+        <Checkbox value="tilBrukeInnad">Til bruke innad i teamet</Checkbox>
         <TextField
           label="Link til kildekode"
           className="w-full"
