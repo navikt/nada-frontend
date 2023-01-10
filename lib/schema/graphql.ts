@@ -576,6 +576,8 @@ export type NewStory = {
   id: Scalars['ID'];
   /** keywords for the datastory used as tags. */
   keywords?: InputMaybe<Array<Scalars['String']>>;
+  /** name is the title of the story */
+  name: Scalars['String'];
   /** Id of the team's product area. */
   productAreaID?: InputMaybe<Scalars['String']>;
   /** target is the id of the published story to overwrite. Keep empty to create new story. */

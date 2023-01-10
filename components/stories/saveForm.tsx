@@ -22,6 +22,7 @@ interface SaveFormProps {
 
 interface FromProps {
   id: string
+  name: string
   keywords: string[]
   target: string | null
   group: string
@@ -36,6 +37,7 @@ function SaveForm({ story }: SaveFormProps) {
       resolver: yupResolver(storyValidation),
       defaultValues: {
         id: story.id,
+        name: story.name,
         keywords: [],
         target: null,
         group: '',
