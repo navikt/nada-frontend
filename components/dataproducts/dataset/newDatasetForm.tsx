@@ -46,7 +46,7 @@ const schema = yup.object().shape({
     then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
   grantAllUsers: yup.string().nullable(),
-  targetUser: yup.string().nullable(),
+  teamInternalUse: yup.boolean(),
 })
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -111,7 +111,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         : PiiLevel.None
     requestData.pii = pii
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
-    requestData.targetUser = requestData.targetUser=== "false" ? "" : requestData.targetUser
+    requestData.targetUser = requestData.teamInternalUse? "OwnerTeam" : ""
+    requestData.teamInternalUse = undefined
     try {
       await createDataset({
         variables: { input: requestData },
@@ -127,7 +128,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       <Heading level="1" size="medium" spacing>
         Legg til datasett
       </Heading>
-      <Checkbox value="OwnerTeam" {...register('targetUser')}>Datasettet er ment til bruk innad i teamet</Checkbox>
+      <Checkbox {...register('teamInternalUse')}>Datasettet er ment til bruk innad i teamet</Checkbox>
 
       <form
         onSubmit={handleSubmit(onSubmitForm)}

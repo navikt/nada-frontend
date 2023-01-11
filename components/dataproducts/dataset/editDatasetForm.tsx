@@ -43,7 +43,7 @@ interface EditDatasetFormFields {
   }
   keywords: string[]
   anonymisation_description: string | null | undefined
-  targetUser?: string
+  teamInternalUse?: boolean
 }
 
 const schema = yup.object().shape({
@@ -66,7 +66,7 @@ const schema = yup.object().shape({
     is: "anonymised",
     then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
-  targetUser: yup.string().nullable(),
+  teamInternalUse: yup.boolean(),
 })
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
@@ -88,14 +88,13 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           table: dataset.datasource.table,
         },
         anonymisation_description: dataset.anonymisation_description,
-        targetUser: dataset.targetUser || "false",
+        teamInternalUse: dataset.targetUser === "OwnerTeam",
       },
     })
 
   const keywords = watch('keywords')
   const bigquery = watch('bigquery')
   const pii = watch('pii')
-
   const {
     columns,
     loading: loadingColumns,
@@ -128,7 +127,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       repo: requestData.repo,
       keywords: requestData.keywords,
       anonymisation_description: requestData.anonymisation_description,
-      targetUser: requestData.targetUser=== "false" ? "" : requestData.targetUser,
+      targetUser: requestData.teamInternalUse? "OwnerTeam" : "",
       piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),      
     }
     updateDataset({
@@ -165,7 +164,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       <Heading level="1" size="medium" spacing>
         Endre datasett
       </Heading>
-      <Checkbox value="OwnerTeam" {...register('targetUser')}>Datasettet er ment til bruk innad i teamet</Checkbox>
+      <Checkbox {...register('teamInternalUse')}>Datasettet er ment til bruk innad i teamet</Checkbox>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-10 h-[90%]"
