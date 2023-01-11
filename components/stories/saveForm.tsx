@@ -58,6 +58,7 @@ function SaveForm({ story }: SaveFormProps) {
   useEffect(() => {
     const story = userInfo?.stories.find((s) => s.id == overwriteStory)
     setValue('keywords', story?.keywords || [])
+    setValue('teamkatalogenURL', story?.owner.teamkatalogenURL? story.owner.teamkatalogenURL : null)
   }, [overwriteStory, userInfo?.stories, setValue])
 
   const onDelete = (keyword: string) => {

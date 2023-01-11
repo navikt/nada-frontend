@@ -41,6 +41,7 @@ export const USER_INFO = gql`
         keywords
         owner {
           group
+          teamkatalogenURL
         }
       }
       accessRequests {
