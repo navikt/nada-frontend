@@ -75,7 +75,8 @@ const schema = yup.object().shape({
         .nullable()
         .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
     }),
-    grantAllUsers: yup.string().nullable()
+    grantAllUsers: yup.string().nullable(),
+    targetUser: yup.string().nullable(),
 })
 
 interface BigQueryFields {
@@ -83,6 +84,8 @@ interface BigQueryFields {
   projectID: string
   table: string
 }
+
+export type TargetUserType = "OwnerTeam" | "" | null
 
 export interface NewDataproductFields {
   name: string
@@ -99,6 +102,7 @@ export interface NewDataproductFields {
   productAreaID: string
   teamID: string
   anonymisation_description?: string | null
+  targetUser?: TargetUserType
 }
 
 export const NewDataproductForm = () => {
@@ -184,6 +188,7 @@ export const NewDataproductForm = () => {
                   data.anonymisation_description
                 ),
                 grantAllUsers: data.pii === PiiLevel.Sensitive || data.grantAllUsers === '' ? null : data.grantAllUsers === 'grantAllUsers',
+                targetUser: data.targetUser=== "false" ? "" : data.targetUser,
               },
             ],
           },
@@ -297,6 +302,7 @@ export const NewDataproductForm = () => {
           <span className="italic text-[#555]">
             Flere datasett kan legges til etter lagring{' '}
           </span>
+          <Checkbox value="OwnerTeam" {...register('targetUser')}>Datasettet er ment til bruk innad i teamet</Checkbox>
         </div>
         <TextField
           label="Navn på datasett"
@@ -309,7 +315,6 @@ export const NewDataproductForm = () => {
           name="datasetDescription"
           control={control}
         />
-        <Checkbox value="tilBrukeInnad">Til bruke innad i teamet</Checkbox>
         <TextField
           label="Link til kildekode"
           className="w-full"

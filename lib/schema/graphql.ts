@@ -197,6 +197,8 @@ export type Dataset = {
   services: DatasetServices;
   /** slug is the dataset slug */
   slug: Scalars['String'];
+  /** targetUser is the type of user that the dataset is meant to be used by */
+  targetUser?: Maybe<Scalars['String']>;
 };
 
 
@@ -533,6 +535,8 @@ export type NewDataset = {
   repo?: InputMaybe<Scalars['String']>;
   /** requesters contains list of users, groups and service accounts which can request access to the dataset */
   requesters?: InputMaybe<Array<Scalars['String']>>;
+  /** targetUser is the type of user that the dataset is meant to be used by */
+  targetUser?: InputMaybe<Scalars['String']>;
 };
 
 /** NewDatasetForNewDataproduct contains metadata for creating a new dataset for a new dataproduct */
@@ -555,6 +559,8 @@ export type NewDatasetForNewDataproduct = {
   repo?: InputMaybe<Scalars['String']>;
   /** requesters contains list of users, groups and service accounts which can request access to the dataset */
   requesters?: InputMaybe<Array<Scalars['String']>>;
+  /** targetUser is the type of user that the dataset is meant to be used by */
+  targetUser?: InputMaybe<Scalars['String']>;
 };
 
 /** NewGrant contains metadata on a request to access a dataset */
@@ -1104,6 +1110,8 @@ export type UpdateDataset = {
   piiTags?: InputMaybe<Scalars['String']>;
   /** repo is the url of the repository containing the code to create the dataset */
   repo?: InputMaybe<Scalars['String']>;
+  /** targetUser is the type of user that the dataset is meant to be used by */
+  targetUser?: InputMaybe<Scalars['String']>;
 };
 
 /** UserInfo contains metadata on a logged in user */
@@ -1220,7 +1228,7 @@ export type DataproductQueryVariables = Exact<{
 }>;
 
 
-export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
+export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
 
 export type DataproductSummaryQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1306,7 +1314,7 @@ export type DatasetQueryVariables = Exact<{
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1889,6 +1897,7 @@ export const DataproductDocument = gql`
       keywords
       mappings
       anonymisation_description
+      targetUser
       services {
         metabase
       }
@@ -2389,6 +2398,7 @@ export const DatasetDocument = gql`
     keywords
     mappings
     anonymisation_description
+    targetUser
     services {
       metabase
     }

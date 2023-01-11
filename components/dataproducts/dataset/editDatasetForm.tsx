@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   ErrorSummary,
   Heading,
   Radio,
@@ -42,6 +43,7 @@ interface EditDatasetFormFields {
   }
   keywords: string[]
   anonymisation_description: string | null | undefined
+  targetUser?: string
 }
 
 const schema = yup.object().shape({
@@ -64,6 +66,7 @@ const schema = yup.object().shape({
     is: "anonymised",
     then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
+  targetUser: yup.string().nullable(),
 })
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
@@ -85,6 +88,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           table: dataset.datasource.table,
         },
         anonymisation_description: dataset.anonymisation_description,
+        targetUser: dataset.targetUser || "false",
       },
     })
 
@@ -124,7 +128,8 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       repo: requestData.repo,
       keywords: requestData.keywords,
       anonymisation_description: requestData.anonymisation_description,
-      piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),
+      targetUser: requestData.targetUser=== "false" ? "" : requestData.targetUser,
+      piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),      
     }
     updateDataset({
       variables: { id: dataset.id, input: payload },
@@ -160,6 +165,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       <Heading level="1" size="medium" spacing>
         Endre datasett
       </Heading>
+      <Checkbox value="OwnerTeam" {...register('targetUser')}>Datasettet er ment til bruk innad i teamet</Checkbox>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-10 h-[90%]"

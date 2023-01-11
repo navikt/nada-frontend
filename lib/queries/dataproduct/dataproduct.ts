@@ -30,6 +30,7 @@ export const GET_DATAPRODUCT = gql`
         keywords
         mappings
         anonymisation_description
+        targetUser
         services {
           metabase
         }
