@@ -119,8 +119,6 @@ export const DataproductSidebar = ({
 
         <SubjectHeader>Opprettet</SubjectHeader>
         <Subject>{humanizeDate(product.created)}</Subject>
-        <SubjectHeader>Oppdatert</SubjectHeader>
-        <Subject>{humanizeDate(product.lastModified)}</Subject>
       </div>
     </div>
   )

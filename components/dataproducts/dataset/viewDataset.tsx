@@ -34,11 +34,9 @@ interface ViewDatasetProps {
 }
 
 const DatasetAlert = ({
-  narrow,
   variant,
   children,
 }: {
-  narrow?: boolean
   children: React.ReactNode
   variant: 'info' | 'success' | 'warning'
 }) => {
@@ -46,7 +44,7 @@ const DatasetAlert = ({
     <Alert
       variant={variant}
       size="small"
-      className={`${narrow && 'max-w-fit'} md:-ml-4`}
+      className='w-full 2xl:w-[60rem] md:-ml-4'
     >
       {children}
     </Alert>
