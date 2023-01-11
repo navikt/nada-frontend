@@ -26,6 +26,7 @@ import AnnotateDatasetTable from './dataset/annotateDatasetTable'
 import { useColumnTags } from './dataset/useColumnTags'
 import { Personopplysninger, TilgangsstyringHelpText } from './dataset/helptext'
 import { ContactInput } from './contactInput'
+import { Checkbox } from '@navikt/ds-react'
 
 
 const defaultValues: FieldValues = {
@@ -74,7 +75,8 @@ const schema = yup.object().shape({
         .nullable()
         .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
     }),
-    grantAllUsers: yup.string().nullable()
+    grantAllUsers: yup.string().nullable(),
+    teamInternalUse: yup.boolean(),
 })
 
 interface BigQueryFields {
@@ -98,6 +100,7 @@ export interface NewDataproductFields {
   productAreaID: string
   teamID: string
   anonymisation_description?: string | null
+  teamInternalUse: boolean 
 }
 
 export const NewDataproductForm = () => {
@@ -183,6 +186,7 @@ export const NewDataproductForm = () => {
                   data.anonymisation_description
                 ),
                 grantAllUsers: data.pii === PiiLevel.Sensitive || data.grantAllUsers === '' ? null : data.grantAllUsers === 'grantAllUsers',
+                targetUser: data.teamInternalUse? "OwnerTeam" : "",
               },
             ],
           },
@@ -296,6 +300,7 @@ export const NewDataproductForm = () => {
           <span className="italic text-[#555]">
             Flere datasett kan legges til etter lagring{' '}
           </span>
+          <Checkbox {...register('teamInternalUse')}>Datasettet er ment til bruk innad i teamet</Checkbox>
         </div>
         <TextField
           label="Navn på datasett"

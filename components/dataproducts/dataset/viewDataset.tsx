@@ -1,4 +1,4 @@
-import { WarningColored, SuccessColored, Back } from '@navikt/ds-icons'
+import { WarningColored, SuccessColored, Back, InformationColored } from '@navikt/ds-icons'
 import { Alert, BodyLong, Heading, Link, Modal } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -185,6 +185,14 @@ const ViewDataset = ({
                   metodebeskrivelse for anonymisering
                 </a>
                 )
+              </span>
+            </p>
+          )}
+          {dataset.targetUser === "OwnerTeam" && (
+            <p className="flex flex-row gap-2 items-center">
+              <InformationColored />
+              <span>
+                Datasettet er ment til bruk innad i teamet
               </span>
             </p>
           )}

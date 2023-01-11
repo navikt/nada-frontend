@@ -15,6 +15,7 @@ export const GET_DATASET = gql`
       keywords
       mappings
       anonymisation_description
+      targetUser
       services {
         metabase
       }

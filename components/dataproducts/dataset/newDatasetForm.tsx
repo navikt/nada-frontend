@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
+import { Button, Checkbox, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -45,7 +45,8 @@ const schema = yup.object().shape({
     is: "anonymised",
     then: yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
   }),
-  grantAllUsers: yup.string().nullable()
+  grantAllUsers: yup.string().nullable(),
+  teamInternalUse: yup.boolean(),
 })
 
 const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
@@ -110,6 +111,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         : PiiLevel.None
     requestData.pii = pii
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
+    requestData.targetUser = requestData.teamInternalUse? "OwnerTeam" : ""
+    requestData.teamInternalUse = undefined
     try {
       await createDataset({
         variables: { input: requestData },
@@ -125,6 +128,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       <Heading level="1" size="medium" spacing>
         Legg til datasett
       </Heading>
+      <Checkbox {...register('teamInternalUse')}>Datasettet er ment til bruk innad i teamet</Checkbox>
+
       <form
         onSubmit={handleSubmit(onSubmitForm)}
         className="flex flex-col gap-10 h-[90%]"
