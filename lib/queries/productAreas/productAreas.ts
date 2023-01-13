@@ -25,6 +25,18 @@ export const GET_PRODUCT_AREAS = gql`
             teamkatalogenURL
         }
       }
+      teams{
+        id
+        name
+        dataproducts{
+          id
+          name
+        }
+        stories{
+          id
+          name
+        }
+      }
     }
   }
 `

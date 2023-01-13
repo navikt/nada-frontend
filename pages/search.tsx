@@ -12,6 +12,7 @@ import ResultList from '../components/search/resultList'
 import amplitudeLog from '../lib/amplitude'
 import InnerContainer from '../components/lib/innerContainer'
 import { Heading } from '@navikt/ds-react'
+import { SearchPanel } from '../components/search/searchPanel'
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -49,7 +50,7 @@ const Search = () => {
     keywords: arrayify(router.query.keywords),
     services: arrayify(router.query.services) as MappingService[],
     text: (router.query.text && router.query.text.toString()) || '',
-    preferredType: router.query.preferredType?.toString() || ''
+    preferredType: router.query.preferredType?.toString() || '',
   }
 
   const search = useSearchContentWithOptionsQuery({
@@ -60,7 +61,7 @@ const Search = () => {
         groups: filters.groups,
         keywords: filters.keywords,
         services: filters.services,
-        text: filters.text
+        text: filters.text,
       },
     },
     fetchPolicy: 'network-only',
@@ -76,9 +77,8 @@ const Search = () => {
     } else {
       if (key === 'text') {
         filters['text'] = value as string
-        amplitudeLog('søk', {...filters})
-      }
-      else if (key === 'preferredType') {
+        amplitudeLog('søk', { ...filters })
+      } else if (key === 'preferredType') {
         filters['preferredType'] = value as string
       } else {
         const values = filters[key] as string[]
@@ -89,7 +89,7 @@ const Search = () => {
           currentValue.push(value.toString())
           filters[key] = currentValue
         }
-        amplitudeLog('søk', {...filters})
+        amplitudeLog('søk', { ...filters })
       }
     }
     await router.push(buildQueryString())
@@ -109,22 +109,15 @@ const Search = () => {
       <Head>
         <title>Søkeresultater</title>
       </Head>
-      <div className="grid gap-4 md:mx-4 my-4">
-        <Heading level="1" size="large">Søkeresultater</Heading>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-shrink-0 md:w-[300px] md:mt-16">
-            {router.isReady && (
-              <SideMenu filters={filters} updateQuery={updateQuery} />
-            )}
-          </div>
-          <div className="flex-grow">
-            <Filters filters={filters} updateQuery={updateQuery} />
-            <ResultList
-              search={search}
-              preferredType={filters.preferredType}
-              updateQuery={updateQuery}
-            />
-          </div>
+      <div className="flex flex-row mt-11">
+        <div className="flex flex-col w-80">{router.isReady && <SearchPanel />}</div>
+        <div className="flex-grow pl-6">
+          <Filters filters={filters} updateQuery={updateQuery} />
+          <ResultList
+            search={search}
+            preferredType={filters.preferredType}
+            updateQuery={updateQuery}
+          />
         </div>
       </div>
     </InnerContainer>
