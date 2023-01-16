@@ -50,11 +50,10 @@ const FiltersTreeView = ({
       {typeof filtersTree === 'object' &&
         !!filtersTree &&
         Object.getOwnPropertyNames(filtersTree).map((it) => (
-          <div>
+          <div key={it}>
             <Checkbox
               checked={isChecked(filtersTree[it])}
               onChange={() => onToggle(it)}
-              key={it}
             >
               {it}
             </Checkbox>
