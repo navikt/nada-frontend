@@ -5,8 +5,17 @@ import {
   useKeywordsQuery,
 } from '../../lib/schema/graphql'
 import { Close } from '@navikt/ds-icons'
-import { emailToValue, FilterTypes } from '../../pages/search'
 import { Autocomplete, IconButton, TextField } from '@mui/material'
+
+type FilterTypes = {
+  [key: string]: string[] | string
+  groups: string[]
+  keywords: string[]
+  text: string
+  preferredType: string
+}
+
+const emailToValue = (v: string) => v
 
 interface SideMenuProps {
   updateQuery: (key: string, value: string | string[], remove?: boolean) => void

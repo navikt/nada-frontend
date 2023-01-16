@@ -36,7 +36,7 @@ type ResultListInterface = {
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
   preferredType?: string
-  updateQuery: (key: string, value: string, clear?: boolean) => void
+  updatePreferredType: (newPreferredType: string) => void
 }
 
 const ResultList = ({
@@ -44,19 +44,21 @@ const ResultList = ({
   dataproducts,
   stories,
   preferredType,
-  updateQuery,
+  updatePreferredType,
 }: ResultListInterface) => {
   useEffect(() => {
-    if (search?.data?.search.filter(
-      (d) => d.result.__typename === 'Dataproduct'
-    ).length == 0) {
-      updateQuery("preferredType", "story")
-    } else if (search?.data?.search.filter(
-      (d) => d.result.__typename === 'Story'
-    ).length == 0) {
-      updateQuery("preferredType", "dataproduct")
+    if (
+      search?.data?.search.filter((d) => d.result.__typename === 'Dataproduct')
+        .length == 0
+    ) {
+      updatePreferredType('story')
+    } else if (
+      search?.data?.search.filter((d) => d.result.__typename === 'Story')
+        .length == 0
+    ) {
+      updatePreferredType('dataproduct')
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
   const tk = useTeamkatalogenQuery({
@@ -80,8 +82,11 @@ const ResultList = ({
         <Tabs
           defaultValue={preferredType}
           size="medium"
-          value = {preferredType}
-          onChange={(focused) => updateQuery("preferredType", focused)}
+          value={preferredType}
+          onChange={(focused) => {
+            console.log(focused)
+            updatePreferredType(focused)
+          }}
         >
           <Tabs.List>
             <Tabs.Tab

@@ -891,6 +891,8 @@ export type SearchOptions = {
   offset?: InputMaybe<Scalars['Int']>;
   /** services filters results on the service. */
   services?: InputMaybe<Array<MappingService>>;
+  /** teamIDs filters results on the team_id. */
+  teamIDs?: InputMaybe<Array<Scalars['String']>>;
   /**
    * text is used as freetext search.
    *
@@ -914,6 +916,8 @@ export type SearchQuery = {
   limit?: InputMaybe<Scalars['Int']>;
   /** offset the list of returned search results. Used as pagination with PAGE-INDEX * limit. */
   offset?: InputMaybe<Scalars['Int']>;
+  /** teamID filters results on the team_id. */
+  teamID?: InputMaybe<Scalars['String']>;
   /**
    * text is used as freetext search.
    *

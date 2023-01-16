@@ -1,7 +1,15 @@
 import * as React from 'react'
 import { Close } from '@navikt/ds-icons'
-import { emailToValue, FilterTypes } from '../../pages/search'
 
+type FilterTypes = {
+  [key: string]: string[] | string
+  groups: string[]
+  keywords: string[]
+  text: string
+  preferredType: string
+}
+
+const emailToValue = (v: string) => v
 const FilterRow = ({children}: {children: React.ReactNode}) => {
   return <div className="flex gap-2">
     {children}
