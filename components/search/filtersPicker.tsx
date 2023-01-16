@@ -54,6 +54,7 @@ const FiltersTreeView = ({
             <Checkbox
               checked={isChecked(filtersTree[it])}
               onChange={() => onToggle(it)}
+              key={it}
             >
               {it}
             </Checkbox>
