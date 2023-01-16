@@ -34,7 +34,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine produkter</h2>
-          <ResultList dataproducts={data.userInfo.dataproducts} updateQuery={(key: string, value: string) => {}} />
+          <ResultList dataproducts={data.userInfo.dataproducts} updatePreferredType={(newPreferredType) => {}} />
         </div>
       ),
     },
@@ -44,7 +44,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine fortellinger</h2>
-          <ResultList stories={data.userInfo.stories} updateQuery={(key: string, value: string) => {}} />
+          <ResultList stories={data.userInfo.stories} updatePreferredType={(newPreferredType) => {}} />
         </div>
       ),
     },
@@ -54,7 +54,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine tilganger</h2>
-          <ResultList dataproducts={data.userInfo.accessable} updateQuery={(key: string, value: string) => {}} />
+          <ResultList dataproducts={data.userInfo.accessable} updatePreferredType={(newPreferredType) => {}} />
         </div>
       ),
     },
