@@ -1,84 +1,45 @@
-import { QueryResult } from '@apollo/client'
 import { Accordion, Loader, Search } from '@navikt/ds-react'
-import router from 'next/router'
 import { useState } from 'react'
 import {
-  Exact,
-  KeywordsQuery,
-  ProductAreasQuery,
-  ProductAreasQueryResult,
   useKeywordsQuery,
   useProductAreasQuery,
 } from '../../lib/schema/graphql'
+import { SearchParam } from '../../pages/search'
 import { FiltersPicker, FilterTreeNode } from './filtersPicker'
 
 export interface SearchPanelProps {
-  searchTerm: string
-  searchTeam: string[]
-  searchKeyword: string[]
+  searchParam: SearchParam
   productAreaFiltersTree: FilterTreeNode
   keywordsFiltersTree: FilterTreeNode
-  updateQuery: (term: string, teams: string[], keywords: string[]) => void
+  updateQuery: (searchParam: SearchParam) => void
 }
 
 export const SearchPanel = ({
-  searchTerm,
-  searchTeam,
-  searchKeyword,
+  searchParam,
   productAreaFiltersTree,
   keywordsFiltersTree,
   updateQuery,
 }: SearchPanelProps) => {
-  const [updatedSearchTerm, setUpdatedSearchTerm] = useState(searchTerm)
+  const [updatedSearchTerm, setUpdatedSearchTerm] = useState(
+    searchParam.freeText || ''
+  )
   const po = useProductAreasQuery()
   const kw = useKeywordsQuery()
 
-  console.log(searchTeam)
-  const onToggleProductArea = (filter: string) => {
-    const picked = !Object.entries(productAreaFiltersTree[filter]).every(
-      (it) => !!searchTeam.find((team) => team === it[0])
-    )
-
-    let updatedFilterValues: string[] = []
-    if (picked) {
-      updatedFilterValues = [
-        ...new Set([
-          ...searchTeam,
-          ...Object.entries(productAreaFiltersTree[filter]).map((it) => it[0]),
-        ]),
-      ]
-    } else {
-      updatedFilterValues = searchTeam
-        .filter(
-          (it) =>
-            !Object.entries(productAreaFiltersTree[filter]).find(
-              (e) => e[0] === it
-            )
-        )
-    }
-    updateQuery(updatedSearchTerm, updatedFilterValues, searchKeyword)
-  }
-
   const onToggleTeam = (filter: string) => {
-    const picked = !searchTeam.find((it) => filter === it)
-    const updatedFilterValues = (picked
-      ? [...new Set([...searchTeam, filter])]
-      : searchTeam.filter((it) => it != filter))
-    updateQuery(updatedSearchTerm, updatedFilterValues, searchKeyword)
-  }
-
-  const onToggleProductAreaOrTeam = (filter: string) => {
-    return Object.entries(productAreaFiltersTree).find((pa) => pa[0] === filter)
-      ? onToggleProductArea(filter)
-      : onToggleTeam(filter)
+    const picked = !searchParam.teams?.find((it) => filter === it)
+    const updatedFilterValues = picked
+      ? [...new Set([...(searchParam.teams || []), filter])]
+      : searchParam.teams?.filter((it) => it != filter)
+    updateQuery({ ...searchParam, teams: updatedFilterValues })
   }
 
   const onPickKeyword = (filter: string) => {
-    const picked = !searchKeyword.find((it) => filter === it)
+    const picked = !searchParam.keywords?.find((it) => filter === it)
     const updatedFilterValues = picked
-      ? [...new Set([...searchKeyword, filter]).values()]
-      : searchKeyword.filter((it) => it != filter)
-    updateQuery(updatedSearchTerm, searchTeam, updatedFilterValues)
+      ? [...new Set([...(searchParam.keywords || []), filter]).values()]
+      : searchParam.keywords?.filter((it) => it != filter)
+    updateQuery({ ...searchParam, keywords: updatedFilterValues })
   }
 
   return (
@@ -87,7 +48,7 @@ export const SearchPanel = ({
         className="self-center px-5 mb-5 mt-3"
         onSubmit={(e) => {
           e.preventDefault()
-          updateQuery(updatedSearchTerm, searchTeam, searchKeyword)
+          updateQuery({ ...searchParam, freeText: updatedSearchTerm })
         }}
       >
         <Search
@@ -108,7 +69,7 @@ export const SearchPanel = ({
           <FiltersPicker
             header="Områder"
             filtersTree={productAreaFiltersTree}
-            onToggle={onToggleProductAreaOrTeam}
+            onToggle={onToggleTeam}
           ></FiltersPicker>
         )}
         {kw.loading ? (

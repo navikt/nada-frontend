@@ -1,5 +1,6 @@
 import { Error } from '@navikt/ds-icons'
 import * as React from 'react'
+import { emptyFilter, isEmptyFilter, SearchParam } from '../../pages/search'
 
 const FilterRow = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex gap-2">{children}</div>
@@ -19,7 +20,9 @@ const FilterPill = ({
   return (
     <span
       onClick={onClick}
-      className={`${className || ''} svg-scale flex items-center gap-1 cursor-pointer text-xs p-2
+      className={`${
+        className || ''
+      } svg-scale flex items-center gap-1 cursor-pointer text-xs p-2
       ${
         all
           ? 'bg-surface-action text-text-on-inverted rounded-sm'
@@ -32,63 +35,57 @@ const FilterPill = ({
   )
 }
 
-interface filterProps {
-  searchTerm: string
-  searchTeam: string[]
-  searchKeyword: string[]
-  updateQuery: (term: string, teams: string[], keywords: string[]) => void
+interface FiltersListProps {
+  searchParam: SearchParam
+  updateQuery: (updatedParam: SearchParam) => void
   className?: string
 }
 
 const FiltersList = ({
-  searchTerm,
-  searchTeam,
-  searchKeyword,
+  searchParam,
   updateQuery,
   className,
-}: filterProps) => (
+}: FiltersListProps) => (
   <div className={className}>
-    {(!!searchTerm || !!searchTeam.length || !!searchKeyword.length) && (
+    {!isEmptyFilter(searchParam) && (
       <FilterRow>
-        <FilterPill all={true} onClick={() => updateQuery('', [], [])}>
+        <FilterPill all={true} onClick={() => updateQuery(emptyFilter)}>
           Fjern alle filtre
           <Error />
         </FilterPill>
-        {!!searchTerm && (
+        {!!searchParam.freeText && (
           <FilterPill
             key={'searchTerm'}
-            onClick={() => updateQuery('', searchTeam, searchKeyword)}
+            onClick={() => updateQuery({ ...searchParam, freeText: '' })}
           >
-            {searchTerm}
+            {searchParam.freeText}
             <Error />
           </FilterPill>
         )}
-        {searchTeam.map((t, index) => (
+        {searchParam.teams?.map((t, index) => (
           <FilterPill
             key={`searchTeam${index}`}
             onClick={() =>
-              updateQuery(
-                searchTerm,
-                searchTeam.filter((st) => st !== t),
-                searchKeyword
-              )
+              updateQuery({
+                ...searchParam,
+                teams: searchParam.teams?.filter((st) => st !== t),
+              })
             }
           >
             {t}
             <Error />
           </FilterPill>
         ))}
-        {searchKeyword.map((k, index) => (
+        {searchParam.keywords?.map((k, index) => (
           <FilterPill
             key={`searchKeyword${index}`}
             onClick={() =>
-              updateQuery(
-                searchTerm,
-                searchTeam,
-                searchKeyword.filter((sk) => sk !== k)
-              )
+              updateQuery({
+                ...searchParam,
+                keywords: searchParam.keywords?.filter((sk) => sk !== k),
+              })
             }
-            className= ""
+            className=""
           >
             {k}
             <Error />

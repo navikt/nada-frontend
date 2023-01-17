@@ -22,7 +22,6 @@ export const UserPages = () => {
     )
   console.log(data.userInfo)
 
-
   const menuItems: Array<{
     title: string
     slug: string
@@ -34,7 +33,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine produkter</h2>
-          <ResultList dataproducts={data.userInfo.dataproducts} updatePreferredType={(newPreferredType) => {}} />
+          <ResultList dataproducts={data.userInfo.dataproducts} />
         </div>
       ),
     },
@@ -44,7 +43,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine fortellinger</h2>
-          <ResultList stories={data.userInfo.stories} updatePreferredType={(newPreferredType) => {}} />
+          <ResultList stories={data.userInfo.stories} />
         </div>
       ),
     },
@@ -54,7 +53,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine tilganger</h2>
-          <ResultList dataproducts={data.userInfo.accessable} updatePreferredType={(newPreferredType) => {}} />
+          <ResultList dataproducts={data.userInfo.accessable} />
         </div>
       ),
     },
@@ -109,9 +108,7 @@ export const UserPages = () => {
             )}
           </div>
         </div>
-        <div className="w-full">
-          {menuItems[currentPage].component}
-        </div>
+        <div className="w-full">{menuItems[currentPage].component}</div>
       </div>
     </InnerContainer>
   )

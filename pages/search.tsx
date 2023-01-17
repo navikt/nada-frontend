@@ -1,28 +1,39 @@
-import * as React from 'react'
-import router, { useRouter } from 'next/router'
+import { QueryResult } from '@apollo/client'
 import Head from 'next/head'
-import SideMenu from '../components/search/sidemenu'
-import Filters from '../components/search/filters'
+import { useRouter } from 'next/router'
+import * as React from 'react'
+import InnerContainer from '../components/lib/innerContainer'
+import FiltersList from '../components/search/filtersList'
+import { FilterTreeNode } from '../components/search/filtersPicker'
+import ResultList from '../components/search/resultList'
+import { SearchPanel } from '../components/search/searchPanel'
+
 import {
   Exact,
   KeywordsQuery,
-  MappingService,
   ProductAreasQuery,
   SearchType,
   useKeywordsQuery,
   useProductAreasQuery,
   useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
-import ResultList from '../components/search/resultList'
-import amplitudeLog from '../lib/amplitude'
-import InnerContainer from '../components/lib/innerContainer'
-import { Heading } from '@navikt/ds-react'
-import { SearchPanel } from '../components/search/searchPanel'
-import { string } from 'yup'
-import { useState } from 'react'
-import { FilterTreeNode } from '../components/search/filtersPicker'
-import { QueryResult } from '@apollo/client'
-import FiltersList from '../components/search/filtersList'
+
+export interface SearchParam {
+  [s: string]: undefined | string | string[]
+  preferredType?: string
+  freeText?: string
+  teams?: string[]
+  keywords?: string[]
+}
+
+export const isEmptyFilter = (param: SearchParam) =>
+  !param.freeText && !param.keywords?.length && !param.teams?.length
+
+export const emptyFilter = {
+  freeText: '',
+  teams: [],
+  keywords: [],
+}
 
 export const arrayify = (query: string | string[] | undefined) => {
   if (query) {
@@ -32,7 +43,28 @@ export const arrayify = (query: string | string[] | undefined) => {
   return []
 }
 
-const mapProductAreas = (
+//Use an object to represent the filters tree, where the object itself is the root of the tree, and its
+//properties represent product areas, which are also objects. The properties of the nested objects
+//for product areas represent the team filters, which are booleans. The values of the boolean properties
+//represent if the related filters are selected.
+//For example, if the product areas info is:
+// - PO1
+//   - team1
+// - PO2
+//   - team2
+//   - team3
+// and only team1 is selected as a filter
+//The object layout will be:
+//{
+//  PO1: {
+//          team1 : true,
+//       },
+//  PO2:{
+//          team2 : false,
+//          team3 : false,
+//      },
+//}
+const mapProductAreasToFiltersTree = (
   productAreas: ProductAreasQuery,
   pickedFilters: string[]
 ) => {
@@ -55,14 +87,13 @@ const buildProductAreaFiltersTree = (
 ) => {
   return queryResult.loading || !queryResult.data
     ? ({} as FilterTreeNode)
-    : mapProductAreas(queryResult.data, pickedFilters)
+    : mapProductAreasToFiltersTree(queryResult.data, pickedFilters)
 }
 
 const buildKeywordsFiltersTree = (
   queryResult: QueryResult<KeywordsQuery, Exact<{ [key: string]: never }>>,
   pickedFilters: string[]
 ) => {
-  const keywordsTree = {} as FilterTreeNode
   return queryResult.loading || !queryResult.data
     ? ({} as FilterTreeNode)
     : (Object.fromEntries(
@@ -75,6 +106,8 @@ const buildKeywordsFiltersTree = (
       ) as FilterTreeNode)
 }
 
+//backend search use team_id instead of team name, which is not human readable
+//so we use the maps to convert the values
 const buildTeamIDMaps = (
   queryResult: QueryResult<ProductAreasQuery, Exact<{ [key: string]: never }>>
 ) => {
@@ -102,70 +135,48 @@ const Search = () => {
   const router = useRouter()
   const baseUrl = router.asPath.split('?')[0]
 
-  const searchPreferredType = router.query.preferredType?.toString() || ''
-  const searchText = (!!router.query.text && router.query.text.toString()) || ''
-  const searchTeamIDs = arrayify(router.query.teamIDs)
-  const searchKeywords = arrayify(router.query.keywords)
-  const searchTeam = searchTeamIDs
-    .map((id) => teamIDToName.get(id))
-    .filter((t) => !!t)
-  const productAreaFiltersTree = buildProductAreaFiltersTree(po, searchTeam)
-  const keywordsFiltersTree = buildKeywordsFiltersTree(kw, searchKeywords)
+  const searchParam: SearchParam = {
+    preferredType: router.query.preferredType?.toString() || '',
+    freeText: (!!router.query.text && router.query.text.toString()) || '',
+    teams: arrayify(router.query.teamIDs).map((it) => teamIDToName.get(it)),
+    keywords: arrayify(router.query.keywords),
+  }
+  const productAreaFiltersTree = buildProductAreaFiltersTree(
+    po,
+    searchParam.teams || []
+  )
+  const keywordsFiltersTree = buildKeywordsFiltersTree(
+    kw,
+    searchParam.keywords || []
+  )
   const search = useSearchContentWithOptionsQuery({
     variables: {
       options: {
         limit: 1000,
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
-        teamIDs: searchTeamIDs,
-        keywords: searchKeywords,
-        text: searchText,
+        teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)),
+        keywords: searchParam.keywords,
+        text: searchParam.freeText,
       },
     },
     fetchPolicy: 'network-only',
   })
 
-  const updateQuery = async (
-    searchTerm: string,
-    searchTeam: string[],
-    searchKeyword: string[]
-  ) => {
-    await router.push(
-      buildQueryString(
-        searchTerm,
-        searchPreferredType,
-        searchTeam.map((t) => teamNameToID.get(t)).filter((id) => !!id),
-        searchKeyword
-      )
-    )
+  const updateQuery = async (updatedParam: SearchParam) => {
+    await router.push(buildQueryString(updatedParam))
   }
 
-  const updatePreferredType = async (updatedPreferredType: string) => {
-    await router.push(
-      buildQueryString(
-        searchText,
-        updatedPreferredType,
-        searchTeamIDs,
-        searchKeywords
-      )
-    )
-  }
-
-  const buildQueryString = (
-    term: string,
-    preferredType: string,
-    teamID: string[],
-    keyword: string[]
-  ) => {
+  const buildQueryString = (param: SearchParam) => {
     const queryString = new URLSearchParams()
-    queryString.append('text', term)
-    queryString.append('preferredType', preferredType)
-    teamID.forEach((t) => queryString.append('teamIDs', t))
-    keyword.forEach((k) => queryString.append('keywords', k))
+    queryString.append('text', param.freeText || '')
+    queryString.append('preferredType', param.preferredType || 'story')
+    param.teams?.forEach((t) =>
+      queryString.append('teamIDs', teamNameToID.get(t))
+    )
+    param.keywords?.forEach((k) => queryString.append('keywords', k))
     return baseUrl + '?' + queryString.toString()
   }
-
-  const noFilters = !searchText && !searchTeam.length && !searchKeywords.length
 
   return (
     <InnerContainer>
@@ -176,9 +187,7 @@ const Search = () => {
         <div className="flex flex-col w-80">
           {router.isReady && (
             <SearchPanel
-              searchTerm={searchText}
-              searchTeam={searchTeam}
-              searchKeyword={searchKeywords}
+              searchParam={searchParam}
               productAreaFiltersTree={productAreaFiltersTree}
               keywordsFiltersTree={keywordsFiltersTree}
               updateQuery={updateQuery}
@@ -186,19 +195,17 @@ const Search = () => {
           )}
         </div>
         <div className="flex-grow pl-6">
-          {!noFilters && (
+          {!isEmptyFilter(searchParam) && (
             <FiltersList
-              searchTerm={searchText}
-              searchTeam={searchTeam}
-              searchKeyword={searchKeywords}
+              searchParam={searchParam}
               updateQuery={updateQuery}
               className={'mt-3'}
             />
           )}
           <ResultList
             search={search}
-            preferredType={searchPreferredType}
-            updatePreferredType={updatePreferredType}
+            searchParam={searchParam}
+            updateQuery={updateQuery}
           />
         </div>
       </div>

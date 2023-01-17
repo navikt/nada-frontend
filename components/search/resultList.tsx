@@ -11,6 +11,7 @@ import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
 import React, { useEffect } from 'react'
+import { SearchParam } from '../../pages/search'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -35,28 +36,28 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
-  preferredType?: string
-  updatePreferredType: (newPreferredType: string) => void
+  searchParam?: SearchParam
+  updateQuery?: (updatedParam: SearchParam)=>void
 }
 
 const ResultList = ({
   search,
   dataproducts,
   stories,
-  preferredType,
-  updatePreferredType,
+  searchParam,
+  updateQuery,
 }: ResultListInterface) => {
   useEffect(() => {
     if (
       search?.data?.search.filter((d) => d.result.__typename === 'Dataproduct')
         .length == 0
     ) {
-      updatePreferredType('story')
+      updateQuery?.({...searchParam, preferredType: 'story'})
     } else if (
       search?.data?.search.filter((d) => d.result.__typename === 'Story')
         .length == 0
     ) {
-      updatePreferredType('dataproduct')
+      updateQuery?.({...searchParam, preferredType: 'dataproduct'})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
@@ -80,12 +81,11 @@ const ResultList = ({
     return (
       <Results>
         <Tabs
-          defaultValue={preferredType}
+          defaultValue={searchParam?.preferredType}
           size="medium"
-          value={preferredType}
+          value={searchParam?.preferredType}
           onChange={(focused) => {
-            console.log(focused)
-            updatePreferredType(focused)
+            updateQuery?.({...searchParam, preferredType: focused})
           }}
         >
           <Tabs.List>
