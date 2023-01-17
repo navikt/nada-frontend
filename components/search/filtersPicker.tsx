@@ -1,4 +1,5 @@
 import { Accordion, Checkbox } from '@navikt/ds-react'
+import { FoldablePanel } from '../lib/foldablePanel/foldablePanel'
 
 export interface FilterTreeNode {
   [s: string]: boolean | FilterTreeNode
@@ -51,17 +52,25 @@ const FiltersTreeView = ({
         !!filtersTree &&
         Object.getOwnPropertyNames(filtersTree).map((it) => (
           <div key={it}>
-            <Checkbox
-              checked={isChecked(filtersTree[it])}
-              onChange={() => onToggle(it)}
-            >
-              {it}
-            </Checkbox>
-            <FiltersTreeView
-              className="pl-9"
-              onToggle={onToggle}
-              filtersTree={filtersTree[it]}
-            />
+            {typeof filtersTree[it] === 'boolean' ? (
+              <div>
+                <Checkbox
+                  size="small"
+                  checked={isChecked(filtersTree[it])}
+                  onChange={() => onToggle(it)}
+                  className="pl-2"
+                >
+                  {it}
+                </Checkbox>
+              </div>
+            ) : (
+              <FoldablePanel caption={it} className="pb-3 pl-2">
+                <FiltersTreeView
+                  onToggle={onToggle}
+                  filtersTree={filtersTree[it]}
+                />
+              </FoldablePanel>
+            )}
           </div>
         ))}
     </div>
