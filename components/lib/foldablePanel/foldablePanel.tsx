@@ -16,7 +16,7 @@ export const FoldablePanel = ({
   const [open, setOpen] = useState(false)
   return (
     <div className={className}>
-      <Link href="#" onClick={() => setOpen(!open)}>
+      <Link href="#" onClick={() => setOpen(!open)} className="w-full justify-between">
         {caption}
         {open ? <Collapse /> : <Expand />}
       </Link>
