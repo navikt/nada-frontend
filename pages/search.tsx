@@ -19,11 +19,11 @@ import {
 } from '../lib/schema/graphql'
 
 export interface SearchParam {
-  [s: string]: undefined | string | string[]
-  preferredType?: string
-  freeText?: string
-  teams?: string[]
-  keywords?: string[]
+  [s: string]: string | string[]
+  preferredType: string
+  freeText: string
+  teams: string[]
+  keywords: string[]
 }
 
 export const isEmptyFilter = (param: SearchParam) =>

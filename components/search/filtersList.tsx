@@ -49,7 +49,15 @@ const FiltersList = ({
   <div className={className}>
     {!isEmptyFilter(searchParam) && (
       <FilterRow>
-        <FilterPill all={true} onClick={() => updateQuery(emptyFilter)}>
+        <FilterPill
+          all={true}
+          onClick={() =>
+            updateQuery({
+              ...emptyFilter,
+              preferredType: searchParam.preferredType,
+            })
+          }
+        >
           Fjern alle filtre
           <Error />
         </FilterPill>

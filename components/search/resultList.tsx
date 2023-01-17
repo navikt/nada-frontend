@@ -37,7 +37,7 @@ type ResultListInterface = {
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
   searchParam?: SearchParam
-  updateQuery?: (updatedParam: SearchParam)=>void
+  updateQuery?: (updatedParam: SearchParam) => void
 }
 
 const ResultList = ({
@@ -48,16 +48,19 @@ const ResultList = ({
   updateQuery,
 }: ResultListInterface) => {
   useEffect(() => {
-    if (
-      search?.data?.search.filter((d) => d.result.__typename === 'Dataproduct')
-        .length == 0
-    ) {
-      updateQuery?.({...searchParam, preferredType: 'story'})
-    } else if (
-      search?.data?.search.filter((d) => d.result.__typename === 'Story')
-        .length == 0
-    ) {
-      updateQuery?.({...searchParam, preferredType: 'dataproduct'})
+    if (!!searchParam) {
+      if (
+        search?.data?.search.filter(
+          (d) => d.result.__typename === 'Dataproduct'
+        ).length == 0
+      ) {
+        updateQuery?.({ ...searchParam, preferredType: 'story' })
+      } else if (
+        search?.data?.search.filter((d) => d.result.__typename === 'Story')
+          .length == 0
+      ) {
+        updateQuery?.({ ...searchParam, preferredType: 'dataproduct' })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
@@ -67,7 +70,7 @@ const ResultList = ({
   })
   const po = useProductAreasQuery()
 
-  if (search) {
+  if (search && !!searchParam) {
     const { data, loading, error } = search
 
     if (error) return <ErrorMessage error={error} />
@@ -85,7 +88,7 @@ const ResultList = ({
           size="medium"
           value={searchParam?.preferredType}
           onChange={(focused) => {
-            updateQuery?.({...searchParam, preferredType: focused})
+            updateQuery?.({ ...searchParam, preferredType: focused })
           }}
         >
           <Tabs.List>

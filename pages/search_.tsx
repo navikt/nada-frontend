@@ -15,6 +15,7 @@ import { Heading } from '@navikt/ds-react'
 import { SearchPanel } from '../components/search/searchPanel'
 import { string } from 'yup'
 import { useState } from 'react'
+import { emptyFilter, SearchParam } from './search'
 
 export type FilterTypes = {
   [key: string]: string[] | string
@@ -67,7 +68,7 @@ const Search = () => {
         limit: 1000,
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
-        teamIDs: searchTeamIDs,          
+        teamIDs: searchTeamIDs,
         keywords: searchKeywords,
         text: searchText,
       },
@@ -103,12 +104,8 @@ const Search = () => {
     await router.push(buildQueryString_())
   }
 
-  const updateQuery = async (
-    searchTerm: string,
-    searchTeamID: string[],
-    searchKeyword: string[]
-  ) => {
-    await router.push(buildQueryString(searchTerm, searchTeamID, searchKeyword))
+  const updateQuery = async (updatedParam: SearchParam) => {
+    await router.push(buildQueryString(updatedParam.freeText || '', [], []))
   }
 
   const buildQueryString = (
@@ -141,9 +138,7 @@ const Search = () => {
         <div className="flex flex-col w-80">
           {router.isReady && (
             <SearchPanel
-              searchTerm={searchText}
-              searchTeam={searchTeamIDs}
-              searchKeyword={searchKeywords}
+              searchParam={{...emptyFilter, preferredType: 'story'}}
               productAreaFiltersTree={{}}
               keywordsFiltersTree={{}}
               updateQuery={updateQuery}
@@ -151,12 +146,8 @@ const Search = () => {
           )}
         </div>
         <div className="flex-grow pl-6">
-          <Filters filters={filters} updateQuery={()=>{}} />
-          <ResultList
-            search={search}
-            preferredType={filters.preferredType}
-            updatePreferredType={()=>{}}
-          />
+          <Filters filters={filters} updateQuery={() => {}} />
+          <ResultList search={search} />
         </div>
       </div>
     </InnerContainer>
