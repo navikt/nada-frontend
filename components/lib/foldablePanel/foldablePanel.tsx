@@ -1,5 +1,5 @@
 import { Collapse, Expand } from '@navikt/ds-icons'
-import { Link } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 import { ReactNode, useState } from 'react'
 
 export interface FoldablePanelProps {
@@ -16,16 +16,14 @@ export const FoldablePanel = ({
   const [open, setOpen] = useState(false)
   return (
     <div className={className}>
-      <Link href="#" onClick={() => setOpen(!open)} className="w-full justify-between">
+      <Button variant="tertiary" onClick={() => setOpen(!open)} className="panel-item">
         {caption}
         {open ? <Collapse /> : <Expand />}
-      </Link>
+      </Button>
       <div
-        className={
-          open
-            ? 'max-h-[1500px] transition-property:max-height duration-200 ease-in-out'
-            : 'max-h-0 overflow-hidden transition-property:max-height duration-200 ease-in-out'
-        }
+        className={`
+          transition-property:max-height duration-200 ease-in-out
+          ${open ? 'mt-2 max-h-64 overflow-y-auto' : 'max-h-0 invisible overflow-y-hidden'}`}
       >
         {children}
       </div>

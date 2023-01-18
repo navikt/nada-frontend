@@ -154,6 +154,14 @@ h6 {
   background-size: contain;
 }
 
+.panel-item {
+  @apply w-full
+}
+
+.panel-item > span {
+  @apply w-full flex justify-between
+}
+
 ol {
     list-style-type: decimal;
     list-style-position: inside;
