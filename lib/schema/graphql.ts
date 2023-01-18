@@ -891,6 +891,8 @@ export type SearchOptions = {
   offset?: InputMaybe<Scalars['Int']>;
   /** services filters results on the service. */
   services?: InputMaybe<Array<MappingService>>;
+  /** teamIDs filters results on the team_id. */
+  teamIDs?: InputMaybe<Array<Scalars['String']>>;
   /**
    * text is used as freetext search.
    *
@@ -914,6 +916,8 @@ export type SearchQuery = {
   limit?: InputMaybe<Scalars['Int']>;
   /** offset the list of returned search results. Used as pagination with PAGE-INDEX * limit. */
   offset?: InputMaybe<Scalars['Int']>;
+  /** teamID filters results on the team_id. */
+  teamID?: InputMaybe<Scalars['String']>;
   /**
    * text is used as freetext search.
    *
@@ -1353,7 +1357,7 @@ export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }> }> }> };
 
 export type QuartoQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -2732,6 +2736,18 @@ export const ProductAreasDocument = gql`
       owner {
         group
         teamkatalogenURL
+      }
+    }
+    teams {
+      id
+      name
+      dataproducts {
+        id
+        name
+      }
+      stories {
+        id
+        name
       }
     }
   }

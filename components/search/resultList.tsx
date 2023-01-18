@@ -11,6 +11,7 @@ import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
 import React, { useEffect } from 'react'
+import { SearchParam } from '../../pages/search'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -35,28 +36,33 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
-  preferredType?: string
-  updateQuery: (key: string, value: string, clear?: boolean) => void
+  searchParam?: SearchParam
+  updateQuery?: (updatedParam: SearchParam) => void
 }
 
 const ResultList = ({
   search,
   dataproducts,
   stories,
-  preferredType,
+  searchParam,
   updateQuery,
 }: ResultListInterface) => {
   useEffect(() => {
-    if (search?.data?.search.filter(
-      (d) => d.result.__typename === 'Dataproduct'
-    ).length == 0) {
-      updateQuery("preferredType", "story")
-    } else if (search?.data?.search.filter(
-      (d) => d.result.__typename === 'Story'
-    ).length == 0) {
-      updateQuery("preferredType", "dataproduct")
+    if (!!searchParam) {
+      if (
+        search?.data?.search.filter(
+          (d) => d.result.__typename === 'Dataproduct'
+        ).length == 0
+      ) {
+        updateQuery?.({ ...searchParam, preferredType: 'story' })
+      } else if (
+        search?.data?.search.filter((d) => d.result.__typename === 'Story')
+          .length == 0
+      ) {
+        updateQuery?.({ ...searchParam, preferredType: 'dataproduct' })
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
   const tk = useTeamkatalogenQuery({
@@ -64,7 +70,7 @@ const ResultList = ({
   })
   const po = useProductAreasQuery()
 
-  if (search) {
+  if (search && !!searchParam) {
     const { data, loading, error } = search
 
     if (error) return <ErrorMessage error={error} />
@@ -78,10 +84,12 @@ const ResultList = ({
     return (
       <Results>
         <Tabs
-          defaultValue={preferredType}
+          defaultValue={searchParam?.preferredType}
           size="medium"
-          value = {preferredType}
-          onChange={(focused) => updateQuery("preferredType", focused)}
+          value={searchParam?.preferredType}
+          onChange={(focused) => {
+            updateQuery?.({ ...searchParam, preferredType: focused })
+          }}
         >
           <Tabs.List>
             <Tabs.Tab
