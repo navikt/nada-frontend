@@ -33,17 +33,17 @@ export const SearchPanel = ({
     updateQuery({ ...searchParam, keywords: updatedFilterValues })
   }
 
-  const onToggleFilter = (filterTree: FilterType, filter: string) =>{
-    switch(filterTree){
-      case "Områder":
+  const onToggleFilter = (filterTree: FilterType, filter: string) => {
+    switch (filterTree) {
+      case 'Områder':
         onToggleTeam(filter)
-        break;
-      case "Nøkkelord":
+        break
+      case 'Nøkkelord':
         onPickKeyword(filter)
-        break;
+        break
       default:
         console.log(`Unrecognized filter tree -> ${filterTree}`)
-        break;
+        break
     }
   }
 
@@ -70,9 +70,10 @@ export const SearchPanel = ({
       <Accordion>
         {Array.from(filtersTree.entries()).map((tree) => (
           <FiltersPicker
+            key={tree[0]}
             header={tree[0]}
             filtersTree={tree[1]}
-            onToggle={(filter)=> onToggleFilter(tree[0], filter)}
+            onToggle={(filter) => onToggleFilter(tree[0], filter)}
           ></FiltersPicker>
         ))}
       </Accordion>
