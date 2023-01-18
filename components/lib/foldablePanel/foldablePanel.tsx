@@ -23,7 +23,7 @@ export const FoldablePanel = ({
       <div
         className={
           open
-            ? 'max-h-[800px] transition-property:max-height duration-200 ease-in-out'
+            ? 'max-h-[1500px] transition-property:max-height duration-200 ease-in-out'
             : 'max-h-0 overflow-hidden transition-property:max-height duration-200 ease-in-out'
         }
       >
