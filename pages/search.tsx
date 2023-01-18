@@ -183,8 +183,8 @@ const Search = () => {
       <Head>
         <title>Søkeresultater</title>
       </Head>
-      <div className="flex flex-row mt-11">
-        <div className="flex flex-col w-80">
+      <div className="flex flex-col md:flex-row mt-11 gap-6">
+        <div className="flex flex-col md:w-80">
           {router.isReady && (
             <SearchPanel
               searchParam={searchParam}
@@ -194,7 +194,7 @@ const Search = () => {
             />
           )}
         </div>
-        <div className="flex-grow pl-6">
+        <div className="flex-grow">
           {!isEmptyFilter(searchParam) && (
             <FiltersList
               searchParam={searchParam}
