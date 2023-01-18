@@ -1,31 +1,22 @@
-import { Accordion, Loader, Search } from '@navikt/ds-react'
+import { Accordion, Search } from '@navikt/ds-react'
 import { useState } from 'react'
-import {
-  useKeywordsQuery,
-  useProductAreasQuery,
-} from '../../lib/schema/graphql'
-import { SearchParam } from '../../pages/search'
+import { FilterType, SearchParam } from '../../pages/search'
 import { FiltersPicker, FilterTreeNode } from './filtersPicker'
 
 export interface SearchPanelProps {
   searchParam: SearchParam
-  productAreaFiltersTree: FilterTreeNode
-  keywordsFiltersTree: FilterTreeNode
+  filtersTree: Map<FilterType, FilterTreeNode>
   updateQuery: (searchParam: SearchParam) => void
 }
 
 export const SearchPanel = ({
   searchParam,
-  productAreaFiltersTree,
-  keywordsFiltersTree,
+  filtersTree,
   updateQuery,
 }: SearchPanelProps) => {
   const [updatedSearchTerm, setUpdatedSearchTerm] = useState(
     searchParam.freeText || ''
   )
-  const po = useProductAreasQuery()
-  const kw = useKeywordsQuery()
-
   const onToggleTeam = (filter: string) => {
     const picked = !searchParam.teams?.find((it) => filter === it)
     const updatedFilterValues = picked
@@ -40,6 +31,20 @@ export const SearchPanel = ({
       ? [...new Set([...(searchParam.keywords || []), filter]).values()]
       : searchParam.keywords?.filter((it) => it != filter)
     updateQuery({ ...searchParam, keywords: updatedFilterValues })
+  }
+
+  const onToggleFilter = (filterTree: FilterType, filter: string) =>{
+    switch(filterTree){
+      case "Områder":
+        onToggleTeam(filter)
+        break;
+      case "Nøkkelord":
+        onPickKeyword(filter)
+        break;
+      default:
+        console.log(`Unrecognized filter tree -> ${filterTree}`)
+        break;
+    }
   }
 
   return (
@@ -63,24 +68,13 @@ export const SearchPanel = ({
         />
       </form>
       <Accordion>
-        {po.loading ? (
-          <Loader />
-        ) : (
+        {Array.from(filtersTree.entries()).map((tree) => (
           <FiltersPicker
-            header="Områder"
-            filtersTree={productAreaFiltersTree}
-            onToggle={onToggleTeam}
+            header={tree[0]}
+            filtersTree={tree[1]}
+            onToggle={(filter)=> onToggleFilter(tree[0], filter)}
           ></FiltersPicker>
-        )}
-        {kw.loading ? (
-          <Loader />
-        ) : (
-          <FiltersPicker
-            header="Nøkkelord"
-            filtersTree={keywordsFiltersTree}
-            onToggle={onPickKeyword}
-          ></FiltersPicker>
-        )}
+        ))}
       </Accordion>
     </div>
   )

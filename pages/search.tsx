@@ -127,6 +127,8 @@ const buildTeamIDMaps = (
       ]
 }
 
+export type FilterType = "Områder" | "Nøkkelord"
+
 const Search = () => {
   const po = useProductAreasQuery()
   const kw = useKeywordsQuery()
@@ -188,8 +190,12 @@ const Search = () => {
           {router.isReady && (
             <SearchPanel
               searchParam={searchParam}
-              productAreaFiltersTree={productAreaFiltersTree}
-              keywordsFiltersTree={keywordsFiltersTree}
+              filtersTree={
+                new Map<FilterType, FilterTreeNode>([
+                  ['Områder', productAreaFiltersTree],
+                  ['Nøkkelord', keywordsFiltersTree],
+                ])
+              }
               updateQuery={updateQuery}
             />
           )}
