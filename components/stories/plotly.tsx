@@ -20,10 +20,10 @@ export function Plotly({ id, draft }: ResultsProps) {
   spec.layout.width = undefined
   spec.layout.autosize = true
   return (
-    <div>
+    <div className="w-screen md:w-[70vw] overflow-auto py-4">
       <Plot
         useResizeHandler={true}
-        className="w-11/12"
+        className="w-[90rem] md:w-[70vw]"
         data={spec.data}
         layout={spec.layout}
         frames={spec.frames}

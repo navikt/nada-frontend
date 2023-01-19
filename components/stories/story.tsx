@@ -31,81 +31,85 @@ export function Story({
   const Plotly = dynamic(() => import("./plotly"));
 
   return (
-    <>
-      <TopBar type={'Story'} name={story.name}>
-        {!draft && isOwner && (
-          <div>
-            <Link 
-              href={`/story/${story.id}/edit`}>
-              <a className="pr-2">Endre</a>
-            </Link>
-            <a className="border-l-[1px] border-border-strong px-2" onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
-            <a
-              className="border-l-[1px] border-border-strong px-2 text-nav-red"
-              onClick={() => setShowDelete && setShowDelete(true)}
-            >
-              Slett
-            </a>
+      <div className="flex flex-col items-center">
+        <div className="w-screen">
+        <TopBar type={'Story'} name={story.name}>
+          {!draft && isOwner && (
+            <div>
+              <Link
+                href={`/story/${story.id}/edit`}>
+                <a className="pr-2">Endre</a>
+              </Link>
+              <a className="border-l-[1px] border-border-strong px-2" onClick={() => setShowToken && setShowToken(true)}>Vis token</a>
+              <a
+                className="border-l-[1px] border-border-strong px-2 text-nav-red"
+                onClick={() => setShowDelete && setShowDelete(true)}
+              >
+                Slett
+              </a>
+            </div>
+          )}
+        </TopBar>
+
+        <MetadataTable
+          created={story.created}
+          lastModified={story.lastModified}
+          owner={story.owner}
+          keywords={story.keywords}
+        />
+        </div>
+        <div className="max-w-6xl">
+          <div className="children-fullwidth flex flex-col gap-5 py-4 max-w-6xl">
+            {views.map((view, id) => {
+              if (view.__typename === 'StoryViewHeader') {
+                return <Header key={id} text={view.content} size={view.level} />
+              }
+
+              if (view.__typename === 'StoryViewMarkdown') {
+                return (
+                  <ReactMarkdown className="" key={id} remarkPlugins={[remarkGfm]}>
+                    {view.content}
+                  </ReactMarkdown>
+                )
+              }
+              if (view.__typename === 'StoryViewPlotly') {
+                return (
+                  <InView key={id} triggerOnce={true}>
+                    {({ inView, ref }) => {
+                      return inView ? (
+                        <div ref={ref}>
+                          <Plotly id={view.id} draft={draft} />
+                        </div>
+                      ) : (
+                        <div ref={ref}>
+                          <LoaderSpinner />
+                        </div>
+                      )
+                    }}
+                  </InView>
+                )
+              }
+              if (view.__typename === 'StoryViewVega') {
+                return (
+                  <InView key={id} triggerOnce={true}>
+                    {({ inView, ref }) => {
+                      return inView ? (
+                        <div ref={ref}>
+                          <VegaView id={view.id} draft={draft!!} />
+                        </div>
+                      ) : (
+                        <div ref={ref}>
+                          <LoaderSpinner />
+                        </div>
+                      )
+                    }}
+                  </InView>
+                )
+              }
+            })}
           </div>
-        )}
-      </TopBar>
-
-      <MetadataTable
-        created={story.created}
-        lastModified={story.lastModified}
-        owner={story.owner}
-        keywords={story.keywords}
-      />
-      <div className="children-fullwidth flex flex-col justify-between gap-5 py-4">
-        {views.map((view, id) => {
-          if (view.__typename === 'StoryViewHeader') {
-            return <Header key={id} text={view.content} size={view.level} />
-          }
-
-          if (view.__typename === 'StoryViewMarkdown') {
-            return (
-              <ReactMarkdown key={id} remarkPlugins={[remarkGfm]}>
-                {view.content}
-              </ReactMarkdown>
-            )
-          }
-          if (view.__typename === 'StoryViewPlotly') {
-            return (
-              <InView key={id} triggerOnce={true}>
-                {({ inView, ref }) => {
-                  return inView ? (
-                    <div ref={ref}>
-                      <Plotly id={view.id} draft={draft} />
-                    </div>
-                  ) : (
-                    <div ref={ref}>
-                      <LoaderSpinner />
-                    </div>
-                  )
-                }}
-              </InView>
-            )
-          }
-          if (view.__typename === 'StoryViewVega') {
-            return (
-              <InView key={id} triggerOnce={true}>
-                {({ inView, ref }) => {
-                  return inView ? (
-                    <div ref={ref}>
-                      <VegaView id={view.id} draft={draft!!} />
-                    </div>
-                  ) : (
-                    <div ref={ref}>
-                      <LoaderSpinner />
-                    </div>
-                  )
-                }}
-              </InView>
-            )
-          }
-        })}
+        </div>
       </div>
-    </>
   )
 }
 

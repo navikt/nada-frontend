@@ -21,22 +21,26 @@ export function VegaView({ id, draft }: ResultsProps) {
   storyView.width = 'container'
   if (storyView.$schema?.includes('vega-lite')) {
     return (
-      <VegaLite
-      className="w-11/12"
-        config={{
-          autosize: { type: 'fit', contains: 'padding', resize: true },
-          projection: { type: 'mercator' },
-        }}
-        spec={storyView}
-      />
+      <div className="w-screen md:w-[70vw] overflow-auto py-4">
+        <VegaLite
+        className="w-[90rem] md:w-[70vw]"
+          config={{
+            autosize: { type: 'fit', contains: 'padding', resize: true },
+            projection: { type: 'mercator' },
+          }}
+          spec={storyView}
+        />
+      </div>
     )
   }
   return (
+    <div className="w-screen md:w-[70vw] overflow-auto py-4">
     <Vega
-      className="w-11/12"
+      className="w-[90rem] md:w-[70vw]"
       spec={storyView}
       config={{ autosize: { type: 'fit', contains: 'padding', resize: true } }}
     />
+    </div>
   )
 }
 
