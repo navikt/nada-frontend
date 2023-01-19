@@ -26,6 +26,15 @@ export interface SearchParam {
   keywords: string[]
 }
 
+type Team = {
+  name: string
+}
+
+type ProductArea = {
+  name: string
+  teams: Team[]
+}
+
 export const isEmptyFilter = (param: SearchParam) =>
   !param.freeText && !param.keywords?.length && !param.teams?.length
 
@@ -65,12 +74,12 @@ export const arrayify = (query: string | string[] | undefined) => {
 //      },
 //}
 const mapProductAreasToFiltersTree = (
-  productAreas: ProductAreasQuery,
+  productAreas: (ProductArea | null)[],
   pickedFilters: string[]
 ) => {
   const productAreasTree = {} as FilterTreeNode
-  productAreas.productAreas.forEach((it) => {
-    if (!!it.teams && it.teams.length > 0) {
+  productAreas.forEach((it) => {
+    if (!!it?.teams.length) {
       productAreasTree[it.name] = {} as FilterTreeNode
       it.teams.forEach((team) => {
         ;(productAreasTree[it.name] as FilterTreeNode)[team.name] =
@@ -81,13 +90,38 @@ const mapProductAreasToFiltersTree = (
   return productAreasTree
 }
 
+const mapProductAreasWithResultToArray = (
+  productAreasQuery: ProductAreasQuery
+) =>
+  productAreasQuery.productAreas
+    .map((it) =>
+      !!it.dataproducts.length || !!it.stories.length
+        ? ({
+            name: it.name,
+            teams: it.teams
+              .map((t) =>
+                !!t.dataproducts.length || !!t.stories.length
+                  ? ({
+                      name: t.name,
+                    } as Team)
+                  : null
+              )
+              .filter((t) => !!t),
+          } as ProductArea)
+        : null
+    )
+    .filter((it) => !!it)
+
 const buildProductAreaFiltersTree = (
   queryResult: QueryResult<ProductAreasQuery, Exact<{ [key: string]: never }>>,
   pickedFilters: string[]
 ) => {
   return queryResult.loading || !queryResult.data
     ? ({} as FilterTreeNode)
-    : mapProductAreasToFiltersTree(queryResult.data, pickedFilters)
+    : mapProductAreasToFiltersTree(
+        mapProductAreasWithResultToArray(queryResult.data),
+        pickedFilters
+      )
 }
 
 const buildKeywordsFiltersTree = (
@@ -127,7 +161,7 @@ const buildTeamIDMaps = (
       ]
 }
 
-export type FilterType = "Områder" | "Nøkkelord"
+export type FilterType = 'Områder' | 'Nøkkelord'
 
 const Search = () => {
   const po = useProductAreasQuery()

@@ -813,11 +813,6 @@ export type QueryGroupStatsArgs = {
 };
 
 
-export type QueryKeywordsArgs = {
-  prefix?: InputMaybe<Scalars['String']>;
-};
-
-
 export type QueryPollyArgs = {
   q: Scalars['String'];
 };
