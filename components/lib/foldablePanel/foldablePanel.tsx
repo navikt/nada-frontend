@@ -23,7 +23,7 @@ export const FoldablePanel = ({
       <div
         className={`
           transition-property:max-height duration-200 ease-in-out
-          ${open ? 'mt-2 max-h-64 overflow-y-auto' : 'max-h-0 invisible overflow-y-hidden'}`}
+          ${open ? 'mt-2 max-h-[999rem]' : 'max-h-0 invisible overflow-y-hidden'}`}
       >
         {children}
       </div>
