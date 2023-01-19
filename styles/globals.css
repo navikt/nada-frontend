@@ -124,10 +124,6 @@ h6 {
   @apply text-text-action underline
 }
 
-.children-fullwidth > :not(div) {
-  @apply max-w-3xl
-}
-
 .children-fullwidth > div {
   @apply flex justify-center w-[90vw] md:w-[70vw] self-center
 }
