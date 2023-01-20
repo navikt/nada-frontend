@@ -47,10 +47,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </main>
       <footer className="flex gap-4 justify-center items-center border-t border-border-on-inverted min-h-[3rem] mt-auto">
-      <a
-        href="#"
-        onClick={async () => await router.push('/about')}
-      >
+      <a href="/about">
         Om NAV Data
       </a>
       <a href="https://docs.knada.io/">Docs</a>
