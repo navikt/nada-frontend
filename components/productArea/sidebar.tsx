@@ -20,8 +20,14 @@ const ProductAreaSidebar = ({
   productAreas,
   selectProductArea,
 }: ProductAreaSidebarProps) => {
-  const relevantProductAreas= productAreas.filter(it=>it.areaType=== "PRODUCT_AREA" || it.areaType=== "PROJECT")
-  .sort((l, r)=> l.name < r.name? -1: 1)
+  const relevantProductAreas = productAreas
+    .filter(
+      (it) =>
+        it.areaType === 'PRODUCT_AREA' ||
+        it.areaType === 'PROJECT' ||
+        it.id === '6dbeedea-b23e-4bf7-a1cb-21d02d15e452'
+    )
+    .sort((l, r) => (l.name < r.name ? -1 : 1))
   return (
     <div className="pr-[2rem] w-96 pt-[1.6rem] hidden md:block">
       <Select
@@ -29,7 +35,8 @@ const ProductAreaSidebar = ({
         label=""
         onChange={(e) => selectProductArea(e.target.value)}
         value={
-          relevantProductAreas.find((it) => it.name == productAreaItems[0].name)?.id
+          relevantProductAreas.find((it) => it.name == productAreaItems[0].name)
+            ?.id
         }
       >
         {relevantProductAreas.map((it, index) => (
@@ -41,7 +48,14 @@ const ProductAreaSidebar = ({
       <div className="flex text-base w-full flex-col gap-2">
         {productAreaItems.map((d: any, idx: number) =>
           d.stories.length || d.dataproducts.length ? (
-            <div key={idx} className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`}>
+            <div
+              key={idx}
+              className={`border-l-[6px] py-1 px-2 hover:cursor-default ${
+                currentItem == idx
+                  ? 'border-l-text-action'
+                  : 'border-l-transparent'
+              }`}
+            >
               <a
                 className="font-semibold no-underline hover:underline"
                 href="#"
@@ -66,7 +80,14 @@ const ProductAreaSidebar = ({
               </div>
             </div>
           ) : (
-            <div key={idx} className={`border-l-[6px] py-1 px-2 hover:cursor-default ${currentItem == idx ? 'border-l-text-action' : 'border-l-transparent'}`}>
+            <div
+              key={idx}
+              className={`border-l-[6px] py-1 px-2 hover:cursor-default ${
+                currentItem == idx
+                  ? 'border-l-text-action'
+                  : 'border-l-transparent'
+              }`}
+            >
               <p className="font-semibold">{d.name}</p>
               <div className="flex justify-between w-24">
                 <span className="flex gap-2 items-center">
