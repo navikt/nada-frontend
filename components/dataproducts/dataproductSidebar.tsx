@@ -62,16 +62,14 @@ export const DataproductSidebar = ({
             typeof title === "string" 
             ? <a
               className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
-              href="#"
+              href={`/dataproduct/${product.id}/${product.slug}/${slug}`}
               key={idx}
-              onClick={(e) => handleChange(e, slug)}
               dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>")}}
             />
             : <a
               className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
-              href="#"
+              href={`/dataproduct/${product.id}/${product.slug}/${slug}`}
               key={idx}
-              onClick={(e) => handleChange(e, slug)}
             >
               {title}
             </a>

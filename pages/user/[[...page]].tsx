@@ -75,10 +75,6 @@ export const UserPages = () => {
     .map((e) => e.slug)
     .indexOf(router.query.page?.[0] ?? 'profile')
 
-  const handleChange = (slug: string) => {
-    router.push(`/user/${slug}`)
-  }
-
   return (
     <InnerContainer>
       <div className="flex flex-row h-full flex-grow pt-8">
@@ -98,9 +94,8 @@ export const UserPages = () => {
               ) : (
                 <a
                   className="border-l-[6px] border-l-transparent font-semibold no-underline mx-1 hover:underline hover:cursor-pointer py-1"
-                  href="#"
+                  href={`/user/${slug}`}
                   key={idx}
-                  onClick={() => handleChange(slug)}
                 >
                   {title}
                 </a>
