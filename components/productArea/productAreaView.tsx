@@ -25,9 +25,6 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   const initialTab = (item: PAItem) => {
     return item.dashboardURL ? 'dashboard' : 'stories'
   }
-  console.log(paItems)
-  console.log(currentItemName)
-  console.log(currentItem)
 
   const [currentTab, setCurrentTab] = useState(initialTab(paItems[teamIdx]))
   const [open, setOpen] = useState(false)
