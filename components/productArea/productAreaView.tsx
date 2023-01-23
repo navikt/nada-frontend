@@ -14,21 +14,40 @@ interface ProductAreaViewProps {
 }
 
 const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
+  const router = useRouter()
+  const currentItemName = (router.query.team as string) || paItems[0].name
+  const teamIdx = paItems.findIndex(
+    (it) => it.name.toLowerCase() === currentItemName.toLowerCase()
+  )
+
+  const currentItem = teamIdx > 0 ? teamIdx : 0
+
   const initialTab = (item: PAItem) => {
     return item.dashboardURL ? 'dashboard' : 'stories'
   }
 
-  const [currentItem, setCurrentItem] = useState(0)
-  const [currentTab, setCurrentTab] = useState(initialTab(paItems[0]))
+  const [currentTab, setCurrentTab] = useState(initialTab(paItems[teamIdx]))
   const [open, setOpen] = useState(false)
+  const pathComponents = router.asPath.split('?')[0].split('/')
+  const currentProductAreaId = pathComponents[pathComponents.length - 1]
 
-  const handleSetCurrentItem = (newCurrent: number) => {
-    setCurrentItem(newCurrent)
-    setCurrentTab(initialTab(paItems[newCurrent]))
+  const buildQueryString = (teamIdx: number) => {
+    const queryString = new URLSearchParams()
+    //team 0 is the product area
+    if (teamIdx > 0) {
+      queryString.append('team', paItems[teamIdx].name)
+      return '?' + queryString.toString()
+    }
+    return ''
   }
 
-  const router = useRouter()
-  const handleSelectProductArea = (newProductAreaID:string) => {
+  const handleSetCurrentItem = (newCurrent: number) => {
+    const path =
+      `/productArea/${currentProductAreaId}` + buildQueryString(newCurrent)
+    router.push(path)
+  }
+
+  const handleSelectProductArea = (newProductAreaID: string) => {
     router.push(`/productArea/${newProductAreaID}`)
   }
 
@@ -42,10 +61,19 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
         selectProductArea={handleSelectProductArea}
       />
       <div className="flex gap-4 items-center md:hidden">
-        <Heading level="1" size="large">{paItems[currentItem].name}</Heading>
-        <a className="flex gap-2 items-center" href="#" onClick={() => setOpen(!open)}><System className="w-4 h-4" />Utforsk</a>
+        <Heading level="1" size="large">
+          {paItems[currentItem].name}
+        </Heading>
+        <a
+          className="flex gap-2 items-center"
+          href="#"
+          onClick={() => setOpen(!open)}
+        >
+          <System className="w-4 h-4" />
+          Utforsk
+        </a>
       </div>
-      <ProductAreaMobileMenu 
+      <ProductAreaMobileMenu
         open={open}
         setOpen={setOpen}
         productAreaItems={paItems}
