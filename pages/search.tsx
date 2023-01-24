@@ -191,7 +191,7 @@ const Search = () => {
         limit: 1000,
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
-        teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)),
+        teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)).filter(it=> !!it),
         keywords: searchParam.keywords,
         text: searchParam.freeText,
       },
