@@ -39,19 +39,25 @@ const TagsCleaner = () => {
   const [tagUpdateList, setTagUpdateList] = useState([] as string[][])
   const [updateKeywords] = useUpdateKeywordsMutation()
   const user = useUserInfoDetailsQuery()
-  if(user.loading){
-    return <InnerContainer><LoaderSpinner></LoaderSpinner></InnerContainer>
+  if (user.loading) {
+    return (
+      <InnerContainer>
+        <LoaderSpinner></LoaderSpinner>
+      </InnerContainer>
+    )
   }
 
-  if(!user.data){
+  if (!user.data) {
     return <InnerContainer>Failed to fetch user information</InnerContainer>
   }
 
-  const notMemberOfNada = !user.data.userInfo.groups.find(g=> g.name==="nada")
-  if(notMemberOfNada){
+  const notMemberOfNada = !user.data.userInfo.groups.find(
+    (g) => g.name === 'nada'
+  )
+  if (notMemberOfNada) {
     return <InnerContainer>Permission denied</InnerContainer>
   }
-  
+
   if (!tagsInUse.length && !tagsObsolete.length && !kw.loading && !!kw.data) {
     setTagsInUse(kw.data.keywords.map((it) => it.keyword))
   }
@@ -83,10 +89,10 @@ const TagsCleaner = () => {
         },
       },
     })
-      .then(res => {
-        if(!!res.errors){
+      .then((res) => {
+        if (!!res.errors) {
           setUpdateFailedMessage(res.errors[0].message)
-        }else{
+        } else {
           setConfirmChange(false)
           router.reload()
         }
@@ -138,7 +144,7 @@ const TagsCleaner = () => {
                 </p>
                 <div className="flex flex-row flex-wrap gap-2 justify-center w-4/5 mt-2">
                   {tagUpdateList.map((it, index) => (
-                    <div key={index} className='flex flex-row items-center'>
+                    <div key={index} className="flex flex-row items-center">
                       [{it[0]}] {<NextDouble />} [{it[1]}]
                       {index !== tagUpdateList.length - 1 && ', '}
                     </div>
@@ -154,7 +160,9 @@ const TagsCleaner = () => {
                 </div>
               )}
               {!!updateFailedMessage && (
-                <div className="text-red-600">Failed to update keywords: {updateFailedMessage}</div>
+                <div className="text-red-600">
+                  Failed to update keywords: {updateFailedMessage}
+                </div>
               )}
             </div>
             <div className="flex flex-row gap-2 mt-10">
@@ -182,38 +190,48 @@ const TagsCleaner = () => {
             Click tags below to move them between left and right panel.
           </Alert>
           <div className="flex flex-row">
-            <Panel border className="w-72 m-6 overflow-y-scroll max-h-[20rem]">
+            <div className='w-72 m-6 flex flex-col'>
               <Heading spacing level="2" size="small">
                 To Keep
               </Heading>
-              <div className="flex flex-col flex-wrap gap-1">
-                {tagsInUse.map((it, index) => (
-                  <TagPill
-                    key={index}
-                    onClick={() => ToggleTag(it)}
-                    keyword={it}
-                  >
-                    {it}
-                  </TagPill>
-                ))}
-              </div>
-            </Panel>
-            <Panel border className="w-72 m-6 overflow-y-scroll max-h-[20rem] bg-gray-300">
+              <Panel
+                border
+                className="overflow-y-scroll max-h-[20rem]"
+              >
+                <div className="flex flex-col flex-wrap gap-1">
+                  {tagsInUse.map((it, index) => (
+                    <TagPill
+                      key={index}
+                      onClick={() => ToggleTag(it)}
+                      keyword={it}
+                    >
+                      {it}
+                    </TagPill>
+                  ))}
+                </div>
+              </Panel>
+            </div>
+            <div className='w-72 m-6 flex flex-col'>
               <Heading spacing level="2" size="small">
                 TO REMOVE
               </Heading>
-              <div className="flex flex-col flex-wrap gap-1 w-64">
-                {tagsObsolete.map((it, index) => (
-                  <TagPill
-                    key={index}
-                    onClick={() => ToggleTag(it)}
-                    keyword={it}
-                  >
-                    {it}
-                  </TagPill>
-                ))}
-              </div>
-            </Panel>
+              <Panel
+                border
+                className="overflow-y-scroll max-h-[20rem] bg-gray-300"
+              >
+                <div className="flex flex-col flex-wrap gap-1 w-64">
+                  {tagsObsolete.map((it, index) => (
+                    <TagPill
+                      key={index}
+                      onClick={() => ToggleTag(it)}
+                      keyword={it}
+                    >
+                      {it}
+                    </TagPill>
+                  ))}
+                </div>
+              </Panel>
+            </div>
           </div>
           {!!tagsObsolete.length && (
             <div>
