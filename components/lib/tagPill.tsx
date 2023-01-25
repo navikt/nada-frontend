@@ -13,10 +13,12 @@ interface keywordPillProps {
   children?: React.ReactNode
   onClick?: () => void
   remove?: boolean
+  lineThrough?: boolean
 }
 
 export const TagPill = ({
   horizontal,
+  lineThrough,
   children,
   onClick,
   remove,
@@ -30,7 +32,8 @@ export const TagPill = ({
         className={`text-text flex items-center bg-surface-subtle border-border-default
       ${onClick && 'cursor-pointer'}
       ${horizontal ? 'flex' : 'inline-block'}
-      ${remove && 'hover:decoration-[3px] hover:line-through'}`}
+      ${remove && 'hover:decoration-[3px] hover:line-through'}
+      ${lineThrough && 'decoration-[3px] line-through'}`}
       >
         {children}
         {remove && <div className={`h-2rem pl-1 place-items-center `}>

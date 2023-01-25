@@ -223,6 +223,7 @@ const TagsCleaner = () => {
                         key={index}
                         onClick={() => ToggleTag(it)}
                         keyword={it}
+                        lineThrough={true}
                       >
                         {it}
                       </TagPill>
