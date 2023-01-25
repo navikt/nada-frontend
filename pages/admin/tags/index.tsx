@@ -178,213 +178,210 @@ const TagsCleaner = () => {
       </Modal>
 
       <Head>
-        <title>Admin Tools - Tags Cleaner</title>
+        <title>Admin tools - Tags maintainence</title>
       </Head>
-      <Heading className="mt-8" spacing level="1" size="medium">
-        Tags Cleanup
-      </Heading>
-      {kw.loading && <LoaderSpinner></LoaderSpinner>}
-      {!kw.loading && !!kw.data && (
-        <div>
-          <Alert variant="info">
-            Click tags below to move them between left and right panel.
-          </Alert>
-          <div className="flex flex-row">
-            <div className='w-72 m-6 flex flex-col'>
-              <Heading spacing level="2" size="small">
-                To Keep
-              </Heading>
-              <Panel
-                border
-                className="overflow-y-scroll max-h-[20rem]"
-              >
-                <div className="flex flex-col flex-wrap gap-1">
-                  {tagsInUse.map((it, index) => (
-                    <TagPill
-                      key={index}
-                      onClick={() => ToggleTag(it)}
-                      keyword={it}
-                    >
-                      {it}
-                    </TagPill>
-                  ))}
-                </div>
-              </Panel>
+      <div className='border-t-2 border-gray-400'>
+        <Heading className="mt-8" spacing level="1" size="medium">
+          Tags Cleanup
+        </Heading>
+        {kw.loading && <LoaderSpinner></LoaderSpinner>}
+        {!kw.loading && !!kw.data && (
+          <div>
+            <Alert variant="info">
+              Click tags below to move them between left and right panel.
+            </Alert>
+            <div className="flex flex-row">
+              <div className="w-72 m-6 flex flex-col">
+                <Heading spacing level="2" size="small">
+                  To Keep
+                </Heading>
+                <Panel border className="overflow-y-scroll h-[20rem]">
+                  <div className="flex flex-col flex-wrap gap-1">
+                    {tagsInUse.map((it, index) => (
+                      <TagPill
+                        key={index}
+                        onClick={() => ToggleTag(it)}
+                        keyword={it}
+                      >
+                        {it}
+                      </TagPill>
+                    ))}
+                  </div>
+                </Panel>
+              </div>
+              <div className="w-72 m-6 flex flex-col">
+                <Heading spacing level="2" size="small">
+                  TO REMOVE
+                </Heading>
+                <Panel
+                  border
+                  className="overflow-y-scroll h-[20rem] bg-gray-300"
+                >
+                  <div className="flex flex-col flex-wrap gap-1 w-64">
+                    {tagsObsolete.map((it, index) => (
+                      <TagPill
+                        key={index}
+                        onClick={() => ToggleTag(it)}
+                        keyword={it}
+                      >
+                        {it}
+                      </TagPill>
+                    ))}
+                  </div>
+                </Panel>
+              </div>
             </div>
-            <div className='w-72 m-6 flex flex-col'>
-              <Heading spacing level="2" size="small">
-                TO REMOVE
-              </Heading>
-              <Panel
-                border
-                className="overflow-y-scroll max-h-[20rem] bg-gray-300"
-              >
-                <div className="flex flex-col flex-wrap gap-1 w-64">
-                  {tagsObsolete.map((it, index) => (
-                    <TagPill
-                      key={index}
-                      onClick={() => ToggleTag(it)}
-                      keyword={it}
-                    >
-                      {it}
-                    </TagPill>
-                  ))}
-                </div>
-              </Panel>
-            </div>
-          </div>
-          {!!tagsObsolete.length && (
-            <div>
-              <p className="mb-2">
-                You must check all the control questions below before you can
-                submit:
-              </p>
+            {!!tagsObsolete.length && (
               <div>
-                <Checkbox
-                  value={checkStatement1}
-                  onChange={(e) => {
-                    setCheckStatement1(!checkStatement1)
-                  }}
-                >
-                  I understand that all the tags in the right panel (TO REMOVE)
-                  will be removed from database permanently, and the operation
-                  is not reversible.
-                </Checkbox>
+                <p className="mb-2">
+                  You must check all the control questions below before you can
+                  submit:
+                </p>
+                <div>
+                  <Checkbox
+                    value={checkStatement1}
+                    onChange={(e) => {
+                      setCheckStatement1(!checkStatement1)
+                    }}
+                  >
+                    I understand that all the tags in the right panel (TO
+                    REMOVE) will be removed from database permanently, and the
+                    operation is not reversible.
+                  </Checkbox>
+                </div>
+                <div className="mb-2">
+                  <Checkbox
+                    value={checkStatement2}
+                    onChange={(e) => {
+                      setCheckStatement2(!checkStatement2)
+                    }}
+                  >
+                    I have done backup for database.
+                  </Checkbox>
+                </div>
               </div>
-              <div className="mb-2">
-                <Checkbox
-                  value={checkStatement2}
-                  onChange={(e) => {
-                    setCheckStatement2(!checkStatement2)
-                  }}
-                >
-                  I have done backup for database.
-                </Checkbox>
-              </div>
-            </div>
-          )}
-          <Heading className="mt-8" spacing level="1" size="medium">
-            Tags Replacement
-          </Heading>
-          <Table className="w-[50rem] mb-10" size="small">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell className="w-[2rem]"></Table.HeaderCell>
-                <Table.HeaderCell className="w-[20rem]">Tags</Table.HeaderCell>
-                <Table.HeaderCell className="w-[2rem]"></Table.HeaderCell>
-                <Table.HeaderCell className="w-[20rem]">
-                  Replace with
-                </Table.HeaderCell>
-                <Table.HeaderCell className="w-[5rem]"></Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {tagUpdateList.map((it, index) => (
-                <Table.Row key={index}>
-                  <Table.DataCell>
-                    <button
-                      onClick={() =>
-                        setTagUpdateList(
-                          tagUpdateList.filter((ttu) => ttu[0] !== it[0])
-                        )
-                      }
-                    >
-                      <MinusCircleFilled color="#C30000" />
-                    </button>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <Select
-                      className="w-full"
-                      label=""
-                      value={it}
-                      size="small"
-                      onChange={(e) => {
-                        tagUpdateList[index][0] = e.target.value
-                        console.log(tagUpdateList)
-                        setTagUpdateList([...tagUpdateList])
-                      }}
-                    >
-                      <option value={it[0]} key={65535}>
-                        {it[0]}
-                      </option>
-                      {[
-                        ...new Set(
-                          tagsInUse
-                            .filter(
-                              (tag) =>
-                                !tagUpdateList.find((ttu) => tag === ttu[0])
-                            )
-                            .map((tag, index) => (
-                              <option value={tag} key={index}>
-                                {tag}
-                              </option>
-                            ))
+            )}
+          </div>
+        )}
+      </div>
+      <div className='border-t-2 border-gray-400'>
+        <Heading className="mt-8" spacing level="1" size="medium">
+          Tags Replacement
+        </Heading>
+        <Table className="w-[50rem] mb-10" size="small">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell className="w-[2rem]"></Table.HeaderCell>
+              <Table.HeaderCell className="w-[20rem]">Tags</Table.HeaderCell>
+              <Table.HeaderCell className="w-[2rem]"></Table.HeaderCell>
+              <Table.HeaderCell className="w-[20rem]">
+                Replace with
+              </Table.HeaderCell>
+              <Table.HeaderCell className="w-[5rem]"></Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {tagUpdateList.map((it, index) => (
+              <Table.Row key={index}>
+                <Table.DataCell>
+                  <button
+                    onClick={() =>
+                      setTagUpdateList(
+                        tagUpdateList.filter((ttu) => ttu[0] !== it[0])
+                      )
+                    }
+                  >
+                    <MinusCircleFilled color="#C30000" />
+                  </button>
+                </Table.DataCell>
+                <Table.DataCell>
+                  <Select
+                    className="w-full"
+                    label=""
+                    value={it}
+                    size="small"
+                    onChange={(e) => {
+                      tagUpdateList[index][0] = e.target.value
+                      console.log(tagUpdateList)
+                      setTagUpdateList([...tagUpdateList])
+                    }}
+                  >
+                    <option value={it[0]} key={65535}>
+                      {it[0]}
+                    </option>
+                    {[
+                      ...new Set(
+                        tagsInUse
+                          .filter(
+                            (tag) =>
+                              !tagUpdateList.find((ttu) => tag === ttu[0])
+                          )
+                          .map((tag, index) => (
+                            <option value={tag} key={index}>
+                              {tag}
+                            </option>
+                          ))
+                      ),
+                    ]}
+                  </Select>
+                </Table.DataCell>
+                <Table.DataCell>
+                  <NextDouble />
+                </Table.DataCell>
+                <Table.DataCell>
+                  <TextField
+                    label={''}
+                    placeholder="Type new tag text..."
+                    size="small"
+                    onChange={(e) =>
+                      setTagUpdateList([
+                        ...tagUpdateList.map((ttu) =>
+                          it[0] !== ttu[0] ? ttu : [ttu[0], e.target.value]
                         ),
-                      ]}
-                    </Select>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <NextDouble />
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <TextField
-                      label={''}
-                      placeholder="Type new tag text..."
-                      size="small"
-                      onChange={(e) =>
-                        setTagUpdateList([
-                          ...tagUpdateList.map((ttu) =>
-                            it[0] !== ttu[0] ? ttu : [ttu[0], e.target.value]
-                          ),
-                        ])
+                      ])
+                    }
+                  ></TextField>
+                </Table.DataCell>
+                <Table.DataCell>
+                  {!it[1] && <div className="text-red-600">Empty</div>}
+                </Table.DataCell>
+              </Table.Row>
+            ))}
+            {tagUpdateList.length < tagsInUse.length && (
+              <Table.Row key={65535}>
+                <Table.DataCell>
+                  <button
+                    onClick={() => {
+                      const availableTag = tagsInUse.find(
+                        (it) => !tagUpdateList.find((ttu) => it === ttu[0])
+                      )
+                      if (!!availableTag) {
+                        setTagUpdateList([...tagUpdateList, [availableTag, '']])
                       }
-                    ></TextField>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    {!it[1] && <div className="text-red-600">Empty</div>}
-                  </Table.DataCell>
-                </Table.Row>
-              ))}
-              {tagUpdateList.length < tagsInUse.length && (
-                <Table.Row key={65535}>
-                  <Table.DataCell>
-                    <button
-                      onClick={() => {
-                        const availableTag = tagsInUse.find(
-                          (it) => !tagUpdateList.find((ttu) => it === ttu[0])
-                        )
-                        if (!!availableTag) {
-                          setTagUpdateList([
-                            ...tagUpdateList,
-                            [availableTag, ''],
-                          ])
-                        }
-                      }}
-                    >
-                      <AddCircleFilled color="#007C2E" />
-                    </button>
-                  </Table.DataCell>
-                  <Table.DataCell></Table.DataCell>
-                  <Table.DataCell></Table.DataCell>
-                  <Table.DataCell></Table.DataCell>
-                  <Table.DataCell></Table.DataCell>
-                </Table.Row>
-              )}
-            </Table.Body>
-          </Table>
-          <Button
-            disabled={
-              ((!checkStatement1 || !checkStatement2) &&
-                !!tagsObsolete.length) ||
-              !!tagUpdateList.find((it) => !it[1]) ||
-              (!tagsObsolete.length && !tagUpdateList.length)
-            }
-            onClick={() => setConfirmChange(true)}
-          >
-            Submit
-          </Button>
-        </div>
-      )}
+                    }}
+                  >
+                    <AddCircleFilled color="#007C2E" />
+                  </button>
+                </Table.DataCell>
+                <Table.DataCell></Table.DataCell>
+                <Table.DataCell></Table.DataCell>
+                <Table.DataCell></Table.DataCell>
+                <Table.DataCell></Table.DataCell>
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table>
+        <Button
+          disabled={
+            ((!checkStatement1 || !checkStatement2) && !!tagsObsolete.length) ||
+            !!tagUpdateList.find((it) => !it[1]) ||
+            (!tagsObsolete.length && !tagUpdateList.length)
+          }
+          onClick={() => setConfirmChange(true)}
+        >
+          Submit
+        </Button>
+      </div>
     </InnerContainer>
   )
 }
