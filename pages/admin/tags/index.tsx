@@ -182,7 +182,7 @@ const TagsCleaner = () => {
             Click tags below to move them between left and right panel.
           </Alert>
           <div className="flex flex-row">
-            <Panel border className="w-72 m-6">
+            <Panel border className="w-72 m-6 overflow-y-scroll max-h-[20rem]">
               <Heading spacing level="2" size="small">
                 To Keep
               </Heading>
@@ -198,7 +198,7 @@ const TagsCleaner = () => {
                 ))}
               </div>
             </Panel>
-            <Panel border className="w-72 m-6 bg-gray-300">
+            <Panel border className="w-72 m-6 overflow-y-scroll max-h-[20rem] bg-gray-300">
               <Heading spacing level="2" size="small">
                 TO REMOVE
               </Heading>
