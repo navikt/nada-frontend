@@ -374,7 +374,8 @@ const TagsCleaner = () => {
 
       <Button
         disabled={
-          ((!checkStatement1 || !checkStatement2) && !!tagsObsolete.length) ||
+          !checkStatement1 ||
+          !checkStatement2 ||
           !!tagUpdateList.find((it) => !it[1]) ||
           (!tagsObsolete.length && !tagUpdateList.length)
         }
