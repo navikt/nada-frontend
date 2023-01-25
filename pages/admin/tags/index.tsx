@@ -180,7 +180,7 @@ const TagsCleaner = () => {
       <Head>
         <title>Admin tools - Tags maintainence</title>
       </Head>
-      <div className='mt-8 border-t-1 border-gray-400'>
+      <div className="mt-8 border-t-1 border-gray-400">
         <Heading className="mt-2" spacing level="1" size="medium">
           Tags Cleanup
         </Heading>
@@ -231,40 +231,10 @@ const TagsCleaner = () => {
                 </Panel>
               </div>
             </div>
-            {!!tagsObsolete.length && (
-              <div>
-                <p className="mb-2">
-                  You must check all the control questions below before you can
-                  submit:
-                </p>
-                <div>
-                  <Checkbox
-                    value={checkStatement1}
-                    onChange={(e) => {
-                      setCheckStatement1(!checkStatement1)
-                    }}
-                  >
-                    I understand that all the tags in the right panel (TO
-                    REMOVE) will be removed from database permanently, and the
-                    operation is not reversible.
-                  </Checkbox>
-                </div>
-                <div className="mb-2">
-                  <Checkbox
-                    value={checkStatement2}
-                    onChange={(e) => {
-                      setCheckStatement2(!checkStatement2)
-                    }}
-                  >
-                    I have done backup for database.
-                  </Checkbox>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>
-      <div className='mt-8 border-t-1 border-gray-400'>
+      <div className="mt-8 border-t-1 border-gray-400">
         <Heading className="mt-2" spacing level="1" size="medium">
           Tags Replacement
         </Heading>
@@ -371,17 +341,47 @@ const TagsCleaner = () => {
             )}
           </Table.Body>
         </Table>
-        <Button
-          disabled={
-            ((!checkStatement1 || !checkStatement2) && !!tagsObsolete.length) ||
-            !!tagUpdateList.find((it) => !it[1]) ||
-            (!tagsObsolete.length && !tagUpdateList.length)
-          }
-          onClick={() => setConfirmChange(true)}
-        >
-          Submit
-        </Button>
       </div>
+      {(!!tagsObsolete.length || !!tagUpdateList.length) && (
+        <div className="mt-8 mb-8">
+          <p className="mb-2">
+            You must check all the control questions below before you can
+            submit:
+          </p>
+          <div>
+            <Checkbox
+              value={checkStatement1}
+              onChange={(e) => {
+                setCheckStatement1(!checkStatement1)
+              }}
+            >
+              I understand that the tags in database will be removed/changed
+              permanently, and the operation may not be reversible.
+            </Checkbox>
+          </div>
+          <div className="mb-2">
+            <Checkbox
+              value={checkStatement2}
+              onChange={(e) => {
+                setCheckStatement2(!checkStatement2)
+              }}
+            >
+              I have done backup for database.
+            </Checkbox>
+          </div>
+        </div>
+      )}
+
+      <Button
+        disabled={
+          ((!checkStatement1 || !checkStatement2) && !!tagsObsolete.length) ||
+          !!tagUpdateList.find((it) => !it[1]) ||
+          (!tagsObsolete.length && !tagUpdateList.length)
+        }
+        onClick={() => setConfirmChange(true)}
+      >
+        Submit
+      </Button>
     </InnerContainer>
   )
 }
