@@ -359,6 +359,12 @@ export type Mutation = {
    */
   updateDataset: Dataset;
   /**
+   * updateKeywords updates keywords
+   *
+   * Requires authentication.
+   */
+  updateKeywords: Scalars['Boolean'];
+  /**
    * updateStoryMetadata updates metadata on an existing story.
    *
    * Requires authentication.
@@ -453,6 +459,11 @@ export type MutationUpdateDataproductArgs = {
 export type MutationUpdateDatasetArgs = {
   id: Scalars['ID'];
   input: UpdateDataset;
+};
+
+
+export type MutationUpdateKeywordsArgs = {
+  input: UpdateKeywords;
 };
 
 
@@ -1113,6 +1124,15 @@ export type UpdateDataset = {
   targetUser?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateKeywords = {
+  /** newText is a list of text to replace the keywords */
+  newText?: InputMaybe<Array<Scalars['String']>>;
+  /** ObsoleteKeywords is a list of keywords to remove */
+  obsoleteKeywords?: InputMaybe<Array<Scalars['String']>>;
+  /** ReplacedKeywords is a list of keywords to be replaced */
+  replacedKeywords?: InputMaybe<Array<Scalars['String']>>;
+};
+
 /** UserInfo contains metadata on a logged in user */
 export type UserInfo = {
   __typename?: 'UserInfo';
@@ -1279,11 +1299,6 @@ export type GcpGetTablesQueryVariables = Exact<{
 
 export type GcpGetTablesQuery = { __typename?: 'Query', gcpGetTables: Array<{ __typename?: 'BigQueryTable', name: string, type: BigQueryType, description: string }> };
 
-export type KeywordsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type KeywordsQuery = { __typename?: 'Query', keywords: Array<{ __typename?: 'Keyword', keyword: string, count: number }> };
-
 export type UpdateDataproductMutationVariables = Exact<{
   id: Scalars['ID'];
   input: UpdateDataproduct;
@@ -1334,6 +1349,18 @@ export type GroupStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GroupStatsQuery = { __typename?: 'Query', groupStats: Array<{ __typename?: 'GroupStats', email: string, dataproducts: number }> };
+
+export type KeywordsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type KeywordsQuery = { __typename?: 'Query', keywords: Array<{ __typename?: 'Keyword', keyword: string, count: number }> };
+
+export type UpdateKeywordsMutationVariables = Exact<{
+  input: UpdateKeywords;
+}>;
+
+
+export type UpdateKeywordsMutation = { __typename?: 'Mutation', updateKeywords: boolean };
 
 export type PollyQueryVariables = Exact<{
   q: Scalars['String'];
@@ -2247,41 +2274,6 @@ export function useGcpGetTablesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GcpGetTablesQueryHookResult = ReturnType<typeof useGcpGetTablesQuery>;
 export type GcpGetTablesLazyQueryHookResult = ReturnType<typeof useGcpGetTablesLazyQuery>;
 export type GcpGetTablesQueryResult = Apollo.QueryResult<GcpGetTablesQuery, GcpGetTablesQueryVariables>;
-export const KeywordsDocument = gql`
-    query Keywords {
-  keywords {
-    keyword
-    count
-  }
-}
-    `;
-
-/**
- * __useKeywordsQuery__
- *
- * To run a query within a React component, call `useKeywordsQuery` and pass it any options that fit your needs.
- * When your component renders, `useKeywordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useKeywordsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useKeywordsQuery(baseOptions?: Apollo.QueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
-      }
-export function useKeywordsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
-        }
-export type KeywordsQueryHookResult = ReturnType<typeof useKeywordsQuery>;
-export type KeywordsLazyQueryHookResult = ReturnType<typeof useKeywordsLazyQuery>;
-export type KeywordsQueryResult = Apollo.QueryResult<KeywordsQuery, KeywordsQueryVariables>;
 export const UpdateDataproductDocument = gql`
     mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
   updateDataproduct(id: $id, input: $input) {
@@ -2577,6 +2569,72 @@ export function useGroupStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GroupStatsQueryHookResult = ReturnType<typeof useGroupStatsQuery>;
 export type GroupStatsLazyQueryHookResult = ReturnType<typeof useGroupStatsLazyQuery>;
 export type GroupStatsQueryResult = Apollo.QueryResult<GroupStatsQuery, GroupStatsQueryVariables>;
+export const KeywordsDocument = gql`
+    query Keywords {
+  keywords {
+    keyword
+    count
+  }
+}
+    `;
+
+/**
+ * __useKeywordsQuery__
+ *
+ * To run a query within a React component, call `useKeywordsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useKeywordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useKeywordsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useKeywordsQuery(baseOptions?: Apollo.QueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
+      }
+export function useKeywordsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
+        }
+export type KeywordsQueryHookResult = ReturnType<typeof useKeywordsQuery>;
+export type KeywordsLazyQueryHookResult = ReturnType<typeof useKeywordsLazyQuery>;
+export type KeywordsQueryResult = Apollo.QueryResult<KeywordsQuery, KeywordsQueryVariables>;
+export const UpdateKeywordsDocument = gql`
+    mutation updateKeywords($input: UpdateKeywords!) {
+  updateKeywords(input: $input)
+}
+    `;
+export type UpdateKeywordsMutationFn = Apollo.MutationFunction<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>;
+
+/**
+ * __useUpdateKeywordsMutation__
+ *
+ * To run a mutation, you first call `useUpdateKeywordsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateKeywordsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateKeywordsMutation, { data, loading, error }] = useUpdateKeywordsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateKeywordsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>(UpdateKeywordsDocument, options);
+      }
+export type UpdateKeywordsMutationHookResult = ReturnType<typeof useUpdateKeywordsMutation>;
+export type UpdateKeywordsMutationResult = Apollo.MutationResult<UpdateKeywordsMutation>;
+export type UpdateKeywordsMutationOptions = Apollo.BaseMutationOptions<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>;
 export const PollyDocument = gql`
     query Polly($q: String!) {
   polly(q: $q) {
