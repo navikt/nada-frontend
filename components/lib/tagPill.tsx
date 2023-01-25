@@ -33,7 +33,7 @@ export const TagPill = ({
       ${onClick && 'cursor-pointer'}
       ${horizontal ? 'flex' : 'inline-block'}
       ${remove && 'hover:decoration-[3px] hover:line-through'}
-      ${lineThrough && 'decoration-[3px] line-through'}`}
+      ${lineThrough && 'decoration-[1px] line-through'}`}
       >
         {children}
         {remove && <div className={`h-2rem pl-1 place-items-center `}>
