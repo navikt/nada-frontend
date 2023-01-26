@@ -1,13 +1,11 @@
 import { Close } from '@navikt/ds-icons'
-import { Label } from '@navikt/ds-react'
+import { Alert, Label } from '@navikt/ds-react'
 import * as React from 'react'
 import { useContext } from 'react'
 import { ActionMeta, StylesConfig, ThemeConfig } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { UserState } from '../../lib/context'
-import {
-  useKeywordsQuery
-} from '../../lib/schema/graphql'
+import { useKeywordsQuery } from '../../lib/schema/graphql'
 import TagPill from './tagPill'
 
 export interface TagsSelectorProps {
@@ -82,7 +80,9 @@ const useBuildTagOptionsList = () => {
 export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
   const userInfo = useContext(UserState)
-  const teamNames = userInfo?.allGoogleGroups?.map((it) => it.name.split('@')[0])
+  const teamNames = userInfo?.allGoogleGroups?.map(
+    (it) => it.name.split('@')[0]
+  )
 
   const tagsLikeTeamName = tags.filter((it) =>
     teamNames?.find((tn) => tn.toLocaleLowerCase() === it.toLocaleLowerCase())
@@ -107,7 +107,7 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
         break
       case 'select-option':
       case 'create-option':
-        actionMeta.option && onAdd(actionMeta.option.value)
+        actionMeta.option && addNewTag(actionMeta.option.value)
         break
       default:
         console.log(`Unsupported action ${actionMeta.action}`)
@@ -123,8 +123,17 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
       >
         Nøkkelord
       </Label>
-        <div className="flex flex-row gap-1 flex-wrap w-full mt-1 mb-1">
-          {tags && tags.map((k, i) => {
+      {!!tagsLikeTeamName.length && (
+        <Alert variant="info" size="small">
+          {tagsLikeTeamName.map(
+            (t, i) => `[${t}]${i !== tagsLikeTeamName.length - 1 ? ', ' : ' '}`
+          )}
+          virker som teamnavn som ikke bør brukes som nøkkelord.
+        </Alert>
+      )}
+      <div className="flex flex-row gap-1 flex-wrap w-full mt-1 mb-1">
+        {tags &&
+          tags.map((k, i) => {
             return (
               <TagPill
                 key={i}
@@ -137,7 +146,7 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
               </TagPill>
             )
           })}
-        </div>
+      </div>
       <CreatableSelect
         isMulti
         options={tagOptions.map((it) => ({
