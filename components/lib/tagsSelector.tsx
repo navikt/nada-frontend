@@ -81,8 +81,6 @@ const useBuildTagOptionsList = () => {
 
 export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
-<<<<<<< Updated upstream
-=======
   const userInfo = useContext(UserState)
   console.log(userInfo)
   const teamNames = userInfo?.allGoogleGroups?.map((it) => it.name.split('@')[0])
@@ -99,7 +97,6 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
     ).trim()
     onAdd(newTag)
   }
->>>>>>> Stashed changes
 
   const onChangeInput = (_: any, actionMeta: ActionMeta<TagOption>) => {
     switch (actionMeta.action) {
