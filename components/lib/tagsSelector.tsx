@@ -81,6 +81,25 @@ const useBuildTagOptionsList = () => {
 
 export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
+<<<<<<< Updated upstream
+=======
+  const userInfo = useContext(UserState)
+  console.log(userInfo)
+  const teamNames = userInfo?.allGoogleGroups?.map((it) => it.name.split('@')[0])
+
+  const tagsLikeTeamName = tags.filter((it) =>
+    teamNames?.find((tn) => tn.toLocaleLowerCase() === it.toLocaleLowerCase())
+  )
+  const addNewTag = (text: string) => {
+    //if there is a similar tag in the list, use it as the text
+    const newTag = (
+      tagOptions.find(
+        (t) => t.toLocaleLowerCase() === text.toLocaleLowerCase()
+      ) ?? text
+    ).trim()
+    onAdd(newTag)
+  }
+>>>>>>> Stashed changes
 
   const onChangeInput = (_: any, actionMeta: ActionMeta<TagOption>) => {
     switch (actionMeta.action) {

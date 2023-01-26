@@ -28,6 +28,14 @@ export const USER_INFO = gql`
         name
         email
       }
+      googleGroups{
+        name
+        email
+      }
+      allGoogleGroups {
+        name
+        email
+      }
       gcpProjects {
         id
         group {

@@ -1125,11 +1125,11 @@ export type UpdateDataset = {
 };
 
 export type UpdateKeywords = {
-  /** newText is a list of text to replace the keywords */
+  /** NewText is a list of text to replace the keywords */
   newText?: InputMaybe<Array<Scalars['String']>>;
   /** ObsoleteKeywords is a list of keywords to remove */
   obsoleteKeywords?: InputMaybe<Array<Scalars['String']>>;
-  /** ReplacedKeywords is a list of keywords to be replaced */
+  /** ReplacedKeywords is a list of keywords to replace */
   replacedKeywords?: InputMaybe<Array<Scalars['String']>>;
 };
 
@@ -1140,6 +1140,8 @@ export type UserInfo = {
   accessRequests: Array<AccessRequest>;
   /** accessable is a list of dataproducts which the user has explicit access to. */
   accessable: Array<Dataproduct>;
+  /** allGoogleGroups is the all the known google groups of the user domains. */
+  allGoogleGroups?: Maybe<Array<Group>>;
   /** azureGroups is the azure groups the user is member of. */
   azureGroups?: Maybe<Array<Group>>;
   /** dataproducts is a list of dataproducts with one of the users groups as owner. */
@@ -1481,7 +1483,7 @@ export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, groups: Array<{ __typename?: 'Group', name: string, email: string }>, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
+export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, groups: Array<{ __typename?: 'Group', name: string, email: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
 
 export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3423,6 +3425,14 @@ export const UserInfoDetailsDocument = gql`
     }
     loginExpiration
     groups {
+      name
+      email
+    }
+    googleGroups {
+      name
+      email
+    }
+    allGoogleGroups {
       name
       email
     }
