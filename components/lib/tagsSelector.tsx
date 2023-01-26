@@ -82,7 +82,6 @@ const useBuildTagOptionsList = () => {
 export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
   const userInfo = useContext(UserState)
-  console.log(userInfo)
   const teamNames = userInfo?.allGoogleGroups?.map((it) => it.name.split('@')[0])
 
   const tagsLikeTeamName = tags.filter((it) =>
