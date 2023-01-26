@@ -123,6 +123,10 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
       >
         Nøkkelord
       </Label>
+      <br />
+      <span className="italic text-[#555]">
+        Ikke legg til team- eller po-navn som vi har tatt vare på
+      </span>
       {!!tagsLikeTeamName.length && (
         <Alert variant="info" size="small">
           {tagsLikeTeamName.map(
