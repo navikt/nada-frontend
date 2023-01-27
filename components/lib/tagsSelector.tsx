@@ -125,14 +125,16 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
       </Label>
       <br />
       <span className="italic text-[#555]">
-        Ikke legg til team- eller po-navn som vi har tatt vare på
+        Team og PO blir automatisk lagt til og trenger ikke å oppgis som eget
+        nøkkelord
       </span>
       {!!tagsLikeTeamName.length && (
         <Alert variant="info" size="small">
           {tagsLikeTeamName.map(
             (t, i) => `[${t}]${i !== tagsLikeTeamName.length - 1 ? ', ' : ' '}`
           )}
-          virker som teamnavn som ikke bør brukes som nøkkelord.
+          virker som (et) teamnavn og bør ikke oppgis som nøkkelord siden vi
+          automatisk legger til team og PO-tilknytning.
         </Alert>
       )}
       <div className="flex flex-row gap-1 flex-wrap w-full mt-1 mb-1">
