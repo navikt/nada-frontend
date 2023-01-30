@@ -15,7 +15,7 @@ const QuartoPage = () => {
 
     const quarto = query.data.quarto.content
 
-    return <div className="w-full px-4 md:px-6" dangerouslySetInnerHTML={{ __html: quarto }} />
+    return <div key={id} className="w-full px-4 md:px-6" dangerouslySetInnerHTML={{ __html: quarto }} />
 }
 
 export default QuartoPage
