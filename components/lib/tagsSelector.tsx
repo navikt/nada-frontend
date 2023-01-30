@@ -131,10 +131,11 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
       {!!tagsLikeTeamName.length && (
         <Alert variant="info" size="small">
           {tagsLikeTeamName.map(
-            (t, i) => `[${t}]${i !== tagsLikeTeamName.length - 1 ? ', ' : ' '}`
+            (t, i) => `"${t}"${i !== tagsLikeTeamName.length - 1 ? ', ' : ' '}`
           )}
-          virker som (et) teamnavn og bør ikke oppgis som nøkkelord siden vi
-          automatisk legger til team og PO-tilknytning.
+          virker som {tagsLikeTeamName.length == 1 && 'et '}teamnavn og bør ikke
+          oppgis som nøkkelord siden vi automatisk legger til team og
+          PO-tilknytning.
         </Alert>
       )}
       <div className="flex flex-row gap-1 flex-wrap w-full mt-1 mb-1">
