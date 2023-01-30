@@ -132,9 +132,9 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
         <Alert variant="info" size="small">
           {tagsLikeTeamName.map(
             (t, i) =>
-              `"${
+              `${
                 i === 0 ? '' : i === tagsLikeTeamName.length - 1 ? ' og ' : ', '
-              }${t}"`
+              }"${t}"`
           )}
           virker som {tagsLikeTeamName.length == 1 && 'et '}teamnavn og bør ikke
           oppgis som nøkkelord siden vi automatisk legger til team og
