@@ -135,7 +135,7 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
               `${
                 i === 0 ? '' : i === tagsLikeTeamName.length - 1 ? ' og ' : ', '
               }"${t}"`
-          )}
+          )}{' '}
           virker som {tagsLikeTeamName.length == 1 && 'et '}teamnavn og bør ikke
           oppgis som nøkkelord siden vi automatisk legger til team og
           PO-tilknytning.
@@ -144,6 +144,7 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
       <div className="flex flex-row gap-1 flex-wrap w-full mt-1 mb-1">
         {tags &&
           tags.map((k, i) => {
+          
             return (
               <TagPill
                 key={i}
