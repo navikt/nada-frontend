@@ -41,8 +41,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             >
                 <iframe
                     src={currentItem.dashboardURL}
-                    style={{height:"200px",width:"100%",overflow:"hidden"}}
-                    onLoad={() => (function(o: any){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this))}
+                    style={{height:"3500px",width:"100%"}}
                 />
             </Tabs.Panel>}
             <Tabs.Panel
