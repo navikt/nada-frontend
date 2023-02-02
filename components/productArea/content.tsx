@@ -42,6 +42,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 <iframe
                     height="4200px"
                     width="100%"
+                    src={currentItem.dashboardURL}
                 />
             </Tabs.Panel>}
             <Tabs.Panel
