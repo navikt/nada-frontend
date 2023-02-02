@@ -2,7 +2,7 @@ import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 import { useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
-import { createRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 
 interface ProductAreaContentProps {
     currentItem: PAItem
@@ -20,6 +20,16 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
         ref.current.contentWindow !== null &&
         setHeight(ref.current.contentWindow.document.body.scrollHeight + "px")
     };
+
+    useEffect(() => {
+        if (ref.current && currentItem.dashboardURL) {
+          ref.current.src = currentItem.dashboardURL
+        }
+        ref.current?.addEventListener('load', onLoad)
+        return () => {
+          ref.current?.removeEventListener('load', onLoad)
+        }
+    }, [])
     const tk = useTeamkatalogenQuery({
         variables: { q: '' },
     })
@@ -51,10 +61,8 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
             >
                 <iframe
                     ref={ref}
-                    onLoad={onLoad}
                     height={height}
                     width="100%"
-                    src={currentItem.dashboardURL}
                 />
             </Tabs.Panel>}
             <Tabs.Panel
