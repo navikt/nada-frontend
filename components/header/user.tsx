@@ -34,7 +34,7 @@ export default function User() {
               className="text-base flex gap-1 items-center"
               onClick={async () =>
                 await router.push(
-                  'https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling'
+                  'https://docs.knada.io/analyse/datafortellinger/'
                 )
               }
             >
