@@ -23,7 +23,7 @@ const About = () => {
                 <p>
 
                     Data deles fra teamene som <a
-                        href={'https://docs.knada.io/dataprodukter/definisjon/'}>dataprodukter</a>.<br />
+                        href={'https://docs.knada.io/dataprodukter/dataprodukt/'}>dataprodukter</a>.<br />
                     Dataprodukter som ikke inneholder personopplysninger eller andre sensitive data vil som regel
                     kunne
                     være
@@ -37,8 +37,8 @@ const About = () => {
                 </p>
                 <p>
                     Innsikt fra data kan deles på markedsplassen som <a
-                        href={'https://docs.knada.io/dele-innsikt/datafortelling'}>datafortellinger</a> eller <a
-                            href={'https://docs.knada.io/dele-innsikt/metabase'}>spørsmål og dashboards i
+                        href={'https://docs.knada.io/analyse/datafortellinger/'}>datafortellinger</a> eller <a
+                            href={'https://docs.knada.io/analyse/metabase/'}>spørsmål og dashboards i
                         visualiseringsverktøyet Metabase</a>.
                     Utdypende dokumentasjon for datamarkedsplassen og tilknyttede verktøy finnes på <a
                         href={'https://docs.knada.io/'}>docs.knada.io</a>.</p>
