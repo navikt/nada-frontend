@@ -18,6 +18,7 @@ import ProductAreaLinks from '../components/productArea/productAreaLinks'
 import DataproductLogo from '../components/lib/icons/dataproductLogo'
 import {Heading, Search} from '@navikt/ds-react'
 import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
+import GetStartedIcon from "../components/lib/icons/getStartedIcon";
 import { Next } from '@navikt/ds-icons'
 
 const SEARCH_LIMIT = 6
@@ -35,7 +36,40 @@ const LandingPage = () => {
     }, [])
 
     return (
-        <div className="w-screen min-h-[calc(100vh-6rem)] flex flex-col justify-between gap-8">
+        <div className="w-screen min-h-[calc(100vh-6rem)] flex flex-col gap-8">
+            <div className="bg-surface-subtle p-8 min-h-[42rem] items-center justify-center flex flex-col md:flex-row gap-8">
+                <ProductAreaLinks/>
+
+                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 flex items-center flex-col gap-4">
+                    <GetStartedIcon />
+                    <div>
+                        <Heading level="2" size="medium">
+                            <Link
+                                href="https://docs.knada.io/"
+                                className="underline"
+                            >
+                                Hvordan komme i gang?
+                            </Link>
+                        </Heading>
+                        <p>Er du usikker på hva du trenger for å lage dataprodukter, eller hvordan du får dashbaord? Dokumentasjonen til plattformen ligger her.</p>
+                    </div>
+                </div>
+
+                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 flex items-center flex-col gap-4">
+                    <LegalGuidanceIcon />
+                    <div>
+                        <Heading level="2" size="medium">
+                            <Link
+                                href="https://docs.knada.io/spilleregler/spilleregler_juridisk/"
+                                className="underline"
+                            >
+                                Usikker på jus og data?
+                            </Link>
+                        </Heading>
+                        <p>For at folk skal være trygge rundt deling og bruk av data med personopplysninger, har vi forsøkt å svare på noen spørsmål.</p>
+                    </div>
+                </div>
+            </div>
             <div className="flex flex-col items-center justify-center gap-20 mt-8 md:mt-48 w-11/12 self-center">
                 <Head>
                     <title>nav data</title>
@@ -78,25 +112,6 @@ const LandingPage = () => {
                             <Next className="justify-self-end md:hidden" />
                         </a>
                     </Link>
-                </div>
-            </div>
-            <div className="bg-surface-subtle py-8 min-h-[24rem] items-center justify-center flex flex-col md:flex-row gap-8">
-                <ProductAreaLinks/>
-                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-col md:flex-row gap-4 md:gap-0">
-                    <div className="mr-6">
-                        <LegalGuidanceIcon />
-                    </div>
-                    <div>
-                        <Heading level="2" size="medium">
-                            <Link
-                                href="https://docs.knada.io/spilleregler/spilleregler_juridisk/"
-                                className="underline"
-                            >
-                                Usikker på jus og data?
-                            </Link>
-                        </Heading>
-                        <p>For at folk skal være trygge rundt deling og bruk av data med personopplysninger, har vi forsøkt å svare på noen spørsmål.</p>
-                    </div>
                 </div>
             </div>
         </div>
