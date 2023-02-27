@@ -20,6 +20,7 @@ import {Heading, Search} from '@navikt/ds-react'
 import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
 import GetStartedIcon from "../components/lib/icons/getStartedIcon";
 import { Next } from '@navikt/ds-icons'
+import DatadrivenIcon from "../components/lib/icons/datadrivenIcon";
 
 const SEARCH_LIMIT = 6
 
@@ -44,9 +45,24 @@ const LandingPage = () => {
                 <ProductAreaLinks/>
 
                 <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
+                    <DatadrivenIcon />
+                    <div>
+                        <Heading level="2" size="small">
+                            <Link
+                                href="https://aksel.nav.no/god-praksis/artikler/nada?tema=produktledelse"
+                                className="underline"
+                            >
+                                Hva er datadrevet?
+                            </Link>
+                        </Heading>
+                        <p>På Aksel kan du lese om datadrevet produktutvikling. En inspirasjon for å komme i gang med målinger i ditt team?</p>
+                        </div>
+                </div>
+
+                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
                     <GetStartedIcon />
                     <div>
-                        <Heading level="2" size="medium">
+                        <Heading level="2" size="small">
                             <Link
                                 href="https://docs.knada.io/"
                                 className="underline"
@@ -61,9 +77,9 @@ const LandingPage = () => {
                 <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
                     <LegalGuidanceIcon />
                     <div>
-                        <Heading level="2" size="medium">
+                        <Heading level="2" size="small">
                             <Link
-                                href="https://docs.knada.io/spilleregler/spilleregler_juridisk/"
+                                href="https://docs.knada.io/juridisk/spilleregler/"
                                 className="underline"
                             >
                                 Usikker på jus og data?
