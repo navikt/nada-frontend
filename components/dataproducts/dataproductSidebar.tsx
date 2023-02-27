@@ -84,7 +84,7 @@ export const DataproductSidebar = ({
             </Alert>
           )}
         </Subject>
-        <SubjectHeader>Eier</SubjectHeader>
+        <SubjectHeader>Ansvarlig team (Teamkatalogen)</SubjectHeader>
         <Subject>
           {product.owner?.teamID && product.owner.teamkatalogenURL? (
             <Link
@@ -98,7 +98,7 @@ export const DataproductSidebar = ({
             product.owner?.group.split('@')[0]
           )}
         </Subject>
-        <SubjectHeader>Kontaktpunkt</SubjectHeader>
+        <SubjectHeader>Kontaktpunkt (Slack)</SubjectHeader>
         <Subject>
           {product.owner?.teamContact ? (
             <Link
