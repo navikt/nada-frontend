@@ -14,12 +14,10 @@ const ProductAreaLinks = () => {
   }
   
   return (
-    <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[35rem] h-fit p-4 flex items-center flex-col md:flex-row gap-4 md:gap-0">
-      <div className="mr-6">
-        <ExploreAreasIcon />
-      </div>
+    <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
+      <ExploreAreasIcon />
       <div>
-        <Heading level="2" size="medium">
+        <Heading level="2" size="small">
           <Link
             href={`/productArea/${defaultProductAreaID}`}
             className="underline"

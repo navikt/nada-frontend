@@ -4,6 +4,7 @@ import { Header } from '@navikt/ds-react-internal'
 import React, { useState } from 'react'
 import { Search } from '@navikt/ds-react'
 import Link from 'next/link'
+import { HeaderLogo } from './index/frontPageLogo'
 
 export const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
@@ -14,14 +15,8 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
       <Header className="flex flex-row justify-between">
         <div className="flex flex-row">
           <Header.Title href="/">
-            <div className="cursor-pointer w-8 md:w-24 flex items-center md:mx-3">
-              <picture>
-                <source
-                  media="(min-width: 768px)"
-                  srcSet="/navdata-logo-white.svg"
-                />
-                <img src="/favicon.svg" width="100" alt="nav data" />
-              </picture>
+            <div className="cursor-pointer w-8 md:w-fit flex items-center">
+              <HeaderLogo />
             </div>
           </Header.Title>
           <form
