@@ -37,10 +37,13 @@ const LandingPage = () => {
 
     return (
         <div className="w-screen min-h-[calc(100vh-6rem)] flex flex-col gap-8">
+            <Head>
+                <title>datamarkedsplassen</title>
+            </Head>
             <div className="bg-surface-subtle p-8 min-h-[42rem] items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
 
-                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 flex items-center flex-col gap-4">
+                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
                     <GetStartedIcon />
                     <div>
                         <Heading level="2" size="medium">
@@ -55,7 +58,7 @@ const LandingPage = () => {
                     </div>
                 </div>
 
-                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 flex items-center flex-col gap-4">
+                <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
                     <LegalGuidanceIcon />
                     <div>
                         <Heading level="2" size="medium">
@@ -70,10 +73,7 @@ const LandingPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-20 mt-8 md:mt-48 w-11/12 self-center">
-                <Head>
-                    <title>nav data</title>
-                </Head>
+            <div className="flex flex-col items-center gap-8 w-11/12 self-center pb-8">
                 <FrontPageLogo />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:w-[32rem]">
                     <form
