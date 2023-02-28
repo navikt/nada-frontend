@@ -92,7 +92,7 @@ export default function User() {
 
       <Dropdown>
         <Header.Button
-          className="whitespace-nowrap hidden md:block"
+          className="whitespace-nowrap hidden md:block text-base"
           as={Dropdown.Toggle}
         >
           {userInfo.name}
