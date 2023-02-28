@@ -20,7 +20,6 @@ const ProductAreaLinks = () => {
         <Heading level="2" size="small">
           <Link
             href={`/productArea/${defaultProductAreaID}`}
-            className="underline"
           >
             Utforsk områder
           </Link>

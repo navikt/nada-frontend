@@ -119,7 +119,7 @@ export default function User() {
   ) : (
     <div className="flex flex-row min-w-fit">
       <Header.Button
-        className={'h-full'}
+        className={'h-full text-base'}
         onClick={async () =>
           await router.push(
             `${backendHost()}/api/login?redirect_uri=${encodeURIComponent(

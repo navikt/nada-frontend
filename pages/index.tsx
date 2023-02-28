@@ -37,21 +37,18 @@ const LandingPage = () => {
     }, [])
 
     return (
-        <div className="w-screen min-h-[calc(100vh-6rem)] flex flex-col gap-8">
+        <div className="w-screen min-h-[calc(100vh-6rem)] flex flex-col gap-8 bg-gray-100">
             <Head>
                 <title>datamarkedsplassen</title>
             </Head>
-            <div className="bg-surface-subtle p-8 min-h-[42rem] items-center justify-center flex flex-col md:flex-row gap-8">
+            <div className="bg-surface-subtle p-8 min-h-[34rem] items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
 
                 <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
                     <DatadrivenIcon />
                     <div>
                         <Heading level="2" size="small">
-                            <Link
-                                href="https://aksel.nav.no/god-praksis/artikler/nada?tema=produktledelse"
-                                className="underline"
-                            >
+                            <Link href="https://aksel.nav.no/god-praksis/artikler/nada?tema=produktledelse">
                                 Hva er datadrevet?
                             </Link>
                         </Heading>
@@ -63,10 +60,7 @@ const LandingPage = () => {
                     <GetStartedIcon />
                     <div>
                         <Heading level="2" size="small">
-                            <Link
-                                href="https://docs.knada.io/"
-                                className="underline"
-                            >
+                            <Link href="https://docs.knada.io/">
                                 Hvordan komme i gang?
                             </Link>
                         </Heading>
@@ -107,7 +101,7 @@ const LandingPage = () => {
                         />
                     </form>
                     <Link href="/search?preferredType=story">
-                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
+                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted bg-white rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
                             <div className="flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
                                     <StoryLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
@@ -118,7 +112,7 @@ const LandingPage = () => {
                         </a>
                     </Link>
                     <Link href="/search?preferredType=dataproduct">
-                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
+                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted bg-white rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
                             <div className="flex flex-row items-center gap-2 md:gap-4">
                                 <div className="text-deepblue-500 bg-deepblue-50">
                                     <DataproductLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
