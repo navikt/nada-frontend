@@ -78,11 +78,13 @@ export const DataproductSidebar = ({
       </div>
       <div className="h-fit fixed w-64 text-base leading-4 pr-4 pb-0 bottom-8">
         <Subject>
-          {isOwner && (
-            <Alert variant="success" size="small">
-              Du eier dette produktet
-            </Alert>
-          )}
+          <Link
+              href={`/productArea/${product.owner.productAreaID}?team=${product.owner.teamID}`}
+              target="_blank"
+              rel="noreferrer"
+          >
+            Utforsk alle teamets dataprodukter
+          </Link>
         </Subject>
         <SubjectHeader>Ansvarlig team (Teamkatalogen)</SubjectHeader>
         <Subject>
