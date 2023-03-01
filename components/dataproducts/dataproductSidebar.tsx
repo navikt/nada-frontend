@@ -83,7 +83,7 @@ export const DataproductSidebar = ({
               target="_blank"
               rel="noreferrer"
           >
-            Utforsk alle teamets dataprodukter
+            Utforsk alle teamets produkter
           </Link>
         </Subject>
         <SubjectHeader>Ansvarlig team (Teamkatalogen)</SubjectHeader>
