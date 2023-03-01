@@ -284,7 +284,7 @@ export const NewDataproductForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          gcpGroup={team}
+          gcpGroups={[team]}
           register={register}
           watch={watch}
           errors={errors}

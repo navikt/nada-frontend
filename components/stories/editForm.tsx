@@ -86,7 +86,7 @@ function EditForm({ story }: SaveFormProps) {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset legend={''}>
               <TeamkatalogenSelector
-                gcpGroup={story.owner.group}
+                gcpGroups={[story.owner.group]}
                 register={register}
                 watch={watch}
                 errors={errors}

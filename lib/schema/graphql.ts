@@ -86,6 +86,8 @@ export type BigQuery = {
   expires?: Maybe<Scalars['Time']>;
   /** lastModified is the time when the table was last modified */
   lastModified: Scalars['Time'];
+  /** missingSince, if set, is the time when the table got deleted from BigQuery */
+  missingSince?: Maybe<Scalars['Time']>;
   /** piiTags is json string from the pii tags map */
   piiTags?: Maybe<Scalars['String']>;
   /** projectID is the GCP project ID that contains the BigQuery table */
@@ -191,8 +193,6 @@ export type Dataset = {
   pii: PiiLevel;
   /** repo is the url of the repository containing the code to create the dataset */
   repo?: Maybe<Scalars['String']>;
-  /** requesters contains a list of users, groups and service accounts which can request access to the dataset */
-  requesters: Array<Scalars['String']>;
   /** services contains links to this dataset in other services */
   services: DatasetServices;
   /** slug is the dataset slug */
@@ -283,6 +283,12 @@ export type Mutation = {
    * Requires authentication.
    */
   createDataset: Dataset;
+  /**
+   * createStory creates a quarto story.
+   *
+   * Requires authentication.
+   */
+  createStory: Story;
   /**
    * deleteAccessRequest deletes a dataset access request.
    *
@@ -390,6 +396,11 @@ export type MutationCreateDataproductArgs = {
 
 export type MutationCreateDatasetArgs = {
   input: NewDataset;
+};
+
+
+export type MutationCreateStoryArgs = {
+  input: NewStory;
 };
 
 
@@ -544,8 +555,6 @@ export type NewDataset = {
   pii: PiiLevel;
   /** repo is the url of the repository containing the code to create the dataset */
   repo?: InputMaybe<Scalars['String']>;
-  /** requesters contains list of users, groups and service accounts which can request access to the dataset */
-  requesters?: InputMaybe<Array<Scalars['String']>>;
   /** targetUser is the type of user that the dataset is meant to be used by */
   targetUser?: InputMaybe<Scalars['String']>;
 };
@@ -568,8 +577,6 @@ export type NewDatasetForNewDataproduct = {
   pii: PiiLevel;
   /** repo is the url of the repository containing the code to create the dataset */
   repo?: InputMaybe<Scalars['String']>;
-  /** requesters contains list of users, groups and service accounts which can request access to the dataset */
-  requesters?: InputMaybe<Array<Scalars['String']>>;
   /** targetUser is the type of user that the dataset is meant to be used by */
   targetUser?: InputMaybe<Scalars['String']>;
 };
@@ -873,7 +880,7 @@ export type QueryTeamArgs = {
 
 
 export type QueryTeamkatalogenArgs = {
-  q: Scalars['String'];
+  q?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type QueryPolly = {
@@ -1411,6 +1418,13 @@ export type SlackQueryVariables = Exact<{
 
 export type SlackQuery = { __typename?: 'Query', IsValidSlackChannel: boolean };
 
+export type CreateStoryMutationVariables = Exact<{
+  input: NewStory;
+}>;
+
+
+export type CreateStoryMutation = { __typename?: 'Mutation', createStory: { __typename?: 'Story', id: string } };
+
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1474,7 +1488,7 @@ export type VegaViewQueryVariables = Exact<{
 export type VegaViewQuery = { __typename?: 'Query', storyView: { __typename?: 'StoryViewHeader' } | { __typename?: 'StoryViewMarkdown' } | { __typename?: 'StoryViewPlotly' } | { __typename?: 'StoryViewVega', id: string, spec: any } };
 
 export type TeamkatalogenQueryVariables = Exact<{
-  q: Scalars['String'];
+  q?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 
@@ -3042,6 +3056,39 @@ export function useSlackLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Slac
 export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
 export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
 export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
+export const CreateStoryDocument = gql`
+    mutation createStory($input: NewStory!) {
+  createStory(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateStoryMutationFn = Apollo.MutationFunction<CreateStoryMutation, CreateStoryMutationVariables>;
+
+/**
+ * __useCreateStoryMutation__
+ *
+ * To run a mutation, you first call `useCreateStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStoryMutation, { data, loading, error }] = useCreateStoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateStoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateStoryMutation, CreateStoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CreateStoryDocument, options);
+      }
+export type CreateStoryMutationHookResult = ReturnType<typeof useCreateStoryMutation>;
+export type CreateStoryMutationResult = Apollo.MutationResult<CreateStoryMutation>;
+export type CreateStoryMutationOptions = Apollo.BaseMutationOptions<CreateStoryMutation, CreateStoryMutationVariables>;
 export const DeleteStoryDocument = gql`
     mutation deleteStory($id: ID!) {
   deleteStory(id: $id)
@@ -3363,7 +3410,7 @@ export type VegaViewQueryHookResult = ReturnType<typeof useVegaViewQuery>;
 export type VegaViewLazyQueryHookResult = ReturnType<typeof useVegaViewLazyQuery>;
 export type VegaViewQueryResult = Apollo.QueryResult<VegaViewQuery, VegaViewQueryVariables>;
 export const TeamkatalogenDocument = gql`
-    query Teamkatalogen($q: String!) {
+    query Teamkatalogen($q: [String!]) {
   teamkatalogen(q: $q) {
     name
     url
@@ -3389,7 +3436,7 @@ export const TeamkatalogenDocument = gql`
  *   },
  * });
  */
-export function useTeamkatalogenQuery(baseOptions: Apollo.QueryHookOptions<TeamkatalogenQuery, TeamkatalogenQueryVariables>) {
+export function useTeamkatalogenQuery(baseOptions?: Apollo.QueryHookOptions<TeamkatalogenQuery, TeamkatalogenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(TeamkatalogenDocument, options);
       }

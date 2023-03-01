@@ -152,7 +152,7 @@ export const NewStoryForm = () => {
           control={control}
         />
         <TeamkatalogenSelector
-          gcpGroup={""}
+          gcpGroups={userInfo?.gcpProjects.map(it=> it.group.email)}
           register={register}
           watch={watch}
           errors={errors}
