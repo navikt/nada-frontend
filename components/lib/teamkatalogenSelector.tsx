@@ -5,7 +5,7 @@ import LoaderSpinner from './spinner'
 import { Dispatch, SetStateAction } from 'react'
 
 type TeamkatalogenSelectorProps = {
-  gcpGroup?: string
+  gcpGroup?: string | string []
   register: any
   watch: any
   errors: any
@@ -20,10 +20,11 @@ export interface Team {
   teamID: string
 }
 
-const useBuildTeamList = (gcpGroup: string | undefined) => {
+const useBuildTeamList = (gcpGroup: string | string [] | undefined) => {
   const allTeamResult = useTeamkatalogenQuery({
     variables: { q: '' },
   })
+
   const relevantTeamResult = useTeamkatalogenQuery({
     variables: { q: gcpGroup?.split('@')[0] || '' },
   })
@@ -57,6 +58,7 @@ export const TeamkatalogenSelector = ({
   setProductAreaID,
   setTeamID,
 }: TeamkatalogenSelectorProps) => {
+
   const { relevantTeams, otherTeams, allTeams, error } =
     useBuildTeamList(gcpGroup)
   const teamkatalogenURL = watch('teamkatalogenURL')
