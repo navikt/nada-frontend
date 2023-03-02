@@ -15,6 +15,7 @@ export type Scalars = {
   Float: number;
   Map: any;
   Time: any;
+  Upload: any;
 };
 
 /** Access contains metadata on an access entry. */
@@ -288,7 +289,7 @@ export type Mutation = {
    *
    * Requires authentication.
    */
-  createStory: Story;
+  createStory: QuartoStory;
   /**
    * deleteAccessRequest deletes a dataset access request.
    *
@@ -400,7 +401,8 @@ export type MutationCreateDatasetArgs = {
 
 
 export type MutationCreateStoryArgs = {
-  input: NewStory;
+  file: Scalars['Upload'];
+  input: NewQuartoStory;
 };
 
 
@@ -593,6 +595,16 @@ export type NewGrant = {
   subjectType?: InputMaybe<SubjectType>;
 };
 
+/** NewQuartoStory contains the metadata and content of quarto stories. */
+export type NewQuartoStory = {
+  /** description of the quarto story. */
+  description: Scalars['String'];
+  /** keywords for the story used as tags. */
+  keywords: Array<Scalars['String']>;
+  /** name of the quarto story. */
+  name: Scalars['String'];
+};
+
 export type NewStory = {
   /** group is the owner group for the story. */
   group: Scalars['String'];
@@ -690,6 +702,19 @@ export type Quarto = {
   lastModified: Scalars['Time'];
   /** name of the data story. */
   owner: Owner;
+};
+
+/** QuartoStory contains the metadata and content of data stories. */
+export type QuartoStory = {
+  __typename?: 'QuartoStory';
+  /** filename of the quarto story. */
+  filename: Scalars['String'];
+  /** id of the data story. */
+  id: Scalars['ID'];
+  /** name of the data story. */
+  name: Scalars['String'];
+  /** url for the story in bucket. */
+  url: Scalars['String'];
 };
 
 export type Query = {
@@ -1419,11 +1444,12 @@ export type SlackQueryVariables = Exact<{
 export type SlackQuery = { __typename?: 'Query', IsValidSlackChannel: boolean };
 
 export type CreateStoryMutationVariables = Exact<{
-  input: NewStory;
+  file: Scalars['Upload'];
+  input: NewQuartoStory;
 }>;
 
 
-export type CreateStoryMutation = { __typename?: 'Mutation', createStory: { __typename?: 'Story', id: string } };
+export type CreateStoryMutation = { __typename?: 'Mutation', createStory: { __typename?: 'QuartoStory', id: string, name: string, filename: string, url: string } };
 
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -3057,9 +3083,12 @@ export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
 export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
 export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
 export const CreateStoryDocument = gql`
-    mutation createStory($input: NewStory!) {
-  createStory(input: $input) {
+    mutation createStory($file: Upload!, $input: NewQuartoStory!) {
+  createStory(file: $file, input: $input) {
     id
+    name
+    filename
+    url
   }
 }
     `;
@@ -3078,6 +3107,7 @@ export type CreateStoryMutationFn = Apollo.MutationFunction<CreateStoryMutation,
  * @example
  * const [createStoryMutation, { data, loading, error }] = useCreateStoryMutation({
  *   variables: {
+ *      file: // value for 'file'
  *      input: // value for 'input'
  *   },
  * });

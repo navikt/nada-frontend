@@ -13,7 +13,7 @@ import {
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
-import { useContext, useState } from 'react'
+import { ChangeEvent, useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
 
@@ -45,7 +45,17 @@ export const NewStoryForm = () => {
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
   const userInfo = useContext(UserState)
+  const [quartoFile, setQuartoFile] = useState<File | undefined | null>(undefined);
+  
+  const [uploadFile] = useMutation( CREATE_STORY,
+    {
+      onCompleted: (data) =>console.log(data)
+    });
 
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.files?.item(0))
+    setQuartoFile(event.target.files?.item(0))
+  }
   const {
     register,
     handleSubmit,
@@ -78,18 +88,22 @@ export const NewStoryForm = () => {
 
   const onSubmit = async (data: any) => {
     console.log(NewStoryForm)
-    try {
-      await createStory({
-        variables: {
-          input: {
-            name: data.name,
-            description: valueOrNull(data.description),
-            teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
-            keywords: data.keywords,
-          },
+    console.log(quartoFile)
+    const uploadData = {
+      variables: {
+        file: quartoFile as File,
+        input: {
+          name: data.name,
+          description: valueOrNull(data.description),
+          keywords: data.keywords,
         },
-        refetchQueries: ['searchContent'],
-      })
+      },
+      refetchQueries: ['searchContent'],
+    }
+
+    console.log(uploadData)
+    try {
+      await createStory(uploadData)
       amplitudeLog('skjema fullført', { skjemanavn: 'ny-datafortelling' })
     } catch (e) {
       amplitudeLog('skjemainnsending feilet', {
@@ -164,6 +178,7 @@ export const NewStoryForm = () => {
             onDelete={onDeleteKeyword}
             tags={keywords || []}
         />
+        <input type="file" onChange={handleFileUpload}/>
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>
