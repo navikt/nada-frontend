@@ -113,7 +113,7 @@ export const NewStoryForm = () => {
       {
         onCompleted: (data) =>
             router.push(
-                `/datastory/${data.createDatastory.id}/${data.createDatastory.slug}`
+                `/`
             ),
       }
   )
