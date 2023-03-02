@@ -16,6 +16,8 @@ import * as yup from 'yup'
 import { ChangeEvent, useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
+import { TEST_UPLOAD } from '../../lib/queries/story/testUpload'
+import { useTestUploadMutation } from '../../lib/schema/graphql'
 
 
 const defaultValues: FieldValues = {
@@ -47,15 +49,10 @@ export const NewStoryForm = () => {
   const userInfo = useContext(UserState)
   const [quartoFile, setQuartoFile] = useState<File | undefined | null>(undefined);
   
-  const [uploadFile] = useMutation( CREATE_STORY,
-    {
-      onCompleted: (data) =>console.log(data)
-    });
-
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files?.item(0))
-    setQuartoFile(event.target.files?.item(0))
+      setQuartoFile(event.target.files?.item(0))
   }
+
   const {
     register,
     handleSubmit,
@@ -88,10 +85,9 @@ export const NewStoryForm = () => {
 
   const onSubmit = async (data: any) => {
     console.log(NewStoryForm)
-    console.log(quartoFile)
     const uploadData = {
       variables: {
-        file: quartoFile as File,
+        file: quartoFile,
         input: {
           name: data.name,
           description: valueOrNull(data.description),
@@ -101,7 +97,6 @@ export const NewStoryForm = () => {
       refetchQueries: ['searchContent'],
     }
 
-    console.log(uploadData)
     try {
       await createStory(uploadData)
       amplitudeLog('skjema fullført', { skjemanavn: 'ny-datafortelling' })
