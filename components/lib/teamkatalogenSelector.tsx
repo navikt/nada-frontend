@@ -5,7 +5,7 @@ import LoaderSpinner from './spinner'
 import { Dispatch, SetStateAction } from 'react'
 
 type TeamkatalogenSelectorProps = {
-  gcpGroup?: string
+  gcpGroups?: string []
   register: any
   watch: any
   errors: any
@@ -20,12 +20,13 @@ export interface Team {
   teamID: string
 }
 
-const useBuildTeamList = (gcpGroup: string | undefined) => {
+const useBuildTeamList = (gcpGroups: string [] | undefined) => {
   const allTeamResult = useTeamkatalogenQuery({
     variables: { q: '' },
   })
+
   const relevantTeamResult = useTeamkatalogenQuery({
-    variables: { q: gcpGroup?.split('@')[0] || '' },
+    variables: { q: gcpGroups?.map(it=> it.split('@')[0]) || []},
   })
 
   if (allTeamResult.error || relevantTeamResult.error) {
@@ -34,7 +35,7 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
     }
   }
 
-  const relevantTeams = gcpGroup? relevantTeamResult.data?.teamkatalogen: undefined
+  const relevantTeams = gcpGroups? relevantTeamResult.data?.teamkatalogen: undefined
   const allTeams = allTeamResult.data?.teamkatalogen
   const otherTeams = allTeamResult.data?.teamkatalogen.filter(
     (it) => !relevantTeams || !relevantTeams.find((t) => t.teamID == it.teamID)
@@ -50,15 +51,16 @@ const useBuildTeamList = (gcpGroup: string | undefined) => {
 }
 
 export const TeamkatalogenSelector = ({
-  gcpGroup,
+  gcpGroups,
   register,
   watch,
   errors,
   setProductAreaID,
   setTeamID,
 }: TeamkatalogenSelectorProps) => {
+
   const { relevantTeams, otherTeams, allTeams, error } =
-    useBuildTeamList(gcpGroup)
+    useBuildTeamList(gcpGroups)
   const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {

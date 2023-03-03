@@ -33,9 +33,7 @@ export default function User() {
             <Dropdown.Menu.GroupedList.Item
               className="text-base flex gap-1 items-center"
               onClick={async () =>
-                await router.push(
-                  'https://docs.knada.io/analyse/datafortellinger/'
-                )
+                await router.push('/story/new')
               }
             >
               Legg til ny datafortelling (docs)
