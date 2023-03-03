@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { FieldValues, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
-import { CREATE_STORY } from '../../lib/queries/story/createStory'
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
@@ -16,8 +15,7 @@ import * as yup from 'yup'
 import { ChangeEvent, useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
-import { TEST_UPLOAD } from '../../lib/queries/story/testUpload'
-import { useTestUploadMutation } from '../../lib/schema/graphql'
+import { CREATE_QUARTO_STORY } from '../../lib/queries/story/createQuartoStory'
 
 
 const defaultValues: FieldValues = {
@@ -92,11 +90,15 @@ export const NewStoryForm = () => {
           name: data.name,
           description: valueOrNull(data.description),
           keywords: data.keywords,
+          teamkatalogenUrl: data.teamkatalogenUrl,
+          productAreaID: productAreaID,
+          teamID: teamID,
         },
       },
       refetchQueries: ['searchContent'],
     }
 
+    console.log(uploadData)
     try {
       await createStory(uploadData)
       amplitudeLog('skjema fullført', { skjemanavn: 'ny-datafortelling' })
@@ -109,13 +111,15 @@ export const NewStoryForm = () => {
   }
 
   const [createStory, { loading, error: backendError }] = useMutation(
-      CREATE_STORY,
+      CREATE_QUARTO_STORY,
       {
-        onCompleted: (data) =>
+        onCompleted: (data) =>{
+          console.log(data)
             router.push(
                 `/`
-            ),
-      }
+            )
+        }
+,      }
   )
 
   const onCancel = () => {
