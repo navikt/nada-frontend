@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../lib/apollo'
 import InnerContainer from '../../components/lib/innerContainer'
 
-const NewDataproduct = () => {
+const NewStory = () => {
   const userInfo = useUserInfoDetailsQuery()
 
   if (!userInfo.data?.userInfo)
@@ -30,7 +30,7 @@ const NewDataproduct = () => {
   )
 }
 
-export default NewDataproduct
+export default NewStory
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo()
