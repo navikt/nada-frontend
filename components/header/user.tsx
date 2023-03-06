@@ -36,7 +36,7 @@ export default function User() {
                 await router.push('/story/new')
               }
             >
-              Legg til ny datafortelling (docs)
+              Legg til ny datafortelling
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
           <Dropdown.Menu.Divider />
