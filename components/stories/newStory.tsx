@@ -9,6 +9,7 @@ import {
   Button,
   Heading,
   TextField,
+  Select,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
@@ -82,7 +83,6 @@ export const NewStoryForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
   const onSubmit = async (data: any) => {
-    console.log(NewStoryForm)
     const uploadData = {
       variables: {
         file: quartoFile,
@@ -93,6 +93,7 @@ export const NewStoryForm = () => {
           teamkatalogenUrl: data.teamkatalogenUrl,
           productAreaID: productAreaID,
           teamID: teamID,
+          group: data.group,
         },
       },
       refetchQueries: ['searchContent'],
@@ -164,6 +165,33 @@ export const NewStoryForm = () => {
           name="description"
           control={control}
         />
+        <Select
+          className="w-full"
+          label="Velg gruppe fra GCP"
+          {...register('group', {
+            onChange: () => setValue('teamkatalogenURL', ''),
+          })}
+          error={errors.team?.message?.toString()}
+        >
+          <option value="">Velg gruppe</option>
+          {[
+            ...new Set(
+              userInfo?.gcpProjects.map(
+                ({ group }: { group: { name: string } }) => (
+                  <option
+                    value={
+                      userInfo?.groups.filter((g) => g.name === group.name)[0]
+                        .email
+                    }
+                    key={group.name}
+                  >
+                    {group.name}
+                  </option>
+                )
+              )
+            ),
+          ]}
+        </Select>
         <TeamkatalogenSelector
           gcpGroups={userInfo?.gcpProjects.map(it=> it.group.email)}
           register={register}

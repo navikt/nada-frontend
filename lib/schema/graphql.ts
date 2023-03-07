@@ -599,6 +599,8 @@ export type NewGrant = {
 export type NewQuartoStory = {
   /** description of the quarto story. */
   description: Scalars['String'];
+  /** group is the owner group of the quarto */
+  group: Scalars['String'];
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
   /** name of the quarto story. */
@@ -702,6 +704,8 @@ export type QuartoStory = {
   creator: Scalars['String'];
   /** description of the quarto story. */
   description: Scalars['String'];
+  /** group is the owner group of the quarto */
+  group: Scalars['String'];
   /** id of the data story. */
   id: Scalars['ID'];
   /** keywords for the story used as tags. */
