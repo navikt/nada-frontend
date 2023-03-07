@@ -707,7 +707,7 @@ export type QuartoStory = {
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
   /** lastModified is the timestamp for when the dataproduct was last modified */
-  lastModified: Scalars['Time'];
+  lastModified?: Maybe<Scalars['Time']>;
   /** name of the data story. */
   name: Scalars['String'];
   /** Id of the creator's product area. */
@@ -960,7 +960,7 @@ export type SearchQuery = {
   text?: InputMaybe<Scalars['String']>;
 };
 
-export type SearchResult = Dataproduct | Story;
+export type SearchResult = Dataproduct | QuartoStory | Story;
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow';
@@ -1412,14 +1412,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'QuartoStory' } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
 
 export type SlackQueryVariables = Exact<{
   name: Scalars['String'];
@@ -2961,6 +2961,14 @@ export const SearchContentWithOptionsDocument = gql`
           group
           teamkatalogenURL
         }
+      }
+      ... on QuartoStory {
+        __typename
+        id
+        name
+        created
+        keywords
+        modified: lastModified
       }
     }
   }

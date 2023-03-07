@@ -81,6 +81,9 @@ const ResultList = ({
     const datastories = data.search.filter(
       (d) => d.result.__typename === 'Story'
     )
+    const quartostories = data.search.filter(
+      (d)=> d.result.__typename === 'QuartoStory'
+    )
     return (
       <Results>
         <Tabs
@@ -94,7 +97,7 @@ const ResultList = ({
           <Tabs.List>
             <Tabs.Tab
               value="story"
-              label={`Fortellinger (${datastories.length})`}
+              label={`Fortellinger (${datastories.length + quartostories.length})`}
             />
             <Tabs.Tab
               value="dataproduct"
@@ -117,7 +120,22 @@ const ResultList = ({
                     productAreas={po.data}
                   />
                 )
-            )}
+            ).concat(quartostories.map(
+              (it, idx)=>
+              (
+                <SearchResultLink
+                  key={idx}
+                  name={it.result.name}
+                  type={'story'}
+                  keywords={it.result.keywords}
+                  description={it.excerpt}
+                  link={`/quarto/${it.result.id}`}
+                  teamkatalogen={tk.data}
+                  productAreas={po.data}
+                />
+              )
+                 
+            ))}
           </Tabs.Panel>
           <Tabs.Panel className="flex flex-col gap-4" value="dataproduct">
             {dataproducts.map(
