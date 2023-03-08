@@ -74,7 +74,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             name={s.name}
                             description={s.excerpt}
                             keywords={s.keywords}
-                            link={`/story/${s.id}`}
+                            link={`${s.__typename == 'Story'? '/story/' : '/quarto/'}${s.id}`}
                             type="story"
                             teamkatalogen={tk.data}
                             productAreas={po.data}
