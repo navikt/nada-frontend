@@ -1,7 +1,8 @@
 import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
-import { useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
+import { Story, useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
+import { owner } from "../../lib/schema/yupValidations";
 
 interface ProductAreaContentProps {
     currentItem: PAItem
@@ -9,10 +10,26 @@ interface ProductAreaContentProps {
     setCurrentTab: React.Dispatch<React.SetStateAction<string>>
 }
 
+interface UnifiedStory{
+        __typename?: "Story" | "QuartoStory" | undefined
+        id: string
+        name: string
+        created: any
+        keywords: string[]
+        lastModified?: any
+        owner?: {
+            __typename?: "Owner" | undefined;
+            group: string;
+            teamkatalogenURL?: string;
+        }
+    }
+
 const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
     const tk = useTeamkatalogenQuery({
         variables: { q: '' },
     })
+    var allStories = currentItem.stories.map(it=> it as UnifiedStory)
+    .concat(currentItem.quartoStories.map(it=> it as UnifiedStory))
     const po = useProductAreasQuery()
     return (
         <Tabs
@@ -28,7 +45,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 />}
                 <Tabs.Tab
                     value="stories"
-                    label={`Fortellinger (${currentItem.stories.length})`}
+                    label={`Fortellinger (${allStories.length})`}
                 />
                 <Tabs.Tab
                     value="products"
@@ -50,20 +67,20 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 className="h-full w-full py-4"
             >
                 <div className="flex flex-col gap-2">
-                    {currentItem.stories && currentItem.stories.map((s: any, idx: number) => (
+                    {allStories && allStories.map((s: any, idx: number) => (
                         <SearchResultLink
                             key={idx}
                             group={s.owner}
                             name={s.name}
                             description={s.excerpt}
                             keywords={s.keywords}
-                            link={`/story/${s.id}`}
+                            link={`${s.__typename == 'Story'? '/story/' : '/quarto/'}${s.id}`}
                             type="story"
                             teamkatalogen={tk.data}
                             productAreas={po.data}
                         />
                     ))}
-                    {currentItem.stories.length == 0 && "Ingen fortellinger"}
+                    {allStories.length == 0 && "Ingen fortellinger"}
                 </div>
             </Tabs.Panel>
             <Tabs.Panel
