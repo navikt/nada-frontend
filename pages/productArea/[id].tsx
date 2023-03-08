@@ -47,6 +47,14 @@ export interface PAItem {
       teamkatalogenURL?: string | null | undefined
     }
   }[]
+  quartoStories: {
+    __typename?: 'QuartoStory'
+    id: string
+    name: string
+    created: any
+    keywords: Array<string>
+    lastModified?: any | null | undefined
+  }[]
 }
 
 export interface PAItems extends Array<PAItem> {}
@@ -58,6 +66,7 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
     dashboardURL: productArea.dashboardURL,
     dataproducts: productArea.dataproducts,
     stories: productArea.stories,
+    quartoStories: productArea.quartoStories,
   })
   productArea.teams
     .slice()
@@ -75,6 +84,7 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
         dashboardURL: t.dashboardURL,
         dataproducts: t.dataproducts,
         stories: t.stories,
+        quartoStories: t.quartoStories,
       })
     })
 
