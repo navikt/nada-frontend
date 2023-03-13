@@ -8,8 +8,9 @@ const Personopplysninger = () => {
             det mulig å finne ut hvem den fysiske personen er.</p>
             <p>Husk at det som regel ikke holder å fjerne direkte identifiserende opplysninger,
             uten å ta høyde for kombinasjonen av informasjon man sitter igjen med.</p>
-            <a href="https://www.datatilsynet.no/rettigheter-og-plikter/personopplysninger/">
+            <a href="https://www.datatilsynet.no/rettigheter-og-plikter/personopplysninger/" target="_blank">
                 Les mer om personopplysninger hos datatilsynet.
+
             </a>
         </HelpText>
     );
@@ -19,7 +20,7 @@ const PersonopplysningerDetaljert = () => {
     return (
         <HelpText title="Hvor kommer dette fra?">
             <p className="font-bold">Personopplysninger kan klassifiseres som direkte identifiserende eller av særlig kategori.</p>
-            <a href="https://www.datatilsynet.no/rettigheter-og-plikter/personopplysninger/">
+            <a href="https://www.datatilsynet.no/rettigheter-og-plikter/personopplysninger/" target="_blank">
                 Les mer om særlig kategori av personopplysninger hos datatilsynet.
             </a>
             <p>
