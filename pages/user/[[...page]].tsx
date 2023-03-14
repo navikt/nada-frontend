@@ -43,7 +43,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine fortellinger</h2>
-          <ResultList stories={data.userInfo.stories} />
+          <ResultList stories={data.userInfo.stories} quartoStories={data.userInfo.quartoStories}/>
         </div>
       ),
     },

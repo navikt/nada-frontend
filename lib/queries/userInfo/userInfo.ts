@@ -52,6 +52,14 @@ export const USER_INFO = gql`
           teamkatalogenURL
         }
       }
+      quartoStories {
+        id
+        name
+        description
+        keywords
+        group
+        teamkatalogenURL
+      }
       accessRequests {
         id
         datasetID

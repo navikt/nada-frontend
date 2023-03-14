@@ -36,6 +36,13 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
+  quartoStories?: {
+    __typename?: 'QuartoStory'
+    id: string
+    name: string
+    group: string
+    teamkatalogenURL?: string | null | undefined
+  }[]
   searchParam?: SearchParam
   updateQuery?: (updatedParam: SearchParam) => void
 }
@@ -44,6 +51,7 @@ const ResultList = ({
   search,
   dataproducts,
   stories,
+  quartoStories,
   searchParam,
   updateQuery,
 }: ResultListInterface) => {
@@ -177,10 +185,24 @@ const ResultList = ({
       </Results>
     )
   }
-  if (stories) {
+  if (stories || quartoStories) {
+    console.log(quartoStories)
     return (
       <Results>
-        {stories.map((s, idx) => (
+        {quartoStories?.map((s, idx) => (
+          <SearchResultLink
+            key={idx}
+            group={{
+              group: s.group,
+              teamkatalogenURL: s.teamkatalogenURL,
+            }}
+            name={s.name}
+            link={`/quarto/${s.id}`}
+            teamkatalogen={tk.data}
+            productAreas={po.data}
+          />
+        ))}
+        {stories?.map((s, idx) => (
           <SearchResultLink
             key={idx}
             group={s.owner}
