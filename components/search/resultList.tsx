@@ -3,6 +3,7 @@ import {
   Exact,
   SearchContentWithOptionsQuery,
   SearchOptions,
+  useDeleteQuartoStoryMutation,
   useProductAreasQuery,
   useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
@@ -10,8 +11,10 @@ import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchParam } from '../../pages/search'
+import { useRouter } from 'next/router'
+import DeleteModal from '../lib/deleteModal'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -73,9 +76,11 @@ const ResultList = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
+  const router = useRouter();
   const tk = useTeamkatalogenQuery({
     variables: { q: '' },
   })
+
   const po = useProductAreasQuery()
 
   if (search && !!searchParam) {
@@ -92,6 +97,7 @@ const ResultList = ({
     const quartostories = data.search.filter(
       (d)=> d.result.__typename === 'QuartoStory'
     )
+
     return (
       <Results>
         <Tabs
@@ -185,34 +191,38 @@ const ResultList = ({
       </Results>
     )
   }
+
   if (stories || quartoStories) {
-    console.log(quartoStories)
     return (
-      <Results>
-        {quartoStories?.map((s, idx) => (
-          <SearchResultLink
-            key={idx}
-            group={{
-              group: s.group,
-              teamkatalogenURL: s.teamkatalogenURL,
-            }}
-            name={s.name}
-            link={`/quarto/${s.id}`}
-            teamkatalogen={tk.data}
-            productAreas={po.data}
-          />
-        ))}
-        {stories?.map((s, idx) => (
-          <SearchResultLink
-            key={idx}
-            group={s.owner}
-            name={s.name}
-            link={`/story/${s.id}`}
-            teamkatalogen={tk.data}
-            productAreas={po.data}
-          />
-        ))}
-      </Results>
+      <div>
+        <Results>
+          {quartoStories?.map((s, idx) => (
+            <SearchResultLink
+              key={idx}
+              group={{
+                group: s.group,
+                teamkatalogenURL: s.teamkatalogenURL,
+              }}
+              id={s.id}
+              name={s.name}
+              link={`/quarto/${s.id}`}
+              teamkatalogen={tk.data}
+              productAreas={po.data}
+              editable = {true}
+            />
+          ))}
+          {stories?.map((s, idx) => (
+            <SearchResultLink
+              key={idx}
+              group={s.owner}
+              name={s.name}
+              link={`/story/${s.id}`}
+              teamkatalogen={tk.data}
+              productAreas={po.data}
+            />
+          ))}
+        </Results>
+      </div>
     )
   }
   return <></>
