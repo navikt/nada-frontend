@@ -68,8 +68,6 @@ export const SearchResultLink = ({
     })
   }
 
-  console.log(id)
-
   return (
     <div>
       <DeleteModal 
@@ -98,7 +96,6 @@ export const SearchResultLink = ({
                 </div>}
             </div>
             <Detail className="flex gap-2 items-center text-text-subtle"><CoApplicant /> {owner + `${po ? " - "+po.name : ""}`}</Detail>
-            <p>{description}</p>
           </div>
           <div className="flex flex-col gap-4">
             {description && (

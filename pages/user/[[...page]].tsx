@@ -20,7 +20,6 @@ export const UserPages = () => {
         <p>Bruk login-knappen øverst.</p>
       </div>
     )
-  console.log(data.userInfo)
 
   const menuItems: Array<{
     title: string

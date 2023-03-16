@@ -45,6 +45,7 @@ type ResultListInterface = {
     name: string
     group: string
     teamkatalogenURL?: string | null | undefined
+    description?: string
   }[]
   searchParam?: SearchParam
   updateQuery?: (updatedParam: SearchParam) => void
@@ -209,6 +210,7 @@ const ResultList = ({
               teamkatalogen={tk.data}
               productAreas={po.data}
               editable = {true}
+              description= {s.description}
             />
           ))}
           {stories?.map((s, idx) => (

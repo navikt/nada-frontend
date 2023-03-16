@@ -17,6 +17,7 @@ import { useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
 import { UPDATE_QUARTOSTORY_METADATA } from '../../lib/queries/story/updateQuartoStory'
+import { useUpdateQuartoStoryMetadataMutation } from '../../lib/schema/graphql'
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
@@ -41,7 +42,7 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
   const userInfo = useContext(UserState)
-  
+  const [updateQuartoQuery, {loading, error}] = useUpdateQuartoStoryMetadataMutation()
   const {
     register,
     handleSubmit,
@@ -83,7 +84,7 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
       variables: {
         id: id,
         name: data.name,
-        description: valueOrNull(data.description),
+        description: data.description,
         keywords: data.keywords,
         teamkatalogenURL: data.teamkatalogenURL,
         productAreaID: productAreaID,
@@ -93,37 +94,23 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
       refetchQueries: ['userInfoDetails'],
     }
 
-    console.log(editQuartoData)
-    try {
-      await updateQuartoStoryMetadata(editQuartoData)
+    updateQuartoQuery(editQuartoData).then(()=>{
       amplitudeLog('skjema fullført', { skjemanavn: 'endre-datafortelling' })
-    } catch (e) {
+      router.back()
+    }).catch(e=>{
       console.log(e)
       amplitudeLog('skjemainnsending feilet', {
         skjemanavn: 'endre-datafortelling',
       })
-    }
+    })
   }
 
-  const [updateQuartoStoryMetadata, { loading, error: backendError }] = useMutation(
-      UPDATE_QUARTOSTORY_METADATA,
-      {
-        onCompleted: (data) =>{
-            router.back()
-        }
-,      }
-  )
-
   const onCancel = () => {
-    amplitudeLog(
-      'Klikker på: Avbryt',
+      amplitudeLog('Klikker på: Avbryt',
       {
         pageName: 'endre-datafortelling',
-      },
-      () => {
-        router.back()
-      }
-    )
+      })
+      router.back()
   }
 
   const onError = (errors: any) => {
@@ -196,12 +183,12 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
             onDelete={onDeleteKeyword}
             tags={kw || []}
         />
-        {backendError && <ErrorMessage error={backendError} />}
+        {error && <ErrorMessage error={error} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <Button type="submit" disabled={loading}>Lagre</Button>
         </div>
       </form>
     </div>
