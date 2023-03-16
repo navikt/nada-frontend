@@ -1,16 +1,18 @@
 import * as React from 'react'
 import Head from 'next/head'
-import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
+import { useDeleteQuartoStoryMutation, useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
 import InnerContainer from '../../components/lib/innerContainer'
+import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 export const UserPages = () => {
   const router = useRouter()
   const { data, error, loading } = useUserInfoDetailsQuery()
+
   if (error) return <ErrorMessage error={error} />
   if (loading || !data) return <LoaderSpinner />
   if (!data.userInfo)

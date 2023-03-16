@@ -8,6 +8,7 @@ import humanizeDate from '../../lib/humanizeDate'
 import DeleteModal from '../lib/deleteModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 export interface SearchResultProps {
   link: string
@@ -28,7 +29,8 @@ export interface SearchResultProps {
   }[]
   teamkatalogen?: TeamkatalogenQuery,
   productAreas?: ProductAreasQuery,
-  editable?: boolean
+  editable?: boolean,
+  deleteResource?: (id: string)=> Promise<any>,
 }
 
 export const SearchResultLink = ({
@@ -40,7 +42,8 @@ export const SearchResultLink = ({
   datasets,
   teamkatalogen,
   productAreas,
-  editable
+  editable,
+  deleteResource
 }: SearchResultProps) => {
   const [modal, setModal] = useState(false)
   const tk = teamkatalogen?.teamkatalogen.find((it) => it.url == group?.teamkatalogenURL)
@@ -54,14 +57,8 @@ export const SearchResultLink = ({
   }
   const openDeleteQuartoModal = ()=> setModal(true)
 
-  const [deleteQuartoQuery] = useDeleteQuartoStoryMutation({
-    variables: {
-      id: id || ''
-    }
-  })
-
-  const deleteQuarto = async () =>{
-    deleteQuartoQuery().then(()=>{
+  const deleteQuarto = () =>{
+    deleteResource?.(id || '').then(()=>{
       setModal(false)
     }).catch((reason)=>{
       setError(reason.toString())

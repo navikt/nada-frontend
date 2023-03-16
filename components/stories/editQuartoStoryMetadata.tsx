@@ -18,6 +18,7 @@ import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
 import { UPDATE_QUARTOSTORY_METADATA } from '../../lib/queries/story/updateQuartoStory'
 import { useUpdateQuartoStoryMetadataMutation } from '../../lib/schema/graphql'
+import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
@@ -91,7 +92,11 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
         teamID: teamID,
         group: data.group,
         },
-      refetchQueries: ['userInfoDetails'],
+      refetchQueries:[
+        {
+            query: USER_INFO,
+        }
+      ]
     }
 
     updateQuartoQuery(editQuartoData).then(()=>{

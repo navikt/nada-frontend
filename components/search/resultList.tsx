@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react'
 import { SearchParam } from '../../pages/search'
 import { useRouter } from 'next/router'
 import DeleteModal from '../lib/deleteModal'
+import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -83,6 +84,17 @@ const ResultList = ({
   })
 
   const po = useProductAreasQuery()
+  const [deleteQuartoQuery] = useDeleteQuartoStoryMutation()
+  const deleteQuarto = (id: string) => deleteQuartoQuery({
+    variables:{
+      id: id
+    },
+    refetchQueries:[
+      {
+        query: USER_INFO,
+      }
+    ]
+  })
 
   if (search && !!searchParam) {
     const { data, loading, error } = search
@@ -211,6 +223,7 @@ const ResultList = ({
               productAreas={po.data}
               editable = {true}
               description= {s.description}
+              deleteResource = {deleteQuarto}
             />
           ))}
           {stories?.map((s, idx) => (
