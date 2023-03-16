@@ -101,7 +101,7 @@ export const SearchResultLink = ({
                 disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre']}
                 unwrapDisallowed={true}
               >
-                {description.split(/\r?\n/).slice(0, 4).join('\n')}
+                {description.split(/\r?\n/).slice(0, 4).join('\n').replace("((START))", "_").replace("((STOP))", "_")}
               </ReactMarkdown>
             )}
             {datasets && !!datasets.length && (
