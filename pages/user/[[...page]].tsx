@@ -1,16 +1,18 @@
 import * as React from 'react'
 import Head from 'next/head'
-import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
+import { useDeleteQuartoStoryMutation, useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
 import InnerContainer from '../../components/lib/innerContainer'
+import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 export const UserPages = () => {
   const router = useRouter()
   const { data, error, loading } = useUserInfoDetailsQuery()
+
   if (error) return <ErrorMessage error={error} />
   if (loading || !data) return <LoaderSpinner />
   if (!data.userInfo)
@@ -20,7 +22,6 @@ export const UserPages = () => {
         <p>Bruk login-knappen øverst.</p>
       </div>
     )
-  console.log(data.userInfo)
 
   const menuItems: Array<{
     title: string
@@ -43,7 +44,7 @@ export const UserPages = () => {
       component: (
         <div className="grid gap-4">
           <h2>Mine fortellinger</h2>
-          <ResultList stories={data.userInfo.stories} />
+          <ResultList stories={data.userInfo.stories} quartoStories={data.userInfo.quartoStories}/>
         </div>
       ),
     },
