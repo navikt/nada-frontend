@@ -23,8 +23,6 @@ export const UserPages = () => {
         <p>Bruk login-knappen øverst.</p>
       </div>
     )
-  
-  console.log("hallo", data.userInfo.nadaTokens)
 
   const menuItems: Array<{
     title: string
