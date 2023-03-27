@@ -28,6 +28,10 @@ export const USER_INFO = gql`
         name
         email
       }
+      nadaTokens {
+        team
+        token
+      }
       googleGroups{
         name
         email

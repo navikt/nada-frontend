@@ -6,6 +6,7 @@ import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
 import ResultList from '../../components/search/resultList'
 import AccessRequestsListForUser from '../../components/user/accessRequests'
+import NadaTokensForUser from '../../components/user/nadaTokens'
 import InnerContainer from '../../components/lib/innerContainer'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
@@ -22,6 +23,8 @@ export const UserPages = () => {
         <p>Bruk login-knappen øverst.</p>
       </div>
     )
+  
+  console.log("hallo", data.userInfo.nadaTokens)
 
   const menuItems: Array<{
     title: string
@@ -70,6 +73,18 @@ export const UserPages = () => {
         </div>
       ),
     },
+    {
+        title: 'Mine team tokens',
+        slug: 'tokens',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine team tokens</h2>
+            <NadaTokensForUser
+              nadaTokens={data.userInfo.nadaTokens}
+            />
+          </div>
+        ),
+      },
   ]
 
   const currentPage = menuItems
