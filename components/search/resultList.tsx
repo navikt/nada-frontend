@@ -3,6 +3,7 @@ import {
   Exact,
   SearchContentWithOptionsQuery,
   SearchOptions,
+  useDeleteQuartoStoryMutation,
   useProductAreasQuery,
   useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
@@ -10,8 +11,11 @@ import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchParam } from '../../pages/search'
+import { useRouter } from 'next/router'
+import DeleteModal from '../lib/deleteModal'
+import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -36,6 +40,14 @@ type ResultListInterface = {
     name: string
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
+  quartoStories?: {
+    __typename?: 'QuartoStory'
+    id: string
+    name: string
+    group: string
+    teamkatalogenURL?: string | null | undefined
+    description?: string
+  }[]
   searchParam?: SearchParam
   updateQuery?: (updatedParam: SearchParam) => void
 }
@@ -44,6 +56,7 @@ const ResultList = ({
   search,
   dataproducts,
   stories,
+  quartoStories,
   searchParam,
   updateQuery,
 }: ResultListInterface) => {
@@ -65,10 +78,23 @@ const ResultList = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
+  const router = useRouter();
   const tk = useTeamkatalogenQuery({
     variables: { q: '' },
   })
+
   const po = useProductAreasQuery()
+  const [deleteQuartoQuery] = useDeleteQuartoStoryMutation()
+  const deleteQuarto = (id: string) => deleteQuartoQuery({
+    variables:{
+      id: id
+    },
+    refetchQueries:[
+      {
+        query: USER_INFO,
+      }
+    ]
+  })
 
   if (search && !!searchParam) {
     const { data, loading, error } = search
@@ -81,6 +107,10 @@ const ResultList = ({
     const datastories = data.search.filter(
       (d) => d.result.__typename === 'Story'
     )
+    const quartostories = data.search.filter(
+      (d)=> d.result.__typename === 'QuartoStory'
+    )
+
     return (
       <Results>
         <Tabs
@@ -94,7 +124,7 @@ const ResultList = ({
           <Tabs.List>
             <Tabs.Tab
               value="story"
-              label={`Fortellinger (${datastories.length})`}
+              label={`Fortellinger (${datastories.length + quartostories.length})`}
             />
             <Tabs.Tab
               value="dataproduct"
@@ -117,7 +147,22 @@ const ResultList = ({
                     productAreas={po.data}
                   />
                 )
-            )}
+            ).concat(quartostories.map(
+              (it, idx)=>
+              (
+                <SearchResultLink
+                  key={idx}
+                  name={it.result.name}
+                  type={'story'}
+                  keywords={it.result.keywords}
+                  description={it.excerpt}
+                  link={`/quarto/${it.result.id}`}
+                  teamkatalogen={tk.data}
+                  productAreas={po.data}
+                />
+              )
+                 
+            ))}
           </Tabs.Panel>
           <Tabs.Panel className="flex flex-col gap-4" value="dataproduct">
             {dataproducts.map(
@@ -159,20 +204,40 @@ const ResultList = ({
       </Results>
     )
   }
-  if (stories) {
+
+  if (stories || quartoStories) {
     return (
-      <Results>
-        {stories.map((s, idx) => (
-          <SearchResultLink
-            key={idx}
-            group={s.owner}
-            name={s.name}
-            link={`/story/${s.id}`}
-            teamkatalogen={tk.data}
-            productAreas={po.data}
-          />
-        ))}
-      </Results>
+      <div>
+        <Results>
+          {quartoStories?.map((s, idx) => (
+            <SearchResultLink
+              key={idx}
+              group={{
+                group: s.group,
+                teamkatalogenURL: s.teamkatalogenURL,
+              }}
+              id={s.id}
+              name={s.name}
+              link={`/quarto/${s.id}`}
+              teamkatalogen={tk.data}
+              productAreas={po.data}
+              editable = {true}
+              description= {s.description}
+              deleteResource = {deleteQuarto}
+            />
+          ))}
+          {stories?.map((s, idx) => (
+            <SearchResultLink
+              key={idx}
+              group={s.owner}
+              name={s.name}
+              link={`/story/${s.id}`}
+              teamkatalogen={tk.data}
+              productAreas={po.data}
+            />
+          ))}
+        </Results>
+      </div>
     )
   }
   return <></>

@@ -28,6 +28,10 @@ export const USER_INFO = gql`
         name
         email
       }
+      nadaTokens {
+        team
+        token
+      }
       googleGroups{
         name
         email
@@ -51,6 +55,14 @@ export const USER_INFO = gql`
           group
           teamkatalogenURL
         }
+      }
+      quartoStories {
+        id
+        name
+        description
+        keywords
+        group
+        teamkatalogenURL
       }
       accessRequests {
         id

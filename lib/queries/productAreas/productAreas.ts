@@ -25,7 +25,14 @@ export const GET_PRODUCT_AREAS = gql`
             teamkatalogenURL
         }
       }
-      teams{
+      quartoStories{
+        id
+        name
+        created
+        lastModified
+        keywords
+      }
+    teams{
         id
         name
         dataproducts{
@@ -33,6 +40,10 @@ export const GET_PRODUCT_AREAS = gql`
           name
         }
         stories{
+          id
+          name
+        }
+        quartoStories{
           id
           name
         }

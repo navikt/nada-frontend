@@ -146,7 +146,7 @@ function SaveForm({ story }: SaveFormProps) {
               </Select>
               {group && (
                 <TeamkatalogenSelector
-                  gcpGroup={group}
+                  gcpGroups={[group]}
                   register={register}
                   watch={watch}
                   errors={errors}
