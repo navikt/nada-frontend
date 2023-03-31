@@ -66,3 +66,4 @@ jobs:
         env:
           CLUSTER: dev-gcp
           VAR: ingress=https://data.dev.intern.nav.no/
+          RESOURCE: .nais/nais.yaml

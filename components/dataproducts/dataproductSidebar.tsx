@@ -43,18 +43,18 @@ export const DataproductSidebar = ({
   }
 
   return (
-    <div className="hidden md:block text-base pt-8 w-64">
+    <div className="hidden md:flex md:flex-col md:gap-8 text-base pt-8 w-64 min-h-[calc(100vh-181px)]">
       <div className="flex w-64 flex-col gap-2">
         {menuItems.map(({ title, slug }, idx) =>
           currentPage == idx ? (
             typeof title === "string" 
             ? <p
-              className="border-l-8 border-l-border-on-inverted py-1 px-2 font-semibold"
+              className="border-l-8 border-l-border-selected py-1 px-2 font-semibold"
               key={idx}
               dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>")}}
             />
             : <p
-              className="border-l-8 border-l-border-on-inverted py-1 px-2 font-semibold"
+              className="border-l-8 border-l-border-selected py-1 px-2 font-semibold"
               key={idx}
             >{title}</p>
           ) : (
@@ -76,7 +76,8 @@ export const DataproductSidebar = ({
           )
         )}
       </div>
-      <div className="h-fit fixed w-64 text-base leading-4 pr-4 pb-0 bottom-8">
+      <hr className="border-border-subtle mr-6" />
+      <div className="h-fit w-64 text-base leading-4 pr-4 pb-0">
         <Subject>
           <Link
               href={`/productArea/${product.owner.productAreaID}?team=${product.owner.teamID}`}

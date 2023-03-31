@@ -7,7 +7,7 @@ interface DeleteModalProps {
   onConfirm: () => void
   name: string
   error: string
-  resource: 'dataprodukt' | 'datasett'
+  resource: 'dataprodukt' | 'datasett' | 'datafortelling'
 }
 export const DeleteModal = ({
   open,

@@ -79,6 +79,7 @@ export const TeamkatalogenSelector = ({
       label="Team i Teamkatalogen"
       {...register('teamkatalogenURL')}
       error={errors.teamkatalogenURL?.message}
+      value={teamkatalogenURL}
     >
       {!error && <option value="">Velg team</option>}
       {error && (

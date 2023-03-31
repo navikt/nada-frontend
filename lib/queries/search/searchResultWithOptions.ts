@@ -45,6 +45,7 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
           __typename
           id
           name
+          description
           created
           keywords
           modified: lastModified
