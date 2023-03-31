@@ -48,7 +48,7 @@ const ProductAreaSidebar = ({
       </Select>
       <div className="flex text-base w-full flex-col gap-2">
         {productAreaItems.map((d: any, idx: number) =>
-          d.stories.length || d.dataproducts.length ? (
+          d.stories.length + d.quartoStories.length + d.dataproducts.length ? (
             <div
               key={idx}
               className={`border-l-[6px] py-1 px-2 hover:cursor-default ${
@@ -70,7 +70,7 @@ const ProductAreaSidebar = ({
                     aria-label="datafortellinger"
                     className="text-text-subtle"
                   />{' '}
-                  {d.stories.length}
+                  {d.stories.length + d.quartoStories.length}
                 </span>
                 <span className="flex gap-2 items-center">
                   <div className="h-[18px] w-[18px] text-text-subtle">
@@ -96,7 +96,7 @@ const ProductAreaSidebar = ({
                     aria-label="datafortellinger"
                     className="text-text-subtle"
                   />{' '}
-                  {d.stories.length}
+                  {d.stories.length + d.quartoStories.length}
                 </span>
                 <span className="flex gap-2 items-center">
                   <div className="h-[18px] w-[18px] text-text-subtle">

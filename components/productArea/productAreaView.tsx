@@ -17,7 +17,7 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   const router = useRouter()
   const currentItemName = (router.query.team as string) || paItems[0].name
   const teamIdx = paItems.findIndex(
-    (it) => it.name.toLowerCase() === currentItemName.toLowerCase()
+    (it) => it.name.toLowerCase() === currentItemName.toLowerCase() || it.id === currentItemName
   )
 
   const currentItem = teamIdx > 0 ? teamIdx : 0
@@ -50,7 +50,6 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   const handleSelectProductArea = (newProductAreaID: string) => {
     router.push(`/productArea/${newProductAreaID}`)
   }
-
   return (
     <div className="flex flex-col md:flex-row gap-3 py-4">
       <ProductAreaSidebar

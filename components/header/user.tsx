@@ -33,12 +33,10 @@ export default function User() {
             <Dropdown.Menu.GroupedList.Item
               className="text-base flex gap-1 items-center"
               onClick={async () =>
-                await router.push(
-                  'https://docs.knada.io/dele-innsikt/datafortelling/#lage-utkast-til-datafortelling'
-                )
+                await router.push('/story/new')
               }
             >
-              Legg til ny datafortelling (docs)
+              Legg til ny datafortelling
             </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
           <Dropdown.Menu.Divider />
@@ -75,6 +73,14 @@ export default function User() {
             >
               Mine tilganger
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/tokens' })
+              }}
+            >
+              Mine team tokens
+            </Dropdown.Menu.GroupedList.Item>
             {userOfNada && <Dropdown.Menu.Divider />}
             {userOfNada && (
               <Dropdown.Menu.GroupedList.Item
@@ -92,7 +98,7 @@ export default function User() {
 
       <Dropdown>
         <Header.Button
-          className="whitespace-nowrap hidden md:block"
+          className="whitespace-nowrap hidden md:block text-base"
           as={Dropdown.Toggle}
         >
           {userInfo.name}
@@ -119,7 +125,7 @@ export default function User() {
   ) : (
     <div className="flex flex-row min-w-fit">
       <Header.Button
-        className={'h-full'}
+        className={'h-full text-base'}
         onClick={async () =>
           await router.push(
             `${backendHost()}/api/login?redirect_uri=${encodeURIComponent(

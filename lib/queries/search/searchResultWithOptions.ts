@@ -41,6 +41,15 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
             teamkatalogenURL
           }
         }
+        ... on QuartoStory {
+          __typename
+          id
+          name
+          description
+          created
+          keywords
+          modified: lastModified
+        }
       }
     }
   }

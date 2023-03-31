@@ -4,6 +4,7 @@ import { Header } from '@navikt/ds-react-internal'
 import React, { useState } from 'react'
 import { Search } from '@navikt/ds-react'
 import Link from 'next/link'
+import { HeaderLogo } from './index/frontPageLogo'
 
 export const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
@@ -14,14 +15,8 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
       <Header className="flex flex-row justify-between">
         <div className="flex flex-row">
           <Header.Title href="/">
-            <div className="cursor-pointer w-8 md:w-24 flex items-center md:mx-3">
-              <picture>
-                <source
-                  media="(min-width: 768px)"
-                  srcSet="/navdata-logo-white.svg"
-                />
-                <img src="/favicon.svg" width="100" alt="nav data" />
-              </picture>
+            <div className="cursor-pointer w-8 md:w-fit flex items-center">
+              <HeaderLogo />
             </div>
           </Header.Title>
           <form
@@ -48,8 +43,8 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </Header>
       <main className="md:w-screen flex flex-col items-center">{children}</main>
-      <footer className="flex gap-4 justify-center items-center border-t border-border-on-inverted min-h-[3rem] mt-auto">
-        <Link href="/about">Om NAV Data</Link>
+      <footer className="flex gap-4 justify-center items-center border-t border-border-on-inverted bg-surface-subtle min-h-[3rem] mt-auto">
+        <Link href="/about">Om Datamarkedsplassen</Link>
         <a href="https://docs.knada.io/">Docs</a>
       </footer>
     </div>

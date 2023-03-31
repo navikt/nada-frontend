@@ -35,6 +35,13 @@ export const GET_PRODUCT_AREA = gql`
                 teamContact
             }
         }
+        quartoStories{
+          id
+          name
+          created
+          lastModified
+          keywords
+        }
       }
       dashboardURL
       dataproducts{
@@ -62,6 +69,13 @@ export const GET_PRODUCT_AREA = gql`
             teamkatalogenURL
             teamContact
         }
+      }
+      quartoStories{
+          id
+          name
+          created
+          lastModified
+          keywords
       }
     }
   }
