@@ -73,6 +73,14 @@ export default function User() {
             >
               Mine tilganger
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/tokens' })
+              }}
+            >
+              Mine team tokens
+            </Dropdown.Menu.GroupedList.Item>
             {userOfNada && <Dropdown.Menu.Divider />}
             {userOfNada && (
               <Dropdown.Menu.GroupedList.Item
