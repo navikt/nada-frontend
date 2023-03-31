@@ -1,17 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     NadaToken,
 } from '../../lib/schema/graphql'
 import { Table } from "@navikt/ds-react";
+import TokenCell from './tokenCell';
 
-interface NadaTokens {
-    nadaTokens: Array<NadaToken>
-}
-
-const NadaTokensForUser = ({ nadaTokens }: NadaTokens) => {
+const NadaTokensForUser = ({ nadaTokens }: { nadaTokens: Array<NadaToken> }) => {
     return (
-        <div>
-        <Table>
+        <Table zebraStripes>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell scope="col">Team</Table.HeaderCell>
@@ -19,17 +15,14 @@ const NadaTokensForUser = ({ nadaTokens }: NadaTokens) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-            {nadaTokens.map((token, i) => {
-                    return (
-                        <Table.Row key={i+"-token"} className={i % 2 === 0 ? 'bg-[#f7f7f7]' : ''}>
-                            <Table.HeaderCell scope="row">{token.team}</Table.HeaderCell>
-                            <Table.DataCell>{token.token}</Table.DataCell>
-                        </Table.Row>
-                    )
-                })}
+            {nadaTokens.map((token, i) => 
+                <Table.Row key={i}>
+                    <Table.HeaderCell className="w-96" scope="row">{token.team}</Table.HeaderCell>
+                    <TokenCell token={token.token} />
+                </Table.Row>
+            )}
             </Table.Body>
         </Table>
-        </div>
     )
 }
 

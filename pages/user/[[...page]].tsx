@@ -117,7 +117,9 @@ export const UserPages = () => {
             )}
           </div>
         </div>
-        <div className="w-full">{menuItems[currentPage].component}</div>
+        {menuItems[currentPage] && 
+          <div className="w-full">{menuItems[currentPage].component}</div>
+        }
       </div>
     </InnerContainer>
   )
