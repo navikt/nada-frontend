@@ -42,6 +42,18 @@ export const GET_PRODUCT_AREA = gql`
           lastModified
           keywords
         }
+        insightProducts{
+          id
+          name
+          description
+          created
+          lastModified
+          group
+          teamkatalogenURL          
+          keywords
+          type
+          link
+        }
       }
       dashboardURL
       dataproducts{
@@ -76,6 +88,18 @@ export const GET_PRODUCT_AREA = gql`
           created
           lastModified
           keywords
+      }
+      insightProducts{
+        id
+        name
+        description
+        created
+        group
+        teamkatalogenURL        
+        lastModified
+        keywords
+        type
+        link
       }
     }
   }

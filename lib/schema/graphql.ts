@@ -244,6 +244,37 @@ export type GroupStats = {
   email: Scalars['String'];
 };
 
+/** InsightProduct contains the metadata of insight product. */
+export type InsightProduct = {
+  __typename?: 'InsightProduct';
+  /** created is the timestamp for when the insight product was created */
+  created: Scalars['Time'];
+  /** creator of the insight product. */
+  creator: Scalars['String'];
+  /** description of the insight product. */
+  description: Scalars['String'];
+  /** group is the owner group of the insight product */
+  group: Scalars['String'];
+  /** id of the insight product. */
+  id: Scalars['ID'];
+  /** keywords for the insight product used as tags. */
+  keywords: Array<Scalars['String']>;
+  /** lastModified is the timestamp for when the insight product was last modified */
+  lastModified?: Maybe<Scalars['Time']>;
+  /** link to the insight product. */
+  link: Scalars['String'];
+  /** name of the insight product. */
+  name: Scalars['String'];
+  /** Id of the creator's product area. */
+  productAreaID?: Maybe<Scalars['String']>;
+  /** Id of the creator's team. */
+  teamID?: Maybe<Scalars['String']>;
+  /** teamkatalogenURL of the creator */
+  teamkatalogenURL?: Maybe<Scalars['String']>;
+  /** type of the insight product. */
+  type: Scalars['String'];
+};
+
 /** Keyword represents a keyword used by other dataproducts */
 export type Keyword = {
   __typename?: 'Keyword';
@@ -285,6 +316,12 @@ export type Mutation = {
    */
   createDataset: Dataset;
   /**
+   * createInsightProduct creates an insight product.
+   *
+   * Requires authentication.
+   */
+  createInsightProduct: InsightProduct;
+  /**
    * createQuartoStory creates a quarto story.
    *
    * Requires authentication.
@@ -308,6 +345,12 @@ export type Mutation = {
    * Requires authentication.
    */
   deleteDataset: Scalars['Boolean'];
+  /**
+   * deleteInsightProduct deletes an existing insight product.
+   *
+   * Requires authentication.
+   */
+  deleteInsightProduct: Scalars['Boolean'];
   /**
    * deleteQuartoStory deletes an existing quarto story.
    *
@@ -372,6 +415,12 @@ export type Mutation = {
    */
   updateDataset: Dataset;
   /**
+   * updateInsightProductMetadata updates metadata on an existing insight product.
+   *
+   * Requires authentication.
+   */
+  updateInsightProductMetadata: InsightProduct;
+  /**
    * updateKeywords updates keywords
    *
    * Requires authentication.
@@ -412,6 +461,11 @@ export type MutationCreateDatasetArgs = {
 };
 
 
+export type MutationCreateInsightProductArgs = {
+  input: NewInsightProduct;
+};
+
+
 export type MutationCreateQuartoStoryArgs = {
   file: Scalars['Upload'];
   input: NewQuartoStory;
@@ -429,6 +483,11 @@ export type MutationDeleteDataproductArgs = {
 
 
 export type MutationDeleteDatasetArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteInsightProductArgs = {
   id: Scalars['ID'];
 };
 
@@ -492,6 +551,20 @@ export type MutationUpdateDatasetArgs = {
 };
 
 
+export type MutationUpdateInsightProductMetadataArgs = {
+  description: Scalars['String'];
+  group: Scalars['String'];
+  id: Scalars['ID'];
+  keywords: Array<Scalars['String']>;
+  link: Scalars['String'];
+  name: Scalars['String'];
+  productAreaID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  type: Scalars['String'];
+};
+
+
 export type MutationUpdateKeywordsArgs = {
   input: UpdateKeywords;
 };
@@ -516,6 +589,15 @@ export type MutationUpdateStoryMetadataArgs = {
   productAreaID?: InputMaybe<Scalars['String']>;
   teamID?: InputMaybe<Scalars['String']>;
   teamkatalogenURL?: InputMaybe<Scalars['String']>;
+};
+
+/** NadaToken contains the team token of the corresponding team for updating quarto stories */
+export type NadaToken = {
+  __typename?: 'NadaToken';
+  /** name of team */
+  team: Scalars['String'];
+  /** nada token for the team */
+  token: Scalars['ID'];
 };
 
 /** NewAccessRequest contains metadata on a request to access a dataset */
@@ -624,10 +706,32 @@ export type NewGrant = {
   subjectType?: InputMaybe<SubjectType>;
 };
 
+/** NewInsightProduct contains the metadata and content of insight products. */
+export type NewInsightProduct = {
+  /** description of the insight product. */
+  description?: InputMaybe<Scalars['String']>;
+  /** group is the owner group of the insight product */
+  group: Scalars['String'];
+  /** keywords for the story used as tags. */
+  keywords: Array<Scalars['String']>;
+  /** link to the insight product. */
+  link: Scalars['String'];
+  /** name of the insight product. */
+  name: Scalars['String'];
+  /** Id of the creator's product area. */
+  productAreaID?: InputMaybe<Scalars['String']>;
+  /** Id of the creator's team. */
+  teamID?: InputMaybe<Scalars['String']>;
+  /** teamkatalogenURL of the creator */
+  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  /** type of the insight product. */
+  type: Scalars['String'];
+};
+
 /** NewQuartoStory contains the metadata and content of quarto stories. */
 export type NewQuartoStory = {
   /** description of the quarto story. */
-  description: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   /** group is the owner group of the quarto */
   group: Scalars['String'];
   /** keywords for the story used as tags. */
@@ -716,6 +820,8 @@ export type ProductArea = {
   dataproducts: Array<Dataproduct>;
   /** id is the product area external id in teamkatalogen. */
   id: Scalars['String'];
+  /** insight products is the insight products owned by the product area. */
+  insightProducts: Array<InsightProduct>;
   /** name is the name of the product area. */
   name: Scalars['String'];
   /** quarto stories is the stories owned by the product area. */
@@ -731,19 +837,19 @@ export type QuartoStory = {
   __typename?: 'QuartoStory';
   /** created is the timestamp for when the dataproduct was created */
   created: Scalars['Time'];
-  /** creator of the data story. */
+  /** creator of the quarto story. */
   creator: Scalars['String'];
   /** description of the quarto story. */
   description: Scalars['String'];
   /** group is the owner group of the quarto */
   group: Scalars['String'];
-  /** id of the data story. */
+  /** id of the quarto story. */
   id: Scalars['ID'];
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
   /** lastModified is the timestamp for when the dataproduct was last modified */
   lastModified?: Maybe<Scalars['Time']>;
-  /** name of the data story. */
+  /** name of the quarto story. */
   name: Scalars['String'];
   /** Id of the creator's product area. */
   productAreaID?: Maybe<Scalars['String']>;
@@ -789,6 +895,8 @@ export type Query = {
   gcpGetTables: Array<BigQueryTable>;
   /** groupStats returns statistics for groups that have created dataproducts. */
   groupStats: Array<GroupStats>;
+  /** insightProduct returns the given story. */
+  insightProduct: InsightProduct;
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
@@ -887,6 +995,11 @@ export type QueryGcpGetTablesArgs = {
 export type QueryGroupStatsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryInsightProductArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -1118,6 +1231,8 @@ export type Team = {
   dataproducts: Array<Dataproduct>;
   /** id is the team external id in teamkatalogen. */
   id: Scalars['String'];
+  /** insight products is the insight products owned by the team. */
+  insightProducts: Array<InsightProduct>;
   /** name is the name of the team. */
   name: Scalars['String'];
   /** productAreaID is the id of the product area. */
@@ -1227,6 +1342,8 @@ export type UserInfo = {
   groups: Array<Group>;
   /** loginExpiration is when the token expires. */
   loginExpiration: Scalars['Time'];
+  /** teamTokens is a list of the nada tokens for each team the logged in user is a part of. */
+  nadaTokens: Array<NadaToken>;
   /** name of user. */
   name: Scalars['String'];
   /** quarto stories is the stories owned by the product area. */
@@ -1422,6 +1539,36 @@ export type GroupStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GroupStatsQuery = { __typename?: 'Query', groupStats: Array<{ __typename?: 'GroupStats', email: string, dataproducts: number }> };
 
+export type CreateInsightProductMutationVariables = Exact<{
+  input: NewInsightProduct;
+}>;
+
+
+export type CreateInsightProductMutation = { __typename?: 'Mutation', createInsightProduct: { __typename?: 'InsightProduct', id: string } };
+
+export type UpdateInsightProductMetadataMutationVariables = Exact<{
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  type: Scalars['String'];
+  link: Scalars['String'];
+  keywords: Array<Scalars['String']> | Scalars['String'];
+  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']>;
+  group: Scalars['String'];
+}>;
+
+
+export type UpdateInsightProductMetadataMutation = { __typename?: 'Mutation', updateInsightProductMetadata: { __typename?: 'InsightProduct', id: string } };
+
+export type InsightProductQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type InsightProductQuery = { __typename?: 'Query', insightProduct: { __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null } };
+
 export type KeywordsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1446,12 +1593,12 @@ export type ProductAreaQueryVariables = Exact<{
 }>;
 
 
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }> } };
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
 
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }> }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
 export type SearchContentQueryVariables = Exact<{
   q: SearchQuery;
@@ -1481,6 +1628,13 @@ export type CreateQuartoStoryMutationVariables = Exact<{
 
 
 export type CreateQuartoStoryMutation = { __typename?: 'Mutation', createQuartoStory: { __typename?: 'QuartoStory', id: string } };
+
+export type DeleteInsightProductMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteInsightProductMutation = { __typename?: 'Mutation', deleteInsightProduct: boolean };
 
 export type DeleteQuartoStoryMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2670,6 +2824,138 @@ export function useGroupStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GroupStatsQueryHookResult = ReturnType<typeof useGroupStatsQuery>;
 export type GroupStatsLazyQueryHookResult = ReturnType<typeof useGroupStatsLazyQuery>;
 export type GroupStatsQueryResult = Apollo.QueryResult<GroupStatsQuery, GroupStatsQueryVariables>;
+export const CreateInsightProductDocument = gql`
+    mutation createInsightProduct($input: NewInsightProduct!) {
+  createInsightProduct(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateInsightProductMutationFn = Apollo.MutationFunction<CreateInsightProductMutation, CreateInsightProductMutationVariables>;
+
+/**
+ * __useCreateInsightProductMutation__
+ *
+ * To run a mutation, you first call `useCreateInsightProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInsightProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInsightProductMutation, { data, loading, error }] = useCreateInsightProductMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateInsightProductMutation(baseOptions?: Apollo.MutationHookOptions<CreateInsightProductMutation, CreateInsightProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInsightProductMutation, CreateInsightProductMutationVariables>(CreateInsightProductDocument, options);
+      }
+export type CreateInsightProductMutationHookResult = ReturnType<typeof useCreateInsightProductMutation>;
+export type CreateInsightProductMutationResult = Apollo.MutationResult<CreateInsightProductMutation>;
+export type CreateInsightProductMutationOptions = Apollo.BaseMutationOptions<CreateInsightProductMutation, CreateInsightProductMutationVariables>;
+export const UpdateInsightProductMetadataDocument = gql`
+    mutation updateInsightProductMetadata($id: ID!, $name: String!, $description: String!, $type: String!, $link: String!, $keywords: [String!]!, $teamkatalogenURL: String, $productAreaID: String, $teamID: String, $group: String!) {
+  updateInsightProductMetadata(
+    id: $id
+    name: $name
+    description: $description
+    type: $type
+    link: $link
+    keywords: $keywords
+    teamkatalogenURL: $teamkatalogenURL
+    productAreaID: $productAreaID
+    teamID: $teamID
+    group: $group
+  ) {
+    id
+  }
+}
+    `;
+export type UpdateInsightProductMetadataMutationFn = Apollo.MutationFunction<UpdateInsightProductMetadataMutation, UpdateInsightProductMetadataMutationVariables>;
+
+/**
+ * __useUpdateInsightProductMetadataMutation__
+ *
+ * To run a mutation, you first call `useUpdateInsightProductMetadataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateInsightProductMetadataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateInsightProductMetadataMutation, { data, loading, error }] = useUpdateInsightProductMetadataMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      description: // value for 'description'
+ *      type: // value for 'type'
+ *      link: // value for 'link'
+ *      keywords: // value for 'keywords'
+ *      teamkatalogenURL: // value for 'teamkatalogenURL'
+ *      productAreaID: // value for 'productAreaID'
+ *      teamID: // value for 'teamID'
+ *      group: // value for 'group'
+ *   },
+ * });
+ */
+export function useUpdateInsightProductMetadataMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInsightProductMetadataMutation, UpdateInsightProductMetadataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateInsightProductMetadataMutation, UpdateInsightProductMetadataMutationVariables>(UpdateInsightProductMetadataDocument, options);
+      }
+export type UpdateInsightProductMetadataMutationHookResult = ReturnType<typeof useUpdateInsightProductMetadataMutation>;
+export type UpdateInsightProductMetadataMutationResult = Apollo.MutationResult<UpdateInsightProductMetadataMutation>;
+export type UpdateInsightProductMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateInsightProductMetadataMutation, UpdateInsightProductMetadataMutationVariables>;
+export const InsightProductDocument = gql`
+    query insightProduct($id: ID!) {
+  insightProduct(id: $id) {
+    id
+    name
+    description
+    created
+    lastModified
+    type
+    link
+    keywords
+    group
+    teamkatalogenURL
+    productAreaID
+    teamID
+  }
+}
+    `;
+
+/**
+ * __useInsightProductQuery__
+ *
+ * To run a query within a React component, call `useInsightProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInsightProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInsightProductQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useInsightProductQuery(baseOptions: Apollo.QueryHookOptions<InsightProductQuery, InsightProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InsightProductQuery, InsightProductQueryVariables>(InsightProductDocument, options);
+      }
+export function useInsightProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InsightProductQuery, InsightProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InsightProductQuery, InsightProductQueryVariables>(InsightProductDocument, options);
+        }
+export type InsightProductQueryHookResult = ReturnType<typeof useInsightProductQuery>;
+export type InsightProductLazyQueryHookResult = ReturnType<typeof useInsightProductLazyQuery>;
+export type InsightProductQueryResult = Apollo.QueryResult<InsightProductQuery, InsightProductQueryVariables>;
 export const KeywordsDocument = gql`
     query Keywords {
   keywords {
@@ -2815,6 +3101,18 @@ export const ProductAreaDocument = gql`
         lastModified
         keywords
       }
+      insightProducts {
+        id
+        name
+        description
+        created
+        lastModified
+        group
+        teamkatalogenURL
+        keywords
+        type
+        link
+      }
     }
     dashboardURL
     dataproducts {
@@ -2849,6 +3147,18 @@ export const ProductAreaDocument = gql`
       created
       lastModified
       keywords
+    }
+    insightProducts {
+      id
+      name
+      description
+      created
+      group
+      teamkatalogenURL
+      lastModified
+      keywords
+      type
+      link
     }
   }
 }
@@ -2913,6 +3223,17 @@ export const ProductAreasDocument = gql`
       lastModified
       keywords
     }
+    insightProducts {
+      id
+      name
+      created
+      lastModified
+      keywords
+      type
+      group
+      teamkatalogenURL
+      link
+    }
     teams {
       id
       name
@@ -2925,6 +3246,10 @@ export const ProductAreasDocument = gql`
         name
       }
       quartoStories {
+        id
+        name
+      }
+      insightProducts {
         id
         name
       }
@@ -3169,6 +3494,37 @@ export function useCreateQuartoStoryMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateQuartoStoryMutationHookResult = ReturnType<typeof useCreateQuartoStoryMutation>;
 export type CreateQuartoStoryMutationResult = Apollo.MutationResult<CreateQuartoStoryMutation>;
 export type CreateQuartoStoryMutationOptions = Apollo.BaseMutationOptions<CreateQuartoStoryMutation, CreateQuartoStoryMutationVariables>;
+export const DeleteInsightProductDocument = gql`
+    mutation deleteInsightProduct($id: ID!) {
+  deleteInsightProduct(id: $id)
+}
+    `;
+export type DeleteInsightProductMutationFn = Apollo.MutationFunction<DeleteInsightProductMutation, DeleteInsightProductMutationVariables>;
+
+/**
+ * __useDeleteInsightProductMutation__
+ *
+ * To run a mutation, you first call `useDeleteInsightProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInsightProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInsightProductMutation, { data, loading, error }] = useDeleteInsightProductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteInsightProductMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInsightProductMutation, DeleteInsightProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInsightProductMutation, DeleteInsightProductMutationVariables>(DeleteInsightProductDocument, options);
+      }
+export type DeleteInsightProductMutationHookResult = ReturnType<typeof useDeleteInsightProductMutation>;
+export type DeleteInsightProductMutationResult = Apollo.MutationResult<DeleteInsightProductMutation>;
+export type DeleteInsightProductMutationOptions = Apollo.BaseMutationOptions<DeleteInsightProductMutation, DeleteInsightProductMutationVariables>;
 export const DeleteQuartoStoryDocument = gql`
     mutation deleteQuartoStory($id: ID!) {
   deleteQuartoStory(id: $id)

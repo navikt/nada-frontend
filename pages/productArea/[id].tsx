@@ -55,6 +55,17 @@ export interface PAItem {
     keywords: Array<string>
     lastModified?: any | null | undefined
   }[]
+  insightProducts: {
+    __typename?: 'InsightProduct'
+    id: string
+    name: string
+    link: string
+    type: string
+    description: string
+    created: any
+    lastModified?: any
+    keywords: Array<string>
+  }[]  
 }
 
 export interface PAItems extends Array<PAItem> {}
@@ -67,14 +78,16 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
     dataproducts: productArea.dataproducts,
     stories: productArea.stories,
     quartoStories: productArea.quartoStories,
+    insightProducts: productArea.insightProducts,
   })
   productArea.teams
     .slice()
     .sort((a, b) => {
       return (
         b.dataproducts.length +
-        b.stories.length -
-        (a.dataproducts.length + a.stories.length)
+        b.stories.length +
+        b.insightProducts.length -
+        (a.dataproducts.length + a.stories.length + a.insightProducts.length)
       )
     })
     .forEach((t) => {
@@ -85,6 +98,7 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
         dataproducts: t.dataproducts,
         stories: t.stories,
         quartoStories: t.quartoStories,
+        insightProducts: t.insightProducts,
       })
     })
 

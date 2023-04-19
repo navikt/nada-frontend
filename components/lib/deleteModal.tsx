@@ -7,7 +7,7 @@ interface DeleteModalProps {
   onConfirm: () => void
   name: string
   error: string
-  resource: 'dataprodukt' | 'datasett' | 'datafortelling'
+  resource: string
 }
 export const DeleteModal = ({
   open,
@@ -20,7 +20,7 @@ export const DeleteModal = ({
   return (
     <Modal open={open} onClose={onCancel}>
       <Modal.Content className="flex flex-col gap-4">
-        <Heading level="2" size="large">
+        <Heading level="2" size="large" className='mr-12'>
           Slette {resource}
         </Heading>
         <p>Er du sikker på at du vil slette {name}?</p>
