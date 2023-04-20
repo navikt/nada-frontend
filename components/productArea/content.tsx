@@ -119,7 +119,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 <div className="flex flex-col gap-2">
                     {currentItem.insightProducts && currentItem.insightProducts.map((ip: any, idx: number) => (
                         <SearchResultLink
-                            resourceType="innsiktsprodukt"
+                            resourceType="InsightProduct"
                             key={idx}
                             group={{
                                 teamkatalogenURL: ip.teamkatalogenURL,
@@ -129,7 +129,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             keywords={ip.keywords}
                             description={ip.description}
                             link={ip.link}
-                            type="insightProduct"
+                            type="InsightProduct"
                             id={ip.id}
                             innsiktsproduktType={ip.type}
                             teamkatalogen={tk.data}
