@@ -265,7 +265,7 @@ const ResultList = ({
                 group: p.group,
                 teamkatalogenURL: p.teamkatalogenURL,
               }}
-              type={"insightProduct"}
+              type={"InsightProduct"}
               id={p.id}
               name={p.name}
               link={p.link}

@@ -63,7 +63,7 @@ export const SearchResultLink = ({
   const editResource = () => {
     if (type == 'QuartoStory') {
       router.push(`/quarto/${id}/edit`)
-    } else if (type == 'insightProduct') {
+    } else if (type == 'InsightProduct') {
       router.push(`/insightProduct/edit?id=${id}`)
     }
   }
@@ -77,13 +77,17 @@ export const SearchResultLink = ({
       refetchQueries:[
         {
           query: GET_PRODUCT_AREAS,
+        },
+        {
+          query: USER_INFO,
         }
       ]
     })
   }
 
   const confirmDelete = () => {
-    const deletePromise = type == "insightProduct"?
+    console.log(type)
+    const deletePromise = type == "InsightProduct"?
       deleteInsightProduct(id || ''):
     deleteResource?.(id || '');
     console.log(deletePromise)
