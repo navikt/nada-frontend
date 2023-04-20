@@ -29,49 +29,59 @@ export const UserPages = () => {
     slug: string
     component: any
   }> = [
-    {
-      title: 'Mine dataprodukter',
-      slug: 'products',
-      component: (
-        <div className="grid gap-4">
-          <h2>Mine produkter</h2>
-          <ResultList dataproducts={data.userInfo.dataproducts} />
-        </div>
-      ),
-    },
-    {
-      title: 'Mine fortellinger',
-      slug: 'stories',
-      component: (
-        <div className="grid gap-4">
-          <h2>Mine fortellinger</h2>
-          <ResultList stories={data.userInfo.stories} quartoStories={data.userInfo.quartoStories}/>
-        </div>
-      ),
-    },
-    {
-      title: 'Mine tilganger',
-      slug: 'access',
-      component: (
-        <div className="grid gap-4">
-          <h2>Mine tilganger</h2>
-          <ResultList dataproducts={data.userInfo.accessable} />
-        </div>
-      ),
-    },
-    {
-      title: 'Mine tilgangssøknader',
-      slug: 'requests',
-      component: (
-        <div className="grid gap-4">
-          <h2>Mine tilgangssøknader</h2>
-          <AccessRequestsListForUser
-            accessRequests={data.userInfo.accessRequests}
-          />
-        </div>
-      ),
-    },
-    {
+      {
+        title: 'Mine dataprodukter',
+        slug: 'products',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine produkter</h2>
+            <ResultList dataproducts={data.userInfo.dataproducts} />
+          </div>
+        ),
+      },
+      {
+        title: 'Mine fortellinger',
+        slug: 'stories',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine fortellinger</h2>
+            <ResultList stories={data.userInfo.stories} quartoStories={data.userInfo.quartoStories} />
+          </div>
+        ),
+      },
+      {
+        title: 'Mine innsiktsprodukter',
+        slug: 'insightProducts',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine innsiktsprodukter</h2>
+            <ResultList insightProducts={data.userInfo.insightProducts} />
+          </div>
+        ),
+      },
+      {
+        title: 'Mine tilganger',
+        slug: 'access',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine tilganger</h2>
+            <ResultList dataproducts={data.userInfo.accessable} />
+          </div>
+        ),
+      },
+      {
+        title: 'Mine tilgangssøknader',
+        slug: 'requests',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine tilgangssøknader</h2>
+            <AccessRequestsListForUser
+              accessRequests={data.userInfo.accessRequests}
+            />
+          </div>
+        ),
+      },
+      {
         title: 'Mine team tokens',
         slug: 'tokens',
         component: (
@@ -83,7 +93,7 @@ export const UserPages = () => {
           </div>
         ),
       },
-  ]
+    ]
 
   const currentPage = menuItems
     .map((e) => e.slug)
@@ -117,7 +127,7 @@ export const UserPages = () => {
             )}
           </div>
         </div>
-        {menuItems[currentPage] && 
+        {menuItems[currentPage] &&
           <div className="w-full">{menuItems[currentPage].component}</div>
         }
       </div>
