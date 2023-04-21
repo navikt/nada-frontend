@@ -51,6 +51,8 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
     const [productAreaID, setProductAreaID] = useState<string>('')
     const [teamID, setTeamID] = useState<string>('')
     const userInfo = useContext(UserState)
+    const [isPrivacyCheckboxChecked, setIsPrivacyCheckboxChecked] = useState(false)
+
     const [updateInsightProductQuery, { loading, error }] = useUpdateInsightProductMetadataMutation()
     const {
         register,
@@ -75,6 +77,10 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
 
     const { errors } = formState
     const kw = watch('keywords')
+
+    const handlePrivacyCheckboxChange = () => {
+        setIsPrivacyCheckboxChecked(!isPrivacyCheckboxChecked)
+    }
 
     const onDeleteKeyword = (keyword: string) => {
         setValue(
@@ -192,18 +198,22 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
                     onDelete={onDeleteKeyword}
                     tags={kw || []}
                 />
-                <Checkbox
-                    {...register('sensitiveInfo')}
-                    errorId={errors.sensitiveInfo?.message?.toString()}
-                >
-                    Jeg bekrefter at innsiktsproduktet ikke inneholder personsensitive eller identifiserende opplysninger
-                </Checkbox>
+                <div className="flex items-center mt-4">
+                    <Checkbox
+                        size="small"
+                        checked={isPrivacyCheckboxChecked}
+                        onChange={handlePrivacyCheckboxChange}
+                        className="pl-2"
+                    >
+                        Innholdsprodukter inneholder ikke personsensitive eller identifiserende opplysninger
+                    </Checkbox>
+                </div>
                 {error && <ErrorMessage error={error} />}
                 <div className="flex flex-row gap-4 mb-16">
                     <Button type="button" variant="secondary" onClick={onCancel}>
                         Avbryt
                     </Button>
-                    <Button type="submit" disabled={loading}>Lagre</Button>
+                    <Button type="submit" disabled={loading || !isPrivacyCheckboxChecked}>Lagre</Button>
                 </div>
             </form>
         </div>
