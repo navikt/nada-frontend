@@ -1,8 +1,10 @@
 import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
-import { Story, useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
+import { Story, useProductAreasQuery, useTeamkatalogenQuery, useUserInfoDetailsQuery } from "../../lib/schema/graphql";
 import { owner } from "../../lib/schema/yupValidations";
+import { useContext } from "react";
+import { UserState } from "../../lib/context";
 
 interface ProductAreaContentProps {
     currentItem: PAItem
@@ -31,6 +33,8 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
     var allStories = currentItem.stories.map(it=> it as UnifiedStory)
     .concat(currentItem.quartoStories.map(it=> it as UnifiedStory))
     const po = useProductAreasQuery()
+    const userInfo= useContext(UserState)
+
     return (
         <Tabs
             value={currentTab}
@@ -51,6 +55,10 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                     value="products"
                     label={`Produkter (${currentItem.dataproducts.length})`}
                 />
+                <Tabs.Tab
+                    value="insightProducts"
+                    label={`Innsiktsprodukt (${currentItem.insightProducts.length})`}
+                />                
             </Tabs.List>
             {currentItem.dashboardURL && <Tabs.Panel
                 value="dashboard"
@@ -69,13 +77,14 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 <div className="flex flex-col gap-2">
                     {allStories && allStories.map((s: any, idx: number) => (
                         <SearchResultLink
+                            resourceType="datafortelling"
                             key={idx}
                             group={s.owner}
                             name={s.name}
                             description={s.excerpt}
                             keywords={s.keywords}
                             link={`${s.__typename == 'Story'? '/story/' : '/quarto/'}${s.id}`}
-                            type="story"
+                            type={s.__typename}
                             teamkatalogen={tk.data}
                             productAreas={po.data}
                         />
@@ -103,6 +112,33 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                     {currentItem.dataproducts.length == 0 && "Ingen dataprodukter"}
                 </div>
             </Tabs.Panel>
+            <Tabs.Panel
+                value="insightProducts"
+                className="h-full w-full py-4"
+            >
+                <div className="flex flex-col gap-2">
+                    {currentItem.insightProducts && currentItem.insightProducts.map((ip: any, idx: number) => (
+                        <SearchResultLink
+                            resourceType="innsiktsprodukt"
+                            key={idx}
+                            group={{
+                                teamkatalogenURL: ip.teamkatalogenURL,
+                                group: ip.group,
+                            }}
+                            name={ip.name}
+                            keywords={ip.keywords}
+                            description={ip.description}
+                            link={ip.link}
+                            id={ip.id}
+                            innsiktsproduktType={ip.type}
+                            teamkatalogen={tk.data}
+                            productAreas={po.data}
+                            editable={!!userInfo?.googleGroups?.find(it=> it.email == ip.group)}
+                        />
+                    ))}
+                    {currentItem.insightProducts.length == 0 && "Ingen innsiktsprodukter"}
+                </div>
+            </Tabs.Panel>            
         </Tabs>
     )
 }

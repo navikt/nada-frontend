@@ -38,6 +38,14 @@ export default function User() {
             >
               Legg til ny datafortelling
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className="text-base flex gap-1 items-center"
+              onClick={async () =>
+                await router.push('/insightProduct/new')
+              }
+            >
+              Legg til nytt innsiktsprodukt
+            </Dropdown.Menu.GroupedList.Item>
           </Dropdown.Menu.GroupedList>
           <Dropdown.Menu.Divider />
           <Dropdown.Menu.GroupedList>
@@ -57,6 +65,15 @@ export default function User() {
             >
               Mine fortellinger
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/insightProducts' })
+              }}
+            >
+              Mine innsiktsprodukter
+            </Dropdown.Menu.GroupedList.Item>
+
             <Dropdown.Menu.GroupedList.Item
               className={'text-base'}
               onClick={() => {

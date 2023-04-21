@@ -32,6 +32,17 @@ export const GET_PRODUCT_AREAS = gql`
         lastModified
         keywords
       }
+      insightProducts{
+        id
+        name
+        created
+        lastModified
+        keywords
+        type
+        group
+        teamkatalogenURL        
+        link
+      }
     teams{
         id
         name
@@ -44,6 +55,10 @@ export const GET_PRODUCT_AREAS = gql`
           name
         }
         quartoStories{
+          id
+          name
+        }
+        insightProducts{
           id
           name
         }

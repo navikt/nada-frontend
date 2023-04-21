@@ -64,6 +64,16 @@ export const USER_INFO = gql`
         group
         teamkatalogenURL
       }
+      insightProducts {
+        id
+        name
+        description
+        type
+        link
+        keywords
+        group
+        teamkatalogenURL
+      }
       accessRequests {
         id
         datasetID

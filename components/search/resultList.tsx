@@ -11,11 +11,11 @@ import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SearchParam } from '../../pages/search'
 import { useRouter } from 'next/router'
-import DeleteModal from '../lib/deleteModal'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
+import { UserState } from '../../lib/context'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -48,6 +48,16 @@ type ResultListInterface = {
     teamkatalogenURL?: string | null | undefined
     description?: string
   }[]
+  insightProducts?: {
+    __typename?: 'InsightProduct'
+    id: string
+    name: string
+    group: string
+    type: string
+    link: string
+    teamkatalogenURL?: string | null | undefined
+    description?: string
+  }[]
   searchParam?: SearchParam
   updateQuery?: (updatedParam: SearchParam) => void
 }
@@ -57,6 +67,7 @@ const ResultList = ({
   dataproducts,
   stories,
   quartoStories,
+  insightProducts,
   searchParam,
   updateQuery,
 }: ResultListInterface) => {
@@ -85,6 +96,7 @@ const ResultList = ({
 
   const po = useProductAreasQuery()
   const [deleteQuartoQuery] = useDeleteQuartoStoryMutation()
+  const userInfo= useContext(UserState)
   const deleteQuarto = (id: string) => deleteQuartoQuery({
     variables:{
       id: id
@@ -234,6 +246,33 @@ const ResultList = ({
               link={`/story/${s.id}`}
               teamkatalogen={tk.data}
               productAreas={po.data}
+            />
+          ))}
+        </Results>
+      </div>
+    )
+  }
+
+  if (insightProducts) {
+    return (
+      <div>
+        <Results>
+          {insightProducts?.map((p, idx) => (
+            <SearchResultLink
+              key={idx}
+              group={{
+                group: p.group,
+                teamkatalogenURL: p.teamkatalogenURL,
+              }}
+              resourceType={"innsiktsprodukt"}
+              id={p.id}
+              name={p.name}
+              link={p.link}
+              teamkatalogen={tk.data}
+              productAreas={po.data}
+              description= {p.description}
+              innsiktsproduktType={p.type}
+              editable={!!userInfo?.googleGroups?.find(it=> it.email == p.group)}     
             />
           ))}
         </Results>
