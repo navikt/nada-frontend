@@ -27,7 +27,6 @@ const schema = yup.object().shape({
     teamkatalogenURL: yup.string().required('Du må velge team i teamkatalogen'),
     keywords: yup.array().of(yup.string()),
     group: yup.string(),
-    sensitiveInfo: yup.boolean().oneOf([true], 'Bekreft at innsiktsproduktet ikke inneholder personsensitive eller identifiserende opplysninger'),
     type: yup.string().nullable().required('Velg en type for innsiktsproduktet'),
     link: yup
         .string()
