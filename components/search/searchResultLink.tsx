@@ -63,7 +63,7 @@ export const SearchResultLink = ({
   const editResource = () => {
     if (type == 'QuartoStory') {
       router.push(`/quarto/${id}/edit`)
-    } else if (type == 'InsightProduct') {
+    } else if (resourceType == 'innsiktsprodukt') {
       router.push(`/insightProduct/edit?id=${id}`)
     }
   }
@@ -87,10 +87,9 @@ export const SearchResultLink = ({
 
   const confirmDelete = () => {
     console.log(type)
-    const deletePromise = type == "InsightProduct"?
+    const deletePromise = resourceType == "innsiktsprodukt"?
       deleteInsightProduct(id || ''):
     deleteResource?.(id || '');
-    console.log(deletePromise)
     deletePromise?.then(() => {
       setModal(false)
     }).catch((reason) => {
@@ -98,6 +97,7 @@ export const SearchResultLink = ({
     })
   }
 
+  console.log(resourceType)
   return (
     <div>
       <DeleteModal

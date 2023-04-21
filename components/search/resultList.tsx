@@ -14,7 +14,6 @@ import { Tabs } from '@navikt/ds-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchParam } from '../../pages/search'
 import { useRouter } from 'next/router'
-import DeleteModal from '../lib/deleteModal'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import { UserState } from '../../lib/context'
 
@@ -265,7 +264,7 @@ const ResultList = ({
                 group: p.group,
                 teamkatalogenURL: p.teamkatalogenURL,
               }}
-              type={"InsightProduct"}
+              resourceType={"innsiktsprodukt"}
               id={p.id}
               name={p.name}
               link={p.link}
