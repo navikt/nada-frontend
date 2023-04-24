@@ -20,7 +20,7 @@
     "@mui/lab": "^5.0.0-alpha.114",
     "@mui/material": "^5.11.3",
     "@navikt/ds-css": "^2.0.11",
-    "@navikt/ds-css-internal": "^2.0.11",
+    "@navikt/ds-css-internal": "^2.8.16",
     "@navikt/ds-icons": "^2.0.11",
     "@navikt/ds-react": "^2.0.11",
     "@navikt/ds-react-internal": "^2.0.11",
