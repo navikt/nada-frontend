@@ -5,15 +5,16 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector';
 import DescriptionEditor from '../lib/DescriptionEditor';
-import { Button, Heading, TextField, Select } from '@navikt/ds-react';
+import { Button, Heading, TextField, Select, Link, Label } from '@navikt/ds-react';
 import amplitudeLog from '../../lib/amplitude';
 import * as yup from 'yup';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useContext, useRef, useState } from 'react';
 import TagsSelector from '../lib/tagsSelector';
 import { UserState } from '../../lib/context';
 import { CREATE_QUARTO_STORY } from '../../lib/queries/story/createQuartoStory';
 import { TreeItem, TreeView } from '@mui/lab';
-import { FileTextFillIcon, FolderFillIcon } from '@navikt/aksel-icons';
+import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Header } from '@navikt/ds-react-internal';
 
 const defaultValues: FieldValues = {
   name: null,
@@ -41,7 +42,18 @@ export const NewStoryForm = () => {
   const [productAreaID, setProductAreaID] = useState<string>('');
   const [teamID, setTeamID] = useState<string>('');
   const userInfo = useContext(UserState);
+  const [inputKey, setInputKey] = useState(0);
   const [quartoFiles, setQuartoFiles] = useState<File[]>([]);
+  const singleFileInputRef = useRef(null);
+  const folderFileInputRef = useRef(null);
+
+  const handleSingleFileClick = () => {
+    singleFileInputRef?.current?.click();
+  };
+
+  const handleFolderFileClick = () => {
+    folderFileInputRef?.current?.click();
+  };
 
   const {
     register,
@@ -76,7 +88,7 @@ export const NewStoryForm = () => {
   const onSubmit = async (data: any) => {
     const uploadData = {
       variables: {
-        file: quartoFiles,
+        files: quartoFiles,
         input: {
           name: data.name,
           description: valueOrNull(data.description),
@@ -106,7 +118,7 @@ export const NewStoryForm = () => {
       onCompleted: (data) => {
         console.log(data);
         router.push("/");
-  },
+      },
     },
   );
 
@@ -139,10 +151,13 @@ export const NewStoryForm = () => {
   };
 
   const generateFileTree = (files: File[]) => {
-    console.log(files)
     const tree: any = {};
     files.forEach((file) => {
-      const pathParts = file.webkitRelativePath.split('/');
+      var pathParts = file.webkitRelativePath.split('/');
+      if (pathParts.length === 1) {
+        pathParts = [file.name]
+      }
+
       let currentLevel = tree;
 
       pathParts.forEach((part, index) => {
@@ -167,21 +182,20 @@ export const NewStoryForm = () => {
     return filesToDelete;
   };
 
-  const handleDeleteClick = (isFile: boolean, node: any, onDelete: (file: File) => void) => {
-    if (isFile) {
-      onDelete(node);
-    } else {
-      const filesToDelete = gatherFilesToDelete(node);
-      console.log(filesToDelete)
-      filesToDelete.forEach((file: File) => onDelete(file));
-    }
+  const handleDeleteClick = (isFile: boolean, node: any) => {
+    var filesToDelete = isFile ? [node] : gatherFilesToDelete(node)
+    const remained = quartoFiles.filter((file) => {
+      return !filesToDelete.find(it => it == file)
+    })
+    setQuartoFiles(remained);
+    setInputKey(inputKey + 1)
   };
 
-  const renderTree = (nodes: any, onDelete: (file: File) => void) => {
+  const renderTree = (nodes: any) => {
     return Object.keys(nodes).map((nodeName, index) => {
       const node = nodes[nodeName];
       const isFile = node instanceof File;
- 
+
       return (
         <TreeItem
           key={nodeName}
@@ -189,33 +203,19 @@ export const NewStoryForm = () => {
           label={
             <div className="flex flex-row items-center gap-2">
               {isFile ? (
-                <FileTextFillIcon color="#9090ff" fontSize="1.5rem" />
+                <FileTextFillIcon color="#4080c0" fontSize="1.5rem" />
               ) : (
-                <FolderFillIcon color="#b08060" fontSize="1.5rem" />
+                <FolderFillIcon color="#b09070" fontSize="1.5rem" />
               )}
               {nodeName}
-              <button
-                className="material-icons text-red-500 hover:text-red-700 cursor-pointer"
-                onClick={()=>handleDeleteClick(isFile, node, onDelete)}
-              >
-                delete
-              </button>
+              <TrashIcon onClick={() => handleDeleteClick(isFile, node)}></TrashIcon>
             </div>
           }
         >
-          {!isFile && renderTree(node, onDelete)}
+          {!isFile && renderTree(node)}
         </TreeItem>
       );
     });
-  };
-
-  const removeFile = (fileToRemove: File) => {
-    const remained = quartoFiles.filter((file) =>{
-      return file !== fileToRemove
-    })
-    console.log(remained)
-    
-    setQuartoFiles(remained);
   };
 
   return (
@@ -266,7 +266,7 @@ export const NewStoryForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          gcpGroups={userInfo?.gcpProjects.map(it=> it.group.email)}
+          gcpGroups={userInfo?.gcpProjects.map(it => it.group.email)}
           register={register}
           watch={watch}
           errors={errors}
@@ -274,16 +274,32 @@ export const NewStoryForm = () => {
           setTeamID={setTeamID}
         />
         <TagsSelector
-            onAdd={onAddKeyword}
-            onDelete={onDeleteKeyword}
-            tags={keywords || []}
+          onAdd={onAddKeyword}
+          onDelete={onDeleteKeyword}
+          tags={keywords || []}
         />
+        <div>
+          <Label
+            htmlFor={'0'}
+            size={'medium'}
+            className={'navds-text-field__label navds-label'}
+          >
+            Last opp quarto files
+          </Label>
+          <div className='mt-5'>
+            Du kan&nbsp;
+            <Link href="#" onClick={handleSingleFileClick}>velg filer</Link>
+            &nbsp;eller&nbsp;
+            <Link href="#" onClick={handleFolderFileClick}>velg maper</Link>
+            &nbsp;til å laste opp&nbsp;
+          </div>
+        </div>
         {/* @ts-expect-error */}
-        <input type="file" webkitdirectory="" directory="" onChange={handleFileUpload} multiple />
-
+        <input key={inputKey * 2} ref={folderFileInputRef} type="file" className="hidden" webkitdirectory="" directory="" onChange={handleFileUpload} multiple />
+        <input key={inputKey * 2 + 1} ref={singleFileInputRef} type="file" className="hidden" onChange={handleFileUpload} multiple />
         {quartoFiles.length > 0 && (
           <TreeView>
-            {renderTree(generateFileTree(quartoFiles), removeFile)}
+            {renderTree(generateFileTree(quartoFiles))}
           </TreeView>
         )}
         {backendError && <ErrorMessage error={backendError} />}
