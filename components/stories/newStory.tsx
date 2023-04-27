@@ -15,7 +15,7 @@ import { CREATE_QUARTO_STORY } from '../../lib/queries/story/createQuartoStory';
 import { TreeItem, TreeView } from '@mui/lab';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Header } from '@navikt/ds-react-internal';
-import { UploadFile } from '../../lib/schema/graphql';
+import { UploadFile, useCreateQuartoStoryMutation } from '../../lib/schema/graphql';
 
 const defaultValues: FieldValues = {
   name: null,
@@ -92,7 +92,7 @@ export const NewStoryForm = () => {
     const uploadData = {
       variables: {
         files: quartoFiles.map<UploadFile>(it=>({
-          path: fixRelativePath(it.webkitRelativePath),
+          path: fixRelativePath(it),
           file: it,
         })),
         input: {
@@ -105,8 +105,9 @@ export const NewStoryForm = () => {
           group: data.group,
         },
       },
-      refetchQueries: ['searchContent'],
-    }; console.log(uploadData);
+      refetchQueries: ['searchContent', 'userInfoDetails'],
+    };
+
     try {
       await createStory(uploadData);
       amplitudeLog('skjema fullført', { skjemanavn: 'ny-datafortelling' });
@@ -151,14 +152,18 @@ export const NewStoryForm = () => {
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
+    console.log(files)
     if (files && files.length > 0) {
       setQuartoFiles(Array.from(files));
     }
   };
 
-  const fixRelativePath = (path: string) =>{
+  const fixRelativePath = (file: File) =>{
+    var path = file.webkitRelativePath
+    console.log(path)
     var pathParts = path.split('/');
-    return pathParts.length === 1? path:pathParts.slice(1).reduce((p, s, i)=>i===0? s: p+ "/" +s)
+    console.log(pathParts)
+    return pathParts.length <= 1? file.name:pathParts.slice(1).reduce((p, s, i)=>i===0? s: p+ "/" +s)
   }
 
   const generateFileTree = (files: File[]) => {
