@@ -15,6 +15,7 @@ import { CREATE_QUARTO_STORY } from '../../lib/queries/story/createQuartoStory';
 import { TreeItem, TreeView } from '@mui/lab';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Header } from '@navikt/ds-react-internal';
+import { UploadFile } from '../../lib/schema/graphql';
 
 const defaultValues: FieldValues = {
   name: null,
@@ -90,7 +91,10 @@ export const NewStoryForm = () => {
   const onSubmit = async (data: any) => {
     const uploadData = {
       variables: {
-        files: quartoFiles,
+        files: quartoFiles.map<UploadFile>(it=>({
+          path: fixRelativePath(it.webkitRelativePath),
+          file: it,
+        })),
         input: {
           name: data.name,
           description: valueOrNull(data.description),
@@ -151,6 +155,11 @@ export const NewStoryForm = () => {
       setQuartoFiles(Array.from(files));
     }
   };
+
+  const fixRelativePath = (path: string) =>{
+    var pathParts = path.split('/');
+    return pathParts.length === 1? path:pathParts.slice(1).reduce((p, s, i)=>i===0? s: p+ "/" +s)
+  }
 
   const generateFileTree = (files: File[]) => {
     const tree: any = {};
