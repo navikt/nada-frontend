@@ -48,10 +48,12 @@ export const NewStoryForm = () => {
   const folderFileInputRef = useRef(null);
 
   const handleSingleFileClick = () => {
+    /* @ts-expect-error */
     singleFileInputRef?.current?.click();
   };
 
   const handleFolderFileClick = () => {
+    /* @ts-expect-error */
     folderFileInputRef?.current?.click();
   };
 
@@ -156,8 +158,9 @@ export const NewStoryForm = () => {
       var pathParts = file.webkitRelativePath.split('/');
       if (pathParts.length === 1) {
         pathParts = [file.name]
+      }else{
+        pathParts = pathParts.slice(1)
       }
-
       let currentLevel = tree;
 
       pathParts.forEach((part, index) => {

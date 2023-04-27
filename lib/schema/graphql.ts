@@ -467,7 +467,7 @@ export type MutationCreateInsightProductArgs = {
 
 
 export type MutationCreateQuartoStoryArgs = {
-  file: Scalars['Upload'];
+  files: Array<Scalars['Upload']>;
   input: NewQuartoStory;
 };
 
@@ -1624,7 +1624,7 @@ export type SlackQueryVariables = Exact<{
 export type SlackQuery = { __typename?: 'Query', IsValidSlackChannel: boolean };
 
 export type CreateQuartoStoryMutationVariables = Exact<{
-  file: Scalars['Upload'];
+  files: Array<Scalars['Upload']> | Scalars['Upload'];
   input: NewQuartoStory;
 }>;
 
@@ -3463,8 +3463,8 @@ export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
 export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
 export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
 export const CreateQuartoStoryDocument = gql`
-    mutation createQuartoStory($file: Upload!, $input: NewQuartoStory!) {
-  createQuartoStory(file: $file, input: $input) {
+    mutation createQuartoStory($files: [Upload!]!, $input: NewQuartoStory!) {
+  createQuartoStory(files: $files, input: $input) {
     id
   }
 }
@@ -3484,7 +3484,7 @@ export type CreateQuartoStoryMutationFn = Apollo.MutationFunction<CreateQuartoSt
  * @example
  * const [createQuartoStoryMutation, { data, loading, error }] = useCreateQuartoStoryMutation({
  *   variables: {
- *      file: // value for 'file'
+ *      files: // value for 'files'
  *      input: // value for 'input'
  *   },
  * });

@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag'
 
 export const CREATE_QUARTO_STORY = gql`
-  mutation createQuartoStory($file: Upload!, $input: NewQuartoStory!) {
-    createQuartoStory(file: $file, input: $input) {
+  mutation createQuartoStory($files: [Upload!]!, $input: NewQuartoStory!) {
+    createQuartoStory(files: $files, input: $input) {
       id
     }
   }
