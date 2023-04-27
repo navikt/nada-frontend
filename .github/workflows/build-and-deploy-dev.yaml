@@ -65,5 +65,5 @@ jobs:
         uses: nais/deploy/actions/deploy@v1
         env:
           CLUSTER: dev-gcp
-          VAR: ingress=https://data.dev.intern.nav.no/
+          VAR: ingress=https://data.intern.dev.nav.no/
           RESOURCE: .nais/nais.yaml
