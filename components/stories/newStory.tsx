@@ -22,20 +22,20 @@ const defaultValues: FieldValues = {
   description: '',
   teamkatalogenURL: '',
   keywords: [] as string[],
-};
+}
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
   description: yup.string(),
   teamkatalogenURL: yup.string().required('Du må velge team i teamkatalogen'),
   keywords: yup.array().of(yup.string()),
-});
+})
 
 export interface NewStoryFields {
-  name: string;
-  description: string;
-  teamkatalogenURL: string;
-  keywords: string[];
+  name: string
+  description: string
+  teamkatalogenURL: string
+  keywords: string[]
 }
 
 export const NewStoryForm = () => {
@@ -68,23 +68,23 @@ export const NewStoryForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: defaultValues,
-  });
+  })
 
-  const { errors } = formState;
-  const keywords = watch('keywords');
+  const { errors } = formState
+  const keywords = watch('keywords')
 
   const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
       keywords.filter((k: string) => k !== keyword),
-    );
-  };
+    )
+  }
 
   const onAddKeyword = (keyword: string) => {
     keywords
       ? setValue('keywords', [...keywords, keyword])
-      : setValue('keywords', [keyword]);
-  };
+      : setValue('keywords', [keyword])
+  }
 
   const valueOrNull = (val: string) => (val == '' ? null : val);
 
@@ -114,20 +114,19 @@ export const NewStoryForm = () => {
     } catch (e) {
       amplitudeLog('skjemainnsending feilet', {
         skjemanavn: 'ny-datafortelling',
-      });
-      console.log(e);
+      })
+      console.log(e)
     }
-  };
+  }
 
   const [createStory, { loading, error: backendError }] = useMutation(
     CREATE_QUARTO_STORY,
     {
       onCompleted: (data) => {
-        console.log(data);
         router.push("/");
       },
     },
-  );
+  )
 
   const onCancel = () => {
     amplitudeLog(
@@ -139,7 +138,7 @@ export const NewStoryForm = () => {
         router.back();
       },
     );
-  };
+  }
 
   const onError = (errors: any) => {
     amplitudeLog('skjemavalidering feilet', {
@@ -148,21 +147,18 @@ export const NewStoryForm = () => {
         .map((errorKey) => errorKey)
         .join(','),
     });
-  };
+  }
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    console.log(files)
     if (files && files.length > 0) {
       setQuartoFiles(Array.from(files));
     }
-  };
+  }
 
   const fixRelativePath = (file: File) =>{
     var path = file.webkitRelativePath
-    console.log(path)
     var pathParts = path.split('/');
-    console.log(pathParts)
     return pathParts.length <= 1? file.name:pathParts.slice(1).reduce((p, s, i)=>i===0? s: p+ "/" +s)
   }
 
