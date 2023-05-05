@@ -230,6 +230,7 @@ const ResultList = ({
               }}
               id={s.id}
               name={s.name}
+              resourceType={"Quarto fortelling"}
               link={`/quarto/${s.id}`}
               teamkatalogen={tk.data}
               productAreas={po.data}

@@ -61,7 +61,7 @@ export const SearchResultLink = ({
   const [deleteInsightProductMutation] = useDeleteInsightProductMutation();
 
   const editResource = () => {
-    if (type == 'QuartoStory') {
+    if (resourceType == 'Quarto fortelling') {
       router.push(`/quarto/${id}/edit`)
     } else if (resourceType == 'innsiktsprodukt') {
       router.push(`/insightProduct/edit?id=${id}`)
