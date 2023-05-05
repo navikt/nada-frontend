@@ -131,7 +131,7 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
-        Legg til datafortelling
+        Endre datafortelling metadata
       </Heading>
       <form
         className="pt-12 flex flex-col gap-10"
