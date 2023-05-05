@@ -162,6 +162,7 @@ const ResultList = ({
             ).concat(quartostories.map(
               (it, idx)=>
               (
+                it.result.__typename ==='QuartoStory' && (
                 <SearchResultLink
                   key={idx}
                   name={it.result.name}
@@ -169,9 +170,14 @@ const ResultList = ({
                   keywords={it.result.keywords}
                   description={it.excerpt}
                   link={`/quarto/${it.result.id}`}
+                  group={{
+                    group: it.result.groupName,
+                    teamkatalogenURL: it.result.teamkatalogenURL,
+                  }}
                   teamkatalogen={tk.data}
                   productAreas={po.data}
                 />
+              )
               )
                  
             ))}
