@@ -1622,7 +1622,7 @@ export type SearchContentWithOptionsQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, keywords: Array<string>, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
 
 export type SlackQueryVariables = Exact<{
   name: Scalars['String'];
@@ -3406,6 +3406,8 @@ export const SearchContentWithOptionsDocument = gql`
         name
         description
         created
+        groupName: group
+        teamkatalogenURL
         keywords
         modified: lastModified
       }

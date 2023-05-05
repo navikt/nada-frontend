@@ -47,6 +47,8 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
           name
           description
           created
+          groupName: group
+          teamkatalogenURL
           keywords
           modified: lastModified
         }
