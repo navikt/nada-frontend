@@ -41,6 +41,8 @@ export const GET_PRODUCT_AREA = gql`
           created
           lastModified
           keywords
+          group
+          teamkatalogenURL
         }
         insightProducts{
           id
@@ -88,6 +90,9 @@ export const GET_PRODUCT_AREA = gql`
           created
           lastModified
           keywords
+          group
+          teamkatalogenURL
+ 
       }
       insightProducts{
         id
