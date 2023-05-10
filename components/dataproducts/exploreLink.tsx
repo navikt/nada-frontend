@@ -82,7 +82,7 @@ export const ExploreLink = ({
                     Er du sikker på at du vil fjerne datasettet fra metabase?
                     </Heading>
                     <div>
-                        Dette vil medføre at du sletter databasen, samlingen og tilgangsgruppene i metabase, samt service account i GCP.
+                        Dette vil medføre at du sletter databasen, samlingen, tilgangsgruppene og alle tilhørende spørsmål i metabase, samt service account i GCP.
                     </div>
                     <div className="flex flex-row gap-4">
                       <Button
