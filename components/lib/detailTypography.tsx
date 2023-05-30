@@ -21,13 +21,13 @@ export const Description = ({
             <Accordion.Item defaultOpen={true}>
                 <Accordion.Header>Beskrivelse</Accordion.Header>
                 <Accordion.Content>
-                    <ReactMarkdown className="text-justify" remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown className="spaced-out text-justify" remarkPlugins={[remarkGfm]}>
                         {dataproduct.description || '*ingen beskrivelse*'}
                     </ReactMarkdown>
                 </Accordion.Content>
             </Accordion.Item>
         </Accordion>
-        <ReactMarkdown className="hidden md:block text-justify" remarkPlugins={[remarkGfm]}>
+        <ReactMarkdown className="spaced-out hidden md:block text-justify" remarkPlugins={[remarkGfm]}>
             {dataproduct.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
         {!!dataproduct.keywords.length && (

@@ -165,6 +165,10 @@ h6 {
   @apply w-full flex justify-between text-start
 }
 
+.spaced-out > * {
+  @apply mb-4
+}
+
 ol {
     list-style-type: decimal;
     list-style-position: inside;
