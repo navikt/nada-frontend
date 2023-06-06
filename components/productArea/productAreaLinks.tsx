@@ -6,7 +6,7 @@ const ProductAreaLinks = () => {
   var defaultProductAreaID = '6b149078-927b-4570-a1ce-97bbb9499fb6'
   const productAreasQuery = useProductAreasQuery()
 
-  if (productAreasQuery.data) {
+  if (productAreasQuery.data && productAreasQuery.data.productAreas.length > 0) {
     defaultProductAreaID =
     productAreasQuery.data.productAreas.find(
       (it) => it.id == '6b149078-927b-4570-a1ce-97bbb9499fb6'
