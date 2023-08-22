@@ -31,6 +31,14 @@ const StoryPage = () => {
   const [showToken, setShowToken] = useState(false)
   const [deleteError, setDeleteError] = useState('')
 
+  const quartoRedirectOnError = async () => {
+    try {
+        await router.push(`/quarto/${id}`)
+    } catch (e: any) {
+        console.log(e.toString())
+    }
+  }
+
   React.useEffect(() => {
     if(!query.loading && query.data){
       const eventProperties = {
@@ -41,7 +49,7 @@ const StoryPage = () => {
     }
   })
 
-  if (query.error) return <ErrorMessage error={query.error} />
+  if (query.error) quartoRedirectOnError()
   if (query.loading || !query.data) return <LoaderSpinner />
   const story = query.data.story
   const isOwner =
