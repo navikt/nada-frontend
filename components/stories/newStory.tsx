@@ -301,9 +301,9 @@ export const NewStoryForm = () => {
           </Label>
           <div className='mt-5'>
             Du kan&nbsp;
-            <Link href="#" onClick={handleSingleFileClick}>velg filer</Link>
+            <Link href="#" onClick={handleSingleFileClick}>velge filer</Link>
             &nbsp;eller&nbsp;
-            <Link href="#" onClick={handleFolderFileClick}>velg maper</Link>
+            <Link href="#" onClick={handleFolderFileClick}>velge mapper</Link>
             &nbsp;til å laste opp&nbsp;
           </div>
         </div>
