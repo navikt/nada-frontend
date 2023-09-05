@@ -78,7 +78,7 @@ export function Story({
                     {({ inView, ref }) => {
                       return inView ? (
                         <div ref={ref}>
-                          <Plotly id={view.id} draft={draft} />
+                          <Plotly id={view.id} />
                         </div>
                       ) : (
                         <div ref={ref}>
@@ -95,7 +95,7 @@ export function Story({
                     {({ inView, ref }) => {
                       return inView ? (
                         <div ref={ref}>
-                          <VegaView id={view.id} draft={draft!!} />
+                          <VegaView id={view.id} />
                         </div>
                       ) : (
                         <div ref={ref}>

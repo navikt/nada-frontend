@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag'
 
 export const GET_PLOTLY = gql`
-  query PlotlyView($id: ID!, $draft: Boolean) {
-    storyView(id: $id, draft: $draft) {
+  query PlotlyView($id: ID!) {
+    storyView(id: $id) {
       ... on StoryViewPlotly {
         id
         data

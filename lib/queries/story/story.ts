@@ -1,8 +1,8 @@
 import { gql } from 'graphql-tag'
 
 export const GET_STORY = gql`
-  query Story($id: ID!, $draft: Boolean) {
-    story(id: $id, draft: $draft) {
+  query Story($id: ID!) {
+    story(id: $id) {
       id
       name
       created

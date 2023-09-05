@@ -7,12 +7,11 @@ import ErrorMessage from '../lib/error'
 
 interface ResultsProps {
   id: string
-  draft?: boolean
 }
 
-export function Plotly({ id, draft }: ResultsProps) {
+export function Plotly({ id }: ResultsProps) {
   const { data, loading, error } = usePlotlyViewQuery({
-    variables: { id, draft },
+    variables: { id },
   })
   if (error) return <ErrorMessage error={error} />
   if (loading || !data) return <LoaderSpinner />

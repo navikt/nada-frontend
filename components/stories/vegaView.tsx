@@ -6,12 +6,11 @@ import ErrorMessage from '../lib/error'
 
 interface ResultsProps {
   id: string
-  draft: boolean
 }
 
-export function VegaView({ id, draft }: ResultsProps) {
+export function VegaView({ id }: ResultsProps) {
   const { data, loading, error } = useVegaViewQuery({
-    variables: { id, draft },
+    variables: { id },
   })
   if (error) return <ErrorMessage error={error} />
   if (loading || !data) return <LoaderSpinner />
