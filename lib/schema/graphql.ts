@@ -1030,7 +1030,6 @@ export type QueryStoriesArgs = {
 
 
 export type QueryStoryArgs = {
-  draft?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
 };
 
@@ -1041,7 +1040,6 @@ export type QueryStoryTokenArgs = {
 
 
 export type QueryStoryViewArgs = {
-  draft?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
 };
 
@@ -1662,7 +1660,6 @@ export type DeleteStoryMutation = { __typename?: 'Mutation', deleteStory: boolea
 
 export type PlotlyViewQueryVariables = Exact<{
   id: Scalars['ID'];
-  draft?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -1689,7 +1686,6 @@ export type StoriesQuery = { __typename?: 'Query', stories: Array<{ __typename?:
 
 export type StoryQueryVariables = Exact<{
   id: Scalars['ID'];
-  draft?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -1730,7 +1726,6 @@ export type UpdateQuartoStoryMetadataMutation = { __typename?: 'Mutation', updat
 
 export type VegaViewQueryVariables = Exact<{
   id: Scalars['ID'];
-  draft?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -3604,8 +3599,8 @@ export type DeleteStoryMutationHookResult = ReturnType<typeof useDeleteStoryMuta
 export type DeleteStoryMutationResult = Apollo.MutationResult<DeleteStoryMutation>;
 export type DeleteStoryMutationOptions = Apollo.BaseMutationOptions<DeleteStoryMutation, DeleteStoryMutationVariables>;
 export const PlotlyViewDocument = gql`
-    query PlotlyView($id: ID!, $draft: Boolean) {
-  storyView(id: $id, draft: $draft) {
+    query PlotlyView($id: ID!) {
+  storyView(id: $id) {
     ... on StoryViewPlotly {
       id
       data
@@ -3629,7 +3624,6 @@ export const PlotlyViewDocument = gql`
  * const { data, loading, error } = usePlotlyViewQuery({
  *   variables: {
  *      id: // value for 'id'
- *      draft: // value for 'draft'
  *   },
  * });
  */
@@ -3761,8 +3755,8 @@ export type StoriesQueryHookResult = ReturnType<typeof useStoriesQuery>;
 export type StoriesLazyQueryHookResult = ReturnType<typeof useStoriesLazyQuery>;
 export type StoriesQueryResult = Apollo.QueryResult<StoriesQuery, StoriesQueryVariables>;
 export const StoryDocument = gql`
-    query Story($id: ID!, $draft: Boolean) {
-  story(id: $id, draft: $draft) {
+    query Story($id: ID!) {
+  story(id: $id) {
     id
     name
     created
@@ -3802,7 +3796,6 @@ export const StoryDocument = gql`
  * const { data, loading, error } = useStoryQuery({
  *   variables: {
  *      id: // value for 'id'
- *      draft: // value for 'draft'
  *   },
  * });
  */
@@ -3947,8 +3940,8 @@ export type UpdateQuartoStoryMetadataMutationHookResult = ReturnType<typeof useU
 export type UpdateQuartoStoryMetadataMutationResult = Apollo.MutationResult<UpdateQuartoStoryMetadataMutation>;
 export type UpdateQuartoStoryMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateQuartoStoryMetadataMutation, UpdateQuartoStoryMetadataMutationVariables>;
 export const VegaViewDocument = gql`
-    query VegaView($id: ID!, $draft: Boolean) {
-  storyView(id: $id, draft: $draft) {
+    query VegaView($id: ID!) {
+  storyView(id: $id) {
     ... on StoryViewVega {
       id
       spec
@@ -3970,7 +3963,6 @@ export const VegaViewDocument = gql`
  * const { data, loading, error } = useVegaViewQuery({
  *   variables: {
  *      id: // value for 'id'
- *      draft: // value for 'draft'
  *   },
  * });
  */
