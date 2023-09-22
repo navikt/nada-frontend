@@ -35,7 +35,7 @@
     "dangerously-set-html-content": "^1.0.13",
     "date-fns": "^2.29.3",
     "deepmerge": "^4.2.2",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "next": "^12.3.1",
     "next-remove-imports": "^1.0.8",
     "plotly.js": "^2.18.1",
