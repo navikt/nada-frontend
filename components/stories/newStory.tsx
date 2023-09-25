@@ -123,7 +123,7 @@ export const NewStoryForm = () => {
     CREATE_QUARTO_STORY,
     {
       onCompleted: (data) => {
-        router.push("/");
+        router.push(`/quarto/${data.createQuartoStory.id}`);
       },
     },
   )

@@ -24,7 +24,7 @@ const StoryPage = () => {
   const [deleteStory] = useDeleteStoryMutation({
     variables: { id },
     awaitRefetchQueries: true,
-    refetchQueries: ['searchContent'],
+    refetchQueries: ['searchContent','userInfoDetails'],
   })
 
   const [showDelete, setShowDelete] = useState(false)
@@ -59,7 +59,7 @@ const StoryPage = () => {
   const onDelete = async () => {
     try {
       await deleteStory()
-      await router.push('/')
+      await router.push('/user/stories')
     } catch (e: any) {
       setDeleteError(e.toString())
     }
