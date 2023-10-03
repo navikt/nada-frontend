@@ -12,6 +12,7 @@ import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
 import { useColumnTags } from './useColumnTags'
 import {Personopplysninger, TilgangsstyringHelpText} from "./helptext";
+import { PiiForm } from './piiForm'
 
 interface NewDatasetFormProps {
   dataproduct: DataproductQuery
@@ -58,11 +59,12 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     watch,
     setValue,
     getValues,
-    formState: { errors },
+    formState,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: defaultValues,
   })
+  const errors = formState.errors
   const projectID = watch('bigquery.projectID')
   const datasetID = watch('bigquery.dataset')
   const tableID = watch('bigquery.table')
@@ -113,6 +115,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
     requestData.targetUser = requestData.teamInternalUse? "OwnerTeam" : ""
     requestData.teamInternalUse = undefined
+    requestData.createAnnoymisedView = requestData.lageAnnoymisertView
     try {
       await createDataset({
         variables: { input: requestData },
@@ -168,44 +171,17 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           onDelete={onDeleteKeyword}
           tags={keywords || []}
         />
-        <Controller
-          name="pii"
+        <PiiForm loading={false}
+          apolloError={undefined}
+          columns={columns}
+          tags={tags}
           control={control}
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
-              error={errors?.pii?.message?.toString()}
-            >
-              <Radio value={"sensitive"}>
-                Ja, inneholder personopplysninger
-              </Radio>
-              {pii == 'sensitive' && projectID && datasetID && tableID && (
-                <AnnotateDatasetTable
-                  loading={loadingColumns}
-                  error={columnsError}
-                  columns={columns}
-                  tags={tags}
-                  annotateColumn={annotateColumn}
-                />
-              )}
-              <Radio value={"anonymised"}>
-                Det er benyttet metoder for å anonymisere personopplysningene
-              </Radio>
-              <Textarea 
-                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                label="Metodebeskrivelse" 
-                aria-hidden={getValues("pii") !== "anonymised"}
-                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
-                error={errors?.anonymisation_description?.message?.toString()}
-                {...register("anonymisation_description")}
-              />
-              <Radio value={"none"}>
-                Nei, inneholder ikke personopplysninger
-              </Radio>
-            </RadioGroup>
-          )}
-        />
+          getValues={getValues}
+          register={register}
+          formState={formState}
+          watch={watch}
+          annotateColumn={annotateColumn}
+        ></PiiForm>
         <Controller name="grantAllUsers" control={control} render={({ field }) => (
           <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
               Tilgangsstyring

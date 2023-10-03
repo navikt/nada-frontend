@@ -23,10 +23,11 @@ import DatasetSourceForm from './dataset/datasetSourceForm'
 import TagsSelector from '../lib/tagsSelector'
 import { PiiLevel } from '../../lib/schema/graphql'
 import AnnotateDatasetTable from './dataset/annotateDatasetTable'
-import { useColumnTags } from './dataset/useColumnTags'
+import { PIITagType, useColumnTags } from './dataset/useColumnTags'
 import { Personopplysninger, TilgangsstyringHelpText } from './dataset/helptext'
 import { ContactInput } from './contactInput'
 import { Checkbox } from '@navikt/ds-react'
+import { PiiForm } from './dataset/piiForm'
 
 
 const defaultValues: FieldValues = {
@@ -75,8 +76,8 @@ const schema = yup.object().shape({
         .nullable()
         .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
     }),
-    grantAllUsers: yup.string().nullable(),
-    teamInternalUse: yup.boolean(),
+  grantAllUsers: yup.string().nullable(),
+  teamInternalUse: yup.boolean(),
 })
 
 interface BigQueryFields {
@@ -100,7 +101,7 @@ export interface NewDataproductFields {
   productAreaID: string
   teamID: string
   anonymisation_description?: string | null
-  teamInternalUse: boolean 
+  teamInternalUse: boolean
 }
 
 export const NewDataproductForm = () => {
@@ -153,6 +154,7 @@ export const NewDataproductForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
   const onSubmit = async (data: any) => {
+    console.log(data)
     try {
       await createDataproduct({
         variables: {
@@ -180,13 +182,14 @@ export const NewDataproductForm = () => {
                   data.pii === 'sensitive'
                     ? PiiLevel.Sensitive
                     : data.pii === 'anonymised'
-                    ? PiiLevel.Anonymised
-                    : PiiLevel.None,
+                      ? PiiLevel.Anonymised
+                      : PiiLevel.None,
                 anonymisation_description: valueOrNull(
                   data.anonymisation_description
                 ),
+                createAnnoymisedView: data.lageAnnoymisertView,
                 grantAllUsers: data.pii === PiiLevel.Sensitive || data.grantAllUsers === '' ? null : data.grantAllUsers === 'grantAllUsers',
-                targetUser: data.teamInternalUse? "OwnerTeam" : "",
+                targetUser: data.teamInternalUse ? "OwnerTeam" : "",
               },
             ],
           },
@@ -236,6 +239,7 @@ export const NewDataproductForm = () => {
   }
 
   const pii = watch('pii')
+  console.log(pii)
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
@@ -332,61 +336,29 @@ export const NewDataproductForm = () => {
           onDelete={onDeleteKeyword}
           tags={keywords || []}
         />
-        <Controller
-          name="pii"
+        <PiiForm loading={loading}
+          apolloError={backendError}
+          columns={columns}
+          tags={tags}
           control={control}
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              legend={
-                <p className="flex gap-2 items-center">
-                  Inneholder datasettet personopplysninger?{' '}
-                  <Personopplysninger />
-                </p>
-              }
-              error={errors?.pii?.message?.toString()}
-            >
-              <Radio value={'sensitive'}>
-                Ja, inneholder personopplysninger
-              </Radio>
-              {pii == 'sensitive' && projectID && datasetID && tableID && (
-                <AnnotateDatasetTable
-                  loading={loadingColumns}
-                  error={columnsError}
-                  columns={columns}
-                  tags={tags}
-                  annotateColumn={annotateColumn}
-                />
-              )}
-              <Radio value={'anonymised'}>
-                Det er benyttet metoder for å anonymisere personopplysningene
-              </Radio>
-              <Textarea
-                placeholder="Beskriv kort hvordan opplysningene er anonymisert"
-                label="Metodebeskrivelse"
-                aria-hidden={getValues('pii') !== 'anonymised'}
-                className={getValues('pii') !== 'anonymised' ? 'hidden' : ''}
-                error={errors?.anonymisation_description?.message?.toString()}
-                {...register('anonymisation_description')}
-              />
-              <Radio value={'none'}>
-                Nei, inneholder ikke personopplysninger
-              </Radio>
-            </RadioGroup>
-          )}
-        />
+          getValues={getValues}
+          register={register}
+          formState={formState}
+          watch={watch}
+          annotateColumn={annotateColumn}
+        ></PiiForm>
         <Controller name="grantAllUsers" control={control} render={({ field }) => (
           <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
-              Tilgangsstyring
-              <TilgangsstyringHelpText />
-            </p>
-            }>
+            Tilgangsstyring
+            <TilgangsstyringHelpText />
+          </p>
+          }>
             <Radio value="dontGrantAllUsers">Brukere må søke om tilgang til datasettet</Radio>
             <Radio value="grantAllUsers" disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
               Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder personopplysninger)"}
             </Radio>
           </RadioGroup>
-          )}
+        )}
         />
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">

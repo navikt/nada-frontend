@@ -8,7 +8,7 @@ import {
   Textarea,
   TextField,
 } from '@navikt/ds-react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FieldValues, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react'
 import * as yup from 'yup'
@@ -25,25 +25,11 @@ import TagsSelector from '../../lib/tagsSelector';
 import { useColumnTags } from './useColumnTags';
 import AnnotateDatasetTable from './annotateDatasetTable';
 import {Personopplysninger} from "./helptext";
+import { PiiForm } from './piiForm';
 
 interface EditDatasetFormProps {
   dataset: DatasetQuery["dataset"]
   setEdit: (value: boolean) => void
-}
-
-interface EditDatasetFormFields {
-  name: string
-  description: string
-  repo: string
-  pii: string
-  bigquery: {
-    projectID: string
-    dataset: string
-    table: string
-  }
-  keywords: string[]
-  anonymisation_description: string | null | undefined
-  teamInternalUse?: boolean
 }
 
 const schema = yup.object().shape({
@@ -70,26 +56,28 @@ const schema = yup.object().shape({
 })
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
+  const defaultValues: FieldValues =  {
+    name: dataset.name,
+    description: dataset.description || '',
+    pii: dataset.pii.toString(),
+    repo: dataset.repo || '',
+    keywords: dataset.keywords,
+    bigquery: {
+      projectID: dataset.datasource.projectID,
+      dataset: dataset.datasource.dataset,
+      table: dataset.datasource.table,
+    },
+    anonymisation_description: dataset.anonymisation_description,
+    teamInternalUse: dataset.targetUser === "OwnerTeam",
+  }
+  
   const [backendError, setBackendError] = useState()
   const [updateDataset] = useUpdateDatasetMutation()
 
   const { register, handleSubmit, watch, formState, setValue, getValues, control } =
     useForm({
       resolver: yupResolver(schema),
-      defaultValues: {
-        name: dataset.name,
-        description: dataset.description || '',
-        pii: dataset.pii.toString(),
-        repo: dataset.repo || '',
-        keywords: dataset.keywords,
-        bigquery: {
-          projectID: dataset.datasource.projectID,
-          dataset: dataset.datasource.dataset,
-          table: dataset.datasource.table,
-        },
-        anonymisation_description: dataset.anonymisation_description,
-        teamInternalUse: dataset.targetUser === "OwnerTeam",
-      },
+      defaultValues: defaultValues,
     })
 
   const keywords = watch('keywords')
@@ -115,7 +103,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   }
 
   const { errors } = formState
-  const onSubmit = (requestData: EditDatasetFormFields) => {
+  const onSubmit = (requestData: any) => {
     const payload: UpdateDataset = {
       name: requestData.name,
       description: requestData.description,
@@ -172,7 +160,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
         <TextField
           {...register('name')}
           label="Skriv inn navn"
-          error={errors?.name?.message}
+          error={errors?.name?.message?.toString()}
           size="medium"
         />
         <DescriptionEditor
@@ -186,7 +174,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           type={'url'}
           id="repo"
           label="Link til kildekode"
-          error={errors.repo?.message}
+          error={errors.repo?.message?.toString()}
         />
         <TextField
           label="Dataset"
@@ -200,43 +188,17 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           onDelete={onDeleteKeyword}
           tags={keywords || []}
         />
-        <Controller
-          name="pii"
+        <PiiForm 
+          loading={false}
+          apolloError={undefined}
+          columns={columns}
+          tags={tags}
           control={control}
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
-              error={errors?.pii?.message}
-            >
-              <Radio value={"sensitive"}>
-                Ja, inneholder personopplysninger
-              </Radio>
-              {pii == 'sensitive' && bigquery.projectID && bigquery.dataset && bigquery.table && (
-                <AnnotateDatasetTable
-                  loading={loadingColumns}
-                  error={columnsError}
-                  columns={columns}
-                  tags={tags}
-                  annotateColumn={annotateColumn}
-                />
-              )}
-              <Radio value={"anonymised"}>
-                Det er benyttet metoder for å anonymisere personopplysningene
-              </Radio>
-              <Textarea 
-                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                label="Metodebeskrivelse" 
-                aria-hidden={getValues("pii") !== "anonymised"}
-                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
-                error={errors?.anonymisation_description?.message}
-                {...register("anonymisation_description")}
-              />
-              <Radio value={"none"}>
-                Nei, inneholder ikke personopplysninger
-              </Radio>
-            </RadioGroup>
-          )}
+          getValues={getValues}
+          register={register}
+          formState={formState}
+          watch={watch}
+          annotateColumn={annotateColumn}
         />
         <div className="flex flex-row gap-4 grow items-end">
           <Button

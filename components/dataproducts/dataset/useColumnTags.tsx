@@ -36,6 +36,8 @@ export type ColumnType = {
   description: string
 }
 
+export type AnnotateColumnListener = (column: string, tag: PIITagType) => void
+
 export const useColumnTags = (
   projectID: string,
   datasetID: string,
