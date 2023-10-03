@@ -82,8 +82,8 @@ export const PiiForm = ({
         {showAnnonymisePii &&
             <Alert variant="info">
             Vi kan processe tablen/viewen for å annonymise personopplysningsinformationen for columnene:
-            {[...tags!!.entries()].map(it=> <div>
-                {it[1] === 'PII_DirekteIdentifiserende'&& <Tag variant="success">{it[0]}</Tag>}
+            {[...tags!!.entries()].map((it, index)=> <div key={index}>
+                {it[1] === 'PII_DirekteIdentifiserende'&& <Tag variant="success" >{it[0]}</Tag>}
             </div>)}
             <Checkbox {...register("lageAnnoymisertView")}>Jeg vil dele en annonymisert view hvor personopplysningene informasjon er psuedomisert</Checkbox>
             </Alert>
