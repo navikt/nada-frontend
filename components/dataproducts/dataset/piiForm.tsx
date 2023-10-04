@@ -4,7 +4,6 @@ import { Control, Controller, FieldValues, FormState, UseFormGetValues, UseFormR
 import { Tag, Checkbox, Alert, Radio, RadioGroup, Textarea } from "@navikt/ds-react"
 import { Personopplysninger } from "./helptext"
 import AnnotateDatasetTable from "./annotateDatasetTable"
-import { Field } from "vega"
 
 interface PiiFormProps {
     loading: boolean
@@ -18,7 +17,6 @@ interface PiiFormProps {
     watch: UseFormWatch<FieldValues>
     annotateColumn: AnnotateColumnListener
 }
-
 
 export const PiiForm = ({
     loading,
@@ -85,7 +83,7 @@ export const PiiForm = ({
             {[...tags!!.entries()].map((it, index)=> <div key={index}>
                 {it[1] === 'PII_DirekteIdentifiserende'&& <Tag variant="success" >{it[0]}</Tag>}
             </div>)}
-            <Checkbox {...register("lageAnnoymisertView")}>Jeg vil dele en annonymisert view hvor personopplysningene informasjon er psuedomisert</Checkbox>
+            <Checkbox {...register("createPseudoynimizedView")}>Jeg vil dele en annonymisert view hvor personopplysningene informasjon er psuedomisert</Checkbox>
             </Alert>
         }
     </div>
