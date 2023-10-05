@@ -654,6 +654,8 @@ export type NewDataset = {
   anonymisation_description?: InputMaybe<Scalars['String']>;
   /** bigquery contains metadata for the bigquery datasource added to the dataset. */
   bigquery: NewBigQuery;
+  /** createPseudoynimizedView is the flag about whether markedplassen should create and share a pseudoynimized view for the dataset */
+  createPseudoynimizedView?: InputMaybe<Scalars['Boolean']>;
   /** dataproductID is the id of the dataproduct containing the dataset */
   dataproductID: Scalars['ID'];
   /** description of the dataset */
@@ -678,6 +680,8 @@ export type NewDatasetForNewDataproduct = {
   anonymisation_description?: InputMaybe<Scalars['String']>;
   /** bigquery contains metadata for the bigquery datasource added to the dataset. */
   bigquery: NewBigQuery;
+  /** createPseudoynimizedView is the flag about whether markedplassen should create and share a pseudoynimized view for the dataset */
+  createPseudoynimizedView?: InputMaybe<Scalars['Boolean']>;
   /** description of the dataset */
   description?: InputMaybe<Scalars['String']>;
   /** grantAllUsers is a boolean indicating whether the dataset shall be made available for all users on creation */
@@ -1287,6 +1291,8 @@ export type UpdateDataproduct = {
 export type UpdateDataset = {
   /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
   anonymisation_description?: InputMaybe<Scalars['String']>;
+  /** createPseudoynimizedView is the flag about whether markedplassen should create and share a pseudoynimized view for the dataset */
+  createPseudoynimizedView?: InputMaybe<Scalars['Boolean']>;
   /** ID of the dataproduct that owns this dataset, the current dataproduct will not change if the field is null */
   dataproductID?: InputMaybe<Scalars['ID']>;
   /** description of the dataset */

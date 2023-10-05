@@ -187,7 +187,7 @@ export const NewDataproductForm = () => {
                 anonymisation_description: valueOrNull(
                   data.anonymisation_description
                 ),
-                createAnnoymisedView: data.lageAnnoymisertView,
+                createPseudoynimizedView: data.createPseudoynimizedView,
                 grantAllUsers: data.pii === PiiLevel.Sensitive || data.grantAllUsers === '' ? null : data.grantAllUsers === 'grantAllUsers',
                 targetUser: data.teamInternalUse ? "OwnerTeam" : "",
               },

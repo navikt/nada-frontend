@@ -104,7 +104,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
 
   const { errors } = formState
   const onSubmit = (requestData: any) => {
-    const payload: UpdateDataset = {
+    const payload = {
       name: requestData.name,
       description: requestData.description,
       pii: requestData.pii === "sensitive"
@@ -117,6 +117,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       anonymisation_description: requestData.anonymisation_description,
       targetUser: requestData.teamInternalUse? "OwnerTeam" : "",
       piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),      
+      createPseudoynimizedView: requestData.createPseudoynimizedView,
     }
     updateDataset({
       variables: { id: dataset.id, input: payload },
