@@ -103,14 +103,14 @@ const AccessRequestFormV2 = ({
       accessType: !isEdit || accessRequest?.expires ? 'until' : 'eternal',
       expires: accessRequest?.expires
         ? accessRequest.expires
-        : undefined,
+        : '',
     },
   })
 
   const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
     defaultSelected: accessRequest?.expires !== undefined ? new Date(getValues("expires")) : tomorrow(),
     fromDate: tomorrow(),
-    onDateChange: (d: Date | undefined) => setValue("expires", d ? d : undefined),
+    onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
   });
 
   const {
@@ -128,7 +128,7 @@ const AccessRequestFormV2 = ({
       subject: data.subject,
       subjectType: data.subjectType,
       polly: polly,
-      expires: data.accessType === 'eternal' || data.expires === undefined ? null : data.expires.toISOString(),
+      expires: data.accessType === 'until' ? data.expires : undefined,
     }
     onSubmit(accessRequest)
   }
