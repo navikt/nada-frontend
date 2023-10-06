@@ -13,9 +13,10 @@ import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 
 interface NewAccessRequestFormProps {
   dataset: DatasetQuery
+  setModal: (value: boolean) => void
 }
 
-const NewAccessRequestForm = ({ dataset }: NewAccessRequestFormProps) => {
+const NewAccessRequestForm = ({ dataset, setModal }: NewAccessRequestFormProps) => {
   const [createAccessRequest] = useCreateAccessRequestMutation()
   const [error, setError] = useState<Error | null>(null)
   const router = useRouter()
@@ -45,7 +46,7 @@ const NewAccessRequestForm = ({ dataset }: NewAccessRequestFormProps) => {
   }
 
   return (
-    <AccessRequestForm dataset={dataset} isEdit={false} onSubmit={onSubmit} error={error} />
+    <AccessRequestForm setModal={setModal} dataset={dataset} isEdit={false} onSubmit={onSubmit} error={error} />
   )
 }
 

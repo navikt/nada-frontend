@@ -65,6 +65,7 @@ interface AccessRequestFormProps {
   isEdit: boolean
   onSubmit: (requestData: AccessRequestFormInput) => void
   error: Error | null
+  setModal: (value: boolean) => void
 }
 
 interface AccessRequestFields {
@@ -75,6 +76,7 @@ interface AccessRequestFields {
 }
 
 const AccessRequestFormV2 = ({
+  setModal,
   accessRequest,
   dataset,
   isEdit,
@@ -250,6 +252,7 @@ const AccessRequestFormV2 = ({
             type="button"
             variant="secondary"
             onClick={() => {
+              setModal(false)
               router.push(`/user/requests`)
             }}
           >

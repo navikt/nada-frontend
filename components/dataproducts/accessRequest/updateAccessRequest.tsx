@@ -48,6 +48,7 @@ const UpdateAccessRequest = ({
       isEdit={true}
       onSubmit={onSubmit}
       error={error}
+      setModal={setModal}
     />
   )
 }
