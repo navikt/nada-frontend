@@ -19,7 +19,7 @@ import ErrorMessage from '../../lib/error';
 const tomorrow = () => {
   const date = new Date()
   date.setDate(date.getDate() + 1)
-  return date
+  return date.toISOString()
 }
 
 const schema = yup
@@ -101,15 +101,13 @@ const AccessRequestFormV2 = ({
         ? accessRequest.subjectType
         : SubjectType.User,
       accessType: !isEdit || accessRequest?.expires ? 'until' : 'eternal',
-      expires: accessRequest?.expires
-        ? accessRequest.expires
-        : '',
+      expires: isEdit && accessRequest?.expires ? accessRequest.expires : tomorrow(),
     },
   })
 
   const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
-    defaultSelected: accessRequest?.expires !== undefined ? new Date(getValues("expires")) : tomorrow(),
-    fromDate: tomorrow(),
+    defaultSelected: new Date(getValues("expires")),
+    fromDate: new Date(tomorrow()),
     onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
   });
 
