@@ -46,6 +46,15 @@ export default function User() {
             >
               Legg til nytt innsiktsprodukt
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className="text-base flex gap-1 items-center"
+              onClick={async () =>
+                await router.push('/preproc/pseudoView/new')
+              }
+            >
+              Legg til/endre pseudonimisert view
+            </Dropdown.Menu.GroupedList.Item>
+
           </Dropdown.Menu.GroupedList>
           <Dropdown.Menu.Divider />
           <Dropdown.Menu.GroupedList>
