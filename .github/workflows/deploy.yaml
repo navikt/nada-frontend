@@ -1,8 +1,6 @@
 name: "Build and deploy"
-on:
-  push:
-    branches:
-      - '*'
+on: [workflow_dispatch, push]
+
 env:
   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
   RESOURCE: .nais/nais.yaml
