@@ -322,6 +322,12 @@ export type Mutation = {
    */
   createInsightProduct: InsightProduct;
   /**
+   * createPseudoView creates a new pseudoynimised view
+   *
+   * Requires authentication.
+   */
+  createPseudoView: Scalars['String'];
+  /**
    * createQuartoStory creates a quarto story.
    *
    * Requires authentication.
@@ -463,6 +469,11 @@ export type MutationCreateDatasetArgs = {
 
 export type MutationCreateInsightProductArgs = {
   input: NewInsightProduct;
+};
+
+
+export type MutationCreatePseudoViewArgs = {
+  input: NewPseudoView;
 };
 
 
@@ -726,6 +737,18 @@ export type NewInsightProduct = {
   teamkatalogenURL?: InputMaybe<Scalars['String']>;
   /** type of the insight product. */
   type: Scalars['String'];
+};
+
+/** NewPseudoView contains metadata for creating a new pseudonymised view */
+export type NewPseudoView = {
+  /** dataset is the name of the dataset of the target table. */
+  dataset: Scalars['String'];
+  /** projectID is the GCP project ID of the target table. */
+  projectID: Scalars['String'];
+  /** table is the name of the target table */
+  table: Scalars['String'];
+  /** targetColumns is the columns to be pseudonymised. */
+  targetColumns?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** NewQuartoStory contains the metadata and content of quarto stories. */

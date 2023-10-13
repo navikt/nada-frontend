@@ -7,7 +7,9 @@ import * as yup from 'yup'
 import DatasetSourceForm from '../../../components/dataproducts/dataset/datasetSourceForm'
 import { useContext, useState } from 'react'
 import { UserState } from '../../../lib/context'
+import {CREATE_PSEUDOVIEW} from '../../../lib/queries/pseudoView/newPseudoView'
 import { useColumnTags } from '../../../components/dataproducts/dataset/useColumnTags'
+import { isConstValueNode } from 'graphql'
 
 const schema = yup.object().shape({
   team: yup.string().required(),
@@ -30,7 +32,30 @@ const NewPsuedoView = () => {
   const bigquery = watch('bigquery')
 
   const {columns, loading, error} = useColumnTags(bigquery?.projectID, bigquery?.dataset, bigquery?.table)
-  const onSubmitForm = async (requestData: any) => {
+
+  const [createPseudoView] =  useMutation(
+    CREATE_PSEUDOVIEW,
+    {
+      onCompleted: (data) =>
+        router.push(
+          `/`
+        ),
+    }
+  )
+
+  const onSubmitForm = async () => {
+    var requestData: any = {}
+    requestData.projectID = bigquery.projectID
+    requestData.dataset = bigquery.dataset
+    requestData.table = bigquery.table
+    requestData.targetColumns= pseudoColumns
+    try{
+      await createPseudoView({
+          variables: { input: requestData }
+    })
+    }catch(e){
+      console.log(e)
+    }
   }
 
 
@@ -103,7 +128,7 @@ const NewPsuedoView = () => {
                         newColumns.push(row.name)
                       }
                       setPseudoColumns(newColumns)
-                    }} value={pseudoColumns.some(it=> it === row.name)}>""</Checkbox>
+                    }} value={pseudoColumns.some(it=> it === row.name)}>{""}</Checkbox>
                   </Table.DataCell>
                 </Table.Row>
               ))}
