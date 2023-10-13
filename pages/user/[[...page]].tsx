@@ -60,16 +60,6 @@ export const UserPages = () => {
         ),
       },
       {
-        title: 'Mine tilganger',
-        slug: 'access',
-        component: (
-          <div className="grid gap-4">
-            <h2>Mine tilganger</h2>
-            <ResultList dataproducts={data.userInfo.accessable} />
-          </div>
-        ),
-      },
-      {
         title: 'Mine tilgangssøknader',
         slug: 'requests',
         component: (

@@ -94,14 +94,6 @@ export default function User() {
             <Dropdown.Menu.GroupedList.Item
               className={'text-base'}
               onClick={() => {
-                router.push({ pathname: '/user/access' })
-              }}
-            >
-              Mine tilganger
-            </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item
-              className={'text-base'}
-              onClick={() => {
                 router.push({ pathname: '/user/tokens' })
               }}
             >
