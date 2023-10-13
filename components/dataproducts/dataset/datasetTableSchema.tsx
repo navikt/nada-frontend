@@ -1,8 +1,9 @@
 import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { Heading, Table } from '@navikt/ds-react'
+import { Heading, Table, Tag } from '@navikt/ds-react'
 import { PIITagNames } from './useColumnTags'
 import {PersonopplysningerDetaljert} from "./helptext";
+import TagPill from '../../lib/tagPill';
 
 interface DatasetTableSchemaProps {
   datasource: DatasetQuery['dataset']['datasource']
@@ -30,6 +31,7 @@ const DatasetTableSchema = ({
               <Table.HeaderCell>Type</Table.HeaderCell>
               <Table.HeaderCell>Description</Table.HeaderCell>
               {showPii && <Table.HeaderCell><span className="flex gap-2 items-center">Personopplysning <PersonopplysningerDetaljert /></span></Table.HeaderCell>}
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -46,6 +48,7 @@ const DatasetTableSchema = ({
                     )}
                   </Table.DataCell>
                 )}
+                <Table.DataCell>{row.name.startsWith("_x_") && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>
