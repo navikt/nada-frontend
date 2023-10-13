@@ -23,7 +23,7 @@ jobs:
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
           echo ::set-output name=image::"$IMAGE"
 
-      - uses: docker/setup-buildx-action@v2
+      - uses: docker/setup-buildx-action@v3
       - uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
