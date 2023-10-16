@@ -49,10 +49,18 @@ export default function User() {
             <Dropdown.Menu.GroupedList.Item
               className="text-base flex gap-1 items-center"
               onClick={async () =>
-                await router.push('/preproc/pseudoView/new')
+                await router.push('/dataProc/pseudoView/new')
               }
             >
               Legg til/endre pseudonimisert view
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className="text-base flex gap-1 items-center"
+              onClick={async () =>
+                await router.push('/dataProc/joinableView/new')
+              }
+            >
+              Bestill sammenføybare view
             </Dropdown.Menu.GroupedList.Item>
 
           </Dropdown.Menu.GroupedList>
@@ -99,6 +107,15 @@ export default function User() {
             >
               Mine team tokens
             </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/joinableViews' })
+              }}
+            >
+              Mine sammenføybare viewer
+            </Dropdown.Menu.GroupedList.Item>
+
             {userOfNada && <Dropdown.Menu.Divider />}
             {userOfNada && (
               <Dropdown.Menu.GroupedList.Item

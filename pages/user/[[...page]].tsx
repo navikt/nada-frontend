@@ -9,6 +9,7 @@ import AccessRequestsListForUser from '../../components/user/accessRequests'
 import NadaTokensForUser from '../../components/user/nadaTokens'
 import InnerContainer from '../../components/lib/innerContainer'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
+import { JoinableViewsList } from '../../components/dataProc/joinableViewsList'
 
 export const UserPages = () => {
   const router = useRouter()
@@ -80,6 +81,16 @@ export const UserPages = () => {
             <NadaTokensForUser
               nadaTokens={data.userInfo.nadaTokens}
             />
+          </div>
+        ),
+      },
+      {
+        title: 'Mine sammenføybare viewer',
+        slug: 'joinableViews',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine sammenføybare viewer</h2>
+            <JoinableViewsList/>
           </div>
         ),
       },

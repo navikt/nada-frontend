@@ -275,6 +275,12 @@ export type InsightProduct = {
   type: Scalars['String'];
 };
 
+export type JoinableView = {
+  __typename?: 'JoinableView';
+  bigqueryDatasetID: Scalars['String'];
+  bigqueryProjectID: Scalars['String'];
+};
+
 /** Keyword represents a keyword used by other dataproducts */
 export type Keyword = {
   __typename?: 'Keyword';
@@ -321,6 +327,7 @@ export type Mutation = {
    * Requires authentication.
    */
   createInsightProduct: InsightProduct;
+  createJoinableViews: Scalars['String'];
   /**
    * createPseudoView creates a new pseudoynimised view
    *
@@ -469,6 +476,11 @@ export type MutationCreateDatasetArgs = {
 
 export type MutationCreateInsightProductArgs = {
   input: NewInsightProduct;
+};
+
+
+export type MutationCreateJoinableViewsArgs = {
+  input: NewJoinableViews;
 };
 
 
@@ -739,6 +751,12 @@ export type NewInsightProduct = {
   type: Scalars['String'];
 };
 
+/** NewJoinableViews contains metadata for creating joinable views */
+export type NewJoinableViews = {
+  /** datasetIDs is the IDs of the dataset which connects to joinable views. */
+  datasetIDs?: InputMaybe<Array<Scalars['ID']>>;
+};
+
 /** NewPseudoView contains metadata for creating a new pseudonymised view */
 export type NewPseudoView = {
   /** dataset is the name of the dataset of the target table. */
@@ -920,6 +938,8 @@ export type Query = {
   groupStats: Array<GroupStats>;
   /** insightProduct returns the given story. */
   insightProduct: InsightProduct;
+  /** joinableViews returns all the joinableViews for the user. */
+  joinableViews: Array<Maybe<JoinableView>>;
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
@@ -1631,6 +1651,25 @@ export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
+export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', bigqueryProjectID: string, bigqueryDatasetID: string } | null> };
+
+export type CreateJoinableViewsMutationVariables = Exact<{
+  input: NewJoinableViews;
+}>;
+
+
+export type CreateJoinableViewsMutation = { __typename?: 'Mutation', createJoinableViews: string };
+
+export type CreatePseudoViewMutationVariables = Exact<{
+  input: NewPseudoView;
+}>;
+
+
+export type CreatePseudoViewMutation = { __typename?: 'Mutation', createPseudoView: string };
+
 export type SearchContentQueryVariables = Exact<{
   q: SearchQuery;
 }>;
@@ -1643,7 +1682,7 @@ export type SearchContentWithOptionsQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
 
 export type SlackQueryVariables = Exact<{
   name: Scalars['String'];
@@ -3316,6 +3355,103 @@ export function useProductAreasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ProductAreasQueryHookResult = ReturnType<typeof useProductAreasQuery>;
 export type ProductAreasLazyQueryHookResult = ReturnType<typeof useProductAreasLazyQuery>;
 export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, ProductAreasQueryVariables>;
+export const JoinableViewsDocument = gql`
+    query JoinableViews {
+  joinableViews {
+    bigqueryProjectID
+    bigqueryDatasetID
+  }
+}
+    `;
+
+/**
+ * __useJoinableViewsQuery__
+ *
+ * To run a query within a React component, call `useJoinableViewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useJoinableViewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useJoinableViewsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useJoinableViewsQuery(baseOptions?: Apollo.QueryHookOptions<JoinableViewsQuery, JoinableViewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<JoinableViewsQuery, JoinableViewsQueryVariables>(JoinableViewsDocument, options);
+      }
+export function useJoinableViewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<JoinableViewsQuery, JoinableViewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<JoinableViewsQuery, JoinableViewsQueryVariables>(JoinableViewsDocument, options);
+        }
+export type JoinableViewsQueryHookResult = ReturnType<typeof useJoinableViewsQuery>;
+export type JoinableViewsLazyQueryHookResult = ReturnType<typeof useJoinableViewsLazyQuery>;
+export type JoinableViewsQueryResult = Apollo.QueryResult<JoinableViewsQuery, JoinableViewsQueryVariables>;
+export const CreateJoinableViewsDocument = gql`
+    mutation createJoinableViews($input: NewJoinableViews!) {
+  createJoinableViews(input: $input)
+}
+    `;
+export type CreateJoinableViewsMutationFn = Apollo.MutationFunction<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>;
+
+/**
+ * __useCreateJoinableViewsMutation__
+ *
+ * To run a mutation, you first call `useCreateJoinableViewsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateJoinableViewsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createJoinableViewsMutation, { data, loading, error }] = useCreateJoinableViewsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateJoinableViewsMutation(baseOptions?: Apollo.MutationHookOptions<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>(CreateJoinableViewsDocument, options);
+      }
+export type CreateJoinableViewsMutationHookResult = ReturnType<typeof useCreateJoinableViewsMutation>;
+export type CreateJoinableViewsMutationResult = Apollo.MutationResult<CreateJoinableViewsMutation>;
+export type CreateJoinableViewsMutationOptions = Apollo.BaseMutationOptions<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>;
+export const CreatePseudoViewDocument = gql`
+    mutation createPseudoView($input: NewPseudoView!) {
+  createPseudoView(input: $input)
+}
+    `;
+export type CreatePseudoViewMutationFn = Apollo.MutationFunction<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>;
+
+/**
+ * __useCreatePseudoViewMutation__
+ *
+ * To run a mutation, you first call `useCreatePseudoViewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePseudoViewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPseudoViewMutation, { data, loading, error }] = useCreatePseudoViewMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePseudoViewMutation(baseOptions?: Apollo.MutationHookOptions<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>(CreatePseudoViewDocument, options);
+      }
+export type CreatePseudoViewMutationHookResult = ReturnType<typeof useCreatePseudoViewMutation>;
+export type CreatePseudoViewMutationResult = Apollo.MutationResult<CreatePseudoViewMutation>;
+export type CreatePseudoViewMutationOptions = Apollo.BaseMutationOptions<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>;
 export const SearchContentDocument = gql`
     query searchContent($q: SearchQuery!) {
   search(q: $q) {
@@ -3392,11 +3528,13 @@ export const SearchContentWithOptionsDocument = gql`
         keywords
         slug
         datasets {
+          id
           name
           datasource {
             type: __typename
             ... on BigQuery {
               lastModified
+              table
             }
           }
         }
