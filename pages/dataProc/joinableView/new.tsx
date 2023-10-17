@@ -17,7 +17,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { Checkbox } from '@navikt/ds-react'
 import { UserState } from '../../../lib/context'
-import { Dataproduct, SearchType, useSearchContentWithOptionsQuery } from '../../../lib/schema/graphql'
+import { Dataproduct, SearchType, useAccessibleDatasetsQuery, useSearchContentWithOptionsQuery } from '../../../lib/schema/graphql'
 import { CREATE_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/newJoinableViews'
 
 
@@ -47,14 +47,7 @@ export const NewJoinableView = () => {
 
   const { errors } = formState
 
-  const search = useSearchContentWithOptionsQuery({
-    variables: {
-      options: {
-        limit: 1000,
-        types: ['dataproduct'] as SearchType[],
-        groups: [],
-      },
-    },
+  const search = useAccessibleDatasetsQuery({
     fetchPolicy: 'network-only',
   })
 
@@ -69,8 +62,8 @@ export const NewJoinableView = () => {
   )
 
   const pseudoDatasets = 
-  search.data?.search.flatMap(it=> it.result.__typename== 'Dataproduct'? it.result.datasets: [])
-  .filter(it=> it.datasource.__typename== 'BigQuery'&& it.datasource.table.startsWith('_x_'))
+  search.data?.accessibleDatasets
+  .filter(it=> it.bqTableID.startsWith('_x_'))
   const onSubmit = async (data: any) => {
     await createJoinableViews({
         variables: {input: {datasetIDs: [data.datasetA, data.datasetB]}}
@@ -99,7 +92,7 @@ export const NewJoinableView = () => {
           <option value="">Velg dataset</option>
           {[
             ...new Set(
-              pseudoDatasets?.map((it)=> <option value = {it.id} key={it.id}>{it.name}</option>)
+              pseudoDatasets?.map((it)=> <option value = {it.datasetID} key={it.datasetID}>{it.name}</option>)
             ),
           ]}
         </Select>
@@ -112,8 +105,8 @@ export const NewJoinableView = () => {
           <option value="">Velg dataset</option>
           {[
             ...new Set(
-              pseudoDatasets?.filter(it=> it.name!= datasetA)
-              .map((it)=> <option value = {it.id} key={it.id}>{it.name}</option>)
+              pseudoDatasets?.filter(it=> it.datasetID!= datasetA)
+              .map((it)=> <option value = {it.datasetID} key={it.datasetID}>{it.name}</option>)
             ),
           ]}
         </Select>

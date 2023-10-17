@@ -217,6 +217,21 @@ export type DatasetServices = {
 /** Datasource defines types that can be returned as a dataset datasource. */
 export type Datasource = BigQuery;
 
+/** DatasourceMinimal contains minimal information about datasource of a dataset */
+export type DatasourceMinimal = {
+  __typename?: 'DatasourceMinimal';
+  /** bqDatasetID is the bigquery dataset that contains the BigQuery table */
+  bqDatasetID: Scalars['String'];
+  /** bqProjectID is the bigquery project ID that contains the BigQuery table */
+  bqProjectID: Scalars['String'];
+  /** bqTableID is the name for BigQuery table */
+  bqTableID: Scalars['String'];
+  /** datasetID is the id of the dataset */
+  datasetID: Scalars['ID'];
+  /** name is the name of the dataset */
+  name: Scalars['String'];
+};
+
 /** GCPProject contains metadata on a GCP project. */
 export type GcpProject = {
   __typename?: 'GCPProject';
@@ -908,6 +923,8 @@ export type Query = {
   accessRequest: AccessRequest;
   /** accessRequests returns all access requests for a dataset */
   accessRequestsForDataset: Array<AccessRequest>;
+  /** accessibleDatasets returns the datasets the user has access to. */
+  accessibleDatasets: Array<DatasourceMinimal>;
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct;
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -1554,6 +1571,11 @@ export type UpdateMappingMutationVariables = Exact<{
 
 
 export type UpdateMappingMutation = { __typename?: 'Mutation', mapDataset: boolean };
+
+export type AccessibleDatasetsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AccessibleDatasetsQuery = { __typename?: 'Query', accessibleDatasets: Array<{ __typename?: 'DatasourceMinimal', bqProjectID: string, bqDatasetID: string, bqTableID: string, datasetID: string, name: string }> };
 
 export type CreateDatasetMutationVariables = Exact<{
   input: NewDataset;
@@ -2662,6 +2684,44 @@ export function useUpdateMappingMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateMappingMutationHookResult = ReturnType<typeof useUpdateMappingMutation>;
 export type UpdateMappingMutationResult = Apollo.MutationResult<UpdateMappingMutation>;
 export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<UpdateMappingMutation, UpdateMappingMutationVariables>;
+export const AccessibleDatasetsDocument = gql`
+    query AccessibleDatasets {
+  accessibleDatasets {
+    bqProjectID
+    bqDatasetID
+    bqTableID
+    datasetID
+    name
+  }
+}
+    `;
+
+/**
+ * __useAccessibleDatasetsQuery__
+ *
+ * To run a query within a React component, call `useAccessibleDatasetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessibleDatasetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessibleDatasetsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAccessibleDatasetsQuery(baseOptions?: Apollo.QueryHookOptions<AccessibleDatasetsQuery, AccessibleDatasetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccessibleDatasetsQuery, AccessibleDatasetsQueryVariables>(AccessibleDatasetsDocument, options);
+      }
+export function useAccessibleDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessibleDatasetsQuery, AccessibleDatasetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccessibleDatasetsQuery, AccessibleDatasetsQueryVariables>(AccessibleDatasetsDocument, options);
+        }
+export type AccessibleDatasetsQueryHookResult = ReturnType<typeof useAccessibleDatasetsQuery>;
+export type AccessibleDatasetsLazyQueryHookResult = ReturnType<typeof useAccessibleDatasetsLazyQuery>;
+export type AccessibleDatasetsQueryResult = Apollo.QueryResult<AccessibleDatasetsQuery, AccessibleDatasetsQueryVariables>;
 export const CreateDatasetDocument = gql`
     mutation createDataset($input: NewDataset!) {
   createDataset(input: $input) {
