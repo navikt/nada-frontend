@@ -53,11 +53,15 @@ const NewPsuedoView = () => {
     requestData.dataset = bigquery.dataset
     requestData.table = bigquery.table
     requestData.targetColumns = pseudoColumns
-    const createRes = await createPseudoView({
-      variables: { input: requestData }
-    })
-    const tableUrl = createRes.data.createPseudoView as string
-    setPseudoViewName(tableUrl?.split(".")[2])
+    try{
+      const createRes = await createPseudoView({
+        variables: { input: requestData }
+      })
+      const tableUrl = createRes.data.createPseudoView as string
+      setPseudoViewName(tableUrl?.split(".")[2])
+    }catch(e){
+      console.log(e)
+    }
   }
 
   const submittable = bigquery?.dataset && bigquery?.projectID && bigquery?.table && pseudoColumns?.length && !submitted

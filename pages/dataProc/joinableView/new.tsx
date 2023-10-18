@@ -69,9 +69,14 @@ export const NewJoinableView = () => {
   .filter(it=> it.bqTableID.startsWith('_x_'))
   const onSubmit = async (data: any) => {
     setSubmitted(true)
-    await createJoinableViews({
+    try{
+      await createJoinableViews({
         variables: {input: {datasetIDs: [data.datasetA, data.datasetB]}}
     })
+      
+    }catch(e){
+      console.log(e)
+    }
   }
   const datasetA = watch('datasetA')
   const datasetB = watch('datasetB')
@@ -114,8 +119,13 @@ export const NewJoinableView = () => {
             ),
           ]}
         </Select>
+        <Alert variant="info">
+          <div className='text-[#C30000]'>
+            Vi støtter for øyeblikket bare datasett i europe-north1 regionen i gcp.
+          </div>
+        </Alert>
         {backendError && <Alert variant="error">{backendError.message}</Alert>}
-        {submitted && <div>Vennligst vent...<Loader size="small" /></div>}
+        {submitted && !backendError && <div>Vennligst vent...<Loader size="small" /></div>}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" disabled={submitted} variant="secondary" onClick={()=> router.back()}>
             Avbryt
