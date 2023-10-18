@@ -7,6 +7,7 @@ import {
   Button,
   ErrorMessage,
   Heading,
+  Loader,
   Radio,
   RadioGroup,
   Select,
@@ -19,6 +20,7 @@ import { Checkbox } from '@navikt/ds-react'
 import { UserState } from '../../../lib/context'
 import { Dataproduct, SearchType, useAccessibleDatasetsQuery, useSearchContentWithOptionsQuery } from '../../../lib/schema/graphql'
 import { CREATE_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/newJoinableViews'
+import LoaderSpinner from '../../../components/lib/spinner'
 
 
 const schema = yup.object().shape({
@@ -32,6 +34,7 @@ export interface NewJoinableViewFields {
 export const NewJoinableView = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
+  const [submitted, setSubmitted] = useState(false)
 
   const {
     register,
@@ -65,6 +68,7 @@ export const NewJoinableView = () => {
   search.data?.accessibleDatasets
   .filter(it=> it.bqTableID.startsWith('_x_'))
   const onSubmit = async (data: any) => {
+    setSubmitted(true)
     await createJoinableViews({
         variables: {input: {datasetIDs: [data.datasetA, data.datasetB]}}
     })
@@ -111,11 +115,12 @@ export const NewJoinableView = () => {
           ]}
         </Select>
         {backendError && <Alert variant="error">{backendError.message}</Alert>}
+        {submitted && <div>Vennligst vent...<Loader size="small" /></div>}
         <div className="flex flex-row gap-4 mb-16">
-          <Button type="button" variant="secondary" onClick={()=> router.back()}>
+          <Button type="button" disabled={submitted} variant="secondary" onClick={()=> router.back()}>
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <Button type="submit" disabled={submitted}>Lagre</Button>
         </div>
       </form>
     </div>
