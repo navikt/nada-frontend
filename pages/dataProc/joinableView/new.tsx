@@ -94,11 +94,11 @@ export const NewJoinableView = () => {
       >
         <Select
           className="w-full"
-          label="Velg først view"
+          label="Velg det første viewet"
           {...register('datasetA')}
           error={errors.datasetA?.message?.toString()}
         >
-          <option value="">Velg dataset</option>
+          <option value="">Velg datasett</option>
           {[
             ...new Set(
               pseudoDatasets?.map((it)=> <option value = {it.datasetID} key={it.datasetID}>{it.name}</option>)
@@ -107,11 +107,11 @@ export const NewJoinableView = () => {
         </Select>
         <Select
           className="w-full"
-          label="Velg andre view"
+          label="Velg det andre viewet"
           {...register('datasetB')}
           error={errors.datasetB?.message?.toString()}
         >
-          <option value="">Velg dataset</option>
+          <option value="">Velg datasett</option>
           {[
             ...new Set(
               pseudoDatasets?.filter(it=> it.datasetID!= datasetA)
@@ -121,7 +121,7 @@ export const NewJoinableView = () => {
         </Select>
         <Alert variant="info">
           <div className='text-[#C30000]'>
-            Vi støtter for øyeblikket bare datasett i europe-north1 regionen i gcp.
+            Alle tabellene må være i Europe North1-regionen for å kunne kobles med vår løsning.
           </div>
         </Alert>
         {backendError && <Alert variant="error">{backendError.message}</Alert>}

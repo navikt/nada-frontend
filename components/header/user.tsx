@@ -52,7 +52,7 @@ export default function User() {
                 await router.push('/dataProc/pseudoView/new')
               }
             >
-              Legg til/endre pseudonimisert view
+              Legg til et pseudonymisert view
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item
               className="text-base flex gap-1 items-center"
@@ -60,7 +60,7 @@ export default function User() {
                 await router.push('/dataProc/joinableView/new')
               }
             >
-              Bestill sammenføybare view
+              Lag pseudonymiserte views tilrettelagt for kobling
             </Dropdown.Menu.GroupedList.Item>
 
           </Dropdown.Menu.GroupedList>

@@ -76,10 +76,10 @@ const NewPsuedoView = () => {
         <Modal.Content className="h-full">
           <div className="flex flex-col gap-8">
             <Heading level="1" size="medium">
-              Gratulerer
+              Et pseudonymisert view har blitt lagt til i GCP-prosjektet ditt
             </Heading>
             <div>
-              Et psueodoynimisert BigQuery view har blitt lagt i prosjektet ditt
+              Du finner viewet i BigQuery-datasettet der opprinnelig tabell/view er lagret.
               <Link
                 className="nada-search-result"
                 target="_blank"
@@ -88,13 +88,13 @@ const NewPsuedoView = () => {
               >
                 <div className="flex flex-col">
                   <div className="flex flex-row text-text-action">
-                    {"Åpne BigQuery viewet i Google Cloud Console"}<ExternalLink />
+                    {"Åpne BigQuery-viewet i Google Cloud Console"}<ExternalLink />
                   </div>
                 </div>
               </Link>
             </div>
             <div>
-              Du kan legge til en dataprodukt/datasett med det viewet, eller legg til andre viewer
+              Tabellen er ikke et datasett på Markedsplassen
             </div>
             <div className="flex flex-row gap-4">
               <Button
@@ -102,14 +102,14 @@ const NewPsuedoView = () => {
                 variant="secondary"
                 size="small"
               >
-                Legg til dataprodukt
+                Registrèr viewet på Markedsplassen
               </Button>
               <Button
                 onClick={() =>location.reload()}
                 variant="secondary"
                 size="small"
               >
-                Legg til et nytt view
+                Lag et nytt pseudonymisert view
               </Button>
               <Button
                 onClick={() => router.push("/")}
@@ -124,7 +124,7 @@ const NewPsuedoView = () => {
       </Modal>
 
       <Heading level="1" size="medium" spacing>
-        Legg til psueodonimisert view
+        Legg til pseuodonymisert view
       </Heading>
       <form
         className="flex flex-col gap-10 h-[90%]"

@@ -85,7 +85,7 @@ export const UserPages = () => {
         ),
       },
       {
-        title: 'Mine sammenføybare viewer',
+        title: 'Mine views tilrettelagt for kobling',
         slug: 'joinableViews',
         component: (
           <div className="grid gap-4">
