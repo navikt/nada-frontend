@@ -80,6 +80,7 @@ const NewPsuedoView = () => {
             </Heading>
             <div>
               Du finner viewet i BigQuery-datasettet der opprinnelig tabell/view er lagret.
+              Viewet registreres på vanlig måte om dere vil dele det på Markedsplassen og analysere det videre i f.eks. Metabase.
               <Link
                 className="nada-search-result"
                 target="_blank"
