@@ -89,7 +89,7 @@ export const UserPages = () => {
         slug: 'joinableViews',
         component: (
           <div className="grid gap-4">
-            <h2>Mine sammenføybare viewer</h2>
+            <h2>Views tilrettelagt for kobling</h2>
             <JoinableViewsList/>
           </div>
         ),

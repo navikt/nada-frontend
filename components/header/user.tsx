@@ -113,7 +113,7 @@ export default function User() {
                 router.push({ pathname: '/user/joinableViews' })
               }}
             >
-              Mine sammenføybare viewer
+              Pseudonymiserte views tilrettelagt for kobling
             </Dropdown.Menu.GroupedList.Item>
 
             {userOfNada && <Dropdown.Menu.Divider />}

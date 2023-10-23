@@ -86,7 +86,7 @@ export const NewJoinableView = () => {
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
-        Bestiller sammenføybare psuedoynimisert view
+        Tilrettelegg pseudonymiserte views for kobling
       </Heading>
       <form
         className="pt-12 flex flex-col gap-10"

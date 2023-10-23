@@ -95,7 +95,7 @@ const NewPsuedoView = () => {
               </Link>
             </div>
             <div>
-              Tabellen er ikke et datasett på Markedsplassen
+              Tabellen er foreløpig ikke et datasett på Markedsplassen
             </div>
             <div className="flex flex-row gap-4">
               <Button
