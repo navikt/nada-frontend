@@ -117,11 +117,8 @@ export const useColumnTags = (
     var newPseudoColumnsMap = new Map<string, Map<string, boolean>>(
       pseudoColumnsMap.set(tableKey, pseudoColumnsMap.get(tableKey)?.set(column, on) || new Map<string, boolean>())
     )
-    console.log(newPseudoColumnsMap)
     setPseudoColumnsMap(newPseudoColumnsMap)
   }
-
-  console.log(pseudoColumnsMap.get(tableKey))
 
   return {
     columns:

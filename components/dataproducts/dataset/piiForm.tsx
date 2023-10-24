@@ -58,7 +58,7 @@ export const PiiForm = ({
                     {showAnnotateDatasetTable &&
                         <Switch {...register("createPseudoynimizedView")}>Deler et pseudoynimisert view hvor personopplysningene informasjon er psuedomisert med SHA256</Switch>
                     }
-                    {createPseudoynimizedView && <Alert variant="info">Du kan velg colona for å pseudoynimise i tablen:</Alert>}
+                    {createPseudoynimizedView && <Alert variant="info">Velg hvilke kolonner du ønsker å pseudonymisere i tabellen:</Alert>}
                     {showAnnotateDatasetTable && (
                         <AnnotateDatasetTable
                             loading={loading}

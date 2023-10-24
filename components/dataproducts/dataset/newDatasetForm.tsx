@@ -119,7 +119,9 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
     requestData.targetUser = requestData.teamInternalUse ? "OwnerTeam" : ""
     requestData.teamInternalUse = undefined
-    requestData.pseudoColumns = createPseudoynimizedView ? pseudoColumns : []
+    requestData.pseudoColumns = createPseudoynimizedView ? Array.from(pseudoColumns.entries())
+    .filter(([, value]) => value)
+    .map(([key]) => key) : []
     try {
       await createDataset({
         variables: { input: requestData },
