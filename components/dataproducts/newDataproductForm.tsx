@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Controller, FieldValues, useForm } from 'react-hook-form'
+import { FieldValues, useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
 import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
@@ -9,24 +9,14 @@ import DescriptionEditor from '../lib/DescriptionEditor'
 import {
   Button,
   Heading,
-  Radio,
-  RadioGroup,
   Select,
-  Textarea,
   TextField,
 } from '@navikt/ds-react'
 import amplitudeLog from '../../lib/amplitude'
 import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
-import DatasetSourceForm from './dataset/datasetSourceForm'
-import TagsSelector from '../lib/tagsSelector'
-import { PiiLevel } from '../../lib/schema/graphql'
-import AnnotateDatasetTable from './dataset/annotateDatasetTable'
-import { useColumnTags } from './dataset/useColumnTags'
-import { Personopplysninger, TilgangsstyringHelpText } from './dataset/helptext'
 import { ContactInput } from './contactInput'
-import { Checkbox } from '@navikt/ds-react'
 
 
 const defaultValues: FieldValues = {
@@ -51,39 +41,7 @@ const schema = yup.object().shape({
     .required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
   teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
   teamContact: yup.string().nullable(),
-  datasetName: yup.string().nullable().required('Du må fylle inn navn'),
-  datasetDescription: yup.string(),
-  sourceCodeURL: yup.string().nullable().url('Link må være en gyldig URL'),
-  bigquery: yup.object({
-    dataset: yup.string().required(),
-    projectID: yup.string().required(),
-    table: yup.string().required(),
-  }),
-  keywords: yup.array().of(yup.string()),
-  pii: yup
-    .string()
-    .nullable()
-    .oneOf(['sensitive', 'anonymised', 'none'])
-    .required('Du må velge om datasettet inneholder personopplysninger'),
-  anonymisation_description: yup
-    .string()
-    .nullable()
-    .when('pii', {
-      is: 'anonymised',
-      then: yup
-        .string()
-        .nullable()
-        .required('Du må beskrive hvordan datasettet har blitt anonymisert'),
-    }),
-    grantAllUsers: yup.string().nullable(),
-    teamInternalUse: yup.boolean(),
 })
-
-interface BigQueryFields {
-  dataset: string
-  projectID: string
-  table: string
-}
 
 export interface NewDataproductFields {
   name: string
@@ -91,16 +49,6 @@ export interface NewDataproductFields {
   team: string
   teamkatalogenURL: string
   teamContact: string
-  datasetName: string
-  datasetDescription: string
-  sourceCodeURL: string
-  bigquery: BigQueryFields
-  keywords: string[]
-  pii: PiiLevel
-  productAreaID: string
-  teamID: string
-  anonymisation_description?: string | null
-  teamInternalUse: boolean 
 }
 
 export const NewDataproductForm = () => {
@@ -108,6 +56,7 @@ export const NewDataproductForm = () => {
   const userInfo = useContext(UserState)
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
+  const [createDataset, setCreateDataset] = useState(false)
 
   const {
     register,
@@ -117,80 +66,33 @@ export const NewDataproductForm = () => {
     setValue,
     getValues,
     control,
+    trigger
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: defaultValues,
   })
 
-  const projectID = watch('bigquery.projectID')
-  const datasetID = watch('bigquery.dataset')
-  const tableID = watch('bigquery.table')
-
-  const {
-    columns,
-    loading: loadingColumns,
-    error: columnsError,
-    tags,
-    pseudoColumns,
-    annotateColumn,
-    selectPseudoColumn,
-  } = useColumnTags(projectID, datasetID, tableID)
-
   const { errors } = formState
-  const keywords = watch('keywords')
-
-  const onDeleteKeyword = (keyword: string) => {
-    setValue(
-      'keywords',
-      keywords.filter((k: string) => k !== keyword)
-    )
-  }
-
-  const onAddKeyword = (keyword: string) => {
-    keywords
-      ? setValue('keywords', [...keywords, keyword])
-      : setValue('keywords', [keyword])
-  }
+  const dataproductName = watch('name')
+  const description = watch('description')
+  const team = watch('team')
+  const teamkatalogenURL = watch('teamkatalogenURL')
+  const teamContact = watch('teamContact')
 
   const valueOrNull = (val: string) => (val == '' ? null : val)
 
-  const onSubmit = async (data: any) => {
+  const submitForm = async () => {
     try {
       await createDataproduct({
         variables: {
           input: {
-            name: data.name,
-            description: valueOrNull(data.description),
-            group: data.team,
-            teamkatalogenURL: valueOrNull(data.teamkatalogenURL),
-            teamContact: valueOrNull(data.teamContact),
+            name: dataproductName,
+            group: team,
+            description: valueOrNull(description),
+            teamkatalogenURL: valueOrNull(teamkatalogenURL),
+            teamContact: valueOrNull(teamContact),
             productAreaID: valueOrNull(productAreaID),
             teamID: valueOrNull(teamID),
-            datasets: [
-              {
-                name: data.datasetName,
-                description: valueOrNull(data.datasetDescription),
-                repo: valueOrNull(data.sourceCodeURL),
-                bigquery: {
-                  ...data.bigquery,
-                  piiTags: JSON.stringify(
-                    Object.fromEntries(tags || new Map<string, string>())
-                  ),
-                },
-                keywords: data.keywords,
-                pii:
-                  data.pii === 'sensitive'
-                    ? PiiLevel.Sensitive
-                    : data.pii === 'anonymised'
-                    ? PiiLevel.Anonymised
-                    : PiiLevel.None,
-                anonymisation_description: valueOrNull(
-                  data.anonymisation_description
-                ),
-                grantAllUsers: data.pii === PiiLevel.Sensitive || data.grantAllUsers === '' ? null : data.grantAllUsers === 'grantAllUsers',
-                targetUser: data.teamInternalUse? "OwnerTeam" : "",
-              },
-            ],
           },
         },
         refetchQueries: ['searchContent'],
@@ -204,15 +106,20 @@ export const NewDataproductForm = () => {
     }
   }
 
-  const team = watch('team')
-
   const [createDataproduct, { loading, error: backendError }] = useMutation(
     CREATE_DATAPRODUCT,
     {
-      onCompleted: (data) =>
-        router.push(
-          `/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}`
-        ),
+      onCompleted: (data) => {
+          if (createDataset) {
+            router.push(
+                `/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}/new`
+            )
+          } else {
+            router.push(
+                `/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}`
+            )
+          }
+      }
     }
   )
 
@@ -245,7 +152,7 @@ export const NewDataproductForm = () => {
       </Heading>
       <form
         className="pt-12 flex flex-col gap-10"
-        onSubmit={handleSubmit(onSubmit, onError)}
+        onSubmit={handleSubmit(submitForm, onError)}
       >
         <TextField
           className="w-full"
@@ -294,110 +201,30 @@ export const NewDataproductForm = () => {
           setTeamID={setTeamID}
         />
         <ContactInput register={register} formState={formState} />
-        <hr className="border-border-on-inverted" />
-        <div>
-          <Heading level="2" size="medium">
-            Legg til et datasett
-          </Heading>
-          <span className="italic text-[#555]">
-            Flere datasett kan legges til etter lagring{' '}
-          </span>
-          <Checkbox {...register('teamInternalUse')}>Datasettet er ment til bruk innad i teamet</Checkbox>
-        </div>
-        <TextField
-          label="Navn på datasett"
-          className="w-full"
-          {...register('datasetName')}
-          error={errors.datasetName?.message?.toString()}
-        />
-        <DescriptionEditor
-          label="Beskrivelse av hva datasettet kan brukes til"
-          name="datasetDescription"
-          control={control}
-        />
-        <TextField
-          label="Link til kildekode"
-          className="w-full"
-          {...register('sourceCodeURL')}
-          error={errors.sourceCodeURL?.message?.toString()}
-        />
-        <DatasetSourceForm
-          label="Velg tabell eller view fra GCP"
-          team={team}
-          register={register}
-          watch={watch}
-          errors={errors}
-          setValue={setValue}
-        />
-        <TagsSelector
-          onAdd={onAddKeyword}
-          onDelete={onDeleteKeyword}
-          tags={keywords || []}
-        />
-        <Controller
-          name="pii"
-          control={control}
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              legend={
-                <p className="flex gap-2 items-center">
-                  Inneholder datasettet personopplysninger?{' '}
-                  <Personopplysninger />
-                </p>
-              }
-              error={errors?.pii?.message?.toString()}
-            >
-              <Radio value={'sensitive'}>
-                Ja, inneholder personopplysninger
-              </Radio>
-              {pii == 'sensitive' && projectID && datasetID && tableID && (
-                <AnnotateDatasetTable
-                  loading={loadingColumns}
-                  error={columnsError}
-                  columns={columns}
-                  tags={tags}
-                  pseudoColumns={pseudoColumns}
-                  annotateColumn={annotateColumn}
-                  selectPseudoColumn={selectPseudoColumn}
-                />
-              )}
-              <Radio value={'anonymised'}>
-                Det er benyttet metoder for å anonymisere personopplysningene
-              </Radio>
-              <Textarea
-                placeholder="Beskriv kort hvordan opplysningene er anonymisert"
-                label="Metodebeskrivelse"
-                aria-hidden={getValues('pii') !== 'anonymised'}
-                className={getValues('pii') !== 'anonymised' ? 'hidden' : ''}
-                error={errors?.anonymisation_description?.message?.toString()}
-                {...register('anonymisation_description')}
-              />
-              <Radio value={'none'}>
-                Nei, inneholder ikke personopplysninger
-              </Radio>
-            </RadioGroup>
-          )}
-        />
-        <Controller name="grantAllUsers" control={control} render={({ field }) => (
-          <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
-              Tilgangsstyring
-              <TilgangsstyringHelpText />
-            </p>
-            }>
-            <Radio value="dontGrantAllUsers">Brukere må søke om tilgang til datasettet</Radio>
-            <Radio value="grantAllUsers" disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
-              Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder personopplysninger)"}
-            </Radio>
-          </RadioGroup>
-          )}
-        />
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <div className="flex flex-row gap-4">
+            <Button
+                onClick={() => submitForm()}
+                variant="primary"
+                size="medium"
+            >
+                Lagre dataprodukt
+            </Button>
+            <Button
+                onClick={() =>{
+                    setCreateDataset(true)
+                    submitForm()
+                }}
+                variant="primary"
+                size="medium"
+            >
+                Lagre dataprodukt og legg til datasett
+            </Button>
+          </div>
         </div>
       </form>
     </div>
