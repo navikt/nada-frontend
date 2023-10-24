@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Select, Table } from '@navikt/ds-react'
+import { Select, Table, Checkbox } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
 import { ApolloError } from '@apollo/client'
 import {
@@ -8,14 +8,16 @@ import {
   PIITagOptions,
   PIITagType,
 } from './useColumnTags'
-import {PersonopplysningerDetaljert} from "./helptext";
+import { PersonopplysningerDetaljert } from "./helptext";
 
 interface AnnotateDatasetTableProps {
   loading: boolean
   error: ApolloError | undefined
   columns: ColumnType[] | undefined
   tags: Map<string, PIITagType> | undefined
+  pseudoColumns: Map<string, boolean>
   annotateColumn: (columnName: string, tag: PIITagType) => void
+  selectPseudoColumn?: (columnName: string, on: boolean) => void
 }
 
 const AnnotateDatasetTable = ({
@@ -23,6 +25,8 @@ const AnnotateDatasetTable = ({
   error,
   columns,
   tags,
+  pseudoColumns,
+  selectPseudoColumn,
   annotateColumn,
 }: AnnotateDatasetTableProps) => {
   if (loading) {
@@ -47,6 +51,8 @@ const AnnotateDatasetTable = ({
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Description</Table.HeaderCell>
             <Table.HeaderCell>Personopplysning</Table.HeaderCell>
+            {selectPseudoColumn && <Table.HeaderCell>Pseudoinymise</Table.HeaderCell>}
+
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -77,6 +83,9 @@ const AnnotateDatasetTable = ({
                   ))}
                 </Select>
               </Table.DataCell>
+              {selectPseudoColumn && <Table.DataCell><Checkbox checked={pseudoColumns.get(row.name)} onChange={e=>{
+                selectPseudoColumn(row.name, e.target.checked)
+              }}>{""}</Checkbox></Table.DataCell>}
             </Table.Row>
           ))}
         </Table.Body>

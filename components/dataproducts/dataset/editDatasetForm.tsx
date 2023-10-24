@@ -100,7 +100,9 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
     loading: loadingColumns,
     error: columnsError,
     tags,
+    pseudoColumns,
     annotateColumn,
+    selectPseudoColumn,
   } = useColumnTags(bigquery.projectID, bigquery.dataset, bigquery.table, dataset)
 
   const onDeleteKeyword = (keyword: string) => {
@@ -218,7 +220,9 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
                   error={columnsError}
                   columns={columns}
                   tags={tags}
+                  pseudoColumns={pseudoColumns}
                   annotateColumn={annotateColumn}
+                  selectPseudoColumn={selectPseudoColumn}
                 />
               )}
               <Radio value={"anonymised"}>

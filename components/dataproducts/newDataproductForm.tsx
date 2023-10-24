@@ -131,7 +131,9 @@ export const NewDataproductForm = () => {
     loading: loadingColumns,
     error: columnsError,
     tags,
+    pseudoColumns,
     annotateColumn,
+    selectPseudoColumn,
   } = useColumnTags(projectID, datasetID, tableID)
 
   const { errors } = formState
@@ -355,7 +357,9 @@ export const NewDataproductForm = () => {
                   error={columnsError}
                   columns={columns}
                   tags={tags}
+                  pseudoColumns={pseudoColumns}
                   annotateColumn={annotateColumn}
+                  selectPseudoColumn={selectPseudoColumn}
                 />
               )}
               <Radio value={'anonymised'}>

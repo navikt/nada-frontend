@@ -56,7 +56,6 @@ const DatasetOwnerMenu = ({
   const [updateDataset] = useUpdateDatasetMutation()
 
   const onMove = async (dataproductID: string)=>{
-    console.log(dataset)
     await updateDataset({
       variables: {
         id: dataset?.id,
