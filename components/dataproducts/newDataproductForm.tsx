@@ -110,15 +110,9 @@ export const NewDataproductForm = () => {
     CREATE_DATAPRODUCT,
     {
       onCompleted: (data) => {
-          if (createDataset) {
-            router.push(
-                `/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}/new`
-            )
-          } else {
             router.push(
                 `/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}`
             )
-          }
       }
     }
   )
@@ -213,16 +207,6 @@ export const NewDataproductForm = () => {
                 size="medium"
             >
                 Lagre dataprodukt
-            </Button>
-            <Button
-                onClick={() =>{
-                    setCreateDataset(true)
-                    submitForm()
-                }}
-                variant="primary"
-                size="medium"
-            >
-                Lagre dataprodukt og legg til datasett
             </Button>
           </div>
         </div>

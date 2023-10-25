@@ -668,8 +668,6 @@ export type NewBigQuery = {
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
 export type NewDataproduct = {
-  /** datasets to associate with the dataproduct. */
-  datasets: Array<NewDatasetForNewDataproduct>;
   /** description of the dataproduct */
   description?: InputMaybe<Scalars['String']>;
   /** owner group email for the dataproduct. */
