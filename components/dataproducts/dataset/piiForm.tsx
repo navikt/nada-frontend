@@ -4,6 +4,7 @@ import { Control, Controller, FieldValues, FormState, UseFormGetValues, UseFormR
 import { Tag, Checkbox, Alert, Radio, RadioGroup, Textarea, Switch } from "@navikt/ds-react"
 import { Personopplysninger } from "./helptext"
 import AnnotateDatasetTable from "./annotateDatasetTable"
+import { useState } from "react"
 
 interface PiiFormProps {
     loading: boolean
@@ -36,7 +37,7 @@ export const PiiForm = ({
 }: PiiFormProps) => {
 
     var showAnnotateDatasetTable = watch("pii") === "sensitive"
-    var createPseudoynimizedView = watch("createPseudoynimizedView")
+    var [createPseudoynimizedView, setcreatePseudoynimizedView] = useState(false)
 
     return <div>
         <Controller
@@ -56,7 +57,9 @@ export const PiiForm = ({
                         Ja, inneholder personopplysninger
                     </Radio>
                     {showAnnotateDatasetTable &&
-                        <Switch {...register("createPseudoynimizedView")}>Deler et pseudoynimisert view hvor personopplysningene informasjon er psuedomisert med SHA256</Switch>
+                        <Switch onChange={e=>{
+                            setcreatePseudoynimizedView(e.target.checked)
+                        }}>Deler et pseudoynimisert view hvor personopplysningene informasjon er psuedomisert med SHA256</Switch>
                     }
                     {createPseudoynimizedView && <Alert variant="info">Velg hvilke kolonner du ønsker å pseudonymisere i tabellen:</Alert>}
                     {showAnnotateDatasetTable && (

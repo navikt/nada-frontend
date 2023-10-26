@@ -75,6 +75,7 @@ export const GET_DATAPRODUCT = gql`
               type
             }
             piiTags
+            pseudoColumns
           }
         }
       }

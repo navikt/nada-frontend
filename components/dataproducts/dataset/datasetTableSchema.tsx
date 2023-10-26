@@ -1,6 +1,6 @@
 import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
-import { Heading, Table, Tag } from '@navikt/ds-react'
+import { Alert, Heading, Table, Tag } from '@navikt/ds-react'
 import { PIITagNames } from './useColumnTags'
 import {PersonopplysningerDetaljert} from "./helptext";
 import TagPill from '../../lib/tagPill';
@@ -22,6 +22,7 @@ const DatasetTableSchema = ({
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
+      {datasource.pseudoColumns?.length && <Alert variant="info">Det er et pseudoynimisert view</Alert>}
       <div className="mb-3 w-[91vw] overflow-auto">
         <Table className="w-fit 2xl:w-[60rem]" size="small">
           <Table.Header>
@@ -48,7 +49,7 @@ const DatasetTableSchema = ({
                     )}
                   </Table.DataCell>
                 )}
-                <Table.DataCell>{row.name.startsWith("_x_") && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
+                <Table.DataCell>{datasource.pseudoColumns?.some(it=> it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>

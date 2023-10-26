@@ -88,7 +88,6 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   }
 
   const keywords = watch('keywords')
-  const createPseudoynimizedView = watch('createPseudoynimizedView')
   const team = dataproduct.dataproduct.owner.group
 
   const onAddKeyword = (keyword: string) => {
@@ -119,7 +118,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
     requestData.targetUser = requestData.teamInternalUse ? "OwnerTeam" : ""
     requestData.teamInternalUse = undefined
-    requestData.pseudoColumns = createPseudoynimizedView ? Array.from(pseudoColumns.entries())
+    requestData.pseudoColumns = pseudoColumns? Array.from(pseudoColumns.entries())
     .filter(([, value]) => value)
     .map(([key]) => key) : []
     try {
