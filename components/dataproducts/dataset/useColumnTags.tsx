@@ -91,7 +91,7 @@ export const useColumnTags = (
             DEFAULT_COLUMN_TAG
         )
         pseudoColumns.set(
-          it.name, false
+          it.name, dataset?.datasource.pseudoColumns?.some(pseudoCol=> it.name === pseudoCol)??false
         )
       }
       )
@@ -114,6 +114,11 @@ export const useColumnTags = (
   }
 
   const selectPseudoColumn = (column: string, on: boolean) => {
+    const hasOtherPseudoCol = on || Array.from(pseudoColumnsMap.get(tableKey)??[]).filter(it=> it[0]!== column && it[1]).length
+    if(!hasOtherPseudoCol){
+      return
+    }
+
     var newPseudoColumnsMap = new Map<string, Map<string, boolean>>(
       pseudoColumnsMap.set(tableKey, pseudoColumnsMap.get(tableKey)?.set(column, on) || new Map<string, boolean>())
     )

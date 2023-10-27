@@ -202,7 +202,6 @@ export const NewDataproductForm = () => {
           </Button>
           <div className="flex flex-row gap-4">
             <Button
-                onClick={() => submitForm()}
                 variant="primary"
                 size="medium"
             >

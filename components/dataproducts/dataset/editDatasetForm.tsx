@@ -130,7 +130,8 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       keywords: requestData.keywords,
       anonymisation_description: requestData.anonymisation_description,
       targetUser: requestData.teamInternalUse? "OwnerTeam" : "",
-      piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),      
+      piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),
+      pseudoColumns: Array.from(pseudoColumns).filter(it=> it[1]).map(it=> it[0]),
     }
     updateDataset({
       variables: { id: dataset.id, input: payload },
@@ -160,6 +161,8 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
     )
   }
+
+  const hasPseudoColumns = !!dataset.datasource.pseudoColumns?.length
 
   return (
     <div className="block pt-8 pr-8 md:w-[46rem]">
@@ -211,10 +214,10 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
               legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
               error={errors?.pii?.message}
             >
-              <Radio value={"sensitive"}>
+              {dataset.pii === 'sensitive' && <Radio value={"sensitive"}>
                 Ja, inneholder personopplysninger
-              </Radio>
-              {pii == 'sensitive' && bigquery.projectID && bigquery.dataset && bigquery.table && (
+              </Radio>}
+              {pii === 'sensitive' && bigquery.projectID && bigquery.dataset && bigquery.table && (
                 <AnnotateDatasetTable
                   loading={loadingColumns}
                   error={columnsError}
@@ -222,12 +225,12 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
                   tags={tags}
                   pseudoColumns={pseudoColumns}
                   annotateColumn={annotateColumn}
-                  selectPseudoColumn={selectPseudoColumn}
+                  selectPseudoColumn={hasPseudoColumns? selectPseudoColumn: undefined}
                 />
               )}
-              <Radio value={"anonymised"}>
+              {dataset.pii === 'anonymised' && <Radio value={"anonymised"}>
                 Det er benyttet metoder for å anonymisere personopplysningene
-              </Radio>
+              </Radio>}
               <Textarea 
                 placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
                 label="Metodebeskrivelse" 
@@ -236,9 +239,9 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
                 error={errors?.anonymisation_description?.message}
                 {...register("anonymisation_description")}
               />
-              <Radio value={"none"}>
+              {dataset.pii === 'none' && <Radio value={"none"}>
                 Nei, inneholder ikke personopplysninger
-              </Radio>
+              </Radio>}
             </RadioGroup>
           )}
         />
