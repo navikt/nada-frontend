@@ -3,7 +3,7 @@ import { Controller, FieldValues, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { ApolloError, useMutation } from '@apollo/client'
 import {
-    Alert,
+  Alert,
   Button,
   ErrorMessage,
   Heading,
@@ -18,7 +18,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { Checkbox } from '@navikt/ds-react'
 import { UserState } from '../../../lib/context'
-import { Dataproduct, SearchType, useAccessibleDatasetsQuery, useSearchContentWithOptionsQuery } from '../../../lib/schema/graphql'
+import { Dataproduct, SearchType, useAccessibleReferenceDatasourcesQuery, useSearchContentWithOptionsQuery } from '../../../lib/schema/graphql'
 import { CREATE_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/newJoinableViews'
 import LoaderSpinner from '../../../components/lib/spinner'
 
@@ -50,7 +50,7 @@ export const NewJoinableView = () => {
 
   const { errors } = formState
 
-  const search = useAccessibleDatasetsQuery({
+  const search = useAccessibleReferenceDatasourcesQuery({
     fetchPolicy: 'network-only',
   })
 
@@ -64,9 +64,7 @@ export const NewJoinableView = () => {
     }
   )
 
-  const pseudoDatasets = 
-  search.data?.accessibleDatasets
-  .filter(it=> it.bqTableID.startsWith('_x_'))
+  const pseudoDatasets =  search.data?.accessibleReferenceDatasources
   const onSubmit = async (data: any) => {
     setSubmitted(true)
     try{
