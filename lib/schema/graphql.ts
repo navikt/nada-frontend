@@ -279,8 +279,10 @@ export type InsightProduct = {
 
 export type JoinableView = {
   __typename?: 'JoinableView';
-  bigqueryDatasetID: Scalars['String'];
-  bigqueryProjectID: Scalars['String'];
+  bigqueryUrls: Array<Scalars['String']>;
+  /** id is the id of the joinable view set */
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 /** Keyword represents a keyword used by other dataproducts */
@@ -329,13 +331,12 @@ export type Mutation = {
    * Requires authentication.
    */
   createInsightProduct: InsightProduct;
-  createJoinableViews: Scalars['String'];
   /**
-   * createPseudoView creates a new pseudoynimised view
+   * createJoinableView creates a new joinable view set
    *
    * Requires authentication.
    */
-  createPseudoView: Scalars['String'];
+  createJoinableViews: Scalars['String'];
   /**
    * createQuartoStory creates a quarto story.
    *
@@ -483,11 +484,6 @@ export type MutationCreateInsightProductArgs = {
 
 export type MutationCreateJoinableViewsArgs = {
   input: NewJoinableViews;
-};
-
-
-export type MutationCreatePseudoViewArgs = {
-  input: NewPseudoView;
 };
 
 
@@ -733,20 +729,10 @@ export type NewInsightProduct = {
 
 /** NewJoinableViews contains metadata for creating joinable views */
 export type NewJoinableViews = {
-  /** datasetIDs is the IDs of the dataset which connects to joinable views. */
+  /** datasetIDs is the IDs of the dataset which are made joinable. */
   datasetIDs?: InputMaybe<Array<Scalars['ID']>>;
-};
-
-/** NewPseudoView contains metadata for creating a new pseudonymised view */
-export type NewPseudoView = {
-  /** dataset is the name of the dataset of the target table. */
-  dataset: Scalars['String'];
-  /** projectID is the GCP project ID of the target table. */
-  projectID: Scalars['String'];
-  /** table is the name of the target table */
-  table: Scalars['String'];
-  /** targetColumns is the columns to be pseudonymised. */
-  targetColumns?: InputMaybe<Array<Scalars['String']>>;
+  /** name is the name of the joinable views which will be used as the name of the dataset in bigquery, which contains all the joinable views */
+  name: Scalars['String'];
 };
 
 /** NewQuartoStory contains the metadata and content of quarto stories. */
@@ -853,6 +839,15 @@ export type ProductArea = {
   teams: Array<Team>;
 };
 
+/** PseudoDataset contains information about a pseudo dataset */
+export type PseudoDataset = {
+  __typename?: 'PseudoDataset';
+  /** datasetID is the id of the dataset */
+  datasetID: Scalars['ID'];
+  /** name is the name of the dataset */
+  name: Scalars['String'];
+};
+
 /** QuartoStory contains the metadata and content of data stories. */
 export type QuartoStory = {
   __typename?: 'QuartoStory';
@@ -888,8 +883,8 @@ export type Query = {
   accessRequest: AccessRequest;
   /** accessRequests returns all access requests for a dataset */
   accessRequestsForDataset: Array<AccessRequest>;
-  /** accessibleReferenceDatasources returns the datasets the user has access to. */
-  accessibleReferenceDatasources: Array<ReferenceDatasource>;
+  /** accessiblePseudoDatasets returns the pseudo datasets the user has access to. */
+  accessiblePseudoDatasets: Array<PseudoDataset>;
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct;
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -921,7 +916,7 @@ export type Query = {
   /** insightProduct returns the given story. */
   insightProduct: InsightProduct;
   /** joinableViews returns all the joinableViews for the user. */
-  joinableViews: Array<Maybe<JoinableView>>;
+  joinableViews: Array<JoinableView>;
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
@@ -1086,21 +1081,6 @@ export type QueryPolly = {
   name: Scalars['String'];
   /** url from polly */
   url: Scalars['String'];
-};
-
-/** ReferenceDatasource contains information about the reference datasource of a dataset */
-export type ReferenceDatasource = {
-  __typename?: 'ReferenceDatasource';
-  /** bqDatasetID is the bigquery dataset that contains the BigQuery table */
-  bqDatasetID: Scalars['String'];
-  /** bqProjectID is the bigquery project ID that contains the BigQuery table */
-  bqProjectID: Scalars['String'];
-  /** bqTableID is the name for BigQuery table */
-  bqTableID: Scalars['String'];
-  /** datasetID is the id of the dataset */
-  datasetID: Scalars['ID'];
-  /** name is the name of the dataset */
-  name: Scalars['String'];
 };
 
 export type SearchOptions = {
@@ -1554,10 +1534,10 @@ export type UpdateMappingMutationVariables = Exact<{
 
 export type UpdateMappingMutation = { __typename?: 'Mutation', mapDataset: boolean };
 
-export type AccessibleReferenceDatasourcesQueryVariables = Exact<{ [key: string]: never; }>;
+export type AccessiblePseudoDatasetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AccessibleReferenceDatasourcesQuery = { __typename?: 'Query', accessibleReferenceDatasources: Array<{ __typename?: 'ReferenceDatasource', bqProjectID: string, bqDatasetID: string, bqTableID: string, datasetID: string, name: string }> };
+export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string }> };
 
 export type CreateDatasetMutationVariables = Exact<{
   input: NewDataset;
@@ -1658,7 +1638,7 @@ export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __
 export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', bigqueryProjectID: string, bigqueryDatasetID: string } | null> };
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name?: string | null, bigqueryUrls: Array<string> }> };
 
 export type CreateJoinableViewsMutationVariables = Exact<{
   input: NewJoinableViews;
@@ -1666,13 +1646,6 @@ export type CreateJoinableViewsMutationVariables = Exact<{
 
 
 export type CreateJoinableViewsMutation = { __typename?: 'Mutation', createJoinableViews: string };
-
-export type CreatePseudoViewMutationVariables = Exact<{
-  input: NewPseudoView;
-}>;
-
-
-export type CreatePseudoViewMutation = { __typename?: 'Mutation', createPseudoView: string };
 
 export type SearchContentQueryVariables = Exact<{
   q: SearchQuery;
@@ -2667,44 +2640,41 @@ export function useUpdateMappingMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateMappingMutationHookResult = ReturnType<typeof useUpdateMappingMutation>;
 export type UpdateMappingMutationResult = Apollo.MutationResult<UpdateMappingMutation>;
 export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<UpdateMappingMutation, UpdateMappingMutationVariables>;
-export const AccessibleReferenceDatasourcesDocument = gql`
-    query AccessibleReferenceDatasources {
-  accessibleReferenceDatasources {
-    bqProjectID
-    bqDatasetID
-    bqTableID
-    datasetID
+export const AccessiblePseudoDatasetsDocument = gql`
+    query AccessiblePseudoDatasets {
+  accessiblePseudoDatasets {
     name
+    datasetID
   }
 }
     `;
 
 /**
- * __useAccessibleReferenceDatasourcesQuery__
+ * __useAccessiblePseudoDatasetsQuery__
  *
- * To run a query within a React component, call `useAccessibleReferenceDatasourcesQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessibleReferenceDatasourcesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccessiblePseudoDatasetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessiblePseudoDatasetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAccessibleReferenceDatasourcesQuery({
+ * const { data, loading, error } = useAccessiblePseudoDatasetsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAccessibleReferenceDatasourcesQuery(baseOptions?: Apollo.QueryHookOptions<AccessibleReferenceDatasourcesQuery, AccessibleReferenceDatasourcesQueryVariables>) {
+export function useAccessiblePseudoDatasetsQuery(baseOptions?: Apollo.QueryHookOptions<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AccessibleReferenceDatasourcesQuery, AccessibleReferenceDatasourcesQueryVariables>(AccessibleReferenceDatasourcesDocument, options);
+        return Apollo.useQuery<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>(AccessiblePseudoDatasetsDocument, options);
       }
-export function useAccessibleReferenceDatasourcesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessibleReferenceDatasourcesQuery, AccessibleReferenceDatasourcesQueryVariables>) {
+export function useAccessiblePseudoDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AccessibleReferenceDatasourcesQuery, AccessibleReferenceDatasourcesQueryVariables>(AccessibleReferenceDatasourcesDocument, options);
+          return Apollo.useLazyQuery<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>(AccessiblePseudoDatasetsDocument, options);
         }
-export type AccessibleReferenceDatasourcesQueryHookResult = ReturnType<typeof useAccessibleReferenceDatasourcesQuery>;
-export type AccessibleReferenceDatasourcesLazyQueryHookResult = ReturnType<typeof useAccessibleReferenceDatasourcesLazyQuery>;
-export type AccessibleReferenceDatasourcesQueryResult = Apollo.QueryResult<AccessibleReferenceDatasourcesQuery, AccessibleReferenceDatasourcesQueryVariables>;
+export type AccessiblePseudoDatasetsQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsQuery>;
+export type AccessiblePseudoDatasetsLazyQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsLazyQuery>;
+export type AccessiblePseudoDatasetsQueryResult = Apollo.QueryResult<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>;
 export const CreateDatasetDocument = gql`
     mutation createDataset($input: NewDataset!) {
   createDataset(input: $input) {
@@ -3402,8 +3372,9 @@ export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, Prod
 export const JoinableViewsDocument = gql`
     query JoinableViews {
   joinableViews {
-    bigqueryProjectID
-    bigqueryDatasetID
+    id
+    name
+    bigqueryUrls
   }
 }
     `;
@@ -3465,37 +3436,6 @@ export function useCreateJoinableViewsMutation(baseOptions?: Apollo.MutationHook
 export type CreateJoinableViewsMutationHookResult = ReturnType<typeof useCreateJoinableViewsMutation>;
 export type CreateJoinableViewsMutationResult = Apollo.MutationResult<CreateJoinableViewsMutation>;
 export type CreateJoinableViewsMutationOptions = Apollo.BaseMutationOptions<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>;
-export const CreatePseudoViewDocument = gql`
-    mutation createPseudoView($input: NewPseudoView!) {
-  createPseudoView(input: $input)
-}
-    `;
-export type CreatePseudoViewMutationFn = Apollo.MutationFunction<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>;
-
-/**
- * __useCreatePseudoViewMutation__
- *
- * To run a mutation, you first call `useCreatePseudoViewMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatePseudoViewMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createPseudoViewMutation, { data, loading, error }] = useCreatePseudoViewMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreatePseudoViewMutation(baseOptions?: Apollo.MutationHookOptions<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>(CreatePseudoViewDocument, options);
-      }
-export type CreatePseudoViewMutationHookResult = ReturnType<typeof useCreatePseudoViewMutation>;
-export type CreatePseudoViewMutationResult = Apollo.MutationResult<CreatePseudoViewMutation>;
-export type CreatePseudoViewMutationOptions = Apollo.BaseMutationOptions<CreatePseudoViewMutation, CreatePseudoViewMutationVariables>;
 export const SearchContentDocument = gql`
     query searchContent($q: SearchQuery!) {
   search(q: $q) {

@@ -7,6 +7,7 @@ import {
   Button,
   ErrorMessage,
   Heading,
+  Link,
   Loader,
   Radio,
   RadioGroup,
@@ -21,6 +22,7 @@ import { UserState } from '../../../lib/context'
 import { Dataproduct, SearchType, useAccessibleReferenceDatasourcesQuery, useSearchContentWithOptionsQuery } from '../../../lib/schema/graphql'
 import { CREATE_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/newJoinableViews'
 import LoaderSpinner from '../../../components/lib/spinner'
+import { TrashIcon } from '@navikt/aksel-icons'
 
 
 const schema = yup.object().shape({
@@ -35,10 +37,10 @@ export const NewJoinableView = () => {
   const router = useRouter()
   const userInfo = useContext(UserState)
   const [submitted, setSubmitted] = useState(false)
+  const [srcDatasets, setSrcDatasets] = useState<string[]>(["", ""])
 
   const {
     register,
-    handleSubmit,
     watch,
     formState,
     setValue,
@@ -64,22 +66,22 @@ export const NewJoinableView = () => {
     }
   )
 
-  const pseudoDatasets =  search.data?.accessibleReferenceDatasources
-  const onSubmit = async (data: any) => {
+  const pseudoDatasets = search.data?.accessibleReferenceDatasources
+  const name = watch("name")
+  const handleSubmit = async () => {
+
     setSubmitted(true)
-    try{
+    try {
       await createJoinableViews({
-        variables: {input: {datasetIDs: [data.datasetA, data.datasetB]}}
-    })
-      
-    }catch(e){
+        variables: { input: { name: name, datasetIDs: srcDatasets } }
+      })
+
+    } catch (e) {
       console.log(e)
     }
   }
-  const datasetA = watch('datasetA')
-  const datasetB = watch('datasetB')
 
-  const onError = ()=>{}
+  const onError = () => { }
 
   return (
     <div className="mt-8 md:w-[46rem]">
@@ -88,35 +90,42 @@ export const NewJoinableView = () => {
       </Heading>
       <form
         className="pt-12 flex flex-col gap-10"
-        onSubmit={handleSubmit(onSubmit, onError)}
       >
-        <Select
+        <TextField
           className="w-full"
-          label="Velg det første viewet"
-          {...register('datasetA')}
-          error={errors.datasetA?.message?.toString()}
-        >
-          <option value="">Velg datasett</option>
-          {[
-            ...new Set(
-              pseudoDatasets?.map((it)=> <option value = {it.datasetID} key={it.datasetID}>{it.name}</option>)
-            ),
-          ]}
-        </Select>
-        <Select
-          className="w-full"
-          label="Velg det andre viewet"
-          {...register('datasetB')}
-          error={errors.datasetB?.message?.toString()}
-        >
-          <option value="">Velg datasett</option>
-          {[
-            ...new Set(
-              pseudoDatasets?.filter(it=> it.datasetID!= datasetA)
-              .map((it)=> <option value = {it.datasetID} key={it.datasetID}>{it.name}</option>)
-            ),
-          ]}
-        </Select>
+          label="Navn på BigQuery dataset"
+          {...register('name')}
+          error={errors.name?.message?.toString()}
+        />
+                <hr className="border-border-on-inverted" />
+        {
+          srcDatasets.map((it, index) => <div className='flex flex-row items-center gap-2'>
+            <Select
+              className="w-full"
+              label="Velg et view"
+              value={it}
+              onChange={e => {
+                srcDatasets[index] = e.target.value
+                setSrcDatasets([...srcDatasets])
+              }}
+            >
+              <option value="">Velg datasett</option>
+              {[
+                ...new Set(
+                  pseudoDatasets?.map((it) => <option value={it.datasetID} key={it.datasetID}>{it.name}</option>)
+                ),
+              ]}
+            </Select>
+
+            {srcDatasets.length> 2 && <div className='h-20 flex flex-col justify-end'>
+            <TrashIcon fontSize="3rem" onClick={()=>setSrcDatasets([...srcDatasets.filter((_, i)=> i!== index)])}/>
+
+            </div>}
+          </div>)
+        }
+        <Link href='#' onClick={() => setSrcDatasets([...srcDatasets, ""])}>
+          Legg til et nytt dataset
+        </Link>
         <Alert variant="info">
           <div className='text-[#C30000]'>
             Alle tabellene må være i Europe North1-regionen for å kunne kobles med vår løsning.
@@ -125,10 +134,10 @@ export const NewJoinableView = () => {
         {backendError && <Alert variant="error">{backendError.message}</Alert>}
         {submitted && !backendError && <div>Vennligst vent...<Loader size="small" /></div>}
         <div className="flex flex-row gap-4 mb-16">
-          <Button type="button" disabled={submitted} variant="secondary" onClick={()=> router.back()}>
+          <Button type="button" disabled={submitted} variant="secondary" onClick={() => router.back()}>
             Avbryt
           </Button>
-          <Button type="submit" disabled={submitted}>Lagre</Button>
+          <Button type="button" disabled={submitted} onClick={()=> handleSubmit()}>Lagre</Button>
         </div>
       </form>
     </div>

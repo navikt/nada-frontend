@@ -3,8 +3,9 @@ import { gql } from 'graphql-tag'
 export const GET_JOINABLEVIEWS = gql`
   query JoinableViews{
     joinableViews{
-        bigqueryProjectID
-        bigqueryDatasetID
+        id,
+        name,
+        bigqueryUrls
     }  
 }
 `
