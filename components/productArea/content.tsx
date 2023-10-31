@@ -79,7 +79,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                         <SearchResultLink
                             resourceType="datafortelling"
                             key={idx}
-                            group={s.__type === 'Story' ? s.owner: {
+                            group={s.__typename === 'Story' ? s.owner : {
                                 group: s.group,
                                 teamkatalogenURL: s.teamkatalogenURL
                             }}
