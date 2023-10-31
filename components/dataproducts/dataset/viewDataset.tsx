@@ -75,9 +75,9 @@ const ViewDataset = ({
           onClose={() => setAccessRequested(false)}
           className="max-w-full md:max-w-3xl px-8 h-[46rem]"
         >
-          <Modal.Content className="h-full">
+          <Modal.Body className="h-full">
             <NewAccessRequestForm setModal={setShowNewAccess} dataset={dataset} />
-          </Modal.Content>
+          </Modal.Body>
         </Modal>
         <Modal
           open={showNewAccess}
@@ -85,12 +85,12 @@ const ViewDataset = ({
           onClose={() => setShowNewAccess(false)}
           className="max-w-full md:max-w-3xl px-8"
         >
-          <Modal.Content className="h-full">
+          <Modal.Body className="h-full">
             <NewDatasetAccess
               dataset={dataset}
               setShowNewAccess={setShowNewAccess}
             />
-          </Modal.Content>
+          </Modal.Body>
         </Modal>
         <Modal
           open={showAnonymisation}
@@ -98,12 +98,12 @@ const ViewDataset = ({
           onClose={() => setShowAnonymisation(false)}
           className="max-w-full md:max-w-3xl md:px-8"
         >
-          <Modal.Content className="h-full">
+          <Modal.Body className="h-full">
             <Heading level="1" size="large" className="pb-8">
               Metodebeskrivelse
             </Heading>
             <BodyLong spacing>{dataset.anonymisation_description}</BodyLong>
-          </Modal.Content>
+          </Modal.Body>
         </Modal>
       </div>
       <div className="flex flex-col gap-8">

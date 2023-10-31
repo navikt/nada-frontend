@@ -5,6 +5,7 @@ export const GET_ACCESSIBLE_DATASETS = gql`
     accessiblePseudoDatasets{
       name
       datasetID
+      datasourceID
     }
   }
 `

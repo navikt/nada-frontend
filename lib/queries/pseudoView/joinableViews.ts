@@ -5,7 +5,8 @@ export const GET_JOINABLEVIEWS = gql`
     joinableViews{
         id,
         name,
-        bigqueryUrls
+        created,
+        bigqueryViewUrls
     }  
 }
 `

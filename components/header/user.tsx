@@ -49,14 +49,6 @@ export default function User() {
             <Dropdown.Menu.GroupedList.Item
               className="text-base flex gap-1 items-center"
               onClick={async () =>
-                await router.push('/dataProc/pseudoView/new')
-              }
-            >
-              Legg til et pseudonymisert view
-            </Dropdown.Menu.GroupedList.Item>
-            <Dropdown.Menu.GroupedList.Item
-              className="text-base flex gap-1 items-center"
-              onClick={async () =>
                 await router.push('/dataProc/joinableView/new')
               }
             >

@@ -85,6 +85,8 @@ export type BigQuery = {
   description: Scalars['String'];
   /** expires, if set, is when the table expires */
   expires?: Maybe<Scalars['Time']>;
+  /** id is the identifier for the datasource */
+  id: Scalars['ID'];
   /** lastModified is the time when the table was last modified */
   lastModified: Scalars['Time'];
   /** missingSince, if set, is the time when the table got deleted from BigQuery */
@@ -279,7 +281,8 @@ export type InsightProduct = {
 
 export type JoinableView = {
   __typename?: 'JoinableView';
-  bigqueryUrls: Array<Scalars['String']>;
+  bigqueryViewUrls: Array<Scalars['String']>;
+  created?: Maybe<Scalars['String']>;
   /** id is the id of the joinable view set */
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
@@ -844,6 +847,8 @@ export type PseudoDataset = {
   __typename?: 'PseudoDataset';
   /** datasetID is the id of the dataset */
   datasetID: Scalars['ID'];
+  /** datasourceID is the id of the bigquery datasource */
+  datasourceID: Scalars['ID'];
   /** name is the name of the dataset */
   name: Scalars['String'];
 };
@@ -1537,7 +1542,7 @@ export type UpdateMappingMutation = { __typename?: 'Mutation', mapDataset: boole
 export type AccessiblePseudoDatasetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string }> };
+export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string, datasourceID: string }> };
 
 export type CreateDatasetMutationVariables = Exact<{
   input: NewDataset;
@@ -1638,7 +1643,7 @@ export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __
 export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name?: string | null, bigqueryUrls: Array<string> }> };
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name?: string | null, created?: string | null, bigqueryViewUrls: Array<string> }> };
 
 export type CreateJoinableViewsMutationVariables = Exact<{
   input: NewJoinableViews;
@@ -2645,6 +2650,7 @@ export const AccessiblePseudoDatasetsDocument = gql`
   accessiblePseudoDatasets {
     name
     datasetID
+    datasourceID
   }
 }
     `;
@@ -3374,7 +3380,8 @@ export const JoinableViewsDocument = gql`
   joinableViews {
     id
     name
-    bigqueryUrls
+    created
+    bigqueryViewUrls
   }
 }
     `;

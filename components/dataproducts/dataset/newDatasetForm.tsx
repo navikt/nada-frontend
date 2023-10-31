@@ -130,6 +130,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       console.log(e)
     }
   }
+  const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns?.length
 
   return (
     <div className="pt-8 pr-8 md:w-[46rem]">
@@ -214,7 +215,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           >
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <Button type="submit" disabled={selectedAllColumns}>Lagre</Button>
         </div>
       </form>
     </div>

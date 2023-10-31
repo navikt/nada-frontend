@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Select, Table, Checkbox } from '@navikt/ds-react'
+import { Select, Table, Checkbox, Popover, Alert } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
 import { ApolloError } from '@apollo/client'
 import {
@@ -9,6 +9,35 @@ import {
   PIITagType,
 } from './useColumnTags'
 import { PersonopplysningerDetaljert } from "./helptext";
+import { useRef, useState } from 'react'
+
+interface PseudoCheckProps {
+  pseudoColumns: Map<string, boolean>
+  selectPseudoColumn?: (columnName: string, on: boolean) => void
+  name: string
+}
+
+const PseudoCheck = ({ pseudoColumns, name, selectPseudoColumn }: PseudoCheckProps) => {
+  const elRef = useRef<HTMLInputElement>(null);
+  const [showAtLeastOne, setShowAtLeastOne] = useState(false)
+  return <>
+    <Checkbox checked={pseudoColumns.get(name)} ref={elRef} onChange={evt => {
+      if (!Array.from(pseudoColumns).filter((e) => e[0] != name && e[1]).length && !evt.target.checked) {
+        setShowAtLeastOne(true)
+        return
+      }
+      setShowAtLeastOne(false)
+      selectPseudoColumn?.(name, evt.target.checked)
+    }}>{""}</Checkbox>      <Popover
+      open={showAtLeastOne}
+      placement="right"
+      onClose={() => setShowAtLeastOne(false)}
+      anchorEl={elRef.current}
+    >
+      <Popover.Content>Må ha minst en pseudokolonne</Popover.Content>
+    </Popover></>
+}
+
 
 interface AnnotateDatasetTableProps {
   loading: boolean
@@ -20,6 +49,7 @@ interface AnnotateDatasetTableProps {
   selectPseudoColumn?: (columnName: string, on: boolean) => void
 }
 
+
 const AnnotateDatasetTable = ({
   loading,
   error,
@@ -29,6 +59,7 @@ const AnnotateDatasetTable = ({
   selectPseudoColumn,
   annotateColumn,
 }: AnnotateDatasetTableProps) => {
+
   if (loading) {
     return <LoaderSpinner />
   }
@@ -40,6 +71,7 @@ const AnnotateDatasetTable = ({
 
   if (!columns) return <div>Ingen skjemainformasjon</div>
 
+  const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns.length
   return (
     <div className="mb-3 w-[91vw] overflow-auto">
       <p className="flex gap-2 items-center mb-2">Klassifiser personopplysningene <PersonopplysningerDetaljert /></p>
@@ -56,7 +88,7 @@ const AnnotateDatasetTable = ({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {columns?.map((row) => (
+          {columns?.map((row, index) => (
             <Table.Row key={row.name}>
               <Table.DataCell>{row.name}</Table.DataCell>
               <Table.DataCell>{row.mode}</Table.DataCell>
@@ -83,13 +115,12 @@ const AnnotateDatasetTable = ({
                   ))}
                 </Select>
               </Table.DataCell>
-              {selectPseudoColumn && <Table.DataCell><Checkbox checked={pseudoColumns.get(row.name)} onChange={e=>{
-                selectPseudoColumn(row.name, e.target.checked)
-              }}>{""}</Checkbox></Table.DataCell>}
+              {selectPseudoColumn && <Table.DataCell><PseudoCheck pseudoColumns={pseudoColumns} name={row.name} selectPseudoColumn={selectPseudoColumn}></PseudoCheck></Table.DataCell>}
             </Table.Row>
           ))}
         </Table.Body>
       </Table>
+      {selectedAllColumns && <Alert className="w-[60rem]" variant='error'>Skal ikke pseudonymisere alle kolonner</Alert>}
     </div>
   )
 }
