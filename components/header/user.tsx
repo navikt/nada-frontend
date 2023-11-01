@@ -52,7 +52,7 @@ export default function User() {
                 await router.push('/dataProc/joinableView/new')
               }
             >
-              Lag pseudonymiserte views tilrettelagt for kobling
+              Koble sammen pseudonymiserte tabeller
             </Dropdown.Menu.GroupedList.Item>
 
           </Dropdown.Menu.GroupedList>
