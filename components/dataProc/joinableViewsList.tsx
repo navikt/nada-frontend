@@ -20,12 +20,11 @@ export const JoinableViewsList = () => {
                         <ExpansionCard aria-label="default-demo">
                             <ExpansionCard.Header>
                                 <ExpansionCard.Title>{`${it?.name} - ${it?.created}`}</ExpansionCard.Title>
-                                <ExpansionCard.Description><Link href={bigQueryUrl}>{"Åpne BigQuery dataset i Google Cloud Console"}<ExternalLink /></Link>
-                                    <br></br>
-                                    <br></br>
-                                    <p>Klikk for å vise BigQuery viewer</p></ExpansionCard.Description>
+                                <ExpansionCard.Description>
+                                    <p>Klikk for å vise BigQuery dataset</p></ExpansionCard.Description>
                             </ExpansionCard.Header>
                             <ExpansionCard.Content>
+                                <Link href={bigQueryUrl}>{"Åpne BigQuery dataset i Google Cloud Console"}<ExternalLink /></Link>
                                 {it.bigqueryViewUrls.map(bqv => <Box key={bqv} padding="1" className="w-[55rem]">
                                     <div className="flex flex-row items-center bg-gray-200">{bqv}<CopyButton copyText={bqv}></CopyButton></div>
                                 </Box>)}
