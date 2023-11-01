@@ -86,7 +86,6 @@ export const SearchResultLink = ({
   }
 
   const confirmDelete = () => {
-    console.log(type)
     const deletePromise = resourceType == "innsiktsprodukt"?
       deleteInsightProduct(id || ''):
     deleteResource?.(id || '');
@@ -97,7 +96,6 @@ export const SearchResultLink = ({
     })
   }
 
-  console.log(resourceType)
   return (
     <div>
       <DeleteModal
