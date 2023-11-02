@@ -40,4 +40,11 @@ const TilgangsstyringHelpText = () => {
     </HelpText>
 }
 
-export {Personopplysninger, PersonopplysningerDetaljert, TilgangsstyringHelpText}
+const PseudonymiseringsText = () => {
+    return <HelpText title="Pseudonymisering er ikke det samme som anonymisering!">
+        <p className="mb-2"> Selv om du pseudonymiserer enkelte kolonner i tabellen, vil det ofte være mulig å reidentifisere personer gjennom annen informasjon i tabellen. Derfor er pseudnoymisering noe annet anonymisering. </p>
+    </HelpText>
+}
+
+
+export {Personopplysninger, PersonopplysningerDetaljert, TilgangsstyringHelpText, PseudonymiseringsText}

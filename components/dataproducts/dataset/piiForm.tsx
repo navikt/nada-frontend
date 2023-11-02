@@ -2,7 +2,7 @@ import { ApolloError } from "@apollo/client"
 import { AnnotateColumnListener, ColumnType, PIITagOptions, PIITagType, PseudoColumnListener } from "./useColumnTags"
 import { Control, Controller, FieldValues, FormState, UseFormGetValues, UseFormRegister, UseFormWatch } from "react-hook-form"
 import { Tag, Checkbox, Alert, Radio, RadioGroup, Textarea, Switch } from "@navikt/ds-react"
-import { Personopplysninger } from "./helptext"
+import { Personopplysninger, PseudonymiseringsText } from "./helptext"
 import AnnotateDatasetTable from "./annotateDatasetTable"
 import { useState } from "react"
 
@@ -59,9 +59,10 @@ export const PiiForm = ({
                     {showAnnotateDatasetTable &&
                         <Switch onChange={e=>{
                             setcreatePseudoynimizedView(e.target.checked)
-                        }}>Deler et pseudoynimisert view hvor personopplysningene informasjon er psuedomisert med SHA256</Switch>
+                        }}>Jeg ønsker å pseudonymisere tabellen</Switch>
+                        && <PseudonymiseringsText />
                     }
-                    {createPseudoynimizedView && <Alert variant="info">Velg hvilke kolonner du ønsker å pseudonymisere i tabellen:</Alert>}
+                    {createPseudoynimizedView && <Alert variant="info">Velg kolonner du ønsker å pseudonymisere</Alert>}
                     {showAnnotateDatasetTable && (
                         <AnnotateDatasetTable
                             loading={loading}
