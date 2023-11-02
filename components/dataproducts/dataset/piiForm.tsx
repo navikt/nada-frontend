@@ -59,8 +59,8 @@ export const PiiForm = ({
                     {showAnnotateDatasetTable &&
                         <Switch onChange={e=>{
                             setcreatePseudoynimizedView(e.target.checked)
-                        }}>Jeg ønsker å pseudonymisere tabellen</Switch>
-                        && <PseudonymiseringsText />
+                        }}>Jeg ønsker å pseudonymisere tabellen <PseudonymiseringsText /> </Switch>
+
                     }
                     {createPseudoynimizedView && <Alert variant="info">Velg kolonner du ønsker å pseudonymisere</Alert>}
                     {showAnnotateDatasetTable && (

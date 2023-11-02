@@ -83,7 +83,7 @@ const AnnotateDatasetTable = ({
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Description</Table.HeaderCell>
             <Table.HeaderCell>Personopplysning</Table.HeaderCell>
-            {selectPseudoColumn && <Table.HeaderCell>Pseudoinymise</Table.HeaderCell>}
+            {selectPseudoColumn && <Table.HeaderCell>Pseudonymisèr</Table.HeaderCell>}
 
           </Table.Row>
         </Table.Header>
