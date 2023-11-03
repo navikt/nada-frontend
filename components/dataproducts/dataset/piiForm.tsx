@@ -57,10 +57,12 @@ export const PiiForm = ({
                         Ja, inneholder personopplysninger
                     </Radio>
                     {showAnnotateDatasetTable &&
-                        <Switch onChange={e=>{
-                            setcreatePseudoynimizedView(e.target.checked)
-                        }}>Jeg ønsker å pseudonymisere tabellen <PseudonymiseringsText /> </Switch>
-
+                        <div className="flex items-center gap-x-1">
+                            <Switch onChange={e=>{
+                                setcreatePseudoynimizedView(e.target.checked)
+                            }}>Jeg ønsker å pseudonymisere tabellen </Switch>
+                            <PseudonymiseringsText />
+                        </div>
                     }
                     {createPseudoynimizedView && <Alert variant="info">Velg kolonner du ønsker å pseudonymisere</Alert>}
                     {showAnnotateDatasetTable && (
