@@ -78,7 +78,18 @@ export const UserPages = () => {
         component: (
           <div className="grid gap-4">
             <h2>Mine tilganger</h2>
-            <ResultList datasets={data.userInfo.accessable} />
+            {data.userInfo.accessable.granted.length > 0 &&
+                <>
+                    <h3>Innvilget tilgang</h3>
+                    <ResultList datasets={data.userInfo.accessable.granted} />
+                </>
+            }
+            {data.userInfo.accessable.owned.length > 0 &&
+                <>
+                    <h3>Eier</h3>
+                    <ResultList datasets={data.userInfo.accessable.owned} />
+                </>
+            }
           </div>
         ),
       },

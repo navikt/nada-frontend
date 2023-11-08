@@ -15,16 +15,31 @@ export const USER_INFO = gql`
         }
       }
       accessable {
-        id
-        name
-        dataproduct {
-            slug
-        }
-        dataproductID
-        keywords
-        slug
-        owner {
+        owned {
+          id
+          name
+          dataproduct {
+              slug
+          }
+          dataproductID
+          keywords
+          slug
+          owner {
           group
+          }
+        }
+        granted {
+          id
+          name
+          dataproduct {
+              slug
+          }
+          dataproductID
+          keywords
+          slug
+          owner {
+          group
+          }
         }
       }
       loginExpiration

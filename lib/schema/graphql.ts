@@ -74,6 +74,14 @@ export enum AccessRequestStatus {
   Pending = 'pending'
 }
 
+export type AccessibleDatasets = {
+  __typename?: 'AccessibleDatasets';
+  /** granted */
+  granted: Array<Dataset>;
+  /** owned */
+  owned: Array<Dataset>;
+};
+
 /** BigQuery contains metadata on a BigQuery table. */
 export type BigQuery = {
   __typename?: 'BigQuery';
@@ -1355,7 +1363,7 @@ export type UserInfo = {
   /** accessRequests is a list of access requests where either the user or one of the users groups is owner. */
   accessRequests: Array<AccessRequest>;
   /** accessable is a list of datasets which the user has either owns or has explicit access to. */
-  accessable: Array<Dataset>;
+  accessable: AccessibleDatasets;
   /** allGoogleGroups is the all the known google groups of the user domains. */
   allGoogleGroups?: Maybe<Array<Group>>;
   /** azureGroups is the azure groups the user is member of. */
@@ -1785,12 +1793,12 @@ export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', slug: string }, owner: { __typename?: 'Owner', group: string } }>, groups: Array<{ __typename?: 'Group', name: string, email: string }>, nadaTokens: Array<{ __typename?: 'NadaToken', team: string, token: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
+export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', slug: string }, owner: { __typename?: 'Owner', group: string } }>, granted: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', slug: string }, owner: { __typename?: 'Owner', group: string } }> }, groups: Array<{ __typename?: 'Group', name: string, email: string }>, nadaTokens: Array<{ __typename?: 'NadaToken', team: string, token: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
 
 export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } };
+export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
 
 
 export const DatasetAccessDocument = gql`
@@ -4182,16 +4190,31 @@ export const UserInfoDetailsDocument = gql`
       }
     }
     accessable {
-      id
-      name
-      dataproduct {
+      owned {
+        id
+        name
+        dataproduct {
+          slug
+        }
+        dataproductID
+        keywords
         slug
+        owner {
+          group
+        }
       }
-      dataproductID
-      keywords
-      slug
-      owner {
-        group
+      granted {
+        id
+        name
+        dataproduct {
+          slug
+        }
+        dataproductID
+        keywords
+        slug
+        owner {
+          group
+        }
       }
     }
     loginExpiration
@@ -4297,15 +4320,29 @@ export const UserInfoAccessableDataproductDocument = gql`
     query userInfoAccessableDataproduct {
   userInfo {
     accessable {
-      __typename
-      id
-      name
-      description
-      created
-      lastModified
-      owner {
-        group
-        teamkatalogenURL
+      owned {
+        __typename
+        id
+        name
+        description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogenURL
+        }
+      }
+      granted {
+        __typename
+        id
+        name
+        description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogenURL
+        }
       }
     }
   }
