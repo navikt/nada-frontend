@@ -34,18 +34,6 @@ type ResultListInterface = {
     slug: string
     owner: { __typename?: 'Owner' | undefined; group: string }
   }[]
-  datasets?: {
-    __typename?: 'Dataset' | undefined
-    id: string
-    dataproductID: string
-    dataproduct: {
-        slug: string
-    }
-    name: string
-    keywords: string[]
-    slug: string
-    owner: { __typename?: 'Owner' | undefined, group: string}
-  }[]
   stories?: {
     __typename?: 'Story'
     id: string
@@ -77,7 +65,6 @@ type ResultListInterface = {
 const ResultList = ({
   search,
   dataproducts,
-  datasets,
   stories,
   quartoStories,
   insightProducts,
@@ -234,24 +221,6 @@ const ResultList = ({
         ))}
       </Results>
     )
-  }
-
-  if (datasets) {
-    return (
-        <Results>
-          {datasets.map((d, idx) => (
-            <SearchResultLink
-              key={idx}
-              group={d.owner}
-              name={d.name}
-              keywords={d.keywords}
-              link={`/dataproduct/${d.dataproductID}/${d.dataproduct.slug}/${d.id}`}
-              teamkatalogen={tk.data}
-              productAreas={po.data}
-            />
-          ))}
-        </Results>
-      ) 
   }
 
   if (stories || quartoStories) {

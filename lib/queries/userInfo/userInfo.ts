@@ -19,6 +19,7 @@ export const USER_INFO = gql`
           id
           name
           dataproduct {
+              name
               slug
           }
           dataproductID
@@ -32,6 +33,7 @@ export const USER_INFO = gql`
           id
           name
           dataproduct {
+              name
               slug
           }
           dataproductID
