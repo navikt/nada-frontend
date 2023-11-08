@@ -44,7 +44,7 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
                     <>
                         <ExpansionCard key={datasets[0].dataproductID} aria-label="dataproduct-access">
                             <ExpansionCard.Header>
-                                <ExpansionCard.Title>{`Dataprodukt - ${datasets[0].name}`}</ExpansionCard.Title>
+                                <ExpansionCard.Title>{`Dataprodukt - ${datasets[0].dataproduct.name}`}</ExpansionCard.Title>
                                 <ExpansionCard.Description>
                                     <p>Klikk for å se datasettene du har tilgang til</p></ExpansionCard.Description>
                             </ExpansionCard.Header>
