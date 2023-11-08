@@ -42,6 +42,7 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
             {groupedDatasets.map((datasets) => {
                 return (
                     <>
+                    <div className="w-[60rem]">
                         <ExpansionCard key={datasets[0].dataproductID} aria-label="dataproduct-access">
                             <ExpansionCard.Header>
                                 <ExpansionCard.Title>{`Dataprodukt - ${datasets[0].dataproduct.name}`}</ExpansionCard.Title>
@@ -64,6 +65,7 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
                                 </>
                             </ExpansionCard.Content>
                         </ExpansionCard>
+                    </div>
                     </>
                 )
             })}
