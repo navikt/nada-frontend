@@ -73,6 +73,16 @@ export const UserPages = () => {
         ),
       },
       {
+        title: 'Mine tilganger',
+        slug: 'access',
+        component: (
+          <div className="grid gap-4">
+            <h2>Mine tilganger</h2>
+            <ResultList datasets={data.userInfo.accessable} />
+          </div>
+        ),
+      },
+      {
         title: 'Mine team tokens',
         slug: 'tokens',
         component: (

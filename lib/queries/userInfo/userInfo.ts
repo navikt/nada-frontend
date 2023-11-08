@@ -17,6 +17,10 @@ export const USER_INFO = gql`
       accessable {
         id
         name
+        dataproduct {
+            slug
+        }
+        dataproductID
         keywords
         slug
         owner {
