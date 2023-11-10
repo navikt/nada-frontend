@@ -94,13 +94,13 @@ export const UserPages = () => {
                                     label="Views tilrettelagt for kobling"
                                 />
                             </Tabs.List>
-                            <Tabs.Panel value="owner" className="w-full space-y-2 bg-gray-50 p-4">
+                            <Tabs.Panel value="owner" className="w-full space-y-2 p-4">
                                 <DataproductsList datasets={data.userInfo.accessable.owned} />
                             </Tabs.Panel>
-                            <Tabs.Panel value="granted" className="w-full space-y-2 bg-gray-50 p-4">
+                            <Tabs.Panel value="granted" className="w-full space-y-2 p-4">
                                 <DataproductsList datasets={data.userInfo.accessable.granted} />
                             </Tabs.Panel>
-                            <Tabs.Panel value="joinable" className="w-full bg-gray-50 p-4">
+                            <Tabs.Panel value="joinable" className="w-full p-4">
                                 <JoinableViewsList />
                             </Tabs.Panel>
                         </Tabs>
