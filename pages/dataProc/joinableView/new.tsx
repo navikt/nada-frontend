@@ -1,39 +1,39 @@
-import {yupResolver} from '@hookform/resolvers/yup'
-import {Controller, FieldValues, useForm} from 'react-hook-form'
 import {useRouter} from 'next/router'
-import {ApolloError, useMutation} from '@apollo/client'
+import {useMutation} from '@apollo/client'
 import {
     Alert,
     Button,
-    ErrorMessage,
+    DatePicker,
     Heading,
     Link,
     Loader,
     Radio,
     RadioGroup,
     Select,
-    Textarea,
     TextField,
+    useDatepicker,
 } from '@navikt/ds-react'
-import * as yup from 'yup'
 import {useContext, useState} from 'react'
-import {Checkbox} from '@navikt/ds-react'
 import {UserState} from '../../../lib/context'
 import {
-    Dataproduct,
-    SearchType,
     useAccessiblePseudoDatasetsQuery,
-    useSearchContentWithOptionsQuery
 } from '../../../lib/schema/graphql'
 import {CREATE_JOINABLEVIEWS} from '../../../lib/queries/pseudoView/newJoinableViews'
-import LoaderSpinner from '../../../components/lib/spinner'
 import {TrashIcon} from '@navikt/aksel-icons'
+import { GET_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/joinableViews'
 
 
-const schema = yup.object().shape({
-    datasetA: yup.string().nullable().required('Du må fylle inn dataset navn'),
-    datasetB: yup.string().nullable().required('Du må fylle inn dataset navn'),
-})
+const tomorrow = () => {
+    const date = new Date()
+    date.setDate(date.getDate() + 1)
+    return date
+}
+
+const startDate = () => {
+    const date = new Date()
+    date.setDate(date.getDate() + 21)
+    return date
+}
 
 export interface NewJoinableViewFields {
 }
@@ -44,6 +44,8 @@ export const NewJoinableView = () => {
     const [submitted, setSubmitted] = useState(false)
     const [srcDatasets, setSrcDatasets] = useState<string[]>(["", ""])
     const [name, setName] = useState("")
+    const [expires, setExpires] = useState<string | null>(startDate().toISOString())
+    const [isTimeLimited, setIsTimeLimited] = useState(true)
 
     const search = useAccessiblePseudoDatasetsQuery({
         fetchPolicy: 'network-only',
@@ -56,6 +58,8 @@ export const NewJoinableView = () => {
                 router.push(
                     `/user/joinableViews`
                 ),
+            refetchQueries: [GET_JOINABLEVIEWS],
+            awaitRefetchQueries: true,
         }
     )
 
@@ -64,7 +68,7 @@ export const NewJoinableView = () => {
         setSubmitted(true)
         try {
             await createJoinableViews({
-                variables: {input: {name: name, datasetIDs: srcDatasets}}
+                variables: {input: {name: name, expires: isTimeLimited ? expires : null, datasetIDs: srcDatasets}}
             })
 
         } catch (e) {
@@ -72,6 +76,12 @@ export const NewJoinableView = () => {
             setSubmitted(false)
         }
     }
+
+    const { datepickerProps, inputProps, selectedDay } = useDatepicker({
+        fromDate: tomorrow(),
+        defaultSelected: startDate(),
+        onDateChange: (d: Date | undefined) => {d ? setExpires(d.toISOString()) : setExpires(null)},
+      });
 
     const error = !name || srcDatasets.some(it => !it)
     return (
@@ -138,6 +148,23 @@ export const NewJoinableView = () => {
                         </Alert>
                     </div>
                 }
+                <div>
+                    <RadioGroup
+                        legend="Når skal viewene slettes?"
+                        onChange={setIsTimeLimited}
+                        value={isTimeLimited}
+                    >
+                        <Radio value={true}>Dato</Radio>
+                            <DatePicker {...datepickerProps}>
+                                <DatePicker.Input
+                                    {...inputProps}
+                                    label=""
+                                    disabled={!isTimeLimited}
+                                />
+                            </DatePicker>
+                        <Radio value={false}>Aldri</Radio>
+                    </RadioGroup>
+                </div>
                 {backendError && <Alert variant="error">{backendError.message}</Alert>}
                 {submitted && !backendError && <div>Vennligst vent...<Loader size="small"/></div>}
                 <div className="flex flex-row gap-4 mb-16">

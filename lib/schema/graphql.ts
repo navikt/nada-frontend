@@ -742,6 +742,8 @@ export type NewInsightProduct = {
 export type NewJoinableViews = {
   /** datasetIDs is the IDs of the dataset which are made joinable. */
   datasetIDs?: InputMaybe<Array<Scalars['ID']>>;
+  /** expires is the time when the created joinable dataset should be deleted, default never */
+  expires?: InputMaybe<Scalars['Time']>;
   /** name is the name of the joinable views which will be used as the name of the dataset in bigquery, which contains all the joinable views */
   name: Scalars['String'];
 };
