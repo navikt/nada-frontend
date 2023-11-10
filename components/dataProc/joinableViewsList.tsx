@@ -28,6 +28,11 @@ export const JoinableViewsList = () => {
                                 {it.bigqueryViewUrls.map(bqv => <Box key={bqv} padding="1" className="w-[55rem]">
                                     <div className="flex flex-row items-center bg-gray-200">{bqv}<CopyButton copyText={bqv}></CopyButton></div>
                                 </Box>)}
+                                {it.expires &&
+                                    <div className="mt-3 italic">
+                                        BigQuery datasettet slettes {it.expires.split("T")[0]}
+                                    </div>
+                                }
                             </ExpansionCard.Content>
                         </ExpansionCard>
                     </div>

@@ -291,6 +291,7 @@ export type JoinableView = {
   __typename?: 'JoinableView';
   bigqueryViewUrls: Array<Scalars['String']>;
   created?: Maybe<Scalars['String']>;
+  expires?: Maybe<Scalars['Time']>;
   /** id is the id of the joinable view set */
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
@@ -1653,7 +1654,7 @@ export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __
 export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name?: string | null, created?: string | null, bigqueryViewUrls: Array<string> }> };
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name?: string | null, created?: string | null, expires?: any | null, bigqueryViewUrls: Array<string> }> };
 
 export type CreateJoinableViewsMutationVariables = Exact<{
   input: NewJoinableViews;
@@ -3391,6 +3392,7 @@ export const JoinableViewsDocument = gql`
     id
     name
     created
+    expires
     bigqueryViewUrls
   }
 }
