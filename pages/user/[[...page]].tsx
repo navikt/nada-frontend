@@ -10,6 +10,7 @@ import NadaTokensForUser from '../../components/user/nadaTokens'
 import InnerContainer from '../../components/lib/innerContainer'
 import { JoinableViewsList } from '../../components/dataProc/joinableViewsList'
 import { DataproductsList } from '../../components/dataproducts/dataproductList'
+import { Tabs } from '@navikt/ds-react'
 
 export const UserPages = () => {
     const router = useRouter()
@@ -78,18 +79,31 @@ export const UserPages = () => {
                 component: (
                     <div className="grid gap-4">
                         <h2>Mine tilganger</h2>
-                        {data.userInfo.accessable.granted.length > 0 &&
-                            <>
-                                <h3>Innvilget tilgang</h3>
-                                <DataproductsList datasets={data.userInfo.accessable.granted} />
-                            </>
-                        }
-                        {data.userInfo.accessable.owned.length > 0 &&
-                            <>
-                                <h3>Eier</h3>
+                        <Tabs defaultValue={router.query.accessCurrentTab ? router.query.accessCurrentTab as string : "owner"}>
+                            <Tabs.List>
+                                <Tabs.Tab
+                                    value="owner"
+                                    label="Eier"
+                                />
+                                <Tabs.Tab
+                                    value="granted"
+                                    label="Innvilgede tilganger"
+                                />
+                                <Tabs.Tab
+                                    value="joinable"
+                                    label="Views tilrettelagt for kobling"
+                                />
+                            </Tabs.List>
+                            <Tabs.Panel value="owner" className="w-full space-y-2 bg-gray-50 p-4">
                                 <DataproductsList datasets={data.userInfo.accessable.owned} />
-                            </>
-                        }
+                            </Tabs.Panel>
+                            <Tabs.Panel value="granted" className="w-full space-y-2 bg-gray-50 p-4">
+                                <DataproductsList datasets={data.userInfo.accessable.granted} />
+                            </Tabs.Panel>
+                            <Tabs.Panel value="joinable" className="w-full bg-gray-50 p-4">
+                                <JoinableViewsList />
+                            </Tabs.Panel>
+                        </Tabs>
                     </div>
                 ),
             },
@@ -102,16 +116,6 @@ export const UserPages = () => {
                         <NadaTokensForUser
                             nadaTokens={data.userInfo.nadaTokens}
                         />
-                    </div>
-                ),
-            },
-            {
-                title: 'Mine views tilrettelagt for kobling',
-                slug: 'joinableViews',
-                component: (
-                    <div className="grid gap-4">
-                        <h2>Views tilrettelagt for kobling</h2>
-                        <JoinableViewsList />
                     </div>
                 ),
             },

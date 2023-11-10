@@ -10,13 +10,13 @@ export const JoinableViewsList = () => {
         {joinableViews.loading && <LoaderSpinner />}
         {joinableViews.error && <Alert variant="error">Kan ikke Hente sammenføybare viewer.</Alert>}
         {joinableViews.data &&
-            <div className="flex-col">
+            <div className="flex-col space-y-2">
                 {joinableViews.data.joinableViews?.map(it => {
                     const urlComps = it.bigqueryViewUrls && it.bigqueryViewUrls.length ? it.bigqueryViewUrls[0].split('.') : ["", "", ""]
                     const projectID = urlComps[0]
                     const datasetID = urlComps[1]
                     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasetID}&p=${projectID}&page=dataset`
-                    return <div key={it.id} className="w-[60rem] mt-10">
+                    return <div key={it.id} className="w-[60rem]">
                         <ExpansionCard aria-label="default-demo">
                             <ExpansionCard.Header>
                                 <ExpansionCard.Title>{`${it?.name} - ${it?.created}`}</ExpansionCard.Title>

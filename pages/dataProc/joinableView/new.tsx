@@ -56,7 +56,7 @@ export const NewJoinableView = () => {
         {
             onCompleted: (data) =>
                 router.push(
-                    `/user/joinableViews`
+                    `/user/access?accessCurrentTab=joinable`
                 ),
             refetchQueries: [GET_JOINABLEVIEWS],
             awaitRefetchQueries: true,
