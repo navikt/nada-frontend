@@ -49,7 +49,7 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
                                 <ExpansionCard.Description>
                                     <p>Klikk for å se datasettene du har tilgang til</p></ExpansionCard.Description>
                             </ExpansionCard.Header>
-                            <ExpansionCard.Content>
+                            <ExpansionCard.Content className="text-center">
                                 <>
                                     {datasets.map((dataset) => {
                                         return <SearchResultLink
