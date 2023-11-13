@@ -290,11 +290,22 @@ export type InsightProduct = {
 export type JoinableView = {
   __typename?: 'JoinableView';
   bigqueryViewUrls: Array<Scalars['String']>;
-  created?: Maybe<Scalars['String']>;
+  created: Scalars['Time'];
   expires?: Maybe<Scalars['Time']>;
   /** id is the id of the joinable view set */
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+export type JoinableViewInDetail = {
+  __typename?: 'JoinableViewInDetail';
+  accessToViews: Array<Scalars['Boolean']>;
+  bigqueryViewUrls: Array<Scalars['String']>;
+  created: Scalars['Time'];
+  expires?: Maybe<Scalars['Time']>;
+  /** id is the id of the joinable view set */
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 /** Keyword represents a keyword used by other dataproducts */
@@ -931,6 +942,8 @@ export type Query = {
   groupStats: Array<GroupStats>;
   /** insightProduct returns the given story. */
   insightProduct: InsightProduct;
+  /** joinableView returns detailed information about a joinableView. */
+  joinableView: JoinableViewInDetail;
   /** joinableViews returns all the joinableViews for the user. */
   joinableViews: Array<JoinableView>;
   /** Keywords returns all keywords, with an optional filter */
@@ -1035,6 +1048,11 @@ export type QueryGroupStatsArgs = {
 
 
 export type QueryInsightProductArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryJoinableViewArgs = {
   id: Scalars['ID'];
 };
 
@@ -1651,10 +1669,17 @@ export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
+export type JoinableViewQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type JoinableViewQuery = { __typename?: 'Query', joinableView: { __typename?: 'JoinableViewInDetail', name: string, created: any, expires?: any | null, bigqueryViewUrls: Array<string>, accessToViews: Array<boolean> } };
+
 export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name?: string | null, created?: string | null, expires?: any | null, bigqueryViewUrls: Array<string> }> };
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name: string, created: any, expires?: any | null, bigqueryViewUrls: Array<string> }> };
 
 export type CreateJoinableViewsMutationVariables = Exact<{
   input: NewJoinableViews;
@@ -3386,6 +3411,45 @@ export function useProductAreasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ProductAreasQueryHookResult = ReturnType<typeof useProductAreasQuery>;
 export type ProductAreasLazyQueryHookResult = ReturnType<typeof useProductAreasLazyQuery>;
 export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, ProductAreasQueryVariables>;
+export const JoinableViewDocument = gql`
+    query JoinableView($id: ID!) {
+  joinableView(id: $id) {
+    name
+    created
+    expires
+    bigqueryViewUrls
+    accessToViews
+  }
+}
+    `;
+
+/**
+ * __useJoinableViewQuery__
+ *
+ * To run a query within a React component, call `useJoinableViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useJoinableViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useJoinableViewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useJoinableViewQuery(baseOptions: Apollo.QueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
+      }
+export function useJoinableViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
+        }
+export type JoinableViewQueryHookResult = ReturnType<typeof useJoinableViewQuery>;
+export type JoinableViewLazyQueryHookResult = ReturnType<typeof useJoinableViewLazyQuery>;
+export type JoinableViewQueryResult = Apollo.QueryResult<JoinableViewQuery, JoinableViewQueryVariables>;
 export const JoinableViewsDocument = gql`
     query JoinableViews {
   joinableViews {
