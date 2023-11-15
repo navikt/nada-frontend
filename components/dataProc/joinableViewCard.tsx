@@ -10,8 +10,8 @@ interface JoinableViewCardProps {
 
 export const JoinableViewCardContent = ({ joinableViewId }: { joinableViewId: string }) => {
     const { data, loading, error } = useJoinableViewQuery({ variables: { id: joinableViewId } })
-    const urlComps = data?.joinableView.bigqueryViewUrls && data?.joinableView.bigqueryViewUrls.length
-        ? data?.joinableView.bigqueryViewUrls[0].split('.') : ["", "", ""]
+    const urlComps = data?.joinableView.pseudoDatasources && data?.joinableView.pseudoDatasources.length
+        ? data?.joinableView.pseudoDatasources[0].bigqueryUrl.split('.') : ["", "", ""]
     const projectID = urlComps[0]
     const datasetID = urlComps[1]
     const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasetID}&p=${projectID}&page=dataset`
@@ -21,9 +21,10 @@ export const JoinableViewCardContent = ({ joinableViewId }: { joinableViewId: st
         {error && <Alert variant="error">Klarte ikke hente data om views tilrettelagt for kobling</Alert>}
         {data && <>
             <Link href={bigQueryUrl}>{"Åpne BigQuery dataset i Google Cloud Console"}<ExternalLink /></Link>
-            {data?.joinableView.bigqueryViewUrls.map((bqv, index) => <Box key={bqv} padding="1" className="w-[55rem]">
-                {data?.joinableView.accessToViews[index] ? <div className="flex flex-row items-center bg-gray-200">{bqv}<CopyButton copyText={bqv}></CopyButton></div>
-                    : <Tooltip content="Har ikke tilgang til datasettet"><div className="flex flex-row items-center text-gray-200" >{bqv}</div></Tooltip>}
+            {data?.joinableView.pseudoDatasources.map((bqv, index) => <Box key={index} padding="1" className="w-[55rem]">
+                {bqv.deleted?<Tooltip content="Datasettet er slettet fra markedsplassen"><div className="flex flex-row items-center line-through">{bqv.bigqueryUrl}</div></Tooltip>:
+                bqv.accessible? <div className="flex flex-row items-center bg-gray-200">{bqv.bigqueryUrl}<CopyButton copyText={bqv.bigqueryUrl}></CopyButton></div>
+                    : <Tooltip content="Har ikke tilgang til datasettet"><div className="flex flex-row items-center text-gray-200" >{bqv.bigqueryUrl}</div></Tooltip>}
             </Box>)}
             {data?.joinableView.expires &&
                 <div className="mt-3 italic">

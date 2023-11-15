@@ -289,7 +289,6 @@ export type InsightProduct = {
 
 export type JoinableView = {
   __typename?: 'JoinableView';
-  bigqueryViewUrls: Array<Scalars['String']>;
   created: Scalars['Time'];
   expires?: Maybe<Scalars['Time']>;
   /** id is the id of the joinable view set */
@@ -297,15 +296,21 @@ export type JoinableView = {
   name: Scalars['String'];
 };
 
-export type JoinableViewInDetail = {
-  __typename?: 'JoinableViewInDetail';
-  accessToViews: Array<Scalars['Boolean']>;
-  bigqueryViewUrls: Array<Scalars['String']>;
+export type JoinableViewDatasource = {
+  __typename?: 'JoinableViewDatasource';
+  accessible: Scalars['Boolean'];
+  bigqueryUrl: Scalars['String'];
+  deleted: Scalars['Boolean'];
+};
+
+export type JoinableViewWithDatasource = {
+  __typename?: 'JoinableViewWithDatasource';
   created: Scalars['Time'];
   expires?: Maybe<Scalars['Time']>;
   /** id is the id of the joinable view set */
   id: Scalars['ID'];
   name: Scalars['String'];
+  pseudoDatasources: Array<JoinableViewDatasource>;
 };
 
 /** Keyword represents a keyword used by other dataproducts */
@@ -943,7 +948,7 @@ export type Query = {
   /** insightProduct returns the given story. */
   insightProduct: InsightProduct;
   /** joinableView returns detailed information about a joinableView. */
-  joinableView: JoinableViewInDetail;
+  joinableView: JoinableViewWithDatasource;
   /** joinableViews returns all the joinableViews for the user. */
   joinableViews: Array<JoinableView>;
   /** Keywords returns all keywords, with an optional filter */
@@ -1674,12 +1679,12 @@ export type JoinableViewQueryVariables = Exact<{
 }>;
 
 
-export type JoinableViewQuery = { __typename?: 'Query', joinableView: { __typename?: 'JoinableViewInDetail', name: string, created: any, expires?: any | null, bigqueryViewUrls: Array<string>, accessToViews: Array<boolean> } };
+export type JoinableViewQuery = { __typename?: 'Query', joinableView: { __typename?: 'JoinableViewWithDatasource', name: string, created: any, expires?: any | null, pseudoDatasources: Array<{ __typename?: 'JoinableViewDatasource', bigqueryUrl: string, accessible: boolean, deleted: boolean }> } };
 
 export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name: string, created: any, expires?: any | null, bigqueryViewUrls: Array<string> }> };
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name: string, created: any, expires?: any | null }> };
 
 export type CreateJoinableViewsMutationVariables = Exact<{
   input: NewJoinableViews;
@@ -3417,8 +3422,11 @@ export const JoinableViewDocument = gql`
     name
     created
     expires
-    bigqueryViewUrls
-    accessToViews
+    pseudoDatasources {
+      bigqueryUrl
+      accessible
+      deleted
+    }
   }
 }
     `;
@@ -3457,7 +3465,6 @@ export const JoinableViewsDocument = gql`
     name
     created
     expires
-    bigqueryViewUrls
   }
 }
     `;

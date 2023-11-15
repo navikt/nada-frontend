@@ -6,8 +6,11 @@ export const GET_JOINABLEVIEWINDETAIL = gql`
       name
       created
       expires
-      bigqueryViewUrls
-      accessToViews
+      pseudoDatasources{
+        bigqueryUrl
+        accessible
+        deleted
+      }
     }
   }
 `;

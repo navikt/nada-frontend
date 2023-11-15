@@ -6,8 +6,7 @@ export const GET_JOINABLEVIEWS = gql`
         id,
         name,
         created,
-        expires,
-        bigqueryViewUrls
+        expires
     }  
 }
 `
