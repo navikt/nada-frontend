@@ -4,15 +4,29 @@ export const USER_INFO_ACCESSABLE_DATAPRODUCT = gql`
   query userInfoAccessableDataproduct {
     userInfo {
       accessable {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogenURL
+        owned {
+            __typename
+            id
+            name
+            description
+            created
+            lastModified
+            owner {
+            group
+            teamkatalogenURL
+            }
+        }
+        granted {
+            __typename
+            id
+            name
+            description
+            created
+            lastModified
+            owner {
+            group
+            teamkatalogenURL
+            }
         }
       }
     }
