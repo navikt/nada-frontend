@@ -48,7 +48,7 @@ const LandingPage = () => {
                     <DatadrivenIcon />
                     <div>
                         <Heading level="2" size="small">
-                            <Link href="https://aksel.nav.no/god-praksis/artikler/nada?tema=produktledelse">
+                            <Link href="https://aksel.nav.no/god-praksis/artikler/malinger-i-produktutvikling?tema=produktledelse">
                                 Hva er datadrevet?
                             </Link>
                         </Heading>

@@ -193,7 +193,7 @@ export const NewInsightProductForm = () => {
                     <option value="HotJar">HotJar</option>
                     <option value="TaskAnalytics">TaskAnalytics</option>
                     <option value="Metabase">Metabase</option>
-                    <option value="Tableau">Metabase</option>
+                    <option value="Tableau">Tableau</option>
                     <option value="Annet">Annet</option>
                 </Select>
                 <Select
