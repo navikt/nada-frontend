@@ -56,7 +56,8 @@ export const PiiForm = ({
                     <Radio value={'sensitive'}>
                         Ja, inneholder personopplysninger
                     </Radio>
-                    {showAnnotateDatasetTable &&
+                    {/* Pseudonymization */}
+                    {false && showAnnotateDatasetTable &&
                         <div className="flex items-center gap-x-1">
                             <Switch onChange={e=>{
                                 setcreatePseudoynimizedView(e.target.checked)
