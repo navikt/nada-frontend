@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import { GET_PRODUCT_AREAS } from '../../lib/queries/productAreas/productAreas'
+import TagPill from '../lib/tagPill'
 
 export interface SearchResultProps {
   resourceType?: string
@@ -41,6 +42,7 @@ export const SearchResultLink = ({
   link,
   id,
   type,
+  keywords,
   name,
   innsiktsproduktType,
   group,
@@ -150,6 +152,19 @@ export const SearchResultLink = ({
               </div>
             )}
           </div>
+          {keywords && keywords?.length > 0 && 
+                keywords.map((k, i) => {
+                   return (
+                        <TagPill
+                            key={i}
+                            keyword={k}
+                            horizontal={true}
+                        >
+                            {k}
+                        </TagPill>
+                   )
+                })
+            }
         </div>
       </Link>
     </div>

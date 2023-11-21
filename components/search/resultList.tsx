@@ -38,6 +38,7 @@ type ResultListInterface = {
     __typename?: 'Story'
     id: string
     name: string
+    keywords?: string[]
     owner?: { __typename?: 'Owner'; group: string } | null | undefined
   }[]
   quartoStories?: {
@@ -45,6 +46,7 @@ type ResultListInterface = {
     id: string
     name: string
     group: string
+    keywords?: string[]
     teamkatalogenURL?: string | null | undefined
     description?: string
   }[]
@@ -93,6 +95,8 @@ const ResultList = ({
   const tk = useTeamkatalogenQuery({
     variables: { q: '' },
   })
+
+  console.log("hallooooo")
 
   const po = useProductAreasQuery()
   const [deleteQuartoQuery] = useDeleteQuartoStoryMutation()
@@ -240,6 +244,7 @@ const ResultList = ({
               link={`/quarto/${s.id}`}
               teamkatalogen={tk.data}
               productAreas={po.data}
+              keywords={s.keywords}
               editable = {true}
               description= {s.description}
               deleteResource = {deleteQuarto}
@@ -250,6 +255,7 @@ const ResultList = ({
               key={idx}
               group={s.owner}
               name={s.name}
+              keywords={s.keywords}
               link={`/story/${s.id}`}
               teamkatalogen={tk.data}
               productAreas={po.data}
