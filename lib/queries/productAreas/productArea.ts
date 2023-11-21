@@ -40,6 +40,7 @@ export const GET_PRODUCT_AREA = gql`
           name
           created
           lastModified
+          description
           keywords
           group
           teamkatalogenURL

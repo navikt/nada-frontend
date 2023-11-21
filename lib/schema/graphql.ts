@@ -771,6 +771,8 @@ export type NewQuartoStory = {
   description?: InputMaybe<Scalars['String']>;
   /** group is the owner group of the quarto */
   group: Scalars['String'];
+  /** id of the quarto story. */
+  id?: InputMaybe<Scalars['ID']>;
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
   /** name of the quarto story. */
@@ -1667,12 +1669,12 @@ export type ProductAreaQueryVariables = Exact<{
 }>;
 
 
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
 
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
 export type JoinableViewQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -3227,6 +3229,7 @@ export const ProductAreaDocument = gql`
         name
         created
         lastModified
+        description
         keywords
         group
         teamkatalogenURL
@@ -3351,6 +3354,7 @@ export const ProductAreasDocument = gql`
     quartoStories {
       id
       name
+      description
       created
       lastModified
       keywords

@@ -84,7 +84,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                                 teamkatalogenURL: s.teamkatalogenURL
                             }}
                             name={s.name}
-                            description={s.excerpt}
+                            description={s.description ? s.description : undefined}
                             keywords={s.keywords}
                             link={`${s.__typename === 'Story'? '/story/' : '/quarto/'}${s.id}`}
                             type={s.__typename}
