@@ -95,12 +95,12 @@ const mapProductAreasWithResultToArray = (
 ) =>
   productAreasQuery.productAreas
     .map((it) =>
-      !!it.dataproducts.length || !!it.stories.length
+      !!it.dataproducts.length || !!it.stories.length || !!it.quartoStories.length
         ? ({
             name: it.name,
             teams: it.teams
               .map((t) =>
-                !!t.dataproducts.length || !!t.stories.length
+                !!t.dataproducts.length || !!t.stories.length || !!t.quartoStories.length
                   ? ({
                       name: t.name,
                     } as Team)
