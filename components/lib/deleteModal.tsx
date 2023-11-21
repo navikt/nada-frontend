@@ -17,7 +17,6 @@ export const DeleteModal = ({
   error,
   resource,
 }: DeleteModalProps) => {
-  console.log(resource)
   return (
     <Modal open={open} onClose={onCancel}>
       <Modal.Body className="flex flex-col gap-4">
