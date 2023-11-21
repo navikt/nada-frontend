@@ -96,8 +96,6 @@ const ResultList = ({
     variables: { q: '' },
   })
 
-  console.log("hallooooo")
-
   const po = useProductAreasQuery()
   const [deleteQuartoQuery] = useDeleteQuartoStoryMutation()
   const userInfo= useContext(UserState)
