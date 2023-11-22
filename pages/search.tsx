@@ -192,7 +192,7 @@ const Search = () => {
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
         teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)).filter(it=> !!it),
-        keywords: searchParam.keywords.map((k) => k.split(" ")[0]),
+        keywords: searchParam.keywords.map((k) => k.includes(" (") ? k.split(" (")[0] : k),
         text: searchParam.freeText,
       },
     },
