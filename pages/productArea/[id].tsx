@@ -51,6 +51,7 @@ export interface PAItem {
     __typename?: 'QuartoStory'
     id: string
     name: string
+    description: string
     created: any
     keywords: Array<string>
     lastModified?: any | null | undefined

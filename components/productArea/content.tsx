@@ -18,6 +18,7 @@ interface UnifiedStory{
         name: string
         created: any
         keywords: string[]
+        description?: string
         lastModified?: any
         owner?: {
             __typename?: "Owner" | undefined;
