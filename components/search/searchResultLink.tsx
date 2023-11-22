@@ -153,17 +153,20 @@ export const SearchResultLink = ({
             )}
           </div>
           {keywords && keywords?.length > 0 && 
-                keywords.map((k, i) => {
-                   return (
-                        <TagPill
-                            key={i}
-                            keyword={k}
-                            horizontal={true}
-                        >
-                            {k}
-                        </TagPill>
-                   )
-                })
+                <div className='flex gap-x-1'>
+                    {keywords.map((k, i) => {
+                       return (
+                            <TagPill
+                                key={i}
+                                keyword={k}
+                                horizontal={true}
+                            >
+                                {k}
+                            </TagPill>
+                       )
+                    })
+                }
+                </div>
             }
         </div>
       </Link>
