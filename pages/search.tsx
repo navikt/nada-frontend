@@ -133,8 +133,8 @@ const buildKeywordsFiltersTree = (
     : (Object.fromEntries(
         new Map(
           queryResult.data.keywords.map((it) => [
-            it.keyword,
-            !!pickedFilters.find((f) => it.keyword === f),
+            `${it.keyword} (${it.count})`,
+            !!pickedFilters.find((f) => `${it.keyword} (${it.count})` === f),
           ])
         )
       ) as FilterTreeNode)
@@ -192,7 +192,7 @@ const Search = () => {
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
         teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)).filter(it=> !!it),
-        keywords: searchParam.keywords,
+        keywords: searchParam.keywords.map((k) => k.split(" ")[0]),
         text: searchParam.freeText,
       },
     },

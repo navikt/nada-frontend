@@ -95,7 +95,7 @@ const FiltersList = ({
             }
             className=""
           >
-            {k}
+            {k.split(" ")[0]}
             <Error />
           </FilterPill>
         ))}

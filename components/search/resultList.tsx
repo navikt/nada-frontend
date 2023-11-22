@@ -91,7 +91,6 @@ const ResultList = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
-  const router = useRouter();
   const tk = useTeamkatalogenQuery({
     variables: { q: '' },
   })
