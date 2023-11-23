@@ -90,7 +90,7 @@ export const UserPages = () => {
                                     label="Innvilgede tilganger"
                                 />
                                 {/* Pseudonymization */}
-                                {false &&
+                                {true &&
                                     <Tabs.Tab
                                         value="joinable"
                                         label="Views tilrettelagt for kobling"
@@ -104,7 +104,7 @@ export const UserPages = () => {
                                 <DataproductsList datasets={data.userInfo.accessable.granted} />
                             </Tabs.Panel>
                             {/* Pseudonymization */}
-                            {false && <Tabs.Panel value="joinable" className="w-full p-4">
+                            {true && <Tabs.Panel value="joinable" className="w-full p-4">
                                 <JoinableViewsList />
                             </Tabs.Panel>}
                         </Tabs>

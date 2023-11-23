@@ -6,6 +6,7 @@ export const GET_ACCESSIBLE_DATASETS = gql`
       name
       datasetID
       datasourceID
+      pseudoColumns
     }
   }
 `

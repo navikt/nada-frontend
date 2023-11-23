@@ -758,9 +758,13 @@ export type NewInsightProduct = {
 /** NewJoinableViews contains metadata for creating joinable views */
 export type NewJoinableViews = {
   /** datasetIDs is the IDs of the dataset which are made joinable. */
-  datasetIDs?: InputMaybe<Array<Scalars['ID']>>;
+  datasetIDs: Array<Scalars['ID']>;
   /** expires is the time when the created joinable dataset should be deleted, default never */
   expires?: InputMaybe<Scalars['Time']>;
+  /** fnrColumns is the columns which contains fnr */
+  fnrColumns: Array<Scalars['String']>;
+  /** mapToFkNada is whether we should map fnr to fk-nada */
+  mapToFkNada: Scalars['Boolean'];
   /** name is the name of the joinable views which will be used as the name of the dataset in bigquery, which contains all the joinable views */
   name: Scalars['String'];
 };
@@ -880,6 +884,8 @@ export type PseudoDataset = {
   datasourceID: Scalars['ID'];
   /** name is the name of the dataset */
   name: Scalars['String'];
+  /** pseudoColumns is a list of pseudo columns */
+  pseudoColumns?: Maybe<Array<Scalars['String']>>;
 };
 
 /** QuartoStory contains the metadata and content of data stories. */
@@ -1578,7 +1584,7 @@ export type UpdateMappingMutation = { __typename?: 'Mutation', mapDataset: boole
 export type AccessiblePseudoDatasetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string, datasourceID: string }> };
+export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string, datasourceID: string, pseudoColumns?: Array<string> | null }> };
 
 export type CreateDatasetMutationVariables = Exact<{
   input: NewDataset;
@@ -2694,6 +2700,7 @@ export const AccessiblePseudoDatasetsDocument = gql`
     name
     datasetID
     datasourceID
+    pseudoColumns
   }
 }
     `;

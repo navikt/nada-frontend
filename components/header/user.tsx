@@ -47,7 +47,7 @@ export default function User() {
               Legg til nytt innsiktsprodukt
             </Dropdown.Menu.GroupedList.Item>
             {/* Pseudonymization */}
-            {false && <Dropdown.Menu.GroupedList.Item
+            {true && <Dropdown.Menu.GroupedList.Item
               className="text-base flex gap-1 items-center"
               onClick={async () =>
                 await router.push('/dataProc/joinableView/new')
