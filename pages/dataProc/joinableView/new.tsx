@@ -120,7 +120,7 @@ export const NewJoinableView = () => {
                         <Switch checked={mapToFkNada} onChange={() => setMapToFkNada(!mapToFkNada)}>Ønsker du å koble sammen data fra DVH og/eller justere tidsserier slik at personer alltid har samme id?</Switch>
                         <hr className="border-divider mb-6" />
                         {
-                            srcDatasets.map((ds, index) => <div><div key={index}
+                            srcDatasets.map((ds, index) => <div key={index}
                                 className='flex flex-row items-center gap-2'>
                                 <Select
                                     className="w-[40%]"
@@ -159,7 +159,6 @@ export const NewJoinableView = () => {
                                         onClick={() => setSrcDatasets([...srcDatasets.filter((_, i) => i !== index)])} />
 
                                 </div>}
-                            </div>
 
                                 <br></br>
                             </div>)
