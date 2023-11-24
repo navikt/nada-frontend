@@ -120,17 +120,17 @@ export const NewJoinableView = () => {
                         <Switch checked={mapToFkNada} onChange={() => setMapToFkNada(!mapToFkNada)}>Ønsker du å koble sammen data fra DVH og/eller justere tidsserier slik at personer alltid har samme id?</Switch>
                         <hr className="border-divider mb-6" />
                         {
-                            srcDatasets.map((it, index) => <div><div key={index}
+                            srcDatasets.map((ds, index) => <div><div key={index}
                                 className='flex flex-row items-center gap-2'>
                                 <Select
                                     className="w-[40%]"
                                     label="Velg et view"
-                                    value={it}
+                                    value={ds}
                                     onChange={e => {
                                         srcDatasets[index] = e.target.value
                                         setSrcDatasets([...srcDatasets])
                                     }}
-                                    error={!it && "Du må velg et datasett"}
+                                    error={!ds && "Du må velg et datasett"}
                                 >
                                     <option value="">Velg datasett</option>
                                     {pseudoDatasets && [
@@ -141,7 +141,7 @@ export const NewJoinableView = () => {
                                         ),
                                     ]}
                                 </Select>
-                                {mapToFkNada && (!containsFkNada(it) ? <Select
+                                {mapToFkNada && (!containsFkNada(ds) ? <Select
                                     className="w-[60%]"
                                     label="Kolonne med fødselsnummer"
                                     value={fnrColumn[index]}
@@ -149,10 +149,10 @@ export const NewJoinableView = () => {
                                         fnrColumn[index] = e.target.value
                                         setFnrColumn([...fnrColumn])
                                     }}
-                                    error={!it && "Du må velg et kolonne"}
+                                    error={!ds && "Du må velg et kolonne"}
                                 >
                                     <option value="">Velg kolonne</option>
-                                    {pseudoDatasets[index].pseudoColumns?.map((it, index) => <option value={it} key={index}>{it}</option>)}
+                                    {pseudoDatasets.find(it=>it.datasetID===ds)?.pseudoColumns?.map((it, i) => <option value={it} key={i}>{it}</option>)}
                                 </Select> : <div className="w-[60%] text-s text-gray-500">Tabellen inneholder en koblingsnøkkel fra Datavarehus og du skal derfor ikke oppgi kolonne som inneholder fødselsnummer</div>)}
                                 {srcDatasets.length > 2 && <div className='h-20 flex flex-col justify-end'>
                                     <TrashIcon fontSize="3rem"
