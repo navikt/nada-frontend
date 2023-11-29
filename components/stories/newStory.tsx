@@ -297,7 +297,7 @@ export const NewStoryForm = () => {
             size={'medium'}
             className={'navds-text-field__label navds-label'}
           >
-            Last opp quarto files
+            Last opp datafortellingen din
           </Label>
           <div className='mt-5'>
             Du kan&nbsp;

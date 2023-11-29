@@ -53,37 +53,37 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   return (
     <div className="flex flex-col md:flex-row gap-3 py-4">
       <ProductAreaSidebar
-        productAreaItems={paItems}
-        setCurrentItem={handleSetCurrentItem}
-        currentItem={currentItem}
-        productAreas={productAreas}
-        selectProductArea={handleSelectProductArea}
+          productAreaItems={paItems}
+          setCurrentItem={handleSetCurrentItem}
+          currentItem={currentItem}
+          productAreas={productAreas}
+          selectProductArea={handleSelectProductArea}
       />
       <div className="flex gap-4 items-center md:hidden">
-        <Heading level="1" size="large">
+          <Heading level="1" size="large">
           {paItems[currentItem].name}
-        </Heading>
-        <a
+          </Heading>
+          <a
           className="flex gap-2 items-center"
           href="#"
           onClick={() => setOpen(!open)}
-        >
+          >
           <System className="w-4 h-4" />
           Utforsk
-        </a>
+          </a>
       </div>
       <ProductAreaMobileMenu
-        open={open}
-        setOpen={setOpen}
-        productAreaItems={paItems}
-        setCurrentItem={handleSetCurrentItem}
-        productAreas={productAreas}
-        selectProductArea={handleSelectProductArea}
+          open={open}
+          setOpen={setOpen}
+          productAreaItems={paItems}
+          setCurrentItem={handleSetCurrentItem}
+          productAreas={productAreas}
+          selectProductArea={handleSelectProductArea}
       />
       <ProductAreaContent
-        currentItem={paItems[currentItem]}
-        currentTab={currentTab}
-        setCurrentTab={setCurrentTab}
+          currentItem={paItems[currentItem]}
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
       />
     </div>
   )

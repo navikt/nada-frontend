@@ -76,7 +76,7 @@ export const ExploreLink = ({
                 onClose={() => setShowRemoveMapping(false)}
                 className="max-w-full md:max-w-3xl px-8 h-[20rem]"
               >
-                <Modal.Content className="h-full">
+                <Modal.Body className="h-full">
                   <div className="flex flex-col gap-8">
                     <Heading level="1" size="medium">
                     Er du sikker på at du vil fjerne datasettet fra metabase?
@@ -101,7 +101,7 @@ export const ExploreLink = ({
                       </Button>
                     </div>
                   </div>
-                </Modal.Content>
+                </Modal.Body>
               </Modal>
                 <Link
                   className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit"

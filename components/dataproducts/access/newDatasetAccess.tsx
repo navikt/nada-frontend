@@ -1,4 +1,4 @@
-import { Button, Heading, Radio, RadioGroup, TextField, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
+import { Button, DatePicker, Heading, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
 import { DatasetQuery, SubjectType, useGrantAccessMutation } from "../../../lib/schema/graphql";
 import * as yup from 'yup'
 import { Controller, useForm, useFormState } from "react-hook-form";
@@ -64,7 +64,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
         },
       })
 
-    const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+    const { datepickerProps, inputProps, selectedDay } = useDatepicker({
       fromDate: tomorrow(),
       onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
     });
@@ -144,14 +144,14 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                 error={errors?.accessType?.message}
               >
                 <Radio value="until">Til dato</Radio>
-                <UNSAFE_DatePicker {...datepickerProps}>
-                  <UNSAFE_DatePicker.Input 
+                <DatePicker {...datepickerProps}>
+                  <DatePicker.Input 
                     {...inputProps} 
                     label="" 
                     disabled={field.value === 'eternal'} 
                     error={errors?.expires?.message} 
                   />
-                </UNSAFE_DatePicker>
+                </DatePicker>
                 <Radio value="eternal">For alltid</Radio>
               </RadioGroup>
             )}

@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Heading, Radio, RadioGroup, TextField, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react'
+import { Button, DatePicker, Heading, Radio, RadioGroup, TextField, useDatepicker} from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -107,7 +107,7 @@ const AccessRequestFormV2 = ({
     },
   })
 
-  const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+  const { datepickerProps, inputProps, selectedDay } = useDatepicker({
     defaultSelected: new Date(getValues("expires")),
     fromDate: new Date(tomorrow()),
     onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
@@ -213,14 +213,14 @@ const AccessRequestFormV2 = ({
                 error={errors?.accessType?.message}
               >
                 <Radio value="until">Til dato</Radio>
-                <UNSAFE_DatePicker {...datepickerProps}>
-                  <UNSAFE_DatePicker.Input 
+                <DatePicker {...datepickerProps}>
+                  <DatePicker.Input 
                     {...inputProps} 
                     label="" 
                     disabled={field.value === 'eternal'} 
                     error={errors?.expires?.message?.toString()} 
                   />
-                </UNSAFE_DatePicker>
+                </DatePicker>
                 <Radio value="eternal">For alltid</Radio>
               </RadioGroup>
             )}
