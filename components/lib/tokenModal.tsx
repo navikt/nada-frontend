@@ -17,7 +17,7 @@ export const TokenModal = ({ id, open, onCancel }: tokenModalProps) => {
 
   return (
     <Modal open={open} onClose={onCancel}>
-      <Modal.Content>
+      <Modal.Body>
         <div style={{ paddingTop: '50px', paddingBottom: '20px' }}>
           {token.error && <ErrorMessage error={token.error} />}
           {token.loading || (!token.data && <LoaderSpinner />)}
@@ -28,7 +28,7 @@ export const TokenModal = ({ id, open, onCancel }: tokenModalProps) => {
             </span>
           )}
         </div>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   )
 }

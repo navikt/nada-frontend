@@ -51,6 +51,7 @@ export interface PAItem {
     __typename?: 'QuartoStory'
     id: string
     name: string
+    description: string
     created: any
     keywords: Array<string>
     lastModified?: any | null | undefined
@@ -70,28 +71,45 @@ export interface PAItem {
 
 export interface PAItems extends Array<PAItem> {}
 
+const isRelevantPA = (productArea: ProductAreaQuery['productArea']) => {
+    return (
+        productArea.dataproducts.length 
+        || productArea.stories.length 
+        || productArea.quartoStories.length 
+        || productArea.insightProducts.length
+    )
+}
+
 const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
   let items = []
-  items.push({
-    name: productArea.name,
-    dashboardURL: productArea.dashboardURL,
-    dataproducts: productArea.dataproducts,
-    stories: productArea.stories,
-    quartoStories: productArea.quartoStories,
-    insightProducts: productArea.insightProducts,
-  })
-  productArea.teams
+  if (isRelevantPA(productArea)) {
+    items.push({
+        name: productArea.name,
+        dashboardURL: productArea.dashboardURL,
+        dataproducts: productArea.dataproducts,
+        stories: productArea.stories,
+        quartoStories: productArea.quartoStories,
+        insightProducts: productArea.insightProducts,
+    })
+    productArea.teams
     .slice()
+    .filter(
+        (it) =>
+        it.dataproducts.length > 0 ||
+        it.stories.length > 0 ||
+        it.quartoStories.length > 0 ||
+        it.insightProducts.length > 0
+    )
     .sort((a, b) => {
-      return (
+        return (
         b.dataproducts.length +
         b.stories.length +
         b.insightProducts.length -
         (a.dataproducts.length + a.stories.length + a.insightProducts.length)
-      )
+        )
     })
     .forEach((t) => {
-      items.push({
+        items.push({
         name: t.name,
         id: t.id,
         dashboardURL: t.dashboardURL,
@@ -99,8 +117,9 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
         stories: t.stories,
         quartoStories: t.quartoStories,
         insightProducts: t.insightProducts,
-      })
+        })
     })
+  }
 
   return items
 }

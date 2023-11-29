@@ -60,6 +60,7 @@ export const GET_DATASET = gql`
             type
           }
           piiTags
+          pseudoColumns
         }
       }
     }

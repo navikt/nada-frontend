@@ -18,6 +18,7 @@ interface UnifiedStory{
         name: string
         created: any
         keywords: string[]
+        description?: string
         lastModified?: any
         owner?: {
             __typename?: "Owner" | undefined;
@@ -79,12 +80,12 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                         <SearchResultLink
                             resourceType="datafortelling"
                             key={idx}
-                            group={s.__type === 'Story' ? s.owner: {
+                            group={s.__typename === 'Story' ? s.owner : {
                                 group: s.group,
                                 teamkatalogenURL: s.teamkatalogenURL
                             }}
                             name={s.name}
-                            description={s.excerpt}
+                            description={s.description ? s.description : undefined}
                             keywords={s.keywords}
                             link={`${s.__typename === 'Story'? '/story/' : '/quarto/'}${s.id}`}
                             type={s.__typename}

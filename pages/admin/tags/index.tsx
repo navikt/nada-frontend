@@ -115,7 +115,7 @@ const TagsCleaner = () => {
   return (
     <InnerContainer>
       <Modal className="w-[800px]" open={confirmChange} onClose={OnCancel}>
-        <Modal.Content className="flex flex-col gap-4">
+        <Modal.Body className="flex flex-col gap-4">
           <div>
             <Heading className="mb-3" level="2" size="medium">
               Confirm Changes on Tags
@@ -174,7 +174,7 @@ const TagsCleaner = () => {
               </Button>
             </div>
           </div>
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
 
       <Head>

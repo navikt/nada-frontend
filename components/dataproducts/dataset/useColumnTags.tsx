@@ -25,6 +25,7 @@ export const PIITagOptions = new Map([
 export const DEFAULT_COLUMN_TAG = 'PII_KanVæreIndirekteIdentifiserende'
 
 type TagsMapType = Map<string, Map<string, PIITagType> | undefined>
+type PseudoColumnsMapType = Map<string, Map<string, boolean>>
 
 const buildTableKey = (projectID: string, datasetID: string, tableID: string) =>
   `${projectID}.${datasetID}.${tableID}`
@@ -36,6 +37,9 @@ export type ColumnType = {
   description: string
 }
 
+export type AnnotateColumnListener = (column: string, tag: PIITagType) => void
+export type PseudoColumnListener = (column: string, on: boolean) => void
+
 export const useColumnTags = (
   projectID: string,
   datasetID: string,
@@ -44,6 +48,10 @@ export const useColumnTags = (
 ) => {
   const [tagsMap, setTagsMap] = useState<TagsMapType>(
     new Map<string, Map<string, PIITagType>>()
+  )
+
+  const [pseudoColumnsMap, setPseudoColumnsMap] = useState<PseudoColumnsMapType>(
+    new Map<string, Map<string, boolean>>()
   )
 
   const columnsQuery = useGcpGetColumnsQuery({
@@ -56,7 +64,7 @@ export const useColumnTags = (
 
   var tableKey = buildTableKey(projectID, datasetID, tableID)
 
-  const initDefaultTagsMapForTable = () => {
+  const initDefaultStatesForTable = () => {
     if (
       projectID &&
       datasetID &&
@@ -71,7 +79,10 @@ export const useColumnTags = (
       )
       var tags = new Map<string, PIITagType>()
       var tagsFromQuery = JSON.parse(dataset?.datasource.piiTags || '{}')
-      columnsQuery.data.gcpGetColumns.forEach((it) =>
+
+      var newPseudoColumnsMap = new Map<string, Map<string, boolean>>(pseudoColumnsMap)
+      var pseudoColumns = new Map<string, boolean>()
+      columnsQuery.data.gcpGetColumns.forEach((it) =>{
         tags.set(
           it.name,
           (!!tagsFromQuery[it.name] &&
@@ -79,19 +90,39 @@ export const useColumnTags = (
             tagsFromQuery[it.name]) ||
             DEFAULT_COLUMN_TAG
         )
+        pseudoColumns.set(
+          it.name, dataset?.datasource.pseudoColumns?.some(pseudoCol=> it.name === pseudoCol)??false
+        )
+      }
       )
       newTagsMap.set(tableKey, tags)
+      newPseudoColumnsMap.set(tableKey, pseudoColumns)
       setTagsMap(newTagsMap)
+      setPseudoColumnsMap(newPseudoColumnsMap)
     }
   }
 
-  initDefaultTagsMapForTable()
+  initDefaultStatesForTable()
 
   const annotateColumn = (column: string, tag: PIITagType) => {
+    //we cannot directly update the tagsMap and set it back, because the reference to the object
+    //will not change, and react do not know it should refresh the components
     var newTagsMap = new Map<string, Map<string, PIITagType> | undefined>(
       tagsMap.set(tableKey, tagsMap.get(tableKey)?.set(column, tag))
     )
     setTagsMap(newTagsMap)
+  }
+
+  const selectPseudoColumn = (column: string, on: boolean) => {
+    const hasOtherPseudoCol = on || Array.from(pseudoColumnsMap.get(tableKey)??[]).filter(it=> it[0]!== column && it[1]).length
+    if(!hasOtherPseudoCol){
+      return
+    }
+
+    var newPseudoColumnsMap = new Map<string, Map<string, boolean>>(
+      pseudoColumnsMap.set(tableKey, pseudoColumnsMap.get(tableKey)?.set(column, on) || new Map<string, boolean>())
+    )
+    setPseudoColumnsMap(newPseudoColumnsMap)
   }
 
   return {
@@ -102,6 +133,8 @@ export const useColumnTags = (
     loading: columnsQuery.loading,
     error: columnsQuery.error,
     tags: tagsMap.get(tableKey),
+    pseudoColumns: pseudoColumnsMap.get(tableKey) || new Map<string, boolean>(),
     annotateColumn: annotateColumn,
+    selectPseudoColumn,
   }
 }

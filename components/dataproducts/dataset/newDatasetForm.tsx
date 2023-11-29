@@ -11,7 +11,9 @@ import TagsSelector from '../../lib/tagsSelector'
 import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
 import { useColumnTags } from './useColumnTags'
-import {Personopplysninger, TilgangsstyringHelpText} from "./helptext";
+import { Personopplysninger, TilgangsstyringHelpText } from "./helptext";
+import { PiiForm } from './piiForm'
+import { useState } from 'react'
 
 interface NewDatasetFormProps {
   dataproduct: DataproductQuery
@@ -58,11 +60,12 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     watch,
     setValue,
     getValues,
-    formState: { errors },
+    formState,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: defaultValues,
   })
+  const errors = formState.errors
   const projectID = watch('bigquery.projectID')
   const datasetID = watch('bigquery.dataset')
   const tableID = watch('bigquery.table')
@@ -72,7 +75,9 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     loading: loadingColumns,
     error: columnsError,
     tags,
+    pseudoColumns,
     annotateColumn,
+    selectPseudoColumn,
   } = useColumnTags(projectID, datasetID, tableID)
 
   const onDeleteKeyword = (keyword: string) => {
@@ -91,7 +96,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       : setValue('keywords', [keyword])
   }
 
-  const [createDataset, {}] = useMutation(
+  const [createDataset, { }] = useMutation(
     CREATE_DATASET,
     {
       onCompleted: (data) =>
@@ -111,8 +116,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         : PiiLevel.None
     requestData.pii = pii
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
-    requestData.targetUser = requestData.teamInternalUse? "OwnerTeam" : ""
+    requestData.targetUser = requestData.teamInternalUse ? "OwnerTeam" : ""
     requestData.teamInternalUse = undefined
+    requestData.pseudoColumns = pseudoColumns? Array.from(pseudoColumns.entries())
+    .filter(([, value]) => value)
+    .map(([key]) => key) : []
     try {
       await createDataset({
         variables: { input: requestData },
@@ -122,6 +130,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       console.log(e)
     }
   }
+  const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns?.length
 
   return (
     <div className="pt-8 pr-8 md:w-[46rem]">
@@ -168,56 +177,31 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           onDelete={onDeleteKeyword}
           tags={keywords || []}
         />
-        <Controller
-          name="pii"
+        <PiiForm loading={false}
+          apolloError={undefined}
+          columns={columns}
+          tags={tags}
+          pseudoColumns={pseudoColumns}
           control={control}
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              legend={<p className="flex gap-2 items-center">Inneholder datasettet personopplysninger? <Personopplysninger /></p>}
-              error={errors?.pii?.message?.toString()}
-            >
-              <Radio value={"sensitive"}>
-                Ja, inneholder personopplysninger
-              </Radio>
-              {pii == 'sensitive' && projectID && datasetID && tableID && (
-                <AnnotateDatasetTable
-                  loading={loadingColumns}
-                  error={columnsError}
-                  columns={columns}
-                  tags={tags}
-                  annotateColumn={annotateColumn}
-                />
-              )}
-              <Radio value={"anonymised"}>
-                Det er benyttet metoder for å anonymisere personopplysningene
-              </Radio>
-              <Textarea 
-                placeholder="Beskriv kort hvordan opplysningene er anonymisert" 
-                label="Metodebeskrivelse" 
-                aria-hidden={getValues("pii") !== "anonymised"}
-                className={getValues("pii") !== "anonymised" ? "hidden" : ""}
-                error={errors?.anonymisation_description?.message?.toString()}
-                {...register("anonymisation_description")}
-              />
-              <Radio value={"none"}>
-                Nei, inneholder ikke personopplysninger
-              </Radio>
-            </RadioGroup>
-          )}
-        />
+          getValues={getValues}
+          register={register}
+          formState={formState}
+          watch={watch}
+          annotateColumn={annotateColumn}
+          pseudoynimiseColumn={selectPseudoColumn}
+        ></PiiForm>
         <Controller name="grantAllUsers" control={control} render={({ field }) => (
           <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
-              Tilgangsstyring
-              <TilgangsstyringHelpText />
-            </p>
-            }>
+            Tilgangsstyring
+            <TilgangsstyringHelpText />
+          </p>
+          }>
             <Radio value="dontGrantAllUsers">Brukere må søke om tilgang til datasettet</Radio>
             <Radio value="grantAllUsers" disabled={![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii'))}>
               Gi tilgang til alle i NAV {![PiiLevel.None, PiiLevel.Anonymised].includes(getValues('pii')) && "(kan ikke gi tilgang til alle i NAV når datasettet inneholder personopplysninger)"}
             </Radio>
           </RadioGroup>
-          )}
+        )}
         />
         <div className="flex flex-row gap-4 grow items-end">
           <Button
@@ -231,7 +215,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           >
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <Button type="submit" disabled={selectedAllColumns}>Lagre</Button>
         </div>
       </form>
     </div>
