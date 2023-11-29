@@ -95,7 +95,7 @@ const FiltersList = ({
             }
             className=""
           >
-            {k}
+            {k.includes(" (") ? k.split(" (")[0] : k}
             <Error />
           </FilterPill>
         ))}

@@ -95,12 +95,12 @@ const mapProductAreasWithResultToArray = (
 ) =>
   productAreasQuery.productAreas
     .map((it) =>
-      !!it.dataproducts.length || !!it.stories.length
+      !!it.dataproducts.length || !!it.stories.length || !!it.quartoStories.length
         ? ({
             name: it.name,
             teams: it.teams
               .map((t) =>
-                !!t.dataproducts.length || !!t.stories.length
+                !!t.dataproducts.length || !!t.stories.length || !!t.quartoStories.length
                   ? ({
                       name: t.name,
                     } as Team)
@@ -133,8 +133,8 @@ const buildKeywordsFiltersTree = (
     : (Object.fromEntries(
         new Map(
           queryResult.data.keywords.map((it) => [
-            it.keyword,
-            !!pickedFilters.find((f) => it.keyword === f),
+            `${it.keyword} (${it.count})`,
+            !!pickedFilters.find((f) => `${it.keyword} (${it.count})` === f),
           ])
         )
       ) as FilterTreeNode)
@@ -192,7 +192,7 @@ const Search = () => {
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
         teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)).filter(it=> !!it),
-        keywords: searchParam.keywords,
+        keywords: searchParam.keywords.map((k) => k.includes(" (") ? k.split(" (")[0] : k),
         text: searchParam.freeText,
       },
     },

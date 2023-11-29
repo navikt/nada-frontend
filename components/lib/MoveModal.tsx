@@ -43,7 +43,7 @@ export const MoveModal = ({
 
   return (
     <Modal open={open} onClose={onCancel}>
-      <Modal.Content className="flex flex-col gap-4">
+      <Modal.Body className="flex flex-col gap-4">
         <Heading level="2" size="large">
           Flytt datasett
         </Heading>
@@ -84,7 +84,7 @@ export const MoveModal = ({
             Flytt
           </Button>
         </div>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   )
 }

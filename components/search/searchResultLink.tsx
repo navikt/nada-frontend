@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import { GET_PRODUCT_AREAS } from '../../lib/queries/productAreas/productAreas'
+import TagPill from '../lib/tagPill'
 
 export interface SearchResultProps {
   resourceType?: string
@@ -41,6 +42,7 @@ export const SearchResultLink = ({
   link,
   id,
   type,
+  keywords,
   name,
   innsiktsproduktType,
   group,
@@ -86,7 +88,6 @@ export const SearchResultLink = ({
   }
 
   const confirmDelete = () => {
-    console.log(type)
     const deletePromise = resourceType == "innsiktsprodukt"?
       deleteInsightProduct(id || ''):
     deleteResource?.(id || '');
@@ -97,7 +98,6 @@ export const SearchResultLink = ({
     })
   }
 
-  console.log(resourceType)
   return (
     <div>
       <DeleteModal
@@ -135,7 +135,7 @@ export const SearchResultLink = ({
                 disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre']}
                 unwrapDisallowed={true}
               >
-                {description.split(/\r?\n/).slice(0, 4).join('\n').replace("((START))", "_").replace("((STOP))", "_")}
+                {description.split(/\r?\n/).slice(0, 4).join('\n').replaceAll("((START))", "_").replaceAll("((STOP))", "_")}
               </ReactMarkdown>
             )}
             {datasets && !!datasets.length && (
@@ -152,10 +152,26 @@ export const SearchResultLink = ({
               </div>
             )}
           </div>
+          {keywords && keywords?.length > 0 && 
+                <div className='flex gap-x-1'>
+                    {keywords.map((k, i) => {
+                       return (
+                            <TagPill
+                                key={i}
+                                keyword={k}
+                                horizontal={true}
+                            >
+                                {k}
+                            </TagPill>
+                       )
+                    })
+                }
+                </div>
+            }
         </div>
       </Link>
     </div>
-  )
+  );
 }
 
 export default SearchResultLink

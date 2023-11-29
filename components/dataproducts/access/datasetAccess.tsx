@@ -146,7 +146,7 @@ const AccessRequestModal = ({
         onClose={() => setOpen(false)}
         className="max-w-full md:max-w-3xl px-8 h-[20rem]"
       >
-        <Modal.Content className="h-full">
+        <Modal.Body className="h-full">
           <div className="flex flex-col gap-8">
             <Heading level="1" size="medium">
               Avslå søknad
@@ -169,7 +169,7 @@ const AccessRequestModal = ({
               </Button>
             </div>
           </div>
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
       <div className="flex flex-row flex-nowrap gap-4 justify-end">
         <Button
@@ -197,7 +197,7 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
         onClose={() => setOpen(false)}
         className="max-w-full md:max-w-3xl px-8 h-[12rem]"
       >
-        <Modal.Content className="h-full">
+        <Modal.Body className="h-full">
           <div className="flex flex-col gap-8">
             <Heading level="1" size="medium">
               Fjerne tilgang
@@ -220,7 +220,7 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
               </Button>
             </div>
           </div>
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
       <Button
         onClick={() => setOpen(true)}

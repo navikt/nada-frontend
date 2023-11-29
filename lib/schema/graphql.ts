@@ -74,6 +74,14 @@ export enum AccessRequestStatus {
   Pending = 'pending'
 }
 
+export type AccessibleDatasets = {
+  __typename?: 'AccessibleDatasets';
+  /** granted */
+  granted: Array<Dataset>;
+  /** owned */
+  owned: Array<Dataset>;
+};
+
 /** BigQuery contains metadata on a BigQuery table. */
 export type BigQuery = {
   __typename?: 'BigQuery';
@@ -85,6 +93,8 @@ export type BigQuery = {
   description: Scalars['String'];
   /** expires, if set, is when the table expires */
   expires?: Maybe<Scalars['Time']>;
+  /** id is the identifier for the datasource */
+  id: Scalars['ID'];
   /** lastModified is the time when the table was last modified */
   lastModified: Scalars['Time'];
   /** missingSince, if set, is the time when the table got deleted from BigQuery */
@@ -93,6 +103,8 @@ export type BigQuery = {
   piiTags?: Maybe<Scalars['String']>;
   /** projectID is the GCP project ID that contains the BigQuery table */
   projectID: Scalars['String'];
+  /** pseudoColumns, if set, the columns are pseudonymised */
+  pseudoColumns?: Maybe<Array<Scalars['String']>>;
   /** schema for the BigQuery table */
   schema: Array<TableColumn>;
   /** table name for BigQuery table */
@@ -275,6 +287,32 @@ export type InsightProduct = {
   type: Scalars['String'];
 };
 
+export type JoinableView = {
+  __typename?: 'JoinableView';
+  created: Scalars['Time'];
+  expires?: Maybe<Scalars['Time']>;
+  /** id is the id of the joinable view set */
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type JoinableViewDatasource = {
+  __typename?: 'JoinableViewDatasource';
+  accessible: Scalars['Boolean'];
+  bigqueryUrl: Scalars['String'];
+  deleted: Scalars['Boolean'];
+};
+
+export type JoinableViewWithDatasource = {
+  __typename?: 'JoinableViewWithDatasource';
+  created: Scalars['Time'];
+  expires?: Maybe<Scalars['Time']>;
+  /** id is the id of the joinable view set */
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  pseudoDatasources: Array<JoinableViewDatasource>;
+};
+
 /** Keyword represents a keyword used by other dataproducts */
 export type Keyword = {
   __typename?: 'Keyword';
@@ -321,6 +359,12 @@ export type Mutation = {
    * Requires authentication.
    */
   createInsightProduct: InsightProduct;
+  /**
+   * createJoinableView creates a new joinable view set
+   *
+   * Requires authentication.
+   */
+  createJoinableViews: Scalars['String'];
   /**
    * createQuartoStory creates a quarto story.
    *
@@ -463,6 +507,11 @@ export type MutationCreateDatasetArgs = {
 
 export type MutationCreateInsightProductArgs = {
   input: NewInsightProduct;
+};
+
+
+export type MutationCreateJoinableViewsArgs = {
+  input: NewJoinableViews;
 };
 
 
@@ -630,8 +679,6 @@ export type NewBigQuery = {
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
 export type NewDataproduct = {
-  /** datasets to associate with the dataproduct. */
-  datasets: Array<NewDatasetForNewDataproduct>;
   /** description of the dataproduct */
   description?: InputMaybe<Scalars['String']>;
   /** owner group email for the dataproduct. */
@@ -666,28 +713,8 @@ export type NewDataset = {
   name: Scalars['String'];
   /** pii indicates whether it is personal identifiable information in the dataset */
   pii: PiiLevel;
-  /** repo is the url of the repository containing the code to create the dataset */
-  repo?: InputMaybe<Scalars['String']>;
-  /** targetUser is the type of user that the dataset is meant to be used by */
-  targetUser?: InputMaybe<Scalars['String']>;
-};
-
-/** NewDatasetForNewDataproduct contains metadata for creating a new dataset for a new dataproduct */
-export type NewDatasetForNewDataproduct = {
-  /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
-  anonymisation_description?: InputMaybe<Scalars['String']>;
-  /** bigquery contains metadata for the bigquery datasource added to the dataset. */
-  bigquery: NewBigQuery;
-  /** description of the dataset */
-  description?: InputMaybe<Scalars['String']>;
-  /** grantAllUsers is a boolean indicating whether the dataset shall be made available for all users on creation */
-  grantAllUsers?: InputMaybe<Scalars['Boolean']>;
-  /** keywords for the dataset used as tags. */
-  keywords?: InputMaybe<Array<Scalars['String']>>;
-  /** name of dataset */
-  name: Scalars['String'];
-  /** pii indicates whether it is personal identifiable information in the dataset */
-  pii: PiiLevel;
+  /** pseudoColumns is the name of the columns that need to be pseudonymised */
+  pseudoColumns?: InputMaybe<Array<Scalars['String']>>;
   /** repo is the url of the repository containing the code to create the dataset */
   repo?: InputMaybe<Scalars['String']>;
   /** targetUser is the type of user that the dataset is meant to be used by */
@@ -728,12 +755,24 @@ export type NewInsightProduct = {
   type: Scalars['String'];
 };
 
+/** NewJoinableViews contains metadata for creating joinable views */
+export type NewJoinableViews = {
+  /** datasetIDs is the IDs of the dataset which are made joinable. */
+  datasetIDs?: InputMaybe<Array<Scalars['ID']>>;
+  /** expires is the time when the created joinable dataset should be deleted, default never */
+  expires?: InputMaybe<Scalars['Time']>;
+  /** name is the name of the joinable views which will be used as the name of the dataset in bigquery, which contains all the joinable views */
+  name: Scalars['String'];
+};
+
 /** NewQuartoStory contains the metadata and content of quarto stories. */
 export type NewQuartoStory = {
   /** description of the quarto story. */
   description?: InputMaybe<Scalars['String']>;
   /** group is the owner group of the quarto */
   group: Scalars['String'];
+  /** id of the quarto story. */
+  id?: InputMaybe<Scalars['ID']>;
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
   /** name of the quarto story. */
@@ -832,6 +871,17 @@ export type ProductArea = {
   teams: Array<Team>;
 };
 
+/** PseudoDataset contains information about a pseudo dataset */
+export type PseudoDataset = {
+  __typename?: 'PseudoDataset';
+  /** datasetID is the id of the dataset */
+  datasetID: Scalars['ID'];
+  /** datasourceID is the id of the bigquery datasource */
+  datasourceID: Scalars['ID'];
+  /** name is the name of the dataset */
+  name: Scalars['String'];
+};
+
 /** QuartoStory contains the metadata and content of data stories. */
 export type QuartoStory = {
   __typename?: 'QuartoStory';
@@ -867,6 +917,8 @@ export type Query = {
   accessRequest: AccessRequest;
   /** accessRequests returns all access requests for a dataset */
   accessRequestsForDataset: Array<AccessRequest>;
+  /** accessiblePseudoDatasets returns the pseudo datasets the user has access to. */
+  accessiblePseudoDatasets: Array<PseudoDataset>;
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct;
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -897,6 +949,10 @@ export type Query = {
   groupStats: Array<GroupStats>;
   /** insightProduct returns the given story. */
   insightProduct: InsightProduct;
+  /** joinableView returns detailed information about a joinableView. */
+  joinableView: JoinableViewWithDatasource;
+  /** joinableViews returns all the joinableViews for the user. */
+  joinableViews: Array<JoinableView>;
   /** Keywords returns all keywords, with an optional filter */
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
@@ -999,6 +1055,11 @@ export type QueryGroupStatsArgs = {
 
 
 export type QueryInsightProductArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryJoinableViewArgs = {
   id: Scalars['ID'];
 };
 
@@ -1299,6 +1360,8 @@ export type UpdateDataset = {
   pii: PiiLevel;
   /** piiTags is json string from the pii tags map */
   piiTags?: InputMaybe<Scalars['String']>;
+  /** pseudoColumns is the name of the columns that need to be pseudonymised */
+  pseudoColumns?: InputMaybe<Array<Scalars['String']>>;
   /** repo is the url of the repository containing the code to create the dataset */
   repo?: InputMaybe<Scalars['String']>;
   /** targetUser is the type of user that the dataset is meant to be used by */
@@ -1327,8 +1390,8 @@ export type UserInfo = {
   __typename?: 'UserInfo';
   /** accessRequests is a list of access requests where either the user or one of the users groups is owner. */
   accessRequests: Array<AccessRequest>;
-  /** accessable is a list of dataproducts which the user has explicit access to. */
-  accessable: Array<Dataproduct>;
+  /** accessable is a list of datasets which the user has either owns or has explicit access to. */
+  accessable: AccessibleDatasets;
   /** allGoogleGroups is the all the known google groups of the user domains. */
   allGoogleGroups?: Maybe<Array<Group>>;
   /** azureGroups is the azure groups the user is member of. */
@@ -1444,7 +1507,7 @@ export type DataproductQueryVariables = Exact<{
 }>;
 
 
-export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
+export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
 
 export type DataproductSummaryQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1512,6 +1575,11 @@ export type UpdateMappingMutationVariables = Exact<{
 
 export type UpdateMappingMutation = { __typename?: 'Mutation', mapDataset: boolean };
 
+export type AccessiblePseudoDatasetsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string, datasourceID: string }> };
+
 export type CreateDatasetMutationVariables = Exact<{
   input: NewDataset;
 }>;
@@ -1525,7 +1593,7 @@ export type DatasetQueryVariables = Exact<{
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1601,12 +1669,31 @@ export type ProductAreaQueryVariables = Exact<{
 }>;
 
 
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, description: string, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
 
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
+
+export type JoinableViewQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type JoinableViewQuery = { __typename?: 'Query', joinableView: { __typename?: 'JoinableViewWithDatasource', name: string, created: any, expires?: any | null, pseudoDatasources: Array<{ __typename?: 'JoinableViewDatasource', bigqueryUrl: string, accessible: boolean, deleted: boolean }> } };
+
+export type JoinableViewsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type JoinableViewsQuery = { __typename?: 'Query', joinableViews: Array<{ __typename?: 'JoinableView', id: string, name: string, created: any, expires?: any | null }> };
+
+export type CreateJoinableViewsMutationVariables = Exact<{
+  input: NewJoinableViews;
+}>;
+
+
+export type CreateJoinableViewsMutation = { __typename?: 'Mutation', createJoinableViews: string };
 
 export type SearchContentQueryVariables = Exact<{
   q: SearchQuery;
@@ -1620,7 +1707,7 @@ export type SearchContentWithOptionsQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
 
 export type SlackQueryVariables = Exact<{
   name: Scalars['String'];
@@ -1741,12 +1828,12 @@ export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, groups: Array<{ __typename?: 'Group', name: string, email: string }>, nadaTokens: Array<{ __typename?: 'NadaToken', team: string, token: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
+export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', name: string, slug: string }, owner: { __typename?: 'Owner', group: string } }>, granted: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', name: string, slug: string }, owner: { __typename?: 'Owner', group: string } }> }, groups: Array<{ __typename?: 'Group', name: string, email: string }>, nadaTokens: Array<{ __typename?: 'NadaToken', team: string, token: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
 
 export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: Array<{ __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } };
+export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
 
 
 export const DatasetAccessDocument = gql`
@@ -2228,6 +2315,7 @@ export const DataproductDocument = gql`
             type
           }
           piiTags
+          pseudoColumns
         }
       }
     }
@@ -2600,6 +2688,42 @@ export function useUpdateMappingMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateMappingMutationHookResult = ReturnType<typeof useUpdateMappingMutation>;
 export type UpdateMappingMutationResult = Apollo.MutationResult<UpdateMappingMutation>;
 export type UpdateMappingMutationOptions = Apollo.BaseMutationOptions<UpdateMappingMutation, UpdateMappingMutationVariables>;
+export const AccessiblePseudoDatasetsDocument = gql`
+    query AccessiblePseudoDatasets {
+  accessiblePseudoDatasets {
+    name
+    datasetID
+    datasourceID
+  }
+}
+    `;
+
+/**
+ * __useAccessiblePseudoDatasetsQuery__
+ *
+ * To run a query within a React component, call `useAccessiblePseudoDatasetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessiblePseudoDatasetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessiblePseudoDatasetsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAccessiblePseudoDatasetsQuery(baseOptions?: Apollo.QueryHookOptions<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>(AccessiblePseudoDatasetsDocument, options);
+      }
+export function useAccessiblePseudoDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>(AccessiblePseudoDatasetsDocument, options);
+        }
+export type AccessiblePseudoDatasetsQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsQuery>;
+export type AccessiblePseudoDatasetsLazyQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsLazyQuery>;
+export type AccessiblePseudoDatasetsQueryResult = Apollo.QueryResult<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>;
 export const CreateDatasetDocument = gql`
     mutation createDataset($input: NewDataset!) {
   createDataset(input: $input) {
@@ -2694,6 +2818,7 @@ export const DatasetDocument = gql`
           type
         }
         piiTags
+        pseudoColumns
       }
     }
   }
@@ -3104,6 +3229,7 @@ export const ProductAreaDocument = gql`
         name
         created
         lastModified
+        description
         keywords
         group
         teamkatalogenURL
@@ -3152,6 +3278,7 @@ export const ProductAreaDocument = gql`
       id
       name
       created
+      description
       lastModified
       keywords
       group
@@ -3228,6 +3355,7 @@ export const ProductAreasDocument = gql`
     quartoStories {
       id
       name
+      description
       created
       lastModified
       keywords
@@ -3293,6 +3421,116 @@ export function useProductAreasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ProductAreasQueryHookResult = ReturnType<typeof useProductAreasQuery>;
 export type ProductAreasLazyQueryHookResult = ReturnType<typeof useProductAreasLazyQuery>;
 export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, ProductAreasQueryVariables>;
+export const JoinableViewDocument = gql`
+    query JoinableView($id: ID!) {
+  joinableView(id: $id) {
+    name
+    created
+    expires
+    pseudoDatasources {
+      bigqueryUrl
+      accessible
+      deleted
+    }
+  }
+}
+    `;
+
+/**
+ * __useJoinableViewQuery__
+ *
+ * To run a query within a React component, call `useJoinableViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useJoinableViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useJoinableViewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useJoinableViewQuery(baseOptions: Apollo.QueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
+      }
+export function useJoinableViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
+        }
+export type JoinableViewQueryHookResult = ReturnType<typeof useJoinableViewQuery>;
+export type JoinableViewLazyQueryHookResult = ReturnType<typeof useJoinableViewLazyQuery>;
+export type JoinableViewQueryResult = Apollo.QueryResult<JoinableViewQuery, JoinableViewQueryVariables>;
+export const JoinableViewsDocument = gql`
+    query JoinableViews {
+  joinableViews {
+    id
+    name
+    created
+    expires
+  }
+}
+    `;
+
+/**
+ * __useJoinableViewsQuery__
+ *
+ * To run a query within a React component, call `useJoinableViewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useJoinableViewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useJoinableViewsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useJoinableViewsQuery(baseOptions?: Apollo.QueryHookOptions<JoinableViewsQuery, JoinableViewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<JoinableViewsQuery, JoinableViewsQueryVariables>(JoinableViewsDocument, options);
+      }
+export function useJoinableViewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<JoinableViewsQuery, JoinableViewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<JoinableViewsQuery, JoinableViewsQueryVariables>(JoinableViewsDocument, options);
+        }
+export type JoinableViewsQueryHookResult = ReturnType<typeof useJoinableViewsQuery>;
+export type JoinableViewsLazyQueryHookResult = ReturnType<typeof useJoinableViewsLazyQuery>;
+export type JoinableViewsQueryResult = Apollo.QueryResult<JoinableViewsQuery, JoinableViewsQueryVariables>;
+export const CreateJoinableViewsDocument = gql`
+    mutation createJoinableViews($input: NewJoinableViews!) {
+  createJoinableViews(input: $input)
+}
+    `;
+export type CreateJoinableViewsMutationFn = Apollo.MutationFunction<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>;
+
+/**
+ * __useCreateJoinableViewsMutation__
+ *
+ * To run a mutation, you first call `useCreateJoinableViewsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateJoinableViewsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createJoinableViewsMutation, { data, loading, error }] = useCreateJoinableViewsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateJoinableViewsMutation(baseOptions?: Apollo.MutationHookOptions<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>(CreateJoinableViewsDocument, options);
+      }
+export type CreateJoinableViewsMutationHookResult = ReturnType<typeof useCreateJoinableViewsMutation>;
+export type CreateJoinableViewsMutationResult = Apollo.MutationResult<CreateJoinableViewsMutation>;
+export type CreateJoinableViewsMutationOptions = Apollo.BaseMutationOptions<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>;
 export const SearchContentDocument = gql`
     query searchContent($q: SearchQuery!) {
   search(q: $q) {
@@ -3369,11 +3607,13 @@ export const SearchContentWithOptionsDocument = gql`
         keywords
         slug
         datasets {
+          id
           name
           datasource {
             type: __typename
             ... on BigQuery {
               lastModified
+              table
             }
           }
         }
@@ -4030,12 +4270,33 @@ export const UserInfoDetailsDocument = gql`
       }
     }
     accessable {
-      id
-      name
-      keywords
-      slug
-      owner {
-        group
+      owned {
+        id
+        name
+        dataproduct {
+          name
+          slug
+        }
+        dataproductID
+        keywords
+        slug
+        owner {
+          group
+        }
+      }
+      granted {
+        id
+        name
+        dataproduct {
+          name
+          slug
+        }
+        dataproductID
+        keywords
+        slug
+        owner {
+          group
+        }
       }
     }
     loginExpiration
@@ -4141,15 +4402,29 @@ export const UserInfoAccessableDataproductDocument = gql`
     query userInfoAccessableDataproduct {
   userInfo {
     accessable {
-      __typename
-      id
-      name
-      description
-      created
-      lastModified
-      owner {
-        group
-        teamkatalogenURL
+      owned {
+        __typename
+        id
+        name
+        description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogenURL
+        }
+      }
+      granted {
+        __typename
+        id
+        name
+        description
+        created
+        lastModified
+        owner {
+          group
+          teamkatalogenURL
+        }
       }
     }
   }
