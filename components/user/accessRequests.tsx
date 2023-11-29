@@ -55,13 +55,13 @@ const ViewRequestButton = ({ request, type }: RequestInterface) => {
         onClose={() => setOpen(false)}
         className="max-w-full md:max-w-3xl px-8 h-[52rem]"
       >
-        <Modal.Content className="h-full">
+        <Modal.Body className="h-full">
           <UpdateAccessRequest
             dataset={data.dataset}
             updateAccessRequestData={request}
             setModal={setOpen}
           />
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
       <Panel
         className="w-full cursor-pointer"
@@ -121,6 +121,7 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   return (
     <>
       {error && <Alert variant={'error'}>{error}</Alert>}
+      {pendingAccessRequests.length > 0 &&
       <div className="flex flex-col gap-5 mb-4">
         <Heading size="small" level="2">
           Ubehandlede tilgangssøknader
@@ -140,6 +141,8 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
           </div>
         ))}
       </div>
+      }
+      {deniedAccessRequests.length > 0 &&
       <div className="flex flex-col gap-5 mb-4">
         <Heading size="small" level="2">
           Avslåtte tilgangssøknader
@@ -154,6 +157,7 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
           </div>
         ))}
       </div>
+      }
     </>
   )
 }

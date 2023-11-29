@@ -17,10 +17,9 @@ export const DeleteModal = ({
   error,
   resource,
 }: DeleteModalProps) => {
-  console.log(resource)
   return (
     <Modal open={open} onClose={onCancel}>
-      <Modal.Content className="flex flex-col gap-4">
+      <Modal.Body className="flex flex-col gap-4">
         <Heading level="2" size="large" className='mr-12'>
           Slette {resource}
         </Heading>
@@ -32,7 +31,7 @@ export const DeleteModal = ({
           <Button onClick={onConfirm}>Slett</Button>
         </div>
         {error && <Alert variant={'error'}>{error}</Alert>}
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   )
 }

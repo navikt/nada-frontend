@@ -15,11 +15,13 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
           keywords
           slug
           datasets{
+            id
             name
             datasource {
               type: __typename
               ... on BigQuery {
                 lastModified
+                table
               }
             }
           }

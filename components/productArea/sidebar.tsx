@@ -24,11 +24,11 @@ const ProductAreaSidebar = ({
   const relevantProductAreas = productAreas
     .filter(
       (it) =>
-        it.areaType === 'PRODUCT_AREA' ||
-        it.areaType === 'PROJECT' ||
-        it.id === '6dbeedea-b23e-4bf7-a1cb-21d02d15e452'
-    )
-    .sort((l, r) => (l.name < r.name ? -1 : 1))
+        it.dataproducts.length ||
+        it.stories.length ||
+        it.quartoStories.length ||
+        it.insightProducts.length
+    ).sort((l, r) => (l.name < r.name ? -1 : 1))
   return (
     <div className="pr-[2rem] w-96 pt-[1.6rem] hidden md:block">
       <Select
@@ -48,7 +48,7 @@ const ProductAreaSidebar = ({
       </Select>
       <div className="flex text-base w-full flex-col gap-2">
         {productAreaItems.map((d: any, idx: number) =>
-          d.stories.length + d.quartoStories.length + d.dataproducts.length ? (
+          d.stories.length + d.quartoStories.length + d.dataproducts.length + d.insightProducts.length ? (
             <div
               key={idx}
               className={`border-l-[6px] py-1 px-2 hover:cursor-default ${
@@ -73,10 +73,16 @@ const ProductAreaSidebar = ({
                   {d.stories.length + d.quartoStories.length}
                 </span>
                 <span className="flex gap-2 items-center">
-                  <div className="h-[18px] w-[18px] text-text-subtle">
+                  <div className="h-[14px] w-[14px] text-text-subtle">
                     <DataproductLogo />
                   </div>{' '}
                   {d.dataproducts.length}
+                </span>
+                <span className="flex gap-2 items-center">
+                  <div className="h-[14px] w-[14px] text-text-subtle">
+                    <Data />
+                  </div>{' '}
+                  {d.insightProducts.length}
                 </span>
               </div>
             </div>

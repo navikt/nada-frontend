@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import * as React from 'react'
 import remarkGfm from 'remark-gfm'
 import TagPill from './tagPill'
-import { Accordion, Heading, Link } from '@navikt/ds-react'
+import { Accordion, Heading, Link, Button, Alert } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { DataproductQuery } from '../../lib/schema/graphql'
 
@@ -17,6 +17,8 @@ export const Description = ({
       }
 
     return (<div className="mt-8 flex flex-col gap-4 max-w-4xl">
+        {dataproduct.datasets.length== 0 && <Alert variant="warning">Det er ikke noe datasett i dataproduktet. Vil du <Link href={ `/dataproduct/${dataproduct.id}/${dataproduct.slug}/new`}>legg til et datasett</Link>?</Alert>}
+
         <Accordion className="block md:hidden w-full">
             <Accordion.Item defaultOpen={true}>
                 <Accordion.Header>Beskrivelse</Accordion.Header>

@@ -46,6 +46,16 @@ export default function User() {
             >
               Legg til nytt innsiktsprodukt
             </Dropdown.Menu.GroupedList.Item>
+            {/* Pseudonymization */}
+            {false && <Dropdown.Menu.GroupedList.Item
+              className="text-base flex gap-1 items-center"
+              onClick={async () =>
+                await router.push('/dataProc/joinableView/new')
+              }
+            >
+              Koble sammen pseudonymiserte tabeller
+            </Dropdown.Menu.GroupedList.Item>
+            }
           </Dropdown.Menu.GroupedList>
           <Dropdown.Menu.Divider />
           <Dropdown.Menu.GroupedList>
@@ -81,6 +91,14 @@ export default function User() {
               }}
             >
               Mine tilgangssøknader
+            </Dropdown.Menu.GroupedList.Item>
+            <Dropdown.Menu.GroupedList.Item
+              className={'text-base'}
+              onClick={() => {
+                router.push({ pathname: '/user/access' })
+              }}
+            >
+              Mine tilganger
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item
               className={'text-base'}

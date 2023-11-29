@@ -28,6 +28,7 @@ export const GET_PRODUCT_AREAS = gql`
       quartoStories{
         id
         name
+        description
         created
         lastModified
         keywords
