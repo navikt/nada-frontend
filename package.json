@@ -37,7 +37,7 @@
     "deepmerge": "^4.2.2",
     "graphql": "^16.8.1",
     "next": "^12.3.1",
-    "next-remove-imports": "^1.0.8",
+    "next-remove-imports": "^1.0.9",
     "plotly.js": "^2.18.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
