@@ -100,32 +100,36 @@ const LandingPage = () => {
                             }
                         />
                     </form>
-                    <Link href="/search?preferredType=story">
-                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted bg-white rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
-                            <div className="flex flex-row items-center gap-2 md:gap-4">
-                                <div className="text-deepblue-500 bg-deepblue-50">
-                                    <StoryLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
-                                </div>
-                                <p>Fortellinger</p>
+                    <Link
+                        href="/search?preferredType=story"
+                        className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted bg-white rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
+
+                        <div className="flex flex-row items-center gap-2 md:gap-4">
+                            <div className="text-deepblue-500 bg-deepblue-50">
+                                <StoryLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
                             </div>
-                            <Next className="justify-self-end md:hidden" />
-                        </a>
+                            <p>Fortellinger</p>
+                        </div>
+                        <Next className="justify-self-end md:hidden" />
+
                     </Link>
-                    <Link href="/search?preferredType=dataproduct">
-                        <a className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted bg-white rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
-                            <div className="flex flex-row items-center gap-2 md:gap-4">
-                                <div className="text-deepblue-500 bg-deepblue-50">
-                                    <DataproductLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
-                                </div>
-                                <p>Produkter</p>
+                    <Link
+                        href="/search?preferredType=dataproduct"
+                        className="grid grid-cols-2 items-center no-underline text-text-default border-2 border-border-on-inverted bg-white rounded shadow-sm shadow-border-on-inverted transition-all hover:shadow-lg pr-4">
+
+                        <div className="flex flex-row items-center gap-2 md:gap-4">
+                            <div className="text-deepblue-500 bg-deepblue-50">
+                                <DataproductLogo className="h-4 w-4 m-4 md:h-6 md:w-6 md:m-4" />
                             </div>
-                            <Next className="justify-self-end md:hidden" />
-                        </a>
+                            <p>Produkter</p>
+                        </div>
+                        <Next className="justify-self-end md:hidden" />
+
                     </Link>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

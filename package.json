@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "next telemetry disable",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -36,8 +37,9 @@
     "date-fns": "^2.29.3",
     "deepmerge": "^4.3.1",
     "graphql": "^16.8.1",
-    "next": "^12.3.1",
+    "next": "^13.5.4",
     "next-remove-imports": "^1.0.9",
+    "node-fetch": "^3.3.2",
     "plotly.js": "^2.18.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
