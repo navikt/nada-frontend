@@ -171,7 +171,7 @@ export const SearchResultLink = ({
         </div>
       </Link>
     </div>
-  )
+  );
 }
 
 export default SearchResultLink
