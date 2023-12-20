@@ -11,8 +11,8 @@ interface DataproductProps {
 }
 
 const Dataproduct = (props: DataproductProps) => {
-  const { id } = props
   const router = useRouter()
+  const id = router.query.id as string
 
   const currentPage = router.query.page?.[0] ?? 'info'
   console.log(currentPage)
@@ -36,31 +36,6 @@ const Dataproduct = (props: DataproductProps) => {
       <></>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const cookie = context.req.headers.cookie
-
-  const apolloClient = initializeApollo()
-
-  try {
-    await apolloClient.query({
-      query: GET_DATAPRODUCT,
-      variables: { id },
-      context: {
-        headers: {
-          cookie,
-        },
-      },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  return addApolloState(apolloClient, {
-    props: { id },
-  })
 }
 
 export default Dataproduct

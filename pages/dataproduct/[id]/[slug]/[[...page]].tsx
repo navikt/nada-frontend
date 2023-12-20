@@ -26,19 +26,16 @@ import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatas
 import { truncate } from '../../../../lib/stringUtils'
 import InnerContainer from '../../../../components/lib/innerContainer'
 
-interface DataproductProps {
-  id: string
-  slug: string
-}
-
-const Dataproduct = (props: DataproductProps) => {
-  const { id } = props
+const Dataproduct = () => {
   const router = useRouter()
+  const id = router.query.id as string
+  if (!id) return <></>
 
   const [showDelete, setShowDelete] = useState(false)
   const [deleteError, setDeleteError] = useState('')
-
+  
   const userInfo = useContext(UserState)
+
   const productQuery = useDataproductQuery({
     variables: { id, rawDesc: false },
     ssr: true,
@@ -180,39 +177,4 @@ const Dataproduct = (props: DataproductProps) => {
     </InnerContainer>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const cookie = context.req.headers.cookie
-
-  const apolloClient = initializeApollo()
-
-  try {
-    await apolloClient.query({
-      query: GET_DATAPRODUCT,
-      variables: { id },
-      context: {
-        headers: {
-          cookie,
-        },
-      },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  try {
-    await apolloClient.query({
-      query: SearchContentDocument,
-      variables: { q: { limit: 6 } },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  return addApolloState(apolloClient, {
-    props: { id },
-  })
-}
-
 export default Dataproduct
