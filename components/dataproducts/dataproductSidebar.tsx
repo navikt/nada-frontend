@@ -16,6 +16,7 @@ interface DataproductDetailProps {
     component: any
   }>
   currentPage: number
+  setSlug: (slug: string)=>void
 }
 
 export const DataproductSidebar = ({
@@ -23,6 +24,7 @@ export const DataproductSidebar = ({
   isOwner,
   menuItems,
   currentPage,
+  setSlug,
 }: DataproductDetailProps) => {
   const router = useRouter()
 
@@ -62,13 +64,15 @@ export const DataproductSidebar = ({
             typeof title === "string" 
             ? <a
               className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
-              href={`/dataproduct/${product.id}/${product.slug}/${slug}`}
+              href={`#`}
+              onClick={e=>{e.preventDefault(); setSlug(slug)}}
               key={idx}
               dangerouslySetInnerHTML={{__html: title.replaceAll("_", "_<wbr>")}}
             />
             : <a
               className="border-l-8 border-l-transparent font-semibold no-underline hover:underline hover:cursor-pointer py-1 px-2"
-              href={`/dataproduct/${product.id}/${product.slug}/${slug}`}
+              href={`#`}
+              onClick={e=>{e.preventDefault(); setSlug(slug)}}
               key={idx}
             >
               {title}

@@ -76,7 +76,7 @@ const ViewDataset = ({
           className="max-w-full md:max-w-3xl px-8 h-[46rem]"
         >
           <Modal.Body className="h-full">
-            <NewAccessRequestForm setModal={setShowNewAccess} dataset={dataset} />
+            <NewAccessRequestForm setModal={setShowNewAccess} dataset={dataset} active={accessRequested}/>
           </Modal.Body>
         </Modal>
         <Modal

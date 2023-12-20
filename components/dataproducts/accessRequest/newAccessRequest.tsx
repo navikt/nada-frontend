@@ -14,19 +14,23 @@ import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 interface NewAccessRequestFormProps {
   dataset: DatasetQuery
   setModal: (value: boolean) => void
+  active: boolean
 }
 
-const NewAccessRequestForm = ({ dataset, setModal }: NewAccessRequestFormProps) => {
+const NewAccessRequestForm = ({ active, dataset, setModal }: NewAccessRequestFormProps) => {
   const [createAccessRequest] = useCreateAccessRequestMutation()
   const [error, setError] = useState<Error | null>(null)
   const router = useRouter()
 
+  if(!active) return <></>
+  
   const dp = useDataproductQuery({
     variables: {
       id: dataset.dataproductID,
     },
   })
 
+  console.log("query new access")
   if (dp.error) return <ErrorMessage error={dp.error} />
   if (dp.loading || !dp.data) return <LoaderSpinner />
 
