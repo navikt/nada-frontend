@@ -25,7 +25,7 @@ const findAccessType = (
 }
 
 interface EntryProps {
-  dataproduct: DataproductQuery['dataproduct']
+  dataproduct: any //DataproductQuery['dataproduct']
   dataset: DatasetQuery['dataset']
   userInfo: UserInfoDetailsQuery['userInfo'] | undefined
   isOwner: boolean

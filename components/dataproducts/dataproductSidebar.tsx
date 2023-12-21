@@ -8,7 +8,7 @@ import { Subject, SubjectHeader } from '../subject'
 import { isEmail } from '../../lib/validators'
 
 interface DataproductDetailProps {
-  product: DataproductQuery['dataproduct']
+  product: any //DataproductQuery['dataproduct']
   isOwner: boolean
   menuItems: Array<{
     title: string

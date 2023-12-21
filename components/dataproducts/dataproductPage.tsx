@@ -1,7 +1,7 @@
 import router, { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { UserState } from "../../lib/context"
-import { Dataproduct, Group, useDataproductQuery, useDeleteDataproductMutation } from "../../lib/schema/graphql"
+import { Dataproduct, Group, useDataproductCompleteQuery, useDataproductQuery, useDeleteDataproductMutation } from "../../lib/schema/graphql"
 import amplitudeLog from "../../lib/amplitude"
 import LoaderSpinner from "../lib/spinner"
 import { Description } from "../lib/detailTypography"
@@ -27,7 +27,7 @@ const DataproductPage = ({id, slug}: DataproductPageProps) => {
   const [newSlug, setNewSlug] = useState(slug)
   const userInfo = useContext(UserState)
 
-  const  productQuery= useDataproductQuery({
+  const  productQuery= useDataproductCompleteQuery({
       variables: { id, rawDesc: false },
       ssr: true,
     })
@@ -36,13 +36,13 @@ const DataproductPage = ({id, slug}: DataproductPageProps) => {
     userInfo?.groups === undefined
       ? false
       : userInfo.groups.some(
-          (g: Group) => g.email === productQuery?.data?.dataproduct?.owner.group
+          (g: Group) => g.email === productQuery?.data?.dataproductComplete?.owner.group
         )
 
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'produktside',
-      title: productQuery?.data?.dataproduct.name,
+      title: productQuery?.data?.dataproductComplete.name,
     }
     amplitudeLog('sidevisning', eventProperties)
   })
@@ -61,19 +61,19 @@ const DataproductPage = ({id, slug}: DataproductPageProps) => {
   const onDelete = async () => {
     try {
       await deleteDataproduct()
-      amplitudeLog('slett dataprodukt', {name: productQuery?.data?.dataproduct.name})
+      amplitudeLog('slett dataprodukt', {name: productQuery?.data?.dataproductComplete.name})
       await router.push('/')
     } catch (e: any) {
-      amplitudeLog('slett dataprodukt feilet', {name: productQuery?.data?.dataproduct.name})
+      amplitudeLog('slett dataprodukt feilet', {name: productQuery?.data?.dataproductComplete.name})
       setDeleteError(e.toString())
     }
   }
   
   if (productQuery?.error) return <ErrorMessage error={productQuery?.error} />
-  if (productQuery?.loading || !productQuery?.data?.dataproduct)
+  if (productQuery?.loading || !productQuery?.data?.dataproductComplete)
     return <LoaderSpinner />
 
-  const product = productQuery?.data.dataproduct
+  const product = productQuery?.data.dataproductComplete
 
   const menuItems: Array<{
     title: any
@@ -89,7 +89,7 @@ const DataproductPage = ({id, slug}: DataproductPageProps) => {
         />
       ),
     },
-  ]
+  ]  
 
   product?.datasets.forEach((dataset: any) => {
     menuItems.push({

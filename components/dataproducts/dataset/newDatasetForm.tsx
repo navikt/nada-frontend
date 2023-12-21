@@ -16,7 +16,7 @@ import { PiiForm } from './piiForm'
 import { useState } from 'react'
 
 interface NewDatasetFormProps {
-  dataproduct: DataproductQuery
+  dataproduct: any //DataproductQuery
 }
 
 const defaultValues: FieldValues = {
