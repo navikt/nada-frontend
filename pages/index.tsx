@@ -1,17 +1,8 @@
-import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../lib/apollo'
-import {
-    KeywordsDocument,
-    MetabaseProudctsDocument,
-    SearchContentDocument,
-    StoriesDocument,
-} from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { useEffect, useState } from 'react'
 import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
-import { USER_INFO } from '../lib/queries/userInfo/userInfo'
 import StoryLogo from '../components/lib/icons/storyLogo'
 import Link from 'next/link'
 import ProductAreaLinks from '../components/productArea/productAreaLinks'
@@ -22,7 +13,6 @@ import GetStartedIcon from "../components/lib/icons/getStartedIcon";
 import { Next } from '@navikt/ds-icons'
 import DatadrivenIcon from "../components/lib/icons/datadrivenIcon";
 
-const SEARCH_LIMIT = 6
 
 const LandingPage = () => {
     const router = useRouter()
@@ -132,33 +122,4 @@ const LandingPage = () => {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    try {
-        const cookie = context?.req?.headers?.cookie || ''
-        const apolloClient = initializeApollo(null, cookie)
-
-        await apolloClient.query({
-            query: USER_INFO,
-        })
-        await apolloClient.query({
-            query: SearchContentDocument,
-            variables: { q: { limit: SEARCH_LIMIT } },
-        })
-        await apolloClient.query({
-            query: MetabaseProudctsDocument,
-        })
-        await apolloClient.query({
-            query: KeywordsDocument,
-        })
-        await apolloClient.query({
-            query: StoriesDocument,
-        })
-
-        return addApolloState(apolloClient, {
-            props: {},
-        })
-    } catch (e) {
-        return { props: {} }
-    }
-}
 export default LandingPage

@@ -1418,7 +1418,7 @@ export type UserInfo = {
 };
 
 export type DatasetAccessQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -1432,28 +1432,28 @@ export type GrantAccessMutationVariables = Exact<{
 export type GrantAccessMutation = { __typename?: 'Mutation', grantAccessToDataset: { __typename?: 'Access', id: string } };
 
 export type RevokeAccessMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type RevokeAccessMutation = { __typename?: 'Mutation', revokeAccessToDataset: boolean };
 
 export type AccessRequestQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type AccessRequestQuery = { __typename?: 'Query', accessRequest: { __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } };
 
 export type AccessRequestsForDatasetQueryVariables = Exact<{
-  datasetID: Scalars['ID']['input'];
+  datasetID: Scalars['ID'];
 }>;
 
 
 export type AccessRequestsForDatasetQuery = { __typename?: 'Query', accessRequestsForDataset: Array<{ __typename?: 'AccessRequest', id: string, subject: string, subjectType: SubjectType, owner: string, created: any, expires?: any | null, polly?: { __typename?: 'Polly', name: string, externalID: string, url: string } | null }> };
 
 export type ApproveAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -1467,15 +1467,15 @@ export type CreateAccessRequestMutationVariables = Exact<{
 export type CreateAccessRequestMutation = { __typename?: 'Mutation', createAccessRequest: { __typename?: 'AccessRequest', id: string } };
 
 export type DeleteAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteAccessRequestMutation = { __typename?: 'Mutation', deleteAccessRequest: boolean };
 
 export type DenyAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  reason?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID'];
+  reason?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1496,60 +1496,60 @@ export type CreateDataproductMutationVariables = Exact<{
 export type CreateDataproductMutation = { __typename?: 'Mutation', createDataproduct: { __typename?: 'DataproductCreate', id: string, slug: string } };
 
 export type DataproductQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  rawDesc?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['ID'];
+  rawDesc?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
 export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
 
 export type DataproductSummaryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DataproductSummaryQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, datasets: Array<{ __typename?: 'Dataset', datasource: { __typename?: 'BigQuery', type: 'BigQuery' } }> } };
 
 export type DeleteDataproductMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteDataproductMutation = { __typename?: 'Mutation', deleteDataproduct: boolean };
 
 export type GcpGetAllTablesInProjectQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
+  projectID: Scalars['String'];
 }>;
 
 
 export type GcpGetAllTablesInProjectQuery = { __typename?: 'Query', gcpGetAllTablesInProject: Array<{ __typename?: 'BigQuerySource', table: string, dataset: string }> };
 
 export type GcpGetColumnsQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
-  datasetID: Scalars['String']['input'];
-  tableID: Scalars['String']['input'];
+  projectID: Scalars['String'];
+  datasetID: Scalars['String'];
+  tableID: Scalars['String'];
 }>;
 
 
 export type GcpGetColumnsQuery = { __typename?: 'Query', gcpGetColumns: Array<{ __typename?: 'TableColumn', name: string, type: string, mode: string, description: string }> };
 
 export type GcpGetDatasetsQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
+  projectID: Scalars['String'];
 }>;
 
 
 export type GcpGetDatasetsQuery = { __typename?: 'Query', gcpGetDatasets: Array<string> };
 
 export type GcpGetTablesQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
-  datasetID: Scalars['String']['input'];
+  projectID: Scalars['String'];
+  datasetID: Scalars['String'];
 }>;
 
 
 export type GcpGetTablesQuery = { __typename?: 'Query', gcpGetTables: Array<{ __typename?: 'BigQueryTable', name: string, type: BigQueryType, description: string }> };
 
 export type UpdateDataproductMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
   input: UpdateDataproduct;
 }>;
 
@@ -1557,7 +1557,7 @@ export type UpdateDataproductMutationVariables = Exact<{
 export type UpdateDataproductMutation = { __typename?: 'Mutation', updateDataproduct: boolean };
 
 export type UpdateMappingMutationVariables = Exact<{
-  datasetID: Scalars['ID']['input'];
+  datasetID: Scalars['ID'];
   services: Array<MappingService> | MappingService;
 }>;
 
@@ -1577,22 +1577,22 @@ export type CreateDatasetMutationVariables = Exact<{
 export type CreateDatasetMutation = { __typename?: 'Mutation', createDataset: { __typename?: 'Dataset', id: string, dataproductID: string } };
 
 export type DatasetQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  rawDesc?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['ID'];
+  rawDesc?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
 export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteDatasetMutation = { __typename?: 'Mutation', deleteDataset: boolean };
 
 export type UpdateDatasetMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
   input: UpdateDataset;
 }>;
 
@@ -1612,23 +1612,23 @@ export type CreateInsightProductMutationVariables = Exact<{
 export type CreateInsightProductMutation = { __typename?: 'Mutation', createInsightProduct: { __typename?: 'InsightProduct', id: string } };
 
 export type UpdateInsightProductMetadataMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  name: Scalars['String']['input'];
-  description: Scalars['String']['input'];
-  type: Scalars['String']['input'];
-  link: Scalars['String']['input'];
-  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
-  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
-  productAreaID?: InputMaybe<Scalars['String']['input']>;
-  teamID?: InputMaybe<Scalars['String']['input']>;
-  group: Scalars['String']['input'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  type: Scalars['String'];
+  link: Scalars['String'];
+  keywords: Array<Scalars['String']> | Scalars['String'];
+  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']>;
+  group: Scalars['String'];
 }>;
 
 
 export type UpdateInsightProductMetadataMutation = { __typename?: 'Mutation', updateInsightProductMetadata: { __typename?: 'InsightProduct', id: string } };
 
 export type InsightProductQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -1647,14 +1647,14 @@ export type UpdateKeywordsMutationVariables = Exact<{
 export type UpdateKeywordsMutation = { __typename?: 'Mutation', updateKeywords: boolean };
 
 export type PollyQueryVariables = Exact<{
-  q: Scalars['String']['input'];
+  q: Scalars['String'];
 }>;
 
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
 export type ProductAreaQueryVariables = Exact<{
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 }>;
 
 
@@ -1666,7 +1666,7 @@ export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
 export type JoinableViewQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -1699,7 +1699,7 @@ export type SearchContentWithOptionsQueryVariables = Exact<{
 export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
 
 export type SlackQueryVariables = Exact<{
-  name: Scalars['String']['input'];
+  name: Scalars['String'];
 }>;
 
 
@@ -1714,28 +1714,28 @@ export type CreateQuartoStoryMutationVariables = Exact<{
 export type CreateQuartoStoryMutation = { __typename?: 'Mutation', createQuartoStory: { __typename?: 'QuartoStory', id: string } };
 
 export type DeleteInsightProductMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteInsightProductMutation = { __typename?: 'Mutation', deleteInsightProduct: boolean };
 
 export type DeleteQuartoStoryMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteQuartoStoryMutation = { __typename?: 'Mutation', deleteQuartoStory: boolean };
 
 export type DeleteStoryMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type DeleteStoryMutation = { __typename?: 'Mutation', deleteStory: boolean };
 
 export type PlotlyViewQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -1749,7 +1749,7 @@ export type PublishStoryMutationVariables = Exact<{
 export type PublishStoryMutation = { __typename?: 'Mutation', publishStory: { __typename?: 'Story', id: string } };
 
 export type QuartoStoryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -1761,54 +1761,54 @@ export type StoriesQueryVariables = Exact<{ [key: string]: never; }>;
 export type StoriesQuery = { __typename?: 'Query', stories: Array<{ __typename?: 'Story', id: string, name: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> };
 
 export type StoryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type StoryQuery = { __typename?: 'Query', story: { __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null }, views: Array<{ __typename: 'StoryViewHeader', content: string, level: number, id: string } | { __typename: 'StoryViewMarkdown', content: string, id: string } | { __typename: 'StoryViewPlotly', id: string } | { __typename: 'StoryViewVega', id: string }> } };
 
 export type StoryTokenQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type StoryTokenQuery = { __typename?: 'Query', storyToken: { __typename?: 'StoryToken', token: string } };
 
 export type UpdateStoryMetadataMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
-  productAreaID?: InputMaybe<Scalars['String']['input']>;
-  teamID?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID'];
+  keywords: Array<Scalars['String']> | Scalars['String'];
+  name: Scalars['String'];
+  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type UpdateStoryMetadataMutation = { __typename?: 'Mutation', updateStoryMetadata: { __typename?: 'Story', id: string } };
 
 export type UpdateQuartoStoryMetadataMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  name: Scalars['String']['input'];
-  description: Scalars['String']['input'];
-  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
-  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
-  productAreaID?: InputMaybe<Scalars['String']['input']>;
-  teamID?: InputMaybe<Scalars['String']['input']>;
-  group: Scalars['String']['input'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  keywords: Array<Scalars['String']> | Scalars['String'];
+  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']>;
+  group: Scalars['String'];
 }>;
 
 
 export type UpdateQuartoStoryMetadataMutation = { __typename?: 'Mutation', updateQuartoStoryMetadata: { __typename?: 'QuartoStory', id: string } };
 
 export type VegaViewQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: Scalars['ID'];
 }>;
 
 
 export type VegaViewQuery = { __typename?: 'Query', storyView: { __typename?: 'StoryViewHeader' } | { __typename?: 'StoryViewMarkdown' } | { __typename?: 'StoryViewPlotly' } | { __typename?: 'StoryViewVega', id: string, spec: any } };
 
 export type TeamkatalogenQueryVariables = Exact<{
-  q?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  q?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 
