@@ -113,37 +113,6 @@ export type BigQuery = {
   tableType: BigQueryType;
 };
 
-/** BigQueryComplete contains metadata on a BigQuery table. */
-export type BigQueryComplete = {
-  __typename?: 'BigQueryComplete';
-  /** created is when the table was created */
-  created: Scalars['Time'];
-  /** dataset is the dataset that contains the BigQuery table */
-  dataset: Scalars['String'];
-  /** description is the description of the BigQuery table */
-  description: Scalars['String'];
-  /** expires, if set, is when the table expires */
-  expires?: Maybe<Scalars['Time']>;
-  /** id is the identifier for the datasource */
-  id: Scalars['ID'];
-  /** lastModified is the time when the table was last modified */
-  lastModified: Scalars['Time'];
-  /** missingSince, if set, is the time when the table got deleted from BigQuery */
-  missingSince?: Maybe<Scalars['Time']>;
-  /** piiTags is json string from the pii tags map */
-  piiTags?: Maybe<Scalars['String']>;
-  /** projectID is the GCP project ID that contains the BigQuery table */
-  projectID: Scalars['String'];
-  /** pseudoColumns, if set, the columns are pseudonymised */
-  pseudoColumns?: Maybe<Array<Scalars['String']>>;
-  /** schema for the BigQuery table */
-  schema: Array<TableColumn>;
-  /** table name for BigQuery table */
-  table: Scalars['String'];
-  /** tableType is what type the table is */
-  tableType: BigQueryType;
-};
-
 export type BigQuerySource = {
   __typename?: 'BigQuerySource';
   /** dataset is the name of the BigQuery dataset. */
@@ -204,33 +173,13 @@ export type DataproductDescriptionArgs = {
   raw?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** DataproductComplete contains metadata on a datasource. */
-export type DataproductComplete = {
-  __typename?: 'DataproductComplete';
-  /** created is the timestamp for when the dataproduct was created */
-  created: Scalars['Time'];
-  /** datasets is the list of associated datasets. */
-  datasets: Array<DatasetComplete>;
-  /** description of the dataproduct */
-  description: Scalars['String'];
+/** DataproductCreate contains metadata on a datasource. */
+export type DataproductCreate = {
+  __typename?: 'DataproductCreate';
   /** id is the identifier for the dataproduct */
   id: Scalars['ID'];
-  /** keywords is the keyword tags for the datasets in the dataproduct. */
-  keywords: Array<Scalars['String']>;
-  /** lastModified is the timestamp for when the dataproduct was last modified */
-  lastModified: Scalars['Time'];
-  /** name of the dataproduct */
-  name: Scalars['String'];
-  /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
-  owner: Owner;
   /** slug is the dataproduct slug */
   slug: Scalars['String'];
-};
-
-
-/** DataproductComplete contains metadata on a datasource. */
-export type DataproductCompleteDescriptionArgs = {
-  raw?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** Dataset contains metadata on a dataset. */
@@ -280,51 +229,6 @@ export type DatasetDescriptionArgs = {
   raw?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** DatasetComplete contains metadata on a dataset. */
-export type DatasetComplete = {
-  __typename?: 'DatasetComplete';
-  /** access contains list of users, groups and service accounts which have access to the dataset */
-  access: Array<Access>;
-  /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
-  anonymisation_description?: Maybe<Scalars['String']>;
-  /** created is the timestamp for when the dataset was created */
-  created: Scalars['Time'];
-  /** dataproductID is the id of the dataproduct containing the dataset */
-  dataproductID: Scalars['ID'];
-  /** datasource contains metadata on the datasource */
-  datasource: Datasource;
-  /** description of the dataset */
-  description: Scalars['String'];
-  /** id is the identifier for the dataset */
-  id: Scalars['ID'];
-  /** keywords for the dataset used as tags. */
-  keywords: Array<Scalars['String']>;
-  /** lastModified is the timestamp for when the dataset was last modified */
-  lastModified: Scalars['Time'];
-  /** mappings services a dataset is exposed to */
-  mappings: Array<MappingService>;
-  /** name of the dataset */
-  name: Scalars['String'];
-  /** owner is the owner of the dataproduct containing this dataset */
-  owner: Owner;
-  /** pii indicates whether it is personal identifiable information in the dataset */
-  pii: PiiLevel;
-  /** repo is the url of the repository containing the code to create the dataset */
-  repo?: Maybe<Scalars['String']>;
-  /** services contains links to this dataset in other services */
-  services: DatasetServices;
-  /** slug is the dataset slug */
-  slug: Scalars['String'];
-  /** targetUser is the type of user that the dataset is meant to be used by */
-  targetUser?: Maybe<Scalars['String']>;
-};
-
-
-/** DatasetComplete contains metadata on a dataset. */
-export type DatasetCompleteDescriptionArgs = {
-  raw?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type DatasetServices = {
   __typename?: 'DatasetServices';
   /** URL to the dataset in metabase */
@@ -332,7 +236,7 @@ export type DatasetServices = {
 };
 
 /** Datasource defines types that can be returned as a dataset datasource. */
-export type Datasource = BigQuery | BigQueryComplete;
+export type Datasource = BigQuery;
 
 /** GCPProject contains metadata on a GCP project. */
 export type GcpProject = {
@@ -451,7 +355,7 @@ export type Mutation = {
    *
    * Requires authentication.
    */
-  createDataproduct: Dataproduct;
+  createDataproduct: DataproductCreate;
   /**
    * createDataset creates a new dataset
    *
@@ -556,7 +460,7 @@ export type Mutation = {
    *
    * Requires authentication.
    */
-  updateDataproduct: Dataproduct;
+  updateDataproduct: Scalars['Boolean'];
   /**
    * updateDataset updates an existing dataset
    *
@@ -1026,13 +930,8 @@ export type Query = {
   accessiblePseudoDatasets: Array<PseudoDataset>;
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct;
-  /** dataproductComplete returns the given dataproduct with complete information. */
-  dataproductComplete: DataproductComplete;
-  /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
-  dataproducts: Array<Dataproduct>;
   /** dataset returns the given dataset. */
   dataset: Dataset;
-  datasetsInDataproduct: Array<Dataset>;
   gcpGetAllTablesInProject: Array<BigQuerySource>;
   /**
    * gcpGetColumns returns all columns for a table.
@@ -1115,25 +1014,8 @@ export type QueryDataproductArgs = {
 };
 
 
-export type QueryDataproductCompleteArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryDataproductsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  service?: InputMaybe<MappingService>;
-};
-
-
 export type QueryDatasetArgs = {
   id: Scalars['ID'];
-};
-
-
-export type QueryDatasetsInDataproductArgs = {
-  dataproductID: Scalars['ID'];
 };
 
 
@@ -1611,7 +1493,7 @@ export type CreateDataproductMutationVariables = Exact<{
 }>;
 
 
-export type CreateDataproductMutation = { __typename?: 'Mutation', createDataproduct: { __typename?: 'Dataproduct', id: string, slug: string } };
+export type CreateDataproductMutation = { __typename?: 'Mutation', createDataproduct: { __typename?: 'DataproductCreate', id: string, slug: string } };
 
 export type DataproductQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1619,27 +1501,14 @@ export type DataproductQueryVariables = Exact<{
 }>;
 
 
-export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } | { __typename?: 'BigQueryComplete', type: 'BigQueryComplete' } }> } };
-
-export type DataproductCompleteQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  rawDesc?: InputMaybe<Scalars['Boolean']['input']>;
-}>;
-
-
-export type DataproductCompleteQuery = { __typename?: 'Query', dataproductComplete: { __typename?: 'DataproductComplete', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'DatasetComplete', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', type: 'BigQuery' } | { __typename?: 'BigQueryComplete', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQueryComplete', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
+export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
 
 export type DataproductSummaryQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DataproductSummaryQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, datasets: Array<{ __typename?: 'Dataset', datasource: { __typename?: 'BigQuery', type: 'BigQuery' } | { __typename?: 'BigQueryComplete', type: 'BigQueryComplete' } }> } };
-
-export type MetabaseProudctsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MetabaseProudctsQuery = { __typename?: 'Query', dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }> };
+export type DataproductSummaryQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, datasets: Array<{ __typename?: 'Dataset', datasource: { __typename?: 'BigQuery', type: 'BigQuery' } }> } };
 
 export type DeleteDataproductMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1685,7 +1554,7 @@ export type UpdateDataproductMutationVariables = Exact<{
 }>;
 
 
-export type UpdateDataproductMutation = { __typename?: 'Mutation', updateDataproduct: { __typename?: 'Dataproduct', id: string } };
+export type UpdateDataproductMutation = { __typename?: 'Mutation', updateDataproduct: boolean };
 
 export type UpdateMappingMutationVariables = Exact<{
   datasetID: Scalars['ID']['input'];
@@ -1713,7 +1582,7 @@ export type DatasetQueryVariables = Exact<{
 }>;
 
 
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } | { __typename?: 'BigQueryComplete', type: 'BigQueryComplete' } } };
+export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
 
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1820,14 +1689,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } | { __typename?: 'BigQueryComplete', type: 'BigQueryComplete' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'QuartoStory' } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'QuartoStory' } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } | { __typename?: 'BigQueryComplete', type: 'BigQueryComplete' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
 
 export type SlackQueryVariables = Exact<{
   name: Scalars['String']['input'];
@@ -2476,122 +2345,6 @@ export function useDataproductLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type DataproductQueryHookResult = ReturnType<typeof useDataproductQuery>;
 export type DataproductLazyQueryHookResult = ReturnType<typeof useDataproductLazyQuery>;
 export type DataproductQueryResult = Apollo.QueryResult<DataproductQuery, DataproductQueryVariables>;
-export const DataproductCompleteDocument = gql`
-    query DataproductComplete($id: ID!, $rawDesc: Boolean) {
-  dataproductComplete(id: $id) {
-    id
-    lastModified
-    name
-    description(raw: $rawDesc)
-    created
-    slug
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-      productAreaID
-      teamID
-    }
-    keywords
-    datasets {
-      id
-      dataproductID
-      lastModified
-      name
-      description
-      created
-      repo
-      slug
-      pii
-      keywords
-      mappings
-      anonymisation_description
-      targetUser
-      services {
-        metabase
-      }
-      owner {
-        group
-        teamkatalogenURL
-        teamContact
-      }
-      access {
-        id
-        subject
-        granter
-        expires
-        created
-        revoked
-        accessRequestID
-        accessRequest {
-          id
-          polly {
-            id
-            name
-            externalID
-            url
-          }
-        }
-      }
-      datasource {
-        type: __typename
-        ... on BigQueryComplete {
-          projectID
-          dataset
-          table
-          lastModified
-          created
-          expires
-          tableType
-          description
-          schema {
-            name
-            description
-            mode
-            type
-          }
-          piiTags
-          pseudoColumns
-        }
-      }
-    }
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-    }
-  }
-}
-    `;
-
-/**
- * __useDataproductCompleteQuery__
- *
- * To run a query within a React component, call `useDataproductCompleteQuery` and pass it any options that fit your needs.
- * When your component renders, `useDataproductCompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDataproductCompleteQuery({
- *   variables: {
- *      id: // value for 'id'
- *      rawDesc: // value for 'rawDesc'
- *   },
- * });
- */
-export function useDataproductCompleteQuery(baseOptions: Apollo.QueryHookOptions<DataproductCompleteQuery, DataproductCompleteQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DataproductCompleteQuery, DataproductCompleteQueryVariables>(DataproductCompleteDocument, options);
-      }
-export function useDataproductCompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DataproductCompleteQuery, DataproductCompleteQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DataproductCompleteQuery, DataproductCompleteQueryVariables>(DataproductCompleteDocument, options);
-        }
-export type DataproductCompleteQueryHookResult = ReturnType<typeof useDataproductCompleteQuery>;
-export type DataproductCompleteLazyQueryHookResult = ReturnType<typeof useDataproductCompleteLazyQuery>;
-export type DataproductCompleteQueryResult = Apollo.QueryResult<DataproductCompleteQuery, DataproductCompleteQueryVariables>;
 export const DataproductSummaryDocument = gql`
     query DataproductSummary($id: ID!) {
   dataproduct(id: $id) {
@@ -2638,48 +2391,6 @@ export function useDataproductSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type DataproductSummaryQueryHookResult = ReturnType<typeof useDataproductSummaryQuery>;
 export type DataproductSummaryLazyQueryHookResult = ReturnType<typeof useDataproductSummaryLazyQuery>;
 export type DataproductSummaryQueryResult = Apollo.QueryResult<DataproductSummaryQuery, DataproductSummaryQueryVariables>;
-export const MetabaseProudctsDocument = gql`
-    query MetabaseProudcts {
-  dataproducts(service: metabase) {
-    id
-    name
-    keywords
-    slug
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-    }
-  }
-}
-    `;
-
-/**
- * __useMetabaseProudctsQuery__
- *
- * To run a query within a React component, call `useMetabaseProudctsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMetabaseProudctsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMetabaseProudctsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMetabaseProudctsQuery(baseOptions?: Apollo.QueryHookOptions<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
-      }
-export function useMetabaseProudctsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
-        }
-export type MetabaseProudctsQueryHookResult = ReturnType<typeof useMetabaseProudctsQuery>;
-export type MetabaseProudctsLazyQueryHookResult = ReturnType<typeof useMetabaseProudctsLazyQuery>;
-export type MetabaseProudctsQueryResult = Apollo.QueryResult<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>;
 export const DeleteDataproductDocument = gql`
     mutation deleteDataproduct($id: ID!) {
   deleteDataproduct(id: $id)
@@ -2860,9 +2571,7 @@ export type GcpGetTablesLazyQueryHookResult = ReturnType<typeof useGcpGetTablesL
 export type GcpGetTablesQueryResult = Apollo.QueryResult<GcpGetTablesQuery, GcpGetTablesQueryVariables>;
 export const UpdateDataproductDocument = gql`
     mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
-  updateDataproduct(id: $id, input: $input) {
-    id
-  }
+  updateDataproduct(id: $id, input: $input)
 }
     `;
 export type UpdateDataproductMutationFn = Apollo.MutationFunction<UpdateDataproductMutation, UpdateDataproductMutationVariables>;

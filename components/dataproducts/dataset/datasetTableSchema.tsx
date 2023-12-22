@@ -6,7 +6,7 @@ import {PersonopplysningerDetaljert} from "./helptext";
 import TagPill from '../../lib/tagPill';
 
 interface DatasetTableSchemaProps {
-  datasource: DatasetQuery['dataset']['datasource']
+  datasource: any
   showPii: boolean
 }
 
@@ -14,7 +14,7 @@ const DatasetTableSchema = ({
   datasource,
   showPii,
 }: DatasetTableSchemaProps) => {
-  const schema = datasource.schema
+  const schema: any = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
   return (
@@ -49,7 +49,7 @@ const DatasetTableSchema = ({
                     )}
                   </Table.DataCell>
                 )}
-                <Table.DataCell>{datasource.pseudoColumns?.some(it=> it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
+                <Table.DataCell>{datasource.pseudoColumns?.some((it: any)=> it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>

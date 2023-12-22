@@ -4,12 +4,12 @@ import remarkGfm from 'remark-gfm'
 import TagPill from './tagPill'
 import { Accordion, Heading, Link, Button, Alert } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
-import { DataproductCompleteQuery} from '../../lib/schema/graphql'
+import { DataproductQuery} from '../../lib/schema/graphql'
 
 export const Description = ({
     dataproduct
 }: {
-    dataproduct: DataproductCompleteQuery['dataproductComplete']
+    dataproduct: DataproductQuery['dataproduct']
 }) => {
     const router = useRouter()
     const handleChange = (newSlug: string) => {

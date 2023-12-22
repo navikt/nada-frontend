@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const CREATE_DATAPRODUCT = gql`
+export const UPDATE_KEYWORDS = gql`
   mutation updateKeywords($input: UpdateKeywords!) {
     updateKeywords(input: $input)
   }

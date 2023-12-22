@@ -22,13 +22,13 @@ const NewAccessRequestForm = ({ active, dataset, setModal }: NewAccessRequestFor
   const [error, setError] = useState<Error | null>(null)
   const router = useRouter()
 
-  if(!active) return <></>
-  
   const dp = useDataproductQuery({
     variables: {
       id: dataset.dataproductID,
     },
   })
+
+  if(!active) return <></>
 
   console.log("query new access")
   if (dp.error) return <ErrorMessage error={dp.error} />

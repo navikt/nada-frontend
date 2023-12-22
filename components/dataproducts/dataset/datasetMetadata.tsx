@@ -10,7 +10,7 @@ interface DataproductTableSchemaProps {
 }
 
 const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {
-  const datasource = dataset.datasource
+  const datasource : any = dataset.datasource
   const schema = datasource.schema
   if (!schema) return <div>Ingen skjemainformasjon</div>
 
