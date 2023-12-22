@@ -86,6 +86,7 @@ const DataproductPage = ({id, slug}: DataproductPageProps) => {
       component: (
         <Description
           dataproduct={product}
+          isOwner={isOwner}
         />
       ),
     },
