@@ -3,7 +3,7 @@ import {
   Exact,
   SearchContentWithOptionsQuery,
   SearchOptions,
-  useDeleteQuartoStoryMutation,
+  useDeleteStoryMutation,
   useProductAreasQuery,
   useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
@@ -38,13 +38,6 @@ type ResultListInterface = {
     __typename?: 'Story'
     id: string
     name: string
-    keywords?: string[]
-    owner?: { __typename?: 'Owner'; group: string } | null | undefined
-  }[]
-  quartoStories?: {
-    __typename?: 'QuartoStory'
-    id: string
-    name: string
     group: string
     keywords?: string[]
     teamkatalogenURL?: string | null | undefined
@@ -68,7 +61,6 @@ const ResultList = ({
   search,
   dataproducts,
   stories,
-  quartoStories,
   insightProducts,
   searchParam,
   updateQuery,
@@ -96,9 +88,9 @@ const ResultList = ({
   })
 
   const po = useProductAreasQuery()
-  const [deleteQuartoQuery] = useDeleteQuartoStoryMutation()
+  const [deleteStoryQuery] = useDeleteStoryMutation()
   const userInfo= useContext(UserState)
-  const deleteQuarto = (id: string) => deleteQuartoQuery({
+  const deleteStory = (id: string) => deleteStoryQuery({
     variables:{
       id: id
     },
@@ -120,9 +112,6 @@ const ResultList = ({
     const datastories = data.search.filter(
       (d) => d.result.__typename === 'Story'
     )
-    const quartostories = data.search.filter(
-      (d)=> d.result.__typename === 'QuartoStory'
-    )
 
     return (
       <Results>
@@ -137,7 +126,7 @@ const ResultList = ({
           <Tabs.List>
             <Tabs.Tab
               value="story"
-              label={`Fortellinger (${datastories.length + quartostories.length})`}
+              label={`Fortellinger (${datastories.length})`}
             />
             <Tabs.Tab
               value="dataproduct"
@@ -146,31 +135,16 @@ const ResultList = ({
           </Tabs.List>
           <Tabs.Panel className="flex flex-col pt-4 gap-4" value="story">
             {datastories.map(
-              (d, idx) =>
-                d.result.__typename === 'Story' && (
-                  <SearchResultLink
-                    key={idx}
-                    group={d.result.group!}
-                    name={d.result.name}
-                    type={'story'}
-                    keywords={d.result.keywords}
-                    description={d.excerpt}
-                    link={`/story/${d.result.id}`}
-                    teamkatalogen={tk.data}
-                    productAreas={po.data}
-                  />
-                )
-            ).concat(quartostories.map(
               (it, idx)=>
               (
-                it.result.__typename ==='QuartoStory' && (
+                it.result.__typename ==='Story' && (
                 <SearchResultLink
                   key={idx}
                   name={it.result.name}
                   type={'story'}
                   keywords={it.result.keywords}
                   description={it.excerpt}
-                  link={`/quarto/${it.result.id}`}
+                  link={`/story/${it.result.id}`}
                   group={{
                     group: it.result.groupName,
                     teamkatalogenURL: it.result.teamkatalogenURL,
@@ -181,7 +155,7 @@ const ResultList = ({
               )
               )
                  
-            ))}
+            )}
           </Tabs.Panel>
           <Tabs.Panel className="flex flex-col gap-4" value="dataproduct">
             {dataproducts.map(
@@ -224,11 +198,11 @@ const ResultList = ({
     )
   }
 
-  if (stories || quartoStories) {
+  if (stories) {
     return (
       <div>
         <Results>
-          {quartoStories?.map((s, idx) => (
+          {stories?.map((s, idx) => (
             <SearchResultLink
               key={idx}
               group={{
@@ -237,25 +211,14 @@ const ResultList = ({
               }}
               id={s.id}
               name={s.name}
-              resourceType={"Quarto fortelling"}
-              link={`/quarto/${s.id}`}
+              resourceType={"datafortelling"}
+              link={`/story/${s.id}`}
               teamkatalogen={tk.data}
               productAreas={po.data}
               keywords={s.keywords}
               editable = {true}
               description= {s.description}
-              deleteResource = {deleteQuarto}
-            />
-          ))}
-          {stories?.map((s, idx) => (
-            <SearchResultLink
-              key={idx}
-              group={s.owner}
-              name={s.name}
-              keywords={s.keywords}
-              link={`/story/${s.id}`}
-              teamkatalogen={tk.data}
-              productAreas={po.data}
+              deleteResource = {deleteStory}
             />
           ))}
         </Results>

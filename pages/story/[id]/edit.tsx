@@ -1,30 +1,29 @@
-import * as React from 'react'
-import { useStoryQuery } from '../../../lib/schema/graphql'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import EditForm from '../../../components/stories/editForm'
-import ErrorMessage from '../../../components/lib/error'
-import LoaderSpinner from '../../../components/lib/spinner'
-import InnerContainer from '../../../components/lib/innerContainer'
+import { Loader } from "@navikt/ds-react";
+import { useRouter } from "next/router"
+import { EditStoryMetadataForm } from "../../../components/stories/editStoryMetadata";
+import { useDataStoryQuery } from "../../../lib/schema/graphql";
 
-const StoryDraft = () => {
-  const router = useRouter()
-  const id = router.query.id as string
-  const { data, error, loading } = useStoryQuery({ variables: { id } })
+const EditStoryPage = ()=>{
+    const router = useRouter()
+    const id = router.query.id;
+    const storyQuery = useDataStoryQuery({variables: {id:id as string}})
+    if(storyQuery.error){
+        return <div>{storyQuery.error.message}</div>
+    }
 
-  if (error) return <ErrorMessage error={error} />
-  if (loading || !data) return <LoaderSpinner />
-
-  const story = data.story
-
-  return (
-    <InnerContainer>
-      <Head>
-        <title>Lagre {story.name}</title>
-      </Head>
-      <EditForm story={story} />
-    </InnerContainer>
-  )
+    if(storyQuery.loading || !storyQuery.data){
+        return <Loader></Loader>
+    }
+    const story = storyQuery.data.dataStory
+    return <div>
+        <EditStoryMetadataForm 
+            id={id as string} 
+            name={story.name} 
+            description={story.description} 
+            keywords={story.keywords} 
+            teamkatalogenURL={story.teamkatalogenURL || ""} 
+            group={story.group} />
+    </div>
 }
 
-export default StoryDraft
+export default EditStoryPage;

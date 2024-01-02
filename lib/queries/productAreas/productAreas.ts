@@ -17,17 +17,6 @@ export const GET_PRODUCT_AREAS = gql`
       stories{
         id
         name
-        created
-        lastModified
-        keywords
-        owner {
-            group
-            teamkatalogenURL
-        }
-      }
-      quartoStories{
-        id
-        name
         description
         created
         lastModified
@@ -52,10 +41,6 @@ export const GET_PRODUCT_AREAS = gql`
           name
         }
         stories{
-          id
-          name
-        }
-        quartoStories{
           id
           name
         }
