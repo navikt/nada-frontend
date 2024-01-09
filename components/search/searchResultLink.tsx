@@ -122,7 +122,7 @@ export const SearchResultLink = ({
               </div>
               {editable && <div>
                 <Link className="m-2" href="#" onClick={editResource}
-                >Endre beskrivelse</Link>
+                >Endre metadata</Link>
                 <Link className='m-2' href="#" onClick={openDeleteModal}>Slett</Link>
               </div>}
             </div>
