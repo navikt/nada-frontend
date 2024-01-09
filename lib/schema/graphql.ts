@@ -602,7 +602,7 @@ export type MutationUpdateStoryMetadataArgs = {
   teamkatalogenURL?: InputMaybe<Scalars['String']>;
 };
 
-/** NadaToken contains the team token of the corresponding team for updating quarto stories */
+/** NadaToken contains the team token of the corresponding team for updating data stories */
 export type NadaToken = {
   __typename?: 'NadaToken';
   /** name of team */
@@ -727,7 +727,7 @@ export type NewJoinableViews = {
   name: Scalars['String'];
 };
 
-/** NewStory contains the metadata and content of quarto stories. */
+/** NewStory contains the metadata and content of data stories. */
 export type NewStory = {
   /** description of the data story. */
   description?: InputMaybe<Scalars['String']>;
