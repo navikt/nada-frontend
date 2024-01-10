@@ -92,6 +92,7 @@ const Dataproduct = (props: DataproductProps) => {
       component: (
         <Description
           dataproduct={product}
+          isOwner={isOwner}
         />
       ),
     },
