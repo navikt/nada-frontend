@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
-import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import {
@@ -16,8 +15,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
-import { UPDATE_QUARTOSTORY_METADATA } from '../../lib/queries/story/updateQuartoStory'
-import { useUpdateQuartoStoryMetadataMutation } from '../../lib/schema/graphql'
+import { useUpdateStoryMetadataMutation } from '../../lib/schema/graphql'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 const schema = yup.object().shape({
@@ -29,7 +27,7 @@ const schema = yup.object().shape({
 })
 
 
-export interface EditQuartoStoryMetadataFields {
+export interface EditStoryMetadataFields {
   id: string
   name: string
   description: string
@@ -38,12 +36,12 @@ export interface EditQuartoStoryMetadataFields {
   group: string
 }
 
-export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, teamkatalogenURL, group}: EditQuartoStoryMetadataFields) => {
+export const EditStoryMetadataForm = ({id, name, description, keywords, teamkatalogenURL, group}: EditStoryMetadataFields) => {
   const router = useRouter()
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
   const userInfo = useContext(UserState)
-  const [updateQuartoQuery, {loading, error}] = useUpdateQuartoStoryMetadataMutation()
+  const [updateStoryQuery, {loading, error}] = useUpdateStoryMetadataMutation()
   const {
     register,
     handleSubmit,
@@ -78,10 +76,8 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
       : setValue('keywords', [keyword])
   }
 
-  const valueOrNull = (val: string) => (val == '' ? null : val)
-
   const onSubmit = async (data: any) => {
-    const editQuartoData = {
+    const editStoryData = {
       variables: {
         id: id,
         name: data.name,
@@ -99,7 +95,7 @@ export const EditQuartoStoryMetadataForm = ({id, name, description, keywords, te
       ]
     }
 
-    updateQuartoQuery(editQuartoData).then(()=>{
+    updateStoryQuery(editStoryData).then(()=>{
       amplitudeLog('skjema fullført', { skjemanavn: 'endre-datafortelling' })
       router.back()
     }).catch(e=>{

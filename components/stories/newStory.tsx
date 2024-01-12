@@ -11,11 +11,10 @@ import * as yup from 'yup';
 import { ChangeEvent, useContext, useRef, useState } from 'react';
 import TagsSelector from '../lib/tagsSelector';
 import { UserState } from '../../lib/context';
-import { CREATE_QUARTO_STORY } from '../../lib/queries/story/createQuartoStory';
+import { CREATE_STORY } from '../../lib/queries/story/createStory';
 import { TreeItem, TreeView } from '@mui/lab';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Header } from '@navikt/ds-react-internal';
-import { UploadFile, useCreateQuartoStoryMutation } from '../../lib/schema/graphql';
+import { UploadFile } from '../../lib/schema/graphql';
 
 const defaultValues: FieldValues = {
   name: null,
@@ -44,7 +43,7 @@ export const NewStoryForm = () => {
   const [teamID, setTeamID] = useState<string>('');
   const userInfo = useContext(UserState);
   const [inputKey, setInputKey] = useState(0);
-  const [quartoFiles, setQuartoFiles] = useState<File[]>([]);
+  const [storyFiles, setStoryFiles] = useState<File[]>([]);
   const singleFileInputRef = useRef(null);
   const folderFileInputRef = useRef(null);
 
@@ -91,7 +90,7 @@ export const NewStoryForm = () => {
   const onSubmit = async (data: any) => {
     const uploadData = {
       variables: {
-        files: quartoFiles.map<UploadFile>(it=>({
+        files: storyFiles.map<UploadFile>(it=>({
           path: fixRelativePath(it),
           file: it,
         })),
@@ -120,10 +119,10 @@ export const NewStoryForm = () => {
   }
 
   const [createStory, { loading, error: backendError }] = useMutation(
-    CREATE_QUARTO_STORY,
+    CREATE_STORY,
     {
       onCompleted: (data) => {
-        router.push(`/quarto/${data.createQuartoStory.id}`);
+        router.push(`/story/${data.createStory.id}`);
       },
     },
   )
@@ -152,7 +151,7 @@ export const NewStoryForm = () => {
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setQuartoFiles(Array.from(files));
+      setStoryFiles(Array.from(files));
     }
   }
 
@@ -197,10 +196,10 @@ export const NewStoryForm = () => {
 
   const handleDeleteClick = (isFile: boolean, node: any) => {
     var filesToDelete = isFile ? [node] : gatherFilesToDelete(node)
-    const remained = quartoFiles.filter((file) => {
+    const remained = storyFiles.filter((file) => {
       return !filesToDelete.find(it => it == file)
     })
-    setQuartoFiles(remained);
+    setStoryFiles(remained);
     setInputKey(inputKey + 1)
   };
 
@@ -310,9 +309,9 @@ export const NewStoryForm = () => {
         {/* @ts-expect-error */}
         <input key={inputKey * 2} ref={folderFileInputRef} type="file" className="hidden" webkitdirectory="" directory="" onChange={handleFileUpload} multiple />
         <input key={inputKey * 2 + 1} ref={singleFileInputRef} type="file" className="hidden" onChange={handleFileUpload} multiple />
-        {quartoFiles.length > 0 && (
+        {storyFiles.length > 0 && (
           <TreeView>
-            {renderTree(generateFileTree(quartoFiles))}
+            {renderTree(generateFileTree(storyFiles))}
           </TreeView>
         )}
         {backendError && <ErrorMessage error={backendError} />}
