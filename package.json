@@ -62,6 +62,8 @@
     "@types/apollo-upload-client": "^17.0.2",
     "@types/cookie": "^0.5.1",
     "@types/react": "18.2.47",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
     "autoprefixer": "^10.4.13",
     "cookie": "^0.5.0",
     "eslint": "8.31.0",
@@ -71,7 +73,7 @@
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "tailwindcss": "^3.2.4",
-    "typescript": "4.9.4"
+    "typescript": "5.3.3"
   },
   "prettier": {
     "semi": false,
