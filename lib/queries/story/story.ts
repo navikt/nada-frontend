@@ -1,30 +1,18 @@
 import { gql } from 'graphql-tag'
 
 export const GET_STORY = gql`
-  query Story($id: ID!) {
-    story(id: $id) {
+  query dataStory($id: ID!) {
+    dataStory(id: $id) {
       id
       name
+      description
       created
       lastModified
       keywords
-      owner {
-        group
-        teamkatalogenURL
-        productAreaID
-        teamID
-      }
-      views {
-        id
-        __typename
-        ... on StoryViewHeader {
-          content
-          level
-        }
-        ... on StoryViewMarkdown {
-          content
-        }
-      }
+      group
+      teamkatalogenURL
+      productAreaID
+      teamID
     }
   }
 `

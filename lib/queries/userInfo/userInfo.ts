@@ -71,15 +71,6 @@ export const USER_INFO = gql`
       stories {
         id
         name
-        keywords
-        owner {
-          group
-          teamkatalogenURL
-        }
-      }
-      quartoStories {
-        id
-        name
         description
         keywords
         group

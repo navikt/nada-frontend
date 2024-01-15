@@ -366,11 +366,11 @@ export type Mutation = {
    */
   createJoinableViews: Scalars['String'];
   /**
-   * createQuartoStory creates a quarto story.
+   * createStory creates a data story.
    *
    * Requires authentication.
    */
-  createQuartoStory: QuartoStory;
+  createStory: Story;
   /**
    * deleteAccessRequest deletes a dataset access request.
    *
@@ -396,13 +396,7 @@ export type Mutation = {
    */
   deleteInsightProduct: Scalars['Boolean'];
   /**
-   * deleteQuartoStory deletes an existing quarto story.
-   *
-   * Requires authentication.
-   */
-  deleteQuartoStory: Scalars['Boolean'];
-  /**
-   * deleteStory deletes an existing story.
+   * deleteStory deletes an existing data story.
    *
    * Requires authentication.
    */
@@ -427,12 +421,6 @@ export type Mutation = {
    * Requires authentication
    */
   mapDataset: Scalars['Boolean'];
-  /**
-   * publishStory publishes a story draft.
-   *
-   * Requires authentication.
-   */
-  publishStory: Story;
   /**
    * revokeAccessToDataset revokes access for a subject to the dataset.
    *
@@ -471,13 +459,7 @@ export type Mutation = {
    */
   updateKeywords: Scalars['Boolean'];
   /**
-   * updateQuartoStoryMetadata updates metadata on an existing quarto story.
-   *
-   * Requires authentication.
-   */
-  updateQuartoStoryMetadata: QuartoStory;
-  /**
-   * updateStoryMetadata updates metadata on an existing story.
+   * updateStoryMetadata updates metadata on an existing data story.
    *
    * Requires authentication.
    */
@@ -515,9 +497,9 @@ export type MutationCreateJoinableViewsArgs = {
 };
 
 
-export type MutationCreateQuartoStoryArgs = {
+export type MutationCreateStoryArgs = {
   files: Array<UploadFile>;
-  input: NewQuartoStory;
+  input: NewStory;
 };
 
 
@@ -537,11 +519,6 @@ export type MutationDeleteDatasetArgs = {
 
 
 export type MutationDeleteInsightProductArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type MutationDeleteQuartoStoryArgs = {
   id: Scalars['ID'];
 };
 
@@ -570,11 +547,6 @@ export type MutationGrantAccessToDatasetArgs = {
 export type MutationMapDatasetArgs = {
   datasetID: Scalars['ID'];
   services: Array<MappingService>;
-};
-
-
-export type MutationPublishStoryArgs = {
-  input: NewStory;
 };
 
 
@@ -619,7 +591,7 @@ export type MutationUpdateKeywordsArgs = {
 };
 
 
-export type MutationUpdateQuartoStoryMetadataArgs = {
+export type MutationUpdateStoryMetadataArgs = {
   description: Scalars['String'];
   group: Scalars['String'];
   id: Scalars['ID'];
@@ -630,17 +602,7 @@ export type MutationUpdateQuartoStoryMetadataArgs = {
   teamkatalogenURL?: InputMaybe<Scalars['String']>;
 };
 
-
-export type MutationUpdateStoryMetadataArgs = {
-  id: Scalars['ID'];
-  keywords: Array<Scalars['String']>;
-  name: Scalars['String'];
-  productAreaID?: InputMaybe<Scalars['String']>;
-  teamID?: InputMaybe<Scalars['String']>;
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
-};
-
-/** NadaToken contains the team token of the corresponding team for updating quarto stories */
+/** NadaToken contains the team token of the corresponding team for updating data stories */
 export type NadaToken = {
   __typename?: 'NadaToken';
   /** name of team */
@@ -765,42 +727,23 @@ export type NewJoinableViews = {
   name: Scalars['String'];
 };
 
-/** NewQuartoStory contains the metadata and content of quarto stories. */
-export type NewQuartoStory = {
-  /** description of the quarto story. */
+/** NewStory contains the metadata and content of data stories. */
+export type NewStory = {
+  /** description of the data story. */
   description?: InputMaybe<Scalars['String']>;
-  /** group is the owner group of the quarto */
+  /** group is the owner group of the data story. */
   group: Scalars['String'];
-  /** id of the quarto story. */
+  /** id of the data story. */
   id?: InputMaybe<Scalars['ID']>;
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
-  /** name of the quarto story. */
+  /** name of the data story. */
   name: Scalars['String'];
   /** Id of the creator's product area. */
   productAreaID?: InputMaybe<Scalars['String']>;
   /** Id of the creator's team. */
   teamID?: InputMaybe<Scalars['String']>;
-  /** teamkatalogenURL of the creator */
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
-};
-
-export type NewStory = {
-  /** group is the owner group for the story. */
-  group: Scalars['String'];
-  /** id is the id for the draft story. */
-  id: Scalars['ID'];
-  /** keywords for the datastory used as tags. */
-  keywords?: InputMaybe<Array<Scalars['String']>>;
-  /** name is the title of the story */
-  name: Scalars['String'];
-  /** Id of the team's product area. */
-  productAreaID?: InputMaybe<Scalars['String']>;
-  /** target is the id of the published story to overwrite. Keep empty to create new story. */
-  target?: InputMaybe<Scalars['ID']>;
-  /** Id of the team. */
-  teamID?: InputMaybe<Scalars['String']>;
-  /** owner Teamkatalogen URL for the dataproduct. */
+  /** teamkatalogenURL of the creator. */
   teamkatalogenURL?: InputMaybe<Scalars['String']>;
 };
 
@@ -863,8 +806,6 @@ export type ProductArea = {
   insightProducts: Array<InsightProduct>;
   /** name is the name of the product area. */
   name: Scalars['String'];
-  /** quarto stories is the stories owned by the product area. */
-  quartoStories: Array<QuartoStory>;
   /** stories is the stories owned by the product area. */
   stories: Array<Story>;
   /** teams is the teams in the product area. */
@@ -882,33 +823,6 @@ export type PseudoDataset = {
   name: Scalars['String'];
 };
 
-/** QuartoStory contains the metadata and content of data stories. */
-export type QuartoStory = {
-  __typename?: 'QuartoStory';
-  /** created is the timestamp for when the dataproduct was created */
-  created: Scalars['Time'];
-  /** creator of the quarto story. */
-  creator: Scalars['String'];
-  /** description of the quarto story. */
-  description: Scalars['String'];
-  /** group is the owner group of the quarto */
-  group: Scalars['String'];
-  /** id of the quarto story. */
-  id: Scalars['ID'];
-  /** keywords for the story used as tags. */
-  keywords: Array<Scalars['String']>;
-  /** lastModified is the timestamp for when the dataproduct was last modified */
-  lastModified?: Maybe<Scalars['Time']>;
-  /** name of the quarto story. */
-  name: Scalars['String'];
-  /** Id of the creator's product area. */
-  productAreaID?: Maybe<Scalars['String']>;
-  /** Id of the creator's team. */
-  teamID?: Maybe<Scalars['String']>;
-  /** teamkatalogenURL of the creator */
-  teamkatalogenURL?: Maybe<Scalars['String']>;
-};
-
 export type Query = {
   __typename?: 'Query';
   /** searches slack public channels to validate the channel name */
@@ -919,6 +833,8 @@ export type Query = {
   accessRequestsForDataset: Array<AccessRequest>;
   /** accessiblePseudoDatasets returns the pseudo datasets the user has access to. */
   accessiblePseudoDatasets: Array<PseudoDataset>;
+  /** dataStory returns the given story. */
+  dataStory: Story;
   /** dataproduct returns the given dataproduct. */
   dataproduct: Dataproduct;
   /** dataproducts returns a list of dataproducts. Pagination done using the arguments. */
@@ -961,22 +877,8 @@ export type Query = {
   productArea: ProductArea;
   /** productAreas returns all product areas. */
   productAreas: Array<ProductArea>;
-  /** quartoStory returns the given story. */
-  quartoStory: QuartoStory;
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>;
-  /** stories returns all either draft or published stories depending on the draft boolean. */
-  stories: Array<Story>;
-  /** story returns the given story. */
-  story: Story;
-  /**
-   * storyToken returns the update token for the data story.
-   *
-   * Requires authentication.
-   */
-  storyToken: StoryToken;
-  /** storyView returns the given story view. */
-  storyView: StoryView;
   /** team returns the given team. */
   team: Team;
   /** searches teamkatalogen for teams where team name matches query input */
@@ -1000,6 +902,11 @@ export type QueryAccessRequestArgs = {
 
 export type QueryAccessRequestsForDatasetArgs = {
   datasetID: Scalars['ID'];
+};
+
+
+export type QueryDataStoryArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -1074,34 +981,9 @@ export type QueryProductAreaArgs = {
 };
 
 
-export type QueryQuartoStoryArgs = {
-  id: Scalars['ID'];
-};
-
-
 export type QuerySearchArgs = {
   options?: InputMaybe<SearchOptions>;
   q?: InputMaybe<SearchQuery>;
-};
-
-
-export type QueryStoriesArgs = {
-  draft?: InputMaybe<Scalars['Boolean']>;
-};
-
-
-export type QueryStoryArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryStoryTokenArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryStoryViewArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -1174,7 +1056,7 @@ export type SearchQuery = {
   text?: InputMaybe<Scalars['String']>;
 };
 
-export type SearchResult = Dataproduct | QuartoStory | Story;
+export type SearchResult = Dataproduct | Story;
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow';
@@ -1190,76 +1072,28 @@ export enum SearchType {
 /** Story contains the metadata and content of data stories. */
 export type Story = {
   __typename?: 'Story';
-  /** created is the timestamp for when the data story was created. */
+  /** created is the timestamp for when the data story was created */
   created: Scalars['Time'];
+  /** creator of the data story. */
+  creator: Scalars['String'];
+  /** description of the data story. */
+  description: Scalars['String'];
+  /** group is the owner group of the data story */
+  group: Scalars['String'];
   /** id of the data story. */
   id: Scalars['ID'];
   /** keywords for the story used as tags. */
   keywords: Array<Scalars['String']>;
-  /** lastModified is the timestamp for when the data story was last modified. */
+  /** lastModified is the timestamp for when the data story was last modified */
   lastModified?: Maybe<Scalars['Time']>;
   /** name of the data story. */
   name: Scalars['String'];
-  /** owner of the data story. Changes to the data story can only be done by a member of the owner. */
-  owner: Owner;
-  /** views contains a list of the different view data in the data story. */
-  views: Array<StoryView>;
-};
-
-/** StoryToken contains the token used for updating a data story. */
-export type StoryToken = {
-  __typename?: 'StoryToken';
-  /** id of the story token. */
-  id: Scalars['ID'];
-  /** token is the update token for the data story. */
-  token: Scalars['String'];
-};
-
-export type StoryView = {
-  /** id of the story view. */
-  id: Scalars['ID'];
-};
-
-/** StoryViewHeader contains the metadata and content of a header story view. */
-export type StoryViewHeader = StoryView & {
-  __typename?: 'StoryViewHeader';
-  /** content contains the header text. */
-  content: Scalars['String'];
-  /** id of the header story view. */
-  id: Scalars['ID'];
-  /** level is the size of the header text. */
-  level: Scalars['Int'];
-};
-
-/** StoryViewMarkdown contains the metadata and content of a markdown story view. */
-export type StoryViewMarkdown = StoryView & {
-  __typename?: 'StoryViewMarkdown';
-  /** content contains the markdown text. */
-  content: Scalars['String'];
-  /** id of the markdown story view. */
-  id: Scalars['ID'];
-};
-
-/** StoryViewPlotly contains the metadata and content of a plotly story view. */
-export type StoryViewPlotly = StoryView & {
-  __typename?: 'StoryViewPlotly';
-  /** view data for the plotly graph. */
-  data: Array<Scalars['Map']>;
-  /** frames contains view data when plotly figures has different views */
-  frames: Array<Scalars['Map']>;
-  /** id of the plotly story view. */
-  id: Scalars['ID'];
-  /** layout contains metadata on the plotly graph layout. */
-  layout: Scalars['Map'];
-};
-
-/** StoryViewVega contains the metadata and content of a vega story view. */
-export type StoryViewVega = StoryView & {
-  __typename?: 'StoryViewVega';
-  /** id of the vega story view. */
-  id: Scalars['ID'];
-  /** spec contains data and metadata on the vega graph. */
-  spec: Scalars['Map'];
+  /** Id of the creator's product area. */
+  productAreaID?: Maybe<Scalars['String']>;
+  /** Id of the creator's team. */
+  teamID?: Maybe<Scalars['String']>;
+  /** teamkatalogenURL of the creator */
+  teamkatalogenURL?: Maybe<Scalars['String']>;
 };
 
 /** SubjectType defines all possible types that can request access to a dataset. */
@@ -1296,8 +1130,6 @@ export type Team = {
   name: Scalars['String'];
   /** productAreaID is the id of the product area. */
   productAreaID: Scalars['String'];
-  /** quartoStories is the quartoStories owned by the team. */
-  quartoStories: Array<QuartoStory>;
   /** stories is the stories owned by the team. */
   stories: Array<Story>;
 };
@@ -1417,9 +1249,7 @@ export type UserInfo = {
   nadaTokens: Array<NadaToken>;
   /** name of user. */
   name: Scalars['String'];
-  /** quarto stories is the stories owned by the user's group */
-  quartoStories: Array<QuartoStory>;
-  /** stories is a list of stories with one of the users groups as owner. */
+  /** stories is the stories owned by the user's group */
   stories: Array<Story>;
 };
 
@@ -1669,12 +1499,12 @@ export type ProductAreaQueryVariables = Exact<{
 }>;
 
 
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, lastModified?: any | null, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, created: any, description: string, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
+export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, description: string, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
 
 export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
+export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
 export type JoinableViewQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1700,14 +1530,14 @@ export type SearchContentQueryVariables = Exact<{
 }>;
 
 
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'QuartoStory' } | { __typename?: 'Story' } }> };
+export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'Story' } }> };
 
 export type SearchContentWithOptionsQueryVariables = Exact<{
   options: SearchOptions;
 }>;
 
 
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'QuartoStory', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } | { __typename: 'Story', id: string, name: string, created: any, keywords: Array<string>, modified?: any | null, group: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } } }> };
+export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'Story', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } }> };
 
 export type SlackQueryVariables = Exact<{
   name: Scalars['String'];
@@ -1716,13 +1546,13 @@ export type SlackQueryVariables = Exact<{
 
 export type SlackQuery = { __typename?: 'Query', IsValidSlackChannel: boolean };
 
-export type CreateQuartoStoryMutationVariables = Exact<{
+export type CreateStoryMutationVariables = Exact<{
   files: Array<UploadFile> | UploadFile;
-  input: NewQuartoStory;
+  input: NewStory;
 }>;
 
 
-export type CreateQuartoStoryMutation = { __typename?: 'Mutation', createQuartoStory: { __typename?: 'QuartoStory', id: string } };
+export type CreateStoryMutation = { __typename?: 'Mutation', createStory: { __typename?: 'Story', id: string } };
 
 export type DeleteInsightProductMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1731,13 +1561,6 @@ export type DeleteInsightProductMutationVariables = Exact<{
 
 export type DeleteInsightProductMutation = { __typename?: 'Mutation', deleteInsightProduct: boolean };
 
-export type DeleteQuartoStoryMutationVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type DeleteQuartoStoryMutation = { __typename?: 'Mutation', deleteQuartoStory: boolean };
-
 export type DeleteStoryMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1745,59 +1568,14 @@ export type DeleteStoryMutationVariables = Exact<{
 
 export type DeleteStoryMutation = { __typename?: 'Mutation', deleteStory: boolean };
 
-export type PlotlyViewQueryVariables = Exact<{
+export type DataStoryQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type PlotlyViewQuery = { __typename?: 'Query', storyView: { __typename?: 'StoryViewHeader' } | { __typename?: 'StoryViewMarkdown' } | { __typename?: 'StoryViewPlotly', id: string, data: Array<any>, layout: any, frames: Array<any> } | { __typename?: 'StoryViewVega' } };
-
-export type PublishStoryMutationVariables = Exact<{
-  input: NewStory;
-}>;
-
-
-export type PublishStoryMutation = { __typename?: 'Mutation', publishStory: { __typename?: 'Story', id: string } };
-
-export type QuartoStoryQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type QuartoStoryQuery = { __typename?: 'Query', quartoStory: { __typename?: 'QuartoStory', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null } };
-
-export type StoriesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StoriesQuery = { __typename?: 'Query', stories: Array<{ __typename?: 'Story', id: string, name: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> };
-
-export type StoryQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type StoryQuery = { __typename?: 'Query', story: { __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null }, views: Array<{ __typename: 'StoryViewHeader', content: string, level: number, id: string } | { __typename: 'StoryViewMarkdown', content: string, id: string } | { __typename: 'StoryViewPlotly', id: string } | { __typename: 'StoryViewVega', id: string }> } };
-
-export type StoryTokenQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type StoryTokenQuery = { __typename?: 'Query', storyToken: { __typename?: 'StoryToken', token: string } };
+export type DataStoryQuery = { __typename?: 'Query', dataStory: { __typename?: 'Story', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null } };
 
 export type UpdateStoryMetadataMutationVariables = Exact<{
-  id: Scalars['ID'];
-  keywords: Array<Scalars['String']> | Scalars['String'];
-  name: Scalars['String'];
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
-  productAreaID?: InputMaybe<Scalars['String']>;
-  teamID?: InputMaybe<Scalars['String']>;
-}>;
-
-
-export type UpdateStoryMetadataMutation = { __typename?: 'Mutation', updateStoryMetadata: { __typename?: 'Story', id: string } };
-
-export type UpdateQuartoStoryMetadataMutationVariables = Exact<{
   id: Scalars['ID'];
   name: Scalars['String'];
   description: Scalars['String'];
@@ -1809,14 +1587,7 @@ export type UpdateQuartoStoryMetadataMutationVariables = Exact<{
 }>;
 
 
-export type UpdateQuartoStoryMetadataMutation = { __typename?: 'Mutation', updateQuartoStoryMetadata: { __typename?: 'QuartoStory', id: string } };
-
-export type VegaViewQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type VegaViewQuery = { __typename?: 'Query', storyView: { __typename?: 'StoryViewHeader' } | { __typename?: 'StoryViewMarkdown' } | { __typename?: 'StoryViewPlotly' } | { __typename?: 'StoryViewVega', id: string, spec: any } };
+export type UpdateStoryMetadataMutation = { __typename?: 'Mutation', updateStoryMetadata: { __typename?: 'Story', id: string } };
 
 export type TeamkatalogenQueryVariables = Exact<{
   q?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -1828,7 +1599,7 @@ export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', name: string, slug: string }, owner: { __typename?: 'Owner', group: string } }>, granted: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', name: string, slug: string }, owner: { __typename?: 'Owner', group: string } }> }, groups: Array<{ __typename?: 'Group', name: string, email: string }>, nadaTokens: Array<{ __typename?: 'NadaToken', team: string, token: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, quartoStories: Array<{ __typename?: 'QuartoStory', id: string, name: string, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
+export type UserInfoDetailsQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', name: string, email: string, loginExpiration: any, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string } }>, accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', name: string, slug: string }, owner: { __typename?: 'Owner', group: string } }>, granted: Array<{ __typename?: 'Dataset', id: string, name: string, dataproductID: string, keywords: Array<string>, slug: string, dataproduct: { __typename?: 'Dataproduct', name: string, slug: string }, owner: { __typename?: 'Owner', group: string } }> }, groups: Array<{ __typename?: 'Group', name: string, email: string }>, nadaTokens: Array<{ __typename?: 'NadaToken', team: string, token: string }>, googleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, allGoogleGroups?: Array<{ __typename?: 'Group', name: string, email: string }> | null, gcpProjects: Array<{ __typename?: 'GCPProject', id: string, group: { __typename?: 'Group', name: string, email: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, accessRequests: Array<{ __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null }> } };
 
 export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3217,18 +2988,6 @@ export const ProductAreaDocument = gql`
         name
         created
         lastModified
-        keywords
-        owner {
-          group
-          teamkatalogenURL
-          teamContact
-        }
-      }
-      quartoStories {
-        id
-        name
-        created
-        lastModified
         description
         keywords
         group
@@ -3263,18 +3022,6 @@ export const ProductAreaDocument = gql`
       }
     }
     stories {
-      id
-      name
-      created
-      lastModified
-      keywords
-      owner {
-        group
-        teamkatalogenURL
-        teamContact
-      }
-    }
-    quartoStories {
       id
       name
       created
@@ -3344,17 +3091,6 @@ export const ProductAreasDocument = gql`
     stories {
       id
       name
-      created
-      lastModified
-      keywords
-      owner {
-        group
-        teamkatalogenURL
-      }
-    }
-    quartoStories {
-      id
-      name
       description
       created
       lastModified
@@ -3379,10 +3115,6 @@ export const ProductAreasDocument = gql`
         name
       }
       stories {
-        id
-        name
-      }
-      quartoStories {
         id
         name
       }
@@ -3627,18 +3359,6 @@ export const SearchContentWithOptionsDocument = gql`
         __typename
         id
         name
-        created
-        keywords
-        modified: lastModified
-        group: owner {
-          group
-          teamkatalogenURL
-        }
-      }
-      ... on QuartoStory {
-        __typename
-        id
-        name
         description
         created
         groupName: group
@@ -3711,40 +3431,40 @@ export function useSlackLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Slac
 export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
 export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
 export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
-export const CreateQuartoStoryDocument = gql`
-    mutation createQuartoStory($files: [UploadFile!]!, $input: NewQuartoStory!) {
-  createQuartoStory(files: $files, input: $input) {
+export const CreateStoryDocument = gql`
+    mutation createStory($files: [UploadFile!]!, $input: NewStory!) {
+  createStory(files: $files, input: $input) {
     id
   }
 }
     `;
-export type CreateQuartoStoryMutationFn = Apollo.MutationFunction<CreateQuartoStoryMutation, CreateQuartoStoryMutationVariables>;
+export type CreateStoryMutationFn = Apollo.MutationFunction<CreateStoryMutation, CreateStoryMutationVariables>;
 
 /**
- * __useCreateQuartoStoryMutation__
+ * __useCreateStoryMutation__
  *
- * To run a mutation, you first call `useCreateQuartoStoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateQuartoStoryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStoryMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createQuartoStoryMutation, { data, loading, error }] = useCreateQuartoStoryMutation({
+ * const [createStoryMutation, { data, loading, error }] = useCreateStoryMutation({
  *   variables: {
  *      files: // value for 'files'
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateQuartoStoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateQuartoStoryMutation, CreateQuartoStoryMutationVariables>) {
+export function useCreateStoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateStoryMutation, CreateStoryMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateQuartoStoryMutation, CreateQuartoStoryMutationVariables>(CreateQuartoStoryDocument, options);
+        return Apollo.useMutation<CreateStoryMutation, CreateStoryMutationVariables>(CreateStoryDocument, options);
       }
-export type CreateQuartoStoryMutationHookResult = ReturnType<typeof useCreateQuartoStoryMutation>;
-export type CreateQuartoStoryMutationResult = Apollo.MutationResult<CreateQuartoStoryMutation>;
-export type CreateQuartoStoryMutationOptions = Apollo.BaseMutationOptions<CreateQuartoStoryMutation, CreateQuartoStoryMutationVariables>;
+export type CreateStoryMutationHookResult = ReturnType<typeof useCreateStoryMutation>;
+export type CreateStoryMutationResult = Apollo.MutationResult<CreateStoryMutation>;
+export type CreateStoryMutationOptions = Apollo.BaseMutationOptions<CreateStoryMutation, CreateStoryMutationVariables>;
 export const DeleteInsightProductDocument = gql`
     mutation deleteInsightProduct($id: ID!) {
   deleteInsightProduct(id: $id)
@@ -3776,37 +3496,6 @@ export function useDeleteInsightProductMutation(baseOptions?: Apollo.MutationHoo
 export type DeleteInsightProductMutationHookResult = ReturnType<typeof useDeleteInsightProductMutation>;
 export type DeleteInsightProductMutationResult = Apollo.MutationResult<DeleteInsightProductMutation>;
 export type DeleteInsightProductMutationOptions = Apollo.BaseMutationOptions<DeleteInsightProductMutation, DeleteInsightProductMutationVariables>;
-export const DeleteQuartoStoryDocument = gql`
-    mutation deleteQuartoStory($id: ID!) {
-  deleteQuartoStory(id: $id)
-}
-    `;
-export type DeleteQuartoStoryMutationFn = Apollo.MutationFunction<DeleteQuartoStoryMutation, DeleteQuartoStoryMutationVariables>;
-
-/**
- * __useDeleteQuartoStoryMutation__
- *
- * To run a mutation, you first call `useDeleteQuartoStoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteQuartoStoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteQuartoStoryMutation, { data, loading, error }] = useDeleteQuartoStoryMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteQuartoStoryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteQuartoStoryMutation, DeleteQuartoStoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteQuartoStoryMutation, DeleteQuartoStoryMutationVariables>(DeleteQuartoStoryDocument, options);
-      }
-export type DeleteQuartoStoryMutationHookResult = ReturnType<typeof useDeleteQuartoStoryMutation>;
-export type DeleteQuartoStoryMutationResult = Apollo.MutationResult<DeleteQuartoStoryMutation>;
-export type DeleteQuartoStoryMutationOptions = Apollo.BaseMutationOptions<DeleteQuartoStoryMutation, DeleteQuartoStoryMutationVariables>;
 export const DeleteStoryDocument = gql`
     mutation deleteStory($id: ID!) {
   deleteStory(id: $id)
@@ -3838,82 +3527,9 @@ export function useDeleteStoryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteStoryMutationHookResult = ReturnType<typeof useDeleteStoryMutation>;
 export type DeleteStoryMutationResult = Apollo.MutationResult<DeleteStoryMutation>;
 export type DeleteStoryMutationOptions = Apollo.BaseMutationOptions<DeleteStoryMutation, DeleteStoryMutationVariables>;
-export const PlotlyViewDocument = gql`
-    query PlotlyView($id: ID!) {
-  storyView(id: $id) {
-    ... on StoryViewPlotly {
-      id
-      data
-      layout
-      frames
-    }
-  }
-}
-    `;
-
-/**
- * __usePlotlyViewQuery__
- *
- * To run a query within a React component, call `usePlotlyViewQuery` and pass it any options that fit your needs.
- * When your component renders, `usePlotlyViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePlotlyViewQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function usePlotlyViewQuery(baseOptions: Apollo.QueryHookOptions<PlotlyViewQuery, PlotlyViewQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PlotlyViewQuery, PlotlyViewQueryVariables>(PlotlyViewDocument, options);
-      }
-export function usePlotlyViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PlotlyViewQuery, PlotlyViewQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PlotlyViewQuery, PlotlyViewQueryVariables>(PlotlyViewDocument, options);
-        }
-export type PlotlyViewQueryHookResult = ReturnType<typeof usePlotlyViewQuery>;
-export type PlotlyViewLazyQueryHookResult = ReturnType<typeof usePlotlyViewLazyQuery>;
-export type PlotlyViewQueryResult = Apollo.QueryResult<PlotlyViewQuery, PlotlyViewQueryVariables>;
-export const PublishStoryDocument = gql`
-    mutation publishStory($input: NewStory!) {
-  publishStory(input: $input) {
-    id
-  }
-}
-    `;
-export type PublishStoryMutationFn = Apollo.MutationFunction<PublishStoryMutation, PublishStoryMutationVariables>;
-
-/**
- * __usePublishStoryMutation__
- *
- * To run a mutation, you first call `usePublishStoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePublishStoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [publishStoryMutation, { data, loading, error }] = usePublishStoryMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function usePublishStoryMutation(baseOptions?: Apollo.MutationHookOptions<PublishStoryMutation, PublishStoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PublishStoryMutation, PublishStoryMutationVariables>(PublishStoryDocument, options);
-      }
-export type PublishStoryMutationHookResult = ReturnType<typeof usePublishStoryMutation>;
-export type PublishStoryMutationResult = Apollo.MutationResult<PublishStoryMutation>;
-export type PublishStoryMutationOptions = Apollo.BaseMutationOptions<PublishStoryMutation, PublishStoryMutationVariables>;
-export const QuartoStoryDocument = gql`
-    query quartoStory($id: ID!) {
-  quartoStory(id: $id) {
+export const DataStoryDocument = gql`
+    query dataStory($id: ID!) {
+  dataStory(id: $id) {
     id
     name
     description
@@ -3929,171 +3545,43 @@ export const QuartoStoryDocument = gql`
     `;
 
 /**
- * __useQuartoStoryQuery__
+ * __useDataStoryQuery__
  *
- * To run a query within a React component, call `useQuartoStoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useQuartoStoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useDataStoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDataStoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useQuartoStoryQuery({
+ * const { data, loading, error } = useDataStoryQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useQuartoStoryQuery(baseOptions: Apollo.QueryHookOptions<QuartoStoryQuery, QuartoStoryQueryVariables>) {
+export function useDataStoryQuery(baseOptions: Apollo.QueryHookOptions<DataStoryQuery, DataStoryQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<QuartoStoryQuery, QuartoStoryQueryVariables>(QuartoStoryDocument, options);
+        return Apollo.useQuery<DataStoryQuery, DataStoryQueryVariables>(DataStoryDocument, options);
       }
-export function useQuartoStoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QuartoStoryQuery, QuartoStoryQueryVariables>) {
+export function useDataStoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DataStoryQuery, DataStoryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<QuartoStoryQuery, QuartoStoryQueryVariables>(QuartoStoryDocument, options);
+          return Apollo.useLazyQuery<DataStoryQuery, DataStoryQueryVariables>(DataStoryDocument, options);
         }
-export type QuartoStoryQueryHookResult = ReturnType<typeof useQuartoStoryQuery>;
-export type QuartoStoryLazyQueryHookResult = ReturnType<typeof useQuartoStoryLazyQuery>;
-export type QuartoStoryQueryResult = Apollo.QueryResult<QuartoStoryQuery, QuartoStoryQueryVariables>;
-export const StoriesDocument = gql`
-    query stories {
-  stories {
-    id
-    name
-    owner {
-      group
-      teamkatalogenURL
-    }
-  }
-}
-    `;
-
-/**
- * __useStoriesQuery__
- *
- * To run a query within a React component, call `useStoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useStoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useStoriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useStoriesQuery(baseOptions?: Apollo.QueryHookOptions<StoriesQuery, StoriesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StoriesQuery, StoriesQueryVariables>(StoriesDocument, options);
-      }
-export function useStoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StoriesQuery, StoriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StoriesQuery, StoriesQueryVariables>(StoriesDocument, options);
-        }
-export type StoriesQueryHookResult = ReturnType<typeof useStoriesQuery>;
-export type StoriesLazyQueryHookResult = ReturnType<typeof useStoriesLazyQuery>;
-export type StoriesQueryResult = Apollo.QueryResult<StoriesQuery, StoriesQueryVariables>;
-export const StoryDocument = gql`
-    query Story($id: ID!) {
-  story(id: $id) {
-    id
-    name
-    created
-    lastModified
-    keywords
-    owner {
-      group
-      teamkatalogenURL
-      productAreaID
-      teamID
-    }
-    views {
-      id
-      __typename
-      ... on StoryViewHeader {
-        content
-        level
-      }
-      ... on StoryViewMarkdown {
-        content
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useStoryQuery__
- *
- * To run a query within a React component, call `useStoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useStoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useStoryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useStoryQuery(baseOptions: Apollo.QueryHookOptions<StoryQuery, StoryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StoryQuery, StoryQueryVariables>(StoryDocument, options);
-      }
-export function useStoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StoryQuery, StoryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StoryQuery, StoryQueryVariables>(StoryDocument, options);
-        }
-export type StoryQueryHookResult = ReturnType<typeof useStoryQuery>;
-export type StoryLazyQueryHookResult = ReturnType<typeof useStoryLazyQuery>;
-export type StoryQueryResult = Apollo.QueryResult<StoryQuery, StoryQueryVariables>;
-export const StoryTokenDocument = gql`
-    query StoryToken($id: ID!) {
-  storyToken(id: $id) {
-    token
-  }
-}
-    `;
-
-/**
- * __useStoryTokenQuery__
- *
- * To run a query within a React component, call `useStoryTokenQuery` and pass it any options that fit your needs.
- * When your component renders, `useStoryTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useStoryTokenQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useStoryTokenQuery(baseOptions: Apollo.QueryHookOptions<StoryTokenQuery, StoryTokenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StoryTokenQuery, StoryTokenQueryVariables>(StoryTokenDocument, options);
-      }
-export function useStoryTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StoryTokenQuery, StoryTokenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StoryTokenQuery, StoryTokenQueryVariables>(StoryTokenDocument, options);
-        }
-export type StoryTokenQueryHookResult = ReturnType<typeof useStoryTokenQuery>;
-export type StoryTokenLazyQueryHookResult = ReturnType<typeof useStoryTokenLazyQuery>;
-export type StoryTokenQueryResult = Apollo.QueryResult<StoryTokenQuery, StoryTokenQueryVariables>;
+export type DataStoryQueryHookResult = ReturnType<typeof useDataStoryQuery>;
+export type DataStoryLazyQueryHookResult = ReturnType<typeof useDataStoryLazyQuery>;
+export type DataStoryQueryResult = Apollo.QueryResult<DataStoryQuery, DataStoryQueryVariables>;
 export const UpdateStoryMetadataDocument = gql`
-    mutation updateStoryMetadata($id: ID!, $keywords: [String!]!, $name: String!, $teamkatalogenURL: String, $productAreaID: String, $teamID: String) {
+    mutation updateStoryMetadata($id: ID!, $name: String!, $description: String!, $keywords: [String!]!, $teamkatalogenURL: String, $productAreaID: String, $teamID: String, $group: String!) {
   updateStoryMetadata(
     id: $id
-    keywords: $keywords
     name: $name
+    description: $description
+    keywords: $keywords
     teamkatalogenURL: $teamkatalogenURL
     productAreaID: $productAreaID
     teamID: $teamID
+    group: $group
   ) {
     id
   }
@@ -4115,53 +3603,6 @@ export type UpdateStoryMetadataMutationFn = Apollo.MutationFunction<UpdateStoryM
  * const [updateStoryMetadataMutation, { data, loading, error }] = useUpdateStoryMetadataMutation({
  *   variables: {
  *      id: // value for 'id'
- *      keywords: // value for 'keywords'
- *      name: // value for 'name'
- *      teamkatalogenURL: // value for 'teamkatalogenURL'
- *      productAreaID: // value for 'productAreaID'
- *      teamID: // value for 'teamID'
- *   },
- * });
- */
-export function useUpdateStoryMetadataMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>(UpdateStoryMetadataDocument, options);
-      }
-export type UpdateStoryMetadataMutationHookResult = ReturnType<typeof useUpdateStoryMetadataMutation>;
-export type UpdateStoryMetadataMutationResult = Apollo.MutationResult<UpdateStoryMetadataMutation>;
-export type UpdateStoryMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>;
-export const UpdateQuartoStoryMetadataDocument = gql`
-    mutation updateQuartoStoryMetadata($id: ID!, $name: String!, $description: String!, $keywords: [String!]!, $teamkatalogenURL: String, $productAreaID: String, $teamID: String, $group: String!) {
-  updateQuartoStoryMetadata(
-    id: $id
-    name: $name
-    description: $description
-    keywords: $keywords
-    teamkatalogenURL: $teamkatalogenURL
-    productAreaID: $productAreaID
-    teamID: $teamID
-    group: $group
-  ) {
-    id
-  }
-}
-    `;
-export type UpdateQuartoStoryMetadataMutationFn = Apollo.MutationFunction<UpdateQuartoStoryMetadataMutation, UpdateQuartoStoryMetadataMutationVariables>;
-
-/**
- * __useUpdateQuartoStoryMetadataMutation__
- *
- * To run a mutation, you first call `useUpdateQuartoStoryMetadataMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateQuartoStoryMetadataMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateQuartoStoryMetadataMutation, { data, loading, error }] = useUpdateQuartoStoryMetadataMutation({
- *   variables: {
- *      id: // value for 'id'
  *      name: // value for 'name'
  *      description: // value for 'description'
  *      keywords: // value for 'keywords'
@@ -4172,51 +3613,13 @@ export type UpdateQuartoStoryMetadataMutationFn = Apollo.MutationFunction<Update
  *   },
  * });
  */
-export function useUpdateQuartoStoryMetadataMutation(baseOptions?: Apollo.MutationHookOptions<UpdateQuartoStoryMetadataMutation, UpdateQuartoStoryMetadataMutationVariables>) {
+export function useUpdateStoryMetadataMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateQuartoStoryMetadataMutation, UpdateQuartoStoryMetadataMutationVariables>(UpdateQuartoStoryMetadataDocument, options);
+        return Apollo.useMutation<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>(UpdateStoryMetadataDocument, options);
       }
-export type UpdateQuartoStoryMetadataMutationHookResult = ReturnType<typeof useUpdateQuartoStoryMetadataMutation>;
-export type UpdateQuartoStoryMetadataMutationResult = Apollo.MutationResult<UpdateQuartoStoryMetadataMutation>;
-export type UpdateQuartoStoryMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateQuartoStoryMetadataMutation, UpdateQuartoStoryMetadataMutationVariables>;
-export const VegaViewDocument = gql`
-    query VegaView($id: ID!) {
-  storyView(id: $id) {
-    ... on StoryViewVega {
-      id
-      spec
-    }
-  }
-}
-    `;
-
-/**
- * __useVegaViewQuery__
- *
- * To run a query within a React component, call `useVegaViewQuery` and pass it any options that fit your needs.
- * When your component renders, `useVegaViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVegaViewQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useVegaViewQuery(baseOptions: Apollo.QueryHookOptions<VegaViewQuery, VegaViewQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<VegaViewQuery, VegaViewQueryVariables>(VegaViewDocument, options);
-      }
-export function useVegaViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VegaViewQuery, VegaViewQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<VegaViewQuery, VegaViewQueryVariables>(VegaViewDocument, options);
-        }
-export type VegaViewQueryHookResult = ReturnType<typeof useVegaViewQuery>;
-export type VegaViewLazyQueryHookResult = ReturnType<typeof useVegaViewLazyQuery>;
-export type VegaViewQueryResult = Apollo.QueryResult<VegaViewQuery, VegaViewQueryVariables>;
+export type UpdateStoryMetadataMutationHookResult = ReturnType<typeof useUpdateStoryMetadataMutation>;
+export type UpdateStoryMetadataMutationResult = Apollo.MutationResult<UpdateStoryMetadataMutation>;
+export type UpdateStoryMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>;
 export const TeamkatalogenDocument = gql`
     query Teamkatalogen($q: [String!]) {
   teamkatalogen(q: $q) {
@@ -4324,15 +3727,6 @@ export const UserInfoDetailsDocument = gql`
       }
     }
     stories {
-      id
-      name
-      keywords
-      owner {
-        group
-        teamkatalogenURL
-      }
-    }
-    quartoStories {
       id
       name
       description

@@ -24,18 +24,6 @@ export const GET_PRODUCT_AREA = gql`
           }
         }
         stories{
-            id
-            name
-            created
-            lastModified
-            keywords
-            owner {
-                group
-                teamkatalogenURL
-                teamContact
-            }
-        }
-        quartoStories{
           id
           name
           created
@@ -74,18 +62,6 @@ export const GET_PRODUCT_AREA = gql`
         }
       }
       stories{
-        id
-        name
-        created
-        lastModified
-        keywords
-        owner {
-            group
-            teamkatalogenURL
-            teamContact
-        }
-      }
-      quartoStories{
           id
           name
           created
