@@ -1,4 +1,3 @@
-import { Close } from '@navikt/ds-icons'
 import { Alert, Label } from '@navikt/ds-react'
 import * as React from 'react'
 import { useContext } from 'react'
@@ -24,19 +23,19 @@ const styles: StylesConfig<TagOption, true> = {
     ...provided,
     border: state.isFocused ? '3px solid #00347d' : '1px solid',
   }),
-  multiValue: (styles, { data }) => ({
+  multiValue: (styles: object, { data }) => ({
     ...styles,
     padding: '0 0 0 0 !important',
     margin: '0 0 0 0 !important',
     width: '0px',
   }),
-  multiValueLabel: (styles, { data }) => ({
+  multiValueLabel: (styles: object, { data }) => ({
     ...styles,
     padding: '0 0 0 0 !important',
     margin: '0 0 0 0 !important',
     width: '0px',
   }),
-  multiValueRemove: (styles, { data }) => ({
+  multiValueRemove: (styles: object, { data }) => ({
     ...styles,
     padding: '0 0 0 0 !important',
     margin: '0 0 0 0 !important',

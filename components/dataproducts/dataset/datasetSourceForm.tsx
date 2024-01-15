@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import TreeView from '@mui/lab/TreeView'
+import { TreeView } from '@mui/x-tree-view/TreeView';
 import {
   FieldErrors,
   FieldValues,
@@ -62,11 +62,11 @@ export const DataproductSourceForm = ({
             onNodeToggle={(x, n) => setActivePaths(n)}
           >
             {teamProjects?.map((projectID) => (
-              <Project
-                key={projectID}
-                projectID={projectID}
-                activePaths={activePaths}
-              />
+            <Project
+            key={projectID}
+            projectID={projectID}
+            activePaths={activePaths}
+            />
             ))}
           </TreeView>
           {errors.bigquery && (

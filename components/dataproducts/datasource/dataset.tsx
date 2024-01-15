@@ -4,7 +4,7 @@ import {
   useGcpGetTablesLazyQuery,
 } from '../../../lib/schema/graphql'
 
-import { TreeItem } from '@mui/lab'
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 
 import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'

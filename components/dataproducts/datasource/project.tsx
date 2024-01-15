@@ -1,4 +1,4 @@
-import { TreeItem } from '@mui/lab'
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { Loader } from '@navikt/ds-react'
 import { useGcpGetDatasetsLazyQuery } from '../../../lib/schema/graphql'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
