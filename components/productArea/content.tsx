@@ -1,8 +1,7 @@
 import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
-import { Story, useProductAreasQuery, useTeamkatalogenQuery, useUserInfoDetailsQuery } from "../../lib/schema/graphql";
-import { owner } from "../../lib/schema/yupValidations";
+import { useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
 import { useContext } from "react";
 import { UserState } from "../../lib/context";
 
@@ -12,27 +11,10 @@ interface ProductAreaContentProps {
     setCurrentTab: React.Dispatch<React.SetStateAction<string>>
 }
 
-interface UnifiedStory{
-        __typename?: "Story" | "QuartoStory" | undefined
-        id: string
-        name: string
-        created: any
-        keywords: string[]
-        description?: string
-        lastModified?: any
-        owner?: {
-            __typename?: "Owner" | undefined;
-            group: string;
-            teamkatalogenURL?: string;
-        }
-    }
-
 const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
     const tk = useTeamkatalogenQuery({
         variables: { q: '' },
     })
-    var allStories = currentItem.stories.map(it=> it as UnifiedStory)
-    .concat(currentItem.quartoStories.map(it=> it as UnifiedStory))
     const po = useProductAreasQuery()
     const userInfo= useContext(UserState)
 
@@ -50,7 +32,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 />}
                 <Tabs.Tab
                     value="stories"
-                    label={`Fortellinger (${allStories.length})`}
+                    label={`Fortellinger (${currentItem.stories.length})`}
                 />
                 <Tabs.Tab
                     value="products"
@@ -76,7 +58,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                 className="h-full w-full py-4"
             >
                 <div className="flex flex-col gap-2">
-                    {allStories && allStories.map((s: any, idx: number) => (
+                    {currentItem.stories && currentItem.stories.map((s: any, idx: number) => (
                         <SearchResultLink
                             resourceType="datafortelling"
                             key={idx}
@@ -87,13 +69,13 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             name={s.name}
                             description={s.description ? s.description : undefined}
                             keywords={s.keywords}
-                            link={`${s.__typename === 'Story'? '/story/' : '/quarto/'}${s.id}`}
+                            link={`/story/${s.id}`}
                             type={s.__typename}
                             teamkatalogen={tk.data}
                             productAreas={po.data}
                         />
                     ))}
-                    {allStories.length == 0 && "Ingen fortellinger"}
+                    {currentItem.stories.length == 0 && "Ingen fortellinger"}
                 </div>
             </Tabs.Panel>
             <Tabs.Panel

@@ -38,19 +38,6 @@ export interface PAItem {
     __typename?: 'Story'
     id: string
     name: string
-    created: any
-    keywords: Array<string>
-    lastModified?: any | null | undefined
-    owner: {
-      __typename?: 'Owner'
-      group: string
-      teamkatalogenURL?: string | null | undefined
-    }
-  }[]
-  quartoStories: {
-    __typename?: 'QuartoStory'
-    id: string
-    name: string
     description: string
     created: any
     keywords: Array<string>
@@ -75,7 +62,6 @@ const isRelevantPA = (productArea: ProductAreaQuery['productArea']) => {
     return (
         productArea.dataproducts.length 
         || productArea.stories.length 
-        || productArea.quartoStories.length 
         || productArea.insightProducts.length
     )
 }
@@ -88,7 +74,6 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
         dashboardURL: productArea.dashboardURL,
         dataproducts: productArea.dataproducts,
         stories: productArea.stories,
-        quartoStories: productArea.quartoStories,
         insightProducts: productArea.insightProducts,
     })
     productArea.teams
@@ -97,13 +82,11 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
         (it) =>
         it.dataproducts.length > 0 ||
         it.stories.length > 0 ||
-        it.quartoStories.length > 0 ||
         it.insightProducts.length > 0
     )
     .sort((a, b) => {
         return (
         b.dataproducts.length +
-        b.stories.length +
         b.insightProducts.length -
         (a.dataproducts.length + a.stories.length + a.insightProducts.length)
         )
@@ -115,7 +98,6 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
         dashboardURL: t.dashboardURL,
         dataproducts: t.dataproducts,
         stories: t.stories,
-        quartoStories: t.quartoStories,
         insightProducts: t.insightProducts,
         })
     })

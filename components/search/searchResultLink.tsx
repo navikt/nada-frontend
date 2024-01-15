@@ -3,7 +3,7 @@ import { Detail, Heading, Link } from '@navikt/ds-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { CoApplicant, Table } from '@navikt/ds-icons'
-import { ProductAreasQuery, TeamkatalogenQuery, useDeleteInsightProductMutation, useDeleteQuartoStoryMutation } from '../../lib/schema/graphql'
+import { ProductAreasQuery, TeamkatalogenQuery, useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
 import humanizeDate from '../../lib/humanizeDate'
 import DeleteModal from '../lib/deleteModal'
 import { useState } from 'react'
@@ -63,8 +63,8 @@ export const SearchResultLink = ({
   const [deleteInsightProductMutation] = useDeleteInsightProductMutation();
 
   const editResource = () => {
-    if (resourceType == 'Quarto fortelling') {
-      router.push(`/quarto/${id}/edit`)
+    if (resourceType == 'datafortelling') {
+      router.push(`/story/${id}/edit`)
     } else if (resourceType == 'innsiktsprodukt') {
       router.push(`/insightProduct/edit?id=${id}`)
     }
@@ -122,7 +122,7 @@ export const SearchResultLink = ({
               </div>
               {editable && <div>
                 <Link className="m-2" href="#" onClick={editResource}
-                >Endre beskrivelse</Link>
+                >Endre metadata</Link>
                 <Link className='m-2' href="#" onClick={openDeleteModal}>Slett</Link>
               </div>}
             </div>

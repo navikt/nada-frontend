@@ -4,7 +4,6 @@ import {
     KeywordsDocument,
     MetabaseProudctsDocument,
     SearchContentDocument,
-    StoriesDocument,
 } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
@@ -149,9 +148,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         })
         await apolloClient.query({
             query: KeywordsDocument,
-        })
-        await apolloClient.query({
-            query: StoriesDocument,
         })
 
         return addApolloState(apolloClient, {

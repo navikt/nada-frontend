@@ -35,18 +35,6 @@ export const SEARCH_CONTENT_WITH_OPTIONS = gql`
           __typename
           id
           name
-          created
-          keywords
-          modified: lastModified
-          group: owner {
-            group
-            teamkatalogenURL
-          }
-        }
-        ... on QuartoStory {
-          __typename
-          id
-          name
           description
           created
           groupName: group
