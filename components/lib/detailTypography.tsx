@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown'
+import { PluggableList } from 'react-markdown/lib'
 import * as React from 'react'
 import remarkGfm from 'remark-gfm'
 import TagPill from './tagPill'
@@ -24,13 +25,13 @@ export const Description = ({dataproduct, isOwner}: DescriptionProps) => {
             <Accordion.Item defaultOpen={true}>
                 <Accordion.Header>Beskrivelse</Accordion.Header>
                 <Accordion.Content>
-                    <ReactMarkdown className="spaced-out text-justify" remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown className="spaced-out text-justify" remarkPlugins={[remarkGfm] as PluggableList}>
                         {dataproduct.description || '*ingen beskrivelse*'}
                     </ReactMarkdown>
                 </Accordion.Content>
             </Accordion.Item>
         </Accordion>
-        <ReactMarkdown className="spaced-out hidden md:block text-justify" remarkPlugins={[remarkGfm]}>
+        <ReactMarkdown className="spaced-out hidden md:block text-justify" remarkPlugins={[remarkGfm] as PluggableList}>
             {dataproduct.description || '*ingen beskrivelse*'}
         </ReactMarkdown>
         {!!dataproduct.keywords.length && (
