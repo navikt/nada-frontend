@@ -43,7 +43,7 @@ const schema = yup
       .nullable()
       .when('accessType', {
         is: 'until',
-        then: yup.string().nullable().matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato')
+        then: () => yup.string().nullable().matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato')
       })
     })
   .required()
