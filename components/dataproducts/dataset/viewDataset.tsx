@@ -3,6 +3,7 @@ import { Alert, BodyLong, Heading, Link, Modal } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import {
   DataproductQuery,
@@ -232,7 +233,7 @@ const ViewDataset = ({
               Beskrivelse
             </Heading>
             <div className="max-w-[60rem]">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown remarkPlugins={[remarkGfm] as PluggableList}>
                 {dataset.description}
               </ReactMarkdown>
             </div>

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Detail, Heading, Link } from '@navikt/ds-react'
 import ReactMarkdown from 'react-markdown'
+import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import { CoApplicant, Table } from '@navikt/ds-icons'
 import { ProductAreasQuery, TeamkatalogenQuery, useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
@@ -131,7 +132,7 @@ export const SearchResultLink = ({
           <div className="flex flex-col gap-4">
             {description && (
               <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
+                remarkPlugins={[remarkGfm] as PluggableList}
                 disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'code', 'pre']}
                 unwrapDisallowed={true}
               >
