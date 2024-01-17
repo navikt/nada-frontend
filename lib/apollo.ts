@@ -5,7 +5,7 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client'
-import { createUploadLink } from 'apollo-upload-client';
+import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
 
@@ -29,9 +29,9 @@ const createApolloClient = (cookie?: string) => {
     link: createUploadLink({
       uri: getQueryURI(),
       credentials: 'include',
-      headers: {
+      headers: cookie !== undefined ? {
         cookie,
-      },
+      } : undefined,
     }),
     cache: new InMemoryCache({
       typePolicies: {
