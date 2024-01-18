@@ -37,7 +37,7 @@ jobs:
 
   deploy-prod:
     runs-on: ubuntu-latest
-    needs: [build, deploy-dev]
+    needs: [build-and-push, deploy-dev]
     env:
       IMAGE: ${{ needs.build.outputs.image }}
     steps:
