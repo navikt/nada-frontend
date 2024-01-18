@@ -5,6 +5,7 @@ import { Tag, Checkbox, Alert, Radio, RadioGroup, Textarea, Switch } from "@navi
 import { Personopplysninger, PseudonymiseringsText } from "./helptext"
 import AnnotateDatasetTable from "./annotateDatasetTable"
 import { useState } from "react"
+import { FormValues } from "./newDatasetForm"
 
 interface PiiFormProps {
     loading: boolean
@@ -12,11 +13,11 @@ interface PiiFormProps {
     columns: ColumnType[] | undefined
     tags: Map<string, PIITagType> | undefined
     pseudoColumns: Map<string, boolean>
-    control: Control<FieldValues, any>
-    getValues: UseFormGetValues<FieldValues>
-    register: UseFormRegister<FieldValues>
-    formState: FormState<FieldValues>
-    watch: UseFormWatch<FieldValues>
+    control: Control<FormValues, any>
+    getValues: UseFormGetValues<FormValues>
+    register: UseFormRegister<FormValues>
+    formState: FormState<FormValues>
+    watch: UseFormWatch<FormValues>
     annotateColumn: AnnotateColumnListener
     pseudoynimiseColumn: PseudoColumnListener
 }

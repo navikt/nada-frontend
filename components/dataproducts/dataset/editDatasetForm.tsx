@@ -33,16 +33,16 @@ interface EditDatasetFormProps {
 
 interface EditDatasetFormFields {
   name: string
-  description: string
-  repo: string
+  description?: string | undefined
+  repo?: string | null | undefined
   pii: string
   bigquery: {
     projectID: string
     dataset: string
     table: string
   }
-  keywords: string[]
-  anonymisation_description: string | null | undefined
+  keywords?: any[] | undefined
+  anonymisation_description?: string | null | undefined
   teamInternalUse?: boolean
 }
 
@@ -51,9 +51,9 @@ const schema = yup.object().shape({
   description: yup.string(),
   repo: yup.string().nullable(),
   pii: yup
-    .string()
+    .mixed<PiiLevel>()
     .nullable()
-    .oneOf(["sensitive", "anonymised", "none"])
+    .oneOf([PiiLevel.Sensitive, PiiLevel.Anonymised, PiiLevel.None])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
     ),
@@ -62,6 +62,7 @@ const schema = yup.object().shape({
     projectID: yup.string().required(),
     table: yup.string().required(),
   }),
+  keywords: yup.array(),
   anonymisation_description: yup.string().nullable().when("pii", {
     is: "anonymised",
     then: () => yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
@@ -79,7 +80,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       defaultValues: {
         name: dataset.name,
         description: dataset.description || '',
-        pii: dataset.pii.toString(),
+        pii: dataset.pii,
         repo: dataset.repo || '',
         keywords: dataset.keywords,
         bigquery: {
@@ -108,12 +109,12 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
-      keywords.filter((k: string) => k !== keyword)
+      keywords !== undefined ? keywords.filter((k: string) => k !== keyword) : [] 
     )
   }
 
   const onAddKeyword = (keyword: string) => {
-    setValue('keywords', [...keywords, keyword])
+    keywords !== undefined ? setValue('keywords', [...keywords, keyword]) : setValue('keywords', [keyword])
   }
 
   const { errors } = formState

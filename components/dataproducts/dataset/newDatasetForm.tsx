@@ -19,30 +19,39 @@ interface NewDatasetFormProps {
   dataproduct: DataproductQuery
 }
 
-const defaultValues: FieldValues = {
-  name: null,
-  description: '',
-  bigquery: null,
-  pii: null,
-  anonymisation_description: null,
-  grantAllUsers: 'dontGrantAllUsers'
+export type FormValues = {
+    name: string,
+    description?: string | undefined,
+    repo?: string | null | undefined,
+    bigquery: {
+        dataset: string,
+        projectID: string,
+        table: string,
+    }
+    pii: NonNullable<PiiLevel | null | undefined>,
+    keywords?: any[] | undefined,
+    anonymisation_description?: string | null | undefined,
+    grantAllUsers?: string | null | undefined,
+    teamInternalUse?: boolean | undefined,
 }
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
+  repo: yup.string().nullable(),
   bigquery: yup.object({
     dataset: yup.string().required(),
     projectID: yup.string().required(),
     table: yup.string().required(),
   }),
   pii: yup
-    .string()
+    .mixed<PiiLevel>()
     .nullable()
-    .oneOf(["sensitive", "anonymised", "none"])
+    .oneOf([PiiLevel.Sensitive, PiiLevel.Anonymised, PiiLevel.None])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
     ),
+  keywords: yup.array(),
   anonymisation_description: yup.string().nullable().when("pii", {
     is: "anonymised",
     then: () => yup.string().nullable().required('Du må beskrive hvordan datasettet har blitt anonymisert')
@@ -63,7 +72,17 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     formState,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues: {
+        name: undefined,
+        description: '',
+        repo: null,
+        bigquery: undefined,
+        pii: undefined,
+        keywords: undefined,
+        anonymisation_description: null,
+        grantAllUsers: 'dontGrantAllUsers',
+        teamInternalUse: undefined,
+    },
   })
   const errors = formState.errors
   const projectID = watch('bigquery.projectID')
@@ -83,7 +102,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   const onDeleteKeyword = (keyword: string) => {
     setValue(
       'keywords',
-      keywords.filter((k: string) => k !== keyword)
+      keywords !== undefined ? keywords.filter((k: string) => k !== keyword) : keywords
     )
   }
 
@@ -168,7 +187,6 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           label="Velg tabell eller view"
           team={team}
           register={register}
-          watch={watch}
           errors={errors}
           setValue={setValue}
         />
@@ -189,7 +207,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           watch={watch}
           annotateColumn={annotateColumn}
           pseudoynimiseColumn={selectPseudoColumn}
-        ></PiiForm>
+        />
         <Controller name="grantAllUsers" control={control} render={({ field }) => (
           <RadioGroup {...field} legend={<p className="flex gap-2 items-center">
             Tilgangsstyring

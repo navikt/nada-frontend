@@ -22,6 +22,11 @@ const tomorrow = () => {
   return date.toISOString()
 }
 
+const currentDate = (currentDate: any) => {
+    if (typeof currentDate === 'string') return new Date(currentDate)
+    return undefined
+}
+
 const schema = yup
   .object({
     subject: yup
@@ -31,7 +36,7 @@ const schema = yup
       )
       .email('E-postadresssen er ikke gyldig'),
     subjectType: yup
-      .string()
+      .mixed<SubjectType>()
       .required('Du må velge hvem tilgangen gjelder for')
       .oneOf([SubjectType.User, SubjectType.Group, SubjectType.ServiceAccount]),
     accessType: yup
@@ -72,7 +77,7 @@ interface AccessRequestFields {
   subject: string
   subjectType: SubjectType
   accessType: string
-  expires: Date | undefined
+  expires?: string | null | undefined
 }
 
 const AccessRequestFormV2 = ({
@@ -108,7 +113,7 @@ const AccessRequestFormV2 = ({
   })
 
   const { datepickerProps, inputProps, selectedDay } = useDatepicker({
-    defaultSelected: new Date(getValues("expires")),
+    defaultSelected: currentDate(getValues("expires")),
     fromDate: new Date(tomorrow()),
     onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
   });

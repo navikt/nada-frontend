@@ -19,20 +19,6 @@ import { UserState } from '../../lib/context'
 import { ContactInput } from './contactInput'
 
 
-const defaultValues: FieldValues = {
-  name: null,
-  description: '',
-  team: '',
-  teamContact: null,
-  datasetName: null,
-  datasetDescription: '',
-  sourceCodeURL: null,
-  bigQuery: null,
-  keywords: [] as string[],
-  pii: null,
-  grantAllUsers: 'dontGrantAllUsers'
-}
-
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
@@ -56,7 +42,6 @@ export const NewDataproductForm = () => {
   const userInfo = useContext(UserState)
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
-  const [createDataset, setCreateDataset] = useState(false)
 
   const {
     register,
@@ -69,7 +54,13 @@ export const NewDataproductForm = () => {
     trigger
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues: {  
+        name: undefined,
+        description: '',
+        team: '',
+        teamContact: null,
+        teamkatalogenURL: undefined,
+    }
   })
 
   const { errors } = formState
@@ -79,7 +70,7 @@ export const NewDataproductForm = () => {
   const teamkatalogenURL = watch('teamkatalogenURL')
   const teamContact = watch('teamContact')
 
-  const valueOrNull = (val: string) => (val == '' ? null : val)
+  const valueOrNull = (val: string | undefined | null) => (typeof val === 'string' && val !== '' ? val : null)
 
   const submitForm = async () => {
     try {
@@ -138,7 +129,6 @@ export const NewDataproductForm = () => {
     })
   }
 
-  const pii = watch('pii')
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">

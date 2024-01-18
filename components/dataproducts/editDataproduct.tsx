@@ -28,7 +28,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       defaultValues: {
         name: product.name,
         description: product.description || '',
-        teamkatalogenURL: product.owner.teamkatalogenURL,
+        teamkatalogenURL: product.owner.teamkatalogenURL === null ? undefined : product.owner.teamkatalogenURL,
         teamContact: product.owner.teamContact,
         productAreaID: product.owner.productAreaID,
       },

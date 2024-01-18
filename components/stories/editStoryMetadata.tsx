@@ -22,7 +22,7 @@ const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
   description: yup.string(),
   teamkatalogenURL: yup.string().required('Du må velge team i teamkatalogen'),
-  keywords: yup.array().of(yup.string()),
+  keywords: yup.array(),
   group: yup.string(),
 })
 
@@ -64,10 +64,10 @@ export const EditStoryMetadataForm = ({id, name, description, keywords, teamkata
   const kw = watch('keywords')
   
   const onDeleteKeyword = (keyword: string) => {
-    setValue(
-      'keywords',
-      kw.filter((k: string) => k !== keyword)
-    )
+    kw !== undefined ? 
+    setValue('keywords', kw.filter((k: string) => k !== keyword))
+    :
+    setValue('keywords', [])
   }
 
   const onAddKeyword = (keyword: string) => {
