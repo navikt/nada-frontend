@@ -1,28 +1,20 @@
 import {
   MappingService,
-  useDataproductQuery,
   useUpdateMappingMutation,
 } from '../../lib/schema/graphql'
 import ExploreLink, { ItemType } from './exploreLink'
 import { useState } from 'react'
 import ErrorMessage from '../lib/error'
-import { DatasetQuery } from '../../lib/schema/datasetQuery'
-import { GET_DATAPRODUCT } from '../../lib/queries/dataproduct/dataproduct'
 
 interface ExploreProps {
   dataproductId: string
-  dataset: DatasetQuery
+  dataset: any
   isOwner: boolean
 }
 
 const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
   const [formError, setFormError] = useState(undefined)
   const [updateMapping] = useUpdateMappingMutation()
-  useDataproductQuery({
-    variables: { id: dataproductId },
-    ssr: true,
-    pollInterval: 30_000,
-  })
 
   const addToMetabase = async () => {
     try {
@@ -32,12 +24,6 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
           services: [MappingService.Metabase],
         },
         refetchQueries: [
-          {
-            query: GET_DATAPRODUCT,
-            variables: {
-              id: dataproductId,
-            },
-          },
         ],
       })
     } catch (e: any) {
@@ -57,7 +43,7 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
   }
 
   const datasource = dataset.datasource
-  const services = dataset.services
+  const metabaseUrl = dataset.meatabaseUrl
   const mappings = dataset.mappings
   const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
 
@@ -73,7 +59,7 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
         <ExploreLink
           datasetID={dataset.id}
           isOwner={isOwner}
-          url={services.metabase}
+          url={metabaseUrl}
           type={ItemType.metabase}
           add={addToMetabase}
           remove={removeFromMetabase}
