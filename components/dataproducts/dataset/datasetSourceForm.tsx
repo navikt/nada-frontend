@@ -5,15 +5,14 @@ import {
   FieldValues,
   SetFieldValue,
   UseFormRegister,
-  UseFormWatch,
 } from 'react-hook-form'
 import { Project } from '../datasource/project'
 import { UserState } from '../../../lib/context'
 import { Label } from '@navikt/ds-react'
+import { FormValues } from './newDatasetForm';
 
 interface DataproductSourceFormProps {
-  register: UseFormRegister<FieldValues>
-  watch: UseFormWatch<FieldValues>
+  register: UseFormRegister<FormValues>
   errors: FieldErrors<FieldValues>
   setValue: SetFieldValue<FieldValues>
   team: string
@@ -25,7 +24,6 @@ export const DataproductSourceForm = ({
   team,
   errors,
   register,
-  watch,
   setValue,
 }: DataproductSourceFormProps) => {
   const userInfo = useContext(UserState)

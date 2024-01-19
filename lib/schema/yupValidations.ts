@@ -11,8 +11,9 @@ export const updateDataproductValidation = yup.object().shape({
   description: yup.string(),
   slug: yup.string(),
   repo: yup.string(),
-  teamContact: yup.string(),
-  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
+  teamContact: yup.string().nullable(),
+  teamkatalogenURL: yup.string().nullable().required('Du må velg en team i teamkatalogen'),
+  productAreaID: yup.string().nullable(),
 })
 
 export const newDataproductValidation = updateDataproductValidation.concat(

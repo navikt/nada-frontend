@@ -19,22 +19,12 @@ import TagsSelector from '../lib/tagsSelector'
 import { UserState } from "../../lib/context";
 import { CREATE_INSIGHT_PRODUCT } from '../../lib/queries/insightProducts/createInsightProduct'
 
-
-const defaultValues: FieldValues = {
-    name: null,
-    description: '',
-    teamkatalogenURL: '',
-    keywords: [] as string[],
-    link: '',
-    type: '',
-    group: '',
-}
-
 const schema = yup.object().shape({
     name: yup.string().nullable().required('Skriv inn navnet på innsiktsproduktet'),
     description: yup.string(),
     teamkatalogenURL: yup.string().required('Du må velge team i teamkatalogen'),
-    keywords: yup.array().of(yup.string()),
+    keywords: yup.array(),
+    type: yup.string(),
     link: yup
         .string()
         .required('Du må legge til en lenke til innsiktsproduktet')
@@ -72,17 +62,25 @@ export const NewInsightProductForm = () => {
         control,
     } = useForm({
         resolver: yupResolver(schema),
-        defaultValues: defaultValues,
+        defaultValues: {
+            name: undefined,
+            description: '',
+            teamkatalogenURL: '',
+            keywords: [] as string[],
+            link: '',
+            type: '',
+            group: '',
+        },
     })
 
     const { errors } = formState
     const keywords = watch('keywords')
 
     const onDeleteKeyword = (keyword: string) => {
-        setValue(
-            'keywords',
-            keywords.filter((k: string) => k !== keyword)
-        )
+        keywords !== undefined ? 
+        setValue('keywords', keywords.filter((k: string) => k !== keyword))
+        :
+        setValue('keywords', [])
     }
 
     const onAddKeyword = (keyword: string) => {

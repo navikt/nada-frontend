@@ -12,22 +12,17 @@ import { ChangeEvent, useContext, useRef, useState } from 'react';
 import TagsSelector from '../lib/tagsSelector';
 import { UserState } from '../../lib/context';
 import { CREATE_STORY } from '../../lib/queries/story/createStory';
-import { TreeItem, TreeView } from '@mui/lab';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
+import { TreeView } from '@mui/x-tree-view/TreeView';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { UploadFile } from '../../lib/schema/graphql';
-
-const defaultValues: FieldValues = {
-  name: null,
-  description: '',
-  teamkatalogenURL: '',
-  keywords: [] as string[],
-}
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
   description: yup.string(),
   teamkatalogenURL: yup.string().required('Du må velge team i teamkatalogen'),
-  keywords: yup.array().of(yup.string()),
+  keywords: yup.array(),
+  group: yup.string().required('Du må skrive inn en gruppe for datafortellingen')
 })
 
 export interface NewStoryFields {
@@ -66,17 +61,22 @@ export const NewStoryForm = () => {
     control,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues: {
+        name: undefined,
+        description: '',
+        teamkatalogenURL: '',
+        keywords: [] as string[],
+    },
   })
 
   const { errors } = formState
   const keywords = watch('keywords')
 
   const onDeleteKeyword = (keyword: string) => {
-    setValue(
-      'keywords',
-      keywords.filter((k: string) => k !== keyword),
-    )
+    keywords !== undefined ? 
+    setValue('keywords', keywords.filter((k: string) => k !== keyword))
+    :
+    setValue('keywords', [])
   }
 
   const onAddKeyword = (keyword: string) => {
@@ -256,7 +256,7 @@ export const NewStoryForm = () => {
           {...register('group', {
             onChange: () => setValue('teamkatalogenURL', ''),
           })}
-          error={errors.team?.message?.toString()}
+          error={errors.group?.message?.toString()}
         >
           <option value="">Velg gruppe</option>
           {[

@@ -25,9 +25,10 @@ const schema = yup.object().shape({
     name: yup.string().nullable().required('Skriv inn navnet på innsiktsproduktet'),
     description: yup.string(),
     teamkatalogenURL: yup.string().required('Du må velge team i teamkatalogen'),
-    keywords: yup.array().of(yup.string()),
+    keywords: yup.array(),
     group: yup.string(),
     type: yup.string().nullable().required('Velg en type for innsiktsproduktet'),
+    sensitiveInfo: yup.bool(),
     link: yup
         .string()
         .required('Du må legge til en lenke til innsiktsproduktet')
@@ -82,10 +83,10 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
     }
 
     const onDeleteKeyword = (keyword: string) => {
-        setValue(
-            'keywords',
-            kw.filter((k: string) => k !== keyword)
-        )
+        kw !== undefined ? 
+            setValue('keywords', kw.filter((k: string) => k !== keyword))
+            :
+            setValue('keywords', [])
     }
 
     const onAddKeyword = (keyword: string) => {
@@ -93,8 +94,6 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
             ? setValue('keywords', [...kw, keyword])
             : setValue('keywords', [keyword])
     }
-
-    const valueOrNull = (val: string) => (val == '' ? null : val)
 
     const onSubmit = async (data: any) => {
         const editInsightProductData = {
