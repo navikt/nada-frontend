@@ -64,7 +64,7 @@
     "@types/cookie": "^0.6.0",
     "@types/lodash": "^4.14.202",
     "@types/react": "18.2.47",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.18.1",
     "autoprefixer": "^10.4.13",
     "cookie": "^0.6.0",
