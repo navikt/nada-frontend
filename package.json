@@ -63,7 +63,7 @@
     "@types/apollo-upload-client": "^18.0.0",
     "@types/cookie": "^0.6.0",
     "@types/lodash": "^4.14.202",
-    "@types/react": "18.2.47",
+    "@types/react": "18.2.48",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.18.1",
     "autoprefixer": "^10.4.17",
