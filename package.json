@@ -33,7 +33,7 @@
     "@uiw/react-md-editor": "^3.20.2",
     "amplitude-js": "^8.21.3",
     "apollo-upload-client": "^18.0.1",
-    "classnames": "^2.3.2",
+    "classnames": "^2.5.1",
     "dangerously-set-html-content": "^1.0.13",
     "date-fns": "^3.3.1",
     "deepmerge": "^4.3.1",
