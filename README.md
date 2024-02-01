@@ -1,3 +1,17 @@
+## Prerequisites:
+
+Install [Node18](https://nodejs.org/en) or later
+
+
+Install [Next.js](https://nextjs.org) version according to package.json:
+```
+npm install -g next@14.1.0
+```
+Install dependencies:
+```
+npm install
+```
+## Development:
 First, run the development server:
 
 ```bash
