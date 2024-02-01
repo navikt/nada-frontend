@@ -1,4 +1,4 @@
-import { useDatasetQuery } from "../../../lib/schema/graphql"
+import { useGetDataset } from "../../../lib/rest/dataproducts"
 import ErrorMessage from "../../lib/error"
 import LoaderSpinner from "../../lib/spinner"
 import EditDatasetForm from "./editDatasetForm"
@@ -9,16 +9,13 @@ interface EditDatasetProps {
 }
 
 const EditDataset = ({datasetID, setEdit}: EditDatasetProps) => {
-    const { data, loading, error } = useDatasetQuery({
-        variables: { id: datasetID, rawDesc: true },
-        fetchPolicy: "network-only"
-    })
+    const { dataset, loading, error } = useGetDataset(datasetID)
 
     if (error) return <ErrorMessage error={error} />
-    if (loading || !data?.dataset) return <LoaderSpinner />
+    if (loading || !dataset) return <LoaderSpinner />
 
     return (
-        <EditDatasetForm dataset={data.dataset} setEdit={setEdit}/>
+        <EditDatasetForm dataset={dataset} setEdit={setEdit}/>
     )
 }
 

@@ -13,21 +13,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react'
 import * as yup from 'yup'
 import {
-  DatasetQuery,
   useUpdateDatasetMutation,
   UpdateDataset,
   PiiLevel,
 } from '../../../lib/schema/graphql'
-import { GET_DATASET } from '../../../lib/queries/dataset/dataset'
 import DescriptionEditor from '../../lib/DescriptionEditor'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import TagsSelector from '../../lib/tagsSelector';
 import { useColumnTags } from './useColumnTags';
 import AnnotateDatasetTable from './annotateDatasetTable';
 import {Personopplysninger} from "./helptext";
+import { useRouter } from 'next/router';
 
 interface EditDatasetFormProps {
-  dataset: DatasetQuery["dataset"]
+  dataset: any
   setEdit: (value: boolean) => void
 }
 
@@ -73,23 +71,24 @@ const schema = yup.object().shape({
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   const [backendError, setBackendError] = useState()
   const [updateDataset] = useUpdateDatasetMutation()
+  const router = useRouter()
 
   const { register, handleSubmit, watch, formState, setValue, getValues, control } =
     useForm({
       resolver: yupResolver(schema),
       defaultValues: {
-        name: dataset.name,
-        description: dataset.description || '',
-        pii: dataset.pii,
-        repo: dataset.repo || '',
-        keywords: dataset.keywords,
+        name: dataset?.name,
+        description: dataset?.description || '',
+        pii: dataset?.pii,
+        repo: dataset?.repo || '',
+        keywords: dataset?.keywords,
         bigquery: {
-          projectID: dataset.datasource.projectID,
-          dataset: dataset.datasource.dataset,
-          table: dataset.datasource.table,
+          projectID: dataset?.datasource?.projectID,
+          dataset: dataset?.datasource?.dataset,
+          table: dataset?.datasource?.table,
         },
-        anonymisation_description: dataset.anonymisation_description,
-        teamInternalUse: dataset.targetUser === "OwnerTeam",
+        anonymisation_description: dataset?.anonymisation_description,
+        teamInternalUse: dataset?.targetUser === "OwnerTeam",
       },
     })
 
@@ -137,24 +136,11 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
     updateDataset({
       variables: { id: dataset.id, input: payload },
       awaitRefetchQueries: true,
-      refetchQueries: [
-        {
-          query: GET_DATASET,
-          variables: {
-            id: dataset.id,
-          },
-        },
-        {
-          query: GET_DATAPRODUCT,
-          variables: {
-            id: dataset.dataproductID,
-          },
-        },
-        'searchContent',
-      ],
+      refetchQueries: [ ],
     }).then(() => {
       setBackendError(undefined)
       setEdit(false)
+      router.reload()
     })
   }
   {

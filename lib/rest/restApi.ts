@@ -7,4 +7,5 @@ const apiUrl = () => {
     return isServer ? 'http://nada-backend/api' : '/api'
 }
 
-export const getDataproductUrl = (id: string)=> `${apiUrl()}/dataproduct/${id}`
+export const getDataproductUrl = (id: string)=> `${apiUrl()}/dataproducts/${id}`
+export const getDatasetUrl = (id: string)=> `${apiUrl()}/datasets/${id}`

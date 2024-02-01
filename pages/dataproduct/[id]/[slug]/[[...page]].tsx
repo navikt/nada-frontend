@@ -3,12 +3,10 @@ import ErrorMessage from '../../../../components/lib/error'
 import {
   Group,
   SearchContentDocument,
-  useDataproductQuery,
   useDeleteDataproductMutation,
 } from '../../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
@@ -101,7 +99,7 @@ const Dataproduct = () => {
       slug: dataset.id,
       component: (
         <Dataset
-          dataset={dataset}
+          datasetID={dataset.id}
           userInfo={userInfo}
           isOwner={isOwner}
           dataproduct={dataproduct}

@@ -1,14 +1,13 @@
 import humanizeDate from '../../lib/humanizeDate'
 import * as React from 'react'
 import { ExternalLink } from '@navikt/ds-icons'
-import { DataproductQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { Alert, Link } from '@navikt/ds-react'
 import { Subject, SubjectHeader } from '../subject'
 import { isEmail } from '../../lib/validators'
 
 interface DataproductDetailProps {
-  product: DataproductQuery['dataproduct']
+  product: any
   isOwner: boolean
   menuItems: Array<{
     title: string

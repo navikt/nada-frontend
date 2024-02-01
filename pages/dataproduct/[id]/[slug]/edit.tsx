@@ -2,12 +2,10 @@ import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
 import {
   Group,
-  useDataproductQuery,
   useDeleteDataproductMutation,
 } from '../../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
@@ -18,17 +16,18 @@ import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
 import { useRouter } from 'next/router'
 import InnerContainer from '../../../../components/lib/innerContainer'
+import { useGetDataproduct } from '../../../../lib/rest/dataproducts'
 
 interface DataproductProps {
   id: string
 }
 
-const DataproductEdit = (props: DataproductProps) => {
-  const { id } = props
+const DataproductEdit = () => {
   const [showDelete, setShowDelete] = useState(false)
   const [deleteError, setDeleteError] = useState('')
   const userInfo = useContext(UserState)
   const router = useRouter()
+  const id = router.query.id as string
 
   const [deleteDataproduct] = useDeleteDataproductMutation({
     variables: { id: id },
@@ -36,27 +35,24 @@ const DataproductEdit = (props: DataproductProps) => {
     refetchQueries: ['searchContent'],
   })
 
-  const { data, loading, error } = useDataproductQuery({
-    variables: { id, rawDesc: true },
-    ssr: true,
-  })
+  const { dataproduct, loading, error } = useGetDataproduct(id)
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'productEdit',
-      title: data?.dataproduct.name,
+      title: dataproduct?.name,
     }
     amplitudeLog('sidevisning', eventProperties)
-  }, [data?.dataproduct.name])
+  }, [dataproduct?.name])
 
   if (error) return <ErrorMessage error={error} />
 
-  if (loading || !data?.dataproduct) return <LoaderSpinner />
+  if (loading || !dataproduct) return <LoaderSpinner />
 
   const isOwner =
     userInfo?.groups === undefined
       ? false
       : userInfo.groups.some(
-          (g: Group) => g.email === data.dataproduct.owner.group
+          (g: Group) => g.email === dataproduct?.owner?.group
         )
 
   const onDelete = async () => {
@@ -71,9 +67,9 @@ const DataproductEdit = (props: DataproductProps) => {
   return (
     <InnerContainer>
       <Head>
-        <title>{data.dataproduct.name}</title>
+        <title>{dataproduct.name}</title>
       </Head>
-      <TopBar name={data.dataproduct.name} type={data.dataproduct.__typename}>
+      <TopBar name={dataproduct.name} type={dataproduct.__typename}>
         {isOwner && (
           <div className="flex gap-2">
             <p className="font-bold px-2 border-r border-border-strong">
@@ -86,39 +82,18 @@ const DataproductEdit = (props: DataproductProps) => {
         )}
       </TopBar>
       <div className="flex flex-col h-full flex-grow">
-        <EditDataproduct product={data.dataproduct} />
+        <EditDataproduct product={dataproduct} />
       </div>
       <DeleteModal
         open={showDelete}
         onCancel={() => setShowDelete(false)}
         onConfirm={() => onDelete()}
-        name={data.dataproduct.name}
+        name={dataproduct.name}
         error={deleteError}
         resource="dataprodukt"
       />
     </InnerContainer>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const cookie = context.req.headers.cookie
-
-  const apolloClient = initializeApollo()
-
-  await apolloClient.query({
-    query: GET_DATAPRODUCT,
-    variables: { id },
-    context: {
-      headers: {
-        cookie,
-      },
-    },
-  })
-
-  return addApolloState(apolloClient, {
-    props: { id },
-  })
 }
 
 export default DataproductEdit

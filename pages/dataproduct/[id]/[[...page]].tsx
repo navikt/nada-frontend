@@ -1,7 +1,5 @@
-import { useDataproductQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Head from 'next/head'

@@ -10,7 +10,7 @@
     "lint": "next lint",
     "prettier": "prettier --write \"./components\" \"./pages\" \"./lib\"",
     "format-schema": "prettier --write \"lib/schema/schema.ts\"",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config ./codegen.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.7.3",
@@ -53,12 +53,12 @@
   },
   "devDependencies": {
     "@apollo/react-hooks": "^4.0.0",
-    "@graphql-codegen/cli": "2.16.2",
-    "@graphql-codegen/introspection": "2.2.3",
-    "@graphql-codegen/typescript": "2.8.6",
-    "@graphql-codegen/typescript-graphql-apollo": "^1.2.1",
-    "@graphql-codegen/typescript-operations": "4.0.1",
-    "@graphql-codegen/typescript-react-apollo": "3.3.7",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/introspection": "^4.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-graphql-apollo": "^2.0.0",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-react-apollo": "^4.1.0",
     "@types/amplitude-js": "^8.16.2",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/cookie": "^0.6.0",
@@ -70,12 +70,13 @@
     "cookie": "^0.6.0",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
+    "graphql-codegen": "^0.4.0",
     "graphql-codegen-apollo-next-ssr": "^1.7.4",
     "graphql-tag": "^2.12.6",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "tailwindcss": "^3.2.4",
-    "typescript": "5.3.3"
+    "typescript": "^5.3.3"
   },
   "prettier": {
     "semi": false,
