@@ -2,15 +2,16 @@
 
 Install [Node18](https://nodejs.org/en) or later
 
-
-Install [Next.js](https://nextjs.org) version according to package.json:
-```
-npm install -g next@14.1.0
-```
 Install dependencies:
 ```
 npm install
 ```
+
+If you don't have `next` in your path:
+```
+export PATH=./node_modules/.bin:$PATH
+```
+
 ## Development:
 First, run the development server:
 
