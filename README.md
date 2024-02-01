@@ -7,7 +7,7 @@ Install dependencies:
 npm install
 ```
 
-If you don't have `next` in your path:
+Optionally add binaries for local node_modules in path:
 ```
 export PATH=./node_modules/.bin:$PATH
 ```
