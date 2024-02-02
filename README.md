@@ -1,3 +1,18 @@
+## Prerequisites:
+
+Install [Node18](https://nodejs.org/en) or later
+
+Install dependencies:
+```
+npm install
+```
+
+Optionally add binaries for local node_modules in path:
+```
+export PATH=./node_modules/.bin:$PATH
+```
+
+## Development:
 First, run the development server:
 
 ```bash
