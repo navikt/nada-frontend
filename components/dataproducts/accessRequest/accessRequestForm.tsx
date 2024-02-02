@@ -252,7 +252,7 @@ const AccessRequestFormV2 = ({
           </div>
         </div>
         { error && <ErrorMessage error={error} /> }
-        <div className="flex flex-row gap-4 grow items-end">
+        <div className="flex flex-row gap-4 grow items-end pb-8">
           <Button
             type="button"
             variant="secondary"
