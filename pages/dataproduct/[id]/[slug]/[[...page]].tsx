@@ -3,12 +3,10 @@ import ErrorMessage from '../../../../components/lib/error'
 import {
   Group,
   SearchContentDocument,
-  useDataproductQuery,
   useDeleteDataproductMutation,
 } from '../../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../../lib/queries/dataproduct/dataproduct'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
@@ -25,36 +23,36 @@ import { AddCircle } from '@navikt/ds-icons'
 import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
 import { truncate } from '../../../../lib/stringUtils'
 import InnerContainer from '../../../../components/lib/innerContainer'
+import { useGetDataproduct } from '../../../../lib/rest/dataproducts'
 
 interface DataproductProps {
   id: string
   slug: string
 }
 
-const Dataproduct = (props: DataproductProps) => {
-  const { id } = props
+const Dataproduct = () => {
   const router = useRouter()
+  const id = router.query.id as string
+  const pageParam = router.query.page?.[0] ?? 'info'
 
   const [showDelete, setShowDelete] = useState(false)
   const [deleteError, setDeleteError] = useState('')
 
+  const { dataproduct, loading, error } = useGetDataproduct(id, pageParam)
+  
   const userInfo = useContext(UserState)
-  const productQuery = useDataproductQuery({
-    variables: { id, rawDesc: false },
-    ssr: true,
-  })
 
   const isOwner =
     userInfo?.groups === undefined
       ? false
       : userInfo.groups.some(
-          (g: Group) => g.email === productQuery?.data?.dataproduct?.owner.group
-        )
-
+        (g: Group) => g.email === dataproduct?.owner.group
+      )
+  
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'produktside',
-      title: productQuery.data?.dataproduct.name,
+      title: dataproduct?.name,
     }
     amplitudeLog('sidevisning', eventProperties)
   })
@@ -68,46 +66,44 @@ const Dataproduct = (props: DataproductProps) => {
   const onDelete = async () => {
     try {
       await deleteDataproduct()
-      amplitudeLog('slett dataprodukt', {name: productQuery.data?.dataproduct.name})
+      amplitudeLog('slett dataprodukt', { name: dataproduct.name })
       await router.push('/')
     } catch (e: any) {
-      amplitudeLog('slett dataprodukt feilet', {name: productQuery.data?.dataproduct.name})
+      amplitudeLog('slett dataprodukt feilet', { name: dataproduct.name })
       setDeleteError(e.toString())
     }
   }
-  if (productQuery.error) return <ErrorMessage error={productQuery.error} />
-  if (productQuery.loading || !productQuery.data?.dataproduct)
+  if (error) return <ErrorMessage error={error} />
+  if (loading || !dataproduct)
     return <LoaderSpinner />
-
-  const product = productQuery.data.dataproduct
 
   const menuItems: Array<{
     title: any
     slug: string
     component: any
   }> = [
-    {
-      title: 'Beskrivelse',
-      slug: 'info',
-      component: (
-        <Description
-          dataproduct={product}
-          isOwner={isOwner}
-        />
-      ),
-    },
-  ]
+      {
+        title: 'Beskrivelse',
+        slug: 'info',
+        component: (
+          <Description
+            dataproduct={dataproduct}
+            isOwner={isOwner}
+          />
+        ),
+      },
+    ]
 
-  product.datasets.forEach((dataset) => {
+  dataproduct.datasets.forEach((dataset: any) => {
     menuItems.push({
       title: `${truncate(dataset.name, 120)}`,
       slug: dataset.id,
       component: (
         <Dataset
-          dataset={dataset}
+          datasetID={dataset.id}
           userInfo={userInfo}
           isOwner={isOwner}
-          dataproduct={product}
+          dataproduct={dataproduct}
         />
       ),
     })
@@ -122,25 +118,24 @@ const Dataproduct = (props: DataproductProps) => {
         </div>
       ),
       slug: 'new',
-      component: <NewDatasetForm dataproduct={productQuery.data} />,
+      component: <NewDatasetForm dataproduct={dataproduct} />,
     })
   }
 
   const currentPage = menuItems
     .map((e) => e.slug)
-    .indexOf(router.query.page?.[0] ?? 'info')
-
+    .indexOf(pageParam)
   return (
     <InnerContainer>
       <Head>
-        <title>{product.name}</title>
+        <title>{dataproduct.name}</title>
       </Head>
-      <TopBar name={product.name} type={product.__typename}>
+      <TopBar name={dataproduct.name} type={dataproduct.__typename}>
         {isOwner && (
           <div className="flex gap-2">
             <a
               className="pr-2 border-r border-border-strong"
-              href={`/dataproduct/${product.id}/${product.slug}/edit`}
+              href={`/dataproduct/${dataproduct.id}/${dataproduct.slug}/edit`}
             >
               Endre dataprodukt
             </a>
@@ -152,7 +147,7 @@ const Dataproduct = (props: DataproductProps) => {
       </TopBar>
       <div className="flex flex-row h-full flex-grow">
         <DataproductSidebar
-          product={product}
+          product={dataproduct}
           isOwner={isOwner}
           menuItems={menuItems}
           currentPage={currentPage}
@@ -172,7 +167,7 @@ const Dataproduct = (props: DataproductProps) => {
             open={showDelete}
             onCancel={() => setShowDelete(false)}
             onConfirm={() => onDelete()}
-            name={product.name}
+            name={dataproduct.name}
             error={deleteError}
             resource="dataprodukt"
           />
@@ -180,40 +175,6 @@ const Dataproduct = (props: DataproductProps) => {
       </div>
     </InnerContainer>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const cookie = context.req.headers.cookie
-
-  const apolloClient = initializeApollo()
-
-  try {
-    await apolloClient.query({
-      query: GET_DATAPRODUCT,
-      variables: { id },
-      context: {
-        headers: {
-          cookie,
-        },
-      },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  try {
-    await apolloClient.query({
-      query: SearchContentDocument,
-      variables: { q: { limit: 6 } },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  return addApolloState(apolloClient, {
-    props: { id },
-  })
 }
 
 export default Dataproduct

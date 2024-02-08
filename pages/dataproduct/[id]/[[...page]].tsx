@@ -1,34 +1,34 @@
-import { useDataproductQuery } from '../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../lib/apollo'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Head from 'next/head'
+import { useGetDataproduct } from '../../../lib/rest/dataproducts'
+import { Alert } from '@navikt/ds-react'
 
 interface DataproductProps {
   id: string
 }
 
-const Dataproduct = (props: DataproductProps) => {
-  const { id } = props
+const Dataproduct = () => {
   const router = useRouter()
+  const id = router.query.id as string
+  const {dataproduct, loading, error} = useGetDataproduct(id)
 
   const currentPage = router.query.page?.[0] ?? 'info'
-  console.log(currentPage)
 
-  const productQuery = useDataproductQuery({
-    variables: { id },
-    ssr: true,
-  })
+  if(dataproduct!= null){
+    router.push(`/dataproduct/${id}/${dataproduct?.slug}/${currentPage}`)
+  }
 
-  const product = productQuery?.data?.dataproduct
-
-  useEffect(() => {
-    router.push(`/dataproduct/${id}/${product?.slug}/${currentPage}`)
-  }, [router, id, product?.slug, currentPage])
-
-  return (
+  return error?(
+    <>
+      <Head>
+        <Alert variant='error'>Internal error: {error}</Alert>
+      </Head>
+      <></>
+    </>
+  ): (
     <>
       <Head>
         <title>Redirigerer deg til ny side</title>
@@ -36,31 +36,6 @@ const Dataproduct = (props: DataproductProps) => {
       <></>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const cookie = context.req.headers.cookie
-
-  const apolloClient = initializeApollo()
-
-  try {
-    await apolloClient.query({
-      query: GET_DATAPRODUCT,
-      variables: { id },
-      context: {
-        headers: {
-          cookie,
-        },
-      },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  return addApolloState(apolloClient, {
-    props: { id },
-  })
 }
 
 export default Dataproduct

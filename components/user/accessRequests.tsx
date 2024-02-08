@@ -10,12 +10,12 @@ import React, { useState } from 'react'
 import humanizeDate from '../../lib/humanizeDate'
 import {
   AccessRequest,
-  useDatasetQuery,
   useDeleteAccessRequestMutation,
 } from '../../lib/schema/graphql'
 import UpdateAccessRequest from '../dataproducts/accessRequest/updateAccessRequest'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
+import { useGetDataset } from '../../lib/rest/dataproducts'
 
 interface AccessRequests {
   accessRequests: Array<AccessRequest>
@@ -39,13 +39,10 @@ interface DeleteRequestInterface {
 
 const ViewRequestButton = ({ request, type }: RequestInterface) => {
   const [open, setOpen] = useState(false)
-  const { data, error, loading } = useDatasetQuery({
-    variables: { id: request.datasetID, rawDesc: false },
-    ssr: true,
-  })
+  const { dataset, error, loading } = useGetDataset(request.datasetID)
 
   if (error) return <ErrorMessage error={error} />
-  if (loading || !data) return <LoaderSpinner />
+  if (loading || !dataset) return <LoaderSpinner />
 
   return (
     <>
@@ -57,7 +54,7 @@ const ViewRequestButton = ({ request, type }: RequestInterface) => {
       >
         <Modal.Body className="h-full">
           <UpdateAccessRequest
-            dataset={data.dataset}
+            dataset={dataset}
             updateAccessRequestData={request}
             setModal={setOpen}
           />
@@ -69,7 +66,7 @@ const ViewRequestButton = ({ request, type }: RequestInterface) => {
         onClick={(_) => setOpen(true)}
       >
         <Heading level="2" size="medium">
-          {data.dataset.name}
+          {dataset.name}
         </Heading>
         <BodyLong>
           <p>Søknad for {request?.subject}</p>

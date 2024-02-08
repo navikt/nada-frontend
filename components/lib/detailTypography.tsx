@@ -5,10 +5,9 @@ import remarkGfm from 'remark-gfm'
 import TagPill from './tagPill'
 import { Accordion, Heading, Link, Button, Alert } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
-import { DataproductQuery } from '../../lib/schema/graphql'
 
 interface DescriptionProps {
-    dataproduct: DataproductQuery['dataproduct'],
+    dataproduct: any,
     isOwner: boolean
 }
 
@@ -36,7 +35,7 @@ export const Description = ({dataproduct, isOwner}: DescriptionProps) => {
         </ReactMarkdown>
         {!!dataproduct.keywords.length && (
             <div className="flex flex-row gap-1 flex-wrap my-2">
-                {dataproduct.keywords.map((k, i) => (
+                {dataproduct.keywords.map((k: string, i: number) => (
                     <TagPill key={k} keyword={k} onClick={() => { router.push(`/search?keywords=${k}`) }}>
                         {k}
                     </TagPill>
@@ -46,7 +45,7 @@ export const Description = ({dataproduct, isOwner}: DescriptionProps) => {
         <div className="block md:hidden">
             <Heading level="2" size="medium">Datasett</Heading>
             <div className="flex flex-col gap-2">
-                {dataproduct.datasets.map((dataset, idx) => <a
+                {dataproduct.datasets.map((dataset: any, idx: number) => <a
                   className=""
                   href="#"
                   key={idx}

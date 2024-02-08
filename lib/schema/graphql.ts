@@ -5,17 +5,19 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Map: any;
-  Time: any;
-  Upload: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Map: { input: any; output: any; }
+  Time: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 /** Access contains metadata on an access entry. */
@@ -24,46 +26,46 @@ export type Access = {
   /** accessRequest is the accessRequest for this grant */
   accessRequest?: Maybe<AccessRequest>;
   /** accessRequestID is the id of the access request for this grant. */
-  accessRequestID?: Maybe<Scalars['ID']>;
+  accessRequestID?: Maybe<Scalars['ID']['output']>;
   /** created is timestamp for when access was created */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** expires is timestamp for when access expires */
-  expires?: Maybe<Scalars['Time']>;
+  expires?: Maybe<Scalars['Time']['output']>;
   /** name of the granter */
-  granter: Scalars['String'];
+  granter: Scalars['String']['output'];
   /** id for the access entry */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** revoked is timestamp for when access was revoked */
-  revoked?: Maybe<Scalars['Time']>;
+  revoked?: Maybe<Scalars['Time']['output']>;
   /** subject to grant access */
-  subject: Scalars['String'];
+  subject: Scalars['String']['output'];
 };
 
 /** AccessRequest contains metadata on a request to access a dataset */
 export type AccessRequest = {
   __typename?: 'AccessRequest';
   /** closed is a timestamp for when the access request was closed. */
-  closed?: Maybe<Scalars['Time']>;
+  closed?: Maybe<Scalars['Time']['output']>;
   /** created is a timestamp for when the access request was created. */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** id of dataset. */
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['output'];
   /** expires is a timestamp for when the access expires */
-  expires?: Maybe<Scalars['Time']>;
+  expires?: Maybe<Scalars['Time']['output']>;
   /** granter is the email of the person who granted/denied the access request. */
-  granter?: Maybe<Scalars['String']>;
+  granter?: Maybe<Scalars['String']['output']>;
   /** id of access request. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** owner of the access request. */
-  owner: Scalars['String'];
+  owner: Scalars['String']['output'];
   /** polly is the process policy attached to this grant. */
   polly?: Maybe<Polly>;
   /** reason is the eventual reason for denying this request. */
-  reason?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']['output']>;
   /** status is the status of the access request (can be pending, approved or denied). */
   status: AccessRequestStatus;
   /** subject to be granted access. */
-  subject: Scalars['String'];
+  subject: Scalars['String']['output'];
   /** subjectType is the type of entity which should be granted access (user, group or service account). */
   subjectType: SubjectType;
 };
@@ -86,29 +88,29 @@ export type AccessibleDatasets = {
 export type BigQuery = {
   __typename?: 'BigQuery';
   /** created is when the table was created */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** dataset is the dataset that contains the BigQuery table */
-  dataset: Scalars['String'];
+  dataset: Scalars['String']['output'];
   /** description is the description of the BigQuery table */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** expires, if set, is when the table expires */
-  expires?: Maybe<Scalars['Time']>;
+  expires?: Maybe<Scalars['Time']['output']>;
   /** id is the identifier for the datasource */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** lastModified is the time when the table was last modified */
-  lastModified: Scalars['Time'];
+  lastModified: Scalars['Time']['output'];
   /** missingSince, if set, is the time when the table got deleted from BigQuery */
-  missingSince?: Maybe<Scalars['Time']>;
+  missingSince?: Maybe<Scalars['Time']['output']>;
   /** piiTags is json string from the pii tags map */
-  piiTags?: Maybe<Scalars['String']>;
+  piiTags?: Maybe<Scalars['String']['output']>;
   /** projectID is the GCP project ID that contains the BigQuery table */
-  projectID: Scalars['String'];
+  projectID: Scalars['String']['output'];
   /** pseudoColumns, if set, the columns are pseudonymised */
-  pseudoColumns?: Maybe<Array<Scalars['String']>>;
+  pseudoColumns?: Maybe<Array<Scalars['String']['output']>>;
   /** schema for the BigQuery table */
   schema: Array<TableColumn>;
   /** table name for BigQuery table */
-  table: Scalars['String'];
+  table: Scalars['String']['output'];
   /** tableType is what type the table is */
   tableType: BigQueryType;
 };
@@ -116,20 +118,20 @@ export type BigQuery = {
 export type BigQuerySource = {
   __typename?: 'BigQuerySource';
   /** dataset is the name of the BigQuery dataset. */
-  dataset: Scalars['String'];
+  dataset: Scalars['String']['output'];
   /** table is the name of the BigQuery table. */
-  table: Scalars['String'];
+  table: Scalars['String']['output'];
 };
 
 /** BigQueryTable contains information about a BigQuery table. */
 export type BigQueryTable = {
   __typename?: 'BigQueryTable';
   /** description defined on the bigquery table. */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** lastModified defines the last modified time of the BigQuery metadata. */
-  lastModified: Scalars['Time'];
+  lastModified: Scalars['Time']['output'];
   /** name of the BigQuery table. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** type of the BigQuery table. */
   type: BigQueryType;
 };
@@ -148,29 +150,29 @@ export enum BigQueryType {
 export type Dataproduct = {
   __typename?: 'Dataproduct';
   /** created is the timestamp for when the dataproduct was created */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** datasets is the list of associated datasets. */
   datasets: Array<Dataset>;
   /** description of the dataproduct */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** id is the identifier for the dataproduct */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** keywords is the keyword tags for the datasets in the dataproduct. */
-  keywords: Array<Scalars['String']>;
+  keywords: Array<Scalars['String']['output']>;
   /** lastModified is the timestamp for when the dataproduct was last modified */
-  lastModified: Scalars['Time'];
+  lastModified: Scalars['Time']['output'];
   /** name of the dataproduct */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** owner of the dataproduct. Changes to the dataproduct can only be done by a member of the owner. */
   owner: Owner;
   /** slug is the dataproduct slug */
-  slug: Scalars['String'];
+  slug: Scalars['String']['output'];
 };
 
 
 /** Dataproduct contains metadata on a datasource. */
 export type DataproductDescriptionArgs = {
-  raw?: InputMaybe<Scalars['Boolean']>;
+  raw?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Dataset contains metadata on a dataset. */
@@ -179,51 +181,51 @@ export type Dataset = {
   /** access contains list of users, groups and service accounts which have access to the dataset */
   access: Array<Access>;
   /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
-  anonymisation_description?: Maybe<Scalars['String']>;
+  anonymisation_description?: Maybe<Scalars['String']['output']>;
   /** created is the timestamp for when the dataset was created */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** dataproduct is the dataproduct containing the dataset */
   dataproduct: Dataproduct;
   /** dataproductID is the id of the dataproduct containing the dataset */
-  dataproductID: Scalars['ID'];
+  dataproductID: Scalars['ID']['output'];
   /** datasource contains metadata on the datasource */
   datasource: Datasource;
   /** description of the dataset */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** id is the identifier for the dataset */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** keywords for the dataset used as tags. */
-  keywords: Array<Scalars['String']>;
+  keywords: Array<Scalars['String']['output']>;
   /** lastModified is the timestamp for when the dataset was last modified */
-  lastModified: Scalars['Time'];
+  lastModified: Scalars['Time']['output'];
   /** mappings services a dataset is exposed to */
   mappings: Array<MappingService>;
   /** name of the dataset */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** owner is the owner of the dataproduct containing this dataset */
   owner: Owner;
   /** pii indicates whether it is personal identifiable information in the dataset */
   pii: PiiLevel;
   /** repo is the url of the repository containing the code to create the dataset */
-  repo?: Maybe<Scalars['String']>;
+  repo?: Maybe<Scalars['String']['output']>;
   /** services contains links to this dataset in other services */
   services: DatasetServices;
   /** slug is the dataset slug */
-  slug: Scalars['String'];
+  slug: Scalars['String']['output'];
   /** targetUser is the type of user that the dataset is meant to be used by */
-  targetUser?: Maybe<Scalars['String']>;
+  targetUser?: Maybe<Scalars['String']['output']>;
 };
 
 
 /** Dataset contains metadata on a dataset. */
 export type DatasetDescriptionArgs = {
-  raw?: InputMaybe<Scalars['Boolean']>;
+  raw?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type DatasetServices = {
   __typename?: 'DatasetServices';
   /** URL to the dataset in metabase */
-  metabase?: Maybe<Scalars['String']>;
+  metabase?: Maybe<Scalars['String']['output']>;
 };
 
 /** Datasource defines types that can be returned as a dataset datasource. */
@@ -235,81 +237,81 @@ export type GcpProject = {
   /** group is owner group of GCP project */
   group: Group;
   /** id of GCP project */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
 };
 
 /** Group contains metadata on a GCP group */
 export type Group = {
   __typename?: 'Group';
   /** email of the group */
-  email: Scalars['String'];
+  email: Scalars['String']['output'];
   /** name of the group */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
 };
 
 /** GroupStats contains statistics on a group. */
 export type GroupStats = {
   __typename?: 'GroupStats';
   /** number of dataproducts owned by the group */
-  dataproducts: Scalars['Int'];
+  dataproducts: Scalars['Int']['output'];
   /** email of the group */
-  email: Scalars['String'];
+  email: Scalars['String']['output'];
 };
 
 /** InsightProduct contains the metadata of insight product. */
 export type InsightProduct = {
   __typename?: 'InsightProduct';
   /** created is the timestamp for when the insight product was created */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** creator of the insight product. */
-  creator: Scalars['String'];
+  creator: Scalars['String']['output'];
   /** description of the insight product. */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** group is the owner group of the insight product */
-  group: Scalars['String'];
+  group: Scalars['String']['output'];
   /** id of the insight product. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** keywords for the insight product used as tags. */
-  keywords: Array<Scalars['String']>;
+  keywords: Array<Scalars['String']['output']>;
   /** lastModified is the timestamp for when the insight product was last modified */
-  lastModified?: Maybe<Scalars['Time']>;
+  lastModified?: Maybe<Scalars['Time']['output']>;
   /** link to the insight product. */
-  link: Scalars['String'];
+  link: Scalars['String']['output'];
   /** name of the insight product. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Id of the creator's product area. */
-  productAreaID?: Maybe<Scalars['String']>;
+  productAreaID?: Maybe<Scalars['String']['output']>;
   /** Id of the creator's team. */
-  teamID?: Maybe<Scalars['String']>;
+  teamID?: Maybe<Scalars['String']['output']>;
   /** teamkatalogenURL of the creator */
-  teamkatalogenURL?: Maybe<Scalars['String']>;
+  teamkatalogenURL?: Maybe<Scalars['String']['output']>;
   /** type of the insight product. */
-  type: Scalars['String'];
+  type: Scalars['String']['output'];
 };
 
 export type JoinableView = {
   __typename?: 'JoinableView';
-  created: Scalars['Time'];
-  expires?: Maybe<Scalars['Time']>;
+  created: Scalars['Time']['output'];
+  expires?: Maybe<Scalars['Time']['output']>;
   /** id is the id of the joinable view set */
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type JoinableViewDatasource = {
   __typename?: 'JoinableViewDatasource';
-  accessible: Scalars['Boolean'];
-  bigqueryUrl: Scalars['String'];
-  deleted: Scalars['Boolean'];
+  accessible: Scalars['Boolean']['output'];
+  bigqueryUrl: Scalars['String']['output'];
+  deleted: Scalars['Boolean']['output'];
 };
 
 export type JoinableViewWithDatasource = {
   __typename?: 'JoinableViewWithDatasource';
-  created: Scalars['Time'];
-  expires?: Maybe<Scalars['Time']>;
+  created: Scalars['Time']['output'];
+  expires?: Maybe<Scalars['Time']['output']>;
   /** id is the id of the joinable view set */
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   pseudoDatasources: Array<JoinableViewDatasource>;
 };
 
@@ -317,9 +319,9 @@ export type JoinableViewWithDatasource = {
 export type Keyword = {
   __typename?: 'Keyword';
   /** Count is the number of dataproducts with this keyword */
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   /** Keyword name */
-  keyword: Scalars['String'];
+  keyword: Scalars['String']['output'];
 };
 
 /** MappingService defines all possible service types that a dataset can be exposed to. */
@@ -334,7 +336,7 @@ export type Mutation = {
    *
    * Requires authentication
    */
-  approveAccessRequest: Scalars['Boolean'];
+  approveAccessRequest: Scalars['Boolean']['output'];
   /**
    * createAccessRequest creates a new access request for a dataset
    *
@@ -364,7 +366,7 @@ export type Mutation = {
    *
    * Requires authentication.
    */
-  createJoinableViews: Scalars['String'];
+  createJoinableViews: Scalars['String']['output'];
   /**
    * createStory creates a data story.
    *
@@ -376,39 +378,39 @@ export type Mutation = {
    *
    * Requires authentication
    */
-  deleteAccessRequest: Scalars['Boolean'];
+  deleteAccessRequest: Scalars['Boolean']['output'];
   /**
    * deleteDataproduct deletes a dataproduct.
    *
    * Requires authentication.
    */
-  deleteDataproduct: Scalars['Boolean'];
+  deleteDataproduct: Scalars['Boolean']['output'];
   /**
    * deleteDataset deletes a dataset.
    *
    * Requires authentication.
    */
-  deleteDataset: Scalars['Boolean'];
+  deleteDataset: Scalars['Boolean']['output'];
   /**
    * deleteInsightProduct deletes an existing insight product.
    *
    * Requires authentication.
    */
-  deleteInsightProduct: Scalars['Boolean'];
+  deleteInsightProduct: Scalars['Boolean']['output'];
   /**
    * deleteStory deletes an existing data story.
    *
    * Requires authentication.
    */
-  deleteStory: Scalars['Boolean'];
+  deleteStory: Scalars['Boolean']['output'];
   /**
    * denyAccessRequest denies an access request.
    *
    * Requires authentication
    */
-  denyAccessRequest: Scalars['Boolean'];
+  denyAccessRequest: Scalars['Boolean']['output'];
   /** This mutation doesn't do anything. */
-  dummy?: Maybe<Scalars['String']>;
+  dummy?: Maybe<Scalars['String']['output']>;
   /**
    * grantAccessToDataset grants access for a subject to the dataset.
    *
@@ -420,14 +422,14 @@ export type Mutation = {
    *
    * Requires authentication
    */
-  mapDataset: Scalars['Boolean'];
+  mapDataset: Scalars['Boolean']['output'];
   /**
    * revokeAccessToDataset revokes access for a subject to the dataset.
    *
    * Requires authentication.
    */
-  revokeAccessToDataset: Scalars['Boolean'];
-  triggerMetadataSync: Scalars['Boolean'];
+  revokeAccessToDataset: Scalars['Boolean']['output'];
+  triggerMetadataSync: Scalars['Boolean']['output'];
   /**
    * createAccessRequest creates a new access request for a dataset
    *
@@ -457,7 +459,7 @@ export type Mutation = {
    *
    * Requires authentication.
    */
-  updateKeywords: Scalars['Boolean'];
+  updateKeywords: Scalars['Boolean']['output'];
   /**
    * updateStoryMetadata updates metadata on an existing data story.
    *
@@ -468,7 +470,7 @@ export type Mutation = {
 
 
 export type MutationApproveAccessRequestArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
@@ -504,38 +506,38 @@ export type MutationCreateStoryArgs = {
 
 
 export type MutationDeleteAccessRequestArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteDataproductArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteDatasetArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteInsightProductArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDeleteStoryArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationDenyAccessRequestArgs = {
-  id: Scalars['ID'];
-  reason?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type MutationDummyArgs = {
-  no?: InputMaybe<Scalars['String']>;
+  no?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -545,13 +547,13 @@ export type MutationGrantAccessToDatasetArgs = {
 
 
 export type MutationMapDatasetArgs = {
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['input'];
   services: Array<MappingService>;
 };
 
 
 export type MutationRevokeAccessToDatasetArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
@@ -561,28 +563,28 @@ export type MutationUpdateAccessRequestArgs = {
 
 
 export type MutationUpdateDataproductArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   input: UpdateDataproduct;
 };
 
 
 export type MutationUpdateDatasetArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   input: UpdateDataset;
 };
 
 
 export type MutationUpdateInsightProductMetadataArgs = {
-  description: Scalars['String'];
-  group: Scalars['String'];
-  id: Scalars['ID'];
-  keywords: Array<Scalars['String']>;
-  link: Scalars['String'];
-  name: Scalars['String'];
-  productAreaID?: InputMaybe<Scalars['String']>;
-  teamID?: InputMaybe<Scalars['String']>;
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
-  type: Scalars['String'];
+  description: Scalars['String']['input'];
+  group: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+  keywords: Array<Scalars['String']['input']>;
+  link: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 
@@ -592,37 +594,37 @@ export type MutationUpdateKeywordsArgs = {
 
 
 export type MutationUpdateStoryMetadataArgs = {
-  description: Scalars['String'];
-  group: Scalars['String'];
-  id: Scalars['ID'];
-  keywords: Array<Scalars['String']>;
-  name: Scalars['String'];
-  productAreaID?: InputMaybe<Scalars['String']>;
-  teamID?: InputMaybe<Scalars['String']>;
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  description: Scalars['String']['input'];
+  group: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+  keywords: Array<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** NadaToken contains the team token of the corresponding team for updating data stories */
 export type NadaToken = {
   __typename?: 'NadaToken';
   /** name of team */
-  team: Scalars['String'];
+  team: Scalars['String']['output'];
   /** nada token for the team */
-  token: Scalars['ID'];
+  token: Scalars['ID']['output'];
 };
 
 /** NewAccessRequest contains metadata on a request to access a dataset */
 export type NewAccessRequest = {
   /** id of dataset. */
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['input'];
   /** expires is a timestamp for when the access expires. */
-  expires?: InputMaybe<Scalars['Time']>;
+  expires?: InputMaybe<Scalars['Time']['input']>;
   /** owner is the owner of the access request */
-  owner?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Scalars['String']['input']>;
   /** polly is the process policy attached to this grant */
   polly?: InputMaybe<PollyInput>;
   /** subject to be granted access. */
-  subject?: InputMaybe<Scalars['String']>;
+  subject?: InputMaybe<Scalars['String']['input']>;
   /** subjectType is the type of entity which should be granted access (user, group or service account). */
   subjectType?: InputMaybe<SubjectType>;
 };
@@ -630,67 +632,67 @@ export type NewAccessRequest = {
 /** NewBigQuery contains metadata for creating a new bigquery data source */
 export type NewBigQuery = {
   /** dataset is the name of the dataset. */
-  dataset: Scalars['String'];
+  dataset: Scalars['String']['input'];
   /** piiTags is json string from the pii tags map */
-  piiTags?: InputMaybe<Scalars['String']>;
+  piiTags?: InputMaybe<Scalars['String']['input']>;
   /** projectID is the GCP project ID that contains the dataset. */
-  projectID: Scalars['String'];
+  projectID: Scalars['String']['input'];
   /** table is the name of the table */
-  table: Scalars['String'];
+  table: Scalars['String']['input'];
 };
 
 /** NewDataproduct contains metadata for creating a new dataproduct */
 export type NewDataproduct = {
   /** description of the dataproduct */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** owner group email for the dataproduct. */
-  group: Scalars['String'];
+  group: Scalars['String']['input'];
   /** name of dataproduct */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** Id of the team's product area. */
-  productAreaID?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
-  teamContact?: InputMaybe<Scalars['String']>;
+  teamContact?: InputMaybe<Scalars['String']['input']>;
   /** Id of the team. */
-  teamID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
   /** owner Teamkatalogen URL for the dataproduct. */
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** NewDataset contains metadata for creating a new dataset */
 export type NewDataset = {
   /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
-  anonymisation_description?: InputMaybe<Scalars['String']>;
+  anonymisation_description?: InputMaybe<Scalars['String']['input']>;
   /** bigquery contains metadata for the bigquery datasource added to the dataset. */
   bigquery: NewBigQuery;
   /** dataproductID is the id of the dataproduct containing the dataset */
-  dataproductID: Scalars['ID'];
+  dataproductID: Scalars['ID']['input'];
   /** description of the dataset */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** grantAllUsers is a boolean indicating whether the dataset shall be made available for all users on creation */
-  grantAllUsers?: InputMaybe<Scalars['Boolean']>;
+  grantAllUsers?: InputMaybe<Scalars['Boolean']['input']>;
   /** keywords for the dataset used as tags. */
-  keywords?: InputMaybe<Array<Scalars['String']>>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   /** name of dataset */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** pii indicates whether it is personal identifiable information in the dataset */
   pii: PiiLevel;
   /** pseudoColumns is the name of the columns that need to be pseudonymised */
-  pseudoColumns?: InputMaybe<Array<Scalars['String']>>;
+  pseudoColumns?: InputMaybe<Array<Scalars['String']['input']>>;
   /** repo is the url of the repository containing the code to create the dataset */
-  repo?: InputMaybe<Scalars['String']>;
+  repo?: InputMaybe<Scalars['String']['input']>;
   /** targetUser is the type of user that the dataset is meant to be used by */
-  targetUser?: InputMaybe<Scalars['String']>;
+  targetUser?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** NewGrant contains metadata on a request to access a dataset */
 export type NewGrant = {
   /** id of dataset. */
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['input'];
   /** expires is a timestamp for when the access expires. */
-  expires?: InputMaybe<Scalars['Time']>;
+  expires?: InputMaybe<Scalars['Time']['input']>;
   /** subject to be granted access. */
-  subject?: InputMaybe<Scalars['String']>;
+  subject?: InputMaybe<Scalars['String']['input']>;
   /** subjectType is the type of entity which should be granted access (user, group or service account). */
   subjectType?: InputMaybe<SubjectType>;
 };
@@ -698,68 +700,68 @@ export type NewGrant = {
 /** NewInsightProduct contains the metadata and content of insight products. */
 export type NewInsightProduct = {
   /** description of the insight product. */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** group is the owner group of the insight product */
-  group: Scalars['String'];
+  group: Scalars['String']['input'];
   /** keywords for the story used as tags. */
-  keywords: Array<Scalars['String']>;
+  keywords: Array<Scalars['String']['input']>;
   /** link to the insight product. */
-  link: Scalars['String'];
+  link: Scalars['String']['input'];
   /** name of the insight product. */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** Id of the creator's product area. */
-  productAreaID?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
   /** Id of the creator's team. */
-  teamID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
   /** teamkatalogenURL of the creator */
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
   /** type of the insight product. */
-  type: Scalars['String'];
+  type: Scalars['String']['input'];
 };
 
 /** NewJoinableViews contains metadata for creating joinable views */
 export type NewJoinableViews = {
   /** datasetIDs is the IDs of the dataset which are made joinable. */
-  datasetIDs?: InputMaybe<Array<Scalars['ID']>>;
+  datasetIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** expires is the time when the created joinable dataset should be deleted, default never */
-  expires?: InputMaybe<Scalars['Time']>;
+  expires?: InputMaybe<Scalars['Time']['input']>;
   /** name is the name of the joinable views which will be used as the name of the dataset in bigquery, which contains all the joinable views */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 /** NewStory contains the metadata and content of data stories. */
 export type NewStory = {
   /** description of the data story. */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** group is the owner group of the data story. */
-  group: Scalars['String'];
+  group: Scalars['String']['input'];
   /** id of the data story. */
-  id?: InputMaybe<Scalars['ID']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   /** keywords for the story used as tags. */
-  keywords: Array<Scalars['String']>;
+  keywords: Array<Scalars['String']['input']>;
   /** name of the data story. */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** Id of the creator's product area. */
-  productAreaID?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
   /** Id of the creator's team. */
-  teamID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
   /** teamkatalogenURL of the creator. */
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Owner contains metadata on the owner of the dataproduct/datastory. */
 export type Owner = {
   __typename?: 'Owner';
   /** owner group is the email for the group. */
-  group: Scalars['String'];
+  group: Scalars['String']['output'];
   /** Id of the team's product area. */
-  productAreaID?: Maybe<Scalars['String']>;
+  productAreaID?: Maybe<Scalars['String']['output']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
-  teamContact?: Maybe<Scalars['String']>;
+  teamContact?: Maybe<Scalars['String']['output']>;
   /** Id of the team in teamkatalogen. */
-  teamID?: Maybe<Scalars['String']>;
+  teamID?: Maybe<Scalars['String']['output']>;
   /** teamkatalogenURL is url for the team in the NAV team catalog. */
-  teamkatalogenURL?: Maybe<Scalars['String']>;
+  teamkatalogenURL?: Maybe<Scalars['String']['output']>;
 };
 
 /** PiiLevel defines all possible levels of personal identifiable information that a dataset can have. */
@@ -772,40 +774,40 @@ export enum PiiLevel {
 export type Polly = {
   __typename?: 'Polly';
   /** id from polly */
-  externalID: Scalars['String'];
+  externalID: Scalars['String']['output'];
   /** database id */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** name from polly */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** url from polly */
-  url: Scalars['String'];
+  url: Scalars['String']['output'];
 };
 
 export type PollyInput = {
   /** id from polly */
-  externalID: Scalars['String'];
+  externalID: Scalars['String']['input'];
   /** database id */
-  id?: InputMaybe<Scalars['ID']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   /** name from polly */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** url from polly */
-  url: Scalars['String'];
+  url: Scalars['String']['input'];
 };
 
 export type ProductArea = {
   __typename?: 'ProductArea';
   /** areaType is the type of the product area, which is defined by teamkatalogen */
-  areaType: Scalars['String'];
+  areaType: Scalars['String']['output'];
   /** dashboardURL is the url to the product area dashboard. */
-  dashboardURL: Scalars['String'];
+  dashboardURL: Scalars['String']['output'];
   /** dataproducts is the dataproducts owned by the product area. */
   dataproducts: Array<Dataproduct>;
   /** id is the product area external id in teamkatalogen. */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
   /** insight products is the insight products owned by the product area. */
   insightProducts: Array<InsightProduct>;
   /** name is the name of the product area. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** stories is the stories owned by the product area. */
   stories: Array<Story>;
   /** teams is the teams in the product area. */
@@ -816,17 +818,17 @@ export type ProductArea = {
 export type PseudoDataset = {
   __typename?: 'PseudoDataset';
   /** datasetID is the id of the dataset */
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['output'];
   /** datasourceID is the id of the bigquery datasource */
-  datasourceID: Scalars['ID'];
+  datasourceID: Scalars['ID']['output'];
   /** name is the name of the dataset */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
   /** searches slack public channels to validate the channel name */
-  IsValidSlackChannel: Scalars['Boolean'];
+  IsValidSlackChannel: Scalars['Boolean']['output'];
   /** accessRequest returns one specific access request */
   accessRequest: AccessRequest;
   /** accessRequests returns all access requests for a dataset */
@@ -854,7 +856,7 @@ export type Query = {
    *
    * Requires authentication.
    */
-  gcpGetDatasets: Array<Scalars['String']>;
+  gcpGetDatasets: Array<Scalars['String']['output']>;
   /**
    * gcpGetTables returns all tables for a given dataset.
    *
@@ -886,98 +888,98 @@ export type Query = {
   /** userInfo returns information about the logged in user. */
   userInfo: UserInfo;
   /** version returns the API version. */
-  version: Scalars['String'];
+  version: Scalars['String']['output'];
 };
 
 
 export type QueryIsValidSlackChannelArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 
 export type QueryAccessRequestArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryAccessRequestsForDatasetArgs = {
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['input'];
 };
 
 
 export type QueryDataStoryArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryDataproductArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryDataproductsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   service?: InputMaybe<MappingService>;
 };
 
 
 export type QueryDatasetArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryDatasetsInDataproductArgs = {
-  dataproductID: Scalars['ID'];
+  dataproductID: Scalars['ID']['input'];
 };
 
 
 export type QueryGcpGetAllTablesInProjectArgs = {
-  projectID: Scalars['String'];
+  projectID: Scalars['String']['input'];
 };
 
 
 export type QueryGcpGetColumnsArgs = {
-  datasetID: Scalars['String'];
-  projectID: Scalars['String'];
-  tableID: Scalars['String'];
+  datasetID: Scalars['String']['input'];
+  projectID: Scalars['String']['input'];
+  tableID: Scalars['String']['input'];
 };
 
 
 export type QueryGcpGetDatasetsArgs = {
-  projectID: Scalars['String'];
+  projectID: Scalars['String']['input'];
 };
 
 
 export type QueryGcpGetTablesArgs = {
-  datasetID: Scalars['String'];
-  projectID: Scalars['String'];
+  datasetID: Scalars['String']['input'];
+  projectID: Scalars['String']['input'];
 };
 
 
 export type QueryGroupStatsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryInsightProductArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryJoinableViewArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryPollyArgs = {
-  q: Scalars['String'];
+  q: Scalars['String']['input'];
 };
 
 
 export type QueryProductAreaArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -988,37 +990,37 @@ export type QuerySearchArgs = {
 
 
 export type QueryTeamArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTeamkatalogenArgs = {
-  q?: InputMaybe<Array<Scalars['String']>>;
+  q?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryPolly = {
   __typename?: 'QueryPolly';
   /** id from polly */
-  externalID: Scalars['String'];
+  externalID: Scalars['String']['output'];
   /** name from polly */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** url from polly */
-  url: Scalars['String'];
+  url: Scalars['String']['output'];
 };
 
 export type SearchOptions = {
   /** groups filters results on the group. */
-  groups?: InputMaybe<Array<Scalars['String']>>;
+  groups?: InputMaybe<Array<Scalars['String']['input']>>;
   /** keywords filters results on the keyword. */
-  keywords?: InputMaybe<Array<Scalars['String']>>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   /** limit the number of returned search results. */
-  limit?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   /** offset the list of returned search results. Used as pagination with PAGE-INDEX * limit. */
-  offset?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   /** services filters results on the service. */
   services?: InputMaybe<Array<MappingService>>;
   /** teamIDs filters results on the team_id. */
-  teamIDs?: InputMaybe<Array<Scalars['String']>>;
+  teamIDs?: InputMaybe<Array<Scalars['String']['input']>>;
   /**
    * text is used as freetext search.
    *
@@ -1028,22 +1030,22 @@ export type SearchOptions = {
    *
    * Use OR as a keyword for the OR operator. Example "night OR day"
    */
-  text?: InputMaybe<Scalars['String']>;
+  text?: InputMaybe<Scalars['String']['input']>;
   /** types to search on */
   types?: InputMaybe<Array<SearchType>>;
 };
 
 export type SearchQuery = {
   /** group filters results on the group. */
-  group?: InputMaybe<Scalars['String']>;
+  group?: InputMaybe<Scalars['String']['input']>;
   /** keyword filters results on the keyword. */
-  keyword?: InputMaybe<Scalars['String']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
   /** limit the number of returned search results. */
-  limit?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   /** offset the list of returned search results. Used as pagination with PAGE-INDEX * limit. */
-  offset?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   /** teamID filters results on the team_id. */
-  teamID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
   /**
    * text is used as freetext search.
    *
@@ -1053,14 +1055,14 @@ export type SearchQuery = {
    *
    * Use OR as a keyword for the OR operator. Example "night OR day"
    */
-  text?: InputMaybe<Scalars['String']>;
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SearchResult = Dataproduct | Story;
 
 export type SearchResultRow = {
   __typename?: 'SearchResultRow';
-  excerpt: Scalars['String'];
+  excerpt: Scalars['String']['output'];
   result: SearchResult;
 };
 
@@ -1073,27 +1075,27 @@ export enum SearchType {
 export type Story = {
   __typename?: 'Story';
   /** created is the timestamp for when the data story was created */
-  created: Scalars['Time'];
+  created: Scalars['Time']['output'];
   /** creator of the data story. */
-  creator: Scalars['String'];
+  creator: Scalars['String']['output'];
   /** description of the data story. */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** group is the owner group of the data story */
-  group: Scalars['String'];
+  group: Scalars['String']['output'];
   /** id of the data story. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** keywords for the story used as tags. */
-  keywords: Array<Scalars['String']>;
+  keywords: Array<Scalars['String']['output']>;
   /** lastModified is the timestamp for when the data story was last modified */
-  lastModified?: Maybe<Scalars['Time']>;
+  lastModified?: Maybe<Scalars['Time']['output']>;
   /** name of the data story. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Id of the creator's product area. */
-  productAreaID?: Maybe<Scalars['String']>;
+  productAreaID?: Maybe<Scalars['String']['output']>;
   /** Id of the creator's team. */
-  teamID?: Maybe<Scalars['String']>;
+  teamID?: Maybe<Scalars['String']['output']>;
   /** teamkatalogenURL of the creator */
-  teamkatalogenURL?: Maybe<Scalars['String']>;
+  teamkatalogenURL?: Maybe<Scalars['String']['output']>;
 };
 
 /** SubjectType defines all possible types that can request access to a dataset. */
@@ -1107,29 +1109,29 @@ export enum SubjectType {
 export type TableColumn = {
   __typename?: 'TableColumn';
   /** description of column. */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** mode of column (NULLABLE, REQUIRED or REPEATED). */
-  mode: Scalars['String'];
+  mode: Scalars['String']['output'];
   /** name of column. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** type is the datatype of the column. */
-  type: Scalars['String'];
+  type: Scalars['String']['output'];
 };
 
 export type Team = {
   __typename?: 'Team';
   /** dashboardURL is the url to the team dashboard. */
-  dashboardURL: Scalars['String'];
+  dashboardURL: Scalars['String']['output'];
   /** dataproducts is the dataproducts owned by the team. */
   dataproducts: Array<Dataproduct>;
   /** id is the team external id in teamkatalogen. */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
   /** insight products is the insight products owned by the team. */
   insightProducts: Array<InsightProduct>;
   /** name is the name of the team. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** productAreaID is the id of the product area. */
-  productAreaID: Scalars['String'];
+  productAreaID: Scalars['String']['output'];
   /** stories is the stories owned by the team. */
   stories: Array<Story>;
 };
@@ -1137,25 +1139,25 @@ export type Team = {
 export type TeamkatalogenResult = {
   __typename?: 'TeamkatalogenResult';
   /** team description. */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** team name. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Id of the team's product area. */
-  productAreaID: Scalars['String'];
+  productAreaID: Scalars['String']['output'];
   /** team id is the id of the team. */
-  teamID: Scalars['String'];
+  teamID: Scalars['String']['output'];
   /** url to team in teamkatalogen. */
-  url: Scalars['String'];
+  url: Scalars['String']['output'];
 };
 
 /** UpdateAccessRequest contains metadata on a request to access a dataset */
 export type UpdateAccessRequest = {
   /** expires is a timestamp for when the access expires. */
-  expires?: InputMaybe<Scalars['Time']>;
+  expires?: InputMaybe<Scalars['Time']['input']>;
   /** id of access request. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   /** owner is the owner of the access request. */
-  owner: Scalars['String'];
+  owner: Scalars['String']['input'];
   /** polly is the new polly documentation for this access request. */
   polly?: InputMaybe<PollyInput>;
 };
@@ -1163,58 +1165,58 @@ export type UpdateAccessRequest = {
 /** UpdateDataproduct contains metadata for updating a dataproduct */
 export type UpdateDataproduct = {
   /** description of the dataproduct */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** name of dataproduct */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** Id of the team's product area. */
-  productAreaID?: InputMaybe<Scalars['String']>;
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
   /** The contact information of the team who owns the dataproduct, which can be slack channel, slack account, email, and so on. */
-  teamContact?: InputMaybe<Scalars['String']>;
+  teamContact?: InputMaybe<Scalars['String']['input']>;
   /** Id of the team. */
-  teamID?: InputMaybe<Scalars['String']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
   /** owner Teamkatalogen URL for the dataproduct. */
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** UpdateDataset contains metadata for updating a dataset */
 export type UpdateDataset = {
   /** anonymisation_description explains how the dataset was anonymised, should be null if `pii` isn't anonymised */
-  anonymisation_description?: InputMaybe<Scalars['String']>;
+  anonymisation_description?: InputMaybe<Scalars['String']['input']>;
   /** ID of the dataproduct that owns this dataset, the current dataproduct will not change if the field is null */
-  dataproductID?: InputMaybe<Scalars['ID']>;
+  dataproductID?: InputMaybe<Scalars['ID']['input']>;
   /** description of the dataset */
-  description?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   /** keywords for the dataset used as tags. */
-  keywords?: InputMaybe<Array<Scalars['String']>>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   /** name of dataset */
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
   /** pii indicates whether it is personal identifiable information in the dataset */
   pii: PiiLevel;
   /** piiTags is json string from the pii tags map */
-  piiTags?: InputMaybe<Scalars['String']>;
+  piiTags?: InputMaybe<Scalars['String']['input']>;
   /** pseudoColumns is the name of the columns that need to be pseudonymised */
-  pseudoColumns?: InputMaybe<Array<Scalars['String']>>;
+  pseudoColumns?: InputMaybe<Array<Scalars['String']['input']>>;
   /** repo is the url of the repository containing the code to create the dataset */
-  repo?: InputMaybe<Scalars['String']>;
+  repo?: InputMaybe<Scalars['String']['input']>;
   /** targetUser is the type of user that the dataset is meant to be used by */
-  targetUser?: InputMaybe<Scalars['String']>;
+  targetUser?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateKeywords = {
   /** NewText is a list of text to replace the keywords */
-  newText?: InputMaybe<Array<Scalars['String']>>;
+  newText?: InputMaybe<Array<Scalars['String']['input']>>;
   /** ObsoleteKeywords is a list of keywords to remove */
-  obsoleteKeywords?: InputMaybe<Array<Scalars['String']>>;
+  obsoleteKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
   /** ReplacedKeywords is a list of keywords to replace */
-  replacedKeywords?: InputMaybe<Array<Scalars['String']>>;
+  replacedKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** UploadFile contains path and data of a file */
 export type UploadFile = {
   /** file data */
-  file: Scalars['Upload'];
+  file: Scalars['Upload']['input'];
   /** path of the file uploaded */
-  path: Scalars['String'];
+  path: Scalars['String']['input'];
 };
 
 /** UserInfo contains metadata on a logged in user */
@@ -1231,7 +1233,7 @@ export type UserInfo = {
   /** dataproducts is a list of dataproducts with one of the users groups as owner. */
   dataproducts: Array<Dataproduct>;
   /** email of user. */
-  email: Scalars['String'];
+  email: Scalars['String']['output'];
   /** gcpProjects is GCP projects the user is a member of. */
   gcpProjects: Array<GcpProject>;
   /** googleGroups is the google groups the user is member of. */
@@ -1244,17 +1246,17 @@ export type UserInfo = {
   /** insight products is the insight products owned by the user's group */
   insightProducts: Array<InsightProduct>;
   /** loginExpiration is when the token expires. */
-  loginExpiration: Scalars['Time'];
+  loginExpiration: Scalars['Time']['output'];
   /** teamTokens is a list of the nada tokens for each team the logged in user is a part of. */
   nadaTokens: Array<NadaToken>;
   /** name of user. */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** stories is the stories owned by the user's group */
   stories: Array<Story>;
 };
 
 export type DatasetAccessQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1268,28 +1270,28 @@ export type GrantAccessMutationVariables = Exact<{
 export type GrantAccessMutation = { __typename?: 'Mutation', grantAccessToDataset: { __typename?: 'Access', id: string } };
 
 export type RevokeAccessMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type RevokeAccessMutation = { __typename?: 'Mutation', revokeAccessToDataset: boolean };
 
 export type AccessRequestQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type AccessRequestQuery = { __typename?: 'Query', accessRequest: { __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } };
 
 export type AccessRequestsForDatasetQueryVariables = Exact<{
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['input'];
 }>;
 
 
 export type AccessRequestsForDatasetQuery = { __typename?: 'Query', accessRequestsForDataset: Array<{ __typename?: 'AccessRequest', id: string, subject: string, subjectType: SubjectType, owner: string, created: any, expires?: any | null, polly?: { __typename?: 'Polly', name: string, externalID: string, url: string } | null }> };
 
 export type ApproveAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1303,15 +1305,15 @@ export type CreateAccessRequestMutationVariables = Exact<{
 export type CreateAccessRequestMutation = { __typename?: 'Mutation', createAccessRequest: { __typename?: 'AccessRequest', id: string } };
 
 export type DeleteAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteAccessRequestMutation = { __typename?: 'Mutation', deleteAccessRequest: boolean };
 
 export type DenyAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID'];
-  reason?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1331,16 +1333,8 @@ export type CreateDataproductMutationVariables = Exact<{
 
 export type CreateDataproductMutation = { __typename?: 'Mutation', createDataproduct: { __typename?: 'Dataproduct', id: string, slug: string } };
 
-export type DataproductQueryVariables = Exact<{
-  id: Scalars['ID'];
-  rawDesc?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type DataproductQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null, productAreaID?: string | null, teamID?: string | null }, datasets: Array<{ __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } }> } };
-
 export type DataproductSummaryQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1352,45 +1346,45 @@ export type MetabaseProudctsQueryVariables = Exact<{ [key: string]: never; }>;
 export type MetabaseProudctsQuery = { __typename?: 'Query', dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }> };
 
 export type DeleteDataproductMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteDataproductMutation = { __typename?: 'Mutation', deleteDataproduct: boolean };
 
 export type GcpGetAllTablesInProjectQueryVariables = Exact<{
-  projectID: Scalars['String'];
+  projectID: Scalars['String']['input'];
 }>;
 
 
 export type GcpGetAllTablesInProjectQuery = { __typename?: 'Query', gcpGetAllTablesInProject: Array<{ __typename?: 'BigQuerySource', table: string, dataset: string }> };
 
 export type GcpGetColumnsQueryVariables = Exact<{
-  projectID: Scalars['String'];
-  datasetID: Scalars['String'];
-  tableID: Scalars['String'];
+  projectID: Scalars['String']['input'];
+  datasetID: Scalars['String']['input'];
+  tableID: Scalars['String']['input'];
 }>;
 
 
 export type GcpGetColumnsQuery = { __typename?: 'Query', gcpGetColumns: Array<{ __typename?: 'TableColumn', name: string, type: string, mode: string, description: string }> };
 
 export type GcpGetDatasetsQueryVariables = Exact<{
-  projectID: Scalars['String'];
+  projectID: Scalars['String']['input'];
 }>;
 
 
 export type GcpGetDatasetsQuery = { __typename?: 'Query', gcpGetDatasets: Array<string> };
 
 export type GcpGetTablesQueryVariables = Exact<{
-  projectID: Scalars['String'];
-  datasetID: Scalars['String'];
+  projectID: Scalars['String']['input'];
+  datasetID: Scalars['String']['input'];
 }>;
 
 
 export type GcpGetTablesQuery = { __typename?: 'Query', gcpGetTables: Array<{ __typename?: 'BigQueryTable', name: string, type: BigQueryType, description: string }> };
 
 export type UpdateDataproductMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   input: UpdateDataproduct;
 }>;
 
@@ -1398,7 +1392,7 @@ export type UpdateDataproductMutationVariables = Exact<{
 export type UpdateDataproductMutation = { __typename?: 'Mutation', updateDataproduct: { __typename?: 'Dataproduct', id: string } };
 
 export type UpdateMappingMutationVariables = Exact<{
-  datasetID: Scalars['ID'];
+  datasetID: Scalars['ID']['input'];
   services: Array<MappingService> | MappingService;
 }>;
 
@@ -1417,23 +1411,15 @@ export type CreateDatasetMutationVariables = Exact<{
 
 export type CreateDatasetMutation = { __typename?: 'Mutation', createDataset: { __typename?: 'Dataset', id: string, dataproductID: string } };
 
-export type DatasetQueryVariables = Exact<{
-  id: Scalars['ID'];
-  rawDesc?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type DatasetQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, dataproductID: string, lastModified: any, name: string, description: string, created: any, repo?: string | null, slug: string, pii: PiiLevel, keywords: Array<string>, mappings: Array<MappingService>, anonymisation_description?: string | null, targetUser?: string | null, services: { __typename?: 'DatasetServices', metabase?: string | null }, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null, accessRequest?: { __typename?: 'AccessRequest', id: string, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } | null }>, datasource: { __typename?: 'BigQuery', projectID: string, dataset: string, table: string, lastModified: any, created: any, expires?: any | null, tableType: BigQueryType, description: string, piiTags?: string | null, pseudoColumns?: Array<string> | null, type: 'BigQuery', schema: Array<{ __typename?: 'TableColumn', name: string, description: string, mode: string, type: string }> } } };
-
 export type DeleteDatasetMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteDatasetMutation = { __typename?: 'Mutation', deleteDataset: boolean };
 
 export type UpdateDatasetMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   input: UpdateDataset;
 }>;
 
@@ -1453,23 +1439,23 @@ export type CreateInsightProductMutationVariables = Exact<{
 export type CreateInsightProductMutation = { __typename?: 'Mutation', createInsightProduct: { __typename?: 'InsightProduct', id: string } };
 
 export type UpdateInsightProductMetadataMutationVariables = Exact<{
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  description: Scalars['String'];
-  type: Scalars['String'];
-  link: Scalars['String'];
-  keywords: Array<Scalars['String']> | Scalars['String'];
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
-  productAreaID?: InputMaybe<Scalars['String']>;
-  teamID?: InputMaybe<Scalars['String']>;
-  group: Scalars['String'];
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+  link: Scalars['String']['input'];
+  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
+  group: Scalars['String']['input'];
 }>;
 
 
 export type UpdateInsightProductMetadataMutation = { __typename?: 'Mutation', updateInsightProductMetadata: { __typename?: 'InsightProduct', id: string } };
 
 export type InsightProductQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1488,14 +1474,14 @@ export type UpdateKeywordsMutationVariables = Exact<{
 export type UpdateKeywordsMutation = { __typename?: 'Mutation', updateKeywords: boolean };
 
 export type PollyQueryVariables = Exact<{
-  q: Scalars['String'];
+  q: Scalars['String']['input'];
 }>;
 
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
 export type ProductAreaQueryVariables = Exact<{
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 }>;
 
 
@@ -1507,7 +1493,7 @@ export type ProductAreasQueryVariables = Exact<{ [key: string]: never; }>;
 export type ProductAreasQuery = { __typename?: 'Query', productAreas: Array<{ __typename?: 'ProductArea', id: string, name: string, areaType: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, owner: { __typename?: 'Owner', group: string } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string> }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, created: any, lastModified?: any | null, keywords: Array<string>, type: string, group: string, teamkatalogenURL?: string | null, link: string }>, teams: Array<{ __typename?: 'Team', id: string, name: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string }>, stories: Array<{ __typename?: 'Story', id: string, name: string }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string }> }> }> };
 
 export type JoinableViewQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
@@ -1540,7 +1526,7 @@ export type SearchContentWithOptionsQueryVariables = Exact<{
 export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'Story', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } }> };
 
 export type SlackQueryVariables = Exact<{
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 }>;
 
 
@@ -1555,42 +1541,42 @@ export type CreateStoryMutationVariables = Exact<{
 export type CreateStoryMutation = { __typename?: 'Mutation', createStory: { __typename?: 'Story', id: string } };
 
 export type DeleteInsightProductMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteInsightProductMutation = { __typename?: 'Mutation', deleteInsightProduct: boolean };
 
 export type DeleteStoryMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteStoryMutation = { __typename?: 'Mutation', deleteStory: boolean };
 
 export type DataStoryQueryVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DataStoryQuery = { __typename?: 'Query', dataStory: { __typename?: 'Story', id: string, name: string, description: string, created: any, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null } };
 
 export type UpdateStoryMetadataMutationVariables = Exact<{
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  description: Scalars['String'];
-  keywords: Array<Scalars['String']> | Scalars['String'];
-  teamkatalogenURL?: InputMaybe<Scalars['String']>;
-  productAreaID?: InputMaybe<Scalars['String']>;
-  teamID?: InputMaybe<Scalars['String']>;
-  group: Scalars['String'];
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  keywords: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  teamkatalogenURL?: InputMaybe<Scalars['String']['input']>;
+  productAreaID?: InputMaybe<Scalars['String']['input']>;
+  teamID?: InputMaybe<Scalars['String']['input']>;
+  group: Scalars['String']['input'];
 }>;
 
 
 export type UpdateStoryMetadataMutation = { __typename?: 'Mutation', updateStoryMetadata: { __typename?: 'Story', id: string } };
 
 export type TeamkatalogenQueryVariables = Exact<{
-  q?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  q?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
 }>;
 
 
@@ -1654,8 +1640,13 @@ export function useDatasetAccessLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
         }
+export function useDatasetAccessSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
+        }
 export type DatasetAccessQueryHookResult = ReturnType<typeof useDatasetAccessQuery>;
 export type DatasetAccessLazyQueryHookResult = ReturnType<typeof useDatasetAccessLazyQuery>;
+export type DatasetAccessSuspenseQueryHookResult = ReturnType<typeof useDatasetAccessSuspenseQuery>;
 export type DatasetAccessQueryResult = Apollo.QueryResult<DatasetAccessQuery, DatasetAccessQueryVariables>;
 export const GrantAccessDocument = gql`
     mutation GrantAccess($input: NewGrant!) {
@@ -1768,8 +1759,13 @@ export function useAccessRequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
         }
+export function useAccessRequestSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
+        }
 export type AccessRequestQueryHookResult = ReturnType<typeof useAccessRequestQuery>;
 export type AccessRequestLazyQueryHookResult = ReturnType<typeof useAccessRequestLazyQuery>;
+export type AccessRequestSuspenseQueryHookResult = ReturnType<typeof useAccessRequestSuspenseQuery>;
 export type AccessRequestQueryResult = Apollo.QueryResult<AccessRequestQuery, AccessRequestQueryVariables>;
 export const AccessRequestsForDatasetDocument = gql`
     query accessRequestsForDataset($datasetID: ID!) {
@@ -1814,8 +1810,13 @@ export function useAccessRequestsForDatasetLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
         }
+export function useAccessRequestsForDatasetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
+        }
 export type AccessRequestsForDatasetQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetQuery>;
 export type AccessRequestsForDatasetLazyQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetLazyQuery>;
+export type AccessRequestsForDatasetSuspenseQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetSuspenseQuery>;
 export type AccessRequestsForDatasetQueryResult = Apollo.QueryResult<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>;
 export const ApproveAccessRequestDocument = gql`
     mutation approveAccessRequest($id: ID!) {
@@ -2011,122 +2012,6 @@ export function useCreateDataproductMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateDataproductMutationHookResult = ReturnType<typeof useCreateDataproductMutation>;
 export type CreateDataproductMutationResult = Apollo.MutationResult<CreateDataproductMutation>;
 export type CreateDataproductMutationOptions = Apollo.BaseMutationOptions<CreateDataproductMutation, CreateDataproductMutationVariables>;
-export const DataproductDocument = gql`
-    query Dataproduct($id: ID!, $rawDesc: Boolean) {
-  dataproduct(id: $id) {
-    id
-    lastModified
-    name
-    description(raw: $rawDesc)
-    created
-    slug
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-      productAreaID
-      teamID
-    }
-    keywords
-    datasets {
-      id
-      dataproductID
-      lastModified
-      name
-      description
-      created
-      repo
-      slug
-      pii
-      keywords
-      mappings
-      anonymisation_description
-      targetUser
-      services {
-        metabase
-      }
-      owner {
-        group
-        teamkatalogenURL
-        teamContact
-      }
-      access {
-        id
-        subject
-        granter
-        expires
-        created
-        revoked
-        accessRequestID
-        accessRequest {
-          id
-          polly {
-            id
-            name
-            externalID
-            url
-          }
-        }
-      }
-      datasource {
-        type: __typename
-        ... on BigQuery {
-          projectID
-          dataset
-          table
-          lastModified
-          created
-          expires
-          tableType
-          description
-          schema {
-            name
-            description
-            mode
-            type
-          }
-          piiTags
-          pseudoColumns
-        }
-      }
-    }
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-    }
-  }
-}
-    `;
-
-/**
- * __useDataproductQuery__
- *
- * To run a query within a React component, call `useDataproductQuery` and pass it any options that fit your needs.
- * When your component renders, `useDataproductQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDataproductQuery({
- *   variables: {
- *      id: // value for 'id'
- *      rawDesc: // value for 'rawDesc'
- *   },
- * });
- */
-export function useDataproductQuery(baseOptions: Apollo.QueryHookOptions<DataproductQuery, DataproductQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DataproductQuery, DataproductQueryVariables>(DataproductDocument, options);
-      }
-export function useDataproductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DataproductQuery, DataproductQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DataproductQuery, DataproductQueryVariables>(DataproductDocument, options);
-        }
-export type DataproductQueryHookResult = ReturnType<typeof useDataproductQuery>;
-export type DataproductLazyQueryHookResult = ReturnType<typeof useDataproductLazyQuery>;
-export type DataproductQueryResult = Apollo.QueryResult<DataproductQuery, DataproductQueryVariables>;
 export const DataproductSummaryDocument = gql`
     query DataproductSummary($id: ID!) {
   dataproduct(id: $id) {
@@ -2170,8 +2055,13 @@ export function useDataproductSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DataproductSummaryQuery, DataproductSummaryQueryVariables>(DataproductSummaryDocument, options);
         }
+export function useDataproductSummarySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DataproductSummaryQuery, DataproductSummaryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DataproductSummaryQuery, DataproductSummaryQueryVariables>(DataproductSummaryDocument, options);
+        }
 export type DataproductSummaryQueryHookResult = ReturnType<typeof useDataproductSummaryQuery>;
 export type DataproductSummaryLazyQueryHookResult = ReturnType<typeof useDataproductSummaryLazyQuery>;
+export type DataproductSummarySuspenseQueryHookResult = ReturnType<typeof useDataproductSummarySuspenseQuery>;
 export type DataproductSummaryQueryResult = Apollo.QueryResult<DataproductSummaryQuery, DataproductSummaryQueryVariables>;
 export const MetabaseProudctsDocument = gql`
     query MetabaseProudcts {
@@ -2212,8 +2102,13 @@ export function useMetabaseProudctsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
         }
+export function useMetabaseProudctsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
+        }
 export type MetabaseProudctsQueryHookResult = ReturnType<typeof useMetabaseProudctsQuery>;
 export type MetabaseProudctsLazyQueryHookResult = ReturnType<typeof useMetabaseProudctsLazyQuery>;
+export type MetabaseProudctsSuspenseQueryHookResult = ReturnType<typeof useMetabaseProudctsSuspenseQuery>;
 export type MetabaseProudctsQueryResult = Apollo.QueryResult<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>;
 export const DeleteDataproductDocument = gql`
     mutation deleteDataproduct($id: ID!) {
@@ -2279,8 +2174,13 @@ export function useGcpGetAllTablesInProjectLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>(GcpGetAllTablesInProjectDocument, options);
         }
+export function useGcpGetAllTablesInProjectSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>(GcpGetAllTablesInProjectDocument, options);
+        }
 export type GcpGetAllTablesInProjectQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectQuery>;
 export type GcpGetAllTablesInProjectLazyQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectLazyQuery>;
+export type GcpGetAllTablesInProjectSuspenseQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectSuspenseQuery>;
 export type GcpGetAllTablesInProjectQueryResult = Apollo.QueryResult<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>;
 export const GcpGetColumnsDocument = gql`
     query gcpGetColumns($projectID: String!, $datasetID: String!, $tableID: String!) {
@@ -2319,8 +2219,13 @@ export function useGcpGetColumnsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
         }
+export function useGcpGetColumnsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
+        }
 export type GcpGetColumnsQueryHookResult = ReturnType<typeof useGcpGetColumnsQuery>;
 export type GcpGetColumnsLazyQueryHookResult = ReturnType<typeof useGcpGetColumnsLazyQuery>;
+export type GcpGetColumnsSuspenseQueryHookResult = ReturnType<typeof useGcpGetColumnsSuspenseQuery>;
 export type GcpGetColumnsQueryResult = Apollo.QueryResult<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>;
 export const GcpGetDatasetsDocument = gql`
     query gcpGetDatasets($projectID: String!) {
@@ -2352,8 +2257,13 @@ export function useGcpGetDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>(GcpGetDatasetsDocument, options);
         }
+export function useGcpGetDatasetsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>(GcpGetDatasetsDocument, options);
+        }
 export type GcpGetDatasetsQueryHookResult = ReturnType<typeof useGcpGetDatasetsQuery>;
 export type GcpGetDatasetsLazyQueryHookResult = ReturnType<typeof useGcpGetDatasetsLazyQuery>;
+export type GcpGetDatasetsSuspenseQueryHookResult = ReturnType<typeof useGcpGetDatasetsSuspenseQuery>;
 export type GcpGetDatasetsQueryResult = Apollo.QueryResult<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>;
 export const GcpGetTablesDocument = gql`
     query gcpGetTables($projectID: String!, $datasetID: String!) {
@@ -2390,8 +2300,13 @@ export function useGcpGetTablesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GcpGetTablesQuery, GcpGetTablesQueryVariables>(GcpGetTablesDocument, options);
         }
+export function useGcpGetTablesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetTablesQuery, GcpGetTablesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GcpGetTablesQuery, GcpGetTablesQueryVariables>(GcpGetTablesDocument, options);
+        }
 export type GcpGetTablesQueryHookResult = ReturnType<typeof useGcpGetTablesQuery>;
 export type GcpGetTablesLazyQueryHookResult = ReturnType<typeof useGcpGetTablesLazyQuery>;
+export type GcpGetTablesSuspenseQueryHookResult = ReturnType<typeof useGcpGetTablesSuspenseQuery>;
 export type GcpGetTablesQueryResult = Apollo.QueryResult<GcpGetTablesQuery, GcpGetTablesQueryVariables>;
 export const UpdateDataproductDocument = gql`
     mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
@@ -2492,8 +2407,13 @@ export function useAccessiblePseudoDatasetsLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>(AccessiblePseudoDatasetsDocument, options);
         }
+export function useAccessiblePseudoDatasetsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>(AccessiblePseudoDatasetsDocument, options);
+        }
 export type AccessiblePseudoDatasetsQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsQuery>;
 export type AccessiblePseudoDatasetsLazyQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsLazyQuery>;
+export type AccessiblePseudoDatasetsSuspenseQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsSuspenseQuery>;
 export type AccessiblePseudoDatasetsQueryResult = Apollo.QueryResult<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>;
 export const CreateDatasetDocument = gql`
     mutation createDataset($input: NewDataset!) {
@@ -2529,101 +2449,6 @@ export function useCreateDatasetMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateDatasetMutationHookResult = ReturnType<typeof useCreateDatasetMutation>;
 export type CreateDatasetMutationResult = Apollo.MutationResult<CreateDatasetMutation>;
 export type CreateDatasetMutationOptions = Apollo.BaseMutationOptions<CreateDatasetMutation, CreateDatasetMutationVariables>;
-export const DatasetDocument = gql`
-    query Dataset($id: ID!, $rawDesc: Boolean) {
-  dataset(id: $id) {
-    id
-    dataproductID
-    lastModified
-    name
-    description(raw: $rawDesc)
-    created
-    repo
-    slug
-    pii
-    keywords
-    mappings
-    anonymisation_description
-    targetUser
-    services {
-      metabase
-    }
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-    }
-    access {
-      id
-      subject
-      granter
-      expires
-      created
-      revoked
-      accessRequestID
-      accessRequest {
-        id
-        polly {
-          id
-          name
-          externalID
-          url
-        }
-      }
-    }
-    datasource {
-      type: __typename
-      ... on BigQuery {
-        projectID
-        dataset
-        table
-        lastModified
-        created
-        expires
-        tableType
-        description
-        schema {
-          name
-          description
-          mode
-          type
-        }
-        piiTags
-        pseudoColumns
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useDatasetQuery__
- *
- * To run a query within a React component, call `useDatasetQuery` and pass it any options that fit your needs.
- * When your component renders, `useDatasetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDatasetQuery({
- *   variables: {
- *      id: // value for 'id'
- *      rawDesc: // value for 'rawDesc'
- *   },
- * });
- */
-export function useDatasetQuery(baseOptions: Apollo.QueryHookOptions<DatasetQuery, DatasetQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DatasetQuery, DatasetQueryVariables>(DatasetDocument, options);
-      }
-export function useDatasetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatasetQuery, DatasetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DatasetQuery, DatasetQueryVariables>(DatasetDocument, options);
-        }
-export type DatasetQueryHookResult = ReturnType<typeof useDatasetQuery>;
-export type DatasetLazyQueryHookResult = ReturnType<typeof useDatasetLazyQuery>;
-export type DatasetQueryResult = Apollo.QueryResult<DatasetQuery, DatasetQueryVariables>;
 export const DeleteDatasetDocument = gql`
     mutation deleteDataset($id: ID!) {
   deleteDataset(id: $id)
@@ -2722,8 +2547,13 @@ export function useGroupStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GroupStatsQuery, GroupStatsQueryVariables>(GroupStatsDocument, options);
         }
+export function useGroupStatsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GroupStatsQuery, GroupStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GroupStatsQuery, GroupStatsQueryVariables>(GroupStatsDocument, options);
+        }
 export type GroupStatsQueryHookResult = ReturnType<typeof useGroupStatsQuery>;
 export type GroupStatsLazyQueryHookResult = ReturnType<typeof useGroupStatsLazyQuery>;
+export type GroupStatsSuspenseQueryHookResult = ReturnType<typeof useGroupStatsSuspenseQuery>;
 export type GroupStatsQueryResult = Apollo.QueryResult<GroupStatsQuery, GroupStatsQueryVariables>;
 export const CreateInsightProductDocument = gql`
     mutation createInsightProduct($input: NewInsightProduct!) {
@@ -2854,8 +2684,13 @@ export function useInsightProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<InsightProductQuery, InsightProductQueryVariables>(InsightProductDocument, options);
         }
+export function useInsightProductSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InsightProductQuery, InsightProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InsightProductQuery, InsightProductQueryVariables>(InsightProductDocument, options);
+        }
 export type InsightProductQueryHookResult = ReturnType<typeof useInsightProductQuery>;
 export type InsightProductLazyQueryHookResult = ReturnType<typeof useInsightProductLazyQuery>;
+export type InsightProductSuspenseQueryHookResult = ReturnType<typeof useInsightProductSuspenseQuery>;
 export type InsightProductQueryResult = Apollo.QueryResult<InsightProductQuery, InsightProductQueryVariables>;
 export const KeywordsDocument = gql`
     query Keywords {
@@ -2889,8 +2724,13 @@ export function useKeywordsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<K
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
         }
+export function useKeywordsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
+        }
 export type KeywordsQueryHookResult = ReturnType<typeof useKeywordsQuery>;
 export type KeywordsLazyQueryHookResult = ReturnType<typeof useKeywordsLazyQuery>;
+export type KeywordsSuspenseQueryHookResult = ReturnType<typeof useKeywordsSuspenseQuery>;
 export type KeywordsQueryResult = Apollo.QueryResult<KeywordsQuery, KeywordsQueryVariables>;
 export const UpdateKeywordsDocument = gql`
     mutation updateKeywords($input: UpdateKeywords!) {
@@ -2957,8 +2797,13 @@ export function usePollyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Poll
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<PollyQuery, PollyQueryVariables>(PollyDocument, options);
         }
+export function usePollySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PollyQuery, PollyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PollyQuery, PollyQueryVariables>(PollyDocument, options);
+        }
 export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
+export type PollySuspenseQueryHookResult = ReturnType<typeof usePollySuspenseQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
 export const ProductAreaDocument = gql`
     query ProductArea($id: String!) {
@@ -3071,8 +2916,13 @@ export function useProductAreaLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
         }
+export function useProductAreaSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
+        }
 export type ProductAreaQueryHookResult = ReturnType<typeof useProductAreaQuery>;
 export type ProductAreaLazyQueryHookResult = ReturnType<typeof useProductAreaLazyQuery>;
+export type ProductAreaSuspenseQueryHookResult = ReturnType<typeof useProductAreaSuspenseQuery>;
 export type ProductAreaQueryResult = Apollo.QueryResult<ProductAreaQuery, ProductAreaQueryVariables>;
 export const ProductAreasDocument = gql`
     query ProductAreas {
@@ -3150,8 +3000,13 @@ export function useProductAreasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProductAreasQuery, ProductAreasQueryVariables>(ProductAreasDocument, options);
         }
+export function useProductAreasSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProductAreasQuery, ProductAreasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProductAreasQuery, ProductAreasQueryVariables>(ProductAreasDocument, options);
+        }
 export type ProductAreasQueryHookResult = ReturnType<typeof useProductAreasQuery>;
 export type ProductAreasLazyQueryHookResult = ReturnType<typeof useProductAreasLazyQuery>;
+export type ProductAreasSuspenseQueryHookResult = ReturnType<typeof useProductAreasSuspenseQuery>;
 export type ProductAreasQueryResult = Apollo.QueryResult<ProductAreasQuery, ProductAreasQueryVariables>;
 export const JoinableViewDocument = gql`
     query JoinableView($id: ID!) {
@@ -3192,8 +3047,13 @@ export function useJoinableViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
         }
+export function useJoinableViewSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
+        }
 export type JoinableViewQueryHookResult = ReturnType<typeof useJoinableViewQuery>;
 export type JoinableViewLazyQueryHookResult = ReturnType<typeof useJoinableViewLazyQuery>;
+export type JoinableViewSuspenseQueryHookResult = ReturnType<typeof useJoinableViewSuspenseQuery>;
 export type JoinableViewQueryResult = Apollo.QueryResult<JoinableViewQuery, JoinableViewQueryVariables>;
 export const JoinableViewsDocument = gql`
     query JoinableViews {
@@ -3229,8 +3089,13 @@ export function useJoinableViewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<JoinableViewsQuery, JoinableViewsQueryVariables>(JoinableViewsDocument, options);
         }
+export function useJoinableViewsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<JoinableViewsQuery, JoinableViewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<JoinableViewsQuery, JoinableViewsQueryVariables>(JoinableViewsDocument, options);
+        }
 export type JoinableViewsQueryHookResult = ReturnType<typeof useJoinableViewsQuery>;
 export type JoinableViewsLazyQueryHookResult = ReturnType<typeof useJoinableViewsLazyQuery>;
+export type JoinableViewsSuspenseQueryHookResult = ReturnType<typeof useJoinableViewsSuspenseQuery>;
 export type JoinableViewsQueryResult = Apollo.QueryResult<JoinableViewsQuery, JoinableViewsQueryVariables>;
 export const CreateJoinableViewsDocument = gql`
     mutation createJoinableViews($input: NewJoinableViews!) {
@@ -3321,8 +3186,13 @@ export function useSearchContentLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SearchContentQuery, SearchContentQueryVariables>(SearchContentDocument, options);
         }
+export function useSearchContentSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchContentQuery, SearchContentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchContentQuery, SearchContentQueryVariables>(SearchContentDocument, options);
+        }
 export type SearchContentQueryHookResult = ReturnType<typeof useSearchContentQuery>;
 export type SearchContentLazyQueryHookResult = ReturnType<typeof useSearchContentLazyQuery>;
+export type SearchContentSuspenseQueryHookResult = ReturnType<typeof useSearchContentSuspenseQuery>;
 export type SearchContentQueryResult = Apollo.QueryResult<SearchContentQuery, SearchContentQueryVariables>;
 export const SearchContentWithOptionsDocument = gql`
     query searchContentWithOptions($options: SearchOptions!) {
@@ -3395,8 +3265,13 @@ export function useSearchContentWithOptionsLazyQuery(baseOptions?: Apollo.LazyQu
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>(SearchContentWithOptionsDocument, options);
         }
+export function useSearchContentWithOptionsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>(SearchContentWithOptionsDocument, options);
+        }
 export type SearchContentWithOptionsQueryHookResult = ReturnType<typeof useSearchContentWithOptionsQuery>;
 export type SearchContentWithOptionsLazyQueryHookResult = ReturnType<typeof useSearchContentWithOptionsLazyQuery>;
+export type SearchContentWithOptionsSuspenseQueryHookResult = ReturnType<typeof useSearchContentWithOptionsSuspenseQuery>;
 export type SearchContentWithOptionsQueryResult = Apollo.QueryResult<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>;
 export const SlackDocument = gql`
     query Slack($name: String!) {
@@ -3428,8 +3303,13 @@ export function useSlackLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Slac
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
         }
+export function useSlackSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SlackQuery, SlackQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
+        }
 export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
 export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
+export type SlackSuspenseQueryHookResult = ReturnType<typeof useSlackSuspenseQuery>;
 export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
 export const CreateStoryDocument = gql`
     mutation createStory($files: [UploadFile!]!, $input: NewStory!) {
@@ -3568,8 +3448,13 @@ export function useDataStoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<DataStoryQuery, DataStoryQueryVariables>(DataStoryDocument, options);
         }
+export function useDataStorySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DataStoryQuery, DataStoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DataStoryQuery, DataStoryQueryVariables>(DataStoryDocument, options);
+        }
 export type DataStoryQueryHookResult = ReturnType<typeof useDataStoryQuery>;
 export type DataStoryLazyQueryHookResult = ReturnType<typeof useDataStoryLazyQuery>;
+export type DataStorySuspenseQueryHookResult = ReturnType<typeof useDataStorySuspenseQuery>;
 export type DataStoryQueryResult = Apollo.QueryResult<DataStoryQuery, DataStoryQueryVariables>;
 export const UpdateStoryMetadataDocument = gql`
     mutation updateStoryMetadata($id: ID!, $name: String!, $description: String!, $keywords: [String!]!, $teamkatalogenURL: String, $productAreaID: String, $teamID: String, $group: String!) {
@@ -3655,8 +3540,13 @@ export function useTeamkatalogenLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(TeamkatalogenDocument, options);
         }
+export function useTeamkatalogenSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TeamkatalogenQuery, TeamkatalogenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(TeamkatalogenDocument, options);
+        }
 export type TeamkatalogenQueryHookResult = ReturnType<typeof useTeamkatalogenQuery>;
 export type TeamkatalogenLazyQueryHookResult = ReturnType<typeof useTeamkatalogenLazyQuery>;
+export type TeamkatalogenSuspenseQueryHookResult = ReturnType<typeof useTeamkatalogenSuspenseQuery>;
 export type TeamkatalogenQueryResult = Apollo.QueryResult<TeamkatalogenQuery, TeamkatalogenQueryVariables>;
 export const UserInfoDetailsDocument = gql`
     query userInfoDetails {
@@ -3789,8 +3679,13 @@ export function useUserInfoDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<UserInfoDetailsQuery, UserInfoDetailsQueryVariables>(UserInfoDetailsDocument, options);
         }
+export function useUserInfoDetailsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserInfoDetailsQuery, UserInfoDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserInfoDetailsQuery, UserInfoDetailsQueryVariables>(UserInfoDetailsDocument, options);
+        }
 export type UserInfoDetailsQueryHookResult = ReturnType<typeof useUserInfoDetailsQuery>;
 export type UserInfoDetailsLazyQueryHookResult = ReturnType<typeof useUserInfoDetailsLazyQuery>;
+export type UserInfoDetailsSuspenseQueryHookResult = ReturnType<typeof useUserInfoDetailsSuspenseQuery>;
 export type UserInfoDetailsQueryResult = Apollo.QueryResult<UserInfoDetailsQuery, UserInfoDetailsQueryVariables>;
 export const UserInfoAccessableDataproductDocument = gql`
     query userInfoAccessableDataproduct {
@@ -3848,6 +3743,11 @@ export function useUserInfoAccessableDataproductLazyQuery(baseOptions?: Apollo.L
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>(UserInfoAccessableDataproductDocument, options);
         }
+export function useUserInfoAccessableDataproductSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>(UserInfoAccessableDataproductDocument, options);
+        }
 export type UserInfoAccessableDataproductQueryHookResult = ReturnType<typeof useUserInfoAccessableDataproductQuery>;
 export type UserInfoAccessableDataproductLazyQueryHookResult = ReturnType<typeof useUserInfoAccessableDataproductLazyQuery>;
+export type UserInfoAccessableDataproductSuspenseQueryHookResult = ReturnType<typeof useUserInfoAccessableDataproductSuspenseQuery>;
 export type UserInfoAccessableDataproductQueryResult = Apollo.QueryResult<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>;

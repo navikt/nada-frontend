@@ -6,8 +6,6 @@ import ReactMarkdown from 'react-markdown'
 import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import {
-  DataproductQuery,
-  DatasetQuery,
   PiiLevel,
   UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
@@ -23,8 +21,8 @@ import DatasetTableSchema from './datasetTableSchema'
 import { Personopplysninger } from './helptext'
 
 interface ViewDatasetProps {
-  dataset: DatasetQuery['dataset']
-  dataproduct: DataproductQuery['dataproduct']
+  dataset: any
+  dataproduct: any
   accessType: {
     type: string
     expires?: any
@@ -155,7 +153,7 @@ const ViewDataset = ({
               Tilbake til beskrivelse
             </a>
             <div className="flex flex-row gap-1 flex-wrap">
-              {dataset.keywords.map((keyword, idx) => (
+              {dataset.keywords.map((keyword: any, idx: number) => (
                 <TagPill key={idx} keyword={keyword}>
                   {keyword}
                 </TagPill>

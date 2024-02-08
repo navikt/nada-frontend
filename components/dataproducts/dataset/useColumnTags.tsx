@@ -2,7 +2,6 @@ import { useState } from 'react'
 import {
   BigQueryType,
   useGcpGetColumnsQuery,
-  DatasetQuery,
 } from '../../../lib/schema/graphql'
 
 export type PIITagType =
@@ -44,7 +43,7 @@ export const useColumnTags = (
   projectID: string,
   datasetID: string,
   tableID: string,
-  dataset?: DatasetQuery['dataset']
+  dataset?: any
 ) => {
   const [tagsMap, setTagsMap] = useState<TagsMapType>(
     new Map<string, Map<string, PIITagType>>()
@@ -91,7 +90,7 @@ export const useColumnTags = (
             DEFAULT_COLUMN_TAG
         )
         pseudoColumns.set(
-          it.name, dataset?.datasource.pseudoColumns?.some(pseudoCol=> it.name === pseudoCol)??false
+          it.name, dataset?.datasource.pseudoColumns?.some((pseudoCol: any)=> it.name === pseudoCol)??false
         )
       }
       )
