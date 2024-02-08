@@ -107,7 +107,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   }
 
   const keywords = watch('keywords')
-  const team = dataproduct.dataproduct.owner.group
+  const team = dataproduct.owner.group
 
   const onAddKeyword = (keyword: string) => {
     keywords
@@ -118,15 +118,16 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   const [createDataset, { }] = useMutation(
     CREATE_DATASET,
     {
-      onCompleted: (data) =>
+      onCompleted: (data) =>{
         router.push(
-          `/dataproduct/${dataproduct.dataproduct.id}/${dataproduct.dataproduct.slug}/${data.createDataset.id}`
-        ),
+          `/dataproduct/${dataproduct.id}/${dataproduct.slug}/${data.createDataset.id}`
+        )
+      }
     }
   )
 
   const onSubmitForm = async (requestData: any) => {
-    requestData.dataproductID = dataproduct.dataproduct.id
+    requestData.dataproductID = dataproduct.id
     requestData.bigquery.piiTags = JSON.stringify(Object.fromEntries(tags || new Map<string, string>()))
     const pii = requestData.pii === "sensitive"
       ? PiiLevel.Sensitive

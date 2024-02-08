@@ -23,10 +23,11 @@ const getDataset = async (id: string) => {
     return fetch(url, options)
 }
 
-export const useGetDataproduct = (id: string)=>{
+export const useGetDataproduct = (id: string, activeDataSetID?: string)=>{
     const [dataproduct, setDataproduct] = useState<any>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+
 
     useEffect(()=>{
         if(!id) return
@@ -42,7 +43,7 @@ export const useGetDataproduct = (id: string)=>{
         }).finally(()=>{
             setLoading(false)
         })
-    }, [id])
+    }, [id, activeDataSetID])
 
     return {dataproduct, loading, error}
 }

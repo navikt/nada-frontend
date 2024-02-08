@@ -33,21 +33,22 @@ interface DataproductProps {
 const Dataproduct = () => {
   const router = useRouter()
   const id = router.query.id as string
+  const pageParam = router.query.page?.[0] ?? 'info'
 
   const [showDelete, setShowDelete] = useState(false)
   const [deleteError, setDeleteError] = useState('')
 
-  const {dataproduct, loading, error} = useGetDataproduct(id)
-
+  const { dataproduct, loading, error } = useGetDataproduct(id, pageParam)
+  
   const userInfo = useContext(UserState)
 
   const isOwner =
     userInfo?.groups === undefined
       ? false
       : userInfo.groups.some(
-          (g: Group) => g.email === dataproduct?.owner.group
-        )
-
+        (g: Group) => g.email === dataproduct?.owner.group
+      )
+  
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'produktside',
@@ -65,10 +66,10 @@ const Dataproduct = () => {
   const onDelete = async () => {
     try {
       await deleteDataproduct()
-      amplitudeLog('slett dataprodukt', {name: dataproduct.name})
+      amplitudeLog('slett dataprodukt', { name: dataproduct.name })
       await router.push('/')
     } catch (e: any) {
-      amplitudeLog('slett dataprodukt feilet', {name: dataproduct.name})
+      amplitudeLog('slett dataprodukt feilet', { name: dataproduct.name })
       setDeleteError(e.toString())
     }
   }
@@ -81,17 +82,17 @@ const Dataproduct = () => {
     slug: string
     component: any
   }> = [
-    {
-      title: 'Beskrivelse',
-      slug: 'info',
-      component: (
-        <Description
-          dataproduct={dataproduct}
-          isOwner={isOwner}
-        />
-      ),
-    },
-  ]
+      {
+        title: 'Beskrivelse',
+        slug: 'info',
+        component: (
+          <Description
+            dataproduct={dataproduct}
+            isOwner={isOwner}
+          />
+        ),
+      },
+    ]
 
   dataproduct.datasets.forEach((dataset: any) => {
     menuItems.push({
@@ -123,8 +124,7 @@ const Dataproduct = () => {
 
   const currentPage = menuItems
     .map((e) => e.slug)
-    .indexOf(router.query.page?.[0] ?? 'info')
-
+    .indexOf(pageParam)
   return (
     <InnerContainer>
       <Head>
