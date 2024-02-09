@@ -1,4 +1,3 @@
-import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import humanizeDate from '../../../lib/humanizeDate'
 import Copy from '../../lib/copy'
@@ -6,7 +5,7 @@ import { Heading, Link } from '@navikt/ds-react'
 import { ExternalLink } from '@navikt/ds-icons'
 
 interface DataproductTableSchemaProps {
-  dataset: DatasetQuery['dataset']
+  dataset: any
 }
 
 const DatasetMetadata = ({ dataset }: DataproductTableSchemaProps) => {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
-import { DataproductQuery, PiiLevel } from '../../../lib/schema/graphql'
+import { PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector'
 import AnnotateDatasetTable from './annotateDatasetTable'
@@ -16,7 +16,7 @@ import { PiiForm } from './piiForm'
 import { useState } from 'react'
 
 interface NewDatasetFormProps {
-  dataproduct: DataproductQuery
+  dataproduct: any
 }
 
 export type FormValues = {
@@ -73,16 +73,16 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-        name: undefined,
+        name:'',
         description: '',
-        repo: null,
-        bigquery: undefined,
-        pii: undefined,
-        keywords: undefined,
-        anonymisation_description: null,
+        repo: '',
+        bigquery: {projectID: '', dataset: '', table: ''},
+        pii: 'none' as PiiLevel,
+        keywords: [] as string[],
+        anonymisation_description: '',
         grantAllUsers: 'dontGrantAllUsers',
         teamInternalUse: undefined,
-    },
+    } as FormValues,
   })
   const errors = formState.errors
   const projectID = watch('bigquery.projectID')
@@ -107,7 +107,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   }
 
   const keywords = watch('keywords')
-  const team = dataproduct.dataproduct.owner.group
+  const team = dataproduct.owner.group
 
   const onAddKeyword = (keyword: string) => {
     keywords
@@ -118,15 +118,16 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   const [createDataset, { }] = useMutation(
     CREATE_DATASET,
     {
-      onCompleted: (data) =>
+      onCompleted: (data) =>{
         router.push(
-          `/dataproduct/${dataproduct.dataproduct.id}/${dataproduct.dataproduct.slug}/${data.createDataset.id}`
-        ),
+          `/dataproduct/${dataproduct.id}/${dataproduct.slug}/${data.createDataset.id}`
+        )
+      }
     }
   )
 
   const onSubmitForm = async (requestData: any) => {
-    requestData.dataproductID = dataproduct.dataproduct.id
+    requestData.dataproductID = dataproduct.id
     requestData.bigquery.piiTags = JSON.stringify(Object.fromEntries(tags || new Map<string, string>()))
     const pii = requestData.pii === "sensitive"
       ? PiiLevel.Sensitive

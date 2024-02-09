@@ -54,14 +54,14 @@ const schema = yup
   .required()
 
 export type AccessRequestFormInput = {
-  id?: Maybe<Scalars['ID']>
-  datasetID: Scalars['ID']
-  expires?: Maybe<Scalars['Time']>
+  id?: Maybe<Scalars['ID']['input']>
+  datasetID: Scalars['ID']['input']
+  expires?: Maybe<Scalars['Time']['input']>
   polly?: Maybe<PollyInput>
-  subject?: Maybe<Scalars['String']>
+  subject?: Maybe<Scalars['String']['input']>
   subjectType?: Maybe<SubjectType>
-  status?: Maybe<Scalars['String']>
-  reason?: Maybe<Scalars['String']>
+  status?: Maybe<Scalars['String']['input']>
+  reason?: Maybe<Scalars['String']['input']>
 }
 
 interface AccessRequestFormProps {
@@ -252,7 +252,7 @@ const AccessRequestFormV2 = ({
           </div>
         </div>
         { error && <ErrorMessage error={error} /> }
-        <div className="flex flex-row gap-4 grow items-end">
+        <div className="flex flex-row gap-4 grow items-end pb-8">
           <Button
             type="button"
             variant="secondary"

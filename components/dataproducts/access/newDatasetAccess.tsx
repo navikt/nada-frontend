@@ -1,14 +1,14 @@
 import { Button, DatePicker, Heading, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
-import { DatasetQuery, SubjectType, useGrantAccessMutation } from "../../../lib/schema/graphql";
+import {  SubjectType, useGrantAccessMutation } from "../../../lib/schema/graphql";
 import * as yup from 'yup'
 import { Controller, useForm, useFormState } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { GET_DATASET } from "../../../lib/queries/dataset/dataset";
 import { useState } from "react";
 import ErrorMessage from "../../lib/error";
+import { useRouter } from "next/router";
 
 interface NewDatasetAccessProps {
-    dataset: DatasetQuery["dataset"]
+    dataset: any
     setShowNewAccess: (val: boolean) => void
 }
 
@@ -48,6 +48,7 @@ const schema = yup
 const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) => {
     const [grantAccess] = useGrantAccessMutation()
     const [error, setError] = useState<Error | null>(null)
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -82,14 +83,11 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                 },
             },
             refetchQueries: [
-                {
-                    query: GET_DATASET,
-                    variables: {
-                        id: dataset.id,
-                    },
-                },
             ]
-        }).then((a) => {!a.errors && setShowNewAccess(false)}) 
+        }).then((a) => {
+          !a.errors && setShowNewAccess(false)
+          router.reload()
+        }) 
 
     }
 

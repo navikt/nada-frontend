@@ -1,4 +1,3 @@
-import { DatasetQuery } from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { Alert, Heading, Table, Tag } from '@navikt/ds-react'
 import { PIITagNames } from './useColumnTags'
@@ -6,7 +5,7 @@ import {PersonopplysningerDetaljert} from "./helptext";
 import TagPill from '../../lib/tagPill';
 
 interface DatasetTableSchemaProps {
-  datasource: DatasetQuery['dataset']['datasource']
+  datasource: any
   showPii: boolean
 }
 
@@ -49,7 +48,7 @@ const DatasetTableSchema = ({
                     )}
                   </Table.DataCell>
                 )}
-                <Table.DataCell>{datasource.pseudoColumns?.some(it=> it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
+                <Table.DataCell>{datasource.pseudoColumns?.some((it: any)=> it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>

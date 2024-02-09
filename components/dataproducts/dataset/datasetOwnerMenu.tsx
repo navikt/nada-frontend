@@ -3,19 +3,16 @@ import { Button } from '@navikt/ds-react'
 import { Dropdown } from '@navikt/ds-react-internal'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { GET_DATAPRODUCT } from '../../../lib/queries/dataproduct/dataproduct'
 import {
-  DataproductQuery,
   useDeleteDatasetMutation,
   useUpdateDatasetMutation,
-  DatasetQuery,
 } from '../../../lib/schema/graphql'
 import DeleteModal from '../../lib/deleteModal'
 import MoveModal from '../../lib/MoveModal'
 
 interface IDatasetOwnerMenuProps {
-  dataset: DatasetQuery['dataset']
-  dataproduct: DataproductQuery['dataproduct']
+  dataset: any
+  dataproduct: any
   setEdit: (value: boolean) => void
 }
 
@@ -33,14 +30,7 @@ const DatasetOwnerMenu = ({
   const [deleteDataset] = useDeleteDatasetMutation({
     variables: { id: dataset?.id },
     awaitRefetchQueries: true,
-    refetchQueries: [
-      {
-        query: GET_DATAPRODUCT,
-        variables: {
-          id: dataproduct?.id,
-        },
-      },
-    ],
+    refetchQueries: [],
   })
 
   const onDelete = async () => {
@@ -49,6 +39,7 @@ const DatasetOwnerMenu = ({
       await router.push(
         `/dataproduct/${dataproduct?.id}/${dataproduct?.slug}/info`
       )
+      router.reload()
     } catch (e: any) {
       setDeleteError(e.toString())
     }
