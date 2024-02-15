@@ -19,9 +19,6 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
     (it) => it.name.toLowerCase() === currentItemName.toLowerCase() || it.id === currentItemName
   )
 
-  if(!currentItemName){
-    return <div>Ingen produktområder samsvarer med søkekriteriene</div>
-  }
   const currentItem = teamIdx > 0 ? teamIdx : 0
 
   const initialTab = (item: PAItem) => {
@@ -30,6 +27,11 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
 
   const [currentTab, setCurrentTab] = useState(initialTab(paItems[teamIdx]))
   const [open, setOpen] = useState(false)
+
+  if(!currentItemName){
+    return <div>Ingen produktområder samsvarer med søkekriteriene</div>
+  }
+
   const pathComponents = router.asPath.split('?')[0].split('/')
   const currentProductAreaId = pathComponents[pathComponents.length - 1]
 
