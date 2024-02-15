@@ -1,17 +1,18 @@
 import { Heading, Link } from '@navikt/ds-react'
-import { useProductAreasQuery } from '../../lib/schema/graphql'
 import ExploreAreasIcon from '../lib/icons/exploreAreasIcon'
+import { useGetProductAreas } from '../../lib/rest/productAreas'
 
 const ProductAreaLinks = () => {
   var defaultProductAreaID = '6b149078-927b-4570-a1ce-97bbb9499fb6'
-  const productAreasQuery = useProductAreasQuery()
+  const {productAreas} = useGetProductAreas()
 
-  if (productAreasQuery.data && productAreasQuery.data.productAreas.length > 0) {
-    defaultProductAreaID =
-    productAreasQuery.data.productAreas.find(
+    defaultProductAreaID =productAreas?.find(
       (it) => it.id == '6b149078-927b-4570-a1ce-97bbb9499fb6'
-    )?.id || productAreasQuery.data.productAreas[0].id
-  }
+    )?.id || productAreas?.length && productAreas[0].id
+  
+    if(!defaultProductAreaID){
+      return null
+    }
   
   return (
     <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">

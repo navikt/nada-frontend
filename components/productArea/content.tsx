@@ -1,9 +1,10 @@
 import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
-import { useProductAreasQuery, useTeamkatalogenQuery } from "../../lib/schema/graphql";
+import { useTeamkatalogenQuery } from "../../lib/schema/graphql";
 import { useContext } from "react";
 import { UserState } from "../../lib/context";
+import { useGetProductAreas } from "../../lib/rest/productAreas";
 
 interface ProductAreaContentProps {
     currentItem: PAItem
@@ -15,9 +16,11 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
     const tk = useTeamkatalogenQuery({
         variables: { q: '' },
     })
-    const po = useProductAreasQuery()
+    const {productAreas, loading, error} = useGetProductAreas()
     const userInfo= useContext(UserState)
 
+    if (loading) return <div>Laster...</div>
+    if (error) return <div>Noe gikk galt</div>
     return (
         <Tabs
             value={currentTab}
@@ -72,7 +75,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             link={`/story/${s.id}`}
                             type={s.__typename}
                             teamkatalogen={tk.data}
-                            productAreas={po.data}
+                            productAreas={productAreas}
                         />
                     ))}
                     {currentItem.stories.length == 0 && "Ingen fortellinger"}
@@ -92,7 +95,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             description={d.description}
                             link={`/dataproduct/${d.id}/${d.slug}`}
                             teamkatalogen={tk.data}
-                            productAreas={po.data}
+                            productAreas={productAreas}
                         />
                     ))}
                     {currentItem.dataproducts.length == 0 && "Ingen dataprodukter"}
@@ -118,7 +121,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             id={ip.id}
                             innsiktsproduktType={ip.type}
                             teamkatalogen={tk.data}
-                            productAreas={po.data}
+                            productAreas={productAreas}
                             editable={!!userInfo?.googleGroups?.find(it=> it.email == ip.group)}
                         />
                     ))}

@@ -2,7 +2,6 @@ import { Data } from '@navikt/ds-icons'
 import { Select } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import { ProductAreasQuery } from '../../lib/schema/graphql'
 import { PAItems } from '../../pages/productArea/[id]'
 import DataproductLogo from '../lib/icons/dataproductLogo'
 
@@ -10,7 +9,7 @@ interface ProductAreaSidebarProps {
   productAreaItems: PAItems
   setCurrentItem: (newCurrent: number) => void
   currentItem: number
-  productAreas: ProductAreasQuery['productAreas']
+  productAreas: any[]
   selectProductArea: (productAreaId: string) => void
 }
 

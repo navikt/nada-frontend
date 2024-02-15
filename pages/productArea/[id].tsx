@@ -8,10 +8,9 @@ import ProductAreaView from '../../components/productArea/productAreaView'
 import amplitudeLog from '../../lib/amplitude'
 import {
   ProductAreaQuery,
-  ProductAreasQuery,
   useProductAreaQuery,
-  useProductAreasQuery,
 } from '../../lib/schema/graphql'
+import { useGetProductAreas } from '../../lib/rest/productAreas'
 
 
 export interface PAItem {
@@ -53,54 +52,54 @@ export interface PAItem {
     created: any
     lastModified?: any
     keywords: Array<string>
-  }[]  
+  }[]
 }
 
-export interface PAItems extends Array<PAItem> {}
+export interface PAItems extends Array<PAItem> { }
 
 const isRelevantPA = (productArea: ProductAreaQuery['productArea']) => {
-    return (
-        productArea.dataproducts.length 
-        || productArea.stories.length 
-        || productArea.insightProducts.length
-    )
+  return (
+    productArea.dataproducts.length
+    || productArea.stories.length
+    || productArea.insightProducts.length
+  )
 }
 
 const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
   let items = []
   if (isRelevantPA(productArea)) {
     items.push({
-        name: productArea.name,
-        dashboardURL: productArea.dashboardURL,
-        dataproducts: productArea.dataproducts,
-        stories: productArea.stories,
-        insightProducts: productArea.insightProducts,
+      name: productArea.name,
+      dashboardURL: productArea.dashboardURL,
+      dataproducts: productArea.dataproducts,
+      stories: productArea.stories,
+      insightProducts: productArea.insightProducts,
     })
     productArea.teams
-    .slice()
-    .filter(
+      .slice()
+      .filter(
         (it) =>
-        it.dataproducts.length > 0 ||
-        it.stories.length > 0 ||
-        it.insightProducts.length > 0
-    )
-    .sort((a, b) => {
+          it.dataproducts.length > 0 ||
+          it.stories.length > 0 ||
+          it.insightProducts.length > 0
+      )
+      .sort((a, b) => {
         return (
-        b.dataproducts.length +
-        b.insightProducts.length -
-        (a.dataproducts.length + a.stories.length + a.insightProducts.length)
+          b.dataproducts.length +
+          b.insightProducts.length -
+          (a.dataproducts.length + a.stories.length + a.insightProducts.length)
         )
-    })
-    .forEach((t) => {
+      })
+      .forEach((t) => {
         items.push({
-        name: t.name,
-        id: t.id,
-        dashboardURL: t.dashboardURL,
-        dataproducts: t.dataproducts,
-        stories: t.stories,
-        insightProducts: t.insightProducts,
+          name: t.name,
+          id: t.id,
+          dashboardURL: t.dashboardURL,
+          dataproducts: t.dataproducts,
+          stories: t.stories,
+          insightProducts: t.insightProducts,
         })
-    })
+      })
   }
 
   return items
@@ -108,7 +107,7 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
 
 interface ProductAreaProps {
   id: string
-  productAreas: ProductAreasQuery['productAreas']
+  productAreas: any[]
 }
 
 const ProductArea = ({ id, productAreas }: ProductAreaProps) => {
@@ -141,29 +140,25 @@ const ProductArea = ({ id, productAreas }: ProductAreaProps) => {
 
 const ProductAreaPage = () => {
   const router = useRouter()
-  const productAreasQuery = useProductAreasQuery()
+  const { productAreas, loading, error } = useGetProductAreas()
 
   if (!router.isReady) return <Loader />
 
-  if (productAreasQuery.error)
+  if (error)
     return (
       <div>
         <p>Teamkatalogen er utilgjengelig. Se på slack channel <Link href="https://slack.com/app_redirect?channel=teamkatalogen">#Teamkatalogen</Link></p>
-        <ErrorMessage error={productAreasQuery.error} />
+        <ErrorMessage error={error} />
       </div>
     )
-  if (
-    productAreasQuery.loading ||
-    !productAreasQuery.data?.productAreas ||
-    !productAreasQuery.data.productAreas.length
-  )
+  if ( loading ||!productAreas?.length)
     return <Loader />
 
   return (
     <InnerContainer>
       <ProductArea
         id={router.query.id as string}
-        productAreas={productAreasQuery.data.productAreas}
+        productAreas={productAreas}
       />
     </InnerContainer>
   )

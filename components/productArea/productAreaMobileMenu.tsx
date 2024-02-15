@@ -1,7 +1,6 @@
 import { Back, Next } from "@navikt/ds-icons"
 import { Button, Heading, Modal } from "@navikt/ds-react"
 import { useState } from "react"
-import { ProductAreasQuery } from "../../lib/schema/graphql"
 import { PAItems } from "../../pages/productArea/[id]"
 
 interface MobileMenuProps {
@@ -9,7 +8,7 @@ interface MobileMenuProps {
     setOpen: (value: boolean) => void
     productAreaItems: PAItems
     setCurrentItem: (newCurrent: number) => void
-    productAreas: ProductAreasQuery['productAreas']
+    productAreas: any[]
     selectProductArea: (productAreaId: string) => void
 }
 
