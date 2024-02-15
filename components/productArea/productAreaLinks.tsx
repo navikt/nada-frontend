@@ -2,7 +2,7 @@ import { Heading, Link } from '@navikt/ds-react'
 import ExploreAreasIcon from '../lib/icons/exploreAreasIcon'
 import { useGetProductAreas } from '../../lib/rest/productAreas'
 
-const ProductAreaHasItems = (p: any)=> p?.teams.filter((it: any)=> it.DataproductsNumber+ it.StoriesNumber> 0).length> 0
+const ProductAreaHasItems = (p: any)=> !!p?.teams.filter((it: any)=> it.dataproductsNumber+ it.storiesNumber> 0).length
 
 const ProductAreaLinks = () => {
   var defaultProductAreaID = '6b149078-927b-4570-a1ce-97bbb9499fb6'
