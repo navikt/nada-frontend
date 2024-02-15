@@ -22,7 +22,7 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   const currentItem = teamIdx > 0 ? teamIdx : 0
 
   const initialTab = (item: PAItem) => {
-    return item.dashboardURL ? 'dashboard' : 'stories'
+    return item?.dashboardURL ? 'dashboard' : 'stories'
   }
 
   const [currentTab, setCurrentTab] = useState(initialTab(paItems[teamIdx]))

@@ -2,18 +2,18 @@ import { Heading, Link } from '@navikt/ds-react'
 import ExploreAreasIcon from '../lib/icons/exploreAreasIcon'
 import { useGetProductAreas } from '../../lib/rest/productAreas'
 
+const ProductAreaHasItems = (p: any)=> p?.teams.filter((it: any)=> it.DataproductsNumber+ it.StoriesNumber> 0).length> 0
+
 const ProductAreaLinks = () => {
   var defaultProductAreaID = '6b149078-927b-4570-a1ce-97bbb9499fb6'
   const {productAreas} = useGetProductAreas()
+  const productAreaWithItems = productAreas?.filter(it=> ProductAreaHasItems(it));
+  if(productAreaWithItems.length>0){
+    defaultProductAreaID = productAreaWithItems.find(it=> it.id== defaultProductAreaID)?.id || productAreaWithItems[0].id
+  }else{
+    return null
+  }
 
-    defaultProductAreaID =productAreas?.find(
-      (it) => it.id == '6b149078-927b-4570-a1ce-97bbb9499fb6'
-    )?.id || productAreas?.length && productAreas[0].id
-  
-    if(!defaultProductAreaID){
-      return null
-    }
-  
   return (
     <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
       <ExploreAreasIcon />
