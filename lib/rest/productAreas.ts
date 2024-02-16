@@ -12,15 +12,25 @@ const getProductAreas = async () => {
     return fetch(url, options)
 }
 
+const enrichProductArea = (productArea: any) => {
+    return {
+        ...productArea,
+        dataproductsNumber: productArea.teams.reduce((acc: number, t: any) => acc + t.dataproductsNumber, 0),
+        storiesNumber: productArea.teams.reduce((acc: number, t: any) => acc + t.storiesNumber, 0),
+        insightProductsNumber: productArea.teams.reduce((acc: number, t: any) => acc + t.insightProductsNumber, 0),
+    }
+
+}
+
 export const useGetProductAreas = () => {
     const [productAreas, setProductAreas] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
         getProductAreas().then((res) => res.json())
-            .then((productAreas) => {
+            .then((productAreaDto) => {
             setError(null);
-            setProductAreas(productAreas);
+            setProductAreas([...productAreaDto.productAreas.map(enrichProductArea)]);
         })
             .catch((err) => {
             setError(err);
