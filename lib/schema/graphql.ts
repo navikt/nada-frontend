@@ -1480,13 +1480,6 @@ export type PollyQueryVariables = Exact<{
 
 export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
 
-export type ProductAreaQueryVariables = Exact<{
-  id: Scalars['String']['input'];
-}>;
-
-
-export type ProductAreaQuery = { __typename?: 'Query', productArea: { __typename?: 'ProductArea', id: string, name: string, dashboardURL: string, teams: Array<{ __typename?: 'Team', id: string, name: string, dashboardURL: string, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, lastModified?: any | null, description: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, group: string, teamkatalogenURL?: string | null, keywords: Array<string>, type: string, link: string }> }>, dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }>, stories: Array<{ __typename?: 'Story', id: string, name: string, created: any, description: string, lastModified?: any | null, keywords: Array<string>, group: string, teamkatalogenURL?: string | null }>, insightProducts: Array<{ __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, group: string, teamkatalogenURL?: string | null, lastModified?: any | null, keywords: Array<string>, type: string, link: string }> } };
-
 export type JoinableViewQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2800,125 +2793,6 @@ export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
 export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
 export type PollySuspenseQueryHookResult = ReturnType<typeof usePollySuspenseQuery>;
 export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
-export const ProductAreaDocument = gql`
-    query ProductArea($id: String!) {
-  productArea(id: $id) {
-    id
-    name
-    teams {
-      id
-      name
-      dashboardURL
-      dataproducts {
-        id
-        name
-        description
-        created
-        lastModified
-        keywords
-        slug
-        owner {
-          group
-          teamkatalogenURL
-          teamContact
-        }
-      }
-      stories {
-        id
-        name
-        created
-        lastModified
-        description
-        keywords
-        group
-        teamkatalogenURL
-      }
-      insightProducts {
-        id
-        name
-        description
-        created
-        lastModified
-        group
-        teamkatalogenURL
-        keywords
-        type
-        link
-      }
-    }
-    dashboardURL
-    dataproducts {
-      id
-      name
-      description
-      created
-      lastModified
-      keywords
-      slug
-      owner {
-        group
-        teamkatalogenURL
-        teamContact
-      }
-    }
-    stories {
-      id
-      name
-      created
-      description
-      lastModified
-      keywords
-      group
-      teamkatalogenURL
-    }
-    insightProducts {
-      id
-      name
-      description
-      created
-      group
-      teamkatalogenURL
-      lastModified
-      keywords
-      type
-      link
-    }
-  }
-}
-    `;
-
-/**
- * __useProductAreaQuery__
- *
- * To run a query within a React component, call `useProductAreaQuery` and pass it any options that fit your needs.
- * When your component renders, `useProductAreaQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProductAreaQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useProductAreaQuery(baseOptions: Apollo.QueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
-      }
-export function useProductAreaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
-        }
-export function useProductAreaSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProductAreaQuery, ProductAreaQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProductAreaQuery, ProductAreaQueryVariables>(ProductAreaDocument, options);
-        }
-export type ProductAreaQueryHookResult = ReturnType<typeof useProductAreaQuery>;
-export type ProductAreaLazyQueryHookResult = ReturnType<typeof useProductAreaLazyQuery>;
-export type ProductAreaSuspenseQueryHookResult = ReturnType<typeof useProductAreaSuspenseQuery>;
-export type ProductAreaQueryResult = Apollo.QueryResult<ProductAreaQuery, ProductAreaQueryVariables>;
 export const JoinableViewDocument = gql`
     query JoinableView($id: ID!) {
   joinableView(id: $id) {

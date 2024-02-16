@@ -6,11 +6,7 @@ import ErrorMessage from '../../components/lib/error'
 import InnerContainer from '../../components/lib/innerContainer'
 import ProductAreaView from '../../components/productArea/productAreaView'
 import amplitudeLog from '../../lib/amplitude'
-import {
-  ProductAreaQuery,
-  useProductAreaQuery,
-} from '../../lib/schema/graphql'
-import { useGetProductAreas } from '../../lib/rest/productAreas'
+import { useGetProductArea, useGetProductAreas } from '../../lib/rest/productAreas'
 
 
 export interface PAItem {
@@ -57,7 +53,7 @@ export interface PAItem {
 
 export interface PAItems extends Array<PAItem> { }
 
-const isRelevantPA = (productArea: ProductAreaQuery['productArea']) => {
+const isRelevantPA = (productArea: any) => {
   return (
     productArea.dataproducts.length
     || productArea.stories.length
@@ -65,7 +61,7 @@ const isRelevantPA = (productArea: ProductAreaQuery['productArea']) => {
   )
 }
 
-const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
+const createPAItems = (productArea: any) => {
   let items = []
   if (isRelevantPA(productArea)) {
     items.push({
@@ -78,19 +74,19 @@ const createPAItems = (productArea: ProductAreaQuery['productArea']) => {
     productArea.teams
       .slice()
       .filter(
-        (it) =>
+        (it: any) =>
           it.dataproducts.length > 0 ||
           it.stories.length > 0 ||
           it.insightProducts.length > 0
       )
-      .sort((a, b) => {
+      .sort((a: any, b: any) => {
         return (
           b.dataproducts.length +
           b.insightProducts.length -
           (a.dataproducts.length + a.stories.length + a.insightProducts.length)
         )
       })
-      .forEach((t) => {
+      .forEach((t: any) => {
         items.push({
           name: t.name,
           id: t.id,
@@ -111,28 +107,23 @@ interface ProductAreaProps {
 }
 
 const ProductArea = ({ id, productAreas }: ProductAreaProps) => {
-  const productAreaQuery = useProductAreaQuery({
-    variables: {
-      id,
-    },
-  })
+  const {productArea, loading, error} = useGetProductArea(id)
 
   useEffect(() => {
-    if (!productAreaQuery.loading && productAreaQuery.data) {
+    if (!loading && productArea) {
       const eventProperties = {
         sidetittel: 'poside',
-        title: productAreaQuery.data.productArea?.name,
+        title: productArea.name,
       }
       amplitudeLog('sidevisning', eventProperties)
     }
   })
 
-  if (productAreaQuery.error)
-    return <ErrorMessage error={productAreaQuery.error} />
-  if (productAreaQuery.loading || !productAreaQuery.data?.productArea)
+  if (error)
+    return <ErrorMessage error={error} />
+  if (loading || !productArea)
     return <Loader />
 
-  const productArea = productAreaQuery.data.productArea
   const paItems = createPAItems(productArea)
 
   return <ProductAreaView paItems={paItems} productAreas={productAreas} />

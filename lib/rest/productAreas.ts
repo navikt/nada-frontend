@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
-import { getProductAreasUrl } from "./restApi";
+import { getProductAreaUrl, getProductAreasUrl } from "./restApi";
 
 const getProductAreas = async () => {
     const url = getProductAreasUrl();
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
+    return fetch(url, options)
+}
+
+const getProductArea = async (id: string) => {
+    const url = getProductAreaUrl(id);
     const options = {
         method: 'GET',
         headers: {
@@ -40,4 +51,34 @@ export const useGetProductAreas = () => {
         });
     }, []);
     return { productAreas, loading, error };
+}
+
+const enrichProductAreaWithAssets = (productArea: any) => {
+    return {
+        ...productArea,
+        dataproducts: productArea.teams.flatMap((t: any) => t.dataproducts),
+        stories: productArea.teams.flatMap((t: any) => t.stories),
+        insightProducts: productArea.teams.flatMap((t: any) => t.insightProducts),
+    }
+
+}
+
+export const useGetProductArea = (id: string) => {
+    const [productArea, setProductArea] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+        getProductArea(id).then((res) => res.json())
+            .then((productAreaDto) => {
+            setError(null);
+            setProductArea(enrichProductAreaWithAssets(productAreaDto));
+        })
+            .catch((err) => {
+            setError(err);
+            setProductArea(null);
+        }).finally(() => {
+            setLoading(false);
+        });
+    }, [id]);
+    return { productArea, loading, error };
 }
