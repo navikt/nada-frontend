@@ -18,7 +18,7 @@ const NadaTokensForUser = ({ nadaTokens }: { nadaTokens: Array<NadaToken> }) => 
             {nadaTokens.map((token, i) => 
                 <Table.Row key={i}>
                     <Table.HeaderCell className="w-96" scope="row">{token.team}</Table.HeaderCell>
-                    <TokenCell token={token.token} />
+                    <TokenCell token={token.token} team={token.team}/>
                 </Table.Row>
             )}
             </Table.Body>
