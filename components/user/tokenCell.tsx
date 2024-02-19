@@ -29,7 +29,7 @@ const TokenCell = ({token, team}: {token: string, team: string}) => {
         <>
         <Modal
                 open={showRotateModal}
-                aria-label="Fjern metabase database"
+                aria-label="Roter nada token"
                 onClose={() => setShowRotateModal(false)}
                 className="max-w-full md:max-w-3xl px-8 h-[20rem]"
               >
