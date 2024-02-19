@@ -13,9 +13,6 @@ interface ProductAreaContentProps {
 }
 
 const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
-    const tk = useTeamkatalogenQuery({
-        variables: { q: '' },
-    })
     const {productAreas, loading, error} = useGetProductAreas()
     const userInfo= useContext(UserState)
 
@@ -74,8 +71,8 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             keywords={s.keywords}
                             link={`/story/${s.id}`}
                             type={s.__typename}
-                            teamkatalogen={tk.data}
-                            productAreas={productAreas}
+                            teamkatalogenTeam={s.teamName}
+                            productArea={s.productAreaName}
                         />
                     ))}
                     {currentItem.stories.length == 0 && "Ingen fortellinger"}
@@ -94,9 +91,9 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             keywords={d.keywords}
                             description={d.description}
                             link={`/dataproduct/${d.id}/${d.slug}`}
-                            teamkatalogen={tk.data}
-                            productAreas={productAreas}
-                        />
+                            teamkatalogenTeam={d.teamName}
+                            productArea={d.productAreaName}
+                            />
                     ))}
                     {currentItem.dataproducts.length == 0 && "Ingen dataprodukter"}
                 </div>
@@ -120,9 +117,9 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             link={ip.link}
                             id={ip.id}
                             innsiktsproduktType={ip.type}
-                            teamkatalogen={tk.data}
-                            productAreas={productAreas}
                             editable={!!userInfo?.googleGroups?.find(it=> it.email == ip.group)}
+                            teamkatalogenTeam={ip.teamName}
+                            productArea={ip.productAreaName}
                         />
                     ))}
                     {currentItem.insightProducts.length == 0 && "Ingen innsiktsprodukter"}

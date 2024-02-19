@@ -59,7 +59,6 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
                                             type={'Dataset'}
                                             keywords={dataset.keywords}
                                             link={`/dataproduct/${dataset.dataproductID}/${dataset.dataproduct.slug}/${dataset.id}`}
-                                            productAreas={[]}
                                         />
                                     })
                                     }
