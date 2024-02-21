@@ -70,7 +70,7 @@ const TokenCell = ({token, team}: {token: string, team: string}) => {
                 ? "*********"
                 : token
             }</span>
-            <ArrowsCirclepathIcon className="cursor-pointer" title="a11y-title" fontSize="1.2rem" onClick={() => setShowRotateModal(true)}/>
+            <ArrowsCirclepathIcon className="cursor-pointer" title="roter token" fontSize="1.2rem" onClick={() => setShowRotateModal(true)}/>
         </Table.DataCell>
         </>
     )
