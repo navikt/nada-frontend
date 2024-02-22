@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Select } from '@navikt/ds-react'
-import { useTeamkatalogenQuery } from '../../lib/schema/graphql'
 import LoaderSpinner from './spinner'
 import { Dispatch, SetStateAction } from 'react'
+import { useSearchTeamKatalogen } from '../../lib/rest/teamkatalogen'
 
 type TeamkatalogenSelectorProps = {
   gcpGroups?: string []
@@ -21,32 +21,28 @@ export interface Team {
 }
 
 const useBuildTeamList = (gcpGroups: string [] | undefined) => {
-  const allTeamResult = useTeamkatalogenQuery({
-    variables: { q: '' },
-  })
+  const {searchResult: relevantTeamResult, loading: loadingRelevant, error: errorRelevant}= 
+  useSearchTeamKatalogen(gcpGroups?.map(it=> it.split('@')[0]) || [])
+  const {searchResult: allTeamsResult, loading: loadingAllTeams, error: errorAllTeams} =
+  useSearchTeamKatalogen()
 
-  const relevantTeamResult = useTeamkatalogenQuery({
-    variables: { q: gcpGroups?.map(it=> it.split('@')[0]) || []},
-  })
-
-  if (allTeamResult.error || relevantTeamResult.error) {
+  if (errorAllTeams || errorRelevant) {
     return {
       error: true,
     }
   }
 
-  const relevantTeams = gcpGroups? relevantTeamResult.data?.teamkatalogen: undefined
-  const allTeams = allTeamResult.data?.teamkatalogen
-  const otherTeams = allTeamResult.data?.teamkatalogen.filter(
-    (it) => !relevantTeams || !relevantTeams.find((t) => t.teamID == it.teamID)
+  const relevantTeams = gcpGroups? relevantTeamResult: undefined
+  const otherTeams = allTeamsResult?.filter(
+    (it: any) => !relevantTeams || !relevantTeams.find((t: any) => t.teamID == it.teamID)
   )
 
-  otherTeams?.sort((a, b) => a.name.localeCompare(b.name))
+  otherTeams?.sort((a:any, b:any) => a.name.localeCompare(b.name))
 
   return {
     relevantTeams: relevantTeams,
     otherTeams: otherTeams,
-    allTeams: allTeams,
+    allTeams: allTeamsResult,
   }
 }
 
@@ -64,7 +60,7 @@ export const TeamkatalogenSelector = ({
   const teamkatalogenURL = watch('teamkatalogenURL')
 
   const updateTeamkatalogInfo = (url: string) => {
-    const team = allTeams?.find((it) => it.url == url)
+    const team = allTeams?.find((it:any) => it.url == url)
     setProductAreaID?.(team ? team.productAreaID : '')
     setTeamID?.(team ? team.teamID : '')
   }
@@ -92,12 +88,12 @@ export const TeamkatalogenSelector = ({
           Ingen team
         </option>
       )}
-      {relevantTeams?.map((team) => (
+      {relevantTeams?.map((team: any) => (
         <option value={team.url} key={team.name}>
           {team.name}
         </option>
       ))}
-      {otherTeams?.map((team) => (
+      {otherTeams?.map((team: any) => (
         <option value={team.url} key={team.name}>
           {team.name}
         </option>

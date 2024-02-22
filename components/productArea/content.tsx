@@ -1,7 +1,6 @@
 import { Tabs } from "@navikt/ds-react";
 import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
-import { useTeamkatalogenQuery } from "../../lib/schema/graphql";
 import { useContext } from "react";
 import { UserState } from "../../lib/context";
 import { useGetProductAreas } from "../../lib/rest/productAreas";

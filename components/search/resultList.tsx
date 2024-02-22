@@ -4,7 +4,6 @@ import {
   SearchContentWithOptionsQuery,
   SearchOptions,
   useDeleteStoryMutation,
-  useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'

@@ -794,26 +794,6 @@ export type PollyInput = {
   url: Scalars['String']['input'];
 };
 
-export type ProductArea = {
-  __typename?: 'ProductArea';
-  /** areaType is the type of the product area, which is defined by teamkatalogen */
-  areaType: Scalars['String']['output'];
-  /** dashboardURL is the url to the product area dashboard. */
-  dashboardURL: Scalars['String']['output'];
-  /** dataproducts is the dataproducts owned by the product area. */
-  dataproducts: Array<Dataproduct>;
-  /** id is the product area external id in teamkatalogen. */
-  id: Scalars['String']['output'];
-  /** insight products is the insight products owned by the product area. */
-  insightProducts: Array<InsightProduct>;
-  /** name is the name of the product area. */
-  name: Scalars['String']['output'];
-  /** stories is the stories owned by the product area. */
-  stories: Array<Story>;
-  /** teams is the teams in the product area. */
-  teams: Array<Team>;
-};
-
 /** PseudoDataset contains information about a pseudo dataset */
 export type PseudoDataset = {
   __typename?: 'PseudoDataset';
@@ -875,16 +855,8 @@ export type Query = {
   keywords: Array<Keyword>;
   /** searches polly for process purposes matching query input */
   polly: Array<QueryPolly>;
-  /** productArea returns the given productArea. */
-  productArea: ProductArea;
-  /** productAreas returns all product areas. */
-  productAreas: Array<ProductArea>;
   /** search through existing dataproducts. */
   search: Array<SearchResultRow>;
-  /** team returns the given team. */
-  team: Team;
-  /** searches teamkatalogen for teams where team name matches query input */
-  teamkatalogen: Array<TeamkatalogenResult>;
   /** userInfo returns information about the logged in user. */
   userInfo: UserInfo;
   /** version returns the API version. */
@@ -978,24 +950,9 @@ export type QueryPollyArgs = {
 };
 
 
-export type QueryProductAreaArgs = {
-  id: Scalars['String']['input'];
-};
-
-
 export type QuerySearchArgs = {
   options?: InputMaybe<SearchOptions>;
   q?: InputMaybe<SearchQuery>;
-};
-
-
-export type QueryTeamArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type QueryTeamkatalogenArgs = {
-  q?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type QueryPolly = {
@@ -1116,38 +1073,6 @@ export type TableColumn = {
   name: Scalars['String']['output'];
   /** type is the datatype of the column. */
   type: Scalars['String']['output'];
-};
-
-export type Team = {
-  __typename?: 'Team';
-  /** dashboardURL is the url to the team dashboard. */
-  dashboardURL: Scalars['String']['output'];
-  /** dataproducts is the dataproducts owned by the team. */
-  dataproducts: Array<Dataproduct>;
-  /** id is the team external id in teamkatalogen. */
-  id: Scalars['String']['output'];
-  /** insight products is the insight products owned by the team. */
-  insightProducts: Array<InsightProduct>;
-  /** name is the name of the team. */
-  name: Scalars['String']['output'];
-  /** productAreaID is the id of the product area. */
-  productAreaID: Scalars['String']['output'];
-  /** stories is the stories owned by the team. */
-  stories: Array<Story>;
-};
-
-export type TeamkatalogenResult = {
-  __typename?: 'TeamkatalogenResult';
-  /** team description. */
-  description: Scalars['String']['output'];
-  /** team name. */
-  name: Scalars['String']['output'];
-  /** Id of the team's product area. */
-  productAreaID: Scalars['String']['output'];
-  /** team id is the id of the team. */
-  teamID: Scalars['String']['output'];
-  /** url to team in teamkatalogen. */
-  url: Scalars['String']['output'];
 };
 
 /** UpdateAccessRequest contains metadata on a request to access a dataset */
@@ -1562,13 +1487,6 @@ export type UpdateStoryMetadataMutationVariables = Exact<{
 
 
 export type UpdateStoryMetadataMutation = { __typename?: 'Mutation', updateStoryMetadata: { __typename?: 'Story', id: string } };
-
-export type TeamkatalogenQueryVariables = Exact<{
-  q?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-}>;
-
-
-export type TeamkatalogenQuery = { __typename?: 'Query', teamkatalogen: Array<{ __typename?: 'TeamkatalogenResult', name: string, url: string, productAreaID: string, teamID: string }> };
 
 export type UserInfoDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3290,49 +3208,6 @@ export function useUpdateStoryMetadataMutation(baseOptions?: Apollo.MutationHook
 export type UpdateStoryMetadataMutationHookResult = ReturnType<typeof useUpdateStoryMetadataMutation>;
 export type UpdateStoryMetadataMutationResult = Apollo.MutationResult<UpdateStoryMetadataMutation>;
 export type UpdateStoryMetadataMutationOptions = Apollo.BaseMutationOptions<UpdateStoryMetadataMutation, UpdateStoryMetadataMutationVariables>;
-export const TeamkatalogenDocument = gql`
-    query Teamkatalogen($q: [String!]) {
-  teamkatalogen(q: $q) {
-    name
-    url
-    productAreaID
-    teamID
-  }
-}
-    `;
-
-/**
- * __useTeamkatalogenQuery__
- *
- * To run a query within a React component, call `useTeamkatalogenQuery` and pass it any options that fit your needs.
- * When your component renders, `useTeamkatalogenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTeamkatalogenQuery({
- *   variables: {
- *      q: // value for 'q'
- *   },
- * });
- */
-export function useTeamkatalogenQuery(baseOptions?: Apollo.QueryHookOptions<TeamkatalogenQuery, TeamkatalogenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(TeamkatalogenDocument, options);
-      }
-export function useTeamkatalogenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamkatalogenQuery, TeamkatalogenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(TeamkatalogenDocument, options);
-        }
-export function useTeamkatalogenSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TeamkatalogenQuery, TeamkatalogenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<TeamkatalogenQuery, TeamkatalogenQueryVariables>(TeamkatalogenDocument, options);
-        }
-export type TeamkatalogenQueryHookResult = ReturnType<typeof useTeamkatalogenQuery>;
-export type TeamkatalogenLazyQueryHookResult = ReturnType<typeof useTeamkatalogenLazyQuery>;
-export type TeamkatalogenSuspenseQueryHookResult = ReturnType<typeof useTeamkatalogenSuspenseQuery>;
-export type TeamkatalogenQueryResult = Apollo.QueryResult<TeamkatalogenQuery, TeamkatalogenQueryVariables>;
 export const UserInfoDetailsDocument = gql`
     query userInfoDetails {
   userInfo {

@@ -13,7 +13,7 @@ const getProductAreas = async () => {
 }
 
 const getProductArea = async (id: string) => {
-    const url = getProductAreaUrl(id);
+    const url = getProductAreaUrl(id)
     const options = {
         method: 'GET',
         headers: {
