@@ -16,7 +16,7 @@ interface MobileMenuProps {
 const ProductAreaMobileMenu = ({ open, setOpen, productAreaItems, setCurrentItem, productAreas, selectProductArea }: MobileMenuProps) => {
     const [selected, setSelected] = useState<string | null>(null)
     
-    return <Modal className="w-screen h-screen py-8" open={open} onClose={() => setOpen(false)}>
+    return <Modal className="w-screen h-screen py-8" open={open} onClose={() => setOpen(false)} header={{heading: ""}}>
         {!selected && <div className="flex flex-col mt-14 gap-2 mx-2">
             {productAreas.map((area, idx) => 
             <>
