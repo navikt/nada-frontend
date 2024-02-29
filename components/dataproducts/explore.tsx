@@ -43,7 +43,7 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
   }
 
   const datasource = dataset.datasource
-  const metabaseUrl = dataset.meatabaseUrl
+  const metabaseUrl = dataset.metabaseUrl
   const mappings = dataset.mappings
   const bigQueryUrl = `https://console.cloud.google.com/bigquery?d=${datasource.dataset}&t=${datasource.table}&p=${datasource.projectID}&page=table`
 
