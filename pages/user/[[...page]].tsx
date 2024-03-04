@@ -89,13 +89,11 @@ export const UserPages = () => {
                                     value="granted"
                                     label="Innvilgede tilganger"
                                 />
-                                {/* Pseudonymization */}
-                                {false &&
-                                    <Tabs.Tab
-                                        value="joinable"
-                                        label="Views tilrettelagt for kobling"
-                                    />
-                                }
+
+                                <Tabs.Tab
+                                    value="joinable"
+                                    label="Views tilrettelagt for kobling"
+                                />
                             </Tabs.List>
                             <Tabs.Panel value="owner" className="w-full space-y-2 p-4">
                                 <DataproductsList datasets={data.userInfo.accessable.owned} />
@@ -103,10 +101,9 @@ export const UserPages = () => {
                             <Tabs.Panel value="granted" className="w-full space-y-2 p-4">
                                 <DataproductsList datasets={data.userInfo.accessable.granted} />
                             </Tabs.Panel>
-                            {/* Pseudonymization */}
-                            {false && <Tabs.Panel value="joinable" className="w-full p-4">
+                            <Tabs.Panel value="joinable" className="w-full p-4">
                                 <JoinableViewsList />
-                            </Tabs.Panel>}
+                            </Tabs.Panel>
                         </Tabs>
                     </div>
                 ),
