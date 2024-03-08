@@ -114,12 +114,9 @@ const TagsCleaner = () => {
 
   return (
     <InnerContainer>
-      <Modal className="w-[800px]" open={confirmChange} onClose={OnCancel}>
+      <Modal className="w-[800px]" open={confirmChange} onClose={OnCancel} header={{heading: "Confirm Changes on Tags"}}>
         <Modal.Body className="flex flex-col gap-4">
           <div>
-            <Heading className="mb-3" level="2" size="medium">
-              Confirm Changes on Tags
-            </Heading>
             {!!tagsObsolete.length && (
               <div>
                 <p>

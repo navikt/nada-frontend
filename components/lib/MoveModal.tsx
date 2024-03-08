@@ -42,11 +42,8 @@ export const MoveModal = ({
   if (search.loading || !search.data?.search) return <LoaderSpinner />
 
   return (
-    <Modal open={open} onClose={onCancel}>
+    <Modal open={open} onClose={onCancel} header={{heading: "Flytt datasett"}}>
       <Modal.Body className="flex flex-col gap-4">
-        <Heading level="2" size="large">
-          Flytt datasett
-        </Heading>
         <p>Velg hvilket dataprodukt datasett skal flyttes til.</p>
         <p>
           (Du kan kun flytte datasett til dataprodukter som hører til samme

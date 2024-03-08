@@ -18,11 +18,8 @@ export const DeleteModal = ({
   resource,
 }: DeleteModalProps) => {
   return (
-    <Modal open={open} onClose={onCancel}>
+    <Modal open={open} onClose={onCancel} header={{heading: "Slett"}}>
       <Modal.Body className="flex flex-col gap-4">
-        <Heading level="2" size="large" className='mr-12'>
-          Slette {resource}
-        </Heading>
         <p>Er du sikker på at du vil slette {name}?</p>
         <div className="flex flex-row gap-3">
           <Button variant="secondary" onClick={onCancel}>
