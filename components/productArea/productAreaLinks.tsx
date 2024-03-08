@@ -6,11 +6,11 @@ const ProductAreaHasItems = (p: any)=> !!p?.teams.filter((it: any)=> it.dataprod
 
 const ProductAreaLinks = () => {
   var defaultProductAreaID = '6b149078-927b-4570-a1ce-97bbb9499fb6'
-  const {productAreas} = useGetProductAreas()
+  const {productAreas, error} = useGetProductAreas()
   const productAreaWithItems = productAreas?.filter(it=> ProductAreaHasItems(it));
   if(productAreaWithItems.length>0){
     defaultProductAreaID = productAreaWithItems.find(it=> it.id== defaultProductAreaID)?.id || productAreaWithItems[0].id
-  }else{
+  }else if(error){
     return null
   }
 
