@@ -1,6 +1,6 @@
 const isServer = typeof window === 'undefined'
 
-const apiUrl = () => {
+export const apiUrl = () => {
     if (process.env.NEXT_PUBLIC_ENV === 'development') {
       return 'http://localhost:8080/api'
     }
