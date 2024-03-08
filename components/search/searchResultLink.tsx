@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import { CoApplicant, Table } from '@navikt/ds-icons'
-import { TeamkatalogenQuery, useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
+import { useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
 import humanizeDate from '../../lib/humanizeDate'
 import DeleteModal from '../lib/deleteModal'
 import { useState } from 'react'
@@ -31,8 +31,8 @@ export interface SearchResultProps {
       lastModified: string,
     }
   }[]
-  teamkatalogen?: TeamkatalogenQuery,
-  productAreas?: any[],
+  teamkatalogenTeam?: string,
+  productArea?: string,
   editable?: boolean,
   deleteResource?: (id: string) => Promise<any>,
 }
@@ -48,16 +48,14 @@ export const SearchResultLink = ({
   group,
   description,
   datasets,
-  teamkatalogen,
-  productAreas,
+  teamkatalogenTeam,
+  productArea,
   editable,
   deleteResource
 }: SearchResultProps) => {
   const [modal, setModal] = useState(false)
 
-  const tk = teamkatalogen?.teamkatalogen.find((it) => it.url == group?.teamkatalogenURL)
-  const po = productAreas?.find((it) => it.id == tk?.productAreaID)
-  const owner = tk?.name || group?.group
+  const owner = teamkatalogenTeam || group?.group
   const router = useRouter();
   const [error, setError] = useState<string | undefined>(undefined)
   const [deleteInsightProductMutation] = useDeleteInsightProductMutation();
@@ -123,7 +121,7 @@ export const SearchResultLink = ({
                 <Link className='m-2' href="#" onClick={openDeleteModal}>Slett</Link>
               </div>}
             </div>
-            <Detail className="flex gap-2 items-center text-text-subtle"><CoApplicant /> {owner + `${po ? " - " + po.name : ""}`}</Detail>
+            <Detail className="flex gap-2 items-center text-text-subtle"><CoApplicant /> {owner + `${productArea ? " - " + productArea : ""}`}</Detail>
           </div>
           <div className="flex flex-col gap-4">
             {description && (

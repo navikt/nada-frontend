@@ -4,7 +4,6 @@ import {
   SearchContentWithOptionsQuery,
   SearchOptions,
   useDeleteStoryMutation,
-  useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
@@ -82,12 +81,6 @@ const ResultList = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
-
-  const tk = useTeamkatalogenQuery({
-    variables: { q: '' },
-  })
-
-  const {productAreas} = useGetProductAreas()
   const [deleteStoryQuery] = useDeleteStoryMutation()
   const userInfo= useContext(UserState)
   const deleteStory = (id: string) => deleteStoryQuery({
@@ -149,8 +142,7 @@ const ResultList = ({
                     group: it.result.groupName,
                     teamkatalogenURL: it.result.teamkatalogenURL,
                   }}
-                  teamkatalogen={tk.data}
-                  productAreas={productAreas}
+                  //TODO: fix teamkatalogen
                 />
               )
               )
@@ -169,8 +161,7 @@ const ResultList = ({
                     description={d.result.description}
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                     datasets={d.result.datasets}
-                    teamkatalogen={tk.data}
-                    productAreas={productAreas}
+                  //TODO: fix teamkatalogen
                   />
                 )
             )}
@@ -190,8 +181,7 @@ const ResultList = ({
             name={d.name}
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
-            teamkatalogen={tk.data}
-            productAreas={productAreas}
+                  //TODO: fix teamkatalogen
           />
         ))}
       </Results>
@@ -213,9 +203,8 @@ const ResultList = ({
               name={s.name}
               resourceType={"datafortelling"}
               link={`/story/${s.id}`}
-              teamkatalogen={tk.data}
-              productAreas={productAreas}
-              keywords={s.keywords}
+                  //TODO: fix teamkatalogen
+                  keywords={s.keywords}
               editable = {true}
               description= {s.description}
               deleteResource = {deleteStory}
@@ -241,9 +230,8 @@ const ResultList = ({
               id={p.id}
               name={p.name}
               link={p.link}
-              teamkatalogen={tk.data}
-              productAreas={productAreas}
-              description= {p.description}
+                  //TODO: fix teamkatalogen
+                  description= {p.description}
               innsiktsproduktType={p.type}
               editable={!!userInfo?.googleGroups?.find(it=> it.email == p.group)}     
             />
