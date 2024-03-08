@@ -8,9 +8,14 @@ import {
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../lib/apollo'
 import InnerContainer from '../../components/lib/innerContainer'
+import LoaderSpinner from '../../components/lib/spinner'
 
 const NewInsightProduct = () => {
   const userInfo = useUserInfoDetailsQuery()
+
+  if(!userInfo || userInfo.loading){
+    return <LoaderSpinner />
+  }
 
   if (!userInfo.data?.userInfo)
     return (

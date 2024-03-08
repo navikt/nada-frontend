@@ -18,6 +18,11 @@ export const UserPages = () => {
 
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
+
+    if(loading){
+        return <LoaderSpinner />
+      }
+    
     if (!data.userInfo)
         return (
             <div>
