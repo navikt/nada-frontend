@@ -2,11 +2,8 @@ import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
 import {
   Group,
-  SearchContentDocument,
   useDeleteDataproductMutation,
 } from '../../../../lib/schema/graphql'
-import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../../../../lib/apollo'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
@@ -25,10 +22,6 @@ import { truncate } from '../../../../lib/stringUtils'
 import InnerContainer from '../../../../components/lib/innerContainer'
 import { useGetDataproduct } from '../../../../lib/rest/dataproducts'
 
-interface DataproductProps {
-  id: string
-  slug: string
-}
 
 const Dataproduct = () => {
   const router = useRouter()

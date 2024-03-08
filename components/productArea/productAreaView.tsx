@@ -2,7 +2,6 @@ import { System } from '@navikt/ds-icons'
 import { Heading } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { ProductAreasQuery } from '../../lib/schema/graphql'
 import { PAItem, PAItems } from '../../pages/productArea/[id]'
 import ProductAreaContent from './content'
 import ProductAreaMobileMenu from './productAreaMobileMenu'
@@ -10,12 +9,12 @@ import ProductAreaSidebar from './sidebar'
 
 interface ProductAreaViewProps {
   paItems: PAItems
-  productAreas: ProductAreasQuery['productAreas']
+  productAreas: any[]
 }
 
 const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   const router = useRouter()
-  const currentItemName = (router.query.team as string) || paItems[0].name
+  const currentItemName = (router.query.team as string) || paItems.length && paItems[0].name || ''
   const teamIdx = paItems.findIndex(
     (it) => it.name.toLowerCase() === currentItemName.toLowerCase() || it.id === currentItemName
   )
@@ -23,11 +22,16 @@ const ProductAreaView = ({ paItems, productAreas }: ProductAreaViewProps) => {
   const currentItem = teamIdx > 0 ? teamIdx : 0
 
   const initialTab = (item: PAItem) => {
-    return item.dashboardURL ? 'dashboard' : 'stories'
+    return item?.dashboardURL ? 'dashboard' : 'stories'
   }
 
   const [currentTab, setCurrentTab] = useState(initialTab(paItems[teamIdx]))
   const [open, setOpen] = useState(false)
+
+  if(!currentItemName){
+    return <div>Ingen produktområder samsvarer med søkekriteriene</div>
+  }
+
   const pathComponents = router.asPath.split('?')[0].split('/')
   const currentProductAreaId = pathComponents[pathComponents.length - 1]
 

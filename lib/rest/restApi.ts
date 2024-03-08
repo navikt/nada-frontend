@@ -9,3 +9,5 @@ export const apiUrl = () => {
 
 export const getDataproductUrl = (id: string)=> `${apiUrl()}/dataproducts/${id}`
 export const getDatasetUrl = (id: string)=> `${apiUrl()}/datasets/${id}`
+export const getProductAreasUrl = () => `${apiUrl()}/productareas`
+export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`

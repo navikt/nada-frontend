@@ -1,18 +1,19 @@
 import { Heading, Link } from '@navikt/ds-react'
-import { useProductAreasQuery } from '../../lib/schema/graphql'
 import ExploreAreasIcon from '../lib/icons/exploreAreasIcon'
+import { useGetProductAreas } from '../../lib/rest/productAreas'
+
+const ProductAreaHasItems = (p: any)=> !!p?.teams.filter((it: any)=> it.dataproductsNumber+ it.storiesNumber> 0).length
 
 const ProductAreaLinks = () => {
   var defaultProductAreaID = '6b149078-927b-4570-a1ce-97bbb9499fb6'
-  const productAreasQuery = useProductAreasQuery()
-
-  if (productAreasQuery.data && productAreasQuery.data.productAreas.length > 0) {
-    defaultProductAreaID =
-    productAreasQuery.data.productAreas.find(
-      (it) => it.id == '6b149078-927b-4570-a1ce-97bbb9499fb6'
-    )?.id || productAreasQuery.data.productAreas[0].id
+  const {productAreas} = useGetProductAreas()
+  const productAreaWithItems = productAreas?.filter(it=> ProductAreaHasItems(it));
+  if(productAreaWithItems.length>0){
+    defaultProductAreaID = productAreaWithItems.find(it=> it.id== defaultProductAreaID)?.id || productAreaWithItems[0].id
+  }else{
+    return null
   }
-  
+
   return (
     <div className="border border-border-default bg-white rounded-lg w-11/12 md:w-[17rem] md:h-[22rem] p-4 pt-8 flex items-center flex-col gap-8">
       <ExploreAreasIcon />

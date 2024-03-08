@@ -4,13 +4,12 @@ import ReactMarkdown from 'react-markdown'
 import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import { CoApplicant, Table } from '@navikt/ds-icons'
-import { ProductAreasQuery, TeamkatalogenQuery, useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
+import { TeamkatalogenQuery, useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
 import humanizeDate from '../../lib/humanizeDate'
 import DeleteModal from '../lib/deleteModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
-import { GET_PRODUCT_AREAS } from '../../lib/queries/productAreas/productAreas'
 import TagPill from '../lib/tagPill'
 
 export interface SearchResultProps {
@@ -33,7 +32,7 @@ export interface SearchResultProps {
     }
   }[]
   teamkatalogen?: TeamkatalogenQuery,
-  productAreas?: ProductAreasQuery,
+  productAreas?: any[],
   editable?: boolean,
   deleteResource?: (id: string) => Promise<any>,
 }
@@ -57,7 +56,7 @@ export const SearchResultLink = ({
   const [modal, setModal] = useState(false)
 
   const tk = teamkatalogen?.teamkatalogen.find((it) => it.url == group?.teamkatalogenURL)
-  const po = productAreas?.productAreas.find((it) => it.id == tk?.productAreaID)
+  const po = productAreas?.find((it) => it.id == tk?.productAreaID)
   const owner = tk?.name || group?.group
   const router = useRouter();
   const [error, setError] = useState<string | undefined>(undefined)
@@ -78,9 +77,6 @@ export const SearchResultLink = ({
         id: id
       },
       refetchQueries:[
-        {
-          query: GET_PRODUCT_AREAS,
-        },
         {
           query: USER_INFO,
         }

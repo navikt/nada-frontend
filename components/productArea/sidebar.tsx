@@ -2,7 +2,6 @@ import { Data } from '@navikt/ds-icons'
 import { Select } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import { ProductAreasQuery } from '../../lib/schema/graphql'
 import { PAItems } from '../../pages/productArea/[id]'
 import DataproductLogo from '../lib/icons/dataproductLogo'
 
@@ -10,7 +9,7 @@ interface ProductAreaSidebarProps {
   productAreaItems: PAItems
   setCurrentItem: (newCurrent: number) => void
   currentItem: number
-  productAreas: ProductAreasQuery['productAreas']
+  productAreas: any
   selectProductArea: (productAreaId: string) => void
 }
 
@@ -23,11 +22,11 @@ const ProductAreaSidebar = ({
 }: ProductAreaSidebarProps) => {
   const relevantProductAreas = productAreas
     .filter(
-      (it) =>
-        it.dataproducts.length ||
-        it.stories.length ||
-        it.insightProducts.length
-    ).sort((l, r) => (l.name < r.name ? -1 : 1))
+      (it: any) =>
+        it.dataproductsNumber ||
+        it.storiesNumber ||
+        it.insightProductsNumber
+    ).sort((l: any, r: any) => (l.name < r.name ? -1 : 1))
   return (
     <div className="pr-[2rem] w-96 pt-[1.6rem] hidden md:block">
       <Select
@@ -35,11 +34,11 @@ const ProductAreaSidebar = ({
         label=""
         onChange={(e) => selectProductArea(e.target.value)}
         value={
-          relevantProductAreas.find((it) => it.name == productAreaItems[0].name)
+          relevantProductAreas.find((it: any) => it.name == productAreaItems[0].name)
             ?.id
         }
       >
-        {relevantProductAreas.map((it, index) => (
+        {relevantProductAreas.map((it: any, index: number) => (
           <option key={index} value={it.id}>
             {it.name}
           </option>

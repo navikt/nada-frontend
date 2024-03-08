@@ -4,7 +4,6 @@ import {
   SearchContentWithOptionsQuery,
   SearchOptions,
   useDeleteStoryMutation,
-  useProductAreasQuery,
   useTeamkatalogenQuery,
 } from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
@@ -16,6 +15,7 @@ import { SearchParam } from '../../pages/search'
 import { useRouter } from 'next/router'
 import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import { UserState } from '../../lib/context'
+import { useGetProductAreas } from '../../lib/rest/productAreas'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -87,7 +87,7 @@ const ResultList = ({
     variables: { q: '' },
   })
 
-  const po = useProductAreasQuery()
+  const {productAreas} = useGetProductAreas()
   const [deleteStoryQuery] = useDeleteStoryMutation()
   const userInfo= useContext(UserState)
   const deleteStory = (id: string) => deleteStoryQuery({
@@ -150,7 +150,7 @@ const ResultList = ({
                     teamkatalogenURL: it.result.teamkatalogenURL,
                   }}
                   teamkatalogen={tk.data}
-                  productAreas={po.data}
+                  productAreas={productAreas}
                 />
               )
               )
@@ -170,7 +170,7 @@ const ResultList = ({
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                     datasets={d.result.datasets}
                     teamkatalogen={tk.data}
-                    productAreas={po.data}
+                    productAreas={productAreas}
                   />
                 )
             )}
@@ -191,7 +191,7 @@ const ResultList = ({
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
             teamkatalogen={tk.data}
-            productAreas={po.data}
+            productAreas={productAreas}
           />
         ))}
       </Results>
@@ -214,7 +214,7 @@ const ResultList = ({
               resourceType={"datafortelling"}
               link={`/story/${s.id}`}
               teamkatalogen={tk.data}
-              productAreas={po.data}
+              productAreas={productAreas}
               keywords={s.keywords}
               editable = {true}
               description= {s.description}
@@ -242,7 +242,7 @@ const ResultList = ({
               name={p.name}
               link={p.link}
               teamkatalogen={tk.data}
-              productAreas={po.data}
+              productAreas={productAreas}
               description= {p.description}
               innsiktsproduktType={p.type}
               editable={!!userInfo?.googleGroups?.find(it=> it.email == p.group)}     

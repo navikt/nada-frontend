@@ -11,12 +11,11 @@ import { SearchPanel } from '../components/search/searchPanel'
 import {
   Exact,
   KeywordsQuery,
-  ProductAreasQuery,
   SearchType,
   useKeywordsQuery,
-  useProductAreasQuery,
   useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
+import { useGetProductAreas } from '../lib/rest/productAreas'
 
 export interface SearchParam {
   [s: string]: string | string[]
@@ -91,38 +90,32 @@ const mapProductAreasToFiltersTree = (
 }
 
 const mapProductAreasWithResultToArray = (
-  productAreasQuery: ProductAreasQuery
+  productAreas: any[]
 ) =>
-  productAreasQuery.productAreas
+  productAreas
     .map((it) =>
-      !!it.dataproducts.length || !!it.stories.length
-        ? ({
+    ({
             name: it.name,
             teams: it.teams
-              .map((t) =>
-                !!t.dataproducts.length || !!t.stories.length
+              .map((t: any) =>
+                !!t.dataproductsNumber || !!t.storiesNumber
                   ? ({
                       name: t.name,
                     } as Team)
                   : null
               )
-              .filter((t) => !!t),
+              .filter((t: any) => !!t),
           } as ProductArea)
-        : null
     )
-    .filter((it) => !!it)
+    .filter((it) => it.teams?.length)
 
 const buildProductAreaFiltersTree = (
-  queryResult: QueryResult<ProductAreasQuery, Exact<{ [key: string]: never }>>,
+  productAreas: any[],
   pickedFilters: string[]
-) => {
-  return queryResult.loading || !queryResult.data
-    ? ({} as FilterTreeNode)
-    : mapProductAreasToFiltersTree(
-        mapProductAreasWithResultToArray(queryResult.data),
+) => mapProductAreasToFiltersTree(
+        mapProductAreasWithResultToArray(productAreas),
         pickedFilters
       )
-}
 
 const buildKeywordsFiltersTree = (
   queryResult: QueryResult<KeywordsQuery, Exact<{ [key: string]: never }>>,
@@ -143,19 +136,17 @@ const buildKeywordsFiltersTree = (
 //backend search use team_id instead of team name, which is not human readable
 //so we use the maps to convert the values
 const buildTeamIDMaps = (
-  queryResult: QueryResult<ProductAreasQuery, Exact<{ [key: string]: never }>>
+  productAreas: any
 ) => {
-  return queryResult.loading || !queryResult.data
-    ? [new Map(), new Map()]
-    : [
+  return [
         new Map(
-          queryResult.data.productAreas.flatMap((it) =>
-            it.teams.map((t) => [t.name, t.id])
+          productAreas.flatMap((it: any) =>
+            it.teams.map((t: any) => [t.name, t.id])
           )
         ),
         new Map(
-          queryResult.data.productAreas.flatMap((it) =>
-            it.teams.map((t) => [t.id, t.name])
+          productAreas.flatMap((it: any) =>
+            it.teams.map((t: any) => [t.id, t.name])
           )
         ),
       ]
@@ -164,9 +155,9 @@ const buildTeamIDMaps = (
 export type FilterType = 'Områder' | 'Nøkkelord'
 
 const Search = () => {
-  const po = useProductAreasQuery()
+  const {productAreas, loading, error} = useGetProductAreas()
   const kw = useKeywordsQuery()
-  const [teamNameToID, teamIDToName] = buildTeamIDMaps(po)
+  const [teamNameToID, teamIDToName] = loading || error? [new Map, new Map]: buildTeamIDMaps(productAreas)
 
   const router = useRouter()
   const baseUrl = router.asPath.split('?')[0]
@@ -177,10 +168,12 @@ const Search = () => {
     teams: arrayify(router.query.teamIDs).map((it) => teamIDToName.get(it)),
     keywords: arrayify(router.query.keywords),
   }
-  const productAreaFiltersTree = buildProductAreaFiltersTree(
-    po,
+  const productAreaFiltersTree = loading || error? {}:
+  buildProductAreaFiltersTree(
+    productAreas,
     searchParam.teams || []
   )
+
   const keywordsFiltersTree = buildKeywordsFiltersTree(
     kw,
     searchParam.keywords || []
