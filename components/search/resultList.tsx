@@ -97,8 +97,13 @@ const ResultList = ({
   })
 
   const getTeamKatalogenInfo = (item: any) => {
-    const tk = teamkatalogen?.find((it) => it.url == item?.teamkatalogenURL)
+    const getTeamID = (url: string)  => {
+      var urlComponents = url?.split("/")
+      return urlComponents?.[urlComponents.length - 1]
+    }
+    const tk = teamkatalogen?.find((it) => getTeamID(it.url) == getTeamID(item?.owner?.teamkatalogenURL))
     const po = productAreas?.find((it) => it.id == tk?.productAreaID)
+
     return {
       productArea: po?.name,
       teamkatalogenTeam: tk?.name || item.group?.group
@@ -117,6 +122,7 @@ const ResultList = ({
       (d) => d.result.__typename === 'Story'
     )
 
+    //dataproducts.forEach((d) => console.log(getTeamKatalogenInfo(d.result)?.teamkatalogenTeam))
     return (
       <Results>
         <Tabs
