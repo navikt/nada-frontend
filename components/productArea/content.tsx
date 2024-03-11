@@ -3,7 +3,6 @@ import { PAItem } from "../../pages/productArea/[id]";
 import SearchResultLink from "../search/searchResultLink";
 import { useContext } from "react";
 import { UserState } from "../../lib/context";
-import { useGetProductAreas } from "../../lib/rest/productAreas";
 
 interface ProductAreaContentProps {
     currentItem: PAItem
@@ -12,11 +11,8 @@ interface ProductAreaContentProps {
 }
 
 const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductAreaContentProps) => {
-    const {productAreas, loading, error} = useGetProductAreas()
     const userInfo= useContext(UserState)
 
-    if (loading) return <div>Laster...</div>
-    if (error) return <div>Noe gikk galt</div>
     return (
         <Tabs
             value={currentTab}
