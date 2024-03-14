@@ -5,13 +5,10 @@ import {
   Heading,
   Select,
 } from '@navikt/ds-react'
-import {
-  SearchType,
-  useSearchContentWithOptionsQuery,
-} from '../../lib/schema/graphql'
 import LoaderSpinner from './spinner'
 import { useState } from 'react'
 import ErrorMessage from './error'
+import { useSearch } from '../../lib/rest/search'
 
 interface MoveModalProps {
   open: boolean
@@ -31,15 +28,10 @@ export const MoveModal = ({
     undefined
   )
   const [error, setError] = useState<string | undefined>(undefined)
-  const search = useSearchContentWithOptionsQuery({
-    variables: {
-      options: { types: ['dataproduct'] as SearchType[], groups: [group] },
-    },
-    fetchPolicy: 'network-only',
-  })
+  const search = useSearch({ types: ['dataproduct'], groups: [group] })
 
   if (search.error) return <ErrorMessage error={search.error} />
-  if (search.loading || !search.data?.search) return <LoaderSpinner />
+  if (search.loading || !search.data?.results) return <LoaderSpinner />
 
   return (
     <Modal open={open} onClose={onCancel} header={{heading: "Flytt datasett"}}>
@@ -56,7 +48,7 @@ export const MoveModal = ({
           onChange={(event) => setDataproductID(event.target.value)}
         >
           <option value="">Velg dataprodukt</option>
-          {search.data?.search?.map(
+          {search.data?.results?.map(
             (dp) =>
               currentDataproductID !== dp.result.id && (
                 <option value={dp.result.id} key={dp.result.id}>

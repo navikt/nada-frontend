@@ -16,6 +16,7 @@ import {
   useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
 import { useGetProductAreas } from '../lib/rest/productAreas'
+import { useSearch } from '../lib/rest/search'
 
 export interface SearchParam {
   [s: string]: string | string[]
@@ -178,19 +179,14 @@ const Search = () => {
     kw,
     searchParam.keywords || []
   )
-  const search = useSearchContentWithOptionsQuery({
-    variables: {
-      options: {
+  const search = useSearch({
         limit: 1000,
         types: ['dataproduct', 'story'] as SearchType[],
         groups: [],
         teamIDs: searchParam.teams?.map((it) => teamNameToID.get(it)).filter(it=> !!it),
         keywords: searchParam.keywords.map((k) => k.includes(" (") ? k.split(" (")[0] : k),
         text: searchParam.freeText,
-      },
-    },
-    fetchPolicy: 'network-only',
-  })
+      })
 
   const updateQuery = async (updatedParam: SearchParam) => {
     await router.push(buildQueryString(updatedParam))
