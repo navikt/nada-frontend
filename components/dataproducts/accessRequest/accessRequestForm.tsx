@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, DatePicker, Heading, Radio, RadioGroup, TextField, useDatepicker} from '@navikt/ds-react'
+import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker} from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -90,6 +90,7 @@ const AccessRequestFormV2 = ({
 }: AccessRequestFormProps) => {
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
+  const [submitted, setSubmitted] = useState(false)
   const router = useRouter()
   const userInfo = useContext(UserState)
 
@@ -128,6 +129,7 @@ const AccessRequestFormV2 = ({
   })
 
   const onSubmitForm = (data: AccessRequestFields) => {
+    setSubmitted(true)
     const accessRequest: AccessRequestFormInput = {
       datasetID: dataset.id,
       subject: data.subject,
@@ -252,6 +254,7 @@ const AccessRequestFormV2 = ({
           </div>
         </div>
         { error && <ErrorMessage error={error} /> }
+        {submitted && !error && <div>Vennligst vent...<Loader size="small"/></div>}
         <div className="flex flex-row gap-4 grow items-end pb-8">
           <Button
             type="button"
@@ -263,7 +266,7 @@ const AccessRequestFormV2 = ({
           >
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <Button type="submit" disabled={submitted}>Lagre</Button>
         </div>
       </form>
     </div>
