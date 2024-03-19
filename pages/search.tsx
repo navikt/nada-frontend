@@ -13,7 +13,6 @@ import {
   KeywordsQuery,
   SearchType,
   useKeywordsQuery,
-  useSearchContentWithOptionsQuery,
 } from '../lib/schema/graphql'
 import { useGetProductAreas } from '../lib/rest/productAreas'
 import { useSearch } from '../lib/rest/search'
