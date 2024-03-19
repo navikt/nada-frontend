@@ -21,7 +21,7 @@ const DatasetTableSchema = ({
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
-      {datasource.pseudoColumns?.length && <Alert variant="info">Det er et pseudoynimisert view</Alert>}
+      {datasource.pseudoColumns?.length && <Alert variant="info">Dette er et pseudoynimisert view</Alert>}
       <div className="mb-3 w-[91vw] overflow-auto">
         <Table className="w-fit 2xl:w-[60rem]" size="small">
           <Table.Header>
