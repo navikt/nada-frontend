@@ -2,7 +2,6 @@ import * as React from 'react'
 import { NewInsightProductForm } from '../../components/insightProducts/newInsightProduct'
 import Head from 'next/head'
 import {
-  SearchContentDocument,
   useUserInfoDetailsQuery,
 } from '../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
@@ -36,20 +35,3 @@ const NewInsightProduct = () => {
 }
 
 export default NewInsightProduct
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const apolloClient = initializeApollo()
-
-  try {
-    await apolloClient.query({
-      query: SearchContentDocument,
-      variables: { q: { limit: 6 } },
-    })
-  } catch (e) {
-    console.log(e)
-  }
-
-  return addApolloState(apolloClient, {
-    props: {},
-  })
-}

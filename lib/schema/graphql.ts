@@ -1424,20 +1424,6 @@ export type CreateJoinableViewsMutationVariables = Exact<{
 
 export type CreateJoinableViewsMutation = { __typename?: 'Mutation', createJoinableViews: string };
 
-export type SearchContentQueryVariables = Exact<{
-  q: SearchQuery;
-}>;
-
-
-export type SearchContentQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', name: string, datasource: { __typename?: 'BigQuery', lastModified: any, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename?: 'Story' } }> };
-
-export type SearchContentWithOptionsQueryVariables = Exact<{
-  options: SearchOptions;
-}>;
-
-
-export type SearchContentWithOptionsQuery = { __typename?: 'Query', search: Array<{ __typename?: 'SearchResultRow', excerpt: string, result: { __typename: 'Dataproduct', id: string, name: string, description: string, created: any, lastModified: any, keywords: Array<string>, slug: string, datasets: Array<{ __typename?: 'Dataset', id: string, name: string, datasource: { __typename?: 'BigQuery', lastModified: any, table: string, type: 'BigQuery' } }>, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } } | { __typename: 'Story', id: string, name: string, description: string, created: any, teamkatalogenURL?: string | null, keywords: Array<string>, groupName: string, modified?: any | null } }> };
-
 export type SlackQueryVariables = Exact<{
   name: Scalars['String']['input'];
 }>;
@@ -1538,7 +1524,7 @@ export const DatasetAccessDocument = gql`
  *   },
  * });
  */
-export function useDatasetAccessQuery(baseOptions: Apollo.QueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables>) {
+export function useDatasetAccessQuery(baseOptions: Apollo.QueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables> & ({ variables: DatasetAccessQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
       }
@@ -1657,7 +1643,7 @@ export const AccessRequestDocument = gql`
  *   },
  * });
  */
-export function useAccessRequestQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables>) {
+export function useAccessRequestQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables> & ({ variables: AccessRequestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
       }
@@ -1708,7 +1694,7 @@ export const AccessRequestsForDatasetDocument = gql`
  *   },
  * });
  */
-export function useAccessRequestsForDatasetQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>) {
+export function useAccessRequestsForDatasetQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables> & ({ variables: AccessRequestsForDatasetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
       }
@@ -1953,7 +1939,7 @@ export const DataproductSummaryDocument = gql`
  *   },
  * });
  */
-export function useDataproductSummaryQuery(baseOptions: Apollo.QueryHookOptions<DataproductSummaryQuery, DataproductSummaryQueryVariables>) {
+export function useDataproductSummaryQuery(baseOptions: Apollo.QueryHookOptions<DataproductSummaryQuery, DataproductSummaryQueryVariables> & ({ variables: DataproductSummaryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<DataproductSummaryQuery, DataproductSummaryQueryVariables>(DataproductSummaryDocument, options);
       }
@@ -2072,7 +2058,7 @@ export const GcpGetAllTablesInProjectDocument = gql`
  *   },
  * });
  */
-export function useGcpGetAllTablesInProjectQuery(baseOptions: Apollo.QueryHookOptions<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>) {
+export function useGcpGetAllTablesInProjectQuery(baseOptions: Apollo.QueryHookOptions<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables> & ({ variables: GcpGetAllTablesInProjectQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>(GcpGetAllTablesInProjectDocument, options);
       }
@@ -2117,7 +2103,7 @@ export const GcpGetColumnsDocument = gql`
  *   },
  * });
  */
-export function useGcpGetColumnsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>) {
+export function useGcpGetColumnsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables> & ({ variables: GcpGetColumnsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
       }
@@ -2155,7 +2141,7 @@ export const GcpGetDatasetsDocument = gql`
  *   },
  * });
  */
-export function useGcpGetDatasetsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>) {
+export function useGcpGetDatasetsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables> & ({ variables: GcpGetDatasetsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>(GcpGetDatasetsDocument, options);
       }
@@ -2198,7 +2184,7 @@ export const GcpGetTablesDocument = gql`
  *   },
  * });
  */
-export function useGcpGetTablesQuery(baseOptions: Apollo.QueryHookOptions<GcpGetTablesQuery, GcpGetTablesQueryVariables>) {
+export function useGcpGetTablesQuery(baseOptions: Apollo.QueryHookOptions<GcpGetTablesQuery, GcpGetTablesQueryVariables> & ({ variables: GcpGetTablesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GcpGetTablesQuery, GcpGetTablesQueryVariables>(GcpGetTablesDocument, options);
       }
@@ -2582,7 +2568,7 @@ export const InsightProductDocument = gql`
  *   },
  * });
  */
-export function useInsightProductQuery(baseOptions: Apollo.QueryHookOptions<InsightProductQuery, InsightProductQueryVariables>) {
+export function useInsightProductQuery(baseOptions: Apollo.QueryHookOptions<InsightProductQuery, InsightProductQueryVariables> & ({ variables: InsightProductQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<InsightProductQuery, InsightProductQueryVariables>(InsightProductDocument, options);
       }
@@ -2695,7 +2681,7 @@ export const PollyDocument = gql`
  *   },
  * });
  */
-export function usePollyQuery(baseOptions: Apollo.QueryHookOptions<PollyQuery, PollyQueryVariables>) {
+export function usePollyQuery(baseOptions: Apollo.QueryHookOptions<PollyQuery, PollyQueryVariables> & ({ variables: PollyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PollyQuery, PollyQueryVariables>(PollyDocument, options);
       }
@@ -2742,7 +2728,7 @@ export const JoinableViewDocument = gql`
  *   },
  * });
  */
-export function useJoinableViewQuery(baseOptions: Apollo.QueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables>) {
+export function useJoinableViewQuery(baseOptions: Apollo.QueryHookOptions<JoinableViewQuery, JoinableViewQueryVariables> & ({ variables: JoinableViewQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<JoinableViewQuery, JoinableViewQueryVariables>(JoinableViewDocument, options);
       }
@@ -2831,151 +2817,6 @@ export function useCreateJoinableViewsMutation(baseOptions?: Apollo.MutationHook
 export type CreateJoinableViewsMutationHookResult = ReturnType<typeof useCreateJoinableViewsMutation>;
 export type CreateJoinableViewsMutationResult = Apollo.MutationResult<CreateJoinableViewsMutation>;
 export type CreateJoinableViewsMutationOptions = Apollo.BaseMutationOptions<CreateJoinableViewsMutation, CreateJoinableViewsMutationVariables>;
-export const SearchContentDocument = gql`
-    query searchContent($q: SearchQuery!) {
-  search(q: $q) {
-    excerpt
-    result {
-      ... on Dataproduct {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        keywords
-        slug
-        datasets {
-          name
-          datasource {
-            type: __typename
-            ... on BigQuery {
-              lastModified
-            }
-          }
-        }
-        owner {
-          group
-          teamkatalogenURL
-          teamContact
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useSearchContentQuery__
- *
- * To run a query within a React component, call `useSearchContentQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchContentQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchContentQuery({
- *   variables: {
- *      q: // value for 'q'
- *   },
- * });
- */
-export function useSearchContentQuery(baseOptions: Apollo.QueryHookOptions<SearchContentQuery, SearchContentQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchContentQuery, SearchContentQueryVariables>(SearchContentDocument, options);
-      }
-export function useSearchContentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchContentQuery, SearchContentQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchContentQuery, SearchContentQueryVariables>(SearchContentDocument, options);
-        }
-export function useSearchContentSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchContentQuery, SearchContentQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SearchContentQuery, SearchContentQueryVariables>(SearchContentDocument, options);
-        }
-export type SearchContentQueryHookResult = ReturnType<typeof useSearchContentQuery>;
-export type SearchContentLazyQueryHookResult = ReturnType<typeof useSearchContentLazyQuery>;
-export type SearchContentSuspenseQueryHookResult = ReturnType<typeof useSearchContentSuspenseQuery>;
-export type SearchContentQueryResult = Apollo.QueryResult<SearchContentQuery, SearchContentQueryVariables>;
-export const SearchContentWithOptionsDocument = gql`
-    query searchContentWithOptions($options: SearchOptions!) {
-  search(options: $options) {
-    excerpt
-    result {
-      ... on Dataproduct {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        keywords
-        slug
-        datasets {
-          id
-          name
-          datasource {
-            type: __typename
-            ... on BigQuery {
-              lastModified
-              table
-            }
-          }
-        }
-        owner {
-          group
-          teamkatalogenURL
-          teamContact
-        }
-      }
-      ... on Story {
-        __typename
-        id
-        name
-        description
-        created
-        groupName: group
-        teamkatalogenURL
-        keywords
-        modified: lastModified
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useSearchContentWithOptionsQuery__
- *
- * To run a query within a React component, call `useSearchContentWithOptionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchContentWithOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchContentWithOptionsQuery({
- *   variables: {
- *      options: // value for 'options'
- *   },
- * });
- */
-export function useSearchContentWithOptionsQuery(baseOptions: Apollo.QueryHookOptions<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>(SearchContentWithOptionsDocument, options);
-      }
-export function useSearchContentWithOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>(SearchContentWithOptionsDocument, options);
-        }
-export function useSearchContentWithOptionsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>(SearchContentWithOptionsDocument, options);
-        }
-export type SearchContentWithOptionsQueryHookResult = ReturnType<typeof useSearchContentWithOptionsQuery>;
-export type SearchContentWithOptionsLazyQueryHookResult = ReturnType<typeof useSearchContentWithOptionsLazyQuery>;
-export type SearchContentWithOptionsSuspenseQueryHookResult = ReturnType<typeof useSearchContentWithOptionsSuspenseQuery>;
-export type SearchContentWithOptionsQueryResult = Apollo.QueryResult<SearchContentWithOptionsQuery, SearchContentWithOptionsQueryVariables>;
 export const SlackDocument = gql`
     query Slack($name: String!) {
   IsValidSlackChannel(name: $name)
@@ -2998,7 +2839,7 @@ export const SlackDocument = gql`
  *   },
  * });
  */
-export function useSlackQuery(baseOptions: Apollo.QueryHookOptions<SlackQuery, SlackQueryVariables>) {
+export function useSlackQuery(baseOptions: Apollo.QueryHookOptions<SlackQuery, SlackQueryVariables> & ({ variables: SlackQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
       }
@@ -3143,7 +2984,7 @@ export const DataStoryDocument = gql`
  *   },
  * });
  */
-export function useDataStoryQuery(baseOptions: Apollo.QueryHookOptions<DataStoryQuery, DataStoryQueryVariables>) {
+export function useDataStoryQuery(baseOptions: Apollo.QueryHookOptions<DataStoryQuery, DataStoryQueryVariables> & ({ variables: DataStoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<DataStoryQuery, DataStoryQueryVariables>(DataStoryDocument, options);
       }
