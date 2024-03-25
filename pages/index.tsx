@@ -3,7 +3,6 @@ import { addApolloState, initializeApollo } from '../lib/apollo'
 import {
     KeywordsDocument,
     MetabaseProudctsDocument,
-    SearchContentDocument,
 } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
@@ -138,10 +137,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         await apolloClient.query({
             query: USER_INFO,
-        })
-        await apolloClient.query({
-            query: SearchContentDocument,
-            variables: { q: { limit: SEARCH_LIMIT } },
         })
         await apolloClient.query({
             query: MetabaseProudctsDocument,

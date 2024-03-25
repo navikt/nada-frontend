@@ -1,10 +1,4 @@
 import { QueryResult } from '@apollo/client'
-import {
-  Exact,
-  SearchContentWithOptionsQuery,
-  SearchOptions,
-  useDeleteStoryMutation,
-} from '../../lib/schema/graphql'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
@@ -15,16 +9,15 @@ import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import { UserState } from '../../lib/context'
 import { useSearchTeamKatalogen } from '../../lib/rest/teamkatalogen'
 import { useGetProductAreas } from '../../lib/rest/productAreas'
+import { SearchResult } from '../../lib/rest/search'
+import { useDeleteStoryMutation } from '../../lib/schema/graphql'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
 )
 
 type ResultListInterface = {
-  search?: QueryResult<
-    SearchContentWithOptionsQuery,
-    Exact<{ options: SearchOptions }>
-  >
+  search?: {data: SearchResult|undefined, loading: boolean, error: any}
   dataproducts?: {
     __typename?: 'Dataproduct' | undefined
     id: string
@@ -64,23 +57,6 @@ const ResultList = ({
   searchParam,
   updateQuery,
 }: ResultListInterface) => {
-  useEffect(() => {
-    if (!!searchParam) {
-      if (
-        search?.data?.search.filter(
-          (d) => d.result.__typename === 'Dataproduct'
-        ).length == 0
-      ) {
-        updateQuery?.({ ...searchParam, preferredType: 'story' })
-      } else if (
-        search?.data?.search.filter((d) => d.result.__typename === 'Story')
-          .length == 0
-      ) {
-        updateQuery?.({ ...searchParam, preferredType: 'dataproduct' })
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search])
   const [deleteStoryQuery] = useDeleteStoryMutation()
   const userInfo = useContext(UserState)
   const { searchResult: teamkatalogen } = useSearchTeamKatalogen()
@@ -95,6 +71,8 @@ const ResultList = ({
       }
     ]
   })
+
+  const isDataProduct = (item: any) => !!item.datasets
 
   const getTeamKatalogenInfo = (item: any) => {
     const getTeamID = (url: string)  => {
@@ -115,11 +93,11 @@ const ResultList = ({
 
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
-    const dataproducts = data.search.filter(
-      (d) => d.result.__typename === 'Dataproduct'
+    const dataproducts = data.results.filter(
+      (d) => isDataProduct(d.result)
     )
-    const datastories = data.search.filter(
-      (d) => d.result.__typename === 'Story'
+    const datastories = data.results.filter(
+      (d) => !isDataProduct(d.result)
     )
 
     //dataproducts.forEach((d) => console.log(getTeamKatalogenInfo(d.result)?.teamkatalogenTeam))
@@ -147,7 +125,7 @@ const ResultList = ({
             {datastories.map(
               (it, idx) =>
               (
-                it.result.__typename === 'Story' && (
+                !isDataProduct(it.result) && (
                   <SearchResultLink
                     key={idx}
                     name={it.result.name}
@@ -169,7 +147,7 @@ const ResultList = ({
           <Tabs.Panel className="flex flex-col gap-4" value="dataproduct">
             {dataproducts.map(
               (d, idx) =>
-                d.result.__typename === 'Dataproduct' && (
+                isDataProduct(d.result) && (
                   <SearchResultLink
                     key={idx}
                     group={d.result.owner}
@@ -184,7 +162,7 @@ const ResultList = ({
             )}
           </Tabs.Panel>
         </Tabs>
-        {data.search.length == 0 && 'ingen resultater'}
+        {data.results.length == 0 && 'ingen resultater'}
       </Results>
     )
   }

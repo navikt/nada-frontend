@@ -27,9 +27,7 @@ export interface SearchResultProps {
   description?: string
   datasets?: {
     name: string
-    datasource: {
-      lastModified: string,
-    }
+    dataSourceLastModified: string
   }[]
   teamkatalogenTeam?: string,
   productArea?: string,
@@ -140,7 +138,7 @@ export const SearchResultLink = ({
                   {datasets.map((ds, index) => (
                     <div key={index}>
                       <p dangerouslySetInnerHTML={{ __html: ds.name.replaceAll("_", "_<wbr>") }} />
-                      <Detail className="text-text-subtle">Sist oppdatert: {humanizeDate(ds.datasource.lastModified)}</Detail>
+                      <Detail className="text-text-subtle">Sist oppdatert: {humanizeDate(ds.dataSourceLastModified)}</Detail>
                     </div>
                   ))}
                 </div>
