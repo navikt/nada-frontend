@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
+import ErrorMessage from '../../lib/error'
 import { Button, Checkbox, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
@@ -115,7 +116,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       : setValue('keywords', [keyword])
   }
 
-  const [createDataset, { }] = useMutation(
+  const [createDataset, { loading, error: backendError }] = useMutation(
     CREATE_DATASET,
     {
       onCompleted: (data) =>{
@@ -222,6 +223,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           </RadioGroup>
         )}
         />
+        {backendError && <ErrorMessage error={backendError}/>}
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
