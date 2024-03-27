@@ -126,7 +126,6 @@ export const NewInsightProductForm = () => {
         CREATE_INSIGHT_PRODUCT,
         {
             onCompleted: (data) => {
-                console.log(data)
                 router.push("/")
             },
         }
@@ -152,6 +151,8 @@ export const NewInsightProductForm = () => {
                 .join(','),
         })
     }
+
+    const gcpProjects = userInfo?.gcpProjects as any[] || []
 
     return (
         <div className="mt-8 md:w-[46rem]">
@@ -205,11 +206,11 @@ export const NewInsightProductForm = () => {
                     <option value="">Velg gruppe</option>
                     {[
                         ...new Set(
-                            userInfo?.gcpProjects.map(
+                            gcpProjects.map(
                                 ({ group }: { group: { name: string } }) => (
                                     <option
                                         value={
-                                            userInfo?.groups.filter((g) => g.name === group.name)[0]
+                                            userInfo?.groups.filter((g: any) => g.name === group.name)[0]
                                                 .email
                                         }
                                         key={group.name}
@@ -222,7 +223,7 @@ export const NewInsightProductForm = () => {
                     ]}
                 </Select>
                 <TeamkatalogenSelector
-                    gcpGroups={userInfo?.gcpProjects.map(it => it.group.email)}
+                    gcpGroups={userInfo?.gcpProjects.map((it: any) => it.group.email)}
                     register={register}
                     watch={watch}
                     errors={errors}

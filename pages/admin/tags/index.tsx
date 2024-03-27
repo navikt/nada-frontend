@@ -24,8 +24,8 @@ import TagPill from '../../../components/lib/tagPill'
 import {
   useKeywordsQuery,
   useUpdateKeywordsMutation,
-  useUserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
+import { useFetchUserData } from '../../../lib/rest/userData'
 
 const TagsCleaner = () => {
   const kw = useKeywordsQuery()
@@ -38,8 +38,8 @@ const TagsCleaner = () => {
   const [confirmChange, setConfirmChange] = useState(false)
   const [tagUpdateList, setTagUpdateList] = useState([] as string[][])
   const [updateKeywords] = useUpdateKeywordsMutation()
-  const user = useUserInfoDetailsQuery()
-  if (user.loading) {
+  const userData = useFetchUserData()
+  if (userData.loading) {
     return (
       <InnerContainer>
         <LoaderSpinner></LoaderSpinner>
@@ -47,12 +47,12 @@ const TagsCleaner = () => {
     )
   }
 
-  if (!user.data) {
+  if (!userData.data) {
     return <InnerContainer>Failed to fetch user information</InnerContainer>
   }
 
-  const notMemberOfNada = !user.data.userInfo.groups.find(
-    (g) => g.name === 'nada'
+  const notMemberOfNada = !userData.data.userInfo.groups.find(
+    (g: any) => g.name === 'nada'
   )
   if (notMemberOfNada) {
     return <InnerContainer>Permission denied</InnerContainer>
@@ -270,7 +270,6 @@ const TagsCleaner = () => {
                     size="small"
                     onChange={(e) => {
                       tagUpdateList[index][0] = e.target.value
-                      console.log(tagUpdateList)
                       setTagUpdateList([...tagUpdateList])
                     }}
                   >

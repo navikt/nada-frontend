@@ -1,6 +1,5 @@
 import * as React from 'react'
 import Head from 'next/head'
-import { useUserInfoDetailsQuery } from '../../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import LoaderSpinner from '../../components/lib/spinner'
 import ErrorMessage from '../../components/lib/error'
@@ -11,10 +10,11 @@ import InnerContainer from '../../components/lib/innerContainer'
 import { JoinableViewsList } from '../../components/dataProc/joinableViewsList'
 import { DataproductsList } from '../../components/dataproducts/dataproductList'
 import { Tabs } from '@navikt/ds-react'
+import { useFetchUserData } from '../../lib/rest/userData'
 
 export const UserPages = () => {
     const router = useRouter()
-    const { data, error, loading } = useUserInfoDetailsQuery()
+    const { data, error, loading } = useFetchUserData()
 
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
@@ -23,7 +23,7 @@ export const UserPages = () => {
         return <LoaderSpinner />
       }
     
-    if (!data.userInfo)
+    if (!data)
         return (
             <div>
                 <h1>Du må være logget inn!</h1>
@@ -42,7 +42,7 @@ export const UserPages = () => {
                 component: (
                     <div className="grid gap-4">
                         <h2>Mine produkter</h2>
-                        <ResultList dataproducts={data.userInfo.dataproducts} />
+                        <ResultList dataproducts={data.dataproducts} />
                     </div>
                 ),
             },
@@ -52,7 +52,7 @@ export const UserPages = () => {
                 component: (
                     <div className="grid gap-4">
                         <h2>Mine fortellinger</h2>
-                        <ResultList stories={data.userInfo.stories} />
+                        <ResultList stories={data.stories} />
                     </div>
                 ),
             },
@@ -62,7 +62,7 @@ export const UserPages = () => {
                 component: (
                     <div className="grid gap-4">
                         <h2>Mine innsiktsprodukter</h2>
-                        <ResultList insightProducts={data.userInfo.insightProducts} />
+                        <ResultList insightProducts={data.insightProducts} />
                     </div>
                 ),
             },
@@ -73,7 +73,7 @@ export const UserPages = () => {
                     <div className="grid gap-4">
                         <h2>Mine tilgangssøknader</h2>
                         <AccessRequestsListForUser
-                            accessRequests={data.userInfo.accessRequests}
+                            accessRequests={data.accessRequests}
                         />
                     </div>
                 ),
@@ -101,10 +101,10 @@ export const UserPages = () => {
                                 />
                             </Tabs.List>
                             <Tabs.Panel value="owner" className="w-full space-y-2 p-4">
-                                <DataproductsList datasets={data.userInfo.accessable.owned} />
+                                <DataproductsList datasets={data.accessable.owned} />
                             </Tabs.Panel>
                             <Tabs.Panel value="granted" className="w-full space-y-2 p-4">
-                                <DataproductsList datasets={data.userInfo.accessable.granted} />
+                                <DataproductsList datasets={data.accessable.granted} />
                             </Tabs.Panel>
                             <Tabs.Panel value="joinable" className="w-full p-4">
                                 <JoinableViewsList />
@@ -120,7 +120,7 @@ export const UserPages = () => {
                     <div className="grid gap-4">
                         <h2>Mine team tokens</h2>
                         <NadaTokensForUser
-                            nadaTokens={data.userInfo.nadaTokens}
+                            nadaTokens={data.nadaTokens}
                         />
                     </div>
                 ),

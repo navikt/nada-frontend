@@ -1,11 +1,9 @@
-import { QueryResult } from '@apollo/client'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import SearchResultLink from './searchResultLink'
 import { Tabs } from '@navikt/ds-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchParam } from '../../pages/search'
-import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import { UserState } from '../../lib/context'
 import { useSearchTeamKatalogen } from '../../lib/rest/teamkatalogen'
 import { useGetProductAreas } from '../../lib/rest/productAreas'
@@ -65,11 +63,6 @@ const ResultList = ({
     variables: {
       id: id
     },
-    refetchQueries: [
-      {
-        query: USER_INFO,
-      }
-    ]
   })
 
   const isDataProduct = (item: any) => !!item.datasets
@@ -89,7 +82,7 @@ const ResultList = ({
   }
 
   if (search && !!searchParam) {
-    const { data, loading, error } = search
+    var { data, loading, error } = search
 
     if (error) return <ErrorMessage error={error} />
     if (loading || !data) return <LoaderSpinner />
@@ -100,7 +93,6 @@ const ResultList = ({
       (d) => !isDataProduct(d.result)
     )
 
-    //dataproducts.forEach((d) => console.log(getTeamKatalogenInfo(d.result)?.teamkatalogenTeam))
     return (
       <Results>
         <Tabs
@@ -228,7 +220,7 @@ const ResultList = ({
               {...getTeamKatalogenInfo(p)}
               description={p.description}
               innsiktsproduktType={p.type}
-              editable={!!userInfo?.googleGroups?.find(it => it.email == p.group)}
+              editable={!!userInfo?.googleGroups?.find((it: any) => it.email == p.group)}
             />
           ))}
         </Results>

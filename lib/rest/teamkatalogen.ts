@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-import { searchTeamKatalogenUrl } from "./restApi";
+import { fetchTemplate, searchTeamKatalogenUrl } from "./restApi";
 import { set } from "lodash";
 import { de } from "date-fns/locale";
 
 export const searchTeamKatalogen = async (gcpGroups?: string[]) => {
     const url = searchTeamKatalogenUrl(gcpGroups)
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 export const useSearchTeamKatalogen = (gcpGroups?: string[]) => {

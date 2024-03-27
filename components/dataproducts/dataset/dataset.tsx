@@ -1,7 +1,4 @@
 import { isAfter, parseISO } from 'date-fns'
-import {
-  UserInfoDetailsQuery,
-} from '../../../lib/schema/graphql'
 import * as React from 'react'
 import { useState } from 'react'
 import EditDataset from './editDataset'
@@ -11,7 +8,7 @@ import LoaderSpinner from '../../lib/spinner'
 import { Alert } from '@navikt/ds-react'
 
 const findAccessType = (
-  groups: UserInfoDetailsQuery['userInfo']['groups'] | undefined,
+  groups: any,
   dataset: any,
   isOwner: boolean
 ) => {
@@ -29,7 +26,7 @@ const findAccessType = (
 interface EntryProps {
   dataproduct: any
   datasetID: string
-  userInfo: UserInfoDetailsQuery['userInfo'] | undefined
+  userInfo: any
   isOwner: boolean
 }
 

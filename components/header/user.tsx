@@ -9,11 +9,11 @@ export const backendHost = () => {
 }
 
 export default function User() {
-  const userInfo = useContext(UserState)
-  const userOfNada = userInfo?.groups.find((gr) => gr.name === 'nada')
+  const userData = useContext(UserState)
+  const userOfNada = userData?.googleGroups.find((gr: any) => gr.name === 'nada')
 
   const router = useRouter()
-  return userInfo ? (
+  return userData ? (
     <div className="flex flex-row min-w-fit">
       <Dropdown>
         <Header.Button
@@ -127,7 +127,7 @@ export default function User() {
           className="whitespace-nowrap hidden md:block text-base"
           as={Dropdown.Toggle}
         >
-          {userInfo.name}
+          {userData.name}
         </Header.Button>
         <Header.Button
           className="md:hidden w-[48px] flex justify-center"

@@ -112,7 +112,7 @@ const ProductAreaContent = ({ currentItem, currentTab, setCurrentTab }: ProductA
                             link={ip.link}
                             id={ip.id}
                             innsiktsproduktType={ip.type}
-                            editable={!!userInfo?.googleGroups?.find(it=> it.email == ip.group)}
+                            editable={!!userInfo?.googleGroups?.find((it: any)=> it.email == ip.group)}
                             teamkatalogenTeam={ip.teamName}
                             productArea={ip.productAreaName}
                         />

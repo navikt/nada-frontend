@@ -9,7 +9,6 @@ import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { useEffect, useState } from 'react'
 import amplitudeLog from '../lib/amplitude'
 import Head from 'next/head'
-import { USER_INFO } from '../lib/queries/userInfo/userInfo'
 import StoryLogo from '../components/lib/icons/storyLogo'
 import Link from 'next/link'
 import ProductAreaLinks from '../components/productArea/productAreaLinks'
@@ -135,9 +134,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         const cookie = context?.req?.headers?.cookie || ''
         const apolloClient = initializeApollo(null, cookie)
 
-        await apolloClient.query({
-            query: USER_INFO,
-        })
         await apolloClient.query({
             query: MetabaseProudctsDocument,
         })

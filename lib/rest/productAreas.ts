@@ -1,26 +1,14 @@
 import { useEffect, useState } from "react";
-import { getProductAreaUrl, getProductAreasUrl } from "./restApi";
+import { fetchTemplate, getProductAreaUrl, getProductAreasUrl } from "./restApi";
 
 const getProductAreas = async () => {
     const url = getProductAreasUrl();
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 const getProductArea = async (id: string) => {
     const url = getProductAreaUrl(id)
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 const enrichProductArea = (productArea: any) => {

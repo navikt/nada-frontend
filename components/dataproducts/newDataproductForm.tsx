@@ -129,6 +129,8 @@ export const NewDataproductForm = () => {
     })
   }
 
+  const gcpProjects = userInfo?.gcpProjects as any[] || []
+
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
@@ -160,11 +162,11 @@ export const NewDataproductForm = () => {
           <option value="">Velg gruppe</option>
           {[
             ...new Set(
-              userInfo?.gcpProjects.map(
+              gcpProjects.map(
                 ({ group }: { group: { name: string } }) => (
                   <option
                     value={
-                      userInfo?.groups.filter((g) => g.name === group.name)[0]
+                      userInfo?.groups.filter((g:any) => g.name === group.name)[0]
                         .email
                     }
                     key={group.name}

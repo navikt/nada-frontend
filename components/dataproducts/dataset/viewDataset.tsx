@@ -7,7 +7,6 @@ import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import {
   PiiLevel,
-  UserInfoDetailsQuery,
 } from '../../../lib/schema/graphql'
 import { backendHost } from '../../header/user'
 import TagPill from '../../lib/tagPill'
@@ -27,7 +26,7 @@ interface ViewDatasetProps {
     type: string
     expires?: any
   }
-  userInfo: UserInfoDetailsQuery['userInfo'] | undefined
+  userInfo: any
   isOwner: boolean
   setEdit: (value: boolean) => void
 }
