@@ -60,9 +60,9 @@ const theme: ThemeConfig = (t) => ({
 
 const useBuildTagOptionsList = () => {
   const { data, error } = useKeywordsQuery()
-  const userInfo = useContext(UserState)
+  const userData = useContext(UserState)
   let tagsMap = new Map(
-    userInfo?.dataproducts
+    userData?.dataproducts
       ?.flatMap((it: any) => it.keywords)
       .map((it: any) => [it, 100000])
   )
@@ -78,9 +78,9 @@ const useBuildTagOptionsList = () => {
 
 export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
-  const userInfo = useContext(UserState)
-  const teamNames = userInfo?.allGoogleGroups?.map(
-    (it: any) => it.name.split('@')[0]
+  const userData = useContext(UserState)
+  const teamNames = userData?.allGoogleGroups?.map(
+    (it: any) => it.Name
   )
 
   const tagsLikeTeamName = tags.filter((it) =>

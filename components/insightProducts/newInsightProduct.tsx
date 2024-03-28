@@ -46,7 +46,7 @@ export const NewInsightProductForm = () => {
     const router = useRouter()
     const [productAreaID, setProductAreaID] = useState<string>('')
     const [teamID, setTeamID] = useState<string>('')
-    const userInfo = useContext(UserState)
+    const userData = useContext(UserState)
     const [isPrivacyCheckboxChecked, setIsPrivacyCheckboxChecked] = useState(false)
 
     const handlePrivacyCheckboxChange = () => {
@@ -109,7 +109,6 @@ export const NewInsightProductForm = () => {
             refetchQueries: ['searchContent'],
         }
 
-        console.log(inputData)
         try {
             await createInsightProduct(inputData)
             amplitudeLog('skjema fullført', { skjemanavn: 'ny-innsiktsprodukt' })
@@ -152,7 +151,7 @@ export const NewInsightProductForm = () => {
         })
     }
 
-    const gcpProjects = userInfo?.gcpProjects as any[] || []
+    const gcpProjects = userData?.gcpProjects as any[] || []
 
     return (
         <div className="mt-8 md:w-[46rem]">
@@ -210,7 +209,7 @@ export const NewInsightProductForm = () => {
                                 ({ group }: { group: { name: string } }) => (
                                     <option
                                         value={
-                                            userInfo?.groups.filter((g: any) => g.name === group.name)[0]
+                                            userData?.groups.filter((g: any) => g.name === group.name)[0]
                                                 .email
                                         }
                                         key={group.name}
@@ -223,7 +222,7 @@ export const NewInsightProductForm = () => {
                     ]}
                 </Select>
                 <TeamkatalogenSelector
-                    gcpGroups={userInfo?.gcpProjects.map((it: any) => it.group.email)}
+                    gcpGroups={userData?.gcpProjects?.map((it: any) => it.group.email)}
                     register={register}
                     watch={watch}
                     errors={errors}
