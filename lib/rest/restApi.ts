@@ -14,6 +14,7 @@ export const getDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`
+export const fetchKeywordsUrl = () => `${apiUrl()}/keywords`
 export const searchTeamKatalogenUrl = (gcpGroups?: string[]) => {
   const parameters = gcpGroups?.length ? gcpGroups.map(group => `gcpGroups=${encodeURIComponent(group)}`).join('&') : ''
   const query = parameters ? `?${parameters}` : ''

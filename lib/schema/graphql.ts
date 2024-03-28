@@ -1386,11 +1386,6 @@ export type InsightProductQueryVariables = Exact<{
 
 export type InsightProductQuery = { __typename?: 'Query', insightProduct: { __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null } };
 
-export type KeywordsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type KeywordsQuery = { __typename?: 'Query', keywords: Array<{ __typename?: 'Keyword', keyword: string, count: number }> };
-
 export type UpdateKeywordsMutationVariables = Exact<{
   input: UpdateKeywords;
 }>;
@@ -2579,46 +2574,6 @@ export type InsightProductQueryHookResult = ReturnType<typeof useInsightProductQ
 export type InsightProductLazyQueryHookResult = ReturnType<typeof useInsightProductLazyQuery>;
 export type InsightProductSuspenseQueryHookResult = ReturnType<typeof useInsightProductSuspenseQuery>;
 export type InsightProductQueryResult = Apollo.QueryResult<InsightProductQuery, InsightProductQueryVariables>;
-export const KeywordsDocument = gql`
-    query Keywords {
-  keywords {
-    keyword
-    count
-  }
-}
-    `;
-
-/**
- * __useKeywordsQuery__
- *
- * To run a query within a React component, call `useKeywordsQuery` and pass it any options that fit your needs.
- * When your component renders, `useKeywordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useKeywordsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useKeywordsQuery(baseOptions?: Apollo.QueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
-      }
-export function useKeywordsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
-        }
-export function useKeywordsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<KeywordsQuery, KeywordsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<KeywordsQuery, KeywordsQueryVariables>(KeywordsDocument, options);
-        }
-export type KeywordsQueryHookResult = ReturnType<typeof useKeywordsQuery>;
-export type KeywordsLazyQueryHookResult = ReturnType<typeof useKeywordsLazyQuery>;
-export type KeywordsSuspenseQueryHookResult = ReturnType<typeof useKeywordsSuspenseQuery>;
-export type KeywordsQueryResult = Apollo.QueryResult<KeywordsQuery, KeywordsQueryVariables>;
 export const UpdateKeywordsDocument = gql`
     mutation updateKeywords($input: UpdateKeywords!) {
   updateKeywords(input: $input)

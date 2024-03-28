@@ -10,12 +10,11 @@ import { SearchPanel } from '../components/search/searchPanel'
 
 import {
   Exact,
-  KeywordsQuery,
   SearchType,
-  useKeywordsQuery,
 } from '../lib/schema/graphql'
 import { useGetProductAreas } from '../lib/rest/productAreas'
 import { useSearch } from '../lib/rest/search'
+import { useFetchKeywords } from '../lib/rest/keywords'
 
 export interface SearchParam {
   [s: string]: string | string[]
@@ -118,14 +117,14 @@ const buildProductAreaFiltersTree = (
       )
 
 const buildKeywordsFiltersTree = (
-  queryResult: QueryResult<KeywordsQuery, Exact<{ [key: string]: never }>>,
+  keywordsList: any,
   pickedFilters: string[]
 ) => {
-  return queryResult.loading || !queryResult.data
+  return !keywordsList?.keywordItems
     ? ({} as FilterTreeNode)
     : (Object.fromEntries(
         new Map(
-          queryResult.data.keywords.map((it) => [
+          keywordsList.keywordItems.map((it: any) => [
             `${it.keyword} (${it.count})`,
             !!pickedFilters.find((f) => `${it.keyword} (${it.count})` === f),
           ])
@@ -156,7 +155,7 @@ export type FilterType = 'Områder' | 'Nøkkelord'
 
 const Search = () => {
   const {productAreas, loading, error} = useGetProductAreas()
-  const kw = useKeywordsQuery()
+  const kw = useFetchKeywords()
   const [teamNameToID, teamIDToName] = loading || error? [new Map, new Map]: buildTeamIDMaps(productAreas)
 
   const router = useRouter()
