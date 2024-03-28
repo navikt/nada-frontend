@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../lib/apollo'
 import {
-    KeywordsDocument,
     MetabaseProudctsDocument,
 } from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
@@ -136,9 +135,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         await apolloClient.query({
             query: MetabaseProudctsDocument,
-        })
-        await apolloClient.query({
-            query: KeywordsDocument,
         })
 
         return addApolloState(apolloClient, {

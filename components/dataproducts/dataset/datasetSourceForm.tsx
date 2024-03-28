@@ -33,8 +33,7 @@ export const DataproductSourceForm = ({
   register('bigquery.dataset')
   register('bigquery.table')
 
-  const teamProjects = userInfo?.gcpProjects
-    .filter((project: any) => project.group.email == team)
+  const teamProjects = userInfo?.gcpProjects?.filter((project: any) => project.group.email == team)
     .map((group: any) => group.id)
 
   const handleNodeSelect = (e: any, node: string) => {

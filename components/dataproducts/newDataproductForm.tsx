@@ -166,7 +166,7 @@ export const NewDataproductForm = () => {
                 ({ group }: { group: { name: string } }) => (
                   <option
                     value={
-                      userInfo?.groups.filter((g:any) => g.name === group.name)[0]
+                      userInfo?.googleGroups.filter((g:any) => g.Name === group.name)[0]
                         .email
                     }
                     key={group.name}

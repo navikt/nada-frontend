@@ -33,7 +33,7 @@ interface EntryProps {
 const Dataset = ({ datasetID, userInfo, isOwner, dataproduct }: EntryProps) => {
   const [edit, setEdit] = useState(false)
   const {dataset, loading, error} = useGetDataset(datasetID)
-  const accessType = findAccessType(userInfo?.groups, dataset, isOwner)
+  const accessType = findAccessType(userInfo?.googleGroups, dataset, isOwner)
 
   if(loading || !dataset){
     return <LoaderSpinner></LoaderSpinner>

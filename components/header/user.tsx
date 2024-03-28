@@ -10,7 +10,7 @@ export const backendHost = () => {
 
 export default function User() {
   const userData = useContext(UserState)
-  const userOfNada = userData?.googleGroups.find((gr: any) => gr.name === 'nada')
+  const userOfNada = userData?.googleGroups.find((gr: any) => gr.Name === 'nada')
 
   const router = useRouter()
   return userData ? (

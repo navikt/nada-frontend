@@ -4,8 +4,8 @@ import { useContext } from 'react'
 import { ActionMeta, StylesConfig, ThemeConfig } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { UserState } from '../../lib/context'
-import { useKeywordsQuery } from '../../lib/schema/graphql'
 import TagPill from './tagPill'
+import { fetchKeywords, useFetchKeywords } from '../../lib/rest/keywords'
 
 export interface TagsSelectorProps {
   onAdd: (value: string) => void
@@ -59,18 +59,17 @@ const theme: ThemeConfig = (t) => ({
 })
 
 const useBuildTagOptionsList = () => {
-  const { data, error } = useKeywordsQuery()
+  const keywordsList = useFetchKeywords()
+
   const userData = useContext(UserState)
   let tagsMap = new Map(
     userData?.dataproducts
       ?.flatMap((it: any) => it.keywords)
       .map((it: any) => [it, 100000])
   )
-  if (!error) {
-    data?.keywords.forEach((it: any) =>
+    keywordsList?.keywordItems.forEach((it: any) =>
       tagsMap.set(it.keyword, it.count + (tagsMap.get(it.keyword) || 0))
     )
-  }
   return Array.from(tagsMap.entries())
     .sort((l: any, r: any) => r[1] - l[1])
     .map((it) => it[0])

@@ -22,13 +22,13 @@ import InnerContainer from '../../../components/lib/innerContainer'
 import LoaderSpinner from '../../../components/lib/spinner'
 import TagPill from '../../../components/lib/tagPill'
 import {
-  useKeywordsQuery,
   useUpdateKeywordsMutation,
 } from '../../../lib/schema/graphql'
 import { useFetchUserData } from '../../../lib/rest/userData'
+import { useFetchKeywords } from '../../../lib/rest/keywords'
 
 const TagsCleaner = () => {
-  const kw = useKeywordsQuery()
+  const kw = useFetchKeywords()
   const [tagsInUse, setTagsInUse] = useState([] as string[])
   const [tagsObsolete, setTagsObsolete] = useState([] as string[])
   const [checkStatement1, setCheckStatement1] = useState(false)
@@ -51,15 +51,15 @@ const TagsCleaner = () => {
     return <InnerContainer>Failed to fetch user information</InnerContainer>
   }
 
-  const notMemberOfNada = !userData.data.userInfo.groups.find(
-    (g: any) => g.name === 'nada'
+  const notMemberOfNada = !userData.data.googleGroups.find(
+    (g: any) => g.Name === 'nada'
   )
   if (notMemberOfNada) {
     return <InnerContainer>Permission denied</InnerContainer>
   }
 
-  if (!tagsInUse.length && !tagsObsolete.length && !kw.loading && !!kw.data) {
-    setTagsInUse(kw.data.keywords.map((it) => it.keyword))
+  if (!tagsInUse.length && !tagsObsolete.length && kw?.keywordItems) {
+    setTagsInUse(kw.keywordItems.map((it:any) => it.keyword))
   }
 
   const ToggleTag = (tag: string) => {
@@ -181,8 +181,7 @@ const TagsCleaner = () => {
         <Heading className="mt-2" spacing level="1" size="medium">
           Tags Cleanup
         </Heading>
-        {kw.loading && <LoaderSpinner></LoaderSpinner>}
-        {!kw.loading && !!kw.data && (
+        {!!kw?.keywordItems && (
           <div>
             <Alert variant="info">
               Click tags below to move them between left and right panel.

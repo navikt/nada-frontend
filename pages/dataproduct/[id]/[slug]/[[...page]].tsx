@@ -36,10 +36,10 @@ const Dataproduct = () => {
   const userInfo = useContext(UserState)
 
   const isOwner =
-    userInfo?.groups === undefined
+    !userInfo?.googleGroups
       ? false
-      : userInfo.groups.some(
-        (g: Group) => g.email === dataproduct?.owner.group
+      : userInfo.googleGroups.some(
+        (g: any) => g.Email === dataproduct?.owner.group
       )
   
   useEffect(() => {
