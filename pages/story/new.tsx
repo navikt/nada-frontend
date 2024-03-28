@@ -8,11 +8,11 @@ import { useFetchUserData } from '../../lib/rest/userData'
 const NewStory = () => {
   const userData = useFetchUserData()
 
-  if(!userData || userData.loading){
+  if(!userData?.data || userData?.loading){
     return <LoaderSpinner />
   }
 
-  if (!userData.data?.userInfo)
+  if (!userData?.data)
     return (
       <div>
         <h1>Du må være logget inn!</h1>
