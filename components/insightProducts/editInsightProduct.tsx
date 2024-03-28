@@ -17,9 +17,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import { UserState } from "../../lib/context";
-import { UPDATE_INSIGHT_PRODUCT_METADATA } from '../../lib/queries/insightProducts/editInsightProduct'
 import { useUpdateInsightProductMetadataMutation } from '../../lib/schema/graphql'
-import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 
 const schema = yup.object().shape({
     name: yup.string().nullable().required('Skriv inn navnet på innsiktsproduktet'),
@@ -109,10 +107,6 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
                 teamID: teamID,
                 group: data.group,
             },
-            refetchQueries: [
-                {
-                    query: USER_INFO,
-                }]
         }
 
         updateInsightProductQuery(editInsightProductData).then(() => {
@@ -164,7 +158,7 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
                     control={control}
                 />
                 <TeamkatalogenSelector
-                    gcpGroups={userInfo?.gcpProjects.map(it => it.group.email)}
+                    gcpGroups={userInfo?.gcpProjects.map((it: any) => it.group.email)}
                     register={register}
                     watch={watch}
                     errors={errors}

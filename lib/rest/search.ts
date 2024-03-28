@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { searchUrl } from "./restApi"
+import { fetchTemplate, searchUrl } from "./restApi"
 
 export interface SearchOptions {
     // Freetext search
@@ -25,13 +25,7 @@ export interface SearchResult{
 
 const search = async (o: SearchOptions)=>{
     const url = searchUrl(o);
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 export const useSearch = (o: SearchOptions)=>{

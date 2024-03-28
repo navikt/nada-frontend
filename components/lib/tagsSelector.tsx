@@ -60,38 +60,38 @@ const theme: ThemeConfig = (t) => ({
 
 const useBuildTagOptionsList = () => {
   const { data, error } = useKeywordsQuery()
-  const userInfo = useContext(UserState)
+  const userData = useContext(UserState)
   let tagsMap = new Map(
-    userInfo?.dataproducts
-      ?.flatMap((it) => it.keywords)
-      .map((it) => [it, 100000])
+    userData?.dataproducts
+      ?.flatMap((it: any) => it.keywords)
+      .map((it: any) => [it, 100000])
   )
   if (!error) {
-    data?.keywords.forEach((it) =>
+    data?.keywords.forEach((it: any) =>
       tagsMap.set(it.keyword, it.count + (tagsMap.get(it.keyword) || 0))
     )
   }
   return Array.from(tagsMap.entries())
-    .sort((l, r) => r[1] - l[1])
+    .sort((l: any, r: any) => r[1] - l[1])
     .map((it) => it[0])
 }
 
 export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
-  const userInfo = useContext(UserState)
-  const teamNames = userInfo?.allGoogleGroups?.map(
-    (it) => it.name.split('@')[0]
+  const userData = useContext(UserState)
+  const teamNames = userData?.allGoogleGroups?.map(
+    (it: any) => it.Name
   )
 
   const tagsLikeTeamName = tags.filter((it) =>
-    teamNames?.find((tn) => tn.toLocaleLowerCase() === it.toLocaleLowerCase())
+    teamNames?.find((tn: any) => tn.toLocaleLowerCase() === it.toLocaleLowerCase())
   )
   const addNewTag = (text: string) => {
     //if there is a similar tag in the list, use it as the text
     const newTag = (
       tagOptions.find(
-        (t) => t.toLocaleLowerCase() === text.toLocaleLowerCase()
-      ) ?? text
+        (t: any) => t.toLocaleLowerCase() === text.toLocaleLowerCase()
+      ) as string ?? text
     ).trim()
     onAdd(newTag)
   }
@@ -160,8 +160,8 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
       <CreatableSelect
         isMulti
         options={tagOptions.map((it) => ({
-          value: it,
-          label: it,
+          value: it as string,
+          label: it as string,
         }))}
         styles={styles}
         theme={theme}

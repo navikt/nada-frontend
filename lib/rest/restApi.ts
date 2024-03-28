@@ -13,11 +13,20 @@ export const getDataproductUrl = (id: string) => `${apiUrl()}/dataproducts/${id}
 export const getDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
+export const fetchUserDataUrl = () => `${apiUrl()}/userData`
 export const searchTeamKatalogenUrl = (gcpGroups?: string[]) => {
   const parameters = gcpGroups?.length ? gcpGroups.map(group => `gcpGroups=${encodeURIComponent(group)}`).join('&') : ''
   const query = parameters ? `?${parameters}` : ''
   return `${apiUrl()}/teamkatalogen${query}`
 }
+
+export const fetchTemplate = (url: string) => fetch(url, {
+  method: 'GET',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 export const searchUrl = (options: SearchOptions) => {
   let queryParams: string[] = [];

@@ -1,26 +1,14 @@
 import { useEffect, useState } from "react";
-import { getDataproductUrl, getDatasetUrl } from "./restApi";
+import { fetchTemplate, getDataproductUrl, getDatasetUrl } from "./restApi";
 
 const getDataproduct = async (id: string) => {
     const url = getDataproductUrl(id);
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 const getDataset = async (id: string) => {
     const url = getDatasetUrl(id);
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 export const useGetDataproduct = (id: string, activeDataSetID?: string)=>{

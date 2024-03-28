@@ -9,7 +9,6 @@ import humanizeDate from '../../lib/humanizeDate'
 import DeleteModal from '../lib/deleteModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { USER_INFO } from '../../lib/queries/userInfo/userInfo'
 import TagPill from '../lib/tagPill'
 
 export interface SearchResultProps {
@@ -72,11 +71,6 @@ export const SearchResultLink = ({
       variables:{
         id: id
       },
-      refetchQueries:[
-        {
-          query: USER_INFO,
-        }
-      ]
     })
   }
 

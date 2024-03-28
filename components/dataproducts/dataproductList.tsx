@@ -22,7 +22,7 @@ interface DataproductsListProps {
 const groupDatasetsByDataproduct = (datasets: any[]) => {
     let dataproducts = new Map<string, Dataset[]>()
 
-    datasets.forEach((dataset) => {
+    datasets?.forEach((dataset) => {
         dataproducts.set(dataset.dataproductID, dataproducts.get(dataset.dataproductID) || [])
         dataproducts.get(dataset.dataproductID)?.push(dataset)
     })
@@ -51,7 +51,7 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
                             </ExpansionCard.Header>
                             <ExpansionCard.Content className="text-center">
                                 <>
-                                    {datasets.map((dataset) => {
+                                    {datasets?.map((dataset) => {
                                         return <SearchResultLink
                                             key={dataset.id}
                                             group={dataset.owner}

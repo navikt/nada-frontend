@@ -36,7 +36,7 @@ export const NewStoryForm = () => {
   const router = useRouter();
   const [productAreaID, setProductAreaID] = useState<string>('');
   const [teamID, setTeamID] = useState<string>('');
-  const userInfo = useContext(UserState);
+  const userData = useContext(UserState);
   const [inputKey, setInputKey] = useState(0);
   const [storyFiles, setStoryFiles] = useState<File[]>([]);
   const singleFileInputRef = useRef(null);
@@ -230,6 +230,9 @@ export const NewStoryForm = () => {
     });
   };
 
+  const gcpProjects = userData?.gcpProjects as any[] || []
+  console.log(gcpProjects)
+
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
@@ -261,11 +264,11 @@ export const NewStoryForm = () => {
           <option value="">Velg gruppe</option>
           {[
             ...new Set(
-              userInfo?.gcpProjects.map(
+              gcpProjects.map(
                 ({ group }: { group: { name: string } }) => (
                   <option
                     value={
-                      userInfo?.groups.filter((g) => g.name === group.name)[0]
+                      userData?.groups.filter((g: any) => g.name === group.name)[0]
                         .email
                     }
                     key={group.name}
@@ -278,7 +281,7 @@ export const NewStoryForm = () => {
           ]}
         </Select>
         <TeamkatalogenSelector
-          gcpGroups={userInfo?.gcpProjects.map(it => it.group.email)}
+          gcpGroups={gcpProjects.map((it: any) => it.group.email)}
           register={register}
           watch={watch}
           errors={errors}

@@ -12,24 +12,16 @@ import { useApollo } from '../lib/apollo'
 import React from 'react'
 import { UserState } from '../lib/context'
 import PageLayout from '../components/pageLayout'
-import { useUserInfoDetailsQuery } from '../lib/schema/graphql'
-import { isBefore, parseISO } from 'date-fns'
+import { useFetchUserData } from '../lib/rest/userData'
 
 const MyApp = ({ Component, pageProps }: AppInitialProps & AppContext) => {
   const apolloClient = useApollo(pageProps)
 
-  const { data, error } = useUserInfoDetailsQuery({
-    client: apolloClient,
-  })
-
-  if (data && isBefore(parseISO(data.userInfo.loginExpiration), Date.now())) {
-    apolloClient.cache.evict({ fieldName: 'userInfo' })
-    apolloClient.cache.gc()
-  }
+  const userData = useFetchUserData()
 
   return (
     <ApolloProvider client={apolloClient}>
-      <UserState.Provider value={!error ? data?.userInfo : undefined}>
+      <UserState.Provider value={!userData.error ? userData.data : undefined}>
         <Head>
           <link
             rel="apple-touch-icon"

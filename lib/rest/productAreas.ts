@@ -1,26 +1,14 @@
 import { useEffect, useState } from "react";
-import { getProductAreaUrl, getProductAreasUrl } from "./restApi";
+import { fetchTemplate, getProductAreaUrl, getProductAreasUrl } from "./restApi";
 
 const getProductAreas = async () => {
     const url = getProductAreasUrl();
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 const getProductArea = async (id: string) => {
     const url = getProductAreaUrl(id)
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
-    return fetch(url, options)
+    return fetchTemplate(url)
 }
 
 const enrichProductArea = (productArea: any) => {
@@ -66,15 +54,18 @@ const enrichProductAreaWithAssets = (productArea: any) => {
 export const useGetProductArea = (id: string) => {
     const [productArea, setProductArea] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<any>(undefined);
     useEffect(() => {
         getProductArea(id).then((res) => res.json())
             .then((productAreaDto) => {
-            setError(null);
+            setError(undefined);
             setProductArea(enrichProductAreaWithAssets(productAreaDto));
         })
             .catch((err) => {
-            setError(err);
+            setError({
+                message: `Failed to fetch product area, please check the product area ID: ${err.message}`,
+                status: err.status
+            });
             setProductArea(null);
         }).finally(() => {
             setLoading(false);

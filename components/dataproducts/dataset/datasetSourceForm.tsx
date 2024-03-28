@@ -34,8 +34,8 @@ export const DataproductSourceForm = ({
   register('bigquery.table')
 
   const teamProjects = userInfo?.gcpProjects
-    .filter((project) => project.group.email == team)
-    .map((group) => group.id)
+    .filter((project: any) => project.group.email == team)
+    .map((group: any) => group.id)
 
   const handleNodeSelect = (e: any, node: string) => {
     const [projectID, datasetID, tableID] = node.split('/')
@@ -59,7 +59,7 @@ export const DataproductSourceForm = ({
             onNodeSelect={handleNodeSelect}
             onNodeToggle={(x, n) => setActivePaths(n)}
           >
-            {teamProjects?.map((projectID) => (
+            {teamProjects?.map((projectID: any) => (
             <Project
             key={projectID}
             projectID={projectID}
