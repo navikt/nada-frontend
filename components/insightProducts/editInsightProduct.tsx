@@ -158,7 +158,7 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
                     control={control}
                 />
                 <TeamkatalogenSelector
-                    gcpGroups={userInfo?.gcpProjects.map((it: any) => it.group.email)}
+                    gcpGroups={userInfo?.gcpProjects.map((it: any) => it.group.Email)}
                     register={register}
                     watch={watch}
                     errors={errors}

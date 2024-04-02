@@ -74,6 +74,8 @@ export const NewDataproductForm = () => {
 
   const submitForm = async () => {
     try {
+      console.log(team)
+
       await createDataproduct({
         variables: {
           input: {
@@ -130,7 +132,6 @@ export const NewDataproductForm = () => {
   }
 
   const gcpProjects = userInfo?.gcpProjects as any[] || []
-
   return (
     <div className="mt-8 md:w-[46rem]">
       <Heading level="1" size="large">
@@ -167,7 +168,7 @@ export const NewDataproductForm = () => {
                   <option
                     value={
                       userInfo?.googleGroups.filter((g:any) => g.Name === group.name)[0]
-                        .email
+                        .Email
                     }
                     key={group.name}
                   >

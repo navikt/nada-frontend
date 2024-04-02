@@ -210,7 +210,7 @@ export const NewInsightProductForm = () => {
                                     <option
                                         value={
                                             userData?.googleGroups.filter((g: any) => g.Name === group.name)[0]
-                                                .email
+                                                .Email
                                         }
                                         key={group.name}
                                     >
