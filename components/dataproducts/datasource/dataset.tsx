@@ -10,11 +10,11 @@ import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 import Tabell from '../../lib/icons/tabell'
 
-// const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
-//   materialized_view: Tabell,
-//   table: Tabell,
-//   view: Tabell,
-// }
+const DataproductTableIconMap: Record<BigQueryType, () => JSX.Element> = {
+  materialized_view: Tabell,
+  table: Tabell,
+  view: Tabell,
+}
 
 export interface DataproductSourceDatasetProps {
   active: boolean
@@ -52,7 +52,7 @@ export const Dataset = ({
     contents?.map(({ name, type }) => (
       <TreeItem
         className="MuiTreeView-leaf"
-        slots={{ endIcon: Tabell}}
+        slots={{ endIcon: DataproductTableIconMap[type]}}
         itemId={`${projectID}/${datasetID}/${name}`}
         key={`${projectID}/${datasetID}/${name}`}
         label={name}
