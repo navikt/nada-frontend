@@ -22,24 +22,23 @@ export const Project = ({
 
   const emptyPlaceholder = (
     <TreeItem
-      nodeId={`${projectID}/emptyPlaceholder`}
+      itemId={`${projectID}/emptyPlaceholder`}
       label={'ingen datasett i prosjekt'}
     />
   )
 
   const loadingPlaceholder = (
     <TreeItem
-      endIcon={<Loader />}
-      nodeId={`${projectID}/loadingPlaceholder`}
+      slots={{ endIcon: Loader}}
+      itemId={`${projectID}/loadingPlaceholder`}
       label={'laster...'}
     />
   )
 
   return (
     <TreeItem
-      collapseIcon={<ExpandFilled />}
-      expandIcon={<NextFilled />}
-      nodeId={projectID}
+      slots={{ collapseIcon: ExpandFilled, expandIcon: NextFilled}}
+      itemId={projectID}
       label={projectID}
     >
       {loading

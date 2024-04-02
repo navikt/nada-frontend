@@ -10,11 +10,11 @@ import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 import Tabell from '../../lib/icons/tabell'
 
-const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
-  materialized_view: <Tabell />,
-  table: <Tabell />,
-  view: <Tabell />,
-}
+// const DataproductTableIconMap: Record<BigQueryType, JSX.Element> = {
+//   materialized_view: Tabell,
+//   table: Tabell,
+//   view: Tabell,
+// }
 
 export interface DataproductSourceDatasetProps {
   active: boolean
@@ -35,15 +35,15 @@ export const Dataset = ({
 
   const loadingPlaceholder = (
     <TreeItem
-      endIcon={<Loader />}
-      nodeId={`${projectID}/${datasetID}/loadingPlaceholder`}
+      slots={{ endIcon: Loader}}
+      itemId={`${projectID}/${datasetID}/loadingPlaceholder`}
       label={'laster...'}
     />
   )
 
   const emptyPlaceholder = (
     <TreeItem
-      nodeId={`${projectID}/${datasetID}/emptyPlaceholder`}
+      itemId={`${projectID}/${datasetID}/emptyPlaceholder`}
       label={'ingenting her'}
     />
   )
@@ -52,8 +52,8 @@ export const Dataset = ({
     contents?.map(({ name, type }) => (
       <TreeItem
         className="MuiTreeView-leaf"
-        endIcon={DataproductTableIconMap[type]}
-        nodeId={`${projectID}/${datasetID}/${name}`}
+        slots={{ endIcon: Tabell}}
+        itemId={`${projectID}/${datasetID}/${name}`}
         key={`${projectID}/${datasetID}/${name}`}
         label={name}
       />
@@ -61,9 +61,8 @@ export const Dataset = ({
 
   return (
     <TreeItem
-      collapseIcon={<ExpandFilled />}
-      expandIcon={<NextFilled />}
-      nodeId={`${projectID}/${datasetID}`}
+      slots={{ collapseIcon: ExpandFilled, expandIcon: NextFilled}}
+      itemId={`${projectID}/${datasetID}`}
       label={datasetID}
     >
       {loading

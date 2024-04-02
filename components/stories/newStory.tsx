@@ -13,7 +13,7 @@ import TagsSelector from '../lib/tagsSelector';
 import { UserState } from '../../lib/context';
 import { CREATE_STORY } from '../../lib/queries/story/createStory';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
-import { TreeView } from '@mui/x-tree-view/TreeView';
+import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { UploadFile } from '../../lib/schema/graphql';
 
@@ -211,7 +211,7 @@ export const NewStoryForm = () => {
       return (
         <TreeItem
           key={nodeName}
-          nodeId={nodeName + index}
+          itemId={nodeName + index}
           label={
             <div className="flex flex-row items-center gap-2">
               {isFile ? (
@@ -231,7 +231,6 @@ export const NewStoryForm = () => {
   };
 
   const gcpProjects = userData?.gcpProjects as any[] || []
-  console.log(gcpProjects)
 
   return (
     <div className="mt-8 md:w-[46rem]">
@@ -313,9 +312,9 @@ export const NewStoryForm = () => {
         <input key={inputKey * 2} ref={folderFileInputRef} type="file" className="hidden" webkitdirectory="" directory="" onChange={handleFileUpload} multiple />
         <input key={inputKey * 2 + 1} ref={singleFileInputRef} type="file" className="hidden" onChange={handleFileUpload} multiple />
         {storyFiles.length > 0 && (
-          <TreeView>
+          <SimpleTreeView>
             {renderTree(generateFileTree(storyFiles))}
-          </TreeView>
+          </SimpleTreeView>
         )}
         {backendError && <ErrorMessage error={backendError} />}
         <div className="flex flex-row gap-4 mb-16">

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { TreeView } from '@mui/x-tree-view/TreeView';
+import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import {
   FieldErrors,
   FieldValues,
@@ -36,7 +36,13 @@ export const DataproductSourceForm = ({
   const teamProjects = userInfo?.gcpProjects?.filter((project: any) => project.group.email == team)
     .map((group: any) => group.id)
 
-  const handleNodeSelect = (e: any, node: string) => {
+  const handleNodeSelect = (e: any, node: string | null) => {
+    if (node === null) {
+      setValue('bigquery.projectID', undefined)
+      setValue('bigquery.dataset', undefined)
+      setValue('bigquery.table', undefined)
+      return
+    }
     const [projectID, datasetID, tableID] = node.split('/')
     if (projectID && datasetID && tableID) {
       setValue('bigquery.projectID', projectID)
@@ -53,10 +59,10 @@ export const DataproductSourceForm = ({
     <div className="flex flex-col justify-start gap-2">
       <Label>{label}</Label>
       {team ? (
-        <div>
-          <TreeView
-            onNodeSelect={handleNodeSelect}
-            onNodeToggle={(x, n) => setActivePaths(n)}
+        <div className="border-2 p-1">
+          <SimpleTreeView
+            onSelectedItemsChange={handleNodeSelect}
+            onExpandedItemsChange={(x, n) => setActivePaths(n)}
           >
             {teamProjects?.map((projectID: any) => (
             <Project
@@ -65,7 +71,7 @@ export const DataproductSourceForm = ({
             activePaths={activePaths}
             />
             ))}
-          </TreeView>
+          </SimpleTreeView>
           {errors.bigquery && (
             <div className="flex gap-2 navds-error-message navds-label before:content-['•']">
               Velg en tabell eller et view
