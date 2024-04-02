@@ -74,8 +74,6 @@ export const NewDataproductForm = () => {
 
   const submitForm = async () => {
     try {
-      console.log(team)
-
       await createDataproduct({
         variables: {
           input: {
