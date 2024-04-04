@@ -39,7 +39,7 @@ const Dataproduct = () => {
     !userInfo?.googleGroups
       ? false
       : userInfo.googleGroups.some(
-        (g: any) => g.Email === dataproduct?.owner.group
+        (g: any) => g.email === dataproduct?.owner.group
       )
   
   useEffect(() => {

@@ -268,7 +268,7 @@ export const NewStoryForm = () => {
                   <option
                     value={
                       userData?.googleGroups.filter((g: any) => g.Name === group.name)[0]
-                        .Email
+                        .email
                     }
                     key={group.name}
                   >
