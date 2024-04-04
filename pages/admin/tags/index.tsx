@@ -52,7 +52,7 @@ const TagsCleaner = () => {
   }
 
   const notMemberOfNada = !userData.data.googleGroups.find(
-    (g: any) => g.Name === 'nada'
+    (g: any) => g.name === 'nada'
   )
   if (notMemberOfNada) {
     return <InnerContainer>Permission denied</InnerContainer>

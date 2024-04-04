@@ -79,7 +79,7 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
   let tagOptions = useBuildTagOptionsList()
   const userData = useContext(UserState)
   const teamNames = userData?.allGoogleGroups?.map(
-    (it: any) => it.Name
+    (it: any) => it.name
   )
 
   const tagsLikeTeamName = tags.filter((it) =>
