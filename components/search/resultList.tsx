@@ -22,7 +22,10 @@ type ResultListInterface = {
     name: string
     keywords: string[]
     slug: string
-    owner: { __typename?: 'Owner' | undefined; group: string }
+    owner: { 
+      __typename?: 'Owner' | undefined; 
+      group: string;
+      teamkatalogenURL?: string;}
   }[]
   stories?: {
     __typename?: 'Story'
@@ -67,17 +70,17 @@ const ResultList = ({
 
   const isDataProduct = (item: any) => !!item.datasets
 
-  const getTeamKatalogenInfo = (item: any) => {
+  const getTeamKatalogenInfo = (teamkatalogenURL: any) => {
     const getTeamID = (url: string)  => {
       var urlComponents = url?.split("/")
       return urlComponents?.[urlComponents.length - 1]
     }
-    const tk = teamkatalogen?.find((it) => getTeamID(it.url) == getTeamID(item?.owner?.teamkatalogenURL))
+    const tk = teamkatalogen?.find((it) => getTeamID(it.url) == getTeamID(teamkatalogenURL))
     const po = productAreas?.find((it) => it.id == tk?.productAreaID)
 
     return {
       productArea: po?.name,
-      teamkatalogenTeam: tk?.name || item.group?.group
+      teamkatalogenTeam: tk?.name
     }
   }
 
@@ -129,7 +132,7 @@ const ResultList = ({
                       group: it.result.group,
                       teamkatalogenURL: it.result.teamkatalogenURL,
                     }}
-                    {...getTeamKatalogenInfo(it.result)}
+                    {...getTeamKatalogenInfo(it.result.teamkatalogenURL)}
                   />
                 )
               )
@@ -148,7 +151,7 @@ const ResultList = ({
                     description={d.result.description}
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                     datasets={d.result.datasets}
-                    {...getTeamKatalogenInfo(d.result)}
+                    {...getTeamKatalogenInfo(d.result.group.teamkatalogenURL)}
                   />
                 )
             )}
@@ -168,7 +171,7 @@ const ResultList = ({
             name={d.name}
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
-            {...getTeamKatalogenInfo(d)}
+            {...getTeamKatalogenInfo(d.owner.teamkatalogenURL)}
           />
         ))}
       </Results>
@@ -190,7 +193,7 @@ const ResultList = ({
               name={s.name}
               resourceType={"datafortelling"}
               link={`/story/${s.id}`}
-              {...getTeamKatalogenInfo(s)}
+              {...getTeamKatalogenInfo(s.teamkatalogenURL)}
               keywords={s.keywords}
               editable={true}
               description={s.description}
@@ -217,7 +220,7 @@ const ResultList = ({
               id={p.id}
               name={p.name}
               link={p.link}
-              {...getTeamKatalogenInfo(p)}
+              {...getTeamKatalogenInfo(p.teamkatalogenURL)}
               description={p.description}
               innsiktsproduktType={p.type}
               editable={!!userInfo?.googleGroups?.find((it: any) => it.email == p.group)}
