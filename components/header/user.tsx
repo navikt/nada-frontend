@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { UserState } from '../../lib/context'
 import { Dropdown, Header } from '@navikt/ds-react-internal'
 import { Hamburger, People } from '@navikt/ds-icons'
+import { Button } from '@navikt/ds-react'
 
 export const backendHost = () => {
   return process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
@@ -127,13 +128,10 @@ export default function User() {
           className="whitespace-nowrap hidden md:block text-base"
           as={Dropdown.Toggle}
         >
-          {userData.name}
-        </Header.Button>
-        <Header.Button
-          className="md:hidden w-[48px] flex justify-center"
-          as={Dropdown.Toggle}
-        >
-          <People className="h-[21px] w-[21px]" />
+          <div className='flex flex-row'>
+            <People className="h-[21px] w-[21px]" />
+            {userData.name}
+          </div>
         </Header.Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
