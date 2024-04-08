@@ -118,7 +118,7 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   return (
     <>
       {error && <Alert variant={'error'}>{error}</Alert>}
-      {pendingAccessRequests.length > 0 &&
+      {pendingAccessRequests?.length &&
       <div className="flex flex-col gap-5 mb-4">
         <Heading size="small" level="2">
           Ubehandlede tilgangssøknader
@@ -139,7 +139,7 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
         ))}
       </div>
       }
-      {deniedAccessRequests.length > 0 &&
+      {deniedAccessRequests?.length &&
       <div className="flex flex-col gap-5 mb-4">
         <Heading size="small" level="2">
           Avslåtte tilgangssøknader
