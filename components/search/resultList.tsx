@@ -130,9 +130,9 @@ const ResultList = ({
                     link={`/story/${it.result.id}`}
                     group={{
                       group: it.result.group,
-                      teamkatalogenURL: it.result.teamkatalogenURL,
+                      teamkatalogenURL: it.result?.teamkatalogenURL,
                     }}
-                    {...getTeamKatalogenInfo(it.result.teamkatalogenURL)}
+                    {...getTeamKatalogenInfo(it.result?.teamkatalogenURL)}
                   />
                 )
               )
@@ -151,7 +151,7 @@ const ResultList = ({
                     description={d.result.description}
                     link={`/dataproduct/${d.result.id}/${d.result.slug}`}
                     datasets={d.result.datasets}
-                    {...getTeamKatalogenInfo(d.result.group.teamkatalogenURL)}
+                    {...getTeamKatalogenInfo(d.result.owner?.teamkatalogenURL)}
                   />
                 )
             )}
@@ -171,7 +171,7 @@ const ResultList = ({
             name={d.name}
             keywords={d.keywords}
             link={`/dataproduct/${d.id}/${d.slug}`}
-            {...getTeamKatalogenInfo(d.owner.teamkatalogenURL)}
+            {...getTeamKatalogenInfo(d.owner?.teamkatalogenURL)}
           />
         ))}
       </Results>
