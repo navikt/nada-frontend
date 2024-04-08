@@ -126,7 +126,7 @@ const ResultList = ({
                     description={it.excerpt}
                     link={`/story/${it.result.id}`}
                     group={{
-                      group: it.result.groupName,
+                      group: it.result.group,
                       teamkatalogenURL: it.result.teamkatalogenURL,
                     }}
                     {...getTeamKatalogenInfo(it.result)}
