@@ -1194,20 +1194,6 @@ export type RevokeAccessMutationVariables = Exact<{
 
 export type RevokeAccessMutation = { __typename?: 'Mutation', revokeAccessToDataset: boolean };
 
-export type AccessRequestQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type AccessRequestQuery = { __typename?: 'Query', accessRequest: { __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } };
-
-export type AccessRequestsForDatasetQueryVariables = Exact<{
-  datasetID: Scalars['ID']['input'];
-}>;
-
-
-export type AccessRequestsForDatasetQuery = { __typename?: 'Query', accessRequestsForDataset: Array<{ __typename?: 'AccessRequest', id: string, subject: string, subjectType: SubjectType, owner: string, created: any, expires?: any | null, polly?: { __typename?: 'Polly', name: string, externalID: string, url: string } | null }> };
-
 export type ApproveAccessRequestMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1532,112 +1518,6 @@ export function useRevokeAccessMutation(baseOptions?: Apollo.MutationHookOptions
 export type RevokeAccessMutationHookResult = ReturnType<typeof useRevokeAccessMutation>;
 export type RevokeAccessMutationResult = Apollo.MutationResult<RevokeAccessMutation>;
 export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<RevokeAccessMutation, RevokeAccessMutationVariables>;
-export const AccessRequestDocument = gql`
-    query accessRequest($id: ID!) {
-  accessRequest(id: $id) {
-    id
-    datasetID
-    subject
-    subjectType
-    granter
-    status
-    created
-    expires
-    owner
-    polly {
-      id
-      name
-      externalID
-      url
-    }
-    reason
-  }
-}
-    `;
-
-/**
- * __useAccessRequestQuery__
- *
- * To run a query within a React component, call `useAccessRequestQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAccessRequestQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useAccessRequestQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables> & ({ variables: AccessRequestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
-      }
-export function useAccessRequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
-        }
-export function useAccessRequestSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
-        }
-export type AccessRequestQueryHookResult = ReturnType<typeof useAccessRequestQuery>;
-export type AccessRequestLazyQueryHookResult = ReturnType<typeof useAccessRequestLazyQuery>;
-export type AccessRequestSuspenseQueryHookResult = ReturnType<typeof useAccessRequestSuspenseQuery>;
-export type AccessRequestQueryResult = Apollo.QueryResult<AccessRequestQuery, AccessRequestQueryVariables>;
-export const AccessRequestsForDatasetDocument = gql`
-    query accessRequestsForDataset($datasetID: ID!) {
-  accessRequestsForDataset(datasetID: $datasetID) {
-    id
-    subject
-    subjectType
-    owner
-    created
-    expires
-    owner
-    polly {
-      name
-      externalID
-      url
-    }
-  }
-}
-    `;
-
-/**
- * __useAccessRequestsForDatasetQuery__
- *
- * To run a query within a React component, call `useAccessRequestsForDatasetQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessRequestsForDatasetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAccessRequestsForDatasetQuery({
- *   variables: {
- *      datasetID: // value for 'datasetID'
- *   },
- * });
- */
-export function useAccessRequestsForDatasetQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables> & ({ variables: AccessRequestsForDatasetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
-      }
-export function useAccessRequestsForDatasetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
-        }
-export function useAccessRequestsForDatasetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
-        }
-export type AccessRequestsForDatasetQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetQuery>;
-export type AccessRequestsForDatasetLazyQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetLazyQuery>;
-export type AccessRequestsForDatasetSuspenseQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetSuspenseQuery>;
-export type AccessRequestsForDatasetQueryResult = Apollo.QueryResult<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>;
 export const ApproveAccessRequestDocument = gql`
     mutation approveAccessRequest($id: ID!) {
   approveAccessRequest(id: $id)
