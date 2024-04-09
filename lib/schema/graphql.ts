@@ -1180,13 +1180,6 @@ export type UserInfo = {
   stories: Array<Story>;
 };
 
-export type DatasetAccessQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DatasetAccessQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, name: string, pii: PiiLevel, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null }> } };
-
 export type GrantAccessMutationVariables = Exact<{
   input: NewGrant;
 }>;
@@ -1475,61 +1468,6 @@ export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]:
 export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
 
 
-export const DatasetAccessDocument = gql`
-    query DatasetAccess($id: ID!) {
-  dataset(id: $id) {
-    id
-    name
-    pii
-    owner {
-      group
-      teamkatalogenURL
-    }
-    access {
-      id
-      subject
-      granter
-      expires
-      created
-      revoked
-      accessRequestID
-    }
-  }
-}
-    `;
-
-/**
- * __useDatasetAccessQuery__
- *
- * To run a query within a React component, call `useDatasetAccessQuery` and pass it any options that fit your needs.
- * When your component renders, `useDatasetAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDatasetAccessQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDatasetAccessQuery(baseOptions: Apollo.QueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables> & ({ variables: DatasetAccessQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
-      }
-export function useDatasetAccessLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
-        }
-export function useDatasetAccessSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
-        }
-export type DatasetAccessQueryHookResult = ReturnType<typeof useDatasetAccessQuery>;
-export type DatasetAccessLazyQueryHookResult = ReturnType<typeof useDatasetAccessLazyQuery>;
-export type DatasetAccessSuspenseQueryHookResult = ReturnType<typeof useDatasetAccessSuspenseQuery>;
-export type DatasetAccessQueryResult = Apollo.QueryResult<DatasetAccessQuery, DatasetAccessQueryVariables>;
 export const GrantAccessDocument = gql`
     mutation GrantAccess($input: NewGrant!) {
   grantAccessToDataset(input: $input) {
