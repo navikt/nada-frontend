@@ -18,7 +18,7 @@ export const fetchKeywordsUrl = () => `${apiUrl()}/keywords`
 export const fetchAccessRequestUrl = (datasetId: string) => `${apiUrl()}/accessRequests?datasetId=${datasetId}`
 export const fetchBQDatasetsUrl = (projectId: string) => `${apiUrl()}/bigquery/datasets?projectId=${projectId}`
 export const fetchBQTablesUrl = (projectId: string, datasetId: string) => `${apiUrl()}/bigquery/tables?projectId=${projectId}&datasetId=${datasetId}`
-export const fetchBQColumnsUrl = (projectId: string, datasetId: string, tableId: string) => `${apiUrl()}/bigquery/tables?projectId=${projectId}&datasetId=${datasetId}&tableId=${tableId}`
+export const fetchBQColumnsUrl = (projectId: string, datasetId: string, tableId: string) => `${apiUrl()}/bigquery/columns?projectId=${projectId}&datasetId=${datasetId}&tableId=${tableId}`
 export const searchTeamKatalogenUrl = (gcpGroups?: string[]) => {
   const parameters = gcpGroups?.length ? gcpGroups.map(group => `gcpGroups=${encodeURIComponent(group)}`).join('&') : ''
   const query = parameters ? `?${parameters}` : ''

@@ -52,6 +52,7 @@ export const useColumnTags = (
   const [pseudoColumnsMap, setPseudoColumnsMap] = useState<PseudoColumnsMapType>(
     new Map<string, Map<string, boolean>>()
   )
+
   const fetchColumns = useFetchBQcolumns(projectID, datasetID, tableID)
 
   var tableKey = buildTableKey(projectID, datasetID, tableID)
