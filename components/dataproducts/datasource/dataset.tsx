@@ -1,7 +1,5 @@
 import {
   BigQueryType,
-  GcpGetTablesQuery,
-  useGcpGetTablesLazyQuery,
 } from '../../../lib/schema/graphql'
 
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
@@ -9,11 +7,12 @@ import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { Loader } from '@navikt/ds-react'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 import Tabell from '../../lib/icons/tabell'
+import { useFetchBQTables } from '../../../lib/rest/bigquery';
 
-const DataproductTableIconMap: Record<BigQueryType, () => JSX.Element> = {
-  materialized_view: Tabell,
-  table: Tabell,
-  view: Tabell,
+const DataproductTableIconMap: Record<string, () => JSX.Element> = {
+  "materialized_view": Tabell,
+  "table": Tabell,
+  "view": Tabell,
 }
 
 export interface DataproductSourceDatasetProps {
@@ -27,11 +26,7 @@ export const Dataset = ({
   datasetID,
   active,
 }: DataproductSourceDatasetProps) => {
-  const [getTables, { data, loading, called }] = useGcpGetTablesLazyQuery({
-    variables: { projectID, datasetID },
-  })
-
-  if (active && !called) getTables()
+  const fetchBQTables= useFetchBQTables(projectID, datasetID)
 
   const loadingPlaceholder = (
     <TreeItem
@@ -48,14 +43,14 @@ export const Dataset = ({
     />
   )
 
-  const datasetContents = (contents: GcpGetTablesQuery['gcpGetTables']) =>
-    contents?.map(({ name, type }) => (
+  const datasetContents = (contents: any) =>
+    contents?.map((it: any) => (
       <TreeItem
         className="MuiTreeView-leaf"
-        slots={{ endIcon: DataproductTableIconMap[type]}}
-        itemId={`${projectID}/${datasetID}/${name}`}
-        key={`${projectID}/${datasetID}/${name}`}
-        label={name}
+        slots={{ endIcon: DataproductTableIconMap[it.type as string]}}
+        itemId={`${projectID}/${datasetID}/${it.name}`}
+        key={`${projectID}/${datasetID}/${it.name}`}
+        label={it.name}
       />
     ))
 
@@ -65,10 +60,10 @@ export const Dataset = ({
       itemId={`${projectID}/${datasetID}`}
       label={datasetID}
     >
-      {loading
+      {fetchBQTables.loading
         ? loadingPlaceholder
-        : data?.gcpGetTables?.length
-        ? datasetContents(data?.gcpGetTables)
+        : fetchBQTables.bqTables?.length
+        ? datasetContents(fetchBQTables?.bqTables)
         : emptyPlaceholder}
     </TreeItem>
   )

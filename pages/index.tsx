@@ -1,8 +1,5 @@
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../lib/apollo'
-import {
-    MetabaseProudctsDocument,
-} from '../lib/schema/graphql'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { useEffect, useState } from 'react'
@@ -132,10 +129,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     try {
         const cookie = context?.req?.headers?.cookie || ''
         const apolloClient = initializeApollo(null, cookie)
-
-        await apolloClient.query({
-            query: MetabaseProudctsDocument,
-        })
 
         return addApolloState(apolloClient, {
             props: {},

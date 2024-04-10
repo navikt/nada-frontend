@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import {
   BigQueryType,
-  useGcpGetColumnsQuery,
 } from '../../../lib/schema/graphql'
+import { useFetchBQcolumns } from '../../../lib/rest/bigquery'
 
 export type PIITagType =
   | 'PII_DirekteIdentifiserende'
@@ -52,14 +52,7 @@ export const useColumnTags = (
   const [pseudoColumnsMap, setPseudoColumnsMap] = useState<PseudoColumnsMapType>(
     new Map<string, Map<string, boolean>>()
   )
-
-  const columnsQuery = useGcpGetColumnsQuery({
-    variables: {
-      projectID: projectID,
-      datasetID: datasetID,
-      tableID: tableID,
-    },
-  })
+  const fetchColumns = useFetchBQcolumns(projectID, datasetID, tableID)
 
   var tableKey = buildTableKey(projectID, datasetID, tableID)
 
@@ -69,9 +62,9 @@ export const useColumnTags = (
       datasetID &&
       tableID &&
       !tagsMap.has(tableKey) &&
-      !columnsQuery.error &&
-      !columnsQuery.loading &&
-      columnsQuery.data
+      !fetchColumns.error &&
+      !fetchColumns.loading &&
+      fetchColumns.bqColumns
     ) {
       var newTagsMap = new Map<string, Map<string, PIITagType> | undefined>(
         tagsMap
@@ -81,7 +74,7 @@ export const useColumnTags = (
 
       var newPseudoColumnsMap = new Map<string, Map<string, boolean>>(pseudoColumnsMap)
       var pseudoColumns = new Map<string, boolean>()
-      columnsQuery.data.gcpGetColumns.forEach((it) =>{
+      fetchColumns.bqColumns.forEach((it) =>{
         tags.set(
           it.name,
           (!!tagsFromQuery[it.name] &&
@@ -126,11 +119,11 @@ export const useColumnTags = (
 
   return {
     columns:
-      !columnsQuery.error && !columnsQuery.loading
-        ? (columnsQuery.data?.gcpGetColumns as ColumnType[])
+      !fetchColumns.error && !fetchColumns.loading
+        ? (fetchColumns.bqColumns as ColumnType[])
         : undefined,
-    loading: columnsQuery.loading,
-    error: columnsQuery.error,
+    loading: fetchColumns.loading,
+    error: fetchColumns.error,
     tags: tagsMap.get(tableKey),
     pseudoColumns: pseudoColumnsMap.get(tableKey) || new Map<string, boolean>(),
     annotateColumn: annotateColumn,
