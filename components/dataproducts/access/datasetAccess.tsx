@@ -3,10 +3,8 @@ import { useState } from 'react'
 import { isAfter, parseISO, format } from 'date-fns'
 import {
   useRevokeAccessMutation,
-  useAccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
   useDenyAccessRequestMutation,
-  useDatasetAccessQuery,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
@@ -17,11 +15,11 @@ import {
   Table,
   Textarea,
 } from '@navikt/ds-react'
-import { GET_DATASET_ACCESS } from '../../../lib/queries/access/datasetAccess'
 import { ExternalLink } from '@navikt/ds-icons'
-import { GET_ACCESS_REQUESTS_FOR_DATASET } from '../../../lib/queries/accessRequest/accessRequestsForDataset'
 import { nb } from 'date-fns/locale'
 import ErrorMessage from '../../lib/error'
+import { useGetDataset } from '../../../lib/rest/dataproducts'
+import { useFetchAccessRequestsForDataset } from '../../../lib/rest/access'
 
 interface AccessEntry {
   subject: string
@@ -239,54 +237,36 @@ const DatasetAccess = ({ id }: AccessListProps) => {
   const [revokeAccess] = useRevokeAccessMutation()
   const [approveAccessRequest] = useApproveAccessRequestMutation()
   const [denyAccessRequest] = useDenyAccessRequestMutation()
-  const datasetAccessRequestsQuery = useAccessRequestsForDatasetQuery({
-    variables: { datasetID: id },
-    ssr: true,
-  })
+  const fetchAccessRequestsForDataset = useFetchAccessRequestsForDataset(id)
 
-  const datasetAccessQuery = useDatasetAccessQuery({
-    variables: { id },
-    ssr: true,
-  })
+  const getDataset = useGetDataset(id)
 
-  if (datasetAccessRequestsQuery.error)
-    return <ErrorMessage error={datasetAccessRequestsQuery.error} />
+  if (fetchAccessRequestsForDataset.error)
+    return <ErrorMessage error={fetchAccessRequestsForDataset.error} />
   if (
-    datasetAccessRequestsQuery.loading ||
-    !datasetAccessRequestsQuery.data?.accessRequestsForDataset
+    fetchAccessRequestsForDataset.loading ||
+    !fetchAccessRequestsForDataset.data?.accessRequests
   )
     return <div />
 
   const datasetAccessRequests =
-    datasetAccessRequestsQuery.data?.accessRequestsForDataset
+  fetchAccessRequestsForDataset.data.accessRequests as any[]
 
-  if (datasetAccessQuery.error)
-    return <ErrorMessage error={datasetAccessQuery.error} />
+  if (getDataset.error)
+    return <ErrorMessage error={getDataset.error} />
   if (
-    datasetAccessQuery.loading ||
-    !datasetAccessQuery.data?.dataset.access
+    getDataset.loading ||
+    !getDataset?.dataset?.access
   )
     return <div />
 
-  const access = datasetAccessQuery.data.dataset.access
+  const access = getDataset.dataset.access
 
   const approveRequest = async (requestID: string) => {
     try {
       await approveAccessRequest({
         variables: { id: requestID },
         refetchQueries: [
-          {
-            query: GET_DATASET_ACCESS,
-            variables: {
-              id,
-            },
-          },
-          {
-            query: GET_ACCESS_REQUESTS_FOR_DATASET,
-            variables: {
-              datasetID: id,
-            },
-          },
         ],
       })
     } catch (e: any) {
@@ -299,12 +279,6 @@ const DatasetAccess = ({ id }: AccessListProps) => {
       await denyAccessRequest({
         variables: { id: requestID },
         refetchQueries: [
-          {
-            query: GET_ACCESS_REQUESTS_FOR_DATASET,
-            variables: {
-              datasetID: id,
-            },
-          },
         ],
       })
     } catch (e: any) {
@@ -319,12 +293,6 @@ const DatasetAccess = ({ id }: AccessListProps) => {
       await revokeAccess({
         variables: { id: a.id },
         refetchQueries: [
-          {
-            query: GET_DATASET_ACCESS,
-            variables: {
-              id,
-            },
-          },
         ],
       })
     } catch (e: any) {

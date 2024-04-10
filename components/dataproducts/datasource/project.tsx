@@ -1,8 +1,8 @@
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { Loader } from '@navikt/ds-react'
-import { useGcpGetDatasetsLazyQuery } from '../../../lib/schema/graphql'
 import { ExpandFilled, NextFilled } from '@navikt/ds-icons'
 import { Dataset } from './dataset'
+import { useFetchBQDatasets } from '../../../lib/rest/bigquery';
 
 export interface DataproductSourceDatasetProps {
   activePaths: string[]
@@ -13,12 +13,7 @@ export const Project = ({
   projectID,
   activePaths,
 }: DataproductSourceDatasetProps) => {
-  const [getDatasets, { data, loading, error, called }] =
-    useGcpGetDatasetsLazyQuery({
-      variables: { projectID },
-    })
-
-  if (!called && activePaths.includes(projectID)) getDatasets()
+  const fetchBQDatasets= useFetchBQDatasets(projectID)
 
   const emptyPlaceholder = (
     <TreeItem
@@ -41,11 +36,11 @@ export const Project = ({
       itemId={projectID}
       label={projectID}
     >
-      {loading
+      {fetchBQDatasets.loading
         ? loadingPlaceholder
-        : !data?.gcpGetDatasets?.length
+        : !fetchBQDatasets.bqDatasets?.length
         ? emptyPlaceholder
-        : data?.gcpGetDatasets.map((datasetID) => (
+        : fetchBQDatasets.bqDatasets?.map((datasetID) => (
             <Dataset
               key={datasetID}
               projectID={projectID}

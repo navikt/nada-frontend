@@ -1180,13 +1180,6 @@ export type UserInfo = {
   stories: Array<Story>;
 };
 
-export type DatasetAccessQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DatasetAccessQuery = { __typename?: 'Query', dataset: { __typename?: 'Dataset', id: string, name: string, pii: PiiLevel, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null }, access: Array<{ __typename?: 'Access', id: string, subject: string, granter: string, expires?: any | null, created: any, revoked?: any | null, accessRequestID?: string | null }> } };
-
 export type GrantAccessMutationVariables = Exact<{
   input: NewGrant;
 }>;
@@ -1200,20 +1193,6 @@ export type RevokeAccessMutationVariables = Exact<{
 
 
 export type RevokeAccessMutation = { __typename?: 'Mutation', revokeAccessToDataset: boolean };
-
-export type AccessRequestQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type AccessRequestQuery = { __typename?: 'Query', accessRequest: { __typename?: 'AccessRequest', id: string, datasetID: string, subject: string, subjectType: SubjectType, granter?: string | null, status: AccessRequestStatus, created: any, expires?: any | null, owner: string, reason?: string | null, polly?: { __typename?: 'Polly', id: string, name: string, externalID: string, url: string } | null } };
-
-export type AccessRequestsForDatasetQueryVariables = Exact<{
-  datasetID: Scalars['ID']['input'];
-}>;
-
-
-export type AccessRequestsForDatasetQuery = { __typename?: 'Query', accessRequestsForDataset: Array<{ __typename?: 'AccessRequest', id: string, subject: string, subjectType: SubjectType, owner: string, created: any, expires?: any | null, polly?: { __typename?: 'Polly', name: string, externalID: string, url: string } | null }> };
 
 export type ApproveAccessRequestMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1258,55 +1237,12 @@ export type CreateDataproductMutationVariables = Exact<{
 
 export type CreateDataproductMutation = { __typename?: 'Mutation', createDataproduct: { __typename?: 'Dataproduct', id: string, slug: string } };
 
-export type DataproductSummaryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DataproductSummaryQuery = { __typename?: 'Query', dataproduct: { __typename?: 'Dataproduct', id: string, lastModified: any, name: string, description: string, created: any, slug: string, keywords: Array<string>, datasets: Array<{ __typename?: 'Dataset', datasource: { __typename?: 'BigQuery', type: 'BigQuery' } }> } };
-
-export type MetabaseProudctsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MetabaseProudctsQuery = { __typename?: 'Query', dataproducts: Array<{ __typename?: 'Dataproduct', id: string, name: string, keywords: Array<string>, slug: string, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null, teamContact?: string | null } }> };
-
 export type DeleteDataproductMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteDataproductMutation = { __typename?: 'Mutation', deleteDataproduct: boolean };
-
-export type GcpGetAllTablesInProjectQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
-}>;
-
-
-export type GcpGetAllTablesInProjectQuery = { __typename?: 'Query', gcpGetAllTablesInProject: Array<{ __typename?: 'BigQuerySource', table: string, dataset: string }> };
-
-export type GcpGetColumnsQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
-  datasetID: Scalars['String']['input'];
-  tableID: Scalars['String']['input'];
-}>;
-
-
-export type GcpGetColumnsQuery = { __typename?: 'Query', gcpGetColumns: Array<{ __typename?: 'TableColumn', name: string, type: string, mode: string, description: string }> };
-
-export type GcpGetDatasetsQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
-}>;
-
-
-export type GcpGetDatasetsQuery = { __typename?: 'Query', gcpGetDatasets: Array<string> };
-
-export type GcpGetTablesQueryVariables = Exact<{
-  projectID: Scalars['String']['input'];
-  datasetID: Scalars['String']['input'];
-}>;
-
-
-export type GcpGetTablesQuery = { __typename?: 'Query', gcpGetTables: Array<{ __typename?: 'BigQueryTable', name: string, type: BigQueryType, description: string }> };
 
 export type UpdateDataproductMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1475,61 +1411,6 @@ export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]:
 export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
 
 
-export const DatasetAccessDocument = gql`
-    query DatasetAccess($id: ID!) {
-  dataset(id: $id) {
-    id
-    name
-    pii
-    owner {
-      group
-      teamkatalogenURL
-    }
-    access {
-      id
-      subject
-      granter
-      expires
-      created
-      revoked
-      accessRequestID
-    }
-  }
-}
-    `;
-
-/**
- * __useDatasetAccessQuery__
- *
- * To run a query within a React component, call `useDatasetAccessQuery` and pass it any options that fit your needs.
- * When your component renders, `useDatasetAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDatasetAccessQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDatasetAccessQuery(baseOptions: Apollo.QueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables> & ({ variables: DatasetAccessQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
-      }
-export function useDatasetAccessLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
-        }
-export function useDatasetAccessSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DatasetAccessQuery, DatasetAccessQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<DatasetAccessQuery, DatasetAccessQueryVariables>(DatasetAccessDocument, options);
-        }
-export type DatasetAccessQueryHookResult = ReturnType<typeof useDatasetAccessQuery>;
-export type DatasetAccessLazyQueryHookResult = ReturnType<typeof useDatasetAccessLazyQuery>;
-export type DatasetAccessSuspenseQueryHookResult = ReturnType<typeof useDatasetAccessSuspenseQuery>;
-export type DatasetAccessQueryResult = Apollo.QueryResult<DatasetAccessQuery, DatasetAccessQueryVariables>;
 export const GrantAccessDocument = gql`
     mutation GrantAccess($input: NewGrant!) {
   grantAccessToDataset(input: $input) {
@@ -1594,112 +1475,6 @@ export function useRevokeAccessMutation(baseOptions?: Apollo.MutationHookOptions
 export type RevokeAccessMutationHookResult = ReturnType<typeof useRevokeAccessMutation>;
 export type RevokeAccessMutationResult = Apollo.MutationResult<RevokeAccessMutation>;
 export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<RevokeAccessMutation, RevokeAccessMutationVariables>;
-export const AccessRequestDocument = gql`
-    query accessRequest($id: ID!) {
-  accessRequest(id: $id) {
-    id
-    datasetID
-    subject
-    subjectType
-    granter
-    status
-    created
-    expires
-    owner
-    polly {
-      id
-      name
-      externalID
-      url
-    }
-    reason
-  }
-}
-    `;
-
-/**
- * __useAccessRequestQuery__
- *
- * To run a query within a React component, call `useAccessRequestQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAccessRequestQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useAccessRequestQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables> & ({ variables: AccessRequestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
-      }
-export function useAccessRequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
-        }
-export function useAccessRequestSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessRequestQuery, AccessRequestQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AccessRequestQuery, AccessRequestQueryVariables>(AccessRequestDocument, options);
-        }
-export type AccessRequestQueryHookResult = ReturnType<typeof useAccessRequestQuery>;
-export type AccessRequestLazyQueryHookResult = ReturnType<typeof useAccessRequestLazyQuery>;
-export type AccessRequestSuspenseQueryHookResult = ReturnType<typeof useAccessRequestSuspenseQuery>;
-export type AccessRequestQueryResult = Apollo.QueryResult<AccessRequestQuery, AccessRequestQueryVariables>;
-export const AccessRequestsForDatasetDocument = gql`
-    query accessRequestsForDataset($datasetID: ID!) {
-  accessRequestsForDataset(datasetID: $datasetID) {
-    id
-    subject
-    subjectType
-    owner
-    created
-    expires
-    owner
-    polly {
-      name
-      externalID
-      url
-    }
-  }
-}
-    `;
-
-/**
- * __useAccessRequestsForDatasetQuery__
- *
- * To run a query within a React component, call `useAccessRequestsForDatasetQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccessRequestsForDatasetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAccessRequestsForDatasetQuery({
- *   variables: {
- *      datasetID: // value for 'datasetID'
- *   },
- * });
- */
-export function useAccessRequestsForDatasetQuery(baseOptions: Apollo.QueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables> & ({ variables: AccessRequestsForDatasetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
-      }
-export function useAccessRequestsForDatasetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
-        }
-export function useAccessRequestsForDatasetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>(AccessRequestsForDatasetDocument, options);
-        }
-export type AccessRequestsForDatasetQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetQuery>;
-export type AccessRequestsForDatasetLazyQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetLazyQuery>;
-export type AccessRequestsForDatasetSuspenseQueryHookResult = ReturnType<typeof useAccessRequestsForDatasetSuspenseQuery>;
-export type AccessRequestsForDatasetQueryResult = Apollo.QueryResult<AccessRequestsForDatasetQuery, AccessRequestsForDatasetQueryVariables>;
 export const ApproveAccessRequestDocument = gql`
     mutation approveAccessRequest($id: ID!) {
   approveAccessRequest(id: $id)
@@ -1894,104 +1669,6 @@ export function useCreateDataproductMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateDataproductMutationHookResult = ReturnType<typeof useCreateDataproductMutation>;
 export type CreateDataproductMutationResult = Apollo.MutationResult<CreateDataproductMutation>;
 export type CreateDataproductMutationOptions = Apollo.BaseMutationOptions<CreateDataproductMutation, CreateDataproductMutationVariables>;
-export const DataproductSummaryDocument = gql`
-    query DataproductSummary($id: ID!) {
-  dataproduct(id: $id) {
-    id
-    lastModified
-    name
-    description
-    created
-    slug
-    keywords
-    datasets {
-      datasource {
-        type: __typename
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useDataproductSummaryQuery__
- *
- * To run a query within a React component, call `useDataproductSummaryQuery` and pass it any options that fit your needs.
- * When your component renders, `useDataproductSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDataproductSummaryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDataproductSummaryQuery(baseOptions: Apollo.QueryHookOptions<DataproductSummaryQuery, DataproductSummaryQueryVariables> & ({ variables: DataproductSummaryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<DataproductSummaryQuery, DataproductSummaryQueryVariables>(DataproductSummaryDocument, options);
-      }
-export function useDataproductSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DataproductSummaryQuery, DataproductSummaryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<DataproductSummaryQuery, DataproductSummaryQueryVariables>(DataproductSummaryDocument, options);
-        }
-export function useDataproductSummarySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DataproductSummaryQuery, DataproductSummaryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<DataproductSummaryQuery, DataproductSummaryQueryVariables>(DataproductSummaryDocument, options);
-        }
-export type DataproductSummaryQueryHookResult = ReturnType<typeof useDataproductSummaryQuery>;
-export type DataproductSummaryLazyQueryHookResult = ReturnType<typeof useDataproductSummaryLazyQuery>;
-export type DataproductSummarySuspenseQueryHookResult = ReturnType<typeof useDataproductSummarySuspenseQuery>;
-export type DataproductSummaryQueryResult = Apollo.QueryResult<DataproductSummaryQuery, DataproductSummaryQueryVariables>;
-export const MetabaseProudctsDocument = gql`
-    query MetabaseProudcts {
-  dataproducts(service: metabase) {
-    id
-    name
-    keywords
-    slug
-    owner {
-      group
-      teamkatalogenURL
-      teamContact
-    }
-  }
-}
-    `;
-
-/**
- * __useMetabaseProudctsQuery__
- *
- * To run a query within a React component, call `useMetabaseProudctsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMetabaseProudctsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMetabaseProudctsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMetabaseProudctsQuery(baseOptions?: Apollo.QueryHookOptions<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
-      }
-export function useMetabaseProudctsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
-        }
-export function useMetabaseProudctsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>(MetabaseProudctsDocument, options);
-        }
-export type MetabaseProudctsQueryHookResult = ReturnType<typeof useMetabaseProudctsQuery>;
-export type MetabaseProudctsLazyQueryHookResult = ReturnType<typeof useMetabaseProudctsLazyQuery>;
-export type MetabaseProudctsSuspenseQueryHookResult = ReturnType<typeof useMetabaseProudctsSuspenseQuery>;
-export type MetabaseProudctsQueryResult = Apollo.QueryResult<MetabaseProudctsQuery, MetabaseProudctsQueryVariables>;
 export const DeleteDataproductDocument = gql`
     mutation deleteDataproduct($id: ID!) {
   deleteDataproduct(id: $id)
@@ -2023,173 +1700,6 @@ export function useDeleteDataproductMutation(baseOptions?: Apollo.MutationHookOp
 export type DeleteDataproductMutationHookResult = ReturnType<typeof useDeleteDataproductMutation>;
 export type DeleteDataproductMutationResult = Apollo.MutationResult<DeleteDataproductMutation>;
 export type DeleteDataproductMutationOptions = Apollo.BaseMutationOptions<DeleteDataproductMutation, DeleteDataproductMutationVariables>;
-export const GcpGetAllTablesInProjectDocument = gql`
-    query gcpGetAllTablesInProject($projectID: String!) {
-  gcpGetAllTablesInProject(projectID: $projectID) {
-    table
-    dataset
-  }
-}
-    `;
-
-/**
- * __useGcpGetAllTablesInProjectQuery__
- *
- * To run a query within a React component, call `useGcpGetAllTablesInProjectQuery` and pass it any options that fit your needs.
- * When your component renders, `useGcpGetAllTablesInProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGcpGetAllTablesInProjectQuery({
- *   variables: {
- *      projectID: // value for 'projectID'
- *   },
- * });
- */
-export function useGcpGetAllTablesInProjectQuery(baseOptions: Apollo.QueryHookOptions<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables> & ({ variables: GcpGetAllTablesInProjectQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>(GcpGetAllTablesInProjectDocument, options);
-      }
-export function useGcpGetAllTablesInProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>(GcpGetAllTablesInProjectDocument, options);
-        }
-export function useGcpGetAllTablesInProjectSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>(GcpGetAllTablesInProjectDocument, options);
-        }
-export type GcpGetAllTablesInProjectQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectQuery>;
-export type GcpGetAllTablesInProjectLazyQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectLazyQuery>;
-export type GcpGetAllTablesInProjectSuspenseQueryHookResult = ReturnType<typeof useGcpGetAllTablesInProjectSuspenseQuery>;
-export type GcpGetAllTablesInProjectQueryResult = Apollo.QueryResult<GcpGetAllTablesInProjectQuery, GcpGetAllTablesInProjectQueryVariables>;
-export const GcpGetColumnsDocument = gql`
-    query gcpGetColumns($projectID: String!, $datasetID: String!, $tableID: String!) {
-  gcpGetColumns(projectID: $projectID, datasetID: $datasetID, tableID: $tableID) {
-    name
-    type
-    mode
-    description
-  }
-}
-    `;
-
-/**
- * __useGcpGetColumnsQuery__
- *
- * To run a query within a React component, call `useGcpGetColumnsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGcpGetColumnsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGcpGetColumnsQuery({
- *   variables: {
- *      projectID: // value for 'projectID'
- *      datasetID: // value for 'datasetID'
- *      tableID: // value for 'tableID'
- *   },
- * });
- */
-export function useGcpGetColumnsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables> & ({ variables: GcpGetColumnsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
-      }
-export function useGcpGetColumnsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
-        }
-export function useGcpGetColumnsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>(GcpGetColumnsDocument, options);
-        }
-export type GcpGetColumnsQueryHookResult = ReturnType<typeof useGcpGetColumnsQuery>;
-export type GcpGetColumnsLazyQueryHookResult = ReturnType<typeof useGcpGetColumnsLazyQuery>;
-export type GcpGetColumnsSuspenseQueryHookResult = ReturnType<typeof useGcpGetColumnsSuspenseQuery>;
-export type GcpGetColumnsQueryResult = Apollo.QueryResult<GcpGetColumnsQuery, GcpGetColumnsQueryVariables>;
-export const GcpGetDatasetsDocument = gql`
-    query gcpGetDatasets($projectID: String!) {
-  gcpGetDatasets(projectID: $projectID)
-}
-    `;
-
-/**
- * __useGcpGetDatasetsQuery__
- *
- * To run a query within a React component, call `useGcpGetDatasetsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGcpGetDatasetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGcpGetDatasetsQuery({
- *   variables: {
- *      projectID: // value for 'projectID'
- *   },
- * });
- */
-export function useGcpGetDatasetsQuery(baseOptions: Apollo.QueryHookOptions<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables> & ({ variables: GcpGetDatasetsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>(GcpGetDatasetsDocument, options);
-      }
-export function useGcpGetDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>(GcpGetDatasetsDocument, options);
-        }
-export function useGcpGetDatasetsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>(GcpGetDatasetsDocument, options);
-        }
-export type GcpGetDatasetsQueryHookResult = ReturnType<typeof useGcpGetDatasetsQuery>;
-export type GcpGetDatasetsLazyQueryHookResult = ReturnType<typeof useGcpGetDatasetsLazyQuery>;
-export type GcpGetDatasetsSuspenseQueryHookResult = ReturnType<typeof useGcpGetDatasetsSuspenseQuery>;
-export type GcpGetDatasetsQueryResult = Apollo.QueryResult<GcpGetDatasetsQuery, GcpGetDatasetsQueryVariables>;
-export const GcpGetTablesDocument = gql`
-    query gcpGetTables($projectID: String!, $datasetID: String!) {
-  gcpGetTables(projectID: $projectID, datasetID: $datasetID) {
-    name
-    type
-    description
-  }
-}
-    `;
-
-/**
- * __useGcpGetTablesQuery__
- *
- * To run a query within a React component, call `useGcpGetTablesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGcpGetTablesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGcpGetTablesQuery({
- *   variables: {
- *      projectID: // value for 'projectID'
- *      datasetID: // value for 'datasetID'
- *   },
- * });
- */
-export function useGcpGetTablesQuery(baseOptions: Apollo.QueryHookOptions<GcpGetTablesQuery, GcpGetTablesQueryVariables> & ({ variables: GcpGetTablesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GcpGetTablesQuery, GcpGetTablesQueryVariables>(GcpGetTablesDocument, options);
-      }
-export function useGcpGetTablesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GcpGetTablesQuery, GcpGetTablesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GcpGetTablesQuery, GcpGetTablesQueryVariables>(GcpGetTablesDocument, options);
-        }
-export function useGcpGetTablesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GcpGetTablesQuery, GcpGetTablesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GcpGetTablesQuery, GcpGetTablesQueryVariables>(GcpGetTablesDocument, options);
-        }
-export type GcpGetTablesQueryHookResult = ReturnType<typeof useGcpGetTablesQuery>;
-export type GcpGetTablesLazyQueryHookResult = ReturnType<typeof useGcpGetTablesLazyQuery>;
-export type GcpGetTablesSuspenseQueryHookResult = ReturnType<typeof useGcpGetTablesSuspenseQuery>;
-export type GcpGetTablesQueryResult = Apollo.QueryResult<GcpGetTablesQuery, GcpGetTablesQueryVariables>;
 export const UpdateDataproductDocument = gql`
     mutation updateDataproduct($id: ID!, $input: UpdateDataproduct!) {
   updateDataproduct(id: $id, input: $input) {

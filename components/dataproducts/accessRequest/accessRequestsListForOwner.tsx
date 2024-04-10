@@ -1,23 +1,21 @@
 import * as React from 'react'
 import { useState } from 'react'
 import {
-  AccessRequestsForDatasetQuery,
   useApproveAccessRequestMutation,
 } from '../../../lib/schema/graphql'
 import { Alert, Button, Table } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 
 interface AccessListProps {
-  accessQuery: AccessRequestsForDatasetQuery | undefined
+  accessRequests: any[]
 }
 
-const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
-  const access = accessQuery?.accessRequestsForDataset
+const AccessRequestsListForOwner = ({ accessRequests }: AccessListProps) => {
   const [approveAccessRequest] = useApproveAccessRequestMutation()
   const [isDenying, setIsDenying] = useState<Array<string>>([])
 
   const [formError, setFormError] = useState('')
-  if (access?.length === 0) {
+  if (accessRequests?.length === 0) {
     return <>Ingen har forespurt tilgang til produktet</>
   }
 
@@ -52,7 +50,7 @@ const AccessRequestsListForOwner = ({ accessQuery }: AccessListProps) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {access?.map((a, i) => (
+          {accessRequests?.map((a, i) => (
             <Table.Row key={i}>
               <Table.DataCell align="right">{a.subject}</Table.DataCell>
               <Table.DataCell>{a.expires}</Table.DataCell>
