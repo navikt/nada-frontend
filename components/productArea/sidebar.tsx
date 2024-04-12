@@ -31,8 +31,8 @@ const ProductAreaSidebar = ({
 
     const [collapsed, setCollapsed] = useState(false)
     return (
-
-        <div className="pr-[2rem] w-96">
+        <div className={`pr-[2rem] ${collapsed ? 'w-0' : 'w-96'}`}>
+        {/*<div className="pr-[2rem] w-96">*/}
             <button className="hidden md:block h-10" onClick={() => setCollapsed(!collapsed)}>
                 <SidebarLeftIcon fontSize="1.5rem" title="Vis eller ikke vis sidemeny"></SidebarLeftIcon>
             </button>
