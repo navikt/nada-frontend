@@ -1,6 +1,6 @@
 import {Data} from '@navikt/ds-icons'
-import {ChevronLeftDoubleIcon, ChevronRightDoubleIcon} from '@navikt/aksel-icons'
-import {Select} from '@navikt/ds-react'
+import {MenuHamburgerIcon} from '@navikt/aksel-icons'
+import {Select, Button} from '@navikt/ds-react'
 import * as React from 'react'
 import {useState} from 'react'
 import {PAItems} from '../../pages/productArea/[id]'
@@ -32,9 +32,14 @@ const ProductAreaSidebar = ({
     const [collapsed, setCollapsed] = useState(false)
     return (
 
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        // <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div>
+            <button className="hidden md:block" onClick={() => setCollapsed(!collapsed)}>
+                <MenuHamburgerIcon title="Vis eller ikke vis sidemeny"></MenuHamburgerIcon>
+                {/*{collapsed ? <ChevronRightDoubleIcon/> : <ChevronLeftDoubleIcon/>}*/}
+            </button>
             {collapsed ? null : (
-                <div className="pr-[2rem] w-96 pt-[1.6rem] hidden md:block">
+                <div className="pr-[2rem] w-96 hidden md:block">
                     <Select
                         className="w-full mb-[1rem]"
                         label=""
@@ -124,9 +129,6 @@ const ProductAreaSidebar = ({
                     </div>
                 </div>
             )}
-            <button className="hidden md:block" onClick={() => setCollapsed(!collapsed)}>
-                {collapsed ? <ChevronRightDoubleIcon/> : <ChevronLeftDoubleIcon/>}
-            </button>
         </div>)
 }
 export default ProductAreaSidebar
