@@ -37,7 +37,7 @@ const ProductAreaSidebar = ({
                 <SidebarLeftIcon fontSize="1.5rem" title="Vis eller ikke vis sidemeny"></SidebarLeftIcon>
             </button>
             {collapsed ? null : (
-                    <div className="pr-[2rem] w-64 hidden md:block">
+                    <div className="hidden md:block">
                     <Select
                         className="w-full mb-[1rem]"
                         label=""
