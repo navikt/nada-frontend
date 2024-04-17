@@ -243,24 +243,18 @@ const DatasetAccess = ({ id }: AccessListProps) => {
 
   if (fetchAccessRequestsForDataset.error)
     return <ErrorMessage error={fetchAccessRequestsForDataset.error} />
-  if (
-    fetchAccessRequestsForDataset.loading ||
-    !fetchAccessRequestsForDataset.data?.accessRequests
-  )
-    return <div />
 
-  const datasetAccessRequests =
-  fetchAccessRequestsForDataset.data.accessRequests as any[]
+  const datasetAccessRequests = fetchAccessRequestsForDataset.loading ||
+    !fetchAccessRequestsForDataset.data?.accessRequests
+    ? []
+    : fetchAccessRequestsForDataset.data.accessRequests as any[]
 
   if (getDataset.error)
     return <ErrorMessage error={getDataset.error} />
-  if (
-    getDataset.loading ||
-    !getDataset?.dataset?.access
-  )
-    return <div />
 
-  const access = getDataset.dataset.access
+  const access = getDataset.loading ||
+    !getDataset?.dataset?.access ? [] :
+    getDataset.dataset.access
 
   const approveRequest = async (requestID: string) => {
     try {
