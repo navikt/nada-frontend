@@ -10,12 +10,12 @@ export const AccessRequestsForGroup = ({ accessRequests }: pendingAccessRequests
     const pendingRequest = accessRequests.filter((r) => r.status === 'pending')
     return <><div>
         {pendingRequest?.length > 0 ? (<div>
-            {pendingRequest.map((r: any) => (
-                <PendingAccessRequestBar accessRequest={r}></PendingAccessRequestBar>
+            {pendingRequest.map((r: any, i: number) => (
+                <PendingAccessRequestBar accessRequest={r} key={i}></PendingAccessRequestBar>
             ))
             }</div>
         ) : (
-            <div>'Ingen tilgangssøknader'</div>
+            <div>Ingen tilgangssøknader</div>
         )}
     </div>
     </>
