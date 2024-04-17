@@ -130,7 +130,7 @@ interface AccessRequestModalProps {
   actionApprove: (requestID: string) => void
 }
 
-const AccessRequestModal = ({
+export const AccessRequestModal = ({
   requestID,
   actionDeny,
   actionApprove,
