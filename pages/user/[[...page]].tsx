@@ -11,6 +11,7 @@ import { JoinableViewsList } from '../../components/dataProc/joinableViewsList'
 import { DataproductsList } from '../../components/dataproducts/dataproductList'
 import { Tabs } from '@navikt/ds-react'
 import { useFetchUserData } from '../../lib/rest/userData'
+import { AccessRequestsForGroup } from '../../components/user/accessRequestsForGroup'
 
 export const UserPages = () => {
     const router = useRouter()
@@ -59,6 +60,18 @@ export const UserPages = () => {
                     <div className="grid gap-4">
                         <h2>Mine innsiktsprodukter</h2>
                         <ResultList insightProducts={data.insightProducts} />
+                    </div>
+                ),
+            },
+            {
+                title: 'Tilgangssøknader til min gruppe',
+                slug: 'requestsForGroup',
+                component: (
+                    <div className="grid gap-4">
+                        <h2>Tilgangssøknader til min gruppe</h2>
+                        <AccessRequestsForGroup
+                            accessRequests={data.accessRequestsAsGranter as any[]}
+                        />
                     </div>
                 ),
             },
