@@ -32,8 +32,8 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          VAR: image=${{ needs.build-and-push.outputs.image }},ingress=https://data.intern.dev.nav.no/
-          RESOURCE: .nais/nais.yaml
+          VAR: image=${{ needs.build-and-push.outputs.image }}
+          RESOURCE: .nais/dev.yaml
 
   deploy-prod:
     runs-on: ubuntu-latest
@@ -47,5 +47,4 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
-          VAR: image=${{ needs.build-and-push.outputs.image }},ingress=https://data.intern.nav.no/
-          RESOURCE: .nais/nais.yaml,.nais/alert.yaml
+          RESOURCE: .nais/prod.yaml,.nais/alert.yaml
