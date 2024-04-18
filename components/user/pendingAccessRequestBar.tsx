@@ -1,7 +1,9 @@
-import { ExpansionCard, Link } from "@navikt/ds-react"
-import { useState } from "react"
+import { Link } from "@navikt/ds-react"
+import { useContext, useState } from "react"
 import { AccessRequestModal } from "../dataproducts/access/datasetAccess"
-import { Header } from "@navikt/ds-react-internal"
+import { apporveAccessRequest, denyAccessRequest } from "../../lib/rest/access"
+import { ExternalLink } from "@navikt/ds-icons"
+import { UserState } from "../../lib/context"
 
 interface PendingAccessRequestBarProps {
     accessRequest: any
@@ -9,6 +11,14 @@ interface PendingAccessRequestBarProps {
 
 export const PendingAccessRequestBar = ({ accessRequest }: PendingAccessRequestBarProps) => {
     const [expanded, setExpanded] = useState(false)
+    const userData = useContext(UserState)
+    const approve = (requestID: string) => {
+        apporveAccessRequest(requestID)
+    }
+    const deny = (requestID: string) => {
+        denyAccessRequest(requestID, "")
+    }
+
     return (
         <div key={accessRequest.id} className="w-[60rem] mb-5 mt-5 border pt-2 pb-2 pl-4 pr-4 flex flex-row justify-between rounded border-gray-200">
             <div>
@@ -16,14 +26,28 @@ export const PendingAccessRequestBar = ({ accessRequest }: PendingAccessRequestB
                     {`${accessRequest?.datasetName} - ${accessRequest?.dataproductName}`}
                 </Link>
                 </h3>
-                fra {accessRequest.owner} - {new Date(accessRequest.created).toLocaleDateString('no-NO')}
+                {accessRequest.owner}
+                <br></br>
+                <div className="flex flex-row">
+                <div>
+                {!accessRequest.expires ? "Alltid tilgang fra ": "Tilgangsperiode: "}
+                {new Date(accessRequest.created).toLocaleDateString('no-NO')}
+                {accessRequest.expires && ` - ${new Date(accessRequest.expires).toLocaleDateString('no-NO')}`}
+                </div>
+                <div className="ml-[2rem]">
+                {accessRequest.polly?.url ? (
+                        <Link target="_blank" rel="norefferer" href={accessRequest.polly.url}>
+                          Åpne behandling
+                          <ExternalLink />
+                        </Link>
+                      ) : (
+                        'Ingen behandling'
+                      )}
+                </div>
+                </div>
             </div>
             <div>
-                <AccessRequestModal requestID={""} actionDeny={function (requestID: string, setOpen: Function): void {
-                    throw new Error("Function not implemented.")
-                }} actionApprove={function (requestID: string): void {
-                    throw new Error("Function not implemented.")
-                }}></AccessRequestModal>
+                <AccessRequestModal requestID={accessRequest.id} actionDeny={deny} actionApprove={approve}></AccessRequestModal>
             </div>
         </div>)
 }
