@@ -64,11 +64,11 @@ export const UserPages = () => {
                 ),
             },
             {
-                title: 'Tilgangssøknader til min gruppe',
+                title: 'Tilgangssøknader til meg',
                 slug: 'requestsForGroup',
                 component: (
                     <div className="grid gap-4">
-                        <h2>Tilgangssøknader til min gruppe</h2>
+                        <h2>Tilgangssøknader til meg</h2>
                         <AccessRequestsForGroup
                             accessRequests={data.accessRequestsAsGranter as any[]}
                         />

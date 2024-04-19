@@ -10,15 +10,6 @@ interface PendingAccessRequestBarProps {
 }
 
 export const PendingAccessRequestBar = ({ accessRequest }: PendingAccessRequestBarProps) => {
-    const [expanded, setExpanded] = useState(false)
-    const userData = useContext(UserState)
-    const approve = (requestID: string) => {
-        apporveAccessRequest(requestID)
-    }
-    const deny = (requestID: string) => {
-        denyAccessRequest(requestID, "")
-    }
-
     return (
         <div key={accessRequest.id} className="w-[60rem] mb-5 mt-5 border pt-2 pb-2 pl-4 pr-4 flex flex-row justify-between rounded border-gray-200">
             <div>
@@ -47,7 +38,7 @@ export const PendingAccessRequestBar = ({ accessRequest }: PendingAccessRequestB
                 </div>
             </div>
             <div>
-                <AccessRequestModal requestID={accessRequest.id} actionDeny={deny} actionApprove={approve}></AccessRequestModal>
+                <AccessRequestModal requestID={accessRequest.id}></AccessRequestModal>
             </div>
         </div>)
 }
