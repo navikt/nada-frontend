@@ -3,8 +3,6 @@ import { useState } from 'react'
 import { isAfter, parseISO, format } from 'date-fns'
 import {
   useRevokeAccessMutation,
-  useApproveAccessRequestMutation,
-  useDenyAccessRequestMutation,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
