@@ -9,7 +9,6 @@ spec:
   image: {{image}}
   port: 3000
   ingresses:
-    - https://data.intern.nav.no
     - https://data.ansatt.nav.no
   accessPolicy:
     outbound:
