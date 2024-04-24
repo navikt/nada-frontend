@@ -11,6 +11,7 @@ import { JoinableViewsList } from '../../components/dataProc/joinableViewsList'
 import { DataproductsList } from '../../components/dataproducts/dataproductList'
 import { Tabs } from '@navikt/ds-react'
 import { useFetchUserData } from '../../lib/rest/userData'
+import { AccessRequestsForGroup } from '../../components/user/accessRequestsForGroup'
 
 export const UserPages = () => {
     const router = useRouter()
@@ -59,6 +60,18 @@ export const UserPages = () => {
                     <div className="grid gap-4">
                         <h2>Mine innsiktsprodukter</h2>
                         <ResultList insightProducts={data.insightProducts} />
+                    </div>
+                ),
+            },
+            {
+                title: 'Tilgangssøknader til meg',
+                slug: 'requestsForGroup',
+                component: (
+                    <div className="grid gap-4">
+                        <h2>Tilgangssøknader til meg</h2>
+                        <AccessRequestsForGroup
+                            accessRequests={data.accessRequestsAsGranter as any[]}
+                        />
                     </div>
                 ),
             },
@@ -133,8 +146,8 @@ export const UserPages = () => {
                 <Head>
                     <title>Brukerside</title>
                 </Head>
-                <div className="flex flex-col items-stretch justify-between pt-8 w-64">
-                    <div className="flex w-64 flex-col gap-2">
+                <div className="flex flex-col items-stretch justify-between pt-8 w-[20rem]">
+                    <div className="flex w-full flex-col gap-2">
                         {menuItems.map(({ title, slug }, idx) =>
                             currentPage == idx ? (
                                 <p

@@ -1194,13 +1194,6 @@ export type RevokeAccessMutationVariables = Exact<{
 
 export type RevokeAccessMutation = { __typename?: 'Mutation', revokeAccessToDataset: boolean };
 
-export type ApproveAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type ApproveAccessRequestMutation = { __typename?: 'Mutation', approveAccessRequest: boolean };
-
 export type CreateAccessRequestMutationVariables = Exact<{
   input: NewAccessRequest;
 }>;
@@ -1214,14 +1207,6 @@ export type DeleteAccessRequestMutationVariables = Exact<{
 
 
 export type DeleteAccessRequestMutation = { __typename?: 'Mutation', deleteAccessRequest: boolean };
-
-export type DenyAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  reason?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type DenyAccessRequestMutation = { __typename?: 'Mutation', denyAccessRequest: boolean };
 
 export type UpdateAccessRequestMutationVariables = Exact<{
   input: UpdateAccessRequest;
@@ -1475,37 +1460,6 @@ export function useRevokeAccessMutation(baseOptions?: Apollo.MutationHookOptions
 export type RevokeAccessMutationHookResult = ReturnType<typeof useRevokeAccessMutation>;
 export type RevokeAccessMutationResult = Apollo.MutationResult<RevokeAccessMutation>;
 export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<RevokeAccessMutation, RevokeAccessMutationVariables>;
-export const ApproveAccessRequestDocument = gql`
-    mutation approveAccessRequest($id: ID!) {
-  approveAccessRequest(id: $id)
-}
-    `;
-export type ApproveAccessRequestMutationFn = Apollo.MutationFunction<ApproveAccessRequestMutation, ApproveAccessRequestMutationVariables>;
-
-/**
- * __useApproveAccessRequestMutation__
- *
- * To run a mutation, you first call `useApproveAccessRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useApproveAccessRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [approveAccessRequestMutation, { data, loading, error }] = useApproveAccessRequestMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useApproveAccessRequestMutation(baseOptions?: Apollo.MutationHookOptions<ApproveAccessRequestMutation, ApproveAccessRequestMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ApproveAccessRequestMutation, ApproveAccessRequestMutationVariables>(ApproveAccessRequestDocument, options);
-      }
-export type ApproveAccessRequestMutationHookResult = ReturnType<typeof useApproveAccessRequestMutation>;
-export type ApproveAccessRequestMutationResult = Apollo.MutationResult<ApproveAccessRequestMutation>;
-export type ApproveAccessRequestMutationOptions = Apollo.BaseMutationOptions<ApproveAccessRequestMutation, ApproveAccessRequestMutationVariables>;
 export const CreateAccessRequestDocument = gql`
     mutation createAccessRequest($input: NewAccessRequest!) {
   createAccessRequest(input: $input) {
@@ -1570,38 +1524,6 @@ export function useDeleteAccessRequestMutation(baseOptions?: Apollo.MutationHook
 export type DeleteAccessRequestMutationHookResult = ReturnType<typeof useDeleteAccessRequestMutation>;
 export type DeleteAccessRequestMutationResult = Apollo.MutationResult<DeleteAccessRequestMutation>;
 export type DeleteAccessRequestMutationOptions = Apollo.BaseMutationOptions<DeleteAccessRequestMutation, DeleteAccessRequestMutationVariables>;
-export const DenyAccessRequestDocument = gql`
-    mutation denyAccessRequest($id: ID!, $reason: String) {
-  denyAccessRequest(id: $id, reason: $reason)
-}
-    `;
-export type DenyAccessRequestMutationFn = Apollo.MutationFunction<DenyAccessRequestMutation, DenyAccessRequestMutationVariables>;
-
-/**
- * __useDenyAccessRequestMutation__
- *
- * To run a mutation, you first call `useDenyAccessRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDenyAccessRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [denyAccessRequestMutation, { data, loading, error }] = useDenyAccessRequestMutation({
- *   variables: {
- *      id: // value for 'id'
- *      reason: // value for 'reason'
- *   },
- * });
- */
-export function useDenyAccessRequestMutation(baseOptions?: Apollo.MutationHookOptions<DenyAccessRequestMutation, DenyAccessRequestMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DenyAccessRequestMutation, DenyAccessRequestMutationVariables>(DenyAccessRequestDocument, options);
-      }
-export type DenyAccessRequestMutationHookResult = ReturnType<typeof useDenyAccessRequestMutation>;
-export type DenyAccessRequestMutationResult = Apollo.MutationResult<DenyAccessRequestMutation>;
-export type DenyAccessRequestMutationOptions = Apollo.BaseMutationOptions<DenyAccessRequestMutation, DenyAccessRequestMutationVariables>;
 export const UpdateAccessRequestDocument = gql`
     mutation updateAccessRequest($input: UpdateAccessRequest!) {
   updateAccessRequest(input: $input) {
