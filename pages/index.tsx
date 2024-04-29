@@ -14,6 +14,7 @@ import LegalGuidanceIcon from "../components/lib/icons/legalGuidanceIcon";
 import GetStartedIcon from "../components/lib/icons/getStartedIcon";
 import { Next } from '@navikt/ds-icons'
 import DatadrivenIcon from "../components/lib/icons/datadrivenIcon";
+import { AccessRequestAlert } from '../components/user/accessRequestAlert'
 
 const SEARCH_LIMIT = 6
 
@@ -34,6 +35,7 @@ const LandingPage = () => {
             <Head>
                 <title>datamarkedsplassen</title>
             </Head>
+            <AccessRequestAlert></AccessRequestAlert>
             <div className="bg-surface-subtle p-8 min-h-[34rem] items-center justify-center flex flex-col md:flex-row gap-8">
                 <ProductAreaLinks/>
 

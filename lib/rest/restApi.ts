@@ -24,6 +24,8 @@ export const searchTeamKatalogenUrl = (gcpGroups?: string[]) => {
   const query = parameters ? `?${parameters}` : ''
   return `${apiUrl()}/teamkatalogen${query}`
 }
+export const approveAccessRequestUrl = (accessRequestId: string) => `${apiUrl()}/accessRequests/${accessRequestId}?action=approve`
+export const denyAccessRequestUrl = (accessRequestId: string, reason: string) => `${apiUrl()}/accessRequests/${accessRequestId}?action=deny&reason=${reason}`
 
 export const fetchTemplate = (url: string) => fetch(url, {
   method: 'GET',
@@ -31,7 +33,27 @@ export const fetchTemplate = (url: string) => fetch(url, {
   headers: {
     'Content-Type': 'application/json',
   },
+}).then(res => {
+  if (!res.ok) {
+    throw new Error(res.statusText)
+  }
+  return res
 })
+
+export const postTemplate = (url: string, body?: any) => fetch(url, {
+  method: 'POST',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(body),
+}).then(res => {
+  if (!res.ok) {
+    throw new Error(res.statusText)
+  }
+  return res
+})
+
 
 export const searchUrl = (options: SearchOptions) => {
   let queryParams: string[] = [];

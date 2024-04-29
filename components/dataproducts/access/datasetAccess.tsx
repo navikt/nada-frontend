@@ -3,8 +3,6 @@ import { useState } from 'react'
 import { isAfter, parseISO, format } from 'date-fns'
 import {
   useRevokeAccessMutation,
-  useApproveAccessRequestMutation,
-  useDenyAccessRequestMutation,
 } from '../../../lib/schema/graphql'
 import {
   Alert,
@@ -19,7 +17,7 @@ import { ExternalLink } from '@navikt/ds-icons'
 import { nb } from 'date-fns/locale'
 import ErrorMessage from '../../lib/error'
 import { useGetDataset } from '../../../lib/rest/dataproducts'
-import { useFetchAccessRequestsForDataset } from '../../../lib/rest/access'
+import { apporveAccessRequest, denyAccessRequest, useFetchAccessRequestsForDataset } from '../../../lib/rest/access'
 
 interface AccessEntry {
   subject: string
@@ -126,23 +124,89 @@ interface AccessModalProps {
 
 interface AccessRequestModalProps {
   requestID: string
-  actionDeny: (requestID: string, setOpen: Function) => void
-  actionApprove: (requestID: string) => void
+  user?: string
 }
 
-const AccessRequestModal = ({
+export const AccessRequestModal = ({
   requestID,
-  actionDeny,
-  actionApprove,
+  user,
 }: AccessRequestModalProps) => {
-  const [open, setOpen] = useState(false)
+  const [openDeny, setOpenDeny] = useState(false)
+  const [openApprove, setOpenApprove] = useState(false)
+  const [errorApprove, setErrorApprove] = useState<string|undefined>(undefined)
+  const [errorDeny, setErrorDeny] = useState<string|undefined>(undefined)
+  const approve = async (requestID: string) => 
+    apporveAccessRequest(requestID).then(res=> 
+    {
+      setOpenApprove(false)
+      setErrorApprove(undefined)
+      window.location.reload();
+    }
+    ).catch((e:any)=>{
+      setErrorApprove(e.message)
+    })
+  const deny = async (requestID: string, reason?: string)=>denyAccessRequest(requestID, reason ||'')
+  .then(()=>{
+    setOpenDeny(false)
+    setErrorDeny(undefined)
+    window.location.reload();
+  }).catch((e:any)=>{
+    setErrorDeny(e.message)
+  })
+
+
+  const cancelApprove = () => {
+    setOpenApprove(false)
+    setErrorApprove(undefined)
+  }
+
+  const cancelDeny = () => {
+    setOpenDeny(false)
+    setErrorDeny(undefined)
+  }
+
   return (
     <>
       <Modal
-        open={open}
+        open={openApprove}
+        aria-label="Godkjenn søknad"
+        onClose={() => setOpenApprove(false)}
+        className='w-full md:w-[60rem] px-8 h-[13rem]'
+      >
+        <Modal.Body className='h-full'>
+          <div className='flex flex-col justify-center items-center'>
+            <Heading level="1" size="medium">
+              Godkjenn søknad
+            </Heading>
+            <p className='mt-4 mb-4'>Gi tilgang til datasett{user ? ` til ${user}` : ''}? </p>
+            <div className="flex flex-row gap-4">
+              <Button
+                onClick={cancelApprove}
+                variant="secondary"
+                size="small"
+              >
+                Avbryt
+              </Button>
+              <Button
+                onClick={() => {
+                  approve(requestID)
+                }}
+                variant="primary"
+                size="small"
+              >
+                Godkjenn
+              </Button>
+            </div>
+            {errorApprove && <div className='text-red-600'>{errorApprove}</div>}
+            </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        open={openDeny}
         aria-label="Avslå søknad"
-        onClose={() => setOpen(false)}
-        className="max-w-full md:max-w-3xl px-8 h-[20rem]"
+        onClose={() => setOpenDeny(false)}
+        className="max-w-full md:max-w-3xl px-8 h-[24rem]"
       >
         <Modal.Body className="h-full">
           <div className="flex flex-col gap-8">
@@ -152,32 +216,33 @@ const AccessRequestModal = ({
             <Textarea label="Begrunnelse" />
             <div className="flex flex-row gap-4">
               <Button
-                onClick={() => setOpen(false)}
+                onClick={cancelDeny}
                 variant="secondary"
                 size="small"
               >
                 Avbryt
               </Button>
               <Button
-                onClick={() => actionDeny(requestID, setOpen)}
+                onClick={() => deny(requestID)}
                 variant="primary"
                 size="small"
               >
                 Avslå
               </Button>
             </div>
+            {errorDeny && <div className='text-red-600'>{errorDeny}</div>}
           </div>
         </Modal.Body>
       </Modal>
       <div className="flex flex-row flex-nowrap gap-4 justify-end">
         <Button
-          onClick={() => actionApprove(requestID)}
+          onClick={() => setOpenApprove(true)}
           variant="secondary"
           size="small"
         >
           Godkjenn
         </Button>
-        <Button onClick={() => setOpen(true)} variant="secondary" size="small">
+        <Button onClick={() => setOpenDeny(true)} variant="secondary" size="small">
           Avslå
         </Button>
       </div>
@@ -235,58 +300,24 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
 const DatasetAccess = ({ id }: AccessListProps) => {
   const [formError, setFormError] = useState('')
   const [revokeAccess] = useRevokeAccessMutation()
-  const [approveAccessRequest] = useApproveAccessRequestMutation()
-  const [denyAccessRequest] = useDenyAccessRequestMutation()
   const fetchAccessRequestsForDataset = useFetchAccessRequestsForDataset(id)
 
   const getDataset = useGetDataset(id)
 
   if (fetchAccessRequestsForDataset.error)
     return <ErrorMessage error={fetchAccessRequestsForDataset.error} />
-  if (
-    fetchAccessRequestsForDataset.loading ||
-    !fetchAccessRequestsForDataset.data?.accessRequests
-  )
-    return <div />
 
-  const datasetAccessRequests =
-  fetchAccessRequestsForDataset.data.accessRequests as any[]
+  const datasetAccessRequests = fetchAccessRequestsForDataset.loading ||
+    !fetchAccessRequestsForDataset.data?.accessRequests
+    ? []
+    : fetchAccessRequestsForDataset.data.accessRequests as any[]
 
   if (getDataset.error)
     return <ErrorMessage error={getDataset.error} />
-  if (
-    getDataset.loading ||
-    !getDataset?.dataset?.access
-  )
-    return <div />
 
-  const access = getDataset.dataset.access
-
-  const approveRequest = async (requestID: string) => {
-    try {
-      await approveAccessRequest({
-        variables: { id: requestID },
-        refetchQueries: [
-        ],
-      })
-    } catch (e: any) {
-      setFormError(e.message)
-    }
-  }
-
-  const denyRequest = async (requestID: string, setOpen: Function) => {
-    try {
-      await denyAccessRequest({
-        variables: { id: requestID },
-        refetchQueries: [
-        ],
-      })
-    } catch (e: any) {
-      setFormError(e.message)
-    } finally {
-      setOpen(false)
-    }
-  }
+  const access = getDataset.loading ||
+    !getDataset?.dataset?.access ? [] :
+    getDataset.dataset.access
 
   const removeAccess = async (a: access, setOpen: Function) => {
     try {
@@ -351,8 +382,7 @@ const DatasetAccess = ({ id }: AccessListProps) => {
                     <Table.DataCell className="w-[150px]" align="right">
                       <AccessRequestModal
                         requestID={r.id}
-                        actionApprove={approveRequest}
-                        actionDeny={denyRequest}
+                        user={r.subject}
                       />
                     </Table.DataCell>
                   </Table.Row>

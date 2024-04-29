@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAccessRequestUrl, fetchTemplate } from "./restApi";
+import { approveAccessRequestUrl, denyAccessRequestUrl, fetchAccessRequestUrl, fetchTemplate, postTemplate } from "./restApi";
 
 export const fetchAccessRequests = async (datasetId: string) => {
     const url = fetchAccessRequestUrl(datasetId);
@@ -29,4 +29,14 @@ export const useFetchAccessRequestsForDataset = (datasetId: string)=>{
     }, [datasetId])
 
     return {data, loading, error}
+}
+
+export const apporveAccessRequest = async (accessRequestId: string) => {
+    const url = approveAccessRequestUrl(accessRequestId);
+    return postTemplate(url);
+}
+
+export const denyAccessRequest = async (accessRequestId: string, reason: string) => {
+    const url = denyAccessRequestUrl(accessRequestId, reason);
+    return postTemplate(url);
 }
