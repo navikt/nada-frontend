@@ -135,6 +135,7 @@ export const AccessRequestModal = ({
   const [openApprove, setOpenApprove] = useState(false)
   const [errorApprove, setErrorApprove] = useState<string|undefined>(undefined)
   const [errorDeny, setErrorDeny] = useState<string|undefined>(undefined)
+  const [reason, setReason] = useState<string>('')
   const approve = async (requestID: string) => 
     apporveAccessRequest(requestID).then(res=> 
     {
@@ -213,7 +214,7 @@ export const AccessRequestModal = ({
             <Heading level="1" size="medium">
               Avslå søknad
             </Heading>
-            <Textarea label="Begrunnelse" />
+            <Textarea label="Begrunnelse" value={reason} onChange={event=> setReason(event.target.value)}/>
             <div className="flex flex-row gap-4">
               <Button
                 onClick={cancelDeny}
@@ -223,7 +224,7 @@ export const AccessRequestModal = ({
                 Avbryt
               </Button>
               <Button
-                onClick={() => deny(requestID)}
+                onClick={() => deny(requestID, reason)}
                 variant="primary"
                 size="small"
               >
