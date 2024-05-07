@@ -91,7 +91,7 @@ export const EditStoryMetadataForm = ({id, name, description, keywords, teamkata
 
     updateStoryQuery(editStoryData).then(()=>{
       amplitudeLog('skjema fullført', { skjemanavn: 'endre-datafortelling' })
-      router.back()
+      router.push("/user/stories")
     }).catch(e=>{
       console.log(e)
       amplitudeLog('skjemainnsending feilet', {
