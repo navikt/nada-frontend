@@ -154,7 +154,7 @@ export const EditStoryMetadataForm = ({id, name, description, keywords, teamkata
                 ({ group }: { group: { name: string } }) => (
                   <option
                     value={
-                      userInfo?.groups.filter((g: any) => g.name === group.name)[0]
+                      userInfo?.googleGroups.filter((g: any) => g.name === group.name)[0]
                         .email
                     }
                     key={group.name}
