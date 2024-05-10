@@ -17,7 +17,7 @@ export interface ExploreLinkProps {
   remove?: (datasetID: string) => void
   isOwner?: boolean
   mappings?: MappingService[]
-  metabaseDeletedAt: string | null
+  metabaseDeletedAt?: string | null
 }
 
 export const ExploreLink = ({
