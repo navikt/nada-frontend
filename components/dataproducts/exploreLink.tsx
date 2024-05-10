@@ -17,6 +17,7 @@ export interface ExploreLinkProps {
   remove?: (datasetID: string) => void
   isOwner?: boolean
   mappings?: MappingService[]
+  metabaseDeletedAt: string | null
 }
 
 export const ExploreLink = ({
@@ -27,6 +28,7 @@ export const ExploreLink = ({
   remove,
   isOwner,
   mappings,
+  metabaseDeletedAt,
 }: ExploreLinkProps) => {
   const [showRemoveMapping, setShowRemoveMapping] = useState(false)
   const addToMetabase = !mappings?.includes(MappingService.Metabase)
@@ -68,7 +70,7 @@ export const ExploreLink = ({
           >
             Åpne i Metabase <ExternalLink />
           </Link>
-          {isOwner && (
+          {isOwner && metabaseDeletedAt == null && (
             <>
               <Modal
                 open={showRemoveMapping}
