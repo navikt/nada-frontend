@@ -8,17 +8,14 @@ import {
 } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import humanizeDate from '../../lib/humanizeDate'
-import {
-  AccessRequest,
-  useDeleteAccessRequestMutation,
-} from '../../lib/schema/graphql'
 import UpdateAccessRequest from '../dataproducts/accessRequest/updateAccessRequest'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import { useGetDataset } from '../../lib/rest/dataproducts'
+import { deleteAccessRequest } from '../../lib/rest/access'
 
 interface AccessRequests {
-  accessRequests: Array<AccessRequest>
+  accessRequests: Array<any>
 }
 
 export enum RequestStatusType {
@@ -28,12 +25,12 @@ export enum RequestStatusType {
 }
 
 interface RequestInterface {
-  request: AccessRequest
+  request: any
   type: RequestStatusType
 }
 
 interface DeleteRequestInterface {
-  request: AccessRequest
+  request: any
   setError: (message: string | null) => void
 }
 
@@ -84,17 +81,10 @@ const ViewRequestButton = ({ request, type }: RequestInterface) => {
 }
 
 const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
-  const [deleteRequest] = useDeleteAccessRequestMutation()
-
   const onClick = async () => {
     try {
-      await deleteRequest({
-        variables: {
-          id: request.id,
-        },
-        awaitRefetchQueries: true,
-        refetchQueries: ['userInfoDetails'],
-      })
+      await deleteAccessRequest(request.id)
+      window.location.reload()
     } catch (e: any) {
       setError(e.message)
     }

@@ -2,9 +2,6 @@ import * as React from 'react'
 import { useState } from 'react'
 import { isAfter, parseISO, format } from 'date-fns'
 import {
-  useRevokeAccessMutation,
-} from '../../../lib/schema/graphql'
-import {
   Alert,
   Button,
   Heading,
@@ -17,7 +14,7 @@ import { ExternalLink } from '@navikt/ds-icons'
 import { nb } from 'date-fns/locale'
 import ErrorMessage from '../../lib/error'
 import { useGetDataset } from '../../../lib/rest/dataproducts'
-import { apporveAccessRequest, denyAccessRequest, useFetchAccessRequestsForDataset } from '../../../lib/rest/access'
+import { apporveAccessRequest, denyAccessRequest, revokeDatasetAccess, useFetchAccessRequestsForDataset } from '../../../lib/rest/access'
 
 interface AccessEntry {
   subject: string
@@ -300,7 +297,6 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
 
 const DatasetAccess = ({ id }: AccessListProps) => {
   const [formError, setFormError] = useState('')
-  const [revokeAccess] = useRevokeAccessMutation()
   const fetchAccessRequestsForDataset = useFetchAccessRequestsForDataset(id)
 
   const getDataset = useGetDataset(id)
@@ -322,11 +318,8 @@ const DatasetAccess = ({ id }: AccessListProps) => {
 
   const removeAccess = async (a: access, setOpen: Function) => {
     try {
-      await revokeAccess({
-        variables: { id: a.id },
-        refetchQueries: [
-        ],
-      })
+      await revokeDatasetAccess(a.id )
+      window.location.reload()
     } catch (e: any) {
       setFormError(e.message)
     } finally {

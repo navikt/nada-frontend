@@ -24,8 +24,17 @@ export const searchTeamKatalogenUrl = (gcpGroups?: string[]) => {
   const query = parameters ? `?${parameters}` : ''
   return `${apiUrl()}/teamkatalogen${query}`
 }
-export const approveAccessRequestUrl = (accessRequestId: string) => `${apiUrl()}/accessRequests/${accessRequestId}?action=approve`
-export const denyAccessRequestUrl = (accessRequestId: string, reason: string) => `${apiUrl()}/accessRequests/${accessRequestId}?action=deny&reason=${reason}`
+export const searchPollyUrl = (query?: string) => {
+  return `${apiUrl()}/polly?query=${query}`
+}
+
+export const createAccessRequestUrl = () => `${apiUrl()}/accessRequests/new`
+export const deleteAccessRequestUrl = (id: string) => `${apiUrl()}/accessRequests/${id}`
+export const updateAccessRequestUrl = (id: string) => `${apiUrl()}/accessRequests/${id}`
+export const approveAccessRequestUrl = (accessRequestId: string) => `${apiUrl()}/accessRequests/process/${accessRequestId}?action=approve`
+export const denyAccessRequestUrl = (accessRequestId: string, reason: string) => `${apiUrl()}/accessRequests/process/${accessRequestId}?action=deny&reason=${reason}`
+export const grantAccessUrl = () => `${apiUrl()}/accesses/grant`
+export const revokeAccessUrl = (accessId: string) => `${apiUrl()}/accesses/revoke?id=${accessId}`
 
 export const fetchTemplate = (url: string) => fetch(url, {
   method: 'GET',
@@ -54,6 +63,32 @@ export const postTemplate = (url: string, body?: any) => fetch(url, {
   return res
 })
 
+export const putTemplate = (url: string, body?: any) => fetch(url, {
+  method: 'PUT',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(body),
+}).then(res => {
+  if (!res.ok) {
+    throw new Error(res.statusText)
+  }
+  return res
+})
+
+export const deleteTemplate = (url: string, body?: any) => fetch(url, {
+  method: 'DELETE',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}).then(res => {
+  if (!res.ok) {
+    throw new Error(res.statusText)
+  }
+  return res
+})
 
 export const searchUrl = (options: SearchOptions) => {
   let queryParams: string[] = [];

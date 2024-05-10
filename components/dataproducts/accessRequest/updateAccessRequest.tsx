@@ -1,14 +1,11 @@
-import {
-  AccessRequest,
-  useUpdateAccessRequestMutation,
-} from '../../../lib/schema/graphql'
 import * as React from 'react'
 import AccessRequestForm, { AccessRequestFormInput } from './accessRequestForm'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { useState } from 'react'
+import { updateAccessRequest } from '../../../lib/rest/access'
 
 interface UpdateAccessRequestFormProps {
-  updateAccessRequestData: AccessRequest
+  updateAccessRequestData: any
   dataset: DatasetQuery
   setModal: (value: boolean) => void
 }
@@ -18,29 +15,28 @@ const UpdateAccessRequest = ({
   updateAccessRequestData,
   setModal,
 }: UpdateAccessRequestFormProps) => {
-  const [updateAccessRequest] = useUpdateAccessRequestMutation()
-  const [error, setError] = useState<Error | null>(null)
+  const [error, setError] = useState<any>(null)
   const accessRequest: AccessRequestFormInput = {
     ...updateAccessRequestData,
   }
 
   const onSubmit = async (requestData: AccessRequestFormInput) => {
-    updateAccessRequest({
-      onError: setError,
-      variables: {
-        input: {
-          id: updateAccessRequestData.id,
-          expires: requestData.expires,
-          owner: updateAccessRequestData.owner,
-          polly: requestData.polly,
-        },
-      },
-      refetchQueries: ['userInfoDetails'],
-    }).then(() => {
-      setModal(false)
-    })
-  }
+    try{
+      await updateAccessRequest(
+        updateAccessRequestData.id,
+        requestData.expires,
+        updateAccessRequestData.owner,
+        requestData.polly,
+        undefined,
+        undefined
+      )
 
+      setModal(false)
+    } catch (e) {
+      setError(e)
+    }
+  }
+  
   return (
     <AccessRequestForm
       dataset={dataset}

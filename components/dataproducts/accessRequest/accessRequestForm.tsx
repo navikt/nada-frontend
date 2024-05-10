@@ -5,25 +5,23 @@ import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
-import {
-  Maybe,
-  PollyInput,
-  Scalars,
-  SubjectType,
-  usePollyQuery,
-} from '../../../lib/schema/graphql'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { UserState } from '../../../lib/context'
 import ErrorMessage from '../../lib/error';
+import { PollyInput, SubjectType } from '../../../lib/rest/access';
+import { useSearchPolly } from '../../../lib/rest/polly';
 
 const tomorrow = () => {
   const date = new Date()
   date.setDate(date.getDate() + 1)
-  return date.toISOString()
+  return date
 }
 
 const currentDate = (currentDate: any) => {
     if (typeof currentDate === 'string') return new Date(currentDate)
+    else if (currentDate instanceof Date) {
+      return currentDate
+    }
     return undefined
 }
 
@@ -44,24 +42,25 @@ const schema = yup
       .required('Du må velge hvor lenge du ønsker tilgang')
       .oneOf(['eternal', 'until']),
     expires: yup
-      .string()
+      .date()
       .nullable()
       .when('accessType', {
         is: 'until',
-        then: () => yup.string().nullable().matches(/\d{4}-[01]\d-[0-3]\d/, 'Du må velge en dato')
+        then: ()=>yup.date().required('Du må angi en utløpsdato for tilgang'),
+        otherwise: ()=>yup.date().nullable()
       })
     })
   .required()
 
 export type AccessRequestFormInput = {
-  id?: Maybe<Scalars['ID']['input']>
-  datasetID: Scalars['ID']['input']
-  expires?: Maybe<Scalars['Time']['input']>
-  polly?: Maybe<PollyInput>
-  subject?: Maybe<Scalars['String']['input']>
-  subjectType?: Maybe<SubjectType>
-  status?: Maybe<Scalars['String']['input']>
-  reason?: Maybe<Scalars['String']['input']>
+  id?: string
+  datasetID: string
+  expires?: Date
+  polly?: PollyInput
+  subject?: string
+  subjectType?: SubjectType
+  status?: string
+  reason?: string
 }
 
 interface AccessRequestFormProps {
@@ -77,7 +76,7 @@ interface AccessRequestFields {
   subject: string
   subjectType: SubjectType
   accessType: string
-  expires?: string | null | undefined
+  expires?: Date | null | undefined
 }
 
 const AccessRequestFormV2 = ({
@@ -116,17 +115,14 @@ const AccessRequestFormV2 = ({
   const { datepickerProps, inputProps, selectedDay } = useDatepicker({
     defaultSelected: currentDate(getValues("expires")),
     fromDate: new Date(tomorrow()),
-    onDateChange: (d: Date | undefined) => setValue("expires", d ? d.toISOString() : ''),
+    onDateChange: (d: Date | undefined) => setValue("expires", d),
   });
 
   const {
-    data: searchData,
-    error: searchError,
-    loading: searchLoading,
-  } = usePollyQuery({
-    variables: { q: searchText },
-    skip: searchText.length < 3,
-  })
+    searchResult,
+    searchError,
+    loading,
+  } = useSearchPolly(searchText)
 
   const onSubmitForm = (data: AccessRequestFields) => {
     setSubmitted(true)
@@ -134,8 +130,8 @@ const AccessRequestFormV2 = ({
       datasetID: dataset.id,
       subject: data.subject,
       subjectType: data.subjectType,
-      polly: polly,
-      expires: data.accessType === 'until' ? data.expires : undefined,
+      polly: polly??undefined,
+      expires: data.accessType === 'until' ? data.expires? new Date(data.expires) : undefined: undefined,
     }
     onSubmit(accessRequest)
   }
@@ -152,8 +148,8 @@ const AccessRequestFormV2 = ({
     setSearchText(input)
     setTimeout(() => {
       callback(
-        searchData
-          ? searchData.polly.map((el) => {
+        searchResult
+          ? searchResult.map((el) => {
               return { value: el.externalID, label: el.name }
             })
           : []
@@ -163,8 +159,8 @@ const AccessRequestFormV2 = ({
 
   const onInputChange = (newOption: Option | null) => {
     newOption != null
-      ? searchData &&
-        setPolly(searchData.polly.find((e) => e.externalID == newOption.value))
+      ? searchResult &&
+        setPolly(searchResult.find((e) => e.externalID == newOption.value))
       : setPolly(null)
   }
 
@@ -205,7 +201,7 @@ const AccessRequestFormV2 = ({
             className="hidden-label"
             label="E-post-adresse"
             placeholder="Skriv inn e-post-adresse"
-            error={errors?.subject?.message}
+            error={errors?.subject?.message?.toString()}
             size="medium"
           />
         </div>
@@ -247,7 +243,7 @@ const AccessRequestFormV2 = ({
               }
               loadingMessage={() => 'Søker etter behandling...'}
               loadOptions={loadOptions}
-              isLoading={searchLoading}
+              isLoading={loading}
               onChange={onInputChange}
               menuIsOpen={true}
             />
