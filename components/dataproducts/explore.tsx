@@ -64,6 +64,7 @@ const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
           add={addToMetabase}
           remove={removeFromMetabase}
           mappings={mappings}
+          metabaseDeletedAt={dataset.metabaseDeletedAt}
         />
       </div>
       {formError && <ErrorMessage error={formError} />}

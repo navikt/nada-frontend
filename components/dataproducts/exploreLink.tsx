@@ -17,6 +17,7 @@ export interface ExploreLinkProps {
   remove?: (datasetID: string) => void
   isOwner?: boolean
   mappings?: MappingService[]
+  metabaseDeletedAt?: string | null
 }
 
 export const ExploreLink = ({
@@ -27,14 +28,22 @@ export const ExploreLink = ({
   remove,
   isOwner,
   mappings,
+  metabaseDeletedAt,
 }: ExploreLinkProps) => {
   const [showRemoveMapping, setShowRemoveMapping] = useState(false)
   const addToMetabase = !mappings?.includes(MappingService.Metabase)
   const [loading, setLoading] = useState(mappings?.includes(MappingService.Metabase) && !url)
+  const [deleteInMetabaseInProgress, setDeleteInMetabaseInProgress] = useState(false);
   const handleDelete = (e: any) => {
     e.preventDefault()
-    if (remove) remove(datasetID)
-    setShowRemoveMapping(false)
+    setDeleteInMetabaseInProgress(true);
+    if (remove) {
+      remove(datasetID)
+      setTimeout(() => {
+        window.location.reload();
+        setShowRemoveMapping(false)
+      }, 5000);
+    }
   }
 
   const handleAdd = () => {
@@ -68,7 +77,7 @@ export const ExploreLink = ({
           >
             Åpne i Metabase <ExternalLink />
           </Link>
-          {isOwner && (
+          {isOwner && metabaseDeletedAt == null && (
             <>
               <Modal
                 open={showRemoveMapping}
@@ -85,6 +94,15 @@ export const ExploreLink = ({
                         Dette vil medføre at du sletter databasen, samlingen, tilgangsgruppene og alle tilhørende spørsmål i metabase, samt service account i GCP.
                     </div>
                     <div className="flex flex-row gap-4">
+                      {deleteInMetabaseInProgress ? (
+                        <p
+                          className="border-l-8 border-border-on-inverted py-1 px-4 flex flex-row gap-2 w-fit text-text-subtle"
+                         >
+                            Fjerner datasettet fra Metabase
+                            <Loader transparent size="small" />
+                        </p> ) : (
+
+                        <div>
                       <Button
                         onClick={handleDelete}
                         variant="primary"
@@ -99,6 +117,9 @@ export const ExploreLink = ({
                       >
                         Avbryt
                       </Button>
+                        </div>
+                        )
+                    }
                     </div>
                   </div>
                 </Modal.Body>
