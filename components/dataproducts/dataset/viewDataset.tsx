@@ -126,12 +126,6 @@ const ViewDataset = ({
               </a>
             </DatasetAlert>
          )}
-         {//Test
-          <a href="#" onClick={() => setAccessRequested(true)}>
-              Søk om tilgang
-          </a>
-          }
-
           <div>
             <div className="flex md:items-center">
               <Heading
