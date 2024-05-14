@@ -1,11 +1,12 @@
 import { Button, DatePicker, Heading, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
-import {  SubjectType, useGrantAccessMutation } from "../../../lib/schema/graphql";
+import {  SubjectType} from "../../../lib/schema/graphql";
 import * as yup from 'yup'
 import { Controller, useForm, useFormState } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import ErrorMessage from "../../lib/error";
 import { useRouter } from "next/router";
+import { grantDatasetAccess } from "../../../lib/rest/access";
 
 interface NewDatasetAccessProps {
     dataset: any
@@ -46,8 +47,7 @@ const schema = yup
   .required()
 
 const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) => {
-    const [grantAccess] = useGrantAccessMutation()
-    const [error, setError] = useState<Error | null>(null)
+    const [error, setError] = useState<any>(null)
     const router = useRouter()
     const {
         register,
@@ -72,23 +72,16 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
 
     const onSubmitForm = async (requestData: any) => {
         requestData.datasetID = dataset.id
-        await grantAccess({
-            onError: setError,
-            variables: {
-                input: {
-                    datasetID: dataset.id,
-                    subject: requestData.subject,
-                    subjectType: requestData.subjectType,
-                    expires: requestData.accessType === "until" ? new Date(requestData.expires) : undefined
-                },
-            },
-            refetchQueries: [
-            ]
-        }).then((a) => {
-          !a.errors && setShowNewAccess(false)
-          router.reload()
-        }) 
-
+        try{
+          await grantDatasetAccess(
+                    dataset.id,
+                    requestData.accessType === "until" ? new Date(requestData.expires) : undefined,
+                    requestData.subject,
+                    requestData.subjectType)
+        router.reload() 
+        }catch(e){
+            setError(e)
+        }
     }
 
     return (

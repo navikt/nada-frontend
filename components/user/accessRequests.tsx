@@ -8,17 +8,14 @@ import {
 } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import humanizeDate from '../../lib/humanizeDate'
-import {
-  AccessRequest,
-  useDeleteAccessRequestMutation,
-} from '../../lib/schema/graphql'
 import UpdateAccessRequest from '../dataproducts/accessRequest/updateAccessRequest'
 import ErrorMessage from '../lib/error'
 import LoaderSpinner from '../lib/spinner'
 import { useGetDataset } from '../../lib/rest/dataproducts'
+import { deleteAccessRequest } from '../../lib/rest/access'
 
 interface AccessRequests {
-  accessRequests: Array<AccessRequest>
+  accessRequests: Array<any>
 }
 
 export enum RequestStatusType {
@@ -28,12 +25,12 @@ export enum RequestStatusType {
 }
 
 interface RequestInterface {
-  request: AccessRequest
+  request: any
   type: RequestStatusType
 }
 
 interface DeleteRequestInterface {
-  request: AccessRequest
+  request: any
   setError: (message: string | null) => void
 }
 
@@ -84,17 +81,10 @@ const ViewRequestButton = ({ request, type }: RequestInterface) => {
 }
 
 const DeleteRequestButton = ({ request, setError }: DeleteRequestInterface) => {
-  const [deleteRequest] = useDeleteAccessRequestMutation()
-
   const onClick = async () => {
     try {
-      await deleteRequest({
-        variables: {
-          id: request.id,
-        },
-        awaitRefetchQueries: true,
-        refetchQueries: ['userInfoDetails'],
-      })
+      await deleteAccessRequest(request.id)
+      window.location.reload()
     } catch (e: any) {
       setError(e.message)
     }
@@ -118,42 +108,42 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   return (
     <>
       {error && <Alert variant={'error'}>{error}</Alert>}
-      {pendingAccessRequests?.length &&
-      <div className="flex flex-col gap-5 mb-4">
-        <Heading size="small" level="2">
-          Ubehandlede tilgangssøknader
-        </Heading>
-        {pendingAccessRequests.map((req, idx) => (
-          <div className="w-full flex flex-row" key={idx}>
-            <ViewRequestButton
-              key={`${idx}_show`}
-              request={req}
-              type={RequestStatusType.Pending}
-            />
-            <DeleteRequestButton
-              key={`${idx}_delete`}
-              request={req}
-              setError={setError}
-            />
-          </div>
-        ))}
-      </div>
+      {pendingAccessRequests?.length ?
+        <div className="flex flex-col gap-5 mb-4">
+          <Heading size="small" level="2">
+            Ubehandlede tilgangssøknader
+          </Heading>
+          {pendingAccessRequests.map((req, idx) => (
+            <div className="w-full flex flex-row" key={idx}>
+              <ViewRequestButton
+                key={`${idx}_show`}
+                request={req}
+                type={RequestStatusType.Pending}
+              />
+              <DeleteRequestButton
+                key={`${idx}_delete`}
+                request={req}
+                setError={setError}
+              />
+            </div>
+          ))}
+        </div> : <div></div>
       }
       {deniedAccessRequests?.length &&
-      <div className="flex flex-col gap-5 mb-4">
-        <Heading size="small" level="2">
-          Avslåtte tilgangssøknader
-        </Heading>
-        {deniedAccessRequests.map((req, idx) => (
-          <div className="w-full flex flex-row" key={idx}>
-            <ViewRequestButton
-              key={`${idx}_show`}
-              request={req}
-              type={RequestStatusType.Denied}
-            />
-          </div>
-        ))}
-      </div>
+        <div className="flex flex-col gap-5 mb-4">
+          <Heading size="small" level="2">
+            Avslåtte tilgangssøknader
+          </Heading>
+          {deniedAccessRequests.map((req, idx) => (
+            <div className="w-full flex flex-row" key={idx}>
+              <ViewRequestButton
+                key={`${idx}_show`}
+                request={req}
+                type={RequestStatusType.Denied}
+              />
+            </div>
+          ))}
+        </div>
       }
     </>
   )

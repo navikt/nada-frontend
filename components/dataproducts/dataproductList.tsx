@@ -15,8 +15,9 @@ interface Dataset {
     owner: { __typename?: 'Owner' | undefined, group: string }
 }
 
+//TODO: there are dataproducts without dataset!!!!
 interface DataproductsListProps {
-    datasets: Dataset[]
+    datasets: any[]
 }
 
 const groupDatasetsByDataproduct = (datasets: any[]) => {
@@ -27,7 +28,7 @@ const groupDatasetsByDataproduct = (datasets: any[]) => {
         dataproducts.get(dataset.dataproductID)?.push(dataset)
     })
 
-    var datasetsGroupedByDataproduct: Array<Dataset[]> = [];
+    var datasetsGroupedByDataproduct: Array<any[]> = [];
     dataproducts.forEach((datasets) => {
         datasetsGroupedByDataproduct.push(datasets)
     })
@@ -39,26 +40,26 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
     const groupedDatasets = groupDatasetsByDataproduct(datasets)
     return (
         <>
-            {groupedDatasets.map((datasets) => {
+            {groupedDatasets.map((datasets, i) => {
                 return (
-                    <>
+                    <div key={i}>
                     <div className="w-[60rem]">
-                        <ExpansionCard key={datasets[0].dataproductID} aria-label="dataproduct-access">
+                        <ExpansionCard key={i} aria-label="dataproduct-access">
                             <ExpansionCard.Header>
-                                <ExpansionCard.Title>{`Dataprodukt - ${datasets[0].dataproduct.name}`}</ExpansionCard.Title>
+                                <ExpansionCard.Title>{`Dataprodukt - ${datasets[0].dataproductName}`}</ExpansionCard.Title>
                                 <ExpansionCard.Description>
-                                    <p>Klikk for å se datasettene du har tilgang til</p></ExpansionCard.Description>
+                                    Klikk for å se datasettene du har tilgang til</ExpansionCard.Description>
                             </ExpansionCard.Header>
                             <ExpansionCard.Content className="text-center">
                                 <>
-                                    {datasets?.map((dataset) => {
+                                    {datasets?.map((dataset, i) => {
                                         return <SearchResultLink
-                                            key={dataset.id}
+                                            key={i}
                                             group={dataset.owner}
                                             name={dataset.name}
                                             type={'Dataset'}
                                             keywords={dataset.keywords}
-                                            link={`/dataproduct/${dataset.dataproductID}/${dataset.dataproduct.slug}/${dataset.id}`}
+                                            link={`/dataproduct/${dataset.dataproductID}/${dataset.dpSlug}/${dataset.id}`}
                                         />
                                     })
                                     }
@@ -66,7 +67,7 @@ export const DataproductsList = ({ datasets }: DataproductsListProps) => {
                             </ExpansionCard.Content>
                         </ExpansionCard>
                     </div>
-                    </>
+                    </div>
                 )
             })}
         </>

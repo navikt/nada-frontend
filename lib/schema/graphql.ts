@@ -1180,41 +1180,6 @@ export type UserInfo = {
   stories: Array<Story>;
 };
 
-export type GrantAccessMutationVariables = Exact<{
-  input: NewGrant;
-}>;
-
-
-export type GrantAccessMutation = { __typename?: 'Mutation', grantAccessToDataset: { __typename?: 'Access', id: string } };
-
-export type RevokeAccessMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type RevokeAccessMutation = { __typename?: 'Mutation', revokeAccessToDataset: boolean };
-
-export type CreateAccessRequestMutationVariables = Exact<{
-  input: NewAccessRequest;
-}>;
-
-
-export type CreateAccessRequestMutation = { __typename?: 'Mutation', createAccessRequest: { __typename?: 'AccessRequest', id: string } };
-
-export type DeleteAccessRequestMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DeleteAccessRequestMutation = { __typename?: 'Mutation', deleteAccessRequest: boolean };
-
-export type UpdateAccessRequestMutationVariables = Exact<{
-  input: UpdateAccessRequest;
-}>;
-
-
-export type UpdateAccessRequestMutation = { __typename?: 'Mutation', updateAccessRequest: { __typename?: 'AccessRequest', id: string } };
-
 export type CreateDataproductMutationVariables = Exact<{
   input: NewDataproduct;
 }>;
@@ -1314,13 +1279,6 @@ export type UpdateKeywordsMutationVariables = Exact<{
 
 export type UpdateKeywordsMutation = { __typename?: 'Mutation', updateKeywords: boolean };
 
-export type PollyQueryVariables = Exact<{
-  q: Scalars['String']['input'];
-}>;
-
-
-export type PollyQuery = { __typename?: 'Query', polly: Array<{ __typename?: 'QueryPolly', externalID: string, name: string, url: string }> };
-
 export type JoinableViewQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1396,167 +1354,6 @@ export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]:
 export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
 
 
-export const GrantAccessDocument = gql`
-    mutation GrantAccess($input: NewGrant!) {
-  grantAccessToDataset(input: $input) {
-    id
-  }
-}
-    `;
-export type GrantAccessMutationFn = Apollo.MutationFunction<GrantAccessMutation, GrantAccessMutationVariables>;
-
-/**
- * __useGrantAccessMutation__
- *
- * To run a mutation, you first call `useGrantAccessMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useGrantAccessMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [grantAccessMutation, { data, loading, error }] = useGrantAccessMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useGrantAccessMutation(baseOptions?: Apollo.MutationHookOptions<GrantAccessMutation, GrantAccessMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<GrantAccessMutation, GrantAccessMutationVariables>(GrantAccessDocument, options);
-      }
-export type GrantAccessMutationHookResult = ReturnType<typeof useGrantAccessMutation>;
-export type GrantAccessMutationResult = Apollo.MutationResult<GrantAccessMutation>;
-export type GrantAccessMutationOptions = Apollo.BaseMutationOptions<GrantAccessMutation, GrantAccessMutationVariables>;
-export const RevokeAccessDocument = gql`
-    mutation RevokeAccess($id: ID!) {
-  revokeAccessToDataset(id: $id)
-}
-    `;
-export type RevokeAccessMutationFn = Apollo.MutationFunction<RevokeAccessMutation, RevokeAccessMutationVariables>;
-
-/**
- * __useRevokeAccessMutation__
- *
- * To run a mutation, you first call `useRevokeAccessMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRevokeAccessMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [revokeAccessMutation, { data, loading, error }] = useRevokeAccessMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useRevokeAccessMutation(baseOptions?: Apollo.MutationHookOptions<RevokeAccessMutation, RevokeAccessMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RevokeAccessMutation, RevokeAccessMutationVariables>(RevokeAccessDocument, options);
-      }
-export type RevokeAccessMutationHookResult = ReturnType<typeof useRevokeAccessMutation>;
-export type RevokeAccessMutationResult = Apollo.MutationResult<RevokeAccessMutation>;
-export type RevokeAccessMutationOptions = Apollo.BaseMutationOptions<RevokeAccessMutation, RevokeAccessMutationVariables>;
-export const CreateAccessRequestDocument = gql`
-    mutation createAccessRequest($input: NewAccessRequest!) {
-  createAccessRequest(input: $input) {
-    id
-  }
-}
-    `;
-export type CreateAccessRequestMutationFn = Apollo.MutationFunction<CreateAccessRequestMutation, CreateAccessRequestMutationVariables>;
-
-/**
- * __useCreateAccessRequestMutation__
- *
- * To run a mutation, you first call `useCreateAccessRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAccessRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createAccessRequestMutation, { data, loading, error }] = useCreateAccessRequestMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateAccessRequestMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccessRequestMutation, CreateAccessRequestMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAccessRequestMutation, CreateAccessRequestMutationVariables>(CreateAccessRequestDocument, options);
-      }
-export type CreateAccessRequestMutationHookResult = ReturnType<typeof useCreateAccessRequestMutation>;
-export type CreateAccessRequestMutationResult = Apollo.MutationResult<CreateAccessRequestMutation>;
-export type CreateAccessRequestMutationOptions = Apollo.BaseMutationOptions<CreateAccessRequestMutation, CreateAccessRequestMutationVariables>;
-export const DeleteAccessRequestDocument = gql`
-    mutation deleteAccessRequest($id: ID!) {
-  deleteAccessRequest(id: $id)
-}
-    `;
-export type DeleteAccessRequestMutationFn = Apollo.MutationFunction<DeleteAccessRequestMutation, DeleteAccessRequestMutationVariables>;
-
-/**
- * __useDeleteAccessRequestMutation__
- *
- * To run a mutation, you first call `useDeleteAccessRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAccessRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteAccessRequestMutation, { data, loading, error }] = useDeleteAccessRequestMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteAccessRequestMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccessRequestMutation, DeleteAccessRequestMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteAccessRequestMutation, DeleteAccessRequestMutationVariables>(DeleteAccessRequestDocument, options);
-      }
-export type DeleteAccessRequestMutationHookResult = ReturnType<typeof useDeleteAccessRequestMutation>;
-export type DeleteAccessRequestMutationResult = Apollo.MutationResult<DeleteAccessRequestMutation>;
-export type DeleteAccessRequestMutationOptions = Apollo.BaseMutationOptions<DeleteAccessRequestMutation, DeleteAccessRequestMutationVariables>;
-export const UpdateAccessRequestDocument = gql`
-    mutation updateAccessRequest($input: UpdateAccessRequest!) {
-  updateAccessRequest(input: $input) {
-    id
-  }
-}
-    `;
-export type UpdateAccessRequestMutationFn = Apollo.MutationFunction<UpdateAccessRequestMutation, UpdateAccessRequestMutationVariables>;
-
-/**
- * __useUpdateAccessRequestMutation__
- *
- * To run a mutation, you first call `useUpdateAccessRequestMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAccessRequestMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAccessRequestMutation, { data, loading, error }] = useUpdateAccessRequestMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateAccessRequestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccessRequestMutation, UpdateAccessRequestMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAccessRequestMutation, UpdateAccessRequestMutationVariables>(UpdateAccessRequestDocument, options);
-      }
-export type UpdateAccessRequestMutationHookResult = ReturnType<typeof useUpdateAccessRequestMutation>;
-export type UpdateAccessRequestMutationResult = Apollo.MutationResult<UpdateAccessRequestMutation>;
-export type UpdateAccessRequestMutationOptions = Apollo.BaseMutationOptions<UpdateAccessRequestMutation, UpdateAccessRequestMutationVariables>;
 export const CreateDataproductDocument = gql`
     mutation createDataproduct($input: NewDataproduct!) {
   createDataproduct(input: $input) {
@@ -2037,48 +1834,6 @@ export function useUpdateKeywordsMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateKeywordsMutationHookResult = ReturnType<typeof useUpdateKeywordsMutation>;
 export type UpdateKeywordsMutationResult = Apollo.MutationResult<UpdateKeywordsMutation>;
 export type UpdateKeywordsMutationOptions = Apollo.BaseMutationOptions<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>;
-export const PollyDocument = gql`
-    query Polly($q: String!) {
-  polly(q: $q) {
-    externalID
-    name
-    url
-  }
-}
-    `;
-
-/**
- * __usePollyQuery__
- *
- * To run a query within a React component, call `usePollyQuery` and pass it any options that fit your needs.
- * When your component renders, `usePollyQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePollyQuery({
- *   variables: {
- *      q: // value for 'q'
- *   },
- * });
- */
-export function usePollyQuery(baseOptions: Apollo.QueryHookOptions<PollyQuery, PollyQueryVariables> & ({ variables: PollyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PollyQuery, PollyQueryVariables>(PollyDocument, options);
-      }
-export function usePollyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PollyQuery, PollyQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PollyQuery, PollyQueryVariables>(PollyDocument, options);
-        }
-export function usePollySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PollyQuery, PollyQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PollyQuery, PollyQueryVariables>(PollyDocument, options);
-        }
-export type PollyQueryHookResult = ReturnType<typeof usePollyQuery>;
-export type PollyLazyQueryHookResult = ReturnType<typeof usePollyLazyQuery>;
-export type PollySuspenseQueryHookResult = ReturnType<typeof usePollySuspenseQuery>;
-export type PollyQueryResult = Apollo.QueryResult<PollyQuery, PollyQueryVariables>;
 export const JoinableViewDocument = gql`
     query JoinableView($id: ID!) {
   joinableView(id: $id) {
