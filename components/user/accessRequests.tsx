@@ -108,42 +108,42 @@ const AccessRequestsListForUser = ({ accessRequests }: AccessRequests) => {
   return (
     <>
       {error && <Alert variant={'error'}>{error}</Alert>}
-      {pendingAccessRequests?.length &&
-      <div className="flex flex-col gap-5 mb-4">
-        <Heading size="small" level="2">
-          Ubehandlede tilgangssøknader
-        </Heading>
-        {pendingAccessRequests.map((req, idx) => (
-          <div className="w-full flex flex-row" key={idx}>
-            <ViewRequestButton
-              key={`${idx}_show`}
-              request={req}
-              type={RequestStatusType.Pending}
-            />
-            <DeleteRequestButton
-              key={`${idx}_delete`}
-              request={req}
-              setError={setError}
-            />
-          </div>
-        ))}
-      </div>
+      {pendingAccessRequests?.length ?
+        <div className="flex flex-col gap-5 mb-4">
+          <Heading size="small" level="2">
+            Ubehandlede tilgangssøknader
+          </Heading>
+          {pendingAccessRequests.map((req, idx) => (
+            <div className="w-full flex flex-row" key={idx}>
+              <ViewRequestButton
+                key={`${idx}_show`}
+                request={req}
+                type={RequestStatusType.Pending}
+              />
+              <DeleteRequestButton
+                key={`${idx}_delete`}
+                request={req}
+                setError={setError}
+              />
+            </div>
+          ))}
+        </div> : <div></div>
       }
       {deniedAccessRequests?.length &&
-      <div className="flex flex-col gap-5 mb-4">
-        <Heading size="small" level="2">
-          Avslåtte tilgangssøknader
-        </Heading>
-        {deniedAccessRequests.map((req, idx) => (
-          <div className="w-full flex flex-row" key={idx}>
-            <ViewRequestButton
-              key={`${idx}_show`}
-              request={req}
-              type={RequestStatusType.Denied}
-            />
-          </div>
-        ))}
-      </div>
+        <div className="flex flex-col gap-5 mb-4">
+          <Heading size="small" level="2">
+            Avslåtte tilgangssøknader
+          </Heading>
+          {deniedAccessRequests.map((req, idx) => (
+            <div className="w-full flex flex-row" key={idx}>
+              <ViewRequestButton
+                key={`${idx}_show`}
+                request={req}
+                type={RequestStatusType.Denied}
+              />
+            </div>
+          ))}
+        </div>
       }
     </>
   )
