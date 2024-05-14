@@ -125,7 +125,13 @@ const ViewDataset = ({
                 Søk om tilgang
               </a>
             </DatasetAlert>
-          )}
+         )}
+         {//Test
+          <a href="#" onClick={() => setAccessRequested(true)}>
+              Søk om tilgang
+          </a>
+          }
+
           <div>
             <div className="flex md:items-center">
               <Heading
@@ -197,7 +203,7 @@ const ViewDataset = ({
           <div>
             {userInfo && accessType.type !== 'none' && (
               <article className="border-b border-border-divider last:border-b-0">
-                { isOwner && <a 
+                { !isOwner && <a 
                   className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit" 
                   href="#" onClick={() => setAccessRequested(true)}>
                   Søk om ny tilgang til datasettet
