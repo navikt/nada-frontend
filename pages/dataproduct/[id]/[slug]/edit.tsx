@@ -1,9 +1,5 @@
 import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
-import {
-  Group,
-  useDeleteDataproductMutation,
-} from '../../../../lib/schema/graphql'
 import { GetServerSideProps } from 'next'
 import { addApolloState, initializeApollo } from '../../../../lib/apollo'
 import * as React from 'react'
@@ -16,7 +12,7 @@ import { UserState } from '../../../../lib/context'
 import DeleteModal from '../../../../components/lib/deleteModal'
 import { useRouter } from 'next/router'
 import InnerContainer from '../../../../components/lib/innerContainer'
-import { useGetDataproduct } from '../../../../lib/rest/dataproducts'
+import { deleteDataproduct, useGetDataproduct } from '../../../../lib/rest/dataproducts'
 
 interface DataproductProps {
   id: string
@@ -28,12 +24,6 @@ const DataproductEdit = () => {
   const userInfo = useContext(UserState)
   const router = useRouter()
   const id = router.query.id as string
-
-  const [deleteDataproduct] = useDeleteDataproductMutation({
-    variables: { id: id },
-    awaitRefetchQueries: true,
-    refetchQueries: ['searchContent'],
-  })
 
   const { dataproduct, loading, error } = useGetDataproduct(id)
   useEffect(() => {
@@ -52,16 +42,17 @@ const DataproductEdit = () => {
     !userInfo?.googleGroups
       ? false
       : userInfo.googleGroups.some(
-          (g: any) => g.email === dataproduct?.owner?.group
-        )
+        (g: any) => g.email === dataproduct?.owner?.group
+      )
 
   const onDelete = async () => {
-    try {
-      await deleteDataproduct()
-      await router.push('/')
-    } catch (e: any) {
-      setDeleteError(e.toString())
-    }
+    deleteDataproduct(dataproduct.id).then(() => {
+      amplitudeLog('slett dataprodukt', { name: dataproduct.name })
+      router.push('/')
+    }).catch(error => {
+      amplitudeLog('slett dataprodukt feilet', { name: dataproduct.name })
+      setDeleteError(error)
+    })
   }
 
   return (

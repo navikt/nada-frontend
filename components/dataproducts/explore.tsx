@@ -1,10 +1,10 @@
 import {
   MappingService,
-  useUpdateMappingMutation,
 } from '../../lib/schema/graphql'
 import ExploreLink, { ItemType } from './exploreLink'
 import { useState } from 'react'
 import ErrorMessage from '../lib/error'
+import { mapDatasetToServices } from '../../lib/rest/dataproducts'
 
 interface ExploreProps {
   dataproductId: string
@@ -14,32 +14,13 @@ interface ExploreProps {
 
 const Explore = ({ dataproductId, dataset, isOwner }: ExploreProps) => {
   const [formError, setFormError] = useState(undefined)
-  const [updateMapping] = useUpdateMappingMutation()
 
   const addToMetabase = async () => {
-    try {
-      await updateMapping({
-        variables: {
-          datasetID: dataset.id,
-          services: [MappingService.Metabase],
-        },
-        refetchQueries: [
-        ],
-      })
-    } catch (e: any) {
-      setFormError(e)
-    }
+    mapDatasetToServices(dataset.id, [MappingService.Metabase]).catch(e => setFormError(e))
   }
 
   const removeFromMetabase = async (datasetID: string) => {
-    try {
-      await updateMapping({
-        variables: { datasetID, services: [] },
-        refetchQueries: ['Dataproduct'],
-      })
-    } catch (e: any) {
-      setFormError(e)
-    }
+    mapDatasetToServices(datasetID, []).catch(e => setFormError(e))
   }
 
   const datasource = dataset.datasource

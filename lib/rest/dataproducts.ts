@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchTemplate, getDataproductUrl, getDatasetUrl } from "./restApi";
+import { createDataproductUrl, deleteDataproductUrl, deleteTemplate, fetchTemplate, getDataproductUrl, getDatasetUrl, mapDatasetToServicesUrl, postTemplate, putTemplate, updateDataproductUrl } from "./restApi";
 
 const getDataproduct = async (id: string) => {
     const url = getDataproductUrl(id);
@@ -58,4 +58,25 @@ export const useGetDataset = (id: string)=>{
     }, [id])
 
     return {dataset, loading, error}
+}
+
+export const createDataproduct = async (dp: any) => {
+    const url = createDataproductUrl();
+    return postTemplate(url, dp).then((res)=>res.json());
+}
+
+export const updateDataproduct = async (id: string, dp: any) => {
+    const url = updateDataproductUrl(id);
+    return putTemplate(url, dp).then((res)=>res.json());
+}
+
+export const deleteDataproduct = async (id: string) => {
+    const url = deleteDataproductUrl(id);
+    return deleteTemplate(url).then((res)=>res.json());
+}
+
+export const mapDatasetToServices = (id: string, services: string[])=>{
+    const url = mapDatasetToServicesUrl(id);
+    return postTemplate(url, {
+        services}).then((res)=>res.json());
 }
