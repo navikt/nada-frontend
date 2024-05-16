@@ -83,7 +83,7 @@ export const NewDataproductForm = () => {
             productAreaID: valueOrNull(productAreaID),
             teamID: valueOrNull(teamID),
       }).then((res) => {
-        const data = res.json()
+        const data = res
         setBackendError(undefined)
         router.push(`/dataproduct/${data.id}/${data.slug}`)
         amplitudeLog('skjema fullført', { skjemanavn: 'nytt-dataprodukt' })
