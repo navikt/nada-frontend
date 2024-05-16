@@ -195,3 +195,7 @@ a:hover {
 .js-plotly-plot .plotly .modebar .modebar-group {
     display: flex;
 }
+
+code {
+  font-size: 0.9em !important;
+}
