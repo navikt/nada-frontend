@@ -1242,13 +1242,6 @@ export type InsightProductQueryVariables = Exact<{
 
 export type InsightProductQuery = { __typename?: 'Query', insightProduct: { __typename?: 'InsightProduct', id: string, name: string, description: string, created: any, lastModified?: any | null, type: string, link: string, keywords: Array<string>, group: string, teamkatalogenURL?: string | null, productAreaID?: string | null, teamID?: string | null } };
 
-export type UpdateKeywordsMutationVariables = Exact<{
-  input: UpdateKeywords;
-}>;
-
-
-export type UpdateKeywordsMutation = { __typename?: 'Mutation', updateKeywords: boolean };
-
 export type JoinableViewQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1642,37 +1635,6 @@ export type InsightProductQueryHookResult = ReturnType<typeof useInsightProductQ
 export type InsightProductLazyQueryHookResult = ReturnType<typeof useInsightProductLazyQuery>;
 export type InsightProductSuspenseQueryHookResult = ReturnType<typeof useInsightProductSuspenseQuery>;
 export type InsightProductQueryResult = Apollo.QueryResult<InsightProductQuery, InsightProductQueryVariables>;
-export const UpdateKeywordsDocument = gql`
-    mutation updateKeywords($input: UpdateKeywords!) {
-  updateKeywords(input: $input)
-}
-    `;
-export type UpdateKeywordsMutationFn = Apollo.MutationFunction<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>;
-
-/**
- * __useUpdateKeywordsMutation__
- *
- * To run a mutation, you first call `useUpdateKeywordsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateKeywordsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateKeywordsMutation, { data, loading, error }] = useUpdateKeywordsMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateKeywordsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>(UpdateKeywordsDocument, options);
-      }
-export type UpdateKeywordsMutationHookResult = ReturnType<typeof useUpdateKeywordsMutation>;
-export type UpdateKeywordsMutationResult = Apollo.MutationResult<UpdateKeywordsMutation>;
-export type UpdateKeywordsMutationOptions = Apollo.BaseMutationOptions<UpdateKeywordsMutation, UpdateKeywordsMutationVariables>;
 export const JoinableViewDocument = gql`
     query JoinableView($id: ID!) {
   joinableView(id: $id) {

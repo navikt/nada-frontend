@@ -19,7 +19,10 @@ export const deleteDataproductUrl = (id: string) => `${apiUrl()}/dataproducts/${
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`
+
 export const fetchKeywordsUrl = () => `${apiUrl()}/keywords`
+export const updateKeywordsUrl = () => `${apiUrl()}/keywords`
+
 export const fetchAccessRequestUrl = (datasetId: string) => `${apiUrl()}/accessRequests?datasetId=${datasetId}`
 export const fetchBQDatasetsUrl = (projectId: string) => `${apiUrl()}/bigquery/datasets?projectId=${projectId}`
 export const fetchBQTablesUrl = (projectId: string, datasetId: string) => `${apiUrl()}/bigquery/tables?projectId=${projectId}&datasetId=${datasetId}`
