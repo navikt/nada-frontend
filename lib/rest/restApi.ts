@@ -11,6 +11,11 @@ export const apiUrl = () => {
 
 export const getDataproductUrl = (id: string) => `${apiUrl()}/dataproducts/${id}`
 export const getDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
+export const mapDatasetToServicesUrl = (datasetId: string) => `${apiUrl()}/datasets/${datasetId}/map`
+export const createDataproductUrl = () => `${apiUrl()}/dataproducts/new`
+export const updateDataproductUrl = (id: string) => `${apiUrl()}/dataproducts/${id}`
+export const deleteDataproductUrl = (id: string) => `${apiUrl()}/dataproducts/${id}`
+
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`

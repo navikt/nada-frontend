@@ -4,13 +4,10 @@ import { updateDataproductValidation } from '../../lib/schema/yupValidations'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
-import {
-  UpdateDataproduct,
-  useUpdateDataproductMutation,
-} from '../../lib/schema/graphql'
 import DescriptionEditor from '../lib/DescriptionEditor'
 import { useRouter } from 'next/router'
 import { ContactInput } from './contactInput';
+import { updateDataproduct } from '../../lib/rest/dataproducts';
 
 interface EditDatacollectionFormProps {
   product: any
@@ -18,7 +15,6 @@ interface EditDatacollectionFormProps {
 
 const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   const [backendError, setBackendError] = useState()
-  const [updateDataproduct] = useUpdateDataproductMutation()
   const router = useRouter()
   const { register, handleSubmit, watch, formState, setValue, control } =
     useForm({
@@ -35,24 +31,16 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
   const [teamID, setTeamID] = useState<string>('')
 
   const { errors } = formState
-  const onSubmit = (requestData: UpdateDataproduct) => {
+  const onSubmit = (requestData: any) => {
     requestData.productAreaID = productAreaID
     requestData.teamID = teamID
-    updateDataproduct({
-      variables: { id: product.id, input: requestData },
-      awaitRefetchQueries: true,
-      refetchQueries: [],
-    }).then(() => {
+    updateDataproduct(product.id, requestData).then(() => {
       setBackendError(undefined)
       router.push(`/dataproduct/${product.id}/${product.slug}`)
+    }).catch((error) => {
+      setBackendError(error)
     })
   }
-  {
-    backendError && (
-      <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
-    )
-  }
-
   return (
     <div className="md:w-[46rem] md:px-4 py-4">
       <Heading level="2" size="large" spacing>
@@ -61,7 +49,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
       <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
         <TextField
           className='w-full'
-          style={{display: 'block' }}
+          style={{ display: 'block' }}
           id="name"
           label="Navn"
           {...register('name')}
@@ -80,7 +68,7 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
           setProductAreaID={setProductAreaID}
           setTeamID={setTeamID}
         />
-        <ContactInput register = {register} formState = {formState}/>
+        <ContactInput register={register} formState={formState} />
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
@@ -92,6 +80,12 @@ const EditDataproduct = ({ product }: EditDatacollectionFormProps) => {
             Avbryt
           </Button>
           <Button type="submit">Lagre</Button>
+          {
+            backendError && (
+              <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
+            )
+          }
+
         </div>
       </form>
     </div>

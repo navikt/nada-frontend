@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import ErrorMessage from '../lib/error'
 import { useRouter } from 'next/router'
-import { CREATE_DATAPRODUCT } from '../../lib/queries/dataproduct/createDataproduct'
 import { useMutation } from '@apollo/client'
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import DescriptionEditor from '../lib/DescriptionEditor'
@@ -17,6 +16,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import { UserState } from '../../lib/context'
 import { ContactInput } from './contactInput'
+import { createDataproduct} from '../../lib/rest/dataproducts'
 
 
 const schema = yup.object().shape({
@@ -42,6 +42,7 @@ export const NewDataproductForm = () => {
   const userInfo = useContext(UserState)
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
+  const [backendError, setBackendError] = useState<Error|undefined>(undefined)
 
   const {
     register,
@@ -73,10 +74,7 @@ export const NewDataproductForm = () => {
   const valueOrNull = (val: string | undefined | null) => (typeof val === 'string' && val !== '' ? val : null)
 
   const submitForm = async () => {
-    try {
-      await createDataproduct({
-        variables: {
-          input: {
+      createDataproduct({
             name: dataproductName,
             group: team,
             description: valueOrNull(description),
@@ -84,29 +82,19 @@ export const NewDataproductForm = () => {
             teamContact: valueOrNull(teamContact),
             productAreaID: valueOrNull(productAreaID),
             teamID: valueOrNull(teamID),
-          },
-        },
-        refetchQueries: ['searchContent'],
-      })
-      amplitudeLog('skjema fullført', { skjemanavn: 'nytt-dataprodukt' })
-    } catch (e) {
+      }).then((res) => {
+        const data = res
+        setBackendError(undefined)
+        router.push(`/dataproduct/${data.id}/${data.slug}`)
+        amplitudeLog('skjema fullført', { skjemanavn: 'nytt-dataprodukt' })
+    }).catch (e=> {
       amplitudeLog('skjemainnsending feilet', {
         skjemanavn: 'nytt-dataprodukt',
       })
+      setBackendError(e)
       console.log(e)
-    }
+    })
   }
-
-  const [createDataproduct, { loading, error: backendError }] = useMutation(
-    CREATE_DATAPRODUCT,
-    {
-      onCompleted: (data) => {
-            router.push(
-                `/dataproduct/${data.createDataproduct.id}/${data.createDataproduct.slug}`
-            )
-      }
-    }
-  )
 
   const onCancel = () => {
     amplitudeLog(

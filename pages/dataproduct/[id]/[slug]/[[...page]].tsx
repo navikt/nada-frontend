@@ -1,9 +1,5 @@
 import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
-import {
-  Group,
-  useDeleteDataproductMutation,
-} from '../../../../lib/schema/graphql'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'
@@ -20,19 +16,18 @@ import { AddCircle } from '@navikt/ds-icons'
 import NewDatasetForm from '../../../../components/dataproducts/dataset/newDatasetForm'
 import { truncate } from '../../../../lib/stringUtils'
 import InnerContainer from '../../../../components/lib/innerContainer'
-import { useGetDataproduct } from '../../../../lib/rest/dataproducts'
+import { deleteDataproduct, useGetDataproduct } from '../../../../lib/rest/dataproducts'
 
 
 const Dataproduct = () => {
   const router = useRouter()
   const id = router.query.id as string
   const pageParam = router.query.page?.[0] ?? 'info'
-
   const [showDelete, setShowDelete] = useState(false)
   const [deleteError, setDeleteError] = useState('')
 
   const { dataproduct, loading, error } = useGetDataproduct(id, pageParam)
-  
+
   const userInfo = useContext(UserState)
 
   const isOwner =
@@ -41,7 +36,7 @@ const Dataproduct = () => {
       : userInfo.googleGroups.some(
         (g: any) => g.email === dataproduct?.owner.group
       )
-  
+
   useEffect(() => {
     const eventProperties = {
       sidetittel: 'produktside',
@@ -50,22 +45,16 @@ const Dataproduct = () => {
     amplitudeLog('sidevisning', eventProperties)
   })
 
-  const [deleteDataproduct] = useDeleteDataproductMutation({
-    variables: { id: id },
-    awaitRefetchQueries: true,
-    refetchQueries: ['searchContent'],
-  })
-
   const onDelete = async () => {
-    try {
-      await deleteDataproduct()
+    deleteDataproduct(dataproduct.id).then(() => {
       amplitudeLog('slett dataprodukt', { name: dataproduct.name })
-      await router.push('/')
-    } catch (e: any) {
+      router.push('/')
+    }).catch(error => {
       amplitudeLog('slett dataprodukt feilet', { name: dataproduct.name })
-      setDeleteError(e.toString())
-    }
+      setDeleteError(error)
+    })
   }
+
   if (error) return <ErrorMessage error={error} />
   if (loading || !dataproduct)
     return <LoaderSpinner />
