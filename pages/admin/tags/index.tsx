@@ -21,11 +21,8 @@ import { LoaderIcon } from '../../../components/lib/icons/loaderIcon'
 import InnerContainer from '../../../components/lib/innerContainer'
 import LoaderSpinner from '../../../components/lib/spinner'
 import TagPill from '../../../components/lib/tagPill'
-import {
-  useUpdateKeywordsMutation,
-} from '../../../lib/schema/graphql'
 import { useFetchUserData } from '../../../lib/rest/userData'
-import { useFetchKeywords } from '../../../lib/rest/keywords'
+import { updateKeywords, useFetchKeywords } from '../../../lib/rest/keywords'
 
 const TagsCleaner = () => {
   const kw = useFetchKeywords()
@@ -37,7 +34,6 @@ const TagsCleaner = () => {
   const [updateFailedMessage, setUpdateFailedMessage] = useState('')
   const [confirmChange, setConfirmChange] = useState(false)
   const [tagUpdateList, setTagUpdateList] = useState([] as string[][])
-  const [updateKeywords] = useUpdateKeywordsMutation()
   const userData = useFetchUserData()
   if (userData.loading) {
     return (
@@ -80,26 +76,17 @@ const TagsCleaner = () => {
   const OnOk = () => {
     setUpdating(true)
     updateKeywords({
-      refetchQueries: ['keywords'],
-      variables: {
-        input: {
           obsoleteKeywords: tagsObsolete,
           replacedKeywords: tagUpdateList.map((it) => it[0]),
           newText: tagUpdateList.map((it) => it[1]),
-        },
-      },
-    })
+        })
       .then((res) => {
-        if (!!res.errors) {
-          setUpdateFailedMessage(res.errors[0].message)
-        } else {
           setConfirmChange(false)
           router.reload()
-        }
-      })
+        })
       .catch((e) => {
         console.log(e)
-        setUpdateFailedMessage('Internal error')
+        setUpdateFailedMessage(`update keywords error: ${e}`)
       })
       .finally(() => {
         setUpdating(false)
