@@ -1185,13 +1185,6 @@ export type AccessiblePseudoDatasetsQueryVariables = Exact<{ [key: string]: neve
 
 export type AccessiblePseudoDatasetsQuery = { __typename?: 'Query', accessiblePseudoDatasets: Array<{ __typename?: 'PseudoDataset', name: string, datasetID: string, datasourceID: string }> };
 
-export type CreateDatasetMutationVariables = Exact<{
-  input: NewDataset;
-}>;
-
-
-export type CreateDatasetMutation = { __typename?: 'Mutation', createDataset: { __typename?: 'Dataset', id: string, dataproductID: string } };
-
 export type DeleteDatasetMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1358,40 +1351,6 @@ export type AccessiblePseudoDatasetsQueryHookResult = ReturnType<typeof useAcces
 export type AccessiblePseudoDatasetsLazyQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsLazyQuery>;
 export type AccessiblePseudoDatasetsSuspenseQueryHookResult = ReturnType<typeof useAccessiblePseudoDatasetsSuspenseQuery>;
 export type AccessiblePseudoDatasetsQueryResult = Apollo.QueryResult<AccessiblePseudoDatasetsQuery, AccessiblePseudoDatasetsQueryVariables>;
-export const CreateDatasetDocument = gql`
-    mutation createDataset($input: NewDataset!) {
-  createDataset(input: $input) {
-    id
-    dataproductID
-  }
-}
-    `;
-export type CreateDatasetMutationFn = Apollo.MutationFunction<CreateDatasetMutation, CreateDatasetMutationVariables>;
-
-/**
- * __useCreateDatasetMutation__
- *
- * To run a mutation, you first call `useCreateDatasetMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDatasetMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDatasetMutation, { data, loading, error }] = useCreateDatasetMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateDatasetMutation(baseOptions?: Apollo.MutationHookOptions<CreateDatasetMutation, CreateDatasetMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateDatasetMutation, CreateDatasetMutationVariables>(CreateDatasetDocument, options);
-      }
-export type CreateDatasetMutationHookResult = ReturnType<typeof useCreateDatasetMutation>;
-export type CreateDatasetMutationResult = Apollo.MutationResult<CreateDatasetMutation>;
-export type CreateDatasetMutationOptions = Apollo.BaseMutationOptions<CreateDatasetMutation, CreateDatasetMutationVariables>;
 export const DeleteDatasetDocument = gql`
     mutation deleteDataset($id: ID!) {
   deleteDataset(id: $id)
