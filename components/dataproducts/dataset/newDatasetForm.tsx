@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import ErrorMessage from '../../lib/error'
-import { Button, Checkbox, Heading, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
+import { Button, Checkbox, Heading, Loader, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -85,6 +85,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         teamInternalUse: undefined,
     } as FormValues,
   })
+  const [submitted, setSubmitted] = useState(false)
   const errors = formState.errors
   const projectID = watch('bigquery.projectID')
   const datasetID = watch('bigquery.dataset')
@@ -128,6 +129,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   )
 
   const onSubmitForm = async (requestData: any) => {
+    setSubmitted(true)
     requestData.dataproductID = dataproduct.id
     requestData.bigquery.piiTags = JSON.stringify(Object.fromEntries(tags || new Map<string, string>()))
     const pii = requestData.pii === "sensitive"
@@ -224,6 +226,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
         )}
         />
         {backendError && <ErrorMessage error={backendError}/>}
+        {submitted && !backendError && <div>Vennligst vent...<Loader size="small"/></div>}
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
@@ -236,7 +239,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           >
             Avbryt
           </Button>
-          <Button type="submit" disabled={selectedAllColumns}>Lagre</Button>
+          <Button type="submit" disabled={selectedAllColumns || submitted}>Lagre</Button>
         </div>
       </form>
     </div>
