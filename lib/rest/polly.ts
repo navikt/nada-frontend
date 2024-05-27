@@ -21,10 +21,8 @@ export const useSearchPolly = (query?: string) => {
             setSearchResult(searchPollyDto);
         })
             .catch((err) => {
-                const searchPollyDto= [{"external_id":"965f1ff3-0c50-40cf-9cb9-2682fb6160be","name":"CV utdanningsdata med fritekstfelter til SSB","url":"https://behandlingskatalog.intern.dev.nav.no/process/purpose/STATISTIKK/965f1ff3-0c50-40cf-9cb9-2682fb6160be"}]
             setError(err);
-            console.log(searchPollyDto)
-            setSearchResult(searchPollyDto)
+            setSearchResult([])
         }).finally(() => {
             setLoading(false);
         })
