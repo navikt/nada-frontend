@@ -12,7 +12,7 @@ export const useSearchPolly = (query?: string) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
-        if(query?.length??0 < 3) return
+        if((query?.length??0) < 3) return
         setLoading(true);
         searchPolly(query).then((res) => res.json())
             .then((searchPollyDto) => {
