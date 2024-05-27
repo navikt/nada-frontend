@@ -145,6 +145,7 @@ const AccessRequestFormV2 = ({
     input: string,
     callback: (options: Option[]) => void
   ) => {
+    console.log(input)
     setSearchText(input)
     setTimeout(() => {
       callback(
@@ -235,7 +236,6 @@ const AccessRequestFormV2 = ({
             <AsyncSelect
               className="pt-2"
               classNamePrefix="select"
-              cacheOptions
               isClearable
               placeholder="Skriv inn navnet på behandlingen"
               noOptionsMessage={({ inputValue }) =>
