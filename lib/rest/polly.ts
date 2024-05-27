@@ -16,12 +16,14 @@ export const useSearchPolly = (query?: string) => {
         setLoading(true);
         searchPolly(query).then((res) => res.json())
             .then((searchPollyDto) => {
+                console.log(searchPollyDto)
             setError(null);
             setSearchResult(searchPollyDto);
         })
             .catch((err) => {
             setError(err);
-            setSearchResult([]);
+            setSearchResult([{"external_id":"965f1ff3-0c50-40cf-9cb9-2682fb6160be","name":"CV utdanningsdata med fritekstfelter til SSB","url":"https://behandlingskatalog.intern.dev.nav.no/process/purpose/STATISTIKK/965f1ff3-0c50-40cf-9cb9-2682fb6160be"}]
+        );
         }).finally(() => {
             setLoading(false);
         })
