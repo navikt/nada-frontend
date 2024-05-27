@@ -10,6 +10,7 @@ import { UserState } from '../../../lib/context'
 import ErrorMessage from '../../lib/error';
 import { PollyInput, SubjectType } from '../../../lib/rest/access';
 import { useSearchPolly } from '../../../lib/rest/polly';
+import { set } from 'lodash';
 
 const tomorrow = () => {
   const date = new Date()
@@ -90,6 +91,7 @@ const AccessRequestFormV2 = ({
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
   const [submitted, setSubmitted] = useState(false)
+  const [loadOptionsCallBack, setLoadOptionsCallBack] = useState<Function | null>(null)
   const router = useRouter()
   const userInfo = useContext(UserState)
 
@@ -141,21 +143,22 @@ const AccessRequestFormV2 = ({
     label: string
   }
 
+  console.log(searchResult)
+  loadOptionsCallBack?.(
+    searchResult
+      ? searchResult.map((el) => {
+          return { value: el.externalID, label: el.name }
+        })
+      : []
+  )
+
   const loadOptions = (
     input: string,
     callback: (options: Option[]) => void
   ) => {
     console.log(input)
     setSearchText(input)
-    setTimeout(() => {
-      callback(
-        searchResult
-          ? searchResult.map((el) => {
-              return { value: el.externalID, label: el.name }
-            })
-          : []
-      )
-    }, 250)
+    setLoadOptionsCallBack(() => callback)
   }
 
   const onInputChange = (newOption: Option | null) => {
