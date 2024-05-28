@@ -1,15 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker} from '@navikt/ds-react'
+import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
 import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { UserState } from '../../../lib/context'
 import ErrorMessage from '../../lib/error';
 import { PollyInput, SubjectType } from '../../../lib/rest/access';
 import { useSearchPolly } from '../../../lib/rest/polly';
+import Select from 'react-select';
 
 const tomorrow = () => {
   const date = new Date()
@@ -18,11 +18,11 @@ const tomorrow = () => {
 }
 
 const currentDate = (currentDate: any) => {
-    if (typeof currentDate === 'string') return new Date(currentDate)
-    else if (currentDate instanceof Date) {
-      return currentDate
-    }
-    return undefined
+  if (typeof currentDate === 'string') return new Date(currentDate)
+  else if (currentDate instanceof Date) {
+    return currentDate
+  }
+  return undefined
 }
 
 const schema = yup
@@ -46,10 +46,10 @@ const schema = yup
       .nullable()
       .when('accessType', {
         is: 'until',
-        then: ()=>yup.date().required('Du må angi en utløpsdato for tilgang'),
-        otherwise: ()=>yup.date().nullable()
+        then: () => yup.date().required('Du må angi en utløpsdato for tilgang'),
+        otherwise: () => yup.date().nullable()
       })
-    })
+  })
   .required()
 
 export type AccessRequestFormInput = {
@@ -67,7 +67,7 @@ interface AccessRequestFormProps {
   accessRequest?: AccessRequestFormInput
   dataset: DatasetQuery
   isEdit: boolean
-  onSubmit: (requestData: AccessRequestFormInput) => void
+  onSubmit: (requestData: AccessRequestFormInput) => Promise<void>
   error: Error | null
   setModal: (value: boolean) => void
 }
@@ -88,11 +88,10 @@ const AccessRequestFormV2 = ({
   error,
 }: AccessRequestFormProps) => {
   const [searchText, setSearchText] = useState('')
-  const [polly, setPolly] = useState<PollyInput | undefined | null>(null)
+  const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest?.polly)
   const [submitted, setSubmitted] = useState(false)
   const router = useRouter()
   const userInfo = useContext(UserState)
-
   const {
     register,
     handleSubmit,
@@ -103,7 +102,7 @@ const AccessRequestFormV2 = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      subject: accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo.email :  "",
+      subject: accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo.email : "",
       subjectType: accessRequest?.subjectType
         ? accessRequest.subjectType
         : SubjectType.User,
@@ -124,16 +123,20 @@ const AccessRequestFormV2 = ({
     loading,
   } = useSearchPolly(searchText)
 
-  const onSubmitForm = (data: AccessRequestFields) => {
+  const onSubmitForm = async (data: AccessRequestFields) => {
     setSubmitted(true)
     const accessRequest: AccessRequestFormInput = {
       datasetID: dataset.id,
       subject: data.subject,
       subjectType: data.subjectType,
-      polly: polly??undefined,
-      expires: data.accessType === 'until' ? data.expires? new Date(data.expires) : undefined: undefined,
+      polly: polly ?? undefined,
+      expires: data.accessType === 'until' ? data.expires ? new Date(data.expires) : undefined : undefined,
     }
-    onSubmit(accessRequest)
+    try {
+      await onSubmit(accessRequest)
+    }finally{
+      setSubmitted(false)
+    }
   }
 
   interface Option {
@@ -141,27 +144,16 @@ const AccessRequestFormV2 = ({
     label: string
   }
 
-  const loadOptions = (
-    input: string,
-    callback: (options: Option[]) => void
-  ) => {
-    setSearchText(input)
-    setTimeout(() => {
-      callback(
-        searchResult
-          ? searchResult.map((el) => {
-              return { value: el.externalID, label: el.name }
-            })
-          : []
-      )
-    }, 250)
+  const getOptionsForSelect = () => {
+    const optionsBySearch = searchResult ? searchResult.map((el) => {
+      return { value: el.externalID, label: el.name }
+    }) : []
+    return optionsBySearch
   }
 
-  const onInputChange = (newOption: Option | null) => {
-    newOption != null
-      ? searchResult &&
-        setPolly(searchResult.find((e) => e.externalID == newOption.value))
-      : setPolly(null)
+
+  const setPollyIfMatches = (input: string) => {
+    setPolly(input && searchResult ? searchResult.find((e) => e.externalID === input) : null)
   }
 
   return (
@@ -217,11 +209,11 @@ const AccessRequestFormV2 = ({
               >
                 <Radio value="until">Til dato</Radio>
                 <DatePicker {...datepickerProps}>
-                  <DatePicker.Input 
-                    {...inputProps} 
-                    label="" 
-                    disabled={field.value === 'eternal'} 
-                    error={errors?.expires?.message?.toString()} 
+                  <DatePicker.Input
+                    {...inputProps}
+                    label=""
+                    disabled={field.value === 'eternal'}
+                    error={errors?.expires?.message?.toString()}
                   />
                 </DatePicker>
                 <Radio value="eternal">For alltid</Radio>
@@ -232,25 +224,27 @@ const AccessRequestFormV2 = ({
             <label className="navds-label">
               Velg behandling fra behandlingskatalogen
             </label>
-            <AsyncSelect
-              className="pt-2"
-              classNamePrefix="select"
-              cacheOptions
-              isClearable
-              placeholder="Skriv inn navnet på behandlingen"
-              noOptionsMessage={({ inputValue }) =>
-                inputValue ? 'Finner ikke behandling' : null
-              }
-              loadingMessage={() => 'Søker etter behandling...'}
-              loadOptions={loadOptions}
+            <Select
+              className="basic-single"
               isLoading={loading}
-              onChange={onInputChange}
-              menuIsOpen={true}
+              isClearable={false}
+              isRtl={false}
+              isSearchable={true}
+              name="color"
+              defaultValue={polly ? { value: polly.externalID, label: polly.name } : undefined}
+              options={getOptionsForSelect()}
+              onInputChange={(t: string) => {
+                setSearchText(t)
+              }}
+              onChange={(e: any) => {
+                setPollyIfMatches(e.value)
+              }}
             />
+
           </div>
         </div>
-        { error && <ErrorMessage error={error} /> }
-        {submitted && !error && <div>Vennligst vent...<Loader size="small"/></div>}
+        {error && <ErrorMessage error={error} />}
+        {submitted && !error && <div>Vennligst vent...<Loader size="small" /></div>}
         <div className="flex flex-row gap-4 grow items-end pb-8">
           <Button
             type="button"
