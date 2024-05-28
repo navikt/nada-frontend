@@ -6,6 +6,7 @@ import {
   Button,
   Heading,
   Link,
+  Loader,
   Modal,
   Table,
   Textarea,
@@ -116,7 +117,7 @@ interface AccessListProps {
 
 interface AccessModalProps {
   accessEntry: AccessEntry
-  action: (a: access, setOpen: Function) => void
+  action: (a: access, setOpen: Function, setRemovingAccess: Function) => void
 }
 
 interface AccessRequestModalProps {
@@ -128,6 +129,7 @@ export const AccessRequestModal = ({
   requestID,
   user,
 }: AccessRequestModalProps) => {
+  const [submitted, setSubmitted] = useState(false)
   const [openDeny, setOpenDeny] = useState(false)
   const [openApprove, setOpenApprove] = useState(false)
   const [errorApprove, setErrorApprove] = useState<string|undefined>(undefined)
@@ -151,7 +153,6 @@ export const AccessRequestModal = ({
   }).catch((e:any)=>{
     setErrorDeny(e.message)
   })
-
 
   const cancelApprove = () => {
     setOpenApprove(false)
@@ -177,26 +178,31 @@ export const AccessRequestModal = ({
               Godkjenn søknad
             </Heading>
             <p className='mt-4 mb-4'>Gi tilgang til datasett{user ? ` til ${user}` : ''}? </p>
-            <div className="flex flex-row gap-4">
-              <Button
-                onClick={cancelApprove}
-                variant="secondary"
-                size="small"
-              >
-                Avbryt
-              </Button>
-              <Button
-                onClick={() => {
-                  approve(requestID)
-                }}
-                variant="primary"
-                size="small"
-              >
-                Godkjenn
-              </Button>
+            <div className="flex flex-col gap-4 items-center">
+              <div className="flex flex-row gap-4">
+                <Button
+                  onClick={cancelApprove}
+                  variant="secondary"
+                  size="small"
+                >
+                  Avbryt
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSubmitted(true)
+                    approve(requestID)
+                  }}
+                  variant="primary"
+                  size="small"
+                  disabled={submitted}
+                >
+                  Godkjenn
+                </Button>
+              </div>
+              {errorApprove && <div className='text-red-600'>{errorApprove}</div>}
+              {submitted && !errorApprove && <div>Vennligst vent...<Loader size="small"/></div>}
             </div>
-            {errorApprove && <div className='text-red-600'>{errorApprove}</div>}
-            </div>
+        </div>
         </Modal.Body>
       </Modal>
 
@@ -207,28 +213,36 @@ export const AccessRequestModal = ({
         className="max-w-full md:max-w-3xl px-8 h-[24rem]"
       >
         <Modal.Body className="h-full">
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col items-center gap-8">
             <Heading level="1" size="medium">
               Avslå søknad
             </Heading>
             <Textarea label="Begrunnelse" value={reason} onChange={event=> setReason(event.target.value)}/>
-            <div className="flex flex-row gap-4">
-              <Button
-                onClick={cancelDeny}
-                variant="secondary"
-                size="small"
-              >
-                Avbryt
-              </Button>
-              <Button
-                onClick={() => deny(requestID, reason)}
-                variant="primary"
-                size="small"
-              >
-                Avslå
-              </Button>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-row gap-4">
+                <Button
+                  onClick={cancelDeny}
+                  variant="secondary"
+                  size="small"
+                >
+                  Avbryt
+                </Button>
+                <Button
+                  onClick={() => {
+                      setSubmitted(true)
+                      deny(requestID, reason)
+                  }
+                  }
+                  variant="primary"
+                  size="small"
+                  disabled={submitted}
+                >
+                  Avslå
+                </Button>
+              </div>
+              {errorDeny && <div className='text-red-600'>{errorDeny}</div>}
+              {submitted && !errorDeny && <div>Vennligst vent...<Loader size="small"/></div>}
             </div>
-            {errorDeny && <div className='text-red-600'>{errorDeny}</div>}
           </div>
         </Modal.Body>
       </Modal>
@@ -250,6 +264,7 @@ export const AccessRequestModal = ({
 
 const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
   const [open, setOpen] = useState(false)
+  const [removingAccess, setRemovingAccess] = useState(false)
   return (
     <>
       <Modal
@@ -269,16 +284,18 @@ const AccessModal = ({ accessEntry, action }: AccessModalProps) => {
                 onClick={() => setOpen(false)}
                 variant="secondary"
                 size="small"
-              >
+                >
                 Avbryt
               </Button>
               <Button
-                onClick={() => action(accessEntry.access, setOpen)}
+                onClick={() => action(accessEntry.access, setOpen, setRemovingAccess)}
                 variant="primary"
                 size="small"
-              >
+                disabled={removingAccess}
+                >
                 Fjern
               </Button>
+              {removingAccess && <div>Vennligst vent...<Loader size="small"/></div>}
             </div>
           </div>
         </Modal.Body>
@@ -316,7 +333,8 @@ const DatasetAccess = ({ id }: AccessListProps) => {
     !getDataset?.dataset?.access ? [] :
     getDataset.dataset.access
 
-  const removeAccess = async (a: access, setOpen: Function) => {
+  const removeAccess = async (a: access, setOpen: Function, setRemovingAccess: Function) => {
+    setRemovingAccess(true)
     try {
       await revokeDatasetAccess(a.id )
       window.location.reload()

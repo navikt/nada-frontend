@@ -1,4 +1,4 @@
-import { Button, DatePicker, Heading, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
+import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
 import {  SubjectType} from "../../../lib/schema/graphql";
 import * as yup from 'yup'
 import { Controller, useForm, useFormState } from "react-hook-form";
@@ -48,6 +48,7 @@ const schema = yup
 
 const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) => {
     const [error, setError] = useState<any>(null)
+    const [submitted, setSubmitted] = useState(false)
     const router = useRouter()
     const {
         register,
@@ -71,6 +72,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
     });
 
     const onSubmitForm = async (requestData: any) => {
+        setSubmitted(true)
         requestData.datasetID = dataset.id
         try{
           await grantDatasetAccess(
@@ -149,6 +151,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
           />
         </div>
         { error && <ErrorMessage error={error} /> }
+        {submitted && !error && <div>Vennligst vent...<Loader size="small"/></div>}
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"
@@ -157,7 +160,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
           >
             Avbryt
           </Button>
-          <Button type="submit">Lagre</Button>
+          <Button type="submit" disabled={submitted}>Lagre</Button>
         </div>
       </form>
     </div>

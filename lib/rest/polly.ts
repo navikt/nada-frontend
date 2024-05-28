@@ -12,16 +12,17 @@ export const useSearchPolly = (query?: string) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
-        if(query?.length??0 < 3) return
+        if((query?.length??0) < 3) return
         setLoading(true);
         searchPolly(query).then((res) => res.json())
             .then((searchPollyDto) => {
+                console.log(searchPollyDto)
             setError(null);
             setSearchResult(searchPollyDto);
         })
             .catch((err) => {
             setError(err);
-            setSearchResult([]);
+            setSearchResult([])
         }).finally(() => {
             setLoading(false);
         })
