@@ -67,7 +67,7 @@ interface AccessRequestFormProps {
   accessRequest?: AccessRequestFormInput
   dataset: DatasetQuery
   isEdit: boolean
-  onSubmit: (requestData: AccessRequestFormInput) => void
+  onSubmit: (requestData: AccessRequestFormInput) => Promise<void>
   error: Error | null
   setModal: (value: boolean) => void
 }
@@ -123,7 +123,7 @@ const AccessRequestFormV2 = ({
     loading,
   } = useSearchPolly(searchText)
 
-  const onSubmitForm = (data: AccessRequestFields) => {
+  const onSubmitForm = async (data: AccessRequestFields) => {
     setSubmitted(true)
     const accessRequest: AccessRequestFormInput = {
       datasetID: dataset.id,
@@ -132,7 +132,11 @@ const AccessRequestFormV2 = ({
       polly: polly ?? undefined,
       expires: data.accessType === 'until' ? data.expires ? new Date(data.expires) : undefined : undefined,
     }
-    onSubmit(accessRequest)
+    try {
+      await onSubmit(accessRequest)
+    }finally{
+      setSubmitted(false)
+    }
   }
 
   interface Option {
