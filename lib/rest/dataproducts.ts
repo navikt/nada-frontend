@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createDataproductUrl, createDatasetUrl, deleteDataproductUrl, deleteTemplate, fetchTemplate, getDataproductUrl, getDatasetUrl, mapDatasetToServicesUrl, postTemplate, putTemplate, updateDataproductUrl } from "./restApi";
+import { createDataproductUrl, createDatasetUrl, deleteDataproductUrl, deleteDatasetUrl, deleteTemplate, fetchTemplate, getAccessiblePseudoDatasetsUrl, getDataproductUrl, getDatasetUrl, mapDatasetToServicesUrl, postTemplate, putTemplate, updateDataproductUrl } from "./restApi";
 
 const getDataproduct = async (id: string) => {
     const url = getDataproductUrl(id);
@@ -84,4 +84,43 @@ export const mapDatasetToServices = (id: string, services: string[])=>{
 export const createDataset = async (dataset: any) => {
     const url = createDatasetUrl();
     return postTemplate(url, dataset).then((res)=>res.json());
+}
+
+export const deleteDataset = async (id: string) => {
+    const url = deleteDatasetUrl(id);
+    return deleteTemplate(url).then((res)=>res.json());
+}
+
+export const updateDataset = async (id: string, dataset: any) => {
+    const url = deleteDatasetUrl(id);
+    return putTemplate(url, dataset).then((res)=>res.json());
+}
+
+export const getAccessiblePseudoDatasets = async () => {
+    const url = getAccessiblePseudoDatasetsUrl()
+    return fetchTemplate(url);
+}
+
+export const useGetAccessiblePseudoDatasets = ()=>{
+    const [accessiblePseudoDatasets, setAccessiblePseudoDatasets] = useState<any[]>([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+
+    useEffect(()=>{
+        getAccessiblePseudoDatasets().then((res)=> res.json())
+        .then((accessibleds)=>
+        {
+            setError(null)
+            setAccessiblePseudoDatasets(accessibleds)
+        })
+        .catch((err)=>{
+            setError(err)
+            setAccessiblePseudoDatasets([])
+        }).finally(()=>{
+            setLoading(false)
+        })
+    }, [])
+
+    return {accessiblePseudoDatasets: accessiblePseudoDatasets, loading, error}
 }

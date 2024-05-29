@@ -17,6 +17,9 @@ export const deleteDataproductUrl = (id: string) => `${apiUrl()}/dataproducts/${
 export const getDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
 export const mapDatasetToServicesUrl = (datasetId: string) => `${apiUrl()}/datasets/${datasetId}/map`
 export const createDatasetUrl = () => `${apiUrl()}/datasets/new`
+export const deleteDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
+export const updateDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
+export const getAccessiblePseudoDatasetsUrl = () => `${apiUrl()}/datasets/pseudo/accessible`
 
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`

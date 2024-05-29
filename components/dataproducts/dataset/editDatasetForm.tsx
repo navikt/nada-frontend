@@ -12,17 +12,13 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react'
 import * as yup from 'yup'
-import {
-  useUpdateDatasetMutation,
-  UpdateDataset,
-  PiiLevel,
-} from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector';
 import { useColumnTags } from './useColumnTags';
 import AnnotateDatasetTable from './annotateDatasetTable';
 import {Personopplysninger} from "./helptext";
 import { useRouter } from 'next/router';
+import { updateDataset } from '../../../lib/rest/dataproducts';
 
 interface EditDatasetFormProps {
   dataset: any
@@ -48,10 +44,8 @@ const schema = yup.object().shape({
   name: yup.string().nullable().required('Du må fylle inn navn'),
   description: yup.string(),
   repo: yup.string().nullable(),
-  pii: yup
-    .mixed<PiiLevel>()
-    .nullable()
-    .oneOf([PiiLevel.Sensitive, PiiLevel.Anonymised, PiiLevel.None])
+  pii: yup.string().nullable()
+    .oneOf(['anonymised','none','sensitive'])
     .required(
       'Du må spesifisere om datasettet inneholder personidentifiserende informasjon'
     ),
@@ -70,7 +64,6 @@ const schema = yup.object().shape({
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
   const [backendError, setBackendError] = useState()
-  const [updateDataset] = useUpdateDatasetMutation()
   const router = useRouter()
 
   const { register, handleSubmit, watch, formState, setValue, getValues, control } =
@@ -118,14 +111,10 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
 
   const { errors } = formState
   const onSubmit = (requestData: EditDatasetFormFields) => {
-    const payload: UpdateDataset = {
+    const payload= {
       name: requestData.name,
       description: requestData.description,
-      pii: requestData.pii === "sensitive"
-        ? PiiLevel.Sensitive
-        : requestData.pii === "anonymised"
-          ? PiiLevel.Anonymised
-          : PiiLevel.None,
+      pii: requestData.pii,
       repo: requestData.repo,
       keywords: requestData.keywords,
       anonymisation_description: requestData.anonymisation_description,
@@ -133,11 +122,7 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       piiTags: JSON.stringify(Object.fromEntries(tags || new Map<string, string>())),
       pseudoColumns: Array.from(pseudoColumns).filter(it=> it[1]).map(it=> it[0]),
     }
-    updateDataset({
-      variables: { id: dataset.id, input: payload },
-      awaitRefetchQueries: true,
-      refetchQueries: [ ],
-    }).then(() => {
+    updateDataset(dataset.id, payload ).then(() => {
       setBackendError(undefined)
       setEdit(false)
       router.reload()
