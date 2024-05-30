@@ -108,10 +108,9 @@ const ResultList = ({
       // If teamkatalogenURL is the same or both are undefined, sort by name
       return a.name.localeCompare(b.name);
     }
-
-    dataproducts.sort(sortByTeamAndName)
-    stories.sort(sortByTeamAndName)
-    insightProducts.sort(sortByTeamAndName)
+    if (dataproducts) { dataproducts.sort(sortByTeamAndName) }
+    if (stories) { stories.sort(sortByTeamAndName) }
+    if (insightProducts) { insightProducts.sort(sortByTeamAndName) }
 
     return (
       <Results>
