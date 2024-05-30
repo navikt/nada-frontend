@@ -15,12 +15,10 @@ import {
 } from '@navikt/ds-react'
 import {useContext, useState} from 'react'
 import {UserState} from '../../../lib/context'
-import {
-    useAccessiblePseudoDatasetsQuery,
-} from '../../../lib/schema/graphql'
 import {CREATE_JOINABLEVIEWS} from '../../../lib/queries/pseudoView/newJoinableViews'
 import {TrashIcon} from '@navikt/aksel-icons'
 import { GET_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/joinableViews'
+import { useGetAccessiblePseudoDatasets } from '../../../lib/rest/dataproducts'
 
 
 const tomorrow = () => {
@@ -47,9 +45,7 @@ export const NewJoinableView = () => {
     const [expires, setExpires] = useState<string | null>(startDate().toISOString())
     const [isTimeLimited, setIsTimeLimited] = useState(true)
 
-    const search = useAccessiblePseudoDatasetsQuery({
-        fetchPolicy: 'network-only',
-    })
+    const search = useGetAccessiblePseudoDatasets()
 
     const [createJoinableViews, {loading, error: backendError}] = useMutation(
         CREATE_JOINABLEVIEWS,
@@ -63,7 +59,7 @@ export const NewJoinableView = () => {
         }
     )
 
-    const pseudoDatasets = search.data?.accessiblePseudoDatasets
+    const pseudoDatasets = search.accessiblePseudoDatasets
     const handleSubmit = async () => {
         setSubmitted(true)
         try {

@@ -66,7 +66,7 @@ export const useFetchBQTables = (projectID: string, datasetID: string) => {
 }
 
 export const useFetchBQcolumns = (projectID: string, datasetID: string, tableID: string) => {
-    const [columns, setColumns] = useState<any[]>([])
+    const [columns, setColumns] = useState<any[]|undefined>(undefined)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<any>(null)
 

@@ -5,7 +5,6 @@ import { Button, Checkbox, Heading, Loader, Radio, RadioGroup, Textarea, TextFie
 import { useRouter } from 'next/router'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { CREATE_DATASET } from '../../../lib/queries/dataset/createDataset'
 import { PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector'
@@ -15,6 +14,7 @@ import { useColumnTags } from './useColumnTags'
 import { Personopplysninger, TilgangsstyringHelpText } from "./helptext";
 import { PiiForm } from './piiForm'
 import { useState } from 'react'
+import { createDataset } from '../../../lib/rest/dataproducts'
 
 interface NewDatasetFormProps {
   dataproduct: any
@@ -90,6 +90,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   const projectID = watch('bigquery.projectID')
   const datasetID = watch('bigquery.dataset')
   const tableID = watch('bigquery.table')
+  const [backendError, setBackendError] = useState<any>(undefined)
   const pii = watch('pii')
   const {
     columns,
@@ -117,17 +118,6 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       : setValue('keywords', [keyword])
   }
 
-  const [createDataset, { loading, error: backendError }] = useMutation(
-    CREATE_DATASET,
-    {
-      onCompleted: (data) =>{
-        router.push(
-          `/dataproduct/${dataproduct.id}/${dataproduct.slug}/${data.createDataset.id}`
-        )
-      }
-    }
-  )
-
   const onSubmitForm = async (requestData: any) => {
     setSubmitted(true)
     requestData.dataproductID = dataproduct.id
@@ -145,12 +135,13 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     .filter(([, value]) => value)
     .map(([key]) => key) : []
     try {
-      await createDataset({
-        variables: { input: requestData },
-        refetchQueries: ['Dataproduct'],
-      })
+      const data= await createDataset(requestData)
+      router.push(
+        `/dataproduct/${dataproduct.id}/${dataproduct.slug}/${data}`
+      )
+      setBackendError(undefined)
     } catch (e) {
-      console.log(e)
+      setBackendError(e)
     }
   }
   const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns?.length
@@ -239,7 +230,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           >
             Avbryt
           </Button>
-          <Button type="submit" disabled={selectedAllColumns || submitted}>Lagre</Button>
+          <Button type="submit" disabled={false && (selectedAllColumns || submitted)}>Lagre</Button>
         </div>
       </form>
     </div>

@@ -63,6 +63,7 @@ export const useColumnTags = (
       datasetID &&
       tableID &&
       !tagsMap.has(tableKey) &&
+      fetchColumns.bqColumns &&
       !fetchColumns.error &&
       !fetchColumns.loading &&
       fetchColumns.bqColumns
