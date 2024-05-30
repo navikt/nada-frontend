@@ -96,6 +96,23 @@ const ResultList = ({
       (d) => !isDataProduct(d.result)
     )
 
+    const sortByTeamAndName = (a: any, b: any) => {
+      if (a.teamkatalogenURL && b.teamkatalogenURL) {
+        let comparison = a.teamkatalogenURL.localeCompare(b.teamkatalogenURL);
+        if (comparison !== 0) return comparison;
+      } else if (a.teamkatalogenURL) {
+        return -1; // a comes first if b is undefined
+      } else if (b.teamkatalogenURL) {
+        return 1; // b comes first if a is undefined
+      }
+      // If teamkatalogenURL is the same or both are undefined, sort by name
+      return a.name.localeCompare(b.name);
+    }
+
+    dataproducts.sort(sortByTeamAndName)
+    stories.sort(sortByTeamAndName)
+    insightProducts.sort(sortByTeamAndName)
+
     return (
       <Results>
         <Tabs
