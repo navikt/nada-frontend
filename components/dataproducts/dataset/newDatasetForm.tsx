@@ -142,7 +142,6 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       setBackendError(undefined)
     } catch (e) {
       setBackendError(e)
-      console.log(e)
     }
   }
   const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns?.length
@@ -231,7 +230,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           >
             Avbryt
           </Button>
-          <Button type="submit" disabled={selectedAllColumns || submitted}>Lagre</Button>
+          <Button type="submit" disabled={false && (selectedAllColumns || submitted)}>Lagre</Button>
         </div>
       </form>
     </div>

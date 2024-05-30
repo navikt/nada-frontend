@@ -63,7 +63,7 @@ const schema = yup.object().shape({
 })
 
 const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
-  const [backendError, setBackendError] = useState()
+  const [backendError, setBackendError] = useState<Error>()
   const router = useRouter()
 
   const { register, handleSubmit, watch, formState, setValue, getValues, control } =
@@ -126,14 +126,10 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
       setBackendError(undefined)
       setEdit(false)
       router.reload()
+    }).catch((e:Error) => {
+      setBackendError(e)
     })
   }
-  {
-    backendError && (
-      <ErrorSummary heading={'Feil fra server'}>{backendError}</ErrorSummary>
-    )
-  }
-
   const hasPseudoColumns = !!dataset.datasource.pseudoColumns?.length
   const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns?.length
   return (
@@ -229,6 +225,12 @@ const EditDatasetForm = ({ dataset, setEdit }: EditDatasetFormProps) => {
           </Button>
           <Button type="submit" disabled={selectedAllColumns}>Lagre</Button>
         </div>
+        {
+    backendError && (
+      <ErrorSummary heading={`Cannot update dataset: ${backendError.message || backendError.toString()}`}>error</ErrorSummary>
+    )
+  }
+
       </form>
     </div>
   )

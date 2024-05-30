@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { createDataproductUrl, createDatasetUrl, deleteDataproductUrl, deleteDatasetUrl, deleteTemplate, fetchTemplate, getAccessiblePseudoDatasetsUrl, getDataproductUrl, getDatasetUrl, mapDatasetToServicesUrl, postTemplate, putTemplate, updateDataproductUrl } from "./restApi";
+import { useEffect, useState } from "react"
+import { createDataproductUrl, createDatasetUrl, deleteDataproductUrl, deleteDatasetUrl, deleteTemplate, fetchTemplate, getAccessiblePseudoDatasetsUrl, getDataproductUrl, getDatasetUrl, mapDatasetToServicesUrl, postTemplate, putTemplate, updateDataproductUrl, updateDatasetUrl } from "./restApi"
 
 const getDataproduct = async (id: string) => {
-    const url = getDataproductUrl(id);
+    const url = getDataproductUrl(id)
     return fetchTemplate(url)
 }
 
 const getDataset = async (id: string) => {
-    const url = getDatasetUrl(id);
+    const url = getDatasetUrl(id)
     return fetchTemplate(url)
 }
 
@@ -61,44 +61,44 @@ export const useGetDataset = (id: string)=>{
 }
 
 export const createDataproduct = async (dp: any) => {
-    const url = createDataproductUrl();
-    return postTemplate(url, dp).then((res)=>res.json());
+    const url = createDataproductUrl()
+    return postTemplate(url, dp).then((res)=>res.json())
 }
 
 export const updateDataproduct = async (id: string, dp: any) => {
-    const url = updateDataproductUrl(id);
-    return putTemplate(url, dp).then((res)=>res.json());
+    const url = updateDataproductUrl(id)
+    return putTemplate(url, dp).then((res)=>res.json())
 }
 
 export const deleteDataproduct = async (id: string) => {
-    const url = deleteDataproductUrl(id);
-    return deleteTemplate(url).then((res)=>res.json());
+    const url = deleteDataproductUrl(id)
+    return deleteTemplate(url).then((res)=>res.json())
 }
 
 export const mapDatasetToServices = (id: string, services: string[])=>{
-    const url = mapDatasetToServicesUrl(id);
+    const url = mapDatasetToServicesUrl(id)
     return postTemplate(url, {
-        services}).then((res)=>res.json());
+        services}).then((res)=>res.json())
 }
 
 export const createDataset = async (dataset: any) => {
-    const url = createDatasetUrl();
-    return postTemplate(url, dataset).then((res)=>res.json());
+    const url = createDatasetUrl()
+    return postTemplate(url, dataset).then((res)=>res.json())
 }
 
 export const deleteDataset = async (id: string) => {
-    const url = deleteDatasetUrl(id);
-    return deleteTemplate(url).then((res)=>res.json());
+    const url = deleteDatasetUrl(id)
+    return deleteTemplate(url).then((res)=>res.json())
 }
 
 export const updateDataset = async (id: string, dataset: any) => {
-    const url = deleteDatasetUrl(id);
-    return putTemplate(url, dataset).then((res)=>res.json());
+    const url = updateDatasetUrl(id)
+    return putTemplate(url, dataset).then((res)=>res.json())
 }
 
 export const getAccessiblePseudoDatasets = async () => {
     const url = getAccessiblePseudoDatasetsUrl()
-    return fetchTemplate(url);
+    return fetchTemplate(url)
 }
 
 export const useGetAccessiblePseudoDatasets = ()=>{
