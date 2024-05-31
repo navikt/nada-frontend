@@ -212,7 +212,9 @@ const ResultList = ({
 // Rest of your component code
 
   if (dataproducts) {
-    sortArrayByTeamAndName(dataproducts, 'owner.group', 'name')
+    dataproducts.sort((a,b) =>
+      (a.owner.group+a.name).localeCompare(b.owner.group+a.name)
+    )
     return (
       <Results>
         {dataproducts.map((d, idx) => (
