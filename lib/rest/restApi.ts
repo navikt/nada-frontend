@@ -25,6 +25,10 @@ export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`
 
+export const getInsightProductUrl = (id: string) => `${apiUrl()}/insightProducts/${id}`
+export const createInsightProductUrl = () => `${apiUrl()}/insightProducts/new`
+export const updateInsightProductUrl = (id: string) => `${apiUrl()}/insightProducts/${id}`
+
 export const fetchKeywordsUrl = () => `${apiUrl()}/keywords`
 export const updateKeywordsUrl = () => `${apiUrl()}/keywords`
 

@@ -17,7 +17,7 @@ import * as yup from 'yup'
 import { ChangeEvent, useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import { UserState } from "../../lib/context";
-import { CREATE_INSIGHT_PRODUCT } from '../../lib/queries/insightProducts/createInsightProduct'
+import { createInsightProduct } from '../../lib/rest/insightProducts'
 
 const schema = yup.object().shape({
     name: yup.string().nullable().required('Skriv inn navnet på innsiktsproduktet'),
@@ -28,7 +28,7 @@ const schema = yup.object().shape({
     link: yup
         .string()
         .required('Du må legge til en lenke til innsiktsproduktet')
-        .url('Lenken må være en gyldig URL'), // Add this line to validate the link as a URL    type: yup.string().required('Du må velge en type for innsiktsproduktet'),
+        .url('Lenken må være en gyldig URL, fks. https://valid.url.to.page'), // Add this line to validate the link as a URL    type: yup.string().required('Du må velge en type for innsiktsproduktet'),
     group: yup.string().required('Du må skrive inn en gruppe for innsiktsproduktet')
 })
 
@@ -48,6 +48,7 @@ export const NewInsightProductForm = () => {
     const [teamID, setTeamID] = useState<string>('')
     const userData = useContext(UserState)
     const [isPrivacyCheckboxChecked, setIsPrivacyCheckboxChecked] = useState(false)
+    const [backendError, setBackendError] = useState<Error | undefined>(undefined)
 
     const handlePrivacyCheckboxChange = () => {
         setIsPrivacyCheckboxChecked(!isPrivacyCheckboxChecked)
@@ -93,8 +94,6 @@ export const NewInsightProductForm = () => {
 
     const onSubmit = async (data: any) => {
         const inputData = {
-            variables: {
-                input: {
                     name: data.name,
                     description: valueOrNull(data.description),
                     keywords: data.keywords,
@@ -104,15 +103,15 @@ export const NewInsightProductForm = () => {
                     link: data.link,
                     type: data.type,
                     group: data.group,
-                },
-            },
-            refetchQueries: ['searchContent'],
         }
 
         try {
             await createInsightProduct(inputData)
+            setBackendError(undefined)
             amplitudeLog('skjema fullført', { skjemanavn: 'ny-innsiktsprodukt' })
+            router.push('/user/insightProducts')
         } catch (e) {
+            setBackendError(new Error('Internal server error'))
             amplitudeLog('skjemainnsending feilet', {
                 skjemanavn: 'ny-innsiktsprodukt',
             })
@@ -120,15 +119,6 @@ export const NewInsightProductForm = () => {
         }
 
     }
-
-    const [createInsightProduct, { loading, error: backendError }] = useMutation(
-        CREATE_INSIGHT_PRODUCT,
-        {
-            onCompleted: (data) => {
-                router.push("/")
-            },
-        }
-    )
 
     const onCancel = () => {
         amplitudeLog(
