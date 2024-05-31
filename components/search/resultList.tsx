@@ -8,7 +8,7 @@ import { UserState } from '../../lib/context'
 import { useSearchTeamKatalogen } from '../../lib/rest/teamkatalogen'
 import { useGetProductAreas } from '../../lib/rest/productAreas'
 import { SearchResult } from '../../lib/rest/search'
-import { useDeleteStoryMutation } from '../../lib/schema/graphql'
+import { deleteStory } from '../../lib/rest/stories'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -58,15 +58,9 @@ const ResultList = ({
   searchParam,
   updateQuery,
 }: ResultListInterface) => {
-  const [deleteStoryQuery] = useDeleteStoryMutation()
   const userInfo = useContext(UserState)
   const { searchResult: teamkatalogen } = useSearchTeamKatalogen()
   const { productAreas } = useGetProductAreas()
-  const deleteStory = (id: string) => deleteStoryQuery({
-    variables: {
-      id: id
-    },
-  })
 
   const isDataProduct = (item: any) => !!item.datasets
 
@@ -197,7 +191,7 @@ const ResultList = ({
               keywords={s.keywords}
               editable={true}
               description={s.description}
-              deleteResource={deleteStory}
+              deleteResource={()=> deleteStory(s.id)}
             />
           ))}
         </Results>

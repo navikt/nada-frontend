@@ -4,12 +4,12 @@ import ReactMarkdown from 'react-markdown'
 import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
 import { CoApplicant, Table } from '@navikt/ds-icons'
-import { useDeleteInsightProductMutation, useDeleteStoryMutation } from '../../lib/schema/graphql'
 import humanizeDate from '../../lib/humanizeDate'
 import DeleteModal from '../lib/deleteModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import TagPill from '../lib/tagPill'
+import { deleteInsightProduct } from '../../lib/rest/insightProducts'
 
 export interface SearchResultProps {
   resourceType?: string
@@ -55,7 +55,6 @@ export const SearchResultLink = ({
   const owner = teamkatalogenTeam || group?.group
   const router = useRouter();
   const [error, setError] = useState<string | undefined>(undefined)
-  const [deleteInsightProductMutation] = useDeleteInsightProductMutation();
 
   const editResource = () => {
     if (resourceType == 'datafortelling') {
@@ -65,14 +64,6 @@ export const SearchResultLink = ({
     }
   }
   const openDeleteModal = () => setModal(true)
-
-  const deleteInsightProduct = (id: string)=>{
-    return deleteInsightProductMutation({
-      variables:{
-        id: id
-      },
-    })
-  }
 
   const confirmDelete = () => {
     const deletePromise = resourceType == "innsiktsprodukt"?

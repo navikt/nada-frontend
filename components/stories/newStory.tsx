@@ -11,11 +11,12 @@ import * as yup from 'yup';
 import { ChangeEvent, useContext, useRef, useState } from 'react';
 import TagsSelector from '../lib/tagsSelector';
 import { UserState } from '../../lib/context';
-import { CREATE_STORY } from '../../lib/queries/story/createStory';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { UploadFile } from '../../lib/schema/graphql';
+import { createStory } from '../../lib/rest/stories';
+import { set } from 'lodash';
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
@@ -41,6 +42,7 @@ export const NewStoryForm = () => {
   const [storyFiles, setStoryFiles] = useState<File[]>([]);
   const singleFileInputRef = useRef(null);
   const folderFileInputRef = useRef(null);
+  const [error, setError] = useState<Error | undefined>(undefined);
 
   const handleSingleFileClick = () => {
     /* @ts-expect-error */
@@ -88,13 +90,11 @@ export const NewStoryForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val);
 
   const onSubmit = async (data: any) => {
-    const uploadData = {
-      variables: {
-        files: storyFiles.map<UploadFile>(it=>({
+        const files= storyFiles.map<UploadFile>(it=>({
           path: fixRelativePath(it),
           file: it,
-        })),
-        input: {
+        }))
+        const storyInput= {
           name: data.name,
           description: valueOrNull(data.description),
           keywords: data.keywords,
@@ -102,30 +102,22 @@ export const NewStoryForm = () => {
           productAreaID: productAreaID,
           teamID: teamID,
           group: data.group,
-        },
-      },
-      refetchQueries: ['searchContent', 'userInfoDetails'],
-    };
+        }
 
     try {
-      await createStory(uploadData);
+      const data = await createStory(storyInput, files);
+      setError(undefined);
       amplitudeLog('skjema fullført', { skjemanavn: 'ny-datafortelling' });
+      router.push(`/story/${data.id}`);
     } catch (e) {
+      setError(e as Error);
       amplitudeLog('skjemainnsending feilet', {
         skjemanavn: 'ny-datafortelling',
       })
       console.log(e)
     }
   }
-
-  const [createStory, { loading, error: backendError }] = useMutation(
-    CREATE_STORY,
-    {
-      onCompleted: (data) => {
-        router.push(`/story/${data.createStory.id}`);
-      },
-    },
-  )
+  
 
   const onCancel = () => {
     amplitudeLog(
@@ -316,7 +308,7 @@ export const NewStoryForm = () => {
             {renderTree(generateFileTree(storyFiles))}
           </SimpleTreeView>
         )}
-        {backendError && <ErrorMessage error={backendError} />}
+        {error && <ErrorMessage error={error} />}
         <div className="flex flex-row gap-4 mb-16">
           <Button type="button" variant="secondary" onClick={onCancel}>
             Avbryt

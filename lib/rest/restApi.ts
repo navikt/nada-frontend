@@ -21,6 +21,10 @@ export const deleteDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
 export const updateDatasetUrl = (id: string) => `${apiUrl()}/datasets/${id}`
 export const getAccessiblePseudoDatasetsUrl = () => `${apiUrl()}/datasets/pseudo/accessible`
 
+export const createStoryUrl = () => `${apiUrl()}/stories/new`
+export const updateStoryUrl = (id: string) => `${apiUrl()}/stories/${id}`
+export const deleteStoryUrl = (id: string) => `${apiUrl()}/stories/${id}`
+
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`
@@ -28,6 +32,7 @@ export const fetchUserDataUrl = () => `${apiUrl()}/userData`
 export const getInsightProductUrl = (id: string) => `${apiUrl()}/insightProducts/${id}`
 export const createInsightProductUrl = () => `${apiUrl()}/insightProducts/new`
 export const updateInsightProductUrl = (id: string) => `${apiUrl()}/insightProducts/${id}`
+export const deleteInsightProductUrl = (id: string) => `${apiUrl()}/insightProducts/${id}`
 
 export const fetchKeywordsUrl = () => `${apiUrl()}/keywords`
 export const updateKeywordsUrl = () => `${apiUrl()}/keywords`

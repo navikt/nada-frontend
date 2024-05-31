@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { createInsightProductUrl, fetchTemplate, getInsightProductUrl, postTemplate, putTemplate, updateInsightProductUrl } from "./restApi"
+import { createInsightProductUrl, deleteTemplate, fetchTemplate, getInsightProductUrl, postTemplate, putTemplate, updateInsightProductUrl } from "./restApi"
 
 const getInsightProduct = async (id: string) => {
     const url = getInsightProductUrl(id)
@@ -39,4 +39,9 @@ export const createInsightProduct = async (insp: any) => {
 export const updateInsightProduct = async (id: string, insp: any) => {
     const url = updateInsightProductUrl(id)
     return putTemplate(url, insp).then((res)=>res.json())
+}
+
+export const deleteInsightProduct= async (id: string) => {
+    const url = updateInsightProductUrl(id)
+    return deleteTemplate(url).then((res)=>res.json())
 }
