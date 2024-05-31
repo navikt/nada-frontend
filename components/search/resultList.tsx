@@ -84,6 +84,41 @@ const ResultList = ({
     }
   }
 
+  const sortArrayByTeamAndName = (array: any[], owner: string, nameKey: string) => {
+    if (array) {
+      array.sort((a, b) => {
+        // If owner is defined for both a and b
+        if (a[owner] && b[owner]) {
+          let comparison = a[owner].toLowerCase().localeCompare(b[owner].toLowerCase());
+          // If owner is not the same, sort by owner
+          if (comparison !== 0) return comparison;
+        } else if (a[owner]) {
+          // If owner is defined for a but not for b, a comes first
+          return -1;
+        } else if (b[owner]) {
+          // If owner is defined for b but not for a, b comes first
+          return 1;
+        } else {
+          // If both a and b are undefined, they are equal in terms of sorting
+          return 0;
+        }
+        // If owner is the same or both are undefined, sort by name
+        if (a[nameKey] && b[nameKey]) {
+          return a[nameKey].toLowerCase().localeCompare(b[nameKey].toLowerCase());
+        } else if (a[nameKey]) {
+          // If name is defined for a but not for b, a comes first
+          return -1;
+        } else if (b[nameKey]) {
+          // If name is defined for b but not for a, b comes first
+          return 1;
+        } else {
+          // If both a and b are undefined, they are equal in terms of sorting
+          return 0;
+        }
+      });
+    }
+  }
+
   if (search && !!searchParam) {
     var { data, loading, error } = search
 
@@ -96,21 +131,6 @@ const ResultList = ({
       (d) => !isDataProduct(d.result)
     )
 
-    const sortByTeamAndName = (a: any, b: any) => {
-      if (a.teamkatalogenURL && b.teamkatalogenURL) {
-        let comparison = a.teamkatalogenURL.localeCompare(b.teamkatalogenURL);
-        if (comparison !== 0) return comparison;
-      } else if (a.teamkatalogenURL) {
-        return -1; // a comes first if b is undefined
-      } else if (b.teamkatalogenURL) {
-        return 1; // b comes first if a is undefined
-      }
-      // If teamkatalogenURL is the same or both are undefined, sort by name
-      return a.name.localeCompare(b.name);
-    }
-    if (dataproducts) { dataproducts.sort(sortByTeamAndName) }
-    if (stories) { stories.sort(sortByTeamAndName) }
-    if (insightProducts) { insightProducts.sort(sortByTeamAndName) }
 
     return (
       <Results>
@@ -178,6 +198,7 @@ const ResultList = ({
     )
   }
   if (dataproducts) {
+    sortArrayByTeamAndName(dataproducts, 'owner.group', 'name')
     return (
       <Results>
         {dataproducts.map((d, idx) => (
@@ -195,6 +216,7 @@ const ResultList = ({
   }
 
   if (stories) {
+    sortArrayByTeamAndName(stories, 'group', 'name')
     return (
       <div>
         <Results>
@@ -222,6 +244,7 @@ const ResultList = ({
   }
 
   if (insightProducts) {
+    sortArrayByTeamAndName(insightProducts, 'group', 'name')
     return (
       <div>
         <Results>
