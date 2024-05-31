@@ -71,6 +71,7 @@ export const SearchResultLink = ({
     deleteResource?.(id || '');
     deletePromise?.then(() => {
       setModal(false)
+      router.reload()
     }).catch((reason) => {
       setError(reason.toString())
     })
