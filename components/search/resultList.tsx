@@ -212,8 +212,12 @@ const ResultList = ({
 // Rest of your component code
 
   if (dataproducts) {
-    dataproducts.sort((a,b) =>
-      (a.owner.group+a.name).localeCompare(b.owner.group+a.name)
+    dataproducts.sort((a,b) => {
+          if (a.owner.teamkatalogenURL && b.owner.teamkatalogenURL) {
+            return (getTeamKatalogenInfo(a.owner.teamkatalogenURL).teamkatalogenTeam + a.name).toLowerCase().localeCompare((getTeamKatalogenInfo(b.owner.teamkatalogenURL).teamkatalogenTeam + b.name).toLowerCase())
+          }
+          return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        }
     )
     return (
       <Results>
