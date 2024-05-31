@@ -15,7 +15,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import {UserState} from "../../lib/context";
-import { useUpdateStoryMetadataMutation } from '../../lib/schema/graphql'
+import { updateStory } from '../../lib/rest/stories'
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),
@@ -40,7 +40,8 @@ export const EditStoryMetadataForm = ({id, name, description, keywords, teamkata
   const [productAreaID, setProductAreaID] = useState<string>('')
   const [teamID, setTeamID] = useState<string>('')
   const userInfo = useContext(UserState)
-  const [updateStoryQuery, {loading, error}] = useUpdateStoryMetadataMutation()
+  const [error, setError] = useState<Error | undefined>(undefined)
+  const [loading, setLoading] = useState(false)
   const {
     register,
     handleSubmit,
@@ -77,8 +78,6 @@ export const EditStoryMetadataForm = ({id, name, description, keywords, teamkata
 
   const onSubmit = async (data: any) => {
     const editStoryData = {
-      variables: {
-        id: id,
         name: data.name,
         description: data.description,
         keywords: data.keywords,
@@ -86,17 +85,21 @@ export const EditStoryMetadataForm = ({id, name, description, keywords, teamkata
         productAreaID: productAreaID,
         teamID: teamID,
         group: data.group,
-        },
     }
 
-    updateStoryQuery(editStoryData).then(()=>{
+    setLoading(true)
+    updateStory(id, editStoryData).then(()=>{
+      setError(undefined)
       amplitudeLog('skjema fullført', { skjemanavn: 'endre-datafortelling' })
       router.push("/user/stories")
     }).catch(e=>{
+      setError(e)
       console.log(e)
       amplitudeLog('skjemainnsending feilet', {
         skjemanavn: 'endre-datafortelling',
       })
+    }).finally(()=>{
+      setLoading(false)
     })
   }
 

@@ -17,7 +17,7 @@ import * as yup from 'yup'
 import { useContext, useState } from 'react'
 import TagsSelector from '../lib/tagsSelector'
 import { UserState } from "../../lib/context";
-import { useUpdateInsightProductMetadataMutation } from '../../lib/schema/graphql'
+import { updateInsightProduct } from '../../lib/rest/insightProducts'
 
 const schema = yup.object().shape({
     name: yup.string().nullable().required('Skriv inn navnet på innsiktsproduktet'),
@@ -50,8 +50,9 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
     const [teamID, setTeamID] = useState<string>('')
     const userInfo = useContext(UserState)
     const [isPrivacyCheckboxChecked, setIsPrivacyCheckboxChecked] = useState(false)
+    const [error, setError] = useState<Error | undefined>(undefined)
+    const [loading, setLoading] = useState(false)
 
-    const [updateInsightProductQuery, { loading, error }] = useUpdateInsightProductMetadataMutation()
     const {
         register,
         handleSubmit,
@@ -95,8 +96,6 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
 
     const onSubmit = async (data: any) => {
         const editInsightProductData = {
-            variables: {
-                id: id,
                 name: data.name,
                 description: data.description,
                 type: data.type,
@@ -106,17 +105,21 @@ export const EditInsightProductMetadataForm = ({ id, name, description, type, li
                 productAreaID: productAreaID,
                 teamID: teamID,
                 group: data.group,
-            },
         }
 
-        updateInsightProductQuery(editInsightProductData).then(() => {
+        setLoading(true)
+        updateInsightProduct(id, editInsightProductData).then(() => {
+            setError(undefined)
             amplitudeLog('skjema fullført', { skjemanavn: 'endre-innsiktsprodukt' })
             router.back()
         }).catch(e => {
             console.log(e)
+            setError(e)
             amplitudeLog('skjemainnsending feilet', {
                 skjemanavn: 'endre-innsiktsprodukt',
             })
+        }).finally(() => {
+            setLoading(false)
         })
     }
 
