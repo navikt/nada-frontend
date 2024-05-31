@@ -83,6 +83,13 @@ const ResultList = ({
       teamkatalogenTeam: tk?.name
     }
   }
+  const [dpLoading, setDpLoading] = useState(true);
+
+  useEffect(() => {
+    if (dataproducts) {
+      setDpLoading(false);
+    }
+  }, [dataproducts]);
 
   const sortArrayByTeamAndName = (array: any[], owner: string, nameKey: string) => {
     if (array) {
@@ -197,6 +204,13 @@ const ResultList = ({
       </Results>
     )
   }
+
+  if (dpLoading) {
+    return <LoaderSpinner />;
+  }
+
+// Rest of your component code
+
   if (dataproducts) {
     sortArrayByTeamAndName(dataproducts, 'owner.group', 'name')
     return (
