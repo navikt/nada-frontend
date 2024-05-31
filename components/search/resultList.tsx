@@ -9,6 +9,7 @@ import { useSearchTeamKatalogen } from '../../lib/rest/teamkatalogen'
 import { useGetProductAreas } from '../../lib/rest/productAreas'
 import { SearchResult } from '../../lib/rest/search'
 import { deleteStory } from '../../lib/rest/stories'
+import { Router, useRouter } from 'next/router'
 
 const Results = ({ children }: { children: React.ReactNode }) => (
   <div className="results">{children}</div>
@@ -61,6 +62,7 @@ const ResultList = ({
   const userInfo = useContext(UserState)
   const { searchResult: teamkatalogen } = useSearchTeamKatalogen()
   const { productAreas } = useGetProductAreas()
+  const router = useRouter()
 
   const isDataProduct = (item: any) => !!item.datasets
 
@@ -191,7 +193,7 @@ const ResultList = ({
               keywords={s.keywords}
               editable={true}
               description={s.description}
-              deleteResource={()=> deleteStory(s.id)}
+              deleteResource={()=> deleteStory(s.id).then(()=>router.reload())}
             />
           ))}
         </Results>

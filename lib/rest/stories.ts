@@ -3,13 +3,26 @@ import { createStoryUrl, deleteTemplate, postTemplate, putTemplate, updateStoryU
 import { isThenable } from "next/dist/client/components/router-reducer/router-reducer-types"
 
 export const createStory = (newStory: any, files: any[]) => {
+    console.log(newStory, files)
     const formData = new FormData()
     files.forEach((file, idx) => {
+        console.log(file, idx)
         formData.append(`files[${idx}][path]`, file.path)
-        formData.append(`files[${idx}[file]`, file.file)
+        formData.append(`files[${idx}][file]`, file.file)
     })
     formData.append('story', JSON.stringify(newStory))
-    return postTemplate(createStoryUrl(), formData).then((res) => res.json())
+    console.log(formData)
+    console.log(formData.get('files[0][file]'))
+    return fetch(createStoryUrl(), {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      }).then(res => {
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+        return res.json()
+      })    
 }
 
 export const updateStory =(storyId: string, updatedStory: any) => {

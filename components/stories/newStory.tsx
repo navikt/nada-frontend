@@ -64,10 +64,10 @@ export const NewStoryForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-        name: undefined,
-        description: '',
-        teamkatalogenURL: '',
-        keywords: [] as string[],
+      name: undefined,
+      description: '',
+      teamkatalogenURL: '',
+      keywords: [] as string[],
     },
   })
 
@@ -75,10 +75,10 @@ export const NewStoryForm = () => {
   const keywords = watch('keywords')
 
   const onDeleteKeyword = (keyword: string) => {
-    keywords !== undefined ? 
-    setValue('keywords', keywords.filter((k: string) => k !== keyword))
-    :
-    setValue('keywords', [])
+    keywords !== undefined ?
+      setValue('keywords', keywords.filter((k: string) => k !== keyword))
+      :
+      setValue('keywords', [])
   }
 
   const onAddKeyword = (keyword: string) => {
@@ -90,25 +90,25 @@ export const NewStoryForm = () => {
   const valueOrNull = (val: string) => (val == '' ? null : val);
 
   const onSubmit = async (data: any) => {
-        const files= storyFiles.map<UploadFile>(it=>({
-          path: fixRelativePath(it),
-          file: it,
-        }))
-        const storyInput= {
-          name: data.name,
-          description: valueOrNull(data.description),
-          keywords: data.keywords,
-          teamkatalogenURL: data.teamkatalogenURL,
-          productAreaID: productAreaID,
-          teamID: teamID,
-          group: data.group,
-        }
+    const files = storyFiles.map<UploadFile>(it => ({
+      path: fixRelativePath(it),
+      file: it,
+    }))
+    const storyInput = {
+      name: data.name,
+      description: valueOrNull(data.description),
+      keywords: data.keywords,
+      teamkatalogenURL: data.teamkatalogenURL,
+      productAreaID: productAreaID,
+      teamID: teamID,
+      group: data.group,
+    }
 
     try {
       const data = await createStory(storyInput, files);
       setError(undefined);
       amplitudeLog('skjema fullført', { skjemanavn: 'ny-datafortelling' });
-      router.push(`/story/${data.id}`);
+      router.push(`/user/stories`);
     } catch (e) {
       setError(e as Error);
       amplitudeLog('skjemainnsending feilet', {
@@ -117,7 +117,7 @@ export const NewStoryForm = () => {
       console.log(e)
     }
   }
-  
+
 
   const onCancel = () => {
     amplitudeLog(
@@ -147,10 +147,10 @@ export const NewStoryForm = () => {
     }
   }
 
-  const fixRelativePath = (file: File) =>{
+  const fixRelativePath = (file: File) => {
     var path = file.webkitRelativePath
     var pathParts = path.split('/');
-    return pathParts.length <= 1? file.name:pathParts.slice(1).reduce((p, s, i)=>i===0? s: p+ "/" +s)
+    return pathParts.length <= 1 ? file.name : pathParts.slice(1).reduce((p, s, i) => i === 0 ? s : p + "/" + s)
   }
 
   const generateFileTree = (files: File[]) => {
@@ -159,7 +159,7 @@ export const NewStoryForm = () => {
       var pathParts = file.webkitRelativePath.split('/');
       if (pathParts.length === 1) {
         pathParts = [file.name]
-      }else{
+      } else {
         pathParts = pathParts.slice(1)
       }
       let currentLevel = tree;
