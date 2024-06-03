@@ -13,6 +13,7 @@ export const useIsValidSlackChannel = (channel: string)=>{
 
     useEffect(()=>{
         if(!channel) return
+        setLoading(true)
         IsValidSlackChannel(channel).then((res)=> res.json())
         .then((isValid)=>
         {
