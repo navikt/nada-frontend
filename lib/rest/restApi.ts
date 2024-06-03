@@ -25,6 +25,10 @@ export const createStoryUrl = () => `${apiUrl()}/stories/new`
 export const updateStoryUrl = (id: string) => `${apiUrl()}/stories/${id}`
 export const deleteStoryUrl = (id: string) => `${apiUrl()}/stories/${id}`
 
+export const getJoinableViewUrl = (id: string) => `${apiUrl()}/pseudo/joinable/${id}`
+export const createJoinableViewsUrl = () => `${apiUrl()}/pseudo/joinable/new`
+export const getJoinableViewsForUserUrl = () => `${apiUrl()}/pseudo/joinable`
+
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`

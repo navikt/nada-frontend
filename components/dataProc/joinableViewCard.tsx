@@ -1,15 +1,15 @@
 import { Alert, Box, CopyButton, ExpansionCard, Link, Loader, Tooltip } from "@navikt/ds-react"
-import { JoinableView, useJoinableViewQuery } from "../../lib/schema/graphql"
 import { ExternalLink } from "@navikt/ds-icons"
 import LoaderSpinner from "../lib/spinner"
 import { useState } from "react"
+import { useGetJoinableView } from "../../lib/rest/joinableViews"
 
 interface JoinableViewCardProps {
-    joinableView: JoinableView
+    joinableView: any
 }
 
 export const JoinableViewCardContent = ({ joinableViewId }: { joinableViewId: string }) => {
-    const { data, loading, error } = useJoinableViewQuery({ variables: { id: joinableViewId } })
+    const { data, loading, error } = useGetJoinableView(joinableViewId)
     const urlComps = data?.joinableView.pseudoDatasources && data?.joinableView.pseudoDatasources.length
         ? data?.joinableView.pseudoDatasources[0].bigqueryUrl.split('.') : ["", "", ""]
     const projectID = urlComps[0]
@@ -21,7 +21,7 @@ export const JoinableViewCardContent = ({ joinableViewId }: { joinableViewId: st
         {error && <Alert variant="error">Klarte ikke hente data om views tilrettelagt for kobling</Alert>}
         {data && <>
             <Link href={bigQueryUrl}>{"Åpne BigQuery dataset i Google Cloud Console"}<ExternalLink /></Link>
-            {data?.joinableView.pseudoDatasources.map((bqv, index) => <Box key={index} padding="1" className="w-[55rem]">
+            {data?.joinableView.pseudoDatasources.map((bqv:any, index: number) => <Box key={index} padding="1" className="w-[55rem]">
                 {bqv.deleted?<Tooltip content="Datasettet er slettet fra markedsplassen"><div className="flex flex-row items-center line-through">{bqv.bigqueryUrl}</div></Tooltip>:
                 bqv.accessible? <div className="flex flex-row items-center bg-gray-200">{bqv.bigqueryUrl}<CopyButton copyText={bqv.bigqueryUrl}></CopyButton></div>
                     : <Tooltip content="Har ikke tilgang til datasettet"><div className="flex flex-row items-center text-gray-200" >{bqv.bigqueryUrl}</div></Tooltip>}
