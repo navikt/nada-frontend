@@ -64,7 +64,7 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
       {!!input &&
         !loading &&
         !isEmail(input) &&
-        isValid
+        !isValid
         && <InfoError />}
     </div>
   )
