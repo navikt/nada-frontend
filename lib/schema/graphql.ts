@@ -1180,73 +1180,45 @@ export type UserInfo = {
   stories: Array<Story>;
 };
 
-export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
+export type CreateDatasetMutationVariables = Exact<{
+  input: NewDataset;
+}>;
 
 
-export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
+export type CreateDatasetMutation = { __typename?: 'Mutation', createDataset: { __typename?: 'Dataset', id: string, dataproductID: string } };
 
 
-export const UserInfoAccessableDataproductDocument = gql`
-    query userInfoAccessableDataproduct {
-  userInfo {
-    accessable {
-      owned {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogenURL
-        }
-      }
-      granted {
-        __typename
-        id
-        name
-        description
-        created
-        lastModified
-        owner {
-          group
-          teamkatalogenURL
-        }
-      }
-    }
+export const CreateDatasetDocument = gql`
+    mutation createDataset($input: NewDataset!) {
+  createDataset(input: $input) {
+    id
+    dataproductID
   }
 }
     `;
+export type CreateDatasetMutationFn = Apollo.MutationFunction<CreateDatasetMutation, CreateDatasetMutationVariables>;
 
 /**
- * __useUserInfoAccessableDataproductQuery__
+ * __useCreateDatasetMutation__
  *
- * To run a query within a React component, call `useUserInfoAccessableDataproductQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserInfoAccessableDataproductQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useCreateDatasetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDatasetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useUserInfoAccessableDataproductQuery({
+ * const [createDatasetMutation, { data, loading, error }] = useCreateDatasetMutation({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useUserInfoAccessableDataproductQuery(baseOptions?: Apollo.QueryHookOptions<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>) {
+export function useCreateDatasetMutation(baseOptions?: Apollo.MutationHookOptions<CreateDatasetMutation, CreateDatasetMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>(UserInfoAccessableDataproductDocument, options);
+        return Apollo.useMutation<CreateDatasetMutation, CreateDatasetMutationVariables>(CreateDatasetDocument, options);
       }
-export function useUserInfoAccessableDataproductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>(UserInfoAccessableDataproductDocument, options);
-        }
-export function useUserInfoAccessableDataproductSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>(UserInfoAccessableDataproductDocument, options);
-        }
-export type UserInfoAccessableDataproductQueryHookResult = ReturnType<typeof useUserInfoAccessableDataproductQuery>;
-export type UserInfoAccessableDataproductLazyQueryHookResult = ReturnType<typeof useUserInfoAccessableDataproductLazyQuery>;
-export type UserInfoAccessableDataproductSuspenseQueryHookResult = ReturnType<typeof useUserInfoAccessableDataproductSuspenseQuery>;
-export type UserInfoAccessableDataproductQueryResult = Apollo.QueryResult<UserInfoAccessableDataproductQuery, UserInfoAccessableDataproductQueryVariables>;
+export type CreateDatasetMutationHookResult = ReturnType<typeof useCreateDatasetMutation>;
+export type CreateDatasetMutationResult = Apollo.MutationResult<CreateDatasetMutation>;
+export type CreateDatasetMutationOptions = Apollo.BaseMutationOptions<CreateDatasetMutation, CreateDatasetMutationVariables>;
