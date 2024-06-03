@@ -51,12 +51,15 @@ export const NewJoinableView = () => {
     const handleSubmit = async () => {
         setSubmitted(true)
         try {
-            await createJoinableViews({ name: name, expires: isTimeLimited ? expires : null, datasetIDs: srcDatasets })
+            const res = await createJoinableViews({ name: name, expires: isTimeLimited ? expires : null, datasetIDs: srcDatasets })
             setBackendError(undefined)
-        } catch (e) {
-            console.log(e)
-            setSubmitted(false)
+            router.push(
+                `/user/access?accessCurrentTab=joinable`
+            )
+        } catch (e: any) {
             setBackendError(e as Error)
+        } finally {
+            setSubmitted(false)
         }
     }
 

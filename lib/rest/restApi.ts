@@ -83,9 +83,10 @@ export const postTemplate = (url: string, body?: any) => fetch(url, {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify(body),
-}).then(res => {
+}).then(async res => {
   if (!res.ok) {
-    throw new Error(res.statusText)
+    const errorMessage = await res.text()
+    throw new Error(`${res.statusText}${errorMessage&&":"}${errorMessage}`)
   }
   return res
 })
