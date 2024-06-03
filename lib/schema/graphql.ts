@@ -1180,57 +1180,12 @@ export type UserInfo = {
   stories: Array<Story>;
 };
 
-export type SlackQueryVariables = Exact<{
-  name: Scalars['String']['input'];
-}>;
-
-
-export type SlackQuery = { __typename?: 'Query', IsValidSlackChannel: boolean };
-
 export type UserInfoAccessableDataproductQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserInfoAccessableDataproductQuery = { __typename?: 'Query', userInfo: { __typename?: 'UserInfo', accessable: { __typename?: 'AccessibleDatasets', owned: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }>, granted: Array<{ __typename: 'Dataset', id: string, name: string, description: string, created: any, lastModified: any, owner: { __typename?: 'Owner', group: string, teamkatalogenURL?: string | null } }> } } };
 
 
-export const SlackDocument = gql`
-    query Slack($name: String!) {
-  IsValidSlackChannel(name: $name)
-}
-    `;
-
-/**
- * __useSlackQuery__
- *
- * To run a query within a React component, call `useSlackQuery` and pass it any options that fit your needs.
- * When your component renders, `useSlackQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSlackQuery({
- *   variables: {
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useSlackQuery(baseOptions: Apollo.QueryHookOptions<SlackQuery, SlackQueryVariables> & ({ variables: SlackQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
-      }
-export function useSlackLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SlackQuery, SlackQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
-        }
-export function useSlackSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SlackQuery, SlackQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SlackQuery, SlackQueryVariables>(SlackDocument, options);
-        }
-export type SlackQueryHookResult = ReturnType<typeof useSlackQuery>;
-export type SlackLazyQueryHookResult = ReturnType<typeof useSlackLazyQuery>;
-export type SlackSuspenseQueryHookResult = ReturnType<typeof useSlackSuspenseQuery>;
-export type SlackQueryResult = Apollo.QueryResult<SlackQuery, SlackQueryVariables>;
 export const UserInfoAccessableDataproductDocument = gql`
     query userInfoAccessableDataproduct {
   userInfo {
