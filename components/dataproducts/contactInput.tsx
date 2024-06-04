@@ -1,12 +1,12 @@
 import { TextField } from '@navikt/ds-react'
 import { useState } from 'react'
 import { FieldValues, FormState, UseFormRegister } from 'react-hook-form'
-import { useSlackQuery } from '../../lib/schema/graphql'
 import { isEmail } from '../../lib/validators'
 import { EmailIcon } from '../lib/icons/emailIcon'
 import { ErrorIcon } from '../lib/icons/errorIcon'
 import { LoaderIcon } from '../lib/icons/loaderIcon'
 import { SlackLogo } from '../lib/icons/slackLogo'
+import { useIsValidSlackChannel } from '../../lib/rest/slack'
 
 export interface IContactInputProps {
   register: UseFormRegister<any>
@@ -44,11 +44,7 @@ const InfoError = ()=>(
 export const ContactInput = ({ register, formState }: IContactInputProps) => {
   const { errors } = formState
   const [input, setInput] = useState('')
-  const { data, loading } = useSlackQuery({
-    variables: {
-      name: input,
-    },
-  })
+  const { isValid, loading } = useIsValidSlackChannel(input)
 
   return (
     <div>
@@ -64,12 +60,12 @@ export const ContactInput = ({ register, formState }: IContactInputProps) => {
       </div>
       {isEmail(input) && <InfoEmail />}
       {!!input && !isEmail(input) && loading && <InfoLoading />}
-      {!loading && data && data.IsValidSlackChannel && <InfoSlack />}
+      {!loading && isValid && <InfoSlack />}
       {!!input &&
         !loading &&
         !isEmail(input) &&
-        data &&
-        !data.IsValidSlackChannel && <InfoError />}
+        !isValid
+        && <InfoError />}
     </div>
   )
 }

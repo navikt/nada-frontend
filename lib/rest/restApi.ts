@@ -25,9 +25,15 @@ export const createStoryUrl = () => `${apiUrl()}/stories/new`
 export const updateStoryUrl = (id: string) => `${apiUrl()}/stories/${id}`
 export const deleteStoryUrl = (id: string) => `${apiUrl()}/stories/${id}`
 
+export const getJoinableViewUrl = (id: string) => `${apiUrl()}/pseudo/joinable/${id}`
+export const createJoinableViewsUrl = () => `${apiUrl()}/pseudo/joinable/new`
+export const getJoinableViewsForUserUrl = () => `${apiUrl()}/pseudo/joinable`
+
 export const getProductAreasUrl = () => `${apiUrl()}/productareas`
 export const getProductAreaUrl = (id: string) => `${apiUrl()}/productareas/${id}`
 export const fetchUserDataUrl = () => `${apiUrl()}/userData`
+
+export const isValidSlackChannelUrl = (channel: string) => `${apiUrl()}/slack/isValid?channel=${channel}`
 
 export const getInsightProductUrl = (id: string) => `${apiUrl()}/insightProducts/${id}`
 export const createInsightProductUrl = () => `${apiUrl()}/insightProducts/new`
@@ -79,9 +85,10 @@ export const postTemplate = (url: string, body?: any) => fetch(url, {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify(body),
-}).then(res => {
+}).then(async res => {
   if (!res.ok) {
-    throw new Error(res.statusText)
+    const errorMessage = await res.text()
+    throw new Error(`${res.statusText}${errorMessage&&":"}${errorMessage}`)
   }
   return res
 })

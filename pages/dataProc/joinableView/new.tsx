@@ -1,5 +1,5 @@
-import {useRouter} from 'next/router'
-import {useMutation} from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useMutation } from '@apollo/client'
 import {
     Alert,
     Button,
@@ -13,12 +13,11 @@ import {
     TextField,
     useDatepicker,
 } from '@navikt/ds-react'
-import {useContext, useState} from 'react'
-import {UserState} from '../../../lib/context'
-import {CREATE_JOINABLEVIEWS} from '../../../lib/queries/pseudoView/newJoinableViews'
-import {TrashIcon} from '@navikt/aksel-icons'
-import { GET_JOINABLEVIEWS } from '../../../lib/queries/pseudoView/joinableViews'
+import { useContext, useState } from 'react'
+import { UserState } from '../../../lib/context'
+import { TrashIcon } from '@navikt/aksel-icons'
 import { useGetAccessiblePseudoDatasets } from '../../../lib/rest/dataproducts'
+import { createJoinableViews } from '../../../lib/rest/joinableViews'
 
 
 const tomorrow = () => {
@@ -44,31 +43,22 @@ export const NewJoinableView = () => {
     const [name, setName] = useState("")
     const [expires, setExpires] = useState<string | null>(startDate().toISOString())
     const [isTimeLimited, setIsTimeLimited] = useState(true)
+    const [backendError, setBackendError] = useState<Error | undefined>(undefined)
 
     const search = useGetAccessiblePseudoDatasets()
-
-    const [createJoinableViews, {loading, error: backendError}] = useMutation(
-        CREATE_JOINABLEVIEWS,
-        {
-            onCompleted: (data) =>
-                router.push(
-                    `/user/access?accessCurrentTab=joinable`
-                ),
-            refetchQueries: [GET_JOINABLEVIEWS],
-            awaitRefetchQueries: true,
-        }
-    )
 
     const pseudoDatasets = search.accessiblePseudoDatasets
     const handleSubmit = async () => {
         setSubmitted(true)
         try {
-            await createJoinableViews({
-                variables: {input: {name: name, expires: isTimeLimited ? expires : null, datasetIDs: srcDatasets}}
-            })
-
-        } catch (e) {
-            console.log(e)
+            const res = await createJoinableViews({ name: name, expires: isTimeLimited ? expires : null, datasetIDs: srcDatasets })
+            setBackendError(undefined)
+            router.push(
+                `/user/access?accessCurrentTab=joinable`
+            )
+        } catch (e: any) {
+            setBackendError(e as Error)
+        } finally {
             setSubmitted(false)
         }
     }
@@ -76,8 +66,8 @@ export const NewJoinableView = () => {
     const { datepickerProps, inputProps, selectedDay } = useDatepicker({
         fromDate: tomorrow(),
         defaultSelected: startDate(),
-        onDateChange: (d: Date | undefined) => {d ? setExpires(d.toISOString()) : setExpires(null)},
-      });
+        onDateChange: (d: Date | undefined) => { d ? setExpires(d.toISOString()) : setExpires(null) },
+    });
 
     const error = !name || srcDatasets.some(it => !it)
     return (
@@ -101,10 +91,10 @@ export const NewJoinableView = () => {
                             onChange={e => setName(e.target.value)}
                             error={!name && "Du må skrive inn et navn"}
                         />
-                        <hr className="border-border-on-inverted"/>
+                        <hr className="border-border-on-inverted" />
                         {
                             srcDatasets.map((it, index) => <div key={index}
-                                                                className='flex flex-row items-center gap-2'>
+                                className='flex flex-row items-center gap-2'>
                                 <Select
                                     className="w-full"
                                     label="Velg et view"
@@ -120,14 +110,14 @@ export const NewJoinableView = () => {
                                         ...new Set(
                                             pseudoDatasets?.filter(it => !srcDatasets.some((sdsid, sdsindex) => sdsid == it.datasetID && index != sdsindex))
                                                 .map((it: any) => <option value={it.datasetID}
-                                                                          key={it.datasetID}>{it.name}</option>)
+                                                    key={it.datasetID}>{it.name}</option>)
                                         ),
                                     ]}
                                 </Select>
 
                                 {srcDatasets.length > 2 && <div className='h-20 flex flex-col justify-end'>
                                     <TrashIcon fontSize="3rem"
-                                               onClick={() => setSrcDatasets([...srcDatasets.filter((_, i) => i !== index)])}/>
+                                        onClick={() => setSrcDatasets([...srcDatasets.filter((_, i) => i !== index)])} />
 
                                 </div>}
                             </div>)
@@ -151,18 +141,18 @@ export const NewJoinableView = () => {
                         value={isTimeLimited}
                     >
                         <Radio value={true}>Dato</Radio>
-                            <DatePicker {...datepickerProps}>
-                                <DatePicker.Input
-                                    {...inputProps}
-                                    label=""
-                                    disabled={!isTimeLimited}
-                                />
-                            </DatePicker>
+                        <DatePicker {...datepickerProps}>
+                            <DatePicker.Input
+                                {...inputProps}
+                                label=""
+                                disabled={!isTimeLimited}
+                            />
+                        </DatePicker>
                         <Radio value={false}>Aldri</Radio>
                     </RadioGroup>
                 </div>
                 {backendError && <Alert variant="error">{backendError.message}</Alert>}
-                {submitted && !backendError && <div>Vennligst vent...<Loader size="small"/></div>}
+                {submitted && !backendError && <div>Vennligst vent...<Loader size="small" /></div>}
                 <div className="flex flex-row gap-4 mb-16">
                     <Button type="button" disabled={submitted} variant="secondary" onClick={() => router.back()}>
                         Avbryt
