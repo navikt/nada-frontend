@@ -1,8 +1,15 @@
 import { useState } from 'react'
-import {
-  BigQueryType,
-} from '../../../lib/schema/graphql'
 import { useFetchBQcolumns } from '../../../lib/rest/bigquery'
+
+/** BigQueryType defines supported table types in a BigQuery set. */
+export enum BigQueryType {
+  /** materialized_view is when the table is a BigQuery materialized view. */
+  MaterializedView = 'materialized_view',
+  /** table is when the table is a regular BigQuery table. */
+  Table = 'table',
+  /** view is when the table is a BigQuery view. */
+  View = 'view'
+}
 
 export type PIITagType =
   | 'PII_DirekteIdentifiserende'

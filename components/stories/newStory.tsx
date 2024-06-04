@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import ErrorMessage from '../lib/error';
 import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
 import TeamkatalogenSelector from '../lib/teamkatalogenSelector';
 import DescriptionEditor from '../lib/DescriptionEditor';
 import { Button, Heading, TextField, Select, Link, Label } from '@navikt/ds-react';
@@ -14,9 +13,15 @@ import { UserState } from '../../lib/context';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { FileTextFillIcon, FolderFillIcon, TrashIcon } from '@navikt/aksel-icons';
-import { UploadFile } from '../../lib/schema/graphql';
 import { createStory } from '../../lib/rest/stories';
-import { set } from 'lodash';
+
+/** UploadFile contains path and data of a file */
+export type UploadFile = {
+  /** file data */
+  file: File;
+  /** path of the file uploaded */
+  path: string;
+};
 
 const schema = yup.object().shape({
   name: yup.string().nullable().required('Skriv inn navnet på datafortellingen'),

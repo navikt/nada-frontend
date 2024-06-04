@@ -4,12 +4,11 @@ import { AccessRequestFormInput } from './accessRequestForm'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
-import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { useGetDataproduct } from '../../../lib/rest/dataproducts'
 import { createAccessRequest } from '../../../lib/rest/access'
 
 interface NewAccessRequestFormProps {
-  dataset: DatasetQuery
+  dataset: any
   setModal: (value: boolean) => void
 }
 

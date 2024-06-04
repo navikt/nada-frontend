@@ -1,7 +1,5 @@
 import LoaderSpinner from '../../../../components/lib/spinner'
 import ErrorMessage from '../../../../components/lib/error'
-import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../../../../lib/apollo'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
 import amplitudeLog from '../../../../lib/amplitude'

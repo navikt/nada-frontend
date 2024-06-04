@@ -1,7 +1,6 @@
-import { ApolloError } from "@apollo/client"
-import { AnnotateColumnListener, ColumnType, PIITagOptions, PIITagType, PseudoColumnListener } from "./useColumnTags"
-import { Control, Controller, FieldValues, FormState, UseFormGetValues, UseFormRegister, UseFormWatch } from "react-hook-form"
-import { Tag, Checkbox, Alert, Radio, RadioGroup, Textarea, Switch } from "@navikt/ds-react"
+import { AnnotateColumnListener, ColumnType, PIITagType, PseudoColumnListener } from "./useColumnTags"
+import { Control, Controller, FormState, UseFormGetValues, UseFormRegister, UseFormWatch } from "react-hook-form"
+import { Alert, Radio, RadioGroup, Textarea, Switch } from "@navikt/ds-react"
 import { Personopplysninger, PseudonymiseringsText } from "./helptext"
 import AnnotateDatasetTable from "./annotateDatasetTable"
 import { useState } from "react"
@@ -9,7 +8,7 @@ import { FormValues } from "./newDatasetForm"
 
 interface PiiFormProps {
     loading: boolean
-    apolloError: ApolloError | undefined
+    error: any
     columns: ColumnType[] | undefined
     tags: Map<string, PIITagType> | undefined
     pseudoColumns: Map<string, boolean>
@@ -24,7 +23,7 @@ interface PiiFormProps {
 
 export const PiiForm = ({
     loading,
-    apolloError,
+    error,
     columns,
     tags,
     pseudoColumns,
@@ -69,7 +68,7 @@ export const PiiForm = ({
                     {showAnnotateDatasetTable && (
                         <AnnotateDatasetTable
                             loading={loading}
-                            error={apolloError}
+                            error={error}
                             columns={columns}
                             tags={tags}
                             pseudoColumns={pseudoColumns}

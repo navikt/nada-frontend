@@ -1,7 +1,4 @@
-import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../../../lib/apollo'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import Head from 'next/head'
 import { useGetDataproduct } from '../../../lib/rest/dataproducts'
 import { Alert } from '@navikt/ds-react'

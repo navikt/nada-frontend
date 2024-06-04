@@ -1,7 +1,3 @@
-import {
-  BigQueryType,
-} from '../../../lib/schema/graphql'
-
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 
 import { Loader } from '@navikt/ds-react'

@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { NewInsightProductForm } from '../../components/insightProducts/newInsightProduct'
 import Head from 'next/head'
-import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../../lib/apollo'
 import InnerContainer from '../../components/lib/innerContainer'
 import LoaderSpinner from '../../components/lib/spinner'
 import { useFetchUserData } from '../../lib/rest/userData'

@@ -1,9 +1,15 @@
 import React from 'react'
-import {
-    NadaToken,
-} from '../../lib/schema/graphql'
 import { Table } from "@navikt/ds-react";
 import TokenCell from './tokenCell';
+
+/** NadaToken contains the team token of the corresponding team for updating data stories */
+export type NadaToken = {
+    __typename?: 'NadaToken';
+    /** name of team */
+    team: string;
+    /** nada token for the team */
+    token: string;
+  };
 
 const NadaTokensForUser = ({ nadaTokens }: { nadaTokens: Array<NadaToken> }) => {
     return (

@@ -1,39 +1,43 @@
-import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import ErrorMessage from '../../lib/error'
 import { Button, Checkbox, Heading, Loader, Radio, RadioGroup, Textarea, TextField } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
-import { Controller, FieldValues, useForm } from 'react-hook-form'
+import { Controller,useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { PiiLevel } from '../../../lib/schema/graphql'
 import DescriptionEditor from '../../lib/DescriptionEditor'
 import TagsSelector from '../../lib/tagsSelector'
-import AnnotateDatasetTable from './annotateDatasetTable'
 import DatasetSourceForm from './datasetSourceForm'
 import { useColumnTags } from './useColumnTags'
-import { Personopplysninger, TilgangsstyringHelpText } from "./helptext";
+import { TilgangsstyringHelpText } from "./helptext";
 import { PiiForm } from './piiForm'
 import { useState } from 'react'
 import { createDataset } from '../../../lib/rest/dataproducts'
+
+/** PiiLevel defines all possible levels of personal identifiable information that a dataset can have. */
+export enum PiiLevel {
+  Anonymised = 'anonymised',
+  None = 'none',
+  Sensitive = 'sensitive'
+}
 
 interface NewDatasetFormProps {
   dataproduct: any
 }
 
 export type FormValues = {
-    name: string,
-    description?: string | undefined,
-    repo?: string | null | undefined,
-    bigquery: {
-        dataset: string,
-        projectID: string,
-        table: string,
-    }
-    pii: NonNullable<PiiLevel | null | undefined>,
-    keywords?: any[] | undefined,
-    anonymisation_description?: string | null | undefined,
-    grantAllUsers?: string | null | undefined,
-    teamInternalUse?: boolean | undefined,
+  name: string,
+  description?: string | undefined,
+  repo?: string | null | undefined,
+  bigquery: {
+    dataset: string,
+    projectID: string,
+    table: string,
+  }
+  pii: NonNullable<PiiLevel | null | undefined>,
+  keywords?: any[] | undefined,
+  anonymisation_description?: string | null | undefined,
+  grantAllUsers?: string | null | undefined,
+  teamInternalUse?: boolean | undefined,
 }
 
 const schema = yup.object().shape({
@@ -74,15 +78,15 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-        name:'',
-        description: '',
-        repo: '',
-        bigquery: {projectID: '', dataset: '', table: ''},
-        pii: 'none' as PiiLevel,
-        keywords: [] as string[],
-        anonymisation_description: '',
-        grantAllUsers: 'dontGrantAllUsers',
-        teamInternalUse: undefined,
+      name: '',
+      description: '',
+      repo: '',
+      bigquery: { projectID: '', dataset: '', table: '' },
+      pii: 'none' as PiiLevel,
+      keywords: [] as string[],
+      anonymisation_description: '',
+      grantAllUsers: 'dontGrantAllUsers',
+      teamInternalUse: undefined,
     } as FormValues,
   })
   const [submitted, setSubmitted] = useState(false)
@@ -131,11 +135,11 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
     requestData.grantAllUsers = requestData.pii === PiiLevel.Sensitive || requestData.grantAllUsers === '' ? null : requestData.grantAllUsers === 'grantAllUsers'
     requestData.targetUser = requestData.teamInternalUse ? "OwnerTeam" : ""
     requestData.teamInternalUse = undefined
-    requestData.pseudoColumns = pseudoColumns? Array.from(pseudoColumns.entries())
-    .filter(([, value]) => value)
-    .map(([key]) => key) : []
+    requestData.pseudoColumns = pseudoColumns ? Array.from(pseudoColumns.entries())
+      .filter(([, value]) => value)
+      .map(([key]) => key) : []
     try {
-      const data= await createDataset(requestData)
+      const data = await createDataset(requestData)
       router.push(
         `/dataproduct/${dataproduct.id}/${dataproduct.slug}/${data}`
       )
@@ -144,7 +148,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
       setBackendError(e)
     }
   }
-  const selectedAllColumns = Array.from(pseudoColumns).filter(e=> e[1]).length === columns?.length
+  const selectedAllColumns = Array.from(pseudoColumns).filter(e => e[1]).length === columns?.length
 
   return (
     <div className="pt-8 pr-8 md:w-[46rem]">
@@ -191,7 +195,7 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           tags={keywords || []}
         />
         <PiiForm loading={false}
-          apolloError={undefined}
+          error={undefined}
           columns={columns}
           tags={tags}
           pseudoColumns={pseudoColumns}
@@ -216,8 +220,8 @@ const NewDatasetForm = ({ dataproduct }: NewDatasetFormProps) => {
           </RadioGroup>
         )}
         />
-        {backendError && <ErrorMessage error={backendError}/>}
-        {submitted && !backendError && <div>Vennligst vent...<Loader size="small"/></div>}
+        {backendError && <ErrorMessage error={backendError} />}
+        {submitted && !backendError && <div>Vennligst vent...<Loader size="small" /></div>}
         <div className="flex flex-row gap-4 grow items-end">
           <Button
             type="button"

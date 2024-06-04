@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Select, Table, Checkbox, Popover, Alert } from '@navikt/ds-react'
 import LoaderSpinner from '../../lib/spinner'
-import { ApolloError } from '@apollo/client'
 import {
   ColumnType,
   DEFAULT_COLUMN_TAG,
@@ -41,7 +40,7 @@ const PseudoCheck = ({ pseudoColumns, name, selectPseudoColumn }: PseudoCheckPro
 
 interface AnnotateDatasetTableProps {
   loading: boolean
-  error: ApolloError | undefined
+  error: any
   columns: ColumnType[] | undefined
   tags: Map<string, PIITagType> | undefined
   pseudoColumns: Map<string, boolean>

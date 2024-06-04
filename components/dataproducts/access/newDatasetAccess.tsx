@@ -1,12 +1,18 @@
 import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
-import {  SubjectType} from "../../../lib/schema/graphql";
 import * as yup from 'yup'
-import { Controller, useForm, useFormState } from "react-hook-form";
+import { Controller, useForm} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import ErrorMessage from "../../lib/error";
 import { useRouter } from "next/router";
 import { grantDatasetAccess } from "../../../lib/rest/access";
+
+/** SubjectType defines all possible types that can request access to a dataset. */
+export enum SubjectType {
+  Group = 'group',
+  ServiceAccount = 'serviceAccount',
+  User = 'user'
+}
 
 interface NewDatasetAccessProps {
     dataset: any

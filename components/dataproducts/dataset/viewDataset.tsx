@@ -5,9 +5,6 @@ import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { PluggableList } from 'react-markdown/lib'
 import remarkGfm from 'remark-gfm'
-import {
-  PiiLevel,
-} from '../../../lib/schema/graphql'
 import { backendHost } from '../../header/user'
 import TagPill from '../../lib/tagPill'
 import DatasetAccess from '../access/datasetAccess'
@@ -18,6 +15,7 @@ import DatasetMetadata from './datasetMetadata'
 import DatasetOwnerMenu from './datasetOwnerMenu'
 import DatasetTableSchema from './datasetTableSchema'
 import { Personopplysninger } from './helptext'
+import { PiiLevel } from './newDatasetForm'
 
 interface ViewDatasetProps {
   dataset: any

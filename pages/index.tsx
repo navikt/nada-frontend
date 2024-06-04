@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next'
-import { addApolloState, initializeApollo } from '../lib/apollo'
 import { useRouter } from 'next/router'
 import { FrontPageLogo } from '../components/index/frontPageLogo'
 import { useEffect, useState } from 'react'
@@ -127,16 +126,4 @@ const LandingPage = () => {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    try {
-        const cookie = context?.req?.headers?.cookie || ''
-        const apolloClient = initializeApollo(null, cookie)
-
-        return addApolloState(apolloClient, {
-            props: {},
-        })
-    } catch (e) {
-        return { props: {} }
-    }
-}
 export default LandingPage
