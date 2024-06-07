@@ -60,10 +60,10 @@ export const searchPollyUrl = (query?: string) => {
 export const createAccessRequestUrl = () => `${apiUrl()}/accessRequests/new`
 export const deleteAccessRequestUrl = (id: string) => `${apiUrl()}/accessRequests/${id}`
 export const updateAccessRequestUrl = (id: string) => `${apiUrl()}/accessRequests/${id}`
-export const approveAccessRequestUrl = (accessRequestId: string) => `${apiUrl()}/accessRequests/process/${accessRequestId}?action=approve`
-export const denyAccessRequestUrl = (accessRequestId: string, reason: string) => `${apiUrl()}/accessRequests/process/${accessRequestId}?action=deny&reason=${reason}`
+export const approveAccessRequestUrl = (accessRequestId: string) => `${apiUrl()}/accessRequests/${accessRequestId}/process?action=approve`
+export const denyAccessRequestUrl = (accessRequestId: string, reason: string) => `${apiUrl()}/accessRequests/${accessRequestId}/process?action=deny&reason=${reason}`
 export const grantAccessUrl = () => `${apiUrl()}/accesses/grant`
-export const revokeAccessUrl = (accessId: string) => `${apiUrl()}/accesses/revoke?id=${accessId}`
+export const revokeAccessUrl = (accessId: string) => `${apiUrl()}/accesses/${accessId}/revoke`
 
 export const fetchTemplate = (url: string) => fetch(url, {
   method: 'GET',
