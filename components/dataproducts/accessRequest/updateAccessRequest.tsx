@@ -1,12 +1,11 @@
 import * as React from 'react'
 import AccessRequestForm, { AccessRequestFormInput } from './accessRequestForm'
-import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { useState } from 'react'
 import { updateAccessRequest } from '../../../lib/rest/access'
 
 interface UpdateAccessRequestFormProps {
   updateAccessRequestData: any
-  dataset: DatasetQuery
+  dataset: any
   setModal: (value: boolean) => void
 }
 

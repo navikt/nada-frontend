@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Button, Heading, Link, Loader, Modal } from '@navikt/ds-react'
-import { MappingService } from '../../lib/schema/graphql'
 import { ExternalLink } from '@navikt/ds-icons'
 import { useState } from 'react'
+import { MappingService } from './explore'
 
 export enum ItemType {
   metabase = 1,

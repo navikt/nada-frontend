@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { DatasetQuery } from '../../../lib/schema/datasetQuery'
 import { UserState } from '../../../lib/context'
 import ErrorMessage from '../../lib/error';
 import { PollyInput, SubjectType } from '../../../lib/rest/access';
@@ -65,7 +64,7 @@ export type AccessRequestFormInput = {
 
 interface AccessRequestFormProps {
   accessRequest?: AccessRequestFormInput
-  dataset: DatasetQuery
+  dataset: any
   isEdit: boolean
   onSubmit: (requestData: AccessRequestFormInput) => Promise<void>
   error: Error | null

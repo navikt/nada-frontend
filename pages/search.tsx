@@ -1,4 +1,3 @@
-import { QueryResult } from '@apollo/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
@@ -8,13 +7,14 @@ import { FilterTreeNode } from '../components/search/filtersPicker'
 import ResultList from '../components/search/resultList'
 import { SearchPanel } from '../components/search/searchPanel'
 
-import {
-  Exact,
-  SearchType,
-} from '../lib/schema/graphql'
 import { useGetProductAreas } from '../lib/rest/productAreas'
 import { useSearch } from '../lib/rest/search'
 import { useFetchKeywords } from '../lib/rest/keywords'
+
+export enum SearchType {
+  Dataproduct = 'dataproduct',
+  Story = 'story'
+}
 
 export interface SearchParam {
   [s: string]: string | string[]

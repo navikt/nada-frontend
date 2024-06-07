@@ -1,10 +1,12 @@
-import {
-  MappingService,
-} from '../../lib/schema/graphql'
 import ExploreLink, { ItemType } from './exploreLink'
 import { useState } from 'react'
 import ErrorMessage from '../lib/error'
 import { mapDatasetToServices } from '../../lib/rest/dataproducts'
+
+/** MappingService defines all possible service types that a dataset can be exposed to. */
+export enum MappingService {
+  Metabase = 'metabase'
+}
 
 interface ExploreProps {
   dataproductId: string
