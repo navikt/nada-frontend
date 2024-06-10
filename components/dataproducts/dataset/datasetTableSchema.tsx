@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Alert, Heading, Table, Tag } from '@navikt/ds-react'
 import { PIITagNames } from './useColumnTags'
-import {PersonopplysningerDetaljert} from "./helptext";
+import { PersonopplysningerDetaljert } from "./helptext";
 import TagPill from '../../lib/tagPill';
 
 interface DatasetTableSchemaProps {
@@ -21,7 +21,7 @@ const DatasetTableSchema = ({
       <Heading spacing level="3" size="small">
         Skjema
       </Heading>
-      {datasource.pseudoColumns?.length && <Alert variant="info">Dette er et pseudoynimisert view</Alert>}
+      {!!datasource.pseudoColumns?.length && <Alert variant="info">Dette er et pseudoynimisert view</Alert>}
       <div className="mb-3 w-[91vw] overflow-auto">
         <Table className="w-fit 2xl:w-[60rem]" size="small">
           <Table.Header>
@@ -48,7 +48,7 @@ const DatasetTableSchema = ({
                     )}
                   </Table.DataCell>
                 )}
-                <Table.DataCell>{datasource.pseudoColumns?.some((it: any)=> it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
+                <Table.DataCell>{datasource.pseudoColumns?.some((it: any) => it == row.name) && <Tag variant="warning">SHA256 hashed</Tag>}</Table.DataCell>
               </Table.Row>
             ))}
           </Table.Body>
