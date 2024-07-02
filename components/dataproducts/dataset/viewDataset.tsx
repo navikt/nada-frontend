@@ -198,7 +198,7 @@ const ViewDataset = ({
                 { !isOwner && <a 
                   className="border-l-8 border-border-on-inverted pl-4 py-1 pr-4 w-fit" 
                   href="#" onClick={() => setAccessRequested(true)}>
-                  Søk om ny tilgang til datasettet
+                  Søk om tilgang til datasettet
                 </a>}
                 <Explore
                   dataproductId={dataset.id}
