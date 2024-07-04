@@ -7,12 +7,10 @@ export const createStory = (newStory: any, files: any[]) => {
     const formData = new FormData()
     files.forEach((file, idx) => {
         console.log(file, idx)
-        formData.append(`files[${idx}][path]`, file.path)
-        formData.append(`files[${idx}][file]`, file.file)
+        formData.append(file.path, file.file)
     })
-    formData.append('story', JSON.stringify(newStory))
+    formData.append('nada-backend-new-story', JSON.stringify(newStory))
     console.log(formData)
-    console.log(formData.get('files[0][file]'))
     return fetch(createStoryUrl(), {
         method: 'POST',
         credentials: 'include',
