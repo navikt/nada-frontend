@@ -76,20 +76,22 @@ const Dataproduct = () => {
       },
     ]
 
-  dataproduct.datasets.forEach((dataset: any) => {
-    menuItems.push({
-      title: `${truncate(dataset.name, 120)}`,
-      slug: dataset.id,
-      component: (
-        <Dataset
-          datasetID={dataset.id}
-          userInfo={userInfo}
-          isOwner={isOwner}
-          dataproduct={dataproduct}
-        />
-      ),
+  if (dataproduct.datasets) {
+    dataproduct.datasets.forEach((dataset: any) => {
+      menuItems.push({
+        title: `${truncate(dataset.name, 120)}`,
+        slug: dataset.id,
+        component: (
+            <Dataset
+                datasetID={dataset.id}
+                userInfo={userInfo}
+                isOwner={isOwner}
+                dataproduct={dataproduct}
+            />
+        ),
+      })
     })
-  })
+  }
 
   if (isOwner) {
     menuItems.push({
