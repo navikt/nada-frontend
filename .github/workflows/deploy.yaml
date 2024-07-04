@@ -1,5 +1,18 @@
 name: "Build and deploy"
-on: [workflow_dispatch, push]
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment du kjører i
+        type: choice
+        options:
+          - dev
+          - prod
+        required: true
 
 permissions:
   contents: read
