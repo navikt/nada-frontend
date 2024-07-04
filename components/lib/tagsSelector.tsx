@@ -89,7 +89,7 @@ export const TagsSelector = ({ onAdd, onDelete, tags }: TagsSelectorProps) => {
     //if there is a similar tag in the list, use it as the text
     const newTag = (
       tagOptions.find(
-        (t: any) => t.toLocaleLowerCase() === text.toLocaleLowerCase()
+        (t: any) => t && t.toLocaleLowerCase() === text.toLocaleLowerCase()
       ) as string ?? text
     ).trim()
     onAdd(newTag)
