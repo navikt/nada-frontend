@@ -12,7 +12,7 @@ export const updateDataproductValidation = yup.object().shape({
   slug: yup.string(),
   repo: yup.string(),
   teamContact: yup.string().nullable(),
-  teamkatalogenURL: yup.string().nullable().required('Du må velg en team i teamkatalogen'),
+  teamkatalogenURL: yup.string().nullable().required('Du må velge et team i Teamkatalogen'),
   productAreaID: yup.string().nullable(),
 })
 
@@ -30,9 +30,9 @@ export const owner = yup.object().shape({
 
 export const storyValidation = yup.object().shape({
   group: yup.string().required('trenger teamnavn'),
-  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
+  teamkatalogenURL: yup.string().required('Du må velge et team i Teamkatalogen'),
 })
 
 export const editStoryValidation = yup.object().shape({
-  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
+  teamkatalogenURL: yup.string().required('Du må velge et team i Teamkatalogen'),
 })

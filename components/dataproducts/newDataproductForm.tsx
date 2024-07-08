@@ -1,21 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import ErrorMessage from '../lib/error'
-import { useRouter } from 'next/router'
-import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
-import DescriptionEditor from '../lib/DescriptionEditor'
 import {
-  Button,
-  Heading,
-  Select,
-  TextField,
+    Button,
+    Heading,
+    Select,
+    TextField,
 } from '@navikt/ds-react'
-import amplitudeLog from '../../lib/amplitude'
-import * as yup from 'yup'
+import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import amplitudeLog from '../../lib/amplitude'
 import { UserState } from '../../lib/context'
+import { createDataproduct } from '../../lib/rest/dataproducts'
+import DescriptionEditor from '../lib/DescriptionEditor'
+import ErrorMessage from '../lib/error'
+import TeamkatalogenSelector from '../lib/teamkatalogenSelector'
 import { ContactInput } from './contactInput'
-import { createDataproduct} from '../../lib/rest/dataproducts'
 
 
 const schema = yup.object().shape({
@@ -24,7 +24,7 @@ const schema = yup.object().shape({
   team: yup
     .string()
     .required('Velg en gruppe fra GCP som skal ha ansvar for dataproduktet'),
-  teamkatalogenURL: yup.string().required('Du må velg en team i teamkatalogen'),
+  teamkatalogenURL: yup.string().required('Du må velge et team i Teamkatalogen'),
   teamContact: yup.string().nullable(),
 })
 
