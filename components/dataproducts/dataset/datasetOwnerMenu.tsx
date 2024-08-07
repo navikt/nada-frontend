@@ -27,13 +27,13 @@ const DatasetOwnerMenu = ({
   const onDelete = async () => {
     try {
       await deleteDataset(dataset.id)
-      await router.push(
-        `/dataproduct/${dataproduct?.id}/${dataproduct?.slug}/info`
-      )
-      router.reload()
     } catch (e: any) {
       setDeleteError(e.toString())
     }
+
+    const url = `/dataproduct/${dataproduct?.id}/${dataproduct?.slug}/info`
+    await router.push(url)
+    router.reload()
   }
   const onMove = async (dataproductID: string)=>{
     await updateDataset(dataset.id,{
