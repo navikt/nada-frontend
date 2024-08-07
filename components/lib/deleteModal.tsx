@@ -20,7 +20,7 @@ export const DeleteModal = ({
   return (
     <Modal open={open} onClose={onCancel} header={{heading: "Slett"}}>
       <Modal.Body className="flex flex-col gap-4">
-        <p>Er du sikker på at du vil slette {name}?</p>
+        <p>Er du sikker på at du vil slette <strong>{name}</strong>?</p>
         <div className="flex flex-row gap-3">
           <Button variant="secondary" onClick={onCancel}>
             Avbryt
