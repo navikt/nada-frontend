@@ -103,7 +103,10 @@ export const UserPages = () => {
                                     value="granted"
                                     label="Innvilgede tilganger"
                                 />
-
+                                <Tabs.Tab
+                                    value="serviceAccountGranted"
+                                    label="Innvilgede tilganger (service accounts)"
+                                />
                                 <Tabs.Tab
                                     value="joinable"
                                     label="Views tilrettelagt for kobling"
@@ -114,6 +117,9 @@ export const UserPages = () => {
                             </Tabs.Panel>
                             <Tabs.Panel value="granted" className="w-full space-y-2 p-4">
                                 <DataproductsList datasets={data.accessable.granted} />
+                            </Tabs.Panel>
+                            <Tabs.Panel value="serviceAccountGranted" className="w-full space-y-2 p-4">
+                                <DataproductsList datasets={data.accessable.serviceAccountGranted} />
                             </Tabs.Panel>
                             <Tabs.Panel value="joinable" className="w-full p-4">
                                 <JoinableViewsList />

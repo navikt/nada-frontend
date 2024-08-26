@@ -124,7 +124,7 @@ const AccessRequestFormV2 = ({
   });
 
   const gcpProjects = userInfo?.gcpProjects as any[] || []
-  const accessRequestOwner = accessRequest?.owner?.split(":")[1]
+  const accessRequestOwner = accessRequest?.owner
 
   const {
     searchResult,
