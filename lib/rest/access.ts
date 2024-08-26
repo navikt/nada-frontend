@@ -75,9 +75,9 @@ export const denyAccessRequest = async (accessRequestId: string, reason: string)
     return postTemplate(url);
 }
 
-export const grantDatasetAccess = async (datasetId: string, expires: Date|undefined, subject: string, subjectType: string) => {
+export const grantDatasetAccess = async (datasetId: string, expires: Date|undefined, subject: string, owner: string, subjectType: string) => {
     const url = grantAccessUrl();
-    return postTemplate(url, { datasetId, expires, subject, subjectType });
+    return postTemplate(url, { datasetId, expires, subject, owner, subjectType });
 }
 
 export const revokeDatasetAccess = async (accessId: string) => {

@@ -6,6 +6,7 @@ import ErrorMessage from '../../lib/error'
 import LoaderSpinner from '../../lib/spinner'
 import { useGetDataproduct } from '../../../lib/rest/dataproducts'
 import { createAccessRequest } from '../../../lib/rest/access'
+import { SubjectType } from '../access/newDatasetAccess'
 
 interface NewAccessRequestFormProps {
   dataset: any
@@ -25,7 +26,7 @@ const NewAccessRequestForm = ({ dataset, setModal }: NewAccessRequestFormProps) 
       await createAccessRequest(
         dataset.id,
         requestData.expires,
-        undefined,
+        (requestData.owner !== "" || undefined) && requestData.subjectType === SubjectType.ServiceAccount? requestData.owner : undefined,
         requestData.polly??undefined,
         requestData.subject,
         requestData.subjectType
