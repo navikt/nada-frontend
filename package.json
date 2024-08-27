@@ -18,7 +18,7 @@
     "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.7",
     "@mui/x-tree-view": "^7.12.1",
-    "@navikt/aksel": "^6.15.0",
+    "@navikt/aksel": "^6.16.2",
     "@navikt/ds-css": "^6.1.0",
     "@navikt/ds-css-internal": "^3.4.3",
     "@navikt/ds-icons": "^3.4.3",
