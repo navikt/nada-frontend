@@ -115,14 +115,22 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                 {...field}
                 legend="Hvem gjelder tilgangen for?"
                 error={errors?.subjectType?.message}
+                onChange={subjectType => {
+                    field.onChange(subjectType);
+                    if (subjectType === SubjectType.ServiceAccount) {
+                        setShowSpecifyOwner(true)
+                    } else {
+                        setShowSpecifyOwner(false)
+                    }
+                }}
               >
-                <Radio value={SubjectType.User} onClick={() => {setShowSpecifyOwner(false)}}>
+                <Radio value={SubjectType.User}>
                   Bruker
                 </Radio>
-                <Radio value={SubjectType.Group} onClick={() => {setShowSpecifyOwner(false)}}>
+                <Radio value={SubjectType.Group}>
                   Gruppe
                 </Radio>
-                <Radio value={SubjectType.ServiceAccount} onClick={() => {setShowSpecifyOwner(true)}}>
+                <Radio value={SubjectType.ServiceAccount}>
                   Servicebruker
                 </Radio>
               </RadioGroup>
