@@ -57,7 +57,7 @@ export const AccessesList = ({ datasetAccesses, isServiceAccounts }: Dataproduct
                             <ExpansionCard.Content className="">
                                 <>
                                     {datasetAccesses?.map((dataset, i) => {
-                                        return <Box className="text-left gap-y-2 w-[47rem]">
+                                        return <Box key={i} className="text-left gap-y-2 w-[47rem]">
                                             {dataset.subject !== null && dataset.subject.split(":")[0] === SubjectType.ServiceAccount ?
                                                 <div className="flex gap-x-2 items-center">
                                                     <div>Servicebruker: </div>
@@ -65,7 +65,6 @@ export const AccessesList = ({ datasetAccesses, isServiceAccounts }: Dataproduct
                                                 </div> : <></>
                                             }
                                             <SearchResultLink
-                                                key={i}
                                                 group={{
                                                     group: dataset.group
                                                 }}
