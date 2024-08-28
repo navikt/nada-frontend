@@ -10,10 +10,10 @@ FROM node-with-deps
 
 COPY . .
 
-ENV NODE_ENV production
-ENV NEXT_PUBLIC_ENV production
-ENV NEXT_PUBLIC_BACKEND http://nada-backend/api
-ENV NPM_CONFIG_CACHE /tmp
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_ENV=production
+ENV NEXT_PUBLIC_BACKEND=http://nada-backend/api
+ENV NPM_CONFIG_CACHE=/tmp
 
 RUN npm run build
 

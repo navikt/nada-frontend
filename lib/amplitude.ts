@@ -7,7 +7,7 @@ const amplitudeLog = (
   onFinished?: onFinishedType
 ) => {
   if (!window) return
-  if (!(document.domain === "data.intern.nav.no")) {
+  if (!(document.domain === "data.ansatt.nav.no")) {
     console.log("Not in prod. Not sending event:", name, eventProperties)
     return
   }
