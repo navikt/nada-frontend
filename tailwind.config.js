@@ -22,6 +22,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/line-clamp')],
+  plugins: [],
   presets: [require('@navikt/ds-tailwind')],
 }
