@@ -156,7 +156,6 @@ const AccessRequestFormV2 = ({
     return optionsBySearch
   }
 
-
   const setPollyIfMatches = (input: string) => {
     setPolly(input && searchResult ? searchResult.find((e) => e.externalID === input) : null)
   }
@@ -179,14 +178,27 @@ const AccessRequestFormV2 = ({
                 {...field}
                 legend="Hvem gjelder tilgangen for?"
                 error={errors?.subjectType?.message}
+                onChange={subjectType => {
+                    field.onChange(subjectType);
+                    if (subjectType === SubjectType.ServiceAccount) {
+                        setShowSpecifyOwner(true)
+                        setValue("subject", "")
+                    } else if (subjectType === SubjectType.Group) {
+                        setShowSpecifyOwner(false)
+                        setValue("subject", "")
+                    } else {
+                        setShowSpecifyOwner(false)
+                        setValue("subject", accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo.email : "")
+                    }
+                }}
               >
-                <Radio disabled={isEdit} value={SubjectType.User} onClick={() => {setShowSpecifyOwner(false)}}>
+                <Radio disabled={isEdit} value={SubjectType.User}>
                   Bruker
                 </Radio>
-                <Radio disabled={isEdit} value={SubjectType.Group} onClick={() => {setShowSpecifyOwner(false)}}>
+                <Radio disabled={isEdit} value={SubjectType.Group}>
                   Gruppe
                 </Radio>
-                <Radio disabled={isEdit} value={SubjectType.ServiceAccount} onClick={() => {setShowSpecifyOwner(true)}}>
+                <Radio disabled={isEdit} value={SubjectType.ServiceAccount}>
                   Servicebruker
                 </Radio>
               </RadioGroup>
