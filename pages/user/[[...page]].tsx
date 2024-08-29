@@ -8,7 +8,7 @@ import AccessRequestsListForUser from '../../components/user/accessRequests'
 import NadaTokensForUser from '../../components/user/nadaTokens'
 import InnerContainer from '../../components/lib/innerContainer'
 import { JoinableViewsList } from '../../components/dataProc/joinableViewsList'
-import { DataproductsList } from '../../components/dataproducts/dataproductList'
+import { AccessesList } from '../../components/dataproducts/accessesList'
 import { Tabs } from '@navikt/ds-react'
 import { useFetchUserData } from '../../lib/rest/userData'
 import { AccessRequestsForGroup } from '../../components/user/accessRequestsForGroup'
@@ -103,17 +103,23 @@ export const UserPages = () => {
                                     value="granted"
                                     label="Innvilgede tilganger"
                                 />
-
+                                <Tabs.Tab
+                                    value="serviceAccountGranted"
+                                    label="Tilganger servicebrukere"
+                                />
                                 <Tabs.Tab
                                     value="joinable"
                                     label="Views tilrettelagt for kobling"
                                 />
                             </Tabs.List>
                             <Tabs.Panel value="owner" className="w-full space-y-2 p-4">
-                                <DataproductsList datasets={data.accessable.owned} />
+                                <AccessesList datasetAccesses={data.accessable.owned} />
                             </Tabs.Panel>
                             <Tabs.Panel value="granted" className="w-full space-y-2 p-4">
-                                <DataproductsList datasets={data.accessable.granted} />
+                                <AccessesList datasetAccesses={data.accessable.granted} />
+                            </Tabs.Panel>
+                            <Tabs.Panel value="serviceAccountGranted" className="w-full space-y-2 p-4">
+                                <AccessesList datasetAccesses={data.accessable.serviceAccountGranted} isServiceAccounts={true} />
                             </Tabs.Panel>
                             <Tabs.Panel value="joinable" className="w-full p-4">
                                 <JoinableViewsList />

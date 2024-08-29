@@ -1,4 +1,4 @@
-import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
+import { Button, DatePicker, Heading, Label, Loader, Radio, RadioGroup, TextField, useDatepicker } from "@navikt/ds-react";
 import * as yup from 'yup'
 import { Controller, useForm} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -37,6 +37,9 @@ const schema = yup
         'Du må skrive inn e-postadressen til hvem tilgangen gjelder for'
       )
       .email('E-postadresssen er ikke gyldig'),
+    owner: yup
+      .string()
+      .email(),
     accessType: yup
       .string()
       .required('Du må velge hvor lenge du ønsker tilgang')
@@ -55,6 +58,7 @@ const schema = yup
 const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) => {
     const [error, setError] = useState<any>(null)
     const [submitted, setSubmitted] = useState(false)
+    const [showSpecifyOwner, setShowSpecifyOwner] = useState(false)
     const router = useRouter()
     const {
         register,
@@ -85,6 +89,7 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                     dataset.id,
                     requestData.accessType === "until" ? new Date(requestData.expires) : undefined,
                     requestData.subject,
+                    (requestData.owner !== "" || undefined) && requestData.subjectType === SubjectType.ServiceAccount ? requestData.owner: requestData.subject,
                     requestData.subjectType)
         router.reload() 
         }catch(e){
@@ -110,6 +115,14 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
                 {...field}
                 legend="Hvem gjelder tilgangen for?"
                 error={errors?.subjectType?.message}
+                onChange={subjectType => {
+                    field.onChange(subjectType);
+                    if (subjectType === SubjectType.ServiceAccount) {
+                        setShowSpecifyOwner(true)
+                    } else {
+                        setShowSpecifyOwner(false)
+                    }
+                }}
               >
                 <Radio value={SubjectType.User}>
                   Bruker
@@ -131,6 +144,19 @@ const NewDatasetAccess = ({dataset, setShowNewAccess}: NewDatasetAccessProps) =>
             error={errors?.subject?.message}
             size="medium"
           />
+        {showSpecifyOwner && 
+            <div className="flex flex-col gap-1 pt-2">
+                <Label>Eierteam</Label>
+                <TextField
+                    {...register('owner')}
+                    className="hidden-label"
+                    label="E-post-adresse"
+                    placeholder="Skriv inn e-post-adresse"
+                    error={errors?.subject?.message}
+                    size="medium"
+                />
+            </div>
+        }
         </div>
         <div>
           <Controller

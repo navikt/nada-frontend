@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, useDatepicker } from '@navikt/ds-react'
+import { Button, DatePicker, Heading, Loader, Radio, RadioGroup, TextField, Select as DSSelect, useDatepicker } from '@navikt/ds-react'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,6 +9,7 @@ import ErrorMessage from '../../lib/error';
 import { PollyInput, SubjectType } from '../../../lib/rest/access';
 import { useSearchPolly } from '../../../lib/rest/polly';
 import Select from 'react-select';
+
 
 const tomorrow = () => {
   const date = new Date()
@@ -31,6 +32,9 @@ const schema = yup
       .required(
         'Du må skrive inn e-postadressen til hvem tilgangen gjelder for'
       )
+      .email('E-postadresssen er ikke gyldig'),
+    owner: yup
+      .string()
       .email('E-postadresssen er ikke gyldig'),
     subjectType: yup
       .mixed<SubjectType>()
@@ -58,6 +62,7 @@ export type AccessRequestFormInput = {
   polly?: PollyInput
   subject?: string
   subjectType?: SubjectType
+  owner?: string
   status?: string
   reason?: string
 }
@@ -74,6 +79,7 @@ interface AccessRequestFormProps {
 interface AccessRequestFields {
   subject: string
   subjectType: SubjectType
+  owner?: string | undefined
   accessType: string
   expires?: Date | null | undefined
 }
@@ -86,6 +92,7 @@ const AccessRequestFormV2 = ({
   onSubmit,
   error,
 }: AccessRequestFormProps) => {
+  const [showSpecifyOwner, setShowSpecifyOwner] = useState(isEdit && accessRequest?.subjectType === SubjectType.ServiceAccount)
   const [searchText, setSearchText] = useState('')
   const [polly, setPolly] = useState<PollyInput | undefined | null>(accessRequest?.polly)
   const [submitted, setSubmitted] = useState(false)
@@ -116,6 +123,9 @@ const AccessRequestFormV2 = ({
     onDateChange: (d: Date | undefined) => setValue("expires", d),
   });
 
+  const gcpProjects = userInfo?.gcpProjects as any[] || []
+  const accessRequestOwner = accessRequest?.owner
+
   const {
     searchResult,
     searchError,
@@ -128,6 +138,7 @@ const AccessRequestFormV2 = ({
       datasetID: dataset.id,
       subject: data.subject,
       subjectType: data.subjectType,
+      owner: data.owner,
       polly: polly ?? undefined,
       expires: data.accessType === 'until' ? data.expires ? new Date(data.expires) : undefined : undefined,
     }
@@ -138,18 +149,12 @@ const AccessRequestFormV2 = ({
     }
   }
 
-  interface Option {
-    value: string
-    label: string
-  }
-
   const getOptionsForSelect = () => {
     const optionsBySearch = searchResult ? searchResult.map((el) => {
       return { value: el.externalID, label: el.name }
     }) : []
     return optionsBySearch
   }
-
 
   const setPollyIfMatches = (input: string) => {
     setPolly(input && searchResult ? searchResult.find((e) => e.externalID === input) : null)
@@ -173,6 +178,19 @@ const AccessRequestFormV2 = ({
                 {...field}
                 legend="Hvem gjelder tilgangen for?"
                 error={errors?.subjectType?.message}
+                onChange={subjectType => {
+                    field.onChange(subjectType);
+                    if (subjectType === SubjectType.ServiceAccount) {
+                        setShowSpecifyOwner(true)
+                        setValue("subject", "")
+                    } else if (subjectType === SubjectType.Group) {
+                        setShowSpecifyOwner(false)
+                        setValue("subject", "")
+                    } else {
+                        setShowSpecifyOwner(false)
+                        setValue("subject", accessRequest?.subject ? accessRequest.subject : userInfo?.email ? userInfo.email : "")
+                    }
+                }}
               >
                 <Radio disabled={isEdit} value={SubjectType.User}>
                   Bruker
@@ -195,6 +213,36 @@ const AccessRequestFormV2 = ({
             error={errors?.subject?.message?.toString()}
             size="medium"
           />
+          {showSpecifyOwner &&
+            <DSSelect
+              className="w-full pt-4 gap-2"
+              label="Velg eierteam for service bruker"
+              {...register('owner', {
+              })}
+              error={errors.owner?.message?.toString()}
+            >
+            {accessRequestOwner !== undefined ? <option value={accessRequestOwner} defaultValue={accessRequestOwner}>{accessRequestOwner?.split("@")[0]}</option>
+                : <option value="">Velg eiergruppe</option>
+            }
+            {[
+                ...new Set(
+                gcpProjects.filter((project) => project.group.email !== accessRequestOwner).map(
+                    ({ group }: { group: { name: string } }) => (
+                    <option
+                        value={
+                        userInfo?.googleGroups.filter((g:any) => g.name === group.name)[0]
+                            .email
+                        }
+                        key={group.name}
+                    >
+                        {group.name}
+                    </option>
+                    )
+                )
+                ),
+            ]}
+            </DSSelect>
+          }
         </div>
         <div>
           <Controller

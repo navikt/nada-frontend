@@ -24,7 +24,7 @@ const UpdateAccessRequest = ({
       await updateAccessRequest(
         updateAccessRequestData.id,
         requestData.expires,
-        updateAccessRequestData.owner,
+        requestData.owner !== undefined ? requestData.owner : updateAccessRequestData.owner,
         requestData.polly,
         undefined,
         undefined
