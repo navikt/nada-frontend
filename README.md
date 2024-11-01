@@ -1,3 +1,6 @@
+> **_NOTE:_** Moved to [https://github.com/navikt/nada-markedsplassen](https://github.com/navikt/nada-markedsplassen)
+
+
 ## Prerequisites:
 
 Install [Node18](https://nodejs.org/en) or later
